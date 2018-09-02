@@ -49,7 +49,7 @@ module STLEventValidation =
             //         loop (cg::acc) g' start' nodes'
             // loop [] g start nodes
 
-    let findAllReferencedEvents (projects : Node list) (event : Event) =
+    let findAllReferencedEvents (projects : (Node * string) list) (event : Event) =
         let eventEffectKeys = ["ship_event"; "pop_event"; "fleet_event"; "pop_faction_event"; "country_event"; "planet_event"]
         let fNode = (fun (x : Node) children ->
                         match x.Key with
@@ -64,26 +64,29 @@ module STLEventValidation =
         let directCalls = event.Children |> List.collect (foldNode7 fNode) // |> List.fold (@) []
         let referencedProjects = event.Children |> List.collect (foldNode7 fpNode)
         //eprintfn "%s projs %A" (event.ID) referencedProjects
+        let projectKeys = ["on_success"; "on_fail"; "on_start"; "on_progress_25"; "on_progress_50"; "on_progress_75";]
         let getProjectTarget (n : Node) =
-            let projectKeys = ["on_success"; "on_fail"; "on_start"; "on_progress_25"; "on_progress_50"; "on_progress_75";]
             n.Children |> List.filter (fun c -> List.contains c.Key projectKeys) |> List.collect (foldNode7 fNode)
-        let projectTargets = projects |> List.filter (fun p -> List.contains (p.TagText "key") referencedProjects) |> List.collect getProjectTarget
+        let projectTargets = projects |> List.filter (fun (_, pk) -> List.contains (pk) referencedProjects) |> List.collect (fun (p, _) -> getProjectTarget p)
         //eprintfn "%s proj targets %A" (event.ID) projectTargets
         directCalls @ projectTargets
 
     let findAllUsedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let targetFromString (k : string) = k.Substring(13).Split('.').[0]
-                        let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then Some (leaf.Value.ToRawString() |> targetFromString) else None
+                        let inner children (leaf : Leaf) =
+                            let value = leaf.Value.ToRawString()
+                            if value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then (value |> targetFromString)::children else children
+                        let innerValues = x.Values |> List.fold inner children
                         match x.Key with
                         |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
-                           targetFromString k :: ((x.Values |> List.choose inner) @ children)
-                        |_ ->
-                            ((x.Values |> List.choose inner) @ children)
+                          ( targetFromString k) :: innerValues//((x.Values |> List.choose inner) @ children)
+                        |_ -> innerValues
+                           // ((x.Values |> List.choose inner) @ children)
 
                         )
-        let fCombine = (@)
-        event |> (foldNode2 fNode fCombine []) |> Set.ofList
+        //let fCombine = (@)
+        event |> (foldNode7 fNode) |> Set.ofList
 
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
@@ -131,7 +134,7 @@ module STLEventValidation =
         let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
         ((eid, e), s2 |> Set.ofList, u2 |> Set.ofList, r, x)
 
-    let checkEventChain (effects : ScriptedEffect list) (sinits : Node list) (projects : Node list) (globals : Set<string>) (events : Event list) =
+    let checkEventChain (effects : ScriptedEffect list) (sinits : Node list) (projects : (Node * string) list) (globals : Set<string>) (events : Event list) =
         let mutable current = events |> List.map (fun e -> ((e.ID, e), findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
                                         //|> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         //|> (fun f -> eprintfn "%A" f; f)
@@ -247,7 +250,8 @@ module STLEventValidation =
         let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
         let eids = events |> List.map (fun e -> e.ID, e) |> Map.ofList
         let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
-        let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
+        let projectsWithTags = projects |> List.map (fun p -> p, p.TagText("key"))
+        let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.ID, f))
                     |> List.filter (fun (_, f) -> Map.containsKey f eids)
                     //|> (fun f -> eprintfn "%A" f; f)
                     |> List.collect(fun (s, t) -> [s,t; t,s])
@@ -265,7 +269,7 @@ module STLEventValidation =
             let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
             //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
             let filteredChains = chains |> List.choose (fun c -> if c.Length > 500 then None else Some c)
-            filteredChains <&!!&> checkEventChain seffects sinits projects globals
+            filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
 
 
     let valEventCalls : StructureValidator =

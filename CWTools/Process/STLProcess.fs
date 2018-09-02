@@ -119,14 +119,60 @@ module rec STLProcess =
             then s.SetValue(target, value, null)
             else copy value (s.GetValue(target,null))
         )
+    // let nodePickler : (ResizeArray<Child> -> ResizeArray<Child>) =
+    //     let mkPickler (resolver : IPicklerResolver) =
+    //         let arrayPickler = resolver.Resolve<Leaf array> ()
+    //         let writer (w : WriteState) (ns : Lazy<Leaf array>) =
+    //             arrayPickler.Write w "value" (ns.Force())
+    //         let reader (r : ReadState) =
+    //             let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
+    //         let cloner (c : CloneState) (ns : Lazy<Leaf array>) =
+    //             lazy (arrayPickler.Clone c (ns.Force()))
+    //         Pickler.FromPrimitives(reader, writer, cloner = cloner)
+    //     let registry = new CustomPicklerRegistry()
+    //     do registry.RegisterFactory mkPickler
+    //     registry.DeclareSerializable<FParsec.Position>()
+    //     let cache = PicklerCache.FromCustomPicklerRegistry registry
+    //     let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
+    //     //(fun (input : ResizeArray<Child>) -> binarySerializer.Pickle input |> binarySerializer.UnPickle)
+    //     // (fun (input) -> FsPickler.Clone(input, pickler = (cache.GeneratePickler<ResizeArray<Child>>())))
+    //     let pickler = cache.GeneratePickler<ResizeArray<Child>>()
+    //     let t = typeof<CloneState>
+    //     (fun (input) ->
+    //         let state = t.GetConstructors(BindingFlags.Instance ||| BindingFlags.NonPublic).[0].Invoke([|cache; null; null; null|]) :?> CloneState
+    //         // let state = t.Assembly.CreateInstance(
+    //         //                 t.FullName, false,
+    //         //                 BindingFlags.Instance ||| BindingFlags.NonPublic ||| BindingFlags.Public ||| BindingFlags.,
+    //         //                 null, [|cache|], null, null) :?> CloneState
+    //         //let state = new CloneState(cache)
+    //         pickler.Clone state input
+
+    //     )
+
+    let optionTriggers = ["trigger"; "allow"; "exclusive_trigger"]
+    let optionEffects = ["tooltip";]
+    let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
+    let optionExcludeSet = optionExcludes |> Set.ofList
+    let copyChild (a : Child) =
+        match a with
+        |NodeC n when Set.contains n.Key optionExcludeSet -> None
+        |NodeC n ->
+            let children = n.AllChildren |> Seq.choose copyChild //|> Array.ofSeq
+            let n2 = (Node(n.Key, n.Position))
+            n2.AllChildren <- children |> ResizeArray<Child>
+            Some (NodeC n2)
+        |LeafC l when Set.contains l.Key optionExcludeSet -> None
+        |x -> Some x
+        // |LeafValueC lv -> LeafValueC (LeafValue(lv.Value, lv.Position))
+        // |LeafC l -> LeafC (Leaf(l.Key, l.Value, l.Position))
+        // |CommentC c -> CommentC c
     let filterOptionToEffects (o : Option) =
-        let optionTriggers = ["trigger"; "allow"; "exclusive_trigger"]
-        let optionEffects = ["tooltip";]
-        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
         let newO = EffectBlock(o.Key, o.Position)
-        copy o newO
-        newO.All <- newO.All |> List.filter (function |LeafC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
-        newO.All <- newO.All |> List.filter (function |NodeC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        //let newChildren = FsPickler.Clone(o.AllChildren, pickler = nodePickler)
+        newO.AllChildren <- (o.AllChildren |> Seq.choose copyChild |> ResizeArray<Child>)
+        //copy o newO
+        // newO.All <- newO.All |> List.filter (function |LeafC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
+        // newO.All <- newO.All |> List.filter (function |NodeC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
         newO.Scope <- o.Scope
         newO
         //newO :> Node
