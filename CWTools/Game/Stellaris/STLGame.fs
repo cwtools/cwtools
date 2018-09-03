@@ -484,5 +484,6 @@ type STLGame (settings : StellarisSettings) =
             member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
             member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
             member __.RefreshCaches() = refreshRuleCaches None
+            member __.ForceRecompute() = resources.ForceRecompute()
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

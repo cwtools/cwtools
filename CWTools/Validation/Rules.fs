@@ -547,7 +547,7 @@ module rec Rules =
                 //         |x -> [x])
                 let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
                 let innerN (c : Node) =
-                    match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
+                    match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
                     | [] ->
                         // let leftClauseRule =
                         //     expandedrules |>
@@ -579,13 +579,12 @@ module rec Rules =
                 let innerLV lv = Some (LeafValueC lv, (field, options))
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
-            //eprintfn "%A %A" pathDir (typedefs |> List.tryHead)
             match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
                 |[(n, (NodeRule (l, rs), o))] ->
-                    (node.Children |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (l, rs), o)) acc)
+                    (node.Children |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
                 |_ -> acc
             |_ -> acc
 
@@ -595,14 +594,18 @@ module rec Rules =
                 |LeafRule (_, TypeField t) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    res |> (fun m -> m.Add(typename, (leaf.Value.ToString(), leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                    res |> (fun m -> m.Add(typename, (leaf.Value.ToRawString(), leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                |LeafRule (TypeField t, _) ->
+                // |Field.TypeField t ->
+                    let typename = t.Split('.').[0]
+                    res |> (fun m -> m.Add(typename, (leaf.Key, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
                 |_ -> res
             let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (field, _) =
                 match field with
                 |LeafValueRule (TypeField t) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    res |> (fun m -> m.Add(t, (leafvalue.Value.ToString(), leafvalue.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                    res |> (fun m -> m.Add(t, (leafvalue.Value.ToRawString(), leafvalue.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
                 |_ -> res
 
             let fComment (res) _ _ = res

@@ -30,7 +30,7 @@ module Validator =
             scope : string
         }
         override x.ToString() = x.file + "," + x.scope.ToString()
-    type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list) =
+    type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config) =
         //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
         let options = {
@@ -42,7 +42,7 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = None
+            rules = Some { ruleFiles = config; validateRules = false }
             embedded = {
                 triggers = triggers
                 effects = effects
@@ -61,3 +61,5 @@ module Validator =
         member val scriptedEffectList = game.ScriptedEffects
         member val localisationErrorList = game.LocalisationErrors true |> List.map (fun (s,c,n,l,e,_) -> {category = s.GetType().Name ; error = e; position = n.ToString()})
         member val references = game.References
+        member __.entities() = game.AllEntities()
+        member __.recompute() = game.ForceRecompute()

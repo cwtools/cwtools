@@ -23,6 +23,7 @@ type IGame =
     abstract FindAllRefs : pos -> string -> string -> range list option
     abstract ReplaceConfigRules : (string * string) list -> unit
     abstract RefreshCaches : unit -> unit
+    abstract ForceRecompute : unit -> unit
 
 type IGame<'T> =
     inherit IGame
