@@ -21,6 +21,7 @@ open FSharp.Data.Runtime
 open QuickGraph
 open System
 open FSharp.Collections.ParallelSeq
+open System
 
 
 module rec Rules =
@@ -685,15 +686,39 @@ module rec Rules =
                 match r with
                 |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
                     [createSnippetForClause innerRules o.description s]
+                |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
+                    enums.TryFind(e) |> Option.map (fun es -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                |NodeRule (ValueField(_), _) -> []
+                |NodeRule (AliasField(_), _) -> []
+                |NodeRule (FilepathField(_), _) -> []
+                |NodeRule (IconField(_), _) -> []
+                |NodeRule (LocalisationField(_), _) -> []
+                |NodeRule (ScopeField(_), _) -> [] //TODO: Scopes
+                |NodeRule (SubtypeField(_), _) -> []
+                |NodeRule (TypeField(t), innerRules) ->
+                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
                 |LeafRule (ValueField(ValueType.Specific s), _) ->
                     [keyvalue s]
+                |LeafRule (ValueField(ValueType.Enum e), _) ->
+                    enums.TryFind(e) |> Option.map (fun es -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                |LeafRule (ValueField(_), _) -> []
+                |LeafRule (AliasField(_), _) -> []
+                |LeafRule (FilepathField(_), _) -> []
+                |LeafRule (IconField(_), _) -> []
+                |LeafRule (LocalisationField(_), _) -> []
+                |LeafRule (ScopeField(_), _) -> [] //TODO: Scopes
+                |LeafRule (SubtypeField(_), _) -> []
+                |LeafRule (TypeField(t), _) ->
+                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+
                 |LeafValueRule lv ->
                     match lv with
                     |NewField.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                     |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
+                |SubtypeRule(_) -> []
                 //TODO: Add leafvalue
-                |_ -> []
+                //|_ -> []
                 // |LeafValueRule
                 // |LeafRule (l, _) -> l
                 // |LeafValueRule l -> l

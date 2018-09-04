@@ -23,7 +23,6 @@ module rec ConfigParser =
     | Enum of string
     | Specific of string
     | Percent
-    | Filepath
     type NewField =
     | ValueField of ValueType
     | TypeField of string
