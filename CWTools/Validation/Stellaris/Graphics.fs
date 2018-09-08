@@ -123,17 +123,17 @@ module Graphics =
 
     let valComponentGraphics : StructureValidator =
         fun os es ->
-            let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
-                            |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
-
             let components = es.AllOfTypeChildren EntityType.ComponentTemplates
                                 |> List.filter (fun c -> (c.Tag "hidden") |> Option.bind (function |Value.Bool x -> Some (not x) |_ -> Some true) |> Option.defaultValue true)
             let cultures = getGraphicalCultures os
             let cultureMap = cultures |> List.filter (fun (_, f) -> f <> "") |> Map.ofList
             let cultures = cultures |> List.map (fun (c, f) -> c, Seq.unfold (fun nc -> cultureMap.TryFind nc |> Option.map (fun nf -> nf, nf)) c |> List.ofSeq)
-            let assets = os.AllOfTypeChildren EntityType.GfxAsset
-                            |> List.map (fun a -> a.TagText "name")
-                            |> Set.ofList
+            // let assets = os.AllOfTypeChildren EntityType.GfxAsset
+            //                 |> List.map (fun a -> a.TagText "name")
+            //                 |> Set.ofList
+            let assetGenerator (e : Entity) : obj list =
+                if e.entityType = EntityType.GfxAsset then e.entity.Children |> List.map (fun a -> upcast a.TagText "name") else []
+            let assets = os.AddOrGetCached "componentgraphicsassets" assetGenerator |> List.map (fun s -> s :?> string) |> Set.ofList
             let inner =
                 fun (s : Node) ->
                     match s.Leafs "entity" |> Seq.tryHead with
@@ -215,10 +215,18 @@ module Graphics =
             let files = res.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             // eprintfn "%A" files
             // files |> Set.filter (fun s -> s.Contains("great")) |> eprintfn "%A"
-            let sprites = os.AllOfTypeChildren EntityType.Interface //os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/**/*.gfx")
-                            |> List.filter (fun e -> e.Key = "spriteTypes")
-                            |> List.collect (fun e -> e.Children)
-            let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> Set.ofSeq
+            let spriteGenerator (e : Entity) : obj list =
+                if e.entityType = EntityType.Interface
+                then e.entity.Children |> List.filter (fun e -> e.Key = "spriteTypes")
+                      |> Seq.collect (fun es -> es.Children |> Seq.collect (fun e -> (e.TagsText "name")) )
+                      |> List.ofSeq
+                      |> List.map (fun s -> upcast s)
+                else []
+            // let sprites = os.AllOfTypeChildren EntityType.Interface //os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/**/*.gfx")
+            //                 |> List.filter (fun e -> e.Key = "spriteTypes")
+            //                 |> List.collect (fun e -> e.Children)
+            // let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> Set.ofSeq
+            let spriteNames = os.AddOrGetCached "componenticonsspritenames" spriteGenerator |> List.map (fun s -> s :?> string) |> Set.ofList
             let components = es.AllOfTypeChildren EntityType.ComponentTemplates
             let componentsets = es.AllOfTypeChildren EntityType.ComponentSets
                                 |> List.filter (fun cs -> cs.Tag "required_component_set" |> Option.map (function |Value.Bool b -> not b |_ -> false) |> Option.defaultValue false)

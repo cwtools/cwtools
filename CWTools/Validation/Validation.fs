@@ -213,8 +213,12 @@ module ValidationCore =
             this.All |> List.collect (foldNode7 fNode)
 
 
-        // member __.AddOrGetCached(id, generator) =
-
+        member __.AddOrGetCached id generator =
+            entities |> List.collect (fun struct (e, d) ->
+                                    let data = d.Force()
+                                    match data.Cache |> Map.tryFind id with
+                                    |Some v -> v
+                                    |None -> let v = generator e in data.Cache <- Map.add id v data.Cache; v)
 
         member __.Raw = entities
         // member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)

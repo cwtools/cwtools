@@ -142,7 +142,7 @@ type STLGame (settings : StellarisSettings) =
             //TODO: Add loc from embedded
 
         let updateDefinedVariables() =
-            lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().setvariables)
+            lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().Setvariables)
 
         let updateModifiers() =
             lookup.coreModifiers <- addGeneratedModifiers settings.embedded.modifiers (EntitySet (resources.AllEntities()))
@@ -328,7 +328,7 @@ type STLGame (settings : StellarisSettings) =
                 |Some (_, Some ((t : string), tv)) ->
                     //eprintfn "tv %A %A" t tv
                     let t = t.Split('.').[0]
-                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().referencedtypes in if x.IsSome then (x.Value.TryFind t) else (info.GetReferencedTypes e).TryFind t)
+                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else (info.GetReferencedTypes e).TryFind t)
                                    |> List.collect id
                                    |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                    |> Some
