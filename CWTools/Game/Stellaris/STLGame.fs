@@ -252,7 +252,11 @@ type STLGame (settings : StellarisSettings) =
 
         let makeEntityResourceInput filepath filetext  =
             let filepath = Path.GetFullPath(filepath)
-            let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
+            let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
+            let rootedpath =
+                if indexOfScope = -1
+                then filepath
+                else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
             let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
             EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
         let mutable errorCache = Map.empty
