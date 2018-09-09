@@ -270,7 +270,7 @@ module STLValidation =
                     | _ -> acc
                     )
             let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
-            let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().setvariables)
+            let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setvariables)
             //let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!!&> (validateUsedVariables defVars)
 
@@ -343,14 +343,16 @@ module STLValidation =
                                 x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Star, lv.Value.ToRawString())) |> Option.defaultValue []
                         newAcc @ acc
                         )
-            let solarsystemflags = os.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.collect (foldNode7 fNode)
+            let ssflaggenerator (e : Entity) : obj list = if e.entityType = EntityType.SolarSystemInitializers then e.entity.Children |> List.collect (foldNode7 fNode) |> List.map (fun a -> upcast a) else []
+            let solarsystemflags = os.AddOrGetCached "flagsolarsystems" ssflaggenerator |> List.map (fun o -> o :?> (FlagType * string))
+            // let solarsystemflags = os.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.collect (foldNode7 fNode)
             // let solarsystemflags =
             //     os.AllOfTypeChildren EntityType.SolarSystemInitializers
             //     |> List.collect (fun n -> n.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())) |> Option.defaultValue [])
             //     |> List.map (fun f -> FlagType.Star, f)
             let customFlags = precursorflags @ prescriptedcountriesflags @ solarsystemflags
             let defFlags =
-                (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().setflags)
+                (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setflags)
                 |> (fun f -> f @ customFlags)
                 |> List.map (fun (k, f) -> k, if f.Contains "@" then f.Split('@').[0] else f)
                 |> List.groupBy fst |> List.map (fun (k, vs) -> k, List.map snd vs) |> Map.ofList
@@ -507,34 +509,49 @@ module STLValidation =
 
     let validateTechnologies : StructureValidator =
         fun os es ->
-            let getPrereqs (b : Node) =
+            // let timer = new System.Diagnostics.Stopwatch()
+            // timer.Start()
+            let getPrereqs (b : Node) : obj list =
                 match b.Child "prerequisites" with
                 |None -> []
                 |Some p ->
-                    p.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())
-            let getPrereqsPar lists = lists |> PSeq.collect (fun ns -> List.collect getPrereqs ns) |> List.ofSeq
+                    p.LeafValues |> List.ofSeq |> List.map (fun lv -> upcast lv.Value.ToRawString())
+            // let getPrereqsPar lists = lists |> PSeq.collect (fun ns -> List.collect getPrereqs ns) |> List.ofSeq
+            let getPrereqGen (e : Entity) : obj list =
+                if List.contains e.entityType [EntityType.Buildings; EntityType.ShipSizes; EntityType.SectionTemplates; EntityType.ComponentTemplates;
+                                                EntityType.StrategicResources; EntityType.Armies; EntityType.Edicts; EntityType.TileBlockers]
+                then List.collect getPrereqs (e.entity.Children)
+                else []
 
-            let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings// |> List.collect getPrereqs
-            let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes// |> List.collect getPrereqs
-            let sectPrereqs = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates// |> List.collect getPrereqs
-            let compPrereqs = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates// |> List.collect getPrereqs
-            let stratResPrereqs = os.AllOfTypeChildren EntityType.StrategicResources @ es.AllOfTypeChildren EntityType.StrategicResources// |> List.collect getPrereqs
-            let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies// |> List.collect getPrereqs
-            let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts// |> List.collect getPrereqs
-            let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers// |> List.collect getPrereqs
-            let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs; ] |> Set.ofList
-            let hastechs = (es.AllWithData |> List.collect (fun (_, d) -> d.Force().hastechs)) @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().hastechs))
+            // let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings// |> List.collect getPrereqs
+            // let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes// |> List.collect getPrereqs
+            // let sectPrereqs = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates// |> List.collect getPrereqs
+            // let compPrereqs = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates// |> List.collect getPrereqs
+            // let stratResPrereqs = os.AllOfTypeChildren EntityType.StrategicResources @ es.AllOfTypeChildren EntityType.StrategicResources// |> List.collect getPrereqs
+            // let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies// |> List.collect getPrereqs
+            // let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts// |> List.collect getPrereqs
+            // let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers// |> List.collect getPrereqs
+            // let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs; ] |> Set.ofList
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let allPrereqs = os.AddOrGetCached "techprereqs" getPrereqGen |> List.map (fun s -> s :?> string) |> Set.ofList
+            let hastechs = (es.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs)) @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allPrereqs = (hastechs) |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
             //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let techPrereqs = techList |> List.collect snd |> Set.ofList
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let techChildren = techList |> List.map (fun (name, _) -> name, Set.contains name techPrereqs)
             // let techChildren = getTechnologies os @ getTechnologies es
             //                     |> (fun l -> l |> List.map (fun (name, _) -> name, l |> List.exists (fun (_, ts2) -> ts2 |> List.contains name)))
                                 |> List.filter snd
                                 |> List.map fst
                                 |> Set.ofList
+
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let techs = es.AllOfTypeChildren EntityType.Technology
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let inner (t : Node) =
                 let isPreReq = t.Has "prereqfor_desc"
                 let isMod = t.Has "modifier"
@@ -544,7 +561,9 @@ module STLValidation =
                 let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00) -> true |_ -> false)) |> Option.defaultValue false
                 let hasFeatureFlag = t.Has "feature_flags"
                 if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid [inv (ErrorCodes.UnusedTech (t.Key)) t]
-            techs <&!&> inner
+            let res = techs <&!&> inner
+            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            res
 
 
 

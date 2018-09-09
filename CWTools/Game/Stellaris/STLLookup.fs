@@ -15,14 +15,17 @@ open CWTools.Utilities.Position
 module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
 
-    type STLComputedData = {
-        eventids : string list
-        setvariables : string list
-        setflags : (FlagType * string) list
-        savedeventtargets : string list
-        referencedtypes : Map<string, (string  * range) list> option
-        hastechs : string list
-    }
+    type ComputedData() =
+        member val Cache : Map<string, obj list> = Map.empty with get, set
+
+    type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs) =
+        inherit ComputedData()
+        member __.Eventids : string list = eventids
+        member __.Setvariables : string list = setvariables
+        member __.Setflags : (FlagType * string) list = setflags
+        member __.Savedeventtargets : string list = savedeventtargets
+        member __.Referencedtypes : Map<string, (string  * range) list> option = referencedtypes
+        member __.Hastechs : string list = hastechs
 
     let getChildrenWithComments (root : Node) =
         let findComment t s (a : Child) =

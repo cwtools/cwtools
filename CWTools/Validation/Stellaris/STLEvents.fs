@@ -275,7 +275,7 @@ module STLEventValidation =
     let valEventCalls : StructureValidator =
         fun os es ->
             let events = (os.AllOfType EntityType.Events @ es.AllOfType EntityType.Events)
-            let eventIds = events |> List.collect (fun (e, d) -> d.Force().eventids)
+            let eventIds = events |> List.collect (fun (e, d) -> d.Force().Eventids)
             let effects = es.AllEffects
             let eventEffectKeys = ["ship_event"; "pop_event"; "fleet_event"; "pop_faction_event"; "country_event"; "planet_event"]
             let fNode = (fun (x : Node) children ->

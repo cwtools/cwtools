@@ -113,7 +113,7 @@ module STLLocalisationString =
         let lang = api |> fst
         let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
         let all = api |> snd
-        let eventtargetsnormal = (os.AllWithData |> List.collect (fun (_, d) -> d.Force().savedeventtargets))
+        let eventtargetsnormal = (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Savedeventtargets))
         let eventtargetsglobal = effects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None) |> List.collect (fun e -> e.GlobalEventTargets @ e.SavedEventTargets)
         let eventtargets = eventtargetsnormal @ eventtargetsglobal
         let extractResult =

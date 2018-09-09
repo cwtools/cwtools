@@ -79,11 +79,9 @@ module STLCompute =
 
     let computeSTLData (foldRules : unit -> FoldRules option) (e : Entity) =
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
-        {
-            eventids = eventIds
-            setvariables = STLValidation.getEntitySetVariables e
-            setflags = findAllSetFlags e
-            savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
-            referencedtypes = (if foldRules().IsSome then Some (foldRules().Value.GetReferencedTypes(e)) else None)
-            hastechs = getAllTechPrereqs e
-        }
+        let setvariables = STLValidation.getEntitySetVariables e
+        let setflags = findAllSetFlags e
+        let savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
+        let referencedtypes = (if foldRules().IsSome then Some (foldRules().Value.GetReferencedTypes(e)) else None)
+        let hastechs = getAllTechPrereqs e
+        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs)

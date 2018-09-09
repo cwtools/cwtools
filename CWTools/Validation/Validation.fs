@@ -174,9 +174,7 @@ module ValidationCore =
     let (<&??&>) es f = es |> Seq.map f |> Seq.reduce (<&?&>)
 
 
-
-
-    type EntitySet<'T>(entities : struct (Entity * Lazy<'T>) list) =
+    type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =
         member __.GlobMatch(pattern : string) =
             let options = new GlobOptions();
             options.Evaluation.CaseInsensitive <- true;
@@ -215,9 +213,15 @@ module ValidationCore =
             this.All |> List.collect (foldNode7 fNode)
 
 
+        member __.AddOrGetCached id generator =
+            entities |> List.collect (fun struct (e, d) ->
+                                    let data = d.Force()
+                                    match data.Cache |> Map.tryFind id with
+                                    |Some v -> v
+                                    |None -> let v = generator e in data.Cache <- Map.add id v data.Cache; v)
 
         member __.Raw = entities
-        member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
+        // member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
 
     type STLEntitySet = EntitySet<STLComputedData>
     type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
