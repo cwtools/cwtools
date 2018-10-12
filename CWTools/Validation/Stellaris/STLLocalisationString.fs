@@ -156,7 +156,8 @@ module STLLocalisationString =
     let checkLocFileName (file : string) =
         let filename = Path.GetFileNameWithoutExtension file
         if filename = "languages.yml" then OK else
-        let fileHeader = File.ReadLines(file) |> Seq.tryHead |> Option.map (fun h -> h.Trim().Replace(":",""))
+        let fileHeader = File.ReadLines(file) |> Seq.tryFind (fun l -> l.Trim().StartsWith("#") |> not && l.Trim().Length > 0)
+                                              |> Option.map (fun h -> h.Trim().Replace(":",""))
         // eprintfn "lcfn %s %A" filename fileHeader
         let keyToLanguage =
             function

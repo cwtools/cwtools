@@ -173,8 +173,8 @@ module rec Rules =
             |_ -> true
 
 
-        let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : NewRule list) (startNode : Node) =
-            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
+        let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext) (rules : NewRule list) (startNode : Node) =
+            let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let subtypedrules =
                 rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(r, o)]))
             let expandedrules =
@@ -187,7 +187,7 @@ module rec Rules =
                 match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
                 |[] ->
                     if enforceCardinality && ((leaf.Key |> Seq.tryHead |> Option.map ((=) '@') |> Option.defaultValue false) |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
-                |rs -> rs <&??&> (fun (l, r, o) -> applyLeafRule ctx r leaf) |> mergeValidationErrors "CW240"
+                |rs -> rs <&??&> (fun (l, r, o) -> applyLeafRule ctx o r leaf) |> mergeValidationErrors "CW240"
             let nodeFun (node : Node) =
                 match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
                 | [] ->
@@ -198,7 +198,7 @@ module rec Rules =
                 match expandedrules |> List.choose (function |(LeafValueRule (l), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None) with
                 | [] ->
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue] else OK
-                |rs -> rs <&??&> (fun (l, o) -> applyLeafValueRule ctx l leafvalue) |> mergeValidationErrors "CW240"
+                |rs -> rs <&??&> (fun (l, o) -> applyLeafValueRule ctx o l leafvalue) |> mergeValidationErrors "CW240"
             let checkCardinality (node : Node) (rule : NewRule) =
                 match rule with
                 |NodeRule(ValueField (ValueType.Specific key), _), opts
@@ -239,16 +239,17 @@ module rec Rules =
         and applyValueField severity (vt : CWTools.Parser.ConfigParser.ValueType) (leaf : Leaf) =
             checkValidValue enumsMap severity vt (leaf.Value.ToRawString()) leaf
 
-        and applyLeafValueRule (ctx : RuleContext) (rule : NewField) (leafvalue : LeafValue) =
-            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
+        and applyLeafValueRule (ctx : RuleContext) (options : Options) (rule : NewField) (leafvalue : LeafValue) =
+            let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
+
             checkField enumsMap typesMap effectMap triggerMap localisation files severity ctx rule (leafvalue.Value.ToRawString()) leafvalue
 
-        and applyLeafRule (ctx : RuleContext) (rule : NewField) (leaf : Leaf) =
-            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
+        and applyLeafRule (ctx : RuleContext) (options : Options) (rule : NewField) (leaf : Leaf) =
+            let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             checkField enumsMap typesMap effectMap triggerMap localisation files severity ctx rule (leaf.Value.ToRawString()) leaf
 
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) =
-            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
+            let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let newCtx =
                 match options.pushScope with
                 |Some ps ->
@@ -281,19 +282,19 @@ module rec Rules =
                 match changeScope true effectMap triggerMap key scope with
                 |NewScope (newScopes ,_) ->
                     let newCtx = {newCtx with scopes = newScopes}
-                    applyClauseField enforceCardinality newCtx rules node
+                    applyClauseField enforceCardinality options.severity newCtx rules node
                 |NotFound _ ->
                     Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) node]
                 |WrongScope (command, prevscope, expected) ->
                     Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node]
                 |_ -> Invalid [inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node]
 
-            |_ -> applyClauseField enforceCardinality newCtx rules node
+            |_ -> applyClauseField enforceCardinality options.severity newCtx rules node
 
         let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
             let results =
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
-                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField false {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node)
+                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node)
             let res = results |> List.choose (fun (s, ps, res) -> res |> function |Invalid _ -> None |OK -> Some (ps, s))
             res |> List.tryPick fst, res |> List.map snd
 

@@ -4,6 +4,7 @@ namespace CWTools.Parser
 open FParsec
 open CWTools.Utilities.Position
 open Types
+open CWTools.Common
 open CWTools.Common.STLConstants
 open System.IO
 open CWTools.Process.STLProcess
@@ -40,6 +41,7 @@ module rec ConfigParser =
         description : string option
         pushScope : Scope option
         replaceScopes : ReplaceScopes option
+        severity : Severity option
     }
     type RuleType =
     |NodeRule of left : NewField * rules : NewRule list
@@ -98,8 +100,14 @@ module rec ConfigParser =
         path : string
         nameTree : Node
     }
-
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None }
+    let parseSeverity =
+        function
+        |"error" -> Severity.Error
+        |"warning" -> Severity.Warning
+        |"info" -> Severity.Information
+        |"hint" -> Severity.Hint
+        |s -> failwithf "Invalid severity %s" s
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
@@ -185,6 +193,10 @@ module rec ConfigParser =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
             |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
             |None -> None
+        let severity =
+            match comments |> List.tryFind (fun s -> s.Contains("severity")) with
+            |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseSeverity |> Some
+            |None -> None
         let replaceScopes =
             match comments |> List.tryFind (fun s -> s.Contains("replace_scope")) with
             |Some s ->
@@ -206,7 +218,7 @@ module rec ConfigParser =
                         Some { root = root; this = this; froms = Some froms }
                     |None -> None
             |None -> None
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes }
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes; severity = severity }
 
     let processKey =
         function
@@ -328,8 +340,8 @@ module rec ConfigParser =
         |x ->
             TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None }
 
     let configLeaf (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey key

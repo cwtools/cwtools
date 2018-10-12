@@ -18,3 +18,10 @@ type RawEffect =
         scopes : string list
         targets : string list
     }
+
+type Severity =
+| Error = 1
+| Warning = 2
+| Information = 3
+| Hint = 4
+
