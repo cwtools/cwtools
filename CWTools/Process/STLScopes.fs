@@ -102,7 +102,7 @@ module STLScopes =
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("owner", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", "", true); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
-        ScopedEffect("controller", [Scope.Planet; Scope.Country; Scope.Starbase], Scope.Country, EffectType.Both, "", "", true);
+        ScopedEffect("controller", [Scope.Planet; Scope.Starbase], Scope.Country, EffectType.Both, "", "", true); //Removed controller of country
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);

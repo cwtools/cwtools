@@ -184,7 +184,8 @@ module STLLocalisationString =
         |_ , Some STLLang.Default -> OK
         |_, None -> Invalid [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 1) "" None ]
         |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 1) "" None ]
-        |Some l1, Some l2 when not (keyAtEnd filename) -> Invalid [invManual ErrorCodes.LocFileLangWrongPlace (rangeN file 1) "" None ]
+        // Removed this as only convention
+        // |Some l1, Some l2 when not (keyAtEnd filename) -> Invalid [invManual ErrorCodes.LocFileLangWrongPlace (rangeN file 1) "" None ]
         |Some l1, Some l2 when l1 = l2 -> OK
         |Some l1, Some l2 -> Invalid [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 1) "" None ]
 

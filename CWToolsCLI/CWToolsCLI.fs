@@ -167,7 +167,7 @@ module CWToolsCLI =
             (gameObj.references().Technologies) |> List.map fst |> List.iter (printfn "%A")
         | ListTypes.Types ->
             gameObj.recompute()
-            let referencedTypes = gameObj.entities() |> List.choose (fun struct(e,l) -> l.Force().referencedtypes)
+            let referencedTypes = gameObj.entities() |> List.choose (fun struct(e,l) -> l.Force().Referencedtypes)
             // printfn "%A" referencedTypes
             let combinedReferences = referencedTypes |> List.fold (fun s m -> merge s m (fun _ (a,b) -> a @ b)) Map.empty
                                         |> Map.map (fun _ vs -> vs |> List.map fst)
@@ -177,6 +177,11 @@ module CWToolsCLI =
             // eventReferences |> List.iter (printfn "%s")
             let unused = List.except eventReferences events
             unused |> List.iter (printfn "%s")
+            let files = events |> List.map (sprintf "%A")
+            File.WriteAllLines("file1.csv", files)
+            let files = eventReferences |> List.map (sprintf "%A")
+            File.WriteAllLines("file2.csv", files)
+
 
         | _ -> failwith "Unexpected list type"
 

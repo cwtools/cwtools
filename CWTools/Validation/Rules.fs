@@ -648,6 +648,12 @@ module rec Rules =
             |_ -> "x"
             //TODO: Expand
 
+        let checkIconField (folder : string) =
+            files |> Collections.Set.filter (fun icon -> icon.StartsWith(folder, StringComparison.OrdinalIgnoreCase))
+                  |> Collections.Set.toList
+                  |> List.map (fun icon -> icon.Replace(".dds",""))
+            // let value = folder + "/" + key + ".dds"
+            // if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leafornode]
 
         let createSnippetForClause (rules : NewRule list) (description : string option) (key : string) =
             let filterToCompletion =
@@ -691,7 +697,8 @@ module rec Rules =
                 |NodeRule (ValueField(_), _) -> []
                 |NodeRule (AliasField(_), _) -> []
                 |NodeRule (FilepathField(_), _) -> []
-                |NodeRule (IconField(_), _) -> []
+                |NodeRule (IconField(folder), innerRules) ->
+                    checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
                 |NodeRule (LocalisationField(_), _) -> []
                 |NodeRule (ScopeField(_), _) -> [] //TODO: Scopes
                 |NodeRule (SubtypeField(_), _) -> []
@@ -704,7 +711,7 @@ module rec Rules =
                 |LeafRule (ValueField(_), _) -> []
                 |LeafRule (AliasField(_), _) -> []
                 |LeafRule (FilepathField(_), _) -> []
-                |LeafRule (IconField(_), _) -> []
+                |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
                 |LeafRule (LocalisationField(_), _) -> []
                 |LeafRule (ScopeField(_), _) -> [] //TODO: Scopes
                 |LeafRule (SubtypeField(_), _) -> []

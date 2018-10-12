@@ -29,7 +29,7 @@ module ValidationCore =
         }
 
     type ErrorCodes =
-        static member MixedBlock = { ID = "CW002"; Severity = Severity.Error; Message = "This block has mixed key/values and values" }
+        static member MixedBlock = { ID = "CW002"; Severity = Severity.Error; Message = "This block has mixed key/values and values, it is probably a missing equals sign inside it." }
         static member MissingLocalisation =
             fun key language ->
                 let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()

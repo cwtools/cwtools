@@ -343,7 +343,14 @@ module STLValidation =
                                 x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Star, lv.Value.ToRawString())) |> Option.defaultValue []
                         newAcc @ acc
                         )
-            let ssflaggenerator (e : Entity) : obj list = if e.entityType = EntityType.SolarSystemInitializers then e.entity.Children |> List.collect (foldNode7 fNode) |> List.map (fun a -> upcast a) else []
+            let ssflaggenerator (e : Entity) : obj list =
+                if e.entityType = EntityType.SolarSystemInitializers
+                then
+                    let starflags = e.entity.Children |> List.collect (fun x -> x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Star, lv.Value.ToRawString())) |> Option.defaultValue [])
+                    let planetflags = e.entity.Children |> List.collect (foldNode7 fNode)
+                    (starflags @ planetflags) |> List.map (fun a -> upcast a)
+                else []
+            // let ssflaggenerator (e : Entity) : obj list = if e.entityType = EntityType.SolarSystemInitializers then e.entity.Children |> List.collect (foldNode7 fNode) |> List.map (fun a -> upcast a) else []
             let solarsystemflags = os.AddOrGetCached "flagsolarsystems" ssflaggenerator |> List.map (fun o -> o :?> (FlagType * string))
             // let solarsystemflags = os.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.collect (foldNode7 fNode)
             // let solarsystemflags =
