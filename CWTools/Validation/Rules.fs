@@ -358,7 +358,7 @@ module rec Rules =
         member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
             testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node
-        member __.RuleValidate : STLStructureValidator =
+        member __.RuleValidate<'T when 'T :> ComputedData>() : StructureValidator<'T> =
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
 
 

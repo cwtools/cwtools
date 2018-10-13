@@ -244,32 +244,32 @@ module STLEventValidation =
 
 
 
-
-    let getEventChains (reffects : Effect list) (os : STLEntitySet) (es : STLEntitySet) =
-
-        let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
-        let eids = events |> List.map (fun e -> e.ID, e) |> Map.ofList
-        let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
-        let projectsWithTags = projects |> List.map (fun p -> p, p.TagText("key"))
-        let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.ID, f))
-                    |> List.filter (fun (_, f) -> Map.containsKey f eids)
-                    //|> (fun f -> eprintfn "%A" f; f)
-                    |> List.collect(fun (s, t) -> [s,t; t,s])
-                    //|> (fun f -> eprintfn "%A" f; f)
-                    //|> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
-                    |> (fun es -> ((events |> List.map (fun f -> f.ID), es)))
-                    |> connectedComponents
-                    //|> (fun f -> eprintfn "%A" f; f)
-                    |> List.map (fun set -> set |> List.map (fun (event) -> eids.[event] ))
-        if chains |> List.isEmpty then OK else
-            let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
-            let effects = os.AllEffects @ es.AllEffects
-            let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
-            let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
-            let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
-            //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
-            let filteredChains = chains |> List.choose (fun c -> if c.Length > 500 then None else Some c)
-            filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
+    let getEventChains : LookupValidator<_> =
+        fun lu os es ->
+            let reffects = lu.scriptedEffects
+            let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
+            let eids = events |> List.map (fun e -> e.ID, e) |> Map.ofList
+            let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
+            let projectsWithTags = projects |> List.map (fun p -> p, p.TagText("key"))
+            let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.ID, f))
+                        |> List.filter (fun (_, f) -> Map.containsKey f eids)
+                        //|> (fun f -> eprintfn "%A" f; f)
+                        |> List.collect(fun (s, t) -> [s,t; t,s])
+                        //|> (fun f -> eprintfn "%A" f; f)
+                        //|> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
+                        |> (fun es -> ((events |> List.map (fun f -> f.ID), es)))
+                        |> connectedComponents
+                        //|> (fun f -> eprintfn "%A" f; f)
+                        |> List.map (fun set -> set |> List.map (fun (event) -> eids.[event] ))
+            if chains |> List.isEmpty then OK else
+                let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
+                let effects = os.AllEffects @ es.AllEffects
+                let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
+                let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
+                let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
+                //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
+                let filteredChains = chains |> List.choose (fun c -> if c.Length > 500 then None else Some c)
+                filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
 
 
     let valEventCalls : STLStructureValidator =

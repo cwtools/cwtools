@@ -262,33 +262,37 @@ module ScopeValidation =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
         effectBlock.All <&!&> valEventEffect effectBlock triggers effects modifiers scope
 
-    let valAllEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let fNode = (fun (x : Node) children ->
-            match x with
-            | (:? EffectBlock as x) -> valEffectsNew triggerMap effectMap modifiers x
-            | (:? Option as x) -> x |> filterOptionToEffects |> (fun o -> valEffectsNew triggerMap effectMap modifiers o)
-            | _ -> OK
-            <&&> children)
-        let fseNode = (fun (x : Node) ->
+    let valAllEffects : LookupValidator<STLComputedData> =
+        (fun lu _ es ->
+            let triggers = lu.scriptedTriggers
+            let effects = lu.scriptedEffects
+            let modifiers = lu.staticModifiers
+            let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+            let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+            let fNode = (fun (x : Node) children ->
+                match x with
+                | (:? EffectBlock as x) -> valEffectsNew triggerMap effectMap modifiers x
+                | (:? Option as x) -> x |> filterOptionToEffects |> (fun o -> valEffectsNew triggerMap effectMap modifiers o)
+                | _ -> OK
+                <&&> children)
+            let fseNode = (fun (x : Node) ->
 
-            let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
-            x.Children <&!&> (fun f -> valEventEffect x triggerMap effectMap modifiers scope (NodeC f)))
-        let fstNode = (fun (x : Node)  ->
-            let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
-            x.Children <&!&> (fun f -> valEventTrigger x triggerMap effectMap modifiers scope (NodeC f)))
+                let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+                x.Children <&!&> (fun f -> valEventEffect x triggerMap effectMap modifiers scope (NodeC f)))
+            let fstNode = (fun (x : Node)  ->
+                let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+                x.Children <&!&> (fun f -> valEventTrigger x triggerMap effectMap modifiers scope (NodeC f)))
 
-        let fCombine = (<&&>)
-        // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
-        // es.All @ opts <&!&> foldNode2 fNode fCombine OK
-        //<&&>
-        let b = (es.All <&!!&> foldNode2 fNode fCombine OK)
-        //<&&>
-        // let c = (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
-        // //<&&>
-        // let d = (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
-        b //<&&> c <&&> d
+            let fCombine = (<&&>)
+            // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
+            // es.All @ opts <&!&> foldNode2 fNode fCombine OK
+            //<&&>
+            let b = (es.All <&!!&> foldNode2 fNode fCombine OK)
+            //<&&>
+            // let c = (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
+            // //<&&>
+            // let d = (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
+            b) //<&&> c <&&> d
 
 
     let valTriggersNew (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (effectBlock : Node) =
@@ -296,16 +300,20 @@ module ScopeValidation =
         effectBlock.All <&!&> valEventTrigger effectBlock triggers effects modifiers scope
 
 
-    let valAllTriggers (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let fNode = (fun (x : Node) children ->
-            match x with
-            | (:? TriggerBlock as x) when not x.InEffectBlock -> valTriggersNew triggerMap effectMap modifiers x
-            | _ -> OK
-            <&&> children)
-        let fCombine = (<&&>)
-        es.All <&!!&> foldNode2 fNode fCombine OK
+    let valAllTriggers : LookupValidator<STLComputedData> =
+        (fun lu _ es ->
+            let triggers = lu.scriptedTriggers
+            let effects = lu.scriptedEffects
+            let modifiers = lu.staticModifiers
+            let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+            let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+            let fNode = (fun (x : Node) children ->
+                match x with
+                | (:? TriggerBlock as x) when not x.InEffectBlock -> valTriggersNew triggerMap effectMap modifiers x
+                | _ -> OK
+                <&&> children)
+            let fCombine = (<&&>)
+            es.All <&!!&> foldNode2 fNode fCombine OK)
 
     let filterWeightBlockToTriggers (wmb : STLProcess.WeightModifierBlock) =
         let excludes = ["factor"; "add"; "weight"]
@@ -318,13 +326,17 @@ module ScopeValidation =
         // eprintfn "%A" (newWmb.Values |> List.map (fun  c -> c.Key))
         newWmb :> Node
 
-    let validateModifierBlocks (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let foNode = (fun (x : Node) children ->
-            match x with
-            | (:? WeightModifierBlock as x) -> x |> filterWeightBlockToTriggers |> (fun o -> valTriggersNew triggerMap effectMap modifiers o)
-            | _ -> OK
-            <&&> children)
-        let fCombine = (<&&>)
-        es.All <&!!&> foldNode2 foNode fCombine OK
+    let validateModifierBlocks : LookupValidator<STLComputedData> =
+        (fun lu _ es ->
+            let triggers = lu.scriptedTriggers
+            let effects = lu.scriptedEffects
+            let modifiers = lu.staticModifiers
+            let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+            let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+            let foNode = (fun (x : Node) children ->
+                match x with
+                | (:? WeightModifierBlock as x) -> x |> filterWeightBlockToTriggers |> (fun o -> valTriggersNew triggerMap effectMap modifiers o)
+                | _ -> OK
+                <&&> children)
+            let fCombine = (<&&>)
+            es.All <&!!&> foldNode2 foNode fCombine OK)

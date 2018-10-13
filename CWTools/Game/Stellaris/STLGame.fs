@@ -164,11 +164,11 @@ type STLGame (settings : StellarisSettings) =
         //         |> List.map ((fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
         //             >> (fun (k, vs) -> k, findDuplicates vs))
 
-        let validateShips (entities : Node list) =
-            let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
-            ships |> List.map validateShip
-                  |> List.choose (function |Invalid es -> Some es |_ -> None)
-                  |> List.collect id
+        // let validateShips (entities : Node list) =
+        //     let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
+        //     ships |> List.map validateShip
+        //           |> List.choose (function |Invalid es -> Some es |_ -> None)
+        //           |> List.collect id
 
         let parseErrors() =
             resources.GetResources()
@@ -181,47 +181,73 @@ type STLGame (settings : StellarisSettings) =
             tech
             // tech |> List.iter (fun (f, t) -> eprintfn "%s" f)
 
-        let validateEvents (entities : Node list) =
-            let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            events |> List.map (fun e -> (valEventVals e) )
-                   |> List.choose (function |Invalid es -> Some es |_ -> None)
-                   |> List.collect id
+        // let validateEvents (entities : Node list) =
+        //     let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
+        //     events |> List.map (fun e -> (valEventVals e) )
+        //            |> List.choose (function |Invalid es -> Some es |_ -> None)
+        //            |> List.collect id
         let mutable ruleApplicator : RuleApplicator option = None
-        let validateAll (shallow : bool) (entities : struct (Entity * Lazy<STLComputedData>) list)  =
-            //let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
-            eprintfn "Validating %i files" (entities.Length)
-            let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
-            let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
-
-            let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
+        let validationSettings = {
+            validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                                 validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"; valFlags, "flags"; valMegastructureGraphics, "megastructure";
-                                valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"]
-            let validators = if useRules && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
-            let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
-            let oldEntities = EntitySet (resources.AllEntities())
-            let newEntities = EntitySet entities
-            let runValidators f (validators : (STLStructureValidator * string) list) =
-                (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-                @ (if not settings.validation.experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-            eprintfn "Validating misc"
-            //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
-            let res = runValidators (fun f -> f oldEntities newEntities) validators
-            //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
-            eprintfn "Validating files"
-            let fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-            let fres = fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
-            eprintfn "Validating effects/triggers"
-            let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
-            let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
-            let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
-            let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
-            let evres = duration (fun _ ->  ( if settings.validation.experimental && (not(shallow)) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
-            //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
-            //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
-            let shallow = (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ wres
-            let deep = evres
-            shallow, deep
+                                valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"]
+            experimentalValidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
+            heavyExperimentalValidators = [getEventChains, "event chains"]
+            experimental = settings.validation.experimental
+            fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
+            resources = resources
+            lookup = lookup
+            lookupValidators = [valAllEffects, "effects"; valAllTriggers, "triggers"; validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
+            ruleApplicator = ruleApplicator
+            useRules = useRules
+    // validators : (StructureValidator<'T> * string) list
+    // experimentalValidators : (StructureValidator<'T> * string) list
+    // heavyExperimentalValidators : (LookupValidator<'T> * string) list
+    // experimental : bool
+    // fileValidators : (FileValidator<'T> * string) list
+    // resources : IResourceAPI<'T>
+    // lookup : Lookup
+    // lookupValidators : (LookupValidator<'T> * string) list
+        }
+
+        let mutable validationManager = ValidationManager(validationSettings)
+        let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
+        // let validateAll (shallow : bool) (entities : struct (Entity * Lazy<STLComputedData>) list)  =
+        //     //let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
+        //     eprintfn "Validating %i files" (entities.Length)
+        //     let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
+        //     let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
+
+        //     let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
+        //                         validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
+        //                         validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"; valFlags, "flags"; valMegastructureGraphics, "megastructure";
+        //                         valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"]
+        //     let validators = if useRules && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
+        //     let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
+        //     let oldEntities = EntitySet (resources.AllEntities())
+        //     let newEntities = EntitySet entities
+        //     let runValidators f (validators : (STLStructureValidator * string) list) =
+        //         (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+        //         @ (if not settings.validation.experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+        //     eprintfn "Validating misc"
+        //     //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
+        //     let res = runValidators (fun f -> f oldEntities newEntities) validators
+        //     //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
+        //     eprintfn "Validating files"
+        //     let STLFileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
+        //     let fres = STLFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
+        //     eprintfn "Validating effects/triggers"
+        //     let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
+        //     let tres = duration (fun _ ->  valAllTriggers (lookup) oldEntities newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
+        //     let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
+        //     let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
+        //     let evres = duration (fun _ ->  ( if settings.validation.experimental && (not(shallow)) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
+        //     //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
+        //     //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
+        //     let shallow = (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ wres
+        //     let deep = evres
+        //     shallow, deep
         let localisationCheck (entities : struct (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             //let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
@@ -401,6 +427,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
             )
         let refreshRuleCaches(rules) =
             updateTypeDef(rules)

@@ -19,7 +19,7 @@ open FSharpx.Collections
 
 
 module Graphics =
-    let valMeshFiles : FileValidator =
+    let valMeshFiles : STLFileValidator =
         fun rm es ->
             let pdxmesh = es.AllOfTypeChildren EntityType.GfxGfx
                             |> List.filter (fun e -> e.Key == "objectTypes")
@@ -36,7 +36,7 @@ module Graphics =
                         | false -> Invalid [inv (ErrorCodes.MissingFile (filename)) fn]
             pdxmesh <&!&> inner
 
-    let valAssetFiles : FileValidator =
+    let valAssetFiles : STLFileValidator =
         fun rm es ->
             let os = EntitySet (rm.AllEntities())
             let pdxmesh =   os.AllOfTypeChildren EntityType.GfxGfx @
@@ -208,7 +208,7 @@ module Graphics =
                 else valIconLeaf sprites leaf
         node.Leafs key <&!&> inner
 
-    let valComponentIcons : FileValidator =
+    let valComponentIcons : STLFileValidator =
         //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
         fun res es ->
             let os = EntitySet (res.AllEntities())

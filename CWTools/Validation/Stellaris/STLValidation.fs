@@ -25,8 +25,14 @@ module STLValidation =
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name" Severity.Error) ship)] else OK
     let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size" Severity.Error) ship)] else OK
 
-    let validateShip : Validator<Ship>  = shipName <&> shipSize
+    // let validateShip : Validator<Ship>  = shipName <&> shipSize
 
+    let validateShips : STLStructureValidator =
+        fun _ es ->
+            let ships =
+                es.All |> List.collect (fun n -> n.Children)
+                   |> List.choose (function | :? Ship as s -> Some s |_ -> None)
+            ships <&!&> (fun s -> (shipName <&> shipSize) s)
 
     let getDefinedVariables (node : Node) =
         let fNode = (fun (x:Node) acc ->
@@ -99,7 +105,7 @@ module STLValidation =
     /// Not mandatory, but performance reasons, suggested by Caligula
     /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
     /// Create issue if none are true
-    let valEventVals (event : Event) =
+    let validateEventValsInternal (event : Event) =
         let isMTTH = event.Has "mean_time_to_happen"
         let isTrig = event.Has "is_triggered_only"
         let isOnce = event.Has "fire_only_once"
@@ -115,6 +121,12 @@ module STLValidation =
             | false -> Invalid [inv ErrorCodes.EventEveryTick event]
             | true -> OK
         e
+    let validateEvents : STLStructureValidator =
+        fun _ es ->
+            let ships =
+                es.All |> List.collect (fun n -> n.Children)
+                   |> List.choose (function | :? Event as s -> Some s |_ -> None)
+            ships <&!&> (fun s -> (validateEventValsInternal) s)
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->
@@ -188,7 +200,7 @@ module STLValidation =
             let fCombine = (<&&>)
             gui <&!&> (foldNode2 fNode fCombine OK)
 
-    let valSpriteFiles : FileValidator =
+    let valSpriteFiles : STLFileValidator =
         fun rm es ->
             let sprites = es.AllOfTypeChildren EntityType.Interface // es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
@@ -411,14 +423,16 @@ module STLValidation =
         let filteredModifierKeys = ["description"; "key"]
         let filtered = node.Values |> List.filter (fun f -> not (filteredModifierKeys |> List.exists (fun k -> k == f.Key)))
         filtered <&!&> valModifier modifiers node.Scope
-    let valAllModifiers (modifiers : (Modifier) list) (es : STLEntitySet) =
-        let fNode = (fun (x : Node) children ->
-            match x with
-            | (:? ModifierBlock as x) -> valModifiers modifiers x
-            | _ -> OK
-            <&&> children)
-        let fCombine = (<&&>)
-        es.All <&!!&> foldNode2 fNode fCombine OK
+    let valAllModifiers : LookupValidator<_> =
+        (fun lu _ es ->
+            let modifiers = lu.coreModifiers
+            let fNode = (fun (x : Node) children ->
+                match x with
+                | (:? ModifierBlock as x) -> valModifiers modifiers x
+                | _ -> OK
+                <&&> children)
+            let fCombine = (<&&>)
+            es.All <&!!&> foldNode2 fNode fCombine OK)
 
     let addGeneratedModifiers (modifiers : Modifier list) (es : STLEntitySet) =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")

@@ -223,4 +223,6 @@ module ValidationCore =
     type StructureValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> EntitySet<'T> -> ValidationResult
     type STLStructureValidator = StructureValidator<STLComputedData>
     type EU4StructureValidator = StructureValidator<EU4ComputedData>
-    type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
+    type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
+    type STLFileValidator = FileValidator<STLComputedData>
+    type LookupValidator<'T when 'T :> ComputedData> = Lookup -> StructureValidator<'T>
