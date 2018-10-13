@@ -206,7 +206,7 @@ module rec Rules =
                     let leafcount = node.Values |> List.filter (fun leaf -> leaf.Key == key) |> List.length
                     let childcount = node.Children |> List.filter (fun child -> child.Key == key) |> List.length
                     let total = leafcount + childcount
-                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" key opts.min) severity) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" key opts.min) (opts.severity |> Option.defaultValue severity)) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" key opts.max) Severity.Warning) node]
                     else OK
                 |NodeRule(AliasField(_), _), _
@@ -214,17 +214,17 @@ module rec Rules =
                 |LeafValueRule(AliasField(_)), _ -> OK
                 |NodeRule(l, _), opts ->
                     let total = node.Children |> List.filter (fun child -> checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l child.Key child) |> List.length
-                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) severity) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %A, expecting at most %i" l opts.max) Severity.Warning) node]
                     else OK
                 |LeafRule(l, r), opts ->
                     let total = node.Values |> List.filter (fun leaf -> checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leaf.Key leaf) |> List.length
-                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) severity) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %A %A, expecting at most %i" l r opts.max) Severity.Warning) node]
                     else OK
                 |LeafValueRule(l), opts ->
                     let total = node.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue) |> List.length
-                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) severity) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %A, expecting at most %i" l opts.max) Severity.Warning) node]
                     else OK
                 |_ -> OK

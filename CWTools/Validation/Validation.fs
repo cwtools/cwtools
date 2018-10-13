@@ -97,7 +97,7 @@ module ValidationCore =
         static member DeprecatedSetName = { ID = "CW253"; Severity = Severity.Information; Message = "Consider using \"set_name\" instead for consistency" }
         static member WrongEncoding = { ID = "CW254"; Severity = Severity.Error; Message = "Localisation files must be UTF-8 BOM, this file is not"}
         static member MissingLocFileLang = { ID = "CW255"; Severity = Severity.Error; Message = "Localisation file name should contain (and ideally end with) \"l_language.yml\""}
-        static member MissingLocFileLangHeader = { ID = "CW256"; Severity = Severity.Error; Message = "Localisation file should start with \"l_language:\" on the first line"}
+        static member MissingLocFileLangHeader = { ID = "CW256"; Severity = Severity.Error; Message = "Localisation file should start with \"l_language:\" on the first line (or a comment)"}
         static member LocFileLangMismatch = fun (name : STLLang) (header : STLLang) -> { ID = "CW257"; Severity = Severity.Error; Message = sprintf "Localisation file's name has language %A doesn't match the header language %A" name header }
         static member LocFileLangWrongPlace = { ID = "CW258"; Severity = Severity.Information; Message = "Localisation file name should end with \"l_language.yml\""}
 

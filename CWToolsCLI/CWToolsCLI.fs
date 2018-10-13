@@ -221,7 +221,7 @@ module CWToolsCLI =
         // registry.DeclareSerializable<Lazy<Leaf array>>()
         // registry.DeclareSerializable<System.LazyHelper>()
         let cache = PicklerCache.FromCustomPicklerRegistry registry
-        let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
+        let binarySerializer = FsPickler.CreateXmlSerializer(picklerResolver = cache) //FsPickler.CreateBinarySerializer(picklerResolver = cache)
         let data = { resources = entities; fileIndexTable = fileIndexTable}
         let pickle = binarySerializer.Pickle data
         File.WriteAllBytes("pickled.cwb", pickle)
