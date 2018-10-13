@@ -81,7 +81,7 @@ module Graphics =
         es.AllOfTypeChildren EntityType.GraphicalCulture
                         |> List.map (fun c -> c.Key, c.TagText "fallback")
 
-    let valSectionGraphics : StructureValidator =
+    let valSectionGraphics : STLStructureValidator =
         fun os es ->
             let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
@@ -121,7 +121,7 @@ module Graphics =
             <&&>
             (shipsizesEV <&!&> ssinner)
 
-    let valComponentGraphics : StructureValidator =
+    let valComponentGraphics : STLStructureValidator =
         fun os es ->
             let components = es.AllOfTypeChildren EntityType.ComponentTemplates
                                 |> List.filter (fun c -> (c.Tag "hidden") |> Option.bind (function |Value.Bool x -> Some (not x) |_ -> Some true) |> Option.defaultValue true)
@@ -142,7 +142,7 @@ module Graphics =
                         (cultures |> List.map fst) |> validateEntityCultures assets cultures (s.TagText "entity") entity
             components <&!&> inner
 
-    let valMegastructureGraphics : StructureValidator =
+    let valMegastructureGraphics : STLStructureValidator =
         fun os es ->
             let megastructures = es.AllOfTypeChildren EntityType.Megastructures
                                     //|> List.collect (fun a -> a.Leafs "entity" |> List.ofSeq)
@@ -163,7 +163,7 @@ module Graphics =
 
             megastructures <&!&> inner
 
-    let valPlanetClassGraphics : StructureValidator =
+    let valPlanetClassGraphics : STLStructureValidator =
         fun os es ->
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                         |> List.map (fun a -> a.TagText "name")
@@ -171,7 +171,7 @@ module Graphics =
             es.AllOfTypeChildren EntityType.PlanetClasses
             |> List.collect (fun ao -> ao.Leafs "entity" |> List.ofSeq)
             <&!&> (fun l -> if assets.Contains (l.Value.ToRawString()) || assets.Contains (l.Value.ToRawString() + "_01_entity") then OK else Invalid [inv (ErrorCodes.UndefinedEntity (l.Value.ToRawString())) l])
-    let validateAmbientGraphics : StructureValidator =
+    let validateAmbientGraphics : STLStructureValidator =
         fun os es ->
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                         |> List.map (fun a -> a.TagText "name")

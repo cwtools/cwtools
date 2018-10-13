@@ -220,5 +220,7 @@ module ValidationCore =
         // member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
 
     type STLEntitySet = EntitySet<STLComputedData>
-    type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
+    type StructureValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> EntitySet<'T> -> ValidationResult
+    type STLStructureValidator = StructureValidator<STLComputedData>
+    type EU4StructureValidator = StructureValidator<EU4ComputedData>
     type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult

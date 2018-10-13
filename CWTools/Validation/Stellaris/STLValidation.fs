@@ -47,7 +47,7 @@ module STLValidation =
 
 
 
-    let validateVariables : StructureValidator =
+    let validateVariables : STLStructureValidator =
         fun os es ->
             let globalVars = os.GlobMatch("**/common/scripted_variables/*.txt") @ es.GlobMatch("**/common/scripted_variables/*.txt")
                             |> List.map getDefinedVariables
@@ -137,7 +137,7 @@ module STLValidation =
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
 
-    let valTechnology : StructureValidator =
+    let valTechnology : STLStructureValidator =
         fun _ es ->
             let techs = es.GlobMatchChildren("**/common/technology/*.txt")
             let inner =
@@ -152,7 +152,7 @@ module STLValidation =
             techs <&!&> inner
             //techs |> List.map inner |> List.fold (<&&>) OK
 
-    let valButtonEffects : StructureValidator =
+    let valButtonEffects : STLStructureValidator =
         fun os es ->
             let effects = (os.GlobMatchChildren("**/common/button_effects/*.txt"))
                             |> List.filter (fun e -> e :? Button_Effect)
@@ -169,7 +169,7 @@ module STLValidation =
             let fCombine = (<&&>)
             buttons <&!&> (foldNode2 fNode fCombine OK)
 
-    let valSprites : StructureValidator =
+    let valSprites : STLStructureValidator =
         //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
         fun os es ->
             let sprites = os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/*/*.gfx")
@@ -262,7 +262,7 @@ module STLValidation =
         let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
         effects @ opts |> List.collect findAllSetVariables
 
-    let valVariables : StructureValidator =
+    let valVariables : STLStructureValidator =
         fun os es ->
             let ftNode = (fun (x : Node) acc ->
                     match x with
@@ -319,7 +319,7 @@ module STLValidation =
         foldNode2 fNode fCombine OK node
 
 
-    let valFlags : StructureValidator =
+    let valFlags : STLStructureValidator =
         fun os es ->
             let ftNode = (fun (x : Node) acc ->
                     match x with
@@ -366,7 +366,7 @@ module STLValidation =
             //let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!!&> (validateUsedFlags defFlags)
 
-    let valTest : StructureValidator =
+    let valTest : STLStructureValidator =
         fun os es ->
             let fNode = (fun (x : Node) acc ->
                         match x with
@@ -514,7 +514,7 @@ module STLValidation =
 
 
 
-    let validateTechnologies : StructureValidator =
+    let validateTechnologies : STLStructureValidator =
         fun os es ->
             // let timer = new System.Diagnostics.Stopwatch()
             // timer.Start()
@@ -574,7 +574,7 @@ module STLValidation =
 
 
 
-    let validateShipDesigns : StructureValidator =
+    let validateShipDesigns : STLStructureValidator =
         fun os es ->
             let ship_designs = es.AllOfTypeChildren EntityType.GlobalShipDesigns
             let section_templates = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates
@@ -632,19 +632,9 @@ module STLValidation =
 
             ship_designs <&!&> validateDesign
 
-    let validateMixedBlocks : StructureValidator =
-        fun _ es ->
-
-            let fNode = (fun (x : Node) children ->
-                if (x.LeafValues |> Seq.isEmpty |> not && (x.Leaves |> Seq.isEmpty |> not || x.Children |> Seq.isEmpty |> not)) |> not
-                then children
-                else Invalid [inv ErrorCodes.MixedBlock x] <&&> children
-                )
-            let fCombine = (<&&>)
-            es.All <&!&> foldNode2 fNode fCombine OK
 
 
-    let validateSolarSystemInitializers : StructureValidator =
+    let validateSolarSystemInitializers : STLStructureValidator =
         fun os es ->
             let inits = es.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.filter (fun si -> not(si.Key == "random_list"))
             let starclasses =
@@ -658,7 +648,7 @@ module STLValidation =
                     |_, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x]
             inits <&!&> fNode
 
-    let validatePlanetKillers : StructureValidator =
+    let validatePlanetKillers : STLStructureValidator =
         fun os es ->
             let planetkillers = es.AllOfTypeChildren EntityType.ComponentTemplates |> List.filter (fun ct -> ct.TagText "type" = "planet_killer")
             let onactions = (os.AllOfTypeChildren EntityType.OnActions @ es.AllOfTypeChildren EntityType.OnActions) |> List.map (fun c -> c.Key)
@@ -672,7 +662,7 @@ module STLValidation =
                 (if List.exists ((==) trigger) scriptedtriggers then OK else Invalid [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing scripted trigger %s" key trigger)) node])
             planetkillers <&!&> inner
 
-    let validateAnomaly210 : StructureValidator =
+    let validateAnomaly210 : STLStructureValidator =
         fun _ es ->
             let anomalies = es.GlobMatchChildren("**/anomalies/*.txt")
             let fNode =
@@ -680,7 +670,7 @@ module STLValidation =
             anomalies <&!&> fNode
 
 
-    let validateIfElse210 : StructureValidator =
+    let validateIfElse210 : STLStructureValidator =
         fun _ es ->
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode =
@@ -693,7 +683,7 @@ module STLValidation =
                 )
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
 
-    let validateIfElse : StructureValidator =
+    let validateIfElse : STLStructureValidator =
         fun _ es ->
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))
             let fNode =
@@ -718,7 +708,7 @@ module STLValidation =
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
 
     type BoolState = | AND | OR
-    let validateRedundantAND : StructureValidator =
+    let validateRedundantAND : STLStructureValidator =
         fun _ es ->
             let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
             let triggers = (es.AllTriggers |> List.map (fun n -> n :> Node))
@@ -731,7 +721,7 @@ module STLValidation =
                     |_, _ -> AND, None
             (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> Invalid)
 
-    let validateDeprecatedSetName : StructureValidator =
+    let validateDeprecatedSetName : STLStructureValidator =
         fun _ es ->
             let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
             let fNode =

@@ -27,3 +27,8 @@ type Severity =
 | Information = 3
 | Hint = 4
 
+type ComputedData() =
+    member val Cache : Map<string, obj list> = Map.empty with get, set
+
+type EU4ComputedData() =
+    inherit ComputedData()

@@ -11,12 +11,11 @@ open System
 open CWTools.Utilities.Utils
 open CWTools.Games
 open CWTools.Utilities.Position
+open CWTools.Common
 
 module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
 
-    type ComputedData() =
-        member val Cache : Map<string, obj list> = Map.empty with get, set
 
     type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs) =
         inherit ComputedData()

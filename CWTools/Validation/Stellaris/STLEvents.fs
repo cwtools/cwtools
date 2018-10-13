@@ -272,7 +272,7 @@ module STLEventValidation =
             filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
 
 
-    let valEventCalls : StructureValidator =
+    let valEventCalls : STLStructureValidator =
         fun os es ->
             let events = (os.AllOfType EntityType.Events @ es.AllOfType EntityType.Events)
             let eventIds = events |> List.collect (fun (e, d) -> d.Force().Eventids)

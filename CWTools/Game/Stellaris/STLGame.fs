@@ -33,6 +33,7 @@ open FSharp.Data.Runtime
 open CWTools.Validation.Stellaris.ScopeValidation
 open Files
 open CWTools.Validation.Stellaris
+open CWTools.Validation.Common.CommonValidation
 
 type EmbeddedSettings = {
     triggers : DocEffect list
@@ -200,7 +201,7 @@ type STLGame (settings : StellarisSettings) =
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
-            let runValidators f (validators : (StructureValidator * string) list) =
+            let runValidators f (validators : (STLStructureValidator * string) list) =
                 (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
                 @ (if not settings.validation.experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             eprintfn "Validating misc"
