@@ -4,19 +4,19 @@ open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
 
-type ValidationManagerSettings<'T when 'T :> ComputedData> = {
+type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S : comparison> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
-    heavyExperimentalValidators : (LookupValidator<'T> * string) list
+    heavyExperimentalValidators : (LookupValidator<'T, 'S> * string) list
     experimental : bool
     fileValidators : (FileValidator<'T> * string) list
     resources : IResourceAPI<'T>
-    lookup : Lookup
-    lookupValidators : (LookupValidator<'T> * string) list
-    ruleApplicator : CWTools.Validation.IRuleApplicator option
+    lookup : Lookup<'S>
+    lookupValidators : (LookupValidator<'T, 'S> * string) list
+    ruleApplicator : CWTools.Validation.IRuleApplicator<'S> option
     useRules : bool
 }
-type ValidationManager<'T when 'T :> ComputedData>(settings : ValidationManagerSettings<'T>) =
+type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S>) =
     let resources = settings.resources
     let validators = settings.validators
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =

@@ -4,12 +4,14 @@ open NodaTime.TimeZones
 open System
 open CWTools.Localisation
 open CWTools.Utilities.Position
+open CWTools.Common
+open CWTools.Process.Scopes
 module STLScopes =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-
+    type LocEntry = LocEntry<Scope>
 
 //         COUNTRY:
 // space_owner
@@ -377,6 +379,14 @@ module STLScopes =
         member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
         member this.GetFrom i =
             if this.From.Length >= i then (this.From.Item (i - 1)) else Scope.Any
+        interface IScopeContext<Scope> with
+            member this.CurrentScope = this.CurrentScope
+            member this.PopScope = this.PopScope
+            member this.GetFrom i = this.GetFrom i
+            member this.Root = this.Root
+            member this.From = this.From
+            member this.Scopes = this.Scopes
+
     let defaultContext =
         { Root = Scope.Any; From = []; Scopes = [] }
 
@@ -386,11 +396,11 @@ module STLScopes =
         | NotFound
 
     let oneToOneScopes =
-        let from i = fun (s, change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
-        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
+        let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
+        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true
         [
         "THIS", id;
-        "ROOT", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
+        "ROOT", fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, true;
         "FROM", from 1;
         "FROMFROM", from 2;
         "FROMFROMFROM", from 3;
@@ -410,7 +420,7 @@ module STLScopes =
 
     let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
-        if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
+        if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ Root = source.Root; From = source.From; Scopes = Scope.Any::source.Scopes }, [])
         else
             let keys = key.Split('.')
             let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
@@ -430,10 +440,10 @@ module STLScopes =
                         let possibleScopes = e.Scopes
                         let exact = possibleScopes |> List.contains context.CurrentScope
                         match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                        | Scope.Any, _, _, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                        | Scope.Any, _, _, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
                         | Scope.Any, _, _, false -> (context, false), NewScope (context, e.IgnoreChildren)
                         | _, [], _, _ -> (context, false), NotFound
-                        | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                        | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
                         | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
                         | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
             let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
@@ -446,6 +456,7 @@ module STLScopes =
             // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
             // x
             res2
+
 
     // let sourceScope (scope : string) = scopes
     //                                 |> List.choose (function | (n, s, _) when n == scope -> Some s |_ -> None)
@@ -466,20 +477,7 @@ module STLScopes =
                 |Some e -> Some e.Scopes
         keys |> List.fold (fun acc k -> match acc with |Some e -> Some e |None -> inner k) None |> Option.defaultValue allScopes
 
-    type UsageScopeContext = Scope list
-    type ContextResult =
-    | Found of string * (Scope list)
-    | LocNotFound of string
-    //| Failed
-    [<Struct>]
-    type LocEntry = {
-        key : string
-        value : char option
-        desc : string
-        position : range
-        scopes : ContextResult list
-        refs : string list
-    }
+
     let scopedLocEffects = [
         ScopedEffect("capital", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("capital_scope", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "", true);

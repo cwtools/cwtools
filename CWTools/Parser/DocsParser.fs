@@ -1,6 +1,6 @@
 namespace CWTools.Parser
 
-    
+
 open FParsec
 open System.IO
 open CWTools.Common
@@ -25,9 +25,9 @@ module DocsParser =
 
     let private twoDocs = docFile .>>. docFile
 
-    let toDocEffect effectType (x : RawEffect) = DocEffect(x, effectType)
-    let processDocs (t, e) = t |> List.map (toDocEffect EffectType.Trigger), e |> List.map (toDocEffect EffectType.Effect)
+    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect<'a>(x, effectType, parseScopes)
+    let processDocs parseScopes (t, e) = t |> List.map (toDocEffect EffectType.Trigger parseScopes), e |> List.map (toDocEffect EffectType.Effect parseScopes)
 
     let parseDocsFile filepath = runParserOnFile twoDocs () filepath (System.Text.Encoding.GetEncoding(1252))
-    
+
     let parseDocsStream file = runParserOnStream twoDocs () "docFile" file (System.Text.Encoding.GetEncoding(1252))

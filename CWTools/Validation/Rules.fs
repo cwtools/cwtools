@@ -22,19 +22,26 @@ open QuickGraph
 open System
 open FSharp.Collections.ParallelSeq
 open System
+open CWTools.Process.Scopes
 
-type IRuleApplicator =
-    abstract ApplyNodeRule : NewRule list * Node -> ValidationResult
-    abstract TestSubtype : SubTypeDefinition list * Node -> Scope option * string list
+type IRuleApplicator<'S> =
+    abstract ApplyNodeRule : NewRule<'S> list * Node -> ValidationResult
+    abstract TestSubtype : SubTypeDefinition<'S> list * Node -> 'S option * string list
     abstract RuleValidate : unit -> StructureValidator<'T>
 
 module rec Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
+    type NewField = NewField<Scope>
+    type NewRule = NewRule<Scope>
+    type Options = Options<Scope>
+    type TypeDefinition = TypeDefinition<Scope>
+    type RootRule = RootRule<Scope>
+    type SubTypeDefinition = SubTypeDefinition<Scope>
 
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
-    let checkPathDir (t : TypeDefinition) (pathDir : string) =
+    let checkPathDir (t : TypeDefinition<_>) (pathDir : string) =
         match t.path_strict with
         |true -> pathDir == t.path.Replace("\\","/")
         |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
@@ -59,13 +66,15 @@ module rec Rules =
     |Simple of label : string
     |Detailed of label : string * desc : string option
     |Snippet of label : string * snippet : string * desc : string option
+
+    // type ScopeContext = IScopeContext<Scope>
     type RuleContext =
         {
             subtypes : string list
             scopes : ScopeContext
             warningOnly : bool
         }
-
+    // type RuleContext  = RuleContext<Scope>
     let firstCharEquals (c : char) = (fun s -> s |> Seq.tryHead |> Option.map ((=) c) |> Option.defaultValue false)
 
     let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (key : string) leafornode =
@@ -357,7 +366,7 @@ module rec Rules =
             let res = (root.Children <&!&> inner)
             res
 
-        interface IRuleApplicator with
+        interface IRuleApplicator<Scope> with
             member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
             member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
                 testSubtype subtypes node
@@ -365,7 +374,7 @@ module rec Rules =
             member __.RuleValidate<'T when 'T :> ComputedData>() : StructureValidator<'T> =
                 fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
 
-    type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>, ruleApplicator : IRuleApplicator) =
+    type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>, ruleApplicator : IRuleApplicator<Scope>) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
@@ -870,9 +879,9 @@ module rec Rules =
 
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
-    let getTypesFromDefinitions (ruleapplicator : IRuleApplicator) (types : TypeDefinition list) (es : Entity list) =
+    let getTypesFromDefinitions (ruleapplicator : IRuleApplicator<_>) (types : TypeDefinition<_> list) (es : Entity list) =
         let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e)
-        let getTypeInfo (def : TypeDefinition) =
+        let getTypeInfo (def : TypeDefinition<_>) =
             entities |> List.choose (fun (path, e) -> if checkPathDir def path then Some e.entity else None)
                      |> List.collect (fun e ->
                             let inner (n : Node) =

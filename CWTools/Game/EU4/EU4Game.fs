@@ -10,8 +10,10 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-open CWTools.Validation.Rules
+// open CWTools.Validation.Rules
 open CWTools.Parser.ConfigParser
+open CWTools.Common.EU4Constants
+open CWTools.Validation.EU4.EU4Rules
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -150,8 +152,8 @@ type EU4Game(settings : EU4Settings) =
         ()
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
-    let lookup = Lookup()
-    let mutable ruleApplicator : CWTools.Validation.IRuleApplicator option = None
+    let lookup = Lookup<Scope>()
+    let mutable ruleApplicator : CWTools.Validation.IRuleApplicator<Scope> option = None
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; ]
         experimentalValidators = []
@@ -195,7 +197,7 @@ type EU4Game(settings : EU4Settings) =
             timer.Start()
             match rulesSettings with
             |Some rulesSettings ->
-                let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig parseScope Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
                 lookup.typeDefs <- types
                 // let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None}))))
                 // lookup.configRules <- rulesWithMod
@@ -205,7 +207,7 @@ type EU4Game(settings : EU4Settings) =
                 tempTypes <- types
                 eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
             |None -> ()
-            let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allEnums = simpleEnums @ complexEnumDefs
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -221,13 +223,13 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             // completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> CWTools.Validation.IRuleApplicator)
+            ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> CWTools.Validation.IRuleApplicator<Scope>)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             // infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -313,7 +315,7 @@ type EU4Game(settings : EU4Settings) =
         // updateTechnologies()
         updateLocalisation()
         updateTypeDef(settings.rules)
-    interface IGame<EU4ComputedData> with
+    interface IGame<EU4ComputedData, Scope> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (validateAll false (resources.ValidatableEntities())) in s @ d
@@ -340,7 +342,7 @@ type EU4Game(settings : EU4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<EU4ComputedData>(resources, Lookup(), (localisationAPIs |> List.map snd))
+        member __.References() = References<EU4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
         member __.Complete pos file text = [] //completion pos file text
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
         member __.GoToType pos file text = Some range0

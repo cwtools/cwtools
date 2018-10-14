@@ -262,7 +262,7 @@ module ScopeValidation =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
         effectBlock.All <&!&> valEventEffect effectBlock triggers effects modifiers scope
 
-    let valAllEffects : LookupValidator<STLComputedData> =
+    let valAllEffects : LookupValidator<STLComputedData, _> =
         (fun lu _ es ->
             let triggers = lu.scriptedTriggers
             let effects = lu.scriptedEffects
@@ -300,7 +300,7 @@ module ScopeValidation =
         effectBlock.All <&!&> valEventTrigger effectBlock triggers effects modifiers scope
 
 
-    let valAllTriggers : LookupValidator<STLComputedData> =
+    let valAllTriggers : LookupValidator<STLComputedData, _> =
         (fun lu _ es ->
             let triggers = lu.scriptedTriggers
             let effects = lu.scriptedEffects
@@ -326,7 +326,7 @@ module ScopeValidation =
         // eprintfn "%A" (newWmb.Values |> List.map (fun  c -> c.Key))
         newWmb :> Node
 
-    let validateModifierBlocks : LookupValidator<STLComputedData> =
+    let validateModifierBlocks : LookupValidator<STLComputedData, _> =
         (fun lu _ es ->
             let triggers = lu.scriptedTriggers
             let effects = lu.scriptedEffects

@@ -8,6 +8,7 @@
     <Compile Include="Utilities/Utilities.fs" />
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Common/STLConstants.fs" />
+    <Compile Include="Common/EU4Constants.fs" />
     <Compile Include="Parser/Types.fs" />
     <Compile Include="Parser/SharedParsers.fs" />
     <Compile Include="Parser/CKParser.fs" />
@@ -22,8 +23,10 @@
     <Compile Include="Localisation/STLLocalisation.fs" />
     <Compile Include="Process/Process.fs" />
     <Compile Include="Process/CK2Process.fs" />
+    <Compile Include="Process/Scopes.fs" />
     <Compile Include="Process/STLScopes.fs" />
     <Compile Include="Process/STLProcess.fs" />
+    <Compile Include="Process/EU4Scopes.fs" />
     <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />

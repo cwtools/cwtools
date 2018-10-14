@@ -1,6 +1,6 @@
 namespace CWTools.Parser
 
-    
+
 open FParsec
 open System.IO
 open CWTools.Common
@@ -10,7 +10,7 @@ open CWTools.Common.STLConstants
 
 module SetupLogParser =
 
-    let private isvaluechar = SharedParsers.isvaluechar 
+    let private isvaluechar = SharedParsers.isvaluechar
     let private str s = pstring s .>> SharedParsers.ws <?> ("string " + s)
     let private header = skipCharsTillString "Initializing Database: CStaticModifierDatabase" true 2000000 .>> SharedParsers.ws <?> "header"
     let private pre = skipCharsTillString "Static Modifier #" true 100
@@ -30,8 +30,8 @@ module SetupLogParser =
 
     let private logFile = SharedParsers.ws >>. header >>. many1 (attempt staticModifier) .>> modifierHeader .>>. many1 (attempt modifier) .>> footer .>> eof
 
-    
-    let toDocEffect effectType (x : RawEffect) = DocEffect(x, effectType)
+
+    let toDocEffect<'a when 'a : comparison> effectType parseScope (x : RawEffect) = DocEffect<'a>(x, effectType, parseScope)
 
     let parseLogsFile filepath = runParserOnFile logFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseLogsStream file = runParserOnStream logFile () "logFile" file (System.Text.Encoding.GetEncoding(1252))

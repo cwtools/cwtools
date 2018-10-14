@@ -225,4 +225,4 @@ module ValidationCore =
     type EU4StructureValidator = StructureValidator<EU4ComputedData>
     type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
     type STLFileValidator = FileValidator<STLComputedData>
-    type LookupValidator<'T when 'T :> ComputedData> = Lookup -> StructureValidator<'T>
+    type LookupValidator<'T, 'S when 'T :> ComputedData and 'S : comparison> = Lookup<'S> -> StructureValidator<'T>

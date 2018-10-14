@@ -19,15 +19,23 @@ open QuickGraph
 open System
 open FSharp.Collections.ParallelSeq
 open System
+open CWTools.Process.Scopes
+open CWTools.Process.EU4Scopes
+open CWTools.Common.EU4Constants
 
 
 module rec EU4Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
-
+    type NewField = NewField<Scope>
+    type NewRule = NewRule<Scope>
+    type Options = Options<Scope>
+    type TypeDefinition = TypeDefinition<Scope>
+    type RootRule = RootRule<Scope>
+    type SubTypeDefinition = SubTypeDefinition<Scope>
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
-    let checkPathDir (t : TypeDefinition) (pathDir : string) =
+    let checkPathDir (t : TypeDefinition<Scope>) (pathDir : string) =
         match t.path_strict with
         |true -> pathDir == t.path.Replace("\\","/")
         |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
@@ -46,21 +54,20 @@ module rec EU4Rules =
         let value = folder + "/" + leaf.Value.ToRawString() + ".dds"
         if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leaf]
 
-    // TODO: EU4 re-add
-    //let scopes = (scopedEffects |> List.map (fun se -> se.Name)) @ (oneToOneScopes |> List.map fst)
+    let scopes = (scopedEffects |> List.map (fun se -> se.Name)) @ (oneToOneScopes |> List.map fst)
 
     type CompletionResponse =
     |Simple of label : string
     |Detailed of label : string * desc : string option
     |Snippet of label : string * snippet : string * desc : string option
+
+    // type RuleContext  = RuleContext<Scope>
     type RuleContext =
         {
             subtypes : string list
-            //TODO: Eu4 re-add
-            // scopes : ScopeContext
+            scopes : ScopeContext
             warningOnly : bool
         }
-
     let firstCharEquals (c : char) = (fun s -> s |> Seq.tryHead |> Option.map ((=) c) |> Option.defaultValue false)
 
     let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (key : string) leafornode =
@@ -101,16 +108,13 @@ module rec EU4Rules =
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leafornode]
 
-    let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (ctx : RuleContext) (s : string) key leafornode =
-        // TODO: Eu4 re-add
-   // let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (ctx : RuleContext) (s : Scope) key leafornode =
-        // let scope = ctx.scopes
-        // match changeScope true effectMap triggerMap key scope with
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
-        // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
-        // |_ -> OK
-        OK
+    let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (ctx : RuleContext) (s : Scope) key leafornode =
+        let scope = ctx.scopes
+        match changeScope true effectMap triggerMap key scope with
+        |NewScope (({Scopes = current::_}) ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
+        |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
+        |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
+        |_ -> OK
 
     let inline checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
         let file = key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
@@ -124,7 +128,7 @@ module rec EU4Rules =
         match field with
         |ValueField vt -> checkValidValue enumsMap severity vt key leafornode
         |TypeField t -> checkTypeField typesMap severity t key leafornode
-        |ScopeField s -> checkScopeField effectMap triggerMap ctx "replace_me" key leafornode
+        |ScopeField s -> checkScopeField effectMap triggerMap ctx s key leafornode
         |LocalisationField synced -> checkLocalisationField localisation synced key leafornode
         |FilepathField -> checkFilepathField files key leafornode
         |IconField folder -> checkIconField files folder key leafornode
@@ -139,9 +143,7 @@ module rec EU4Rules =
         let leaf = LeafValue(Value.String key)
         checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx field key leaf
 
-    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,string,InsensitiveStringComparer>, effects : Map<string,string,InsensitiveStringComparer>) =
-    //TODO: EU4 re-add effects
-    //type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>) =
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
@@ -254,63 +256,61 @@ module rec EU4Rules =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let newCtx = ctx
             //TODO: EU4 re-add
-            // let newCtx =
-            //     match options.pushScope with
-            //     |Some ps ->
-            //         {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
-            //     |None ->
-            //         match options.replaceScopes with
-            //         |Some rs ->
-            //             let newctx =
-            //                 match rs.this, rs.froms with
-            //                 |Some this, Some froms ->
-            //                     {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
-            //                 |Some this, None ->
-            //                     {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
-            //                 |None, Some froms ->
-            //                     {ctx with scopes = {ctx.scopes with From = froms}}
-            //                 |None, None ->
-            //                     ctx
-            //             match rs.root with
-            //             |Some root ->
-            //                 {ctx with scopes = {ctx.scopes with Root = root}}
-            //             |None -> newctx
-            //         |None ->
-            //             if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
-            //             then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
-            //             else ctx
+            let newCtx =
+                match options.pushScope with
+                |Some ps ->
+                    {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                |None ->
+                    match options.replaceScopes with
+                    |Some rs ->
+                        let newctx =
+                            match rs.this, rs.froms with
+                            |Some this, Some froms ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                            |Some this, None ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                            |None, Some froms ->
+                                {ctx with scopes = {ctx.scopes with From = froms}}
+                            |None, None ->
+                                ctx
+                        match rs.root with
+                        |Some root ->
+                            {ctx with scopes = {ctx.scopes with Root = root}}
+                        |None -> newctx
+                    |None ->
+                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                        then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                        else ctx
             match rule with
             |ScopeField s ->
-                // let scope = newCtx.scopes
-                // let key = node.Key
-                // match changeScope true effectMap triggerMap key scope with
-                // |NewScope (newScopes ,_) ->
-                    // let newCtx = {newCtx with scopes = newScopes}
+                let scope = newCtx.scopes
+                let key = node.Key
+                match changeScope true effectMap triggerMap key scope with
+                |NewScope (newScopes ,_) ->
+                    let newCtx = {newCtx with scopes = newScopes}
                     applyClauseField enforceCardinality options.severity newCtx rules node
-                // |NotFound _ ->
-                //     Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) node]
-                // |WrongScope (command, prevscope, expected) ->
-                //     Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node]
-                // |_ -> Invalid [inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node]
+                |NotFound _ ->
+                    Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) node]
+                |WrongScope (command, prevscope, expected) ->
+                    Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node]
+                |_ -> Invalid [inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node]
 
             |_ -> applyClauseField enforceCardinality options.severity newCtx rules node
 
         let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
             let results =
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
-                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField false None {subtypes = []; warningOnly = false } (s.rules) node)
-                        // |> List.map (fun s -> s.name, s.pushScope, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node)
+                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node)
             let res = results |> List.choose (fun (s, ps, res) -> res |> function |Invalid _ -> None |OK -> Some (ps, s))
             res |> List.tryPick fst, res |> List.map snd
 
         let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : Node) =
             let pushScope, subtypes = testSubtype (typedef.subtypes) node
-            // let startingScopeContext =
-            //     match Option.orElse pushScope options.pushScope with
-            //     |Some ps -> { Root = ps; From = []; Scopes = [] }
-            //     |None -> defaultContext
-            let context = { subtypes = subtypes; warningOnly = typedef.warningOnly }
-            // let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
+            let startingScopeContext =
+                match Option.orElse pushScope options.pushScope with
+                |Some ps -> { Root = ps; From = []; Scopes = [] }
+                |None -> defaultContext
+            let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
             applyNodeRule true context options (ValueField (ValueType.Specific "root")) rules node
 
         let validate ((path, root) : string * Node) =
@@ -359,10 +359,9 @@ module rec EU4Rules =
             let res = (root.Children <&!&> inner)
             res
 
-        interface CWTools.Validation.IRuleApplicator with
+        interface CWTools.Validation.IRuleApplicator<Scope> with
 
-            // member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
-            member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
+            member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
             member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
                 testSubtype subtypes node
             //member __.ValidateFile(node : Node) = validate node

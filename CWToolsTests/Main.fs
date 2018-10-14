@@ -20,6 +20,7 @@ open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
 open System.Threading
 open System.Globalization
+open CWTools.Common.STLConstants
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -52,14 +53,14 @@ let getAllFoldersUnion dirs =
 let perf(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> (DocsParser.processDocs parseScopes) p)
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs}}
-    let stl = STLGame(settings) :> IGame<STLComputedData>
+    let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
@@ -72,14 +73,14 @@ let perf(b) =
 let perf2(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest2/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs}}
-    let stl = STLGame(settings) :> IGame<STLComputedData>
+    let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then

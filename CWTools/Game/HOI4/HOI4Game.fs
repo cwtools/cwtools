@@ -159,7 +159,7 @@ type HOI4Game(settings : HOI4Settings) =
         // updateTechnologies()
         updateLocalisation()
         // updateTypeDef()
-    interface IGame<HOI4ComputedData> with
+    interface IGame<HOI4ComputedData, string> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = [] //(validateAll false (resources.ValidatableEntities()))
@@ -186,7 +186,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData>(resources, Lookup(), (localisationAPIs |> List.map snd))
+        member __.References() = References<HOI4ComputedData, string>(resources, Lookup(), (localisationAPIs |> List.map snd))
         member __.Complete pos file text = [] //completion pos file text
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
         member __.GoToType pos file text = Some range0

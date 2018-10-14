@@ -105,7 +105,7 @@ let testc =
                           ## cardinality = 0..1\n\
                           effect = effect\n\
                           }"
-            let rules, types, enums, _ = parseConfig "" config
+            let rules, types, enums, _ = parseConfig parseScope Scope.Any "" config
             let Typerules = rules |> List.choose (function |TypeRule (_, rs) -> Some (rs) |_ -> None)
             let input =    "create_starbase = {\n\
                             owner = this \n\
@@ -115,7 +115,7 @@ let testc =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let apply = RuleApplicator(rules, [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let apply = RuleApplicator(rules, [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let errors = apply.ApplyNodeRule(Typerules, node)
                 match errors with
                 | OK -> ()
@@ -140,7 +140,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -157,7 +157,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let enums = ConfigParser.createStarbaseEnums |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -169,7 +169,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -184,7 +184,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -203,7 +203,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -284,7 +284,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 3 23
@@ -309,7 +309,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 9
@@ -333,7 +333,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope; logEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope; logEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator<Scope>
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope; logEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 2
@@ -364,12 +364,12 @@ let testsConfig =
         testCase "basic" <| fun () ->
             let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings) :> IGame<STLComputedData>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
             //let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
@@ -386,12 +386,12 @@ let testsConfig =
         testCase "basic with config load" <| fun () ->
             let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings) :> IGame<STLComputedData>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -404,12 +404,12 @@ let testsConfig =
         testCase "shipsize prerequisits" <| fun () ->
             let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings) :> IGame<STLComputedData>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
             let input =    "ship_size = {\n\
                             prerequisites = {\n\
@@ -424,12 +424,12 @@ let testsConfig =
         testCase "shipsize enum" <| fun () ->
             let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings) :> IGame<STLComputedData>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
             let input =    "ship_size = {\n\
                             class = \n\

@@ -423,7 +423,7 @@ module STLValidation =
         let filteredModifierKeys = ["description"; "key"]
         let filtered = node.Values |> List.filter (fun f -> not (filteredModifierKeys |> List.exists (fun k -> k == f.Key)))
         filtered <&!&> valModifier modifiers node.Scope
-    let valAllModifiers : LookupValidator<_> =
+    let valAllModifiers : LookupValidator<_, _> =
         (fun lu _ es ->
             let modifiers = lu.coreModifiers
             let fNode = (fun (x : Node) children ->

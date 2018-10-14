@@ -35,6 +35,7 @@ open Files
 open CWTools.Validation.Stellaris
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Validation
+open CWTools.Process.Scopes
 
 type EmbeddedSettings = {
     triggers : DocEffect list
@@ -187,7 +188,7 @@ type STLGame (settings : StellarisSettings) =
         //     events |> List.map (fun e -> (valEventVals e) )
         //            |> List.choose (function |Invalid es -> Some es |_ -> None)
         //            |> List.collect id
-        let mutable ruleApplicator : CWTools.Validation.IRuleApplicator option = None
+        let mutable ruleApplicator : CWTools.Validation.IRuleApplicator<Scope> option = None
         let validationSettings = {
             validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
@@ -393,7 +394,7 @@ type STLGame (settings : StellarisSettings) =
                 timer.Start()
                 match rulesSettings with
                 |Some rulesSettings ->
-                    let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                    let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig parseScope Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
                     lookup.typeDefs <- types
                     let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None}))))
                     lookup.configRules <- rulesWithMod
@@ -424,7 +425,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> IRuleApplicator)
+                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> IRuleApplicator<Scope>)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -483,7 +484,7 @@ type STLGame (settings : StellarisSettings) =
             // ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             // infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
             //resources.ForceRecompute()
-        interface IGame<STLComputedData> with
+        interface IGame<STLComputedData, Scope> with
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (validateAll false (resources.ValidatableEntities())) in s @ d
@@ -510,9 +511,9 @@ type STLGame (settings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = updateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
+            member __.References() = References<STLComputedData, _>(resources, lookup, (localisationAPIs |> List.map snd))
             member __.Complete pos file text = completion pos file text
-            member __.ScopesAtPos pos file text = scopesAtPos pos file text
+            member __.ScopesAtPos pos file text = scopesAtPos pos file text |> Option.map (fun sc -> sc :> IScopeContext<Scope>)
             member __.GoToType pos file text = getInfoAtPos pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
             member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})

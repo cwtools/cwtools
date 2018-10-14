@@ -9,6 +9,7 @@ open CWTools.Common.STLConstants
 open DotNet.Globbing
 open System
 open CWTools.Utilities.Utils
+open CWTools.Common
 
 module rec STLProcess =
     let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]

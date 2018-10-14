@@ -244,7 +244,7 @@ module STLEventValidation =
 
 
 
-    let getEventChains : LookupValidator<_> =
+    let getEventChains : LookupValidator<_, _> =
         fun lu os es ->
             let reffects = lu.scriptedEffects
             let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
