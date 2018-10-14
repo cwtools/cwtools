@@ -23,6 +23,7 @@ open CWTools.Utilities.Utils
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
+open CWTools.Validation
 
 
 
@@ -114,7 +115,7 @@ let testc =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let apply = RuleApplicator(rules, [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let apply = RuleApplicator(rules, [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let errors = apply.ApplyNodeRule(Typerules, node)
                 match errors with
                 | OK -> ()
@@ -139,7 +140,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -156,7 +157,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let enums = ConfigParser.createStarbaseEnums |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -168,7 +169,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -183,7 +184,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -202,7 +203,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -283,7 +284,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 3 23
@@ -308,7 +309,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 9
@@ -332,7 +333,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope; logEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap)
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope; logEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap) :> IRuleApplicator
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope; logEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 2

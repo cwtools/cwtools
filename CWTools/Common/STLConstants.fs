@@ -88,7 +88,7 @@ module STLConstants =
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
-            |x -> failwith ("unexpected scope" + x.ToString()))
+            |x -> eprintfn "Unexpected scope %O" x; Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
     let parseScopes =
         function

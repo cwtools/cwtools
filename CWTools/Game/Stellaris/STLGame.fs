@@ -34,6 +34,7 @@ open CWTools.Validation.Stellaris.ScopeValidation
 open Files
 open CWTools.Validation.Stellaris
 open CWTools.Validation.Common.CommonValidation
+open CWTools.Validation
 
 type EmbeddedSettings = {
     triggers : DocEffect list
@@ -186,7 +187,7 @@ type STLGame (settings : StellarisSettings) =
         //     events |> List.map (fun e -> (valEventVals e) )
         //            |> List.choose (function |Invalid es -> Some es |_ -> None)
         //            |> List.collect id
-        let mutable ruleApplicator : RuleApplicator option = None
+        let mutable ruleApplicator : CWTools.Validation.IRuleApplicator option = None
         let validationSettings = {
             validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
@@ -423,7 +424,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
+                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> IRuleApplicator)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

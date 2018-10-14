@@ -11,6 +11,7 @@ open CWTools.Utilities.Position
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Validation.Rules
+open CWTools.Parser.ConfigParser
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -20,12 +21,16 @@ type ValidationSettings = {
     langs : Lang list
     validateVanilla : bool
 }
+type RulesSettings = {
+    ruleFiles : (string * string) list
+    validateRules : bool
+}
 type EU4Settings = {
     rootDirectory : string
     embedded : EmbeddedSettings
     validation : ValidationSettings
+    rules : RulesSettings option
 }
-
 
 type EU4Game(settings : EU4Settings) =
     let scriptFolders = [
@@ -123,6 +128,7 @@ type EU4Game(settings : EU4Settings) =
     let allLocalisation() = localisationAPIs |> List.map snd
     let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
     let mutable localisationErrors : CWError list option = None
+    let mutable localisationKeys = []
 
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
@@ -138,13 +144,14 @@ type EU4Game(settings : EU4Settings) =
                 |> List.map (fun (_, fn, f) -> (fn, f))
                 |> (fun files -> EU4LocalisationService(files))
                 |> (fun l -> (settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
+        localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
         let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
         let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
         ()
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
     let lookup = Lookup()
-    let mutable ruleApplicator : RuleApplicator option = None
+    let mutable ruleApplicator : CWTools.Validation.IRuleApplicator option = None
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; ]
         experimentalValidators = []
@@ -177,6 +184,57 @@ type EU4Game(settings : EU4Settings) =
         // let vs = (validators |> List.map (fun v -> v oldEntities localisationKeys newEntities) |> List.fold (<&&>) OK)
         // ((vs) |> (function |Invalid es -> es |_ -> []))
         []
+    let updateTypeDef =
+        let mutable simpleEnums = []
+        let mutable complexEnums = []
+        let mutable tempTypes = []
+        let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
+        let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
+        (fun rulesSettings ->
+            let timer = new System.Diagnostics.Stopwatch()
+            timer.Start()
+            match rulesSettings with
+            |Some rulesSettings ->
+                let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                lookup.typeDefs <- types
+                // let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None}))))
+                // lookup.configRules <- rulesWithMod
+                lookup.configRules <- rules
+                simpleEnums <- enums
+                complexEnums <- complexenums
+                tempTypes <- types
+                eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
+            |None -> ()
+            let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let allEnums = simpleEnums @ complexEnumDefs
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            lookup.enumDefs <- allEnums |> Map.ofList
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let loc = localisationKeys
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let tempRuleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap)
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> CWTools.Validation.IRuleApplicator)
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
+        )
+    let refreshRuleCaches(rules) =
+        updateTypeDef(rules)
 
     let parseErrors() =
         resources.GetResources()
@@ -254,7 +312,7 @@ type EU4Game(settings : EU4Settings) =
         // updateModifiers()
         // updateTechnologies()
         updateLocalisation()
-        // updateTypeDef()
+        updateTypeDef(settings.rules)
     interface IGame<EU4ComputedData> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
@@ -287,8 +345,8 @@ type EU4Game(settings : EU4Settings) =
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
         member __.GoToType pos file text = Some range0
         member __.FindAllRefs pos file text = Some [range0]
-        member __.ReplaceConfigRules rules = ()
-        member __.RefreshCaches() = ()
+        member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
+        member __.RefreshCaches() = refreshRuleCaches None
         member __.ForceRecompute() = ()
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

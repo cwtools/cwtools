@@ -13,7 +13,7 @@ type ValidationManagerSettings<'T when 'T :> ComputedData> = {
     resources : IResourceAPI<'T>
     lookup : Lookup
     lookupValidators : (LookupValidator<'T> * string) list
-    ruleApplicator : RuleApplicator option
+    ruleApplicator : CWTools.Validation.IRuleApplicator option
     useRules : bool
 }
 type ValidationManager<'T when 'T :> ComputedData>(settings : ValidationManagerSettings<'T>) =

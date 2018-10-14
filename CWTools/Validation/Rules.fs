@@ -23,6 +23,10 @@ open System
 open FSharp.Collections.ParallelSeq
 open System
 
+type IRuleApplicator =
+    abstract ApplyNodeRule : NewRule list * Node -> ValidationResult
+    abstract TestSubtype : SubTypeDefinition list * Node -> Scope option * string list
+    abstract RuleValidate : unit -> StructureValidator<'T>
 
 module rec Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
@@ -353,16 +357,15 @@ module rec Rules =
             let res = (root.Children <&!&> inner)
             res
 
+        interface IRuleApplicator with
+            member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
+            member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
+                testSubtype subtypes node
+            //member __.ValidateFile(node : Node) = validate node
+            member __.RuleValidate<'T when 'T :> ComputedData>() : StructureValidator<'T> =
+                fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
-        member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
-            testSubtype subtypes node
-        //member __.ValidateFile(node : Node) = validate node
-        member __.RuleValidate<'T when 'T :> ComputedData>() : StructureValidator<'T> =
-            fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
-
-
-    type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>, ruleApplicator : RuleApplicator) =
+    type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>, ruleApplicator : IRuleApplicator) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
@@ -867,7 +870,7 @@ module rec Rules =
 
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
-    let getTypesFromDefinitions (ruleapplicator : RuleApplicator) (types : TypeDefinition list) (es : Entity list) =
+    let getTypesFromDefinitions (ruleapplicator : IRuleApplicator) (types : TypeDefinition list) (es : Entity list) =
         let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e)
         let getTypeInfo (def : TypeDefinition) =
             entities |> List.choose (fun (path, e) -> if checkPathDir def path then Some e.entity else None)
