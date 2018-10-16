@@ -42,6 +42,7 @@ module rec ConfigParser =
         pushScope : 'a option
         replaceScopes : ReplaceScopes<'a> option
         severity : Severity option
+        requiredScopes : 'a list
     }
     type RuleType<'a> =
     |NodeRule of left : NewField<'a> * rules : NewRule<'a> list
@@ -107,7 +108,7 @@ module rec ConfigParser =
         |"info" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None }
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
     let requiredMany<'a> = { defaultOptions with min = 1; max = 100 }
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
@@ -173,7 +174,7 @@ module rec ConfigParser =
 
 
 
-    let getOptionsFromComments (parseScope) (comments : string list) =
+    let getOptionsFromComments (parseScope) (allScopes) (anyScope) (comments : string list) =
         let min, max =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             |Some c ->
@@ -193,6 +194,12 @@ module rec ConfigParser =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
             |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
             |None -> None
+        let reqScope =
+            match comments |> List.tryFind (fun s -> s.Contains("scope")) with
+            |Some s ->
+                let scope =  s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope
+                if scope = anyScope then allScopes else [scope]
+            |None -> []
         let severity =
             match comments |> List.tryFind (fun s -> s.Contains("severity")) with
             |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseSeverity |> Some
@@ -218,7 +225,7 @@ module rec ConfigParser =
                         Some { root = root; this = this; froms = Some froms }
                     |None -> None
             |None -> None
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes; severity = severity }
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes; severity = severity; requiredScopes = reqScope }
 
     let processKey parseScope anyScope =
         function
@@ -270,17 +277,17 @@ module rec ConfigParser =
         |x -> ValueField (ValueType.Specific (x.Trim([|'\"'|])))
 
 
-    let processChildConfig (parseScope) (anyScope) ((child, comments) : Child * string list)  =
+    let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
         match child with
-        |NodeC n -> Some (configNode parseScope anyScope n comments (n.Key))
-        |LeafC l -> Some (configLeaf parseScope anyScope l comments (l.Key))
-        |LeafValueC lv -> Some (configLeafValue parseScope anyScope lv comments)
+        |NodeC n -> Some (configNode parseScope allScopes anyScope n comments (n.Key))
+        |LeafC l -> Some (configLeaf parseScope allScopes anyScope l comments (l.Key))
+        |LeafValueC lv -> Some (configLeafValue parseScope allScopes anyScope lv comments)
         |_ -> None
 
-    let configNode (parseScope) (anyScope) (node : Node) (comments : string list) (key : string) =
+    let configNode (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope comments
-        let innerRules = children |> List.choose (processChildConfig parseScope anyScope)
+        let options = getOptionsFromComments parseScope allScopes anyScope comments
+        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         let rule =
             match key with
             |x when x.StartsWith "subtype[" ->
@@ -303,36 +310,36 @@ module rec ConfigParser =
             // |x -> NodeRule(ValueField(ValueType.Specific x), innerRules)
         NewRule(rule, options)
 
-    let processChildConfigRoot (parseScope) (anyScope) ((child, comments) : Child * string list) =
+    let processChildConfigRoot (parseScope) (allScopes) (anyScope) ((child, comments) : Child * string list) =
         match child with
         |NodeC n when n.Key == "types" -> None
-        |NodeC n -> Some (configRootNode parseScope anyScope n comments)
-        |LeafC l -> Some (configRootLeaf parseScope anyScope l comments)
+        |NodeC n -> Some (configRootNode parseScope allScopes anyScope n comments)
+        |LeafC l -> Some (configRootLeaf parseScope allScopes anyScope l comments)
         //|LeafValueC lv -> Some (configLeafValue lv comments)
         |_ -> None
 
-    let configRootLeaf (parseScope) (anyScope) (leaf : Leaf) (comments : string list) =
-        let rule = configLeaf parseScope anyScope leaf comments leaf.Key
+    let configRootLeaf (parseScope) allScopes (anyScope) (leaf : Leaf) (comments : string list) =
+        let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
         match leaf.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
-                let innerRule = configLeaf parseScope anyScope leaf comments rn
+                let innerRule = configLeaf parseScope allScopes anyScope leaf comments rn
                 AliasRule (a, innerRule)
             |None ->
                 TypeRule (x, rule)
         |x ->
             TypeRule (x, rule)
 
-    let configRootNode (parseScope) (anyScope) (node : Node) (comments : string list) =
+    let configRootNode (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope comments
-        let innerRules = children |> List.choose (processChildConfig parseScope anyScope)
+        let options = getOptionsFromComments parseScope allScopes anyScope comments
+        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         match node.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
-                let innerRule = configNode parseScope anyScope node comments rn
+                let innerRule = configNode parseScope allScopes anyScope node comments rn
                 // eprintfn "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
@@ -340,12 +347,12 @@ module rec ConfigParser =
         |x ->
             TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
 
-    let configLeaf (parseScope) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
+    let configLeaf (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
-        let options = getOptionsFromComments parseScope comments
+        let options = getOptionsFromComments parseScope allScopes anyScope comments
         let rightkey = leaf.Value.ToString()
         match rightkey with
         |x when x.StartsWith("colour[") ->
@@ -360,18 +367,18 @@ module rec ConfigParser =
             let leafRule = LeafRule(leftfield, rightfield)
             NewRule(leafRule, options)
 
-    let configLeafValue (parseScope) (anyScope) (leafvalue : LeafValue) (comments : string list) =
+    let configLeafValue (parseScope) allScopes (anyScope) (leafvalue : LeafValue) (comments : string list) =
         let field = processKey parseScope anyScope (leafvalue.Value.ToRawString())
             // match leafvalue.Value.ToRawString() with
             // |x when x.StartsWith "<" && x.EndsWith ">" ->
             //     TypeField (x.Trim([|'<'; '>'|]))
             // |x -> ValueField (ValueType.Enum x)
-        let options = { getOptionsFromComments parseScope comments with leafvalue = true }
+        let options = { getOptionsFromComments parseScope allScopes anyScope comments with leafvalue = true }
         NewRule(LeafValueRule(field), options)
 
     // Types
 
-    let processType (parseScope) (anyScope) (node : Node) (comments : string list) =
+    let processType (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) =
         let parseSubType ((child : Child), comments : string list) =
             match child with
             |NodeC subtype when subtype.Key.StartsWith "subtype" ->
@@ -384,7 +391,7 @@ module rec ConfigParser =
                     |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
                     |None -> None
                 match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose (processChildConfig parseScope anyScope)); typeKeyField = typekeyfilter; pushScope = pushScope }
+                |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope)); typeKeyField = typekeyfilter; pushScope = pushScope }
                 |None -> None
             |_ -> None
         match node.Key with
@@ -413,12 +420,12 @@ module rec ConfigParser =
 
 
 
-    let processChildType (parseScope) (anyScope) ((child, comments) : Child * string list) =
+    let processChildType (parseScope) allScopes (anyScope) ((child, comments) : Child * string list) =
         match child with
         |NodeC n when n.Key == "types" ->
             let inner ((child2, comments2) : Child * string list) =
                 match child2 with
-                |NodeC n2 -> (processType parseScope anyScope n2 comments2)
+                |NodeC n2 -> (processType parseScope allScopes anyScope n2 comments2)
                 |_ -> None
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
@@ -464,15 +471,15 @@ module rec ConfigParser =
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
 
-    let processConfig (parseScope) (anyScope) (node : Node) =
+    let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
-        let rules = nodes |> List.choose (processChildConfigRoot parseScope anyScope)
-        let types = nodes |> List.choose (processChildType parseScope anyScope) |> List.collect id
+        let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
+        let types = nodes |> List.choose (processChildType parseScope allScopes anyScope) |> List.collect id
         let enums = nodes |> List.choose processChildEnum |> List.collect id
         let complexenums = nodes |> List.choose processComplexChildEnum |> List.collect id
         rules, types, enums, complexenums
 
-    let parseConfig (parseScope) (anyScope) filename fileString =
+    let parseConfig (parseScope) (allScopes) (anyScope) filename fileString =
         //eprintfn "parse"
         let parsed = CKParser.parseString fileString filename
         match parsed with
@@ -481,7 +488,7 @@ module rec ConfigParser =
             //eprintfn "parsed %A" s
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
             //eprintfn "processConfig"
-            processConfig parseScope anyScope root
+            processConfig parseScope allScopes anyScope root
 
 
 

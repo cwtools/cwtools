@@ -281,6 +281,13 @@ module rec EU4Rules =
                         if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
                         then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
                         else ctx
+            (match options.requiredScopes with
+            |[] -> OK
+            |xs ->
+                match newCtx.scopes.CurrentScope with
+                |Scope.Any -> OK
+                |s -> if List.contains s xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) node])
+            <&&>
             match rule with
             |ScopeField s ->
                 let scope = newCtx.scopes
