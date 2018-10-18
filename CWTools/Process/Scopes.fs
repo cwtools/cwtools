@@ -24,16 +24,53 @@ module Scopes =
         refs : string list
     }
 
-    type IScopeContext<'S when 'S : comparison> =
-        abstract CurrentScope : 'S
-        abstract PopScope : 'S list
-        abstract GetFrom : int -> 'S
-        abstract Root : 'S
-        abstract From :'S list
-        abstract Scopes :'S list
+    // type IScopeContext<'S when 'S : comparison> =
+    //     abstract CurrentScope : 'S
+    //     abstract PopScope : 'S list
+    //     abstract GetFrom : int -> 'S
+    //     abstract Root : 'S
+    //     abstract From :'S list
+    //     abstract Scopes :'S list
     // type RuleContext<'T when 'T : comparison> =
     //     {
     //         subtypes : string list
     //         scopes : IScopeContext<'T>
     //         warningOnly : bool
     //     }
+
+    type OutputScopeContext<'T> =
+        {
+            Root : 'T
+            From : 'T list
+            Scopes : 'T list
+        }
+        member inline this.CurrentScope = match this.Scopes with |[] -> None | x::_ -> Some x
+        member inline this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
+        member inline this.GetFrom i =
+            if this.From.Length >= i then Some (this.From.Item (i - 1)) else None
+
+    type ScopeContext< ^T when ^T : (static member AnyScope : ^T) and ^T : comparison > =
+        {
+            Root : ^T
+            From : ^T list
+            Scopes : ^T list
+        }
+        member inline this.CurrentScope = match this.Scopes with |[] -> (^T : (static member AnyScope : ^T) ()) | x::_ -> x
+        member inline this.PopScope : ^T list = match this.Scopes with |[] -> [] |_::xs -> xs
+        member inline this.GetFrom i =
+            if this.From.Length >= i then (this.From.Item (i - 1)) else (^T : (static member AnyScope : ^T) ())
+
+
+
+
+    type ScopeResult< ^T when ^T : (static member AnyScope : ^T) and ^T : comparison > =
+        | NewScope of newScope : ScopeContext< ^T> * ignoreKeys : string list
+        | WrongScope of command : string * scope : ^T * expected : ^T list
+        | NotFound
+    // interface IScopeContext<^T> with
+    //     member this.CurrentScope = this.CurrentScope
+    //     member this.PopScope = this.PopScope
+    //     member this.GetFrom i = this.GetFrom i
+    //     member this.Root = this.Root
+    //     member this.From = this.From
+    //     member this.Scopes = this.Scopes

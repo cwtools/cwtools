@@ -14,6 +14,8 @@ open CWTools.Validation.Common.CommonValidation
 open CWTools.Parser.ConfigParser
 open CWTools.Common.EU4Constants
 open CWTools.Validation.EU4.EU4Rules
+open CWTools.Validation.Rules
+open CWTools.Process.EU4Scopes
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -123,6 +125,8 @@ type EU4Game(settings : EU4Settings) =
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv")
 
     let computeEU4Data (e : Entity) = EU4ComputedData()
+    let mutable infoService = None
+    let mutable completionService = None
     let resourceManager = ResourceManager(computeEU4Data)
     let resources = resourceManager.Api
     let validatableFiles() = resources.ValidatableFiles
@@ -227,11 +231,11 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            // completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
+            completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> CWTools.Validation.IRuleApplicator<Scope>)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            // infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
+            infoService <- Some (foldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
         )
@@ -296,7 +300,16 @@ type EU4Game(settings : EU4Settings) =
 
         eprintfn "Update Time: %i" timer.ElapsedMilliseconds
         res
-
+    let completion (pos : pos) (filepath : string) (filetext : string) =
+        let split = filetext.Split('\n')
+        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
+        let resource = makeEntityResourceInput filepath filetext
+        match resourceManager.ManualProcessResource resource, completionService with
+        |Some e, Some completion ->
+            eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
+            completion(pos, e)
+        |_, _ -> []
 
     do
         eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
@@ -343,7 +356,7 @@ type EU4Game(settings : EU4Settings) =
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<EU4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
-        member __.Complete pos file text = [] //completion pos file text
+        member __.Complete pos file text = completion pos file text
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
         member __.GoToType pos file text = Some range0
         member __.FindAllRefs pos file text = Some [range0]

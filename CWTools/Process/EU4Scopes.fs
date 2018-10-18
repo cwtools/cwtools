@@ -11,33 +11,33 @@ module EU4Scopes =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-    type ScopeContext =
-        {
-            Root : Scope
-            From : Scope list
-            Scopes : Scope list
-        }
-        member this.CurrentScope = match this.Scopes with |[] -> Scope.Any |x::_ -> x
-        member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
-        member this.GetFrom i =
-            if this.From.Length >= i then (this.From.Item (i - 1)) else Scope.Any
-        interface IScopeContext<Scope> with
-            member this.CurrentScope = this.CurrentScope
-            member this.PopScope = this.PopScope
-            member this.GetFrom i = this.GetFrom i
-            member this.Root = this.Root
-            member this.From = this.From
-            member this.Scopes = this.Scopes
+    // type ScopeContext =
+    //     {
+    //         Root : Scope
+    //         From : Scope list
+    //         Scopes : Scope list
+    //     }
+    //     member this.CurrentScope = match this.Scopes with |[] -> Scope.Any |x::_ -> x
+    //     member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
+    //     member this.GetFrom i =
+    //         if this.From.Length >= i then (this.From.Item (i - 1)) else Scope.Any
+    //     interface IScopeContext<Scope> with
+    //         member this.CurrentScope = this.CurrentScope
+    //         member this.PopScope = this.PopScope
+    //         member this.GetFrom i = this.GetFrom i
+    //         member this.Root = this.Root
+    //         member this.From = this.From
+    //         member this.Scopes = this.Scopes
 
     let defaultContext =
         { Root = Scope.Any; From = []; Scopes = [] }
 
     let scopedEffects = []
 
-    type ScopeResult =
-        | NewScope of newScope : ScopeContext * ignoreKeys : string list
-        | WrongScope of command : string * scope : Scope * expected : Scope list
-        | NotFound
+    // type ScopeResult =
+    //     | NewScope of newScope : ScopeContext<Scope> * ignoreKeys : string list
+    //     | WrongScope of command : string * scope : Scope * expected : Scope list
+    //     | NotFound
 
     let oneToOneScopes =
         let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
@@ -62,12 +62,12 @@ module EU4Scopes =
     ]
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
 
-    let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
+    let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ Root = source.Root; From = source.From; Scopes = Scope.Any::source.Scopes }, [])
         else
             let keys = key.Split('.')
-            let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
+            let inner ((context : ScopeContext<Scope>), (changed : bool)) (nextKey : string) =
                 let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                 match onetoone with
                 | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])

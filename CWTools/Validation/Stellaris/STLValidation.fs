@@ -18,6 +18,7 @@ open CWTools.Games.Stellaris.STLLookup
 open System.Threading.Tasks
 open FSharp.Collections.ParallelSeq
 open System.Globalization
+open CWTools.Process.Scopes
 
 
 module STLValidation =
@@ -92,7 +93,7 @@ module STLValidation =
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
 
 
-    let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext) (modifier : string) (node) =
+    let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (modifier : string) (node) =
         let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
         match exists with
         |None -> Invalid [inv (ErrorCodes.UndefinedStaticModifier modifier) node]

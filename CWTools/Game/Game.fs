@@ -28,7 +28,7 @@ type IGame<'S when 'S : comparison> =
     abstract ScriptedTriggers : unit -> Effect<'S> list
     abstract ScriptedEffects : unit -> Effect<'S> list
     abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
-    abstract ScopesAtPos : pos -> string -> string -> IScopeContext<'S> option
+    abstract ScopesAtPos : pos -> string -> string -> OutputScopeContext<'S> option
 
 type IGame<'T, 'S when 'S : comparison> =
     inherit IGame<'S>

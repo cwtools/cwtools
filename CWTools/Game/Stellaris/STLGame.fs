@@ -27,6 +27,7 @@ open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Utilities.Position
 open CWTools.Validation.Rules
+open CWTools.Validation.Stellaris.STLRules
 open CWTools.Parser
 open CWTools.Parser.ConfigParser
 open FSharp.Data.Runtime
@@ -82,8 +83,8 @@ type STLGame (settings : StellarisSettings) =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
-        let mutable completionService : CompletionService option = None
-        let mutable infoService : FoldRules option = None
+        let mutable completionService = None
+        let mutable infoService = None
 
         let resourceManager = ResourceManager(STLCompute.computeSTLData (fun () -> infoService))
         let resources = resourceManager.Api
@@ -337,7 +338,7 @@ type STLGame (settings : StellarisSettings) =
             |Some e, Some completion ->
                 eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
                 //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-                completion.Complete(pos, e)
+                completion(pos, e)
             |_, _ -> []
 
 
@@ -346,7 +347,7 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match info.GetInfo(pos, e) with
+                match (info |> fst)(pos, e) with
                 |Some (_, Some (t, tv)) ->
                     lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
                 |_ -> None
@@ -357,11 +358,11 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match info.GetInfo(pos, e) with
+                match (info |> fst)(pos, e) with
                 |Some (_, Some ((t : string), tv)) ->
                     //eprintfn "tv %A %A" t tv
                     let t = t.Split('.').[0]
-                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else (info.GetReferencedTypes e).TryFind t)
+                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info |> snd) e).TryFind t)
                                    |> List.collect id
                                    |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                    |> Some
@@ -372,14 +373,15 @@ type STLGame (settings : StellarisSettings) =
             let resource = makeEntityResourceInput filepath filetext
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
-                match info.GetInfo(pos, e) with
-                |Some (ctx, _) when ctx.scopes <> { Root = Scope.Any; From = []; Scopes = [] } ->
+                // match info.GetInfo(pos, e) with
+                match (info |> fst)(pos, e) with
+                |Some (ctx, _) when ctx <> { Root = Scope.Any; From = []; Scopes = [] } ->
                     eprintfn "true scopes"
-                    Some (ctx.scopes)
+                    Some (ctx)
                 |_ ->
                     eprintfn "fallback scopes"
-                    getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
-            |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
+                    getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
+            |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
             |_ -> None
 
 
@@ -415,7 +417,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                let tempRuleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap)
+                let tempRuleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -423,11 +425,11 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
+                completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap) :> IRuleApplicator<Scope>)
+                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any) :> IRuleApplicator<Scope>)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
+                infoService <- Some (foldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
             )
@@ -513,7 +515,7 @@ type STLGame (settings : StellarisSettings) =
             member __.AllEntities() = resources.AllEntities()
             member __.References() = References<STLComputedData, _>(resources, lookup, (localisationAPIs |> List.map snd))
             member __.Complete pos file text = completion pos file text
-            member __.ScopesAtPos pos file text = scopesAtPos pos file text |> Option.map (fun sc -> sc :> IScopeContext<Scope>)
+            member __.ScopesAtPos pos file text = scopesAtPos pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
             member __.GoToType pos file text = getInfoAtPos pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
             member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})

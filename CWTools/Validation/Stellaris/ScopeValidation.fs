@@ -17,23 +17,24 @@ open System.Collections
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Utilities.Position
+open CWTools.Process.Scopes
 
 module ScopeValidation =
-    let valTriggerLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
+    let valTriggerLeafUsage (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (leaf : Leaf) =
         match leaf.Key with
         | "has_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
         | _ -> OK
 
-    let valTriggerNodeUsage (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+    let valTriggerNodeUsage (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (node : Node) =
         match node.Key with
         | "NOT" -> valNotUsage node
         | _ -> OK
-    let valEffectLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
+    let valEffectLeafUsage (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (leaf : Leaf) =
         match leaf.Key with
         | "remove_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
         | _ -> OK
 
-    let valEffectNodeUsage (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+    let valEffectNodeUsage (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (node : Node) =
         match node.Key with
         | "add_modifier" -> valStaticModifier modifiers scopes (node.TagText "modifier") node
         | _ -> OK
@@ -58,7 +59,7 @@ module ScopeValidation =
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
 
-    let valTriggerLeaf (triggers : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
+    let valTriggerLeaf (triggers : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (leaf : Leaf) =
         match triggers.TryFind leaf.Key with
         |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
         |Some e ->
@@ -67,7 +68,7 @@ module ScopeValidation =
             else Invalid [inv (ErrorCodes.IncorrectTriggerScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
         |None -> handleUnknownTrigger leaf leaf.Key
 
-    let valEffectLeaf (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
+    let valEffectLeaf (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (leaf : Leaf) =
         match effects.TryFind leaf.Key with
             |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
             |Some e ->
@@ -76,7 +77,7 @@ module ScopeValidation =
                 else Invalid [inv (ErrorCodes.IncorrectEffectScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
             |None -> handleUnknownEffect leaf leaf.Key
 
-    let rec valEventTrigger (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
+    let rec valEventTrigger (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (effect : Child) =
         match effect with
         |LeafC leaf -> valTriggerLeaf triggers modifiers scopes leaf
         |NodeC node ->
@@ -111,7 +112,7 @@ module ScopeValidation =
                     |None -> handleUnknownTrigger node x
         |_ -> OK
 
-    and valEventEffect (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
+    and valEventEffect (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (effect : Child) =
         match effect with
         |LeafC leaf -> valEffectLeaf effects modifiers scopes leaf
         |NodeC node ->
@@ -141,7 +142,7 @@ module ScopeValidation =
                     |None -> handleUnknownEffect node x
         |_ -> OK
 
-    and valNodeTriggers (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
+    and valNodeTriggers (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (ignores : string list) (node : Node) =
         // let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
         // let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
         let filteredAll =
@@ -149,7 +150,7 @@ module ScopeValidation =
             |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
         List.map (valEventTrigger root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
 
-    and valNodeEffects (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
+    and valNodeEffects (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (ignores : string list) (node : Node) =
         //let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
         //let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
         let filteredAll =
@@ -157,9 +158,9 @@ module ScopeValidation =
             |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
         List.map (valEventEffect root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
 
-    //let applyTriggerToScope (triggers : EffectMap) (effects : EffectMap) (scopes : ScopeContext) (key : string) =
+    //let applyTriggerToScope (triggers : EffectMap) (effects : EffectMap) (scopes : ScopeContext<Scope>) (key : string) =
 
-    let applyEffectToScope (triggers : EffectMap) (effects : EffectMap) (scopes : ScopeContext) (key : string) =
+    let applyEffectToScope (triggers : EffectMap) (effects : EffectMap) (scopes : ScopeContext<Scope>) (key : string) =
         match key with
         |x when STLProcess.toTriggerBlockKeys |> List.exists (fun t -> t == x) -> true, scopes
         |x when ["else"] |> List.exists (fun t -> t == x) -> false, scopes
@@ -186,7 +187,7 @@ module ScopeValidation =
             match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
             | Some c -> getPathFromEffectBlockAndPos pos (c.Key :: stack) c
             | None -> stack
-        let rec getScopeFromPath (stack : string list) (scopes : ScopeContext) (isTrigger : bool) =
+        let rec getScopeFromPath (stack : string list) (scopes : ScopeContext<Scope>) (isTrigger : bool) =
             match stack with
             |[] -> scopes
             |head::tail ->
@@ -200,7 +201,7 @@ module ScopeValidation =
             let path = getPathFromEffectBlockAndPos targetpos [] startingBlock |> List.rev
             Some (getScopeFromPath path {Root = scope; Scopes = [scope]; From = []} isTrigger)
         |None -> None
-        // let rec getScopeFromPath (stack : string list) (scopes : ScopeContext) (node : Node) =
+        // let rec getScopeFromPath (stack : string list) (scopes : ScopeContext<Scope>) (node : Node) =
         //     match stack with
         //     |[] -> scopes
         //     |head::tail ->
@@ -208,7 +209,7 @@ module ScopeValidation =
         //         |Some c -> applyEffectToScope ()
         //         |None -> scopes
 
-    let valOption (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+    let valOption (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (node : Node) =
         let optionTriggers = ["trigger"; "allow"]
         let optionEffects = ["tooltip"; "hidden_effect"]
         let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"]

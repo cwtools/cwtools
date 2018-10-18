@@ -15,6 +15,7 @@ module EU4Constants =
             |TradeNode -> "Trade node"
             |Any -> "Any/Unknown"
             |x -> sprintf "%A" x
+        static member AnyScope = Scope.Any
 
     let allScopes = [
             Country;
