@@ -16,9 +16,13 @@ open CWTools.Common.EU4Constants
 open CWTools.Validation.EU4.EU4Rules
 open CWTools.Validation.Rules
 open CWTools.Process.EU4Scopes
+open CWTools.Common
+open CWTools.Process.Scopes
+open CWTools.Validation.EU4
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
+    modifiers : Modifier list
 }
 
 type ValidationSettings = {
@@ -124,10 +128,10 @@ type EU4Game(settings : EU4Settings) =
 
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv")
 
-    let computeEU4Data (e : Entity) = EU4ComputedData()
-    let mutable infoService = None
+    // let computeEU4Data (e : Entity) = EU4ComputedData()
+    let mutable infoService : ('a * (Entity -> Map<string,(string * range) list>)) option = None
     let mutable completionService = None
-    let resourceManager = ResourceManager(computeEU4Data)
+    let resourceManager = ResourceManager(EU4Compute.computeEU4Data (fun () -> infoService))
     let resources = resourceManager.Api
     let validatableFiles() = resources.ValidatableFiles
     let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
@@ -190,6 +194,32 @@ type EU4Game(settings : EU4Settings) =
         // let vs = (validators |> List.map (fun v -> v oldEntities localisationKeys newEntities) |> List.fold (<&&>) OK)
         // ((vs) |> (function |Invalid es -> es |_ -> []))
         []
+
+    let updateModifiers() =
+        lookup.coreEU4Modifiers <- settings.embedded.modifiers
+    let updateScriptedEffects(rules :RootRule<Scope> list) =
+        let effects =
+            rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
+        let ruleToEffect(r,o) =
+            let name =
+                match r with
+                |LeafRule(ValueField(Specific n),_) -> n
+                |NodeRule(ValueField(Specific n),_) -> n
+                |_ -> ""
+            DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
+        effects |> List.map ruleToEffect
+    let updateScriptedTriggers(rules :RootRule<Scope> list) =
+        let effects =
+            rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
+        let ruleToTrigger(r,o) =
+            let name =
+                match r with
+                |LeafRule(ValueField(Specific n),_) -> n
+                |NodeRule(ValueField(Specific n),_) -> n
+                |_ -> ""
+            DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+        effects |> List.map ruleToTrigger
+
     let updateTypeDef =
         let mutable simpleEnums = []
         let mutable complexEnums = []
@@ -202,10 +232,11 @@ type EU4Game(settings : EU4Settings) =
             match rulesSettings with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                lookup.scriptedEffects <- updateScriptedEffects rules |> List.map (fun e -> e :> Effect)
+                lookup.scriptedTriggers <- updateScriptedTriggers rules |> List.map (fun e -> e :> Effect)
                 lookup.typeDefs <- types
-                // let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None}))))
-                // lookup.configRules <- rulesWithMod
-                lookup.configRules <- rules
+                let rulesWithMod = rules @ (lookup.coreEU4Modifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
+                lookup.configRules <- rulesWithMod
                 simpleEnums <- enums
                 complexEnums <- complexenums
                 tempTypes <- types
@@ -310,6 +341,41 @@ type EU4Game(settings : EU4Settings) =
             //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
             completion(pos, e)
         |_, _ -> []
+    let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
+        let resource = makeEntityResourceInput filepath filetext
+        match resourceManager.ManualProcessResource resource, infoService with
+        |Some e, Some info ->
+            eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            match (info |> fst)(pos, e) with
+            |Some (_, Some (t, tv)) ->
+                lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
+            |_ -> None
+        |_, _ -> None
+    let getScopesAtPos (pos : pos) (filepath : string) (filetext : string) : OutputScopeContext<Scope> option =
+        let resource = makeEntityResourceInput filepath filetext
+        match resourceManager.ManualProcessResource resource, infoService with
+        |Some e, Some info ->
+            eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            match (info |> fst)(pos, e) with
+            |Some (sc, _) ->
+                Some { From = sc.From; Scopes = sc.Scopes; Root = sc.Root}
+            |_ -> None
+        |_, _ -> None
+    let findAllRefsFromPos (pos : pos) (filepath : string) (filetext : string) : range list option =
+        let resource = makeEntityResourceInput filepath filetext
+        match resourceManager.ManualProcessResource resource, infoService with
+        |Some e, Some info ->
+            eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            match (info |> fst)(pos, e) with
+            |Some (_, Some ((t : string), tv)) ->
+                //eprintfn "tv %A %A" t tv
+                let t = t.Split('.').[0]
+                resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info |> snd) e).TryFind t)
+                               |> List.collect id
+                               |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
+                               |> Some
+            |_ -> None
+        |_, _ -> None
 
     do
         eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
@@ -324,7 +390,7 @@ type EU4Game(settings : EU4Settings) =
         // updateStaticodifiers()
         // updateScriptedLoc()
         // updateDefinedVariables()
-        // updateModifiers()
+        updateModifiers()
         // updateTechnologies()
         updateLocalisation()
         updateTypeDef(settings.rules)
@@ -350,18 +416,18 @@ type EU4Game(settings : EU4Settings) =
             //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
             //         |FileResource (f, r) ->  (r.filepath, false, 0L))
             //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
-        member __.ScriptedTriggers() = []//lookup.scriptedTriggers
-        member __.ScriptedEffects() = [] //lookup.scriptedEffects
+        member __.ScriptedTriggers() = lookup.scriptedTriggers
+        member __.ScriptedEffects() = lookup.scriptedEffects
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<EU4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
         member __.Complete pos file text = completion pos file text
-        member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
-        member __.GoToType pos file text = Some range0
-        member __.FindAllRefs pos file text = Some [range0]
+        member __.ScopesAtPos pos file text = getScopesAtPos pos file text
+        member __.GoToType pos file text = getInfoAtPos pos file text
+        member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
         member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
         member __.RefreshCaches() = refreshRuleCaches None
-        member __.ForceRecompute() = ()
+        member __.ForceRecompute() = resources.ForceRecompute()
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

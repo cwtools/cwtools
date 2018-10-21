@@ -195,7 +195,7 @@ module rec ConfigParser =
             |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
             |None -> None
         let reqScope =
-            match comments |> List.tryFind (fun s -> s.Contains("scope")) with
+            match comments |> List.tryFind (fun s -> s.StartsWith("# scope =")) with
             |Some s ->
                 let scope =  s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope
                 if scope = anyScope then allScopes else [scope]

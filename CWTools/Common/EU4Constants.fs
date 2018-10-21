@@ -49,3 +49,15 @@ module EU4Constants =
     type DocEffect = DocEffect<Scope>
     type ScriptedEffect = ScriptedEffect<Scope>
     type ScopedEffect = ScopedEffect<Scope>
+    type ModifierCategory =
+        |Country
+        |Province
+        |Any
+
+    type Modifier =
+        {
+            tag : string
+            categories : ModifierCategory list
+            /// Is this a core modifier or a static modifier?
+            core : bool
+        }

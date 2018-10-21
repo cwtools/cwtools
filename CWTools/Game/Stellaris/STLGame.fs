@@ -384,6 +384,21 @@ type STLGame (settings : StellarisSettings) =
             |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
             |_ -> None
 
+        let findAllRefsFromPos (pos : pos) (filepath : string) (filetext : string) =
+            let resource = makeEntityResourceInput filepath filetext
+            match resourceManager.ManualProcessResource resource, infoService with
+            |Some e, Some info ->
+                eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+                match (info |> fst)(pos, e) with
+                |Some (_, Some ((t : string), tv)) ->
+                    //eprintfn "tv %A %A" t tv
+                    let t = t.Split('.').[0]
+                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info |> snd) e).TryFind t)
+                                   |> List.collect id
+                                   |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
+                                   |> Some
+                |_ -> None
+            |_, _ -> None
 
         let updateTypeDef =
             let mutable simpleEnums = []

@@ -1,4 +1,5 @@
 namespace CWTools.Common
+open CWTools.Utilities.Position
 
 type Game = |CK2 = 0 |HOI4 = 1 |EU4 = 2 |STL = 3
 type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4
@@ -30,8 +31,9 @@ type Severity =
 type ComputedData() =
     member val Cache : Map<string, obj list> = Map.empty with get, set
 
-type EU4ComputedData() =
+type EU4ComputedData(referencedtypes) =
     inherit ComputedData()
+    member __.Referencedtypes : Map<string, (string  * range) list> option = referencedtypes
 
 type EffectType = |Effect |Trigger |Both
 type Effect<'T when 'T : comparison> internal (name, scopes, effectType) =
