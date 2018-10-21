@@ -245,6 +245,13 @@ module rec EU4Rules =
 
         and applyLeafRule (ctx : RuleContext) (options : Options) (rule : NewField) (leaf : Leaf) =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
+            (match options.requiredScopes with
+            |[] -> OK
+            |xs ->
+                match ctx.scopes.CurrentScope with
+                |Scope.Any -> OK
+                |s -> if List.contains s xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) leaf])
+            <&&>
             checkField enumsMap typesMap effectMap triggerMap localisation files severity ctx rule (leaf.Value.ToRawString()) leaf
 
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) =
