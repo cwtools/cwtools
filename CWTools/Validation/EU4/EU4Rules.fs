@@ -34,10 +34,6 @@ module rec EU4Rules =
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
-    let checkPathDir (t : TypeDefinition<Scope>) (pathDir : string) =
-        match t.path_strict with
-        |true -> pathDir == t.path.Replace("\\","/")
-        |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
 
     let getValidValues =
         function
@@ -321,6 +317,7 @@ module rec EU4Rules =
 
         let validate ((path, root) : string * Node) =
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
+            let file = (Path.GetFileName path)
             let inner (node : Node) =
 
                 let typekeyfilter (td : TypeDefinition) (n : Node) =
@@ -346,18 +343,18 @@ module rec EU4Rules =
                         OK
 
                 let skipres =
-                    match typedefs |> List.filter (fun t -> checkPathDir t pathDir && skiprootkey t node) with
+                    match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t node) with
                     |[] -> OK
                     |xs ->
                         node.Children <&!&>
                             (fun c ->
-                                match xs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t c) with
+                                match xs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t c) with
                                 |Some typedef -> validateType typedef c
                                 |None -> OK
                             )
 
                 let nonskipres =
-                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t node && t.skipRootKey.IsNone) with
+                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t node && t.skipRootKey.IsNone) with
                     |Some typedef -> validateType typedef node
                     |None -> OK
                 skipres <&&> nonskipres

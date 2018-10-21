@@ -89,6 +89,7 @@ module rec ConfigParser =
         nameField : string option
         path : string
         path_strict : bool
+        path_file : string option
         conditions : Node option
         subtypes : SubTypeDefinition<'a> list
         typeKeyFilter : (string * bool) option
@@ -400,6 +401,7 @@ module rec ConfigParser =
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let path_strict = node.TagText "path_strict" == "yes"
+            let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
             let skiprootkey = if node.Has "skip_root_key" then Some (node.TagText "skip_root_key") else None
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
@@ -414,7 +416,7 @@ module rec ConfigParser =
                     |_ -> None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict}
+            |Some tn -> Some { name = tn; nameField = namefield; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict}
             |None -> None
         |_ -> None
 
@@ -519,6 +521,7 @@ module rec ConfigParser =
             nameField = None
             path = "events"
             path_strict = false
+            path_file = None
             conditions = None
             subtypes = []
             typeKeyFilter = None
@@ -628,6 +631,7 @@ module rec ConfigParser =
             skipRootKey = None
             warningOnly = false
             path_strict = false
+            path_file = None
         }
     let shipSizeType =
         {
@@ -640,6 +644,7 @@ module rec ConfigParser =
             skipRootKey = None
             warningOnly = false
             path_strict = false
+            path_file = None
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

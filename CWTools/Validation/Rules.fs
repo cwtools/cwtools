@@ -37,10 +37,14 @@ module rec Rules =
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
-    let checkPathDir (t : TypeDefinition<_>) (pathDir : string) =
+    let checkPathDir (t : TypeDefinition<_>) (pathDir : string) (file : string) =
         match t.path_strict with
         |true -> pathDir == t.path.Replace("\\","/")
         |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
+        &&
+        match t.path_file with
+        |Some f -> file == f
+        |None -> true
 
     let getValidValues =
         function
@@ -232,9 +236,10 @@ module rec Rules =
                 |_, _, Some lv -> Some (LeafValueC lv, (field, options))
                 |None, None, None -> None
             let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\","/")
+            let file = Path.GetFileName logicalpath
             let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
-            match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
+            match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
             |Some c, Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
@@ -294,10 +299,11 @@ module rec Rules =
                 | _ -> newCtx, res
 
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
+            let file = Path.GetFileName entity.logicalpath
             let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
             // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
-                match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
+                match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
                 |Some c, Some typedef ->
                     let pushScope, subtypes = ruleApplicator.TestSubtype (typedef.subtypes, c)
                     match pushScope with
@@ -368,7 +374,8 @@ module rec Rules =
                 let innerLV lv = Some (LeafValueC lv, (field, options))
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
-            match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
+            let file = Path.GetFileName path
+            match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
@@ -622,6 +629,7 @@ module rec Rules =
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
+            let file = Path.GetFileName entity.logicalpath
             // eprintfn "%A" typedefs
             // eprintfn "%A" pos
             // eprintfn "%A" entity.logicalpath
@@ -635,10 +643,10 @@ module rec Rules =
                 |Some key -> n == key
                 |None -> false
             let skipcomp =
-                match typedefs |> List.filter (fun t -> checkPathDir t pathDir && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
+                match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
                 |[] -> None
                 |xs ->
-                    match xs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
+                    match xs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
                     |Some typedef ->
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
                         //eprintfn "sc %A" path
@@ -649,7 +657,7 @@ module rec Rules =
             let res =
                 skipcomp |> Option.defaultWith
                     (fun () ->
-                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
+                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
                     |Some typedef ->
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
                         //eprintfn "fc %A" path
@@ -663,9 +671,9 @@ module rec Rules =
         // member inline __.Complete(pos : pos, entity : Entity) = complete pos entity
 
     let getTypesFromDefinitions (ruleapplicator : IRuleApplicator<_>) (types : TypeDefinition<_> list) (es : Entity list) =
-        let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e)
+        let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath))
         let getTypeInfo (def : TypeDefinition<_>) =
-            entities |> List.choose (fun (path, e) -> if checkPathDir def path then Some e.entity else None)
+            entities |> List.choose (fun (path, e, file) -> if checkPathDir def path file then Some e.entity else None)
                      |> List.collect (fun e ->
                             let inner (n : Node) =
                                 let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
