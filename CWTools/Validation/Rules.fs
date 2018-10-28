@@ -673,8 +673,8 @@ module rec Rules =
     let getTypesFromDefinitions (ruleapplicator : IRuleApplicator<_>) (types : TypeDefinition<_> list) (es : Entity list) =
         let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath))
         let getTypeInfo (def : TypeDefinition<_>) =
-            entities |> List.choose (fun (path, e, file) -> if checkPathDir def path file then Some e.entity else None)
-                     |> List.collect (fun e ->
+            entities |> List.choose (fun (path, e, file) -> if checkPathDir def path file then Some (e.entity, file) else None)
+                     |> List.collect (fun (e, f) ->
                             let inner (n : Node) =
                                 let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
                                 let key =
@@ -686,10 +686,13 @@ module rec Rules =
                                 |Some (filter, negate) -> if n.Key == filter <> negate then result else []
                                 |None -> result
                             let childres =
-                                match def.skipRootKey with
-                                |Some key ->
+                                match def.filenameName, def.skipRootKey with
+                                |true, _ -> 
+                                    let subtypes = ruleapplicator.TestSubtype(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
+                                    def.name::subtypes |> List.map (fun s -> s, (Path.GetFileNameWithoutExtension f, e.Position))
+                                |false, Some key ->
                                     e.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect inner)
-                                |None ->
+                                |false, None ->
                                     (e.Children |> List.collect inner)
                             childres
                             @

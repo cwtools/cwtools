@@ -13,3 +13,13 @@ event = {
     #Error
     blah = test
 }
+
+##Type from filename
+event = {
+    my_file_name = test
+    my_file_name_subtype = test2
+    #Error
+    my_file_name = test2
+    #Error
+    blah = test
+}
