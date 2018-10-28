@@ -121,7 +121,19 @@ type EU4Game(settings : EU4Settings) =
         "common/units";
         "common/units_display";
         "common/wargoal_types";
+        "customizable_localization";
+        "decisions";
         "events";
+        "hints";
+        "history/advisors";
+        "history/countries";
+        "history/diplomacy";
+        "history/provinces";
+        "history/wars";
+        "map";
+        "music";
+        "sound";
+        "tutorial";
         "gfx";
         "interface";]
 
