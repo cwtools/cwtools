@@ -1,0 +1,38 @@
+my_ship = {
+    formation_priority = 1
+    max_speed = 0.4
+    acceleration = 0
+    rotation_speed = 0
+    max_hitpoints = 50000
+    size_multiplier = 4
+    fleet_slot_size = 2
+    modifier = {
+
+    }
+    icon_frame = 3
+    base_buildtime = 1080
+    cost = 1000
+    components_add_to_cost = no
+    enable_default_design = yes
+    is_designable = no
+    can_have_federation_design = no
+    is_civilian = no
+    build_block_radius = 20
+    can_disable = yes
+    flip_control_on_disable = yes
+    combat_size_multiplier = 30
+    prerequisites = {  }
+    upkeep_override = {  }
+    class = shipclass_starbase
+
+    required_component_set = "required_sensor"
+    required_component_set = "required_hull"
+    required_component_set = "required_station_reactor"
+    required_component_set = "ftl_inhibitor"
+    section_slots = {  }
+    num_target_locators = 0
+    collision_radius = 10
+    is_space_station = no
+    has_mineral_upkeep = yes
+    construction_type = test
+}

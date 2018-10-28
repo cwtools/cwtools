@@ -1,0 +1,22 @@
+#Type in alias
+#Enum in alias
+types = {
+    type[ship_size] = {
+        path = "game/common/ship_sizes"
+    }
+    type[event] = {
+        path = "game/events"
+    }
+}
+enums = {
+enum[test_enum] = {
+    my_enum
+}
+}
+
+alias[effect:<ship_size>] = test
+alias[effect:enum[test_enum]] = test
+
+event = {
+    alias_name[effect] = alias_match_left[effect]
+}

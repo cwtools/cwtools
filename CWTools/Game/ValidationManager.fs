@@ -15,6 +15,7 @@ type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S : compariso
     lookupValidators : (LookupValidator<'T, 'S> * string) list
     ruleApplicator : CWTools.Validation.IRuleApplicator<'S> option
     useRules : bool
+    debugRulesOnly : bool
 }
 type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S>) =
     let resources = settings.resources
@@ -49,7 +50,7 @@ type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(setti
         // let evres = duration (fun _ ->  ( if settings..experimental && (not(shallow)) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
         //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
         //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
-        let shallow = res @ fres @ lres @ rres
+        let shallow = if settings.debugRulesOnly then rres else res @ fres @ lres @ rres
         let deep = hres
         shallow, deep
 

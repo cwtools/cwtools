@@ -143,17 +143,17 @@ let tests =
             ]
     ]
 
-let testFolder folder testsname config (culture : string) =
+let testFolder folder testsname config configfile configOnly (culture : string) =
     testList (testsname + culture) [
         Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
         Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
-        let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+        let configtext = if config then [configfile, File.ReadAllText configfile] else []
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = if config then Some { ruleFiles = [configtext]; validateRules = config} else None}
+                                            rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = configOnly} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
@@ -178,16 +178,49 @@ let testFolder folder testsname config (culture : string) =
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false "en-GB"
-        testFolder "./testfiles/validationtests/gfxtests" "gfx" false "en-GB"
-        testFolder "./testfiles/validationtests/scopetests" "scopes" false "en-GB"
-        testFolder "./testfiles/validationtests/variabletests" "variables" false "en-GB"
-        testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "en-GB"
-        testFolder "./testfiles/validationtests/eventtests" "events" false "en-GB"
-        testFolder "./testfiles/validationtests/weighttests" "weights" false "en-GB"
-        testFolder "./testfiles/multiplemodtests" "multiple" false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true "ru-RU"
+        testFolder "./testfiles/validationtests/interfacetests" "interface" false "" false "en-GB"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx" false "" false "en-GB"
+        testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false "en-GB"
+        testFolder "./testfiles/validationtests/variabletests" "variables" false "" false "en-GB"
+        testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false "en-GB"
+        testFolder "./testfiles/validationtests/eventtests" "events" false "" false "en-GB"
+        testFolder "./testfiles/validationtests/weighttests" "weights" false "" false"en-GB"
+        testFolder "./testfiles/multiplemodtests" "multiple" false "" false "en-GB" 
+        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "ru-RU"
+        testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
+    ]
+
+let testConfigFolder folder testsname config configfile (culture : string) =
+    testList (testsname + culture) [
+        Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
+        Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
+        let configtext = if config then [configfile, File.ReadAllText configfile] else []
+        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
+        let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+        // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
+        let settings = emptyStellarisSettings folder
+        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+                                            rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = false} else None}
+        let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
+        // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
+        //printfn "%A" (testVals)
+        //eprintfn "%A" testVals
+        // eprintfn "%A" (stl.AllFiles())
+        //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
+        let inner (file, ((nodekeys : range list)) )=
+            let expected = nodekeys |> List.map (fun nk -> "", nk)
+             //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
+            let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file )
+            let fileErrorPositions = fileErrors //|> List.map snd
+            let missing = remove_all_by expected fileErrorPositions snd
+            let extras = remove_all_by fileErrorPositions expected snd
+            //eprintfn "%A" nodekeys
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
+            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+        yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
 
 [<Tests>]

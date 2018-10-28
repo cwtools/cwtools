@@ -49,6 +49,7 @@ type EmbeddedSettings = {
 type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
+    debugRulesOnly : bool
 }
 
 type ValidationSettings = {
@@ -204,6 +205,7 @@ type STLGame (settings : StellarisSettings) =
             lookupValidators = [valAllEffects, "effects"; valAllTriggers, "triggers"; validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
             ruleApplicator = ruleApplicator
             useRules = useRules
+            debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
     // validators : (StructureValidator<'T> * string) list
     // experimentalValidators : (StructureValidator<'T> * string) list
     // heavyExperimentalValidators : (LookupValidator<'T> * string) list
@@ -533,7 +535,7 @@ type STLGame (settings : StellarisSettings) =
             member __.ScopesAtPos pos file text = scopesAtPos pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
             member __.GoToType pos file text = getInfoAtPos pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
-            member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
+            member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
             member __.RefreshCaches() = refreshRuleCaches None
             member __.ForceRecompute() = resources.ForceRecompute()
 

@@ -1,0 +1,13 @@
+colors = {
+	orange 	= { flag = hsv { 0.07 0.6 0.23 }	map = hsv { 0.06 0.5 0.35 } 	ship = hsv { 0.05  0.7   0.8  } }
+	black 		= { flag = hsv { 0.07 0.6 0.4 }     map = hsv { 0.08 0.5 0.55 } 	ship = hsv { 0.08  0.7   0.7  } }
+}
+
+randomizable_combo = { orange black orange }
+randomizable_combo = { black orange orange }
+randomizable_combo = {
+    black
+    orange
+    #error
+    blue
+}

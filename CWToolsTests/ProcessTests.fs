@@ -370,7 +370,7 @@ let testsConfig =
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
             //let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
@@ -392,7 +392,7 @@ let testsConfig =
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
             let input =    "ship_size = {\n\
@@ -410,7 +410,7 @@ let testsConfig =
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
             let input =    "ship_size = {\n\
@@ -430,7 +430,7 @@ let testsConfig =
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
 
             let input =    "ship_size = {\n\

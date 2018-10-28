@@ -141,7 +141,7 @@ module rec ConfigParser =
     let getSettingFromString (full : string) (key : string) =
         let setting = full.Substring(key.Length)
         if not (setting.StartsWith "[" && setting.EndsWith "]") then None else
-            Some (setting.Trim [|'['; ']'|])
+            Some (setting.Substring(1, setting.Length - 2))
 
     let getFloatSettingFromString (full : string) =
         match getSettingFromString full "float" with

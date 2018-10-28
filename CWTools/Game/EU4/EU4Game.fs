@@ -173,6 +173,7 @@ type EU4Game(settings : EU4Settings) =
         lookupValidators = []
         ruleApplicator = None
         useRules = true
+        debugRulesOnly = false
     }
 
     let mutable validationManager = ValidationManager(validationSettings)

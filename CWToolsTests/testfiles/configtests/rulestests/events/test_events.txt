@@ -1,0 +1,15 @@
+namespace = test
+
+##Type in alias
+event = {
+    my_ship = test
+    #Error
+    blah = test
+}
+
+##Enum in alias
+event = {
+    my_enum = test
+    #Error
+    blah = test
+}
