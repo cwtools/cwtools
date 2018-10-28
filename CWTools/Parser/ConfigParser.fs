@@ -84,6 +84,7 @@ module rec ConfigParser =
         typeKeyField : string option
         pushScope : 'a option
     }
+    type SkipRootKey = |SpecificKey of string |AnyKey
     type TypeDefinition<'a> = {
         name : string
         nameField : string option
@@ -94,7 +95,7 @@ module rec ConfigParser =
         conditions : Node option
         subtypes : SubTypeDefinition<'a> list
         typeKeyFilter : (string * bool) option
-        skipRootKey : string option
+        skipRootKey : SkipRootKey option
         warningOnly : bool
     }
     type EnumDefinition = string * string list
@@ -199,8 +200,10 @@ module rec ConfigParser =
         let reqScope =
             match comments |> List.tryFind (fun s -> s.StartsWith("# scope =")) with
             |Some s ->
-                let scope =  s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope
-                if scope = anyScope then allScopes else [scope]
+                let rhs = s.Substring(s.IndexOf "=" + 1).Trim()
+                match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                |true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.map parseScope |> List.ofArray
+                |false -> let scope = rhs |> parseScope in if scope = anyScope then allScopes else [scope]
             |None -> []
         let severity =
             match comments |> List.tryFind (fun s -> s.Contains("severity")) with
@@ -404,7 +407,7 @@ module rec ConfigParser =
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let path_strict = node.TagText "path_strict" == "yes"
             let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
-            let skiprootkey = if node.Has "skip_root_key" then Some (node.TagText "skip_root_key") else None
+            let skiprootkey = if node.Has "skip_root_key" then (let text = node.TagText "skip_root_key" in if text = "any" then Some SkipRootKey.AnyKey else Some (SkipRootKey.SpecificKey text)) else None
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
             //eprintfn "cs %A" comments

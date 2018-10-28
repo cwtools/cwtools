@@ -640,7 +640,8 @@ module rec Rules =
                 |None -> true
             let skiprootkey (td : TypeDefinition<_>) (n : string) =
                 match td.skipRootKey with
-                |Some key -> n == key
+                |Some (SpecificKey key) -> n == key
+                |Some (AnyKey) -> true
                 |None -> false
             let skipcomp =
                 match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
@@ -690,8 +691,10 @@ module rec Rules =
                                 |true, _ -> 
                                     let subtypes = ruleapplicator.TestSubtype(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
                                     def.name::subtypes |> List.map (fun s -> s, (Path.GetFileNameWithoutExtension f, e.Position))
-                                |false, Some key ->
+                                |false, Some (SpecificKey key) ->
                                     e.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect inner)
+                                |false, Some (AnyKey) ->
+                                    e.Children |> List.collect (fun c -> c.Children |> List.collect inner)
                                 |false, None ->
                                     (e.Children |> List.collect inner)
                             childres

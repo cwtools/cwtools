@@ -14,6 +14,17 @@ types = {
     }
     type[event] = {
         path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+        
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+        
     }
 }
 enums = {
@@ -27,6 +38,22 @@ alias[effect:enum[test_enum]] = test
 alias[effect:<name_from_file>] = test
 alias[effect:<name_from_file.subtype_one>] = test2
 
+## scope = ship
+alias[effect:ship_only] = test
+
+## scope = {ship country}
+alias[effect:ship_and_country] = test
+
 event = {
     alias_name[effect] = alias_match_left[effect]
+    ## push_scope = ship
+    ## cardinality = 0..inf
+    ship = {
+        alias_name[effect] = alias_match_left[effect]
+    }
+    ## push_scope = country
+    ## cardinality = 0..inf
+    country = {
+        alias_name[effect] = alias_match_left[effect]
+    }
 }

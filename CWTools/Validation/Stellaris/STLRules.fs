@@ -157,8 +157,14 @@ module rec STLRules =
 
         and applyLeafRule (ctx : RuleContext<_>) (options : Options) (rule : NewField) (leaf : Leaf) =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
+            (match options.requiredScopes with
+            |[] -> OK
+            |xs ->
+                match ctx.scopes.CurrentScope with
+                |Scope.Any -> OK
+                |s -> if List.contains s xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) leaf])
+            <&&>
             checkField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope severity ctx rule (leaf.Value.ToRawString()) leaf
-
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let newCtx =
@@ -186,6 +192,13 @@ module rec STLRules =
                         if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
                         then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
                         else ctx
+            (match options.requiredScopes with
+            |[] -> OK
+            |xs ->
+                match newCtx.scopes.CurrentScope with
+                |Scope.Any -> OK
+                |s -> if List.contains s xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) node])
+            <&&>
             match rule with
             |ScopeField s ->
                 let scope = newCtx.scopes
@@ -229,7 +242,8 @@ module rec STLRules =
                     |None -> true
                 let skiprootkey (td : TypeDefinition) (n : Node) =
                     match td.skipRootKey with
-                    |Some key -> n.Key == key
+                    |Some (SpecificKey key) -> n.Key == key
+                    |Some (AnyKey) -> true
                     |None -> false
                 let validateType (typedef : TypeDefinition) (n : Node) =
                     let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)

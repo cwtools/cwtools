@@ -333,7 +333,8 @@ module rec EU4Rules =
                     |None -> true
                 let skiprootkey (td : TypeDefinition) (n : Node) =
                     match td.skipRootKey with
-                    |Some key -> n.Key == key
+                    |Some (SpecificKey key) -> n.Key == key
+                    |Some (AnyKey) -> true
                     |None -> false
                 let validateType (typedef : TypeDefinition) (n : Node) =
                     let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)

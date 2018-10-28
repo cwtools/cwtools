@@ -23,3 +23,19 @@ event = {
     #Error
     blah = test
 }
+
+##Required scopes
+ship_event = {
+    ship = {
+        ship_only = test
+        ship_and_country = test
+    }
+}
+
+country_event = {
+    country = {
+        ship_and_country = test
+        #error
+        ship_only = test
+    }
+}
