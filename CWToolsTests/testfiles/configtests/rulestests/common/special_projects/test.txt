@@ -1,0 +1,7 @@
+test = {
+    my_date = 1420.9.15
+    #error
+    my_date = asd
+    #error
+    my_date = 1240.13.30
+}

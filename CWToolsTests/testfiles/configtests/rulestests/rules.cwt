@@ -19,12 +19,12 @@ types = {
 		## push_scope = ship
         subtype[ship] = {
         }
-        
+
         ## type_key_filter = country_event
 		## push_scope = country
         subtype[country] = {
         }
-        
+
     }
 }
 enums = {
@@ -56,4 +56,17 @@ event = {
     country = {
         alias_name[effect] = alias_match_left[effect]
     }
+}
+
+
+#Test value types
+types = {
+    type[special_project] = {
+        path = "game/common/special_projects"
+    }
+}
+
+special_project = {
+    ## cardinality = 0..inf
+    my_date = date_field
 }

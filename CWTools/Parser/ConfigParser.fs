@@ -24,6 +24,7 @@ module rec ConfigParser =
     | Enum of string
     | Specific of string
     | Percent
+    | Date
     type NewField<'a> =
     | ValueField of ValueType
     | TypeField of string
@@ -240,6 +241,7 @@ module rec ConfigParser =
         |"localisation" -> LocalisationField false
         |"localisation_synced" -> LocalisationField true
         |"filepath" -> FilepathField
+        |"date_field" -> ValueField Date
         |x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (x.Trim([|'<'; '>'|]))
         |"int" -> defaultInt
