@@ -3,6 +3,7 @@ open CWTools.Common
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
+open CWTools.Validation
 
 type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S : comparison> = {
     validators : (StructureValidator<'T> * string) list
@@ -13,7 +14,7 @@ type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S : compariso
     resources : IResourceAPI<'T>
     lookup : Lookup<'S>
     lookupValidators : (LookupValidator<'T, 'S> * string) list
-    ruleApplicator : CWTools.Validation.IRuleApplicator<'S> option
+    ruleApplicator : RuleApplicator<'S, 'T> option
     useRules : bool
     debugRulesOnly : bool
 }
@@ -35,7 +36,7 @@ type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(setti
         eprintfn "Validating misc"
         //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
         let res = runValidators (fun f -> f oldEntities newEntities) validators
-        let rres = (if settings.useRules && settings.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [settings.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
+        let rres = (if settings.useRules && settings.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [settings.ruleApplicator.Value.ruleValidate(), "rules"]) else [])
         //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
         eprintfn "Validating files"
         // let STLFileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
