@@ -535,7 +535,7 @@ module rec Rules =
                     let newCtx =
                         match changeScope true effectMap triggerMap key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
-                            eprintfn "cs %A %A %A" s node.Key current
+                             eprintfn "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
                         |_ -> newCtx
                     newCtx, res
