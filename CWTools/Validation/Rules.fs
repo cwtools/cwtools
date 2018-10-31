@@ -442,6 +442,7 @@ module rec Rules =
 
         let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
             let fChild (ctx, _) (node : Node) ((field, options) : NewRule<_>) =
+                eprintfn "child acc %A %A" ctx field
                 let rules =
                     match field with
                     //| Field.LeftTypeField (t, f) -> inner f newCtx n
@@ -464,7 +465,8 @@ module rec Rules =
                 let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
                 let leafMatch = node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos)
                 let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
-                // let ctx = { RuleContext.subtypes = []; scopes = defaultContext; warningOnly = false }
+                eprintfn "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
+                // let ctx = { RuleContext.subtypes = []; scop es = defaultContext; warningOnly = false }
                 match childMatch, leafMatch, leafValueMatch with
                 |Some c, _, _ ->
                     match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
@@ -535,7 +537,7 @@ module rec Rules =
                     let newCtx =
                         match changeScope true effectMap triggerMap key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
-                             eprintfn "cs %A %A %A" s node.Key current
+                            eprintfn "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
                         |_ -> newCtx
                     newCtx, res
