@@ -175,6 +175,9 @@ let testFolder folder testsname config configfile configOnly (culture : string) 
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
 
+let testSubdirectories dir =
+    let dirs = Directory.EnumerateDirectories dir
+    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true (d + "/rules.cwt") true "en-GB")
 [<Tests>]
 let folderTests =
     testList "validation" [
@@ -188,8 +191,11 @@ let folderTests =
         testFolder "./testfiles/multiplemodtests" "multiple" false "" false "en-GB" 
         testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "en-GB"
         testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "ru-RU"
-        testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
+        // yield! testSubdirectories "./testfiles/configtests/rulestests"
+        // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]
+[<Tests>]
+let subfolderTests = testList "validation" (testSubdirectories "./testfiles/configtests/rulestests" |> List.ofSeq)
 
 let testConfigFolder folder testsname config configfile (culture : string) =
     testList (testsname + culture) [

@@ -1,0 +1,94 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+    type[country_tag] = {
+        path = "game/common/anomalies"
+    }
+}
+
+country_tag = scalar
+enums = {
+enum[test_enum] = {
+    my_enum
+}
+complex_enum[country_tags] = {
+    path = "game/common/anomalies"
+    enum_name = {
+
+    }
+}
+}
+
+## scope = { country ship }
+## push_scope = country
+###Refers to the country tags listed /Europa Universalis IV/common/country_tags
+alias[effect:enum[country_tags]] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+alias[effect:enum[test_enum]] = bool
+
+alias[trigger:enum[country_tags]] = {
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+alias[trigger:enum[test_enum]] = bool
+
+## scope = ship
+alias[effect:ship_only] = test
+
+## scope = {ship country}
+alias[effect:ship_and_country] = test
+
+## scope = country
+## push_scope = ship
+###Scopes to one random province the current scope owns.
+alias[effect:random_owned_ship] = {
+    ## cardinality = 0..1
+    limit = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    alias_name[effect] = alias_match_left[effect]
+}
+
+## scope = country
+alias[trigger:is_country] = bool
+
+## scope = ship
+alias[trigger:is_ship] = bool
+
+alias[effect:<scripted_effect>] = yes
+
+event = {
+    ## cardinality = 1..inf
+    option = {
+        ## cardinality = 0..1
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+}
+
+
+#Test value types
+types = {
+    type[special_project] = {
+        path = "game/common/special_projects"
+    }
+}
+
+special_project = {
+    ## cardinality = 0..inf
+    my_date = date_field
+}

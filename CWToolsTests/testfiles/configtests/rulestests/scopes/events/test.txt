@@ -1,0 +1,15 @@
+namespace = test
+
+country_event = {
+    option = {
+        random_owned_ship = {
+            limit = {
+                is_ship = yes
+            }
+            ship_only = test
+        }
+        USA = {
+            
+        }
+    }
+}
