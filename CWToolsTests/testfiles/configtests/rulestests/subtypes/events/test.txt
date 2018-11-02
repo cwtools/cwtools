@@ -1,0 +1,5 @@
+event = {
+    subtype_one = blessing_no
+    subtype_one = blessing_none
+    subtype_two = blessing_yes
+}

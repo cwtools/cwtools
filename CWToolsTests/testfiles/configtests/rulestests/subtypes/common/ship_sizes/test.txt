@@ -1,0 +1,11 @@
+blessing_yes = {
+    blessing = yes
+}
+
+blessing_no = {
+    blessing = no
+}
+
+blessing_none = {
+
+}

@@ -1,0 +1,6 @@
+event = {
+    singlefile = one
+    singlefile = two
+    #error
+    singlefile = three
+}

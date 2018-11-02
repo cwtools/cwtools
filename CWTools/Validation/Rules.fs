@@ -963,7 +963,9 @@ module rec Rules =
                 else
                     match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() = "enum_name") with
                     |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
-                    |None -> []
+                    |None -> 
+                        match enumtree.Leaves |> Seq.tryFind (fun l -> k.Key == "enum_name") with
+                        |Some leaf -> node.Leaves |> Seq.map(fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq 
         let getEnumInfo (complexenum : ComplexEnumDef) =
             let cpath = complexenum.path.Replace("\\","/")
             let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)

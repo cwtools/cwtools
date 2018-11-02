@@ -1,0 +1,18 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+enums = {
+    complex_enum[singlefile] = {
+        path = "game/common/graphicalculturetype.txt"
+        enum_path = {
+            enum_name = ignore
+        }
+    }
+}
+event = {
+    ## cardinality = 0..inf
+    singlefile = enum[singlefile]
+}
