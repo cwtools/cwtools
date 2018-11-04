@@ -7,12 +7,24 @@ types = {
 enums = {
     complex_enum[singlefile] = {
         path = "game/common/graphicalculturetype.txt"
-        enum_path = {
+        name = {
             enum_name = ignore
         }
+        start_from_root = yes
+    }
+    complex_enum[top_leaf] = {
+        path = "game/common/anomalies"
+        name = {
+            enum_name = ignore
+        }
+        start_from_root = yes
     }
 }
+
 event = {
     ## cardinality = 0..inf
     singlefile = enum[singlefile]
+
+    ## cardinality = 0..inf
+    top_leaf = enum[top_leaf]
 }

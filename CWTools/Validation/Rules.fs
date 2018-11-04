@@ -20,6 +20,7 @@ open System
 open FSharp.Collections.ParallelSeq
 open System
 open CWTools.Process.Scopes
+open FParsec
 
 type RuleApplicator<'S, 'T when 'T :> ComputedData and 'S : comparison> = {
     applyNodeRule : NewRule<'S> list * Node -> ValidationResult
@@ -84,7 +85,7 @@ module rec Rules =
             |ValueType.Enum e ->
                 match enumsMap.TryFind e with
                 |Some es -> if es.Contains (key.Trim([|'\"'|])) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode]
-                |None -> OK
+                |None -> Invalid[inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode]
             |ValueType.Float (min, max) ->
                 match TryParser.parseDouble key with
                 |Some f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode]
@@ -277,7 +278,7 @@ module rec Rules =
             checkField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang severity ctx rule (leaf.Value.ToRawString()) leaf
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
-            let newCtx =
+            let newCtx  =
                 match options.pushScope with
                 |Some ps ->
                     {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
@@ -442,7 +443,7 @@ module rec Rules =
 
         let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
             let fChild (ctx, _) (node : Node) ((field, options) : NewRule<_>) =
-                eprintfn "child acc %A %A" ctx field
+                // eprintfn "child acc %A %A" ctx field
                 let rules =
                     match field with
                     //| Field.LeftTypeField (t, f) -> inner f newCtx n
@@ -952,6 +953,7 @@ module rec Rules =
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
         let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
         let rec inner (enumtree : Node) (node : Node) =
+            eprintfn "%A %A" (enumtree.ToRaw) (node.Position.FileName)
             match enumtree.Children with
             |head::_ ->
                 if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
@@ -963,12 +965,15 @@ module rec Rules =
                 else
                     match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() = "enum_name") with
                     |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
-                    |None -> 
-                        match enumtree.Leaves |> Seq.tryFind (fun l -> k.Key == "enum_name") with
-                        |Some leaf -> node.Leaves |> Seq.map(fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq 
+                    |None ->
+                        match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
+                        |Some leaf -> node.Leaves |> Seq.map(fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq
+                        |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
             let cpath = complexenum.path.Replace("\\","/")
+            eprintfn "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
             let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
-                                  |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
+                                  |> List.collect (fun e -> if complexenum.start_from_root then inner complexenum.nameTree e else  e.Children |> List.collect (inner complexenum.nameTree))
+            eprintfn "%A %A" complexenum.name values
             complexenum.name, values
         complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq

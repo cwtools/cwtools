@@ -122,6 +122,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
 
     let filepathToEntityType =
         function
+        |x when globCheckFilepath "**/common/*.txt" x -> EntityType.Other
         |x when globCheckFilepath "**/common/agendas/*.txt" x -> EntityType.Agenda
         |x when globCheckFilepath "**/common/ambient_objects/*.txt" x -> EntityType.AmbientObjects
         |x when globCheckFilepath "**/common/anomalies/*.txt" x -> EntityType.Anomalies

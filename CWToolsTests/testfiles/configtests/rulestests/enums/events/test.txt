@@ -3,4 +3,9 @@ event = {
     singlefile = two
     #error
     singlefile = three
+
+    top_leaf = one
+    top_leaf = two
+    #error
+    top_leaf = three
 }

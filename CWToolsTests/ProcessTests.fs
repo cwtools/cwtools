@@ -142,11 +142,12 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
+                let enums = [("size", ["medium"; "large"]); ("module", ["trafficControl"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 let errors = rules.applyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.isEmpty es "should be empty"
+                | Invalid es -> Expect.isEmpty es (sprintf "should be empty: %A" es)
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase fail" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -171,7 +172,8 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
+                let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 let errors = rules.applyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -186,7 +188,8 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
+                let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 let errors = rules.applyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -205,7 +208,8 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
+                let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+                let rules = ruleApplicatorCreator([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, enums, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 let errors = rules.applyNodeRule([ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()

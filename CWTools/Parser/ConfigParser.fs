@@ -104,6 +104,7 @@ module rec ConfigParser =
         name : string
         path : string
         nameTree : Node
+        start_from_root : bool
     }
     let parseSeverity =
         function
@@ -347,7 +348,7 @@ module rec ConfigParser =
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
                 let innerRule = configNode parseScope allScopes anyScope node comments rn
-                eprintfn "%s %A" a innerRule
+                // eprintfn "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
                 TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
@@ -465,8 +466,9 @@ module rec ConfigParser =
             let enumname = getSettingFromString node.Key "complex_enum"
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let nametree = node.Child "name"
+            let start_from_root = node.TagText "start_from_root" == "yes"
             match enumname, nametree with
-            |Some en, Some nt -> Some {name = en; path = path; nameTree = nt}
+            |Some en, Some nt -> Some {name = en; path = path; nameTree = nt; start_from_root = start_from_root}
             |_ -> None
         |_ -> None
 

@@ -135,7 +135,7 @@ let tests =
                     Expect.isEmpty missing (sprintf "Missing required despite having key %s" file)
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
-                eprintfn "%A" (stl.LocalisationErrors(true))
+                // eprintfn "%A" (stl.LocalisationErrors(true))
                 let locErrorCodes = [ "CW225"; "CW226"; "CW254"; "CW255"; "CW256"; "CW257"; "CW258"]
                 let globalLocError = stl.LocalisationErrors(true) |> List.filter (fun (c, s, n, l, f, k) -> List.contains c locErrorCodes)
                 yield testCase "globalLoc" <| fun () ->
@@ -188,7 +188,7 @@ let folderTests =
         testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false "en-GB"
         testFolder "./testfiles/validationtests/eventtests" "events" false "" false "en-GB"
         testFolder "./testfiles/validationtests/weighttests" "weights" false "" false"en-GB"
-        testFolder "./testfiles/multiplemodtests" "multiple" false "" false "en-GB" 
+        testFolder "./testfiles/multiplemodtests" "multiple" false "" false "en-GB"
         testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "en-GB"
         testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"

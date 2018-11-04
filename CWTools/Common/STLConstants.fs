@@ -335,6 +335,7 @@ module STLConstants =
         "common/war_demand_counters"; //Removed in 2.0
         "common/war_demand_types"; //Removed in 2.0
         "common/war_goals";
+        "common";
         "events";
         "map/galaxy";
         "map/setup_scenarios";

@@ -15,11 +15,6 @@ open CWTools.Common.STLConstants
 
 module ValidationCore =
 
-    type Severity =
-        | Error = 1
-        | Warning = 2
-        | Information = 3
-        | Hint = 4
 
     type ErrorCode =
         {
@@ -29,7 +24,7 @@ module ValidationCore =
         }
 
     type ErrorCodes =
-        static member MixedBlock = { ID = "CW002"; Severity = Severity.Error; Message = "This block has mixed key/values and values" }
+        static member MixedBlock = { ID = "CW002"; Severity = Severity.Error; Message = "This block has mixed key/values and values, it is probably a missing equals sign inside it." }
         static member MissingLocalisation =
             fun key language ->
                 let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()
@@ -101,10 +96,11 @@ module ValidationCore =
         static member DeprecatedSetName = { ID = "CW253"; Severity = Severity.Information; Message = "Consider using \"set_name\" instead for consistency" }
         static member WrongEncoding = { ID = "CW254"; Severity = Severity.Error; Message = "Localisation files must be UTF-8 BOM, this file is not"}
         static member MissingLocFileLang = { ID = "CW255"; Severity = Severity.Error; Message = "Localisation file name should contain (and ideally end with) \"l_language.yml\""}
-        static member MissingLocFileLangHeader = { ID = "CW256"; Severity = Severity.Error; Message = "Localisation file should start with \"l_language:\" on the first line"}
+        static member MissingLocFileLangHeader = { ID = "CW256"; Severity = Severity.Error; Message = "Localisation file should start with \"l_language:\" on the first line (or a comment)"}
         static member LocFileLangMismatch = fun (name : STLLang) (header : STLLang) -> { ID = "CW257"; Severity = Severity.Error; Message = sprintf "Localisation file's name has language %A doesn't match the header language %A" name header }
         static member LocFileLangWrongPlace = { ID = "CW258"; Severity = Severity.Information; Message = "Localisation file name should end with \"l_language.yml\""}
 
+        static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
     type CWError = (string * Severity * range * int * string * option<string>)
@@ -173,12 +169,8 @@ module ValidationCore =
 
     let (<&??&>) es f = es |> Seq.map f |> Seq.reduce (<&?&>)
 
-    [<Interface>]
-    type ICachedEntityData() = 
-        member val Cache : Map<string, (string * (Entity -> string list))> = Map.empty
-    
 
-    type EntitySet<'T when 'T :> ICachedEntityData>(entities : struct (Entity * Lazy<'T>) list) =
+    type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =
         member __.GlobMatch(pattern : string) =
             let options = new GlobOptions();
             options.Evaluation.CaseInsensitive <- true;
@@ -216,18 +208,20 @@ module ValidationCore =
                                 )
             this.All |> List.collect (foldNode7 fNode)
 
+        member __.AddOrGetCached id generator =
+            entities |> List.collect (fun struct (e, d) ->
+                                    let data = d.Force()
+                                    match data.Cache |> Map.tryFind id with
+                                    |Some v -> v
+                                    |None -> let v = generator e in data.Cache <- Map.add id v data.Cache; v)
 
 
         member __.Raw = entities
-        member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
-        member this.AddOrGetCached(name : string, generator : Entity -> string list) =
-            entities |> List.map (fun struct (es, d) -> es.entity, d)
-                     |> List.map (fun (e, d) -> 
-                                    let data = d.Force()
-                                    match data.Cache.TryGet(name) with
-                                    | Some vs -> vs
-                                    | None -> let vs = generator name in data.Cache.[name] <- vs; vs
-                                    )
+
     type STLEntitySet = EntitySet<STLComputedData>
-    type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
-    type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
+    type StructureValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> EntitySet<'T> -> ValidationResult
+    type STLStructureValidator = StructureValidator<STLComputedData>
+    type EU4StructureValidator = StructureValidator<EU4ComputedData>
+    type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
+    type STLFileValidator = FileValidator<STLComputedData>
+    type LookupValidator<'T, 'S when 'T :> ComputedData and 'S : comparison> = Lookup<'S> -> StructureValidator<'T>
