@@ -466,13 +466,13 @@ module rec Rules =
                 let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
                 let leafMatch = node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos)
                 let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
-                eprintfn "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
+                // eprintfn "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
                 // let ctx = { RuleContext.subtypes = []; scop es = defaultContext; warningOnly = false }
                 match childMatch, leafMatch, leafValueMatch with
                 |Some c, _, _ ->
                     match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
                     | [] ->
-                            eprintfn "fallback match %s %A" (node.Key) expandedrules
+                            // eprintfn "fallback match %s %A" (node.Key) expandedrules
                             Some (NodeC c, (field, options))
                     | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
                 |_, Some leaf, _ ->
@@ -505,7 +505,7 @@ module rec Rules =
             let fComment (ctx) _ _ = ctx
             let fNode (ctx, res) (node : Node) ((field, options) : NewRule<_>) =
                 // let anyScope = ( ^a : (static member AnyScope : ^a) ())
-                eprintfn "info fnode inner %s %A %A %A" (node.Key) options field ctx
+                // eprintfn "info fnode inner %s %A %A %A" (node.Key) options field ctx
                 let newCtx =
                     match options.pushScope with
                     |Some ps ->
@@ -538,7 +538,7 @@ module rec Rules =
                     let newCtx =
                         match changeScope true effectMap triggerMap key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
-                            eprintfn "cs %A %A %A" s node.Key current
+                            // eprintfn "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
                         |_ -> newCtx
                     newCtx, res
@@ -548,7 +548,7 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
             let file = Path.GetFileName entity.logicalpath
             let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
-            eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
+            // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
                 match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
                 |Some c, Some typedef ->
@@ -953,7 +953,7 @@ module rec Rules =
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
         let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
         let rec inner (enumtree : Node) (node : Node) =
-            eprintfn "%A %A" (enumtree.ToRaw) (node.Position.FileName)
+            // eprintfn "%A %A" (enumtree.ToRaw) (node.Position.FileName)
             match enumtree.Children with
             |head::_ ->
                 if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
@@ -971,9 +971,9 @@ module rec Rules =
                         |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
             let cpath = complexenum.path.Replace("\\","/")
-            eprintfn "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
+            // eprintfn "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
             let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
                                   |> List.collect (fun e -> if complexenum.start_from_root then inner complexenum.nameTree e else  e.Children |> List.collect (inner complexenum.nameTree))
-            eprintfn "%A %A" complexenum.name values
+            // eprintfn "%A %A" complexenum.name values
             complexenum.name, values
         complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq

@@ -37,6 +37,7 @@ open CWTools.Validation.Stellaris
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Validation
 open CWTools.Process.Scopes
+open System.Text
 
 type EmbeddedSettings = {
     triggers : DocEffect list
@@ -75,7 +76,7 @@ type STLGame (settings : StellarisSettings) =
         let useRules = settings.rules.IsSome
 
 
-        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris")
+        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris", Encoding.UTF8)
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)

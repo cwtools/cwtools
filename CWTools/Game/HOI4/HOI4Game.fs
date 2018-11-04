@@ -9,6 +9,7 @@ open CWTools.Localisation.HOI4Localisation
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
 open System.IO
+open System.Text
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -75,7 +76,7 @@ type HOI4Game(settings : HOI4Settings) =
         "interface";
     ]
 
-    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv")
+    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv", Encoding.UTF8)
 
     let computeHOI4Data (e : Entity) = { temp = [] }
     let resourceManager = ResourceManager(computeHOI4Data)

@@ -31,8 +31,16 @@ module EU4Scopes =
 
     let defaultContext =
         { Root = Scope.Any; From = []; Scopes = [] }
+    let defaultDesc = "Scope (/context) switch"
 
-    let scopedEffects = []
+
+    let scopedEffects =
+        [
+            ScopedEffect("owner", [Scope.Province; Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("controller", [Scope.Province; Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
+        ]
+
 
     // type ScopeResult =
     //     | NewScope of newScope : ScopeContext<Scope> * ignoreKeys : string list
@@ -46,13 +54,13 @@ module EU4Scopes =
         "THIS", id;
         "ROOT", fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, true;
         "FROM", from 1;
-        "FROMFROM", from 2;
-        "FROMFROMFROM", from 3;
-        "FROMFROMFROMFROM", from 4;
+        // "FROMFROM", from 2;
+        // "FROMFROMFROM", from 3;
+        // "FROMFROMFROMFROM", from 4;
         "PREV", prev;
-        "PREVPREV", prev >> prev;
-        "PREVPREVPREV", prev >> prev >> prev;
-        "PREVPREVPREVPREV", prev >> prev >> prev >> prev
+        // "PREVPREV", prev >> prev;
+        // "PREVPREVPREV", prev >> prev >> prev;
+        // "PREVPREVPREVPREV", prev >> prev >> prev >> prev
         "AND", id;
         "OR", id;
         "NOR", id;

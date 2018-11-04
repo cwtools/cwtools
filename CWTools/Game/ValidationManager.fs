@@ -33,9 +33,10 @@ type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(setti
         let runValidators f (validators : (StructureValidator<'T> * string) list) =
             (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             @ (if not settings.experimental then [] else settings.experimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-        eprintfn "Validating misc"
         //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
+        eprintfn "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
+        eprintfn "Validating rules"
         let rres = (if settings.useRules && settings.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [settings.ruleApplicator.Value.ruleValidate(), "rules"]) else [])
         //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
         eprintfn "Validating files"

@@ -19,6 +19,7 @@ open CWTools.Process.EU4Scopes
 open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.EU4
+open System.Text
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -138,7 +139,7 @@ type EU4Game(settings : EU4Settings) =
         "interface";]
 
 
-    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv")
+    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv", Encoding.GetEncoding(1252))
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     let mutable infoService : ('a * (Entity -> Map<string,(string * range) list>)) option = None
@@ -220,7 +221,8 @@ type EU4Game(settings : EU4Settings) =
                 |NodeRule(ValueField(Specific n),_) -> n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        effects |> List.map ruleToEffect
+        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+
     let updateScriptedTriggers(rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
@@ -231,7 +233,7 @@ type EU4Game(settings : EU4Settings) =
                 |NodeRule(ValueField(Specific n),_) -> n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        effects |> List.map ruleToTrigger
+        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
 
     let updateTypeDef =
         let mutable simpleEnums = []
@@ -245,7 +247,7 @@ type EU4Game(settings : EU4Settings) =
             match rulesSettings with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-                lookup.scriptedEffects <- updateScriptedEffects rules |> List.map (fun e -> e :> Effect)
+                lookup.scriptedEffects <- updateScriptedEffects rules
                 lookup.scriptedTriggers <- updateScriptedTriggers rules |> List.map (fun e -> e :> Effect)
                 lookup.typeDefs <- types
                 let rulesWithMod = rules @ (lookup.coreEU4Modifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
@@ -315,7 +317,7 @@ type EU4Game(settings : EU4Settings) =
                 []
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
-                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, Encoding.GetEncoding(1252)))
                 let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
                 let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
                 let resource = makeEntityResourceInput filepath file

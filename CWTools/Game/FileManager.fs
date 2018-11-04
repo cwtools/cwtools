@@ -15,16 +15,16 @@ module Files =
         |Mods
         |Vanilla
 
-    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string) =
+    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding) =
         let normalisedScopeDirectory = rootDirectory.Replace("\\","/").TrimStart('.')
         do eprintfn "normalised %s" normalisedScopeDirectory
         let normalisedScopeDirectoryLength = normalisedScopeDirectory.Length
         let convertPathToLogicalPath =
             fun (path : string) ->
                 let path = path.Replace("\\","/")
-                eprintfn "conv %A" path
+                // eprintfn "conv %A" path
                 let path = let index = path.IndexOf(normalisedScopeDirectory) in if index >= 0 then path.Substring(index + normalisedScopeDirectoryLength) else path
-                eprintfn "conv2 %A" path
+                // eprintfn "conv2 %A" path
                 //let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
                 if path.StartsWith "gfx\\" || path.StartsWith "gfx/" then path else
                 let pathContains (part : string) =
@@ -131,7 +131,7 @@ module Files =
                 |".gfx"
                 |".asset" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
-                    Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText filepath; validate = true})
+                    Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText(filepath, encoding); validate = true})
                 |".dds"
                 |".tga"
                 |".shader"
