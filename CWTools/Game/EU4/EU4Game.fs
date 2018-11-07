@@ -133,6 +133,7 @@ type EU4Game(settings : EU4Settings) =
         "history/wars";
         "map";
         "music";
+        "missions";
         "sound";
         "tutorial";
         "gfx";

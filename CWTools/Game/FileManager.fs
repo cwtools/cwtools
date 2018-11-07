@@ -46,6 +46,10 @@ module Files =
                         if pathContains "sound" then let i = pathIndex "sound" in yield i, path.Substring(i) else ();
                         if pathContains "flags" then let i = pathIndex "flags" in yield i, path.Substring(i) else ();
                         if pathContains "prescripted_countries" then let i = pathIndex "prescripted_countries" in yield i, path.Substring(i) else ();
+                        if pathContains "decisions" then let i = pathIndex "decisions" in yield i, path.Substring(i) else ();
+                        if pathContains "missions" then let i = pathIndex "missions" in yield i, path.Substring(i) else ();
+                        if pathContains "customizable_localisation" then let i = pathIndex "customizable_localisation" in yield i, path.Substring(i) else ();
+                        if pathContains "history" then let i = pathIndex "history" in yield i, path.Substring(i) else ();
                     ]
                 if matches.IsEmpty then path else matches |> List.minBy fst |> snd
 
