@@ -342,20 +342,22 @@ module rec Rules =
             let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
             applyNodeRule true context options (ValueField (ValueType.Specific "root")) rules node
 
+        let rootTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file)
+        let normalTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file |> not )
         let validate ((path, root) : string * Node) =
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
-            let inner (node : Node) =
+            let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
+                match td.typeKeyFilter with
+                |Some (filter, negate) -> n.Key == filter <> negate
+                |None -> true
+            let skiprootkey (td : TypeDefinition<_>) (n : Node) =
+                match td.skipRootKey with
+                |Some (SpecificKey key) -> n.Key == key
+                |Some (AnyKey) -> true
+                |None -> false
 
-                let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
-                    match td.typeKeyFilter with
-                    |Some (filter, negate) -> n.Key == filter <> negate
-                    |None -> true
-                let skiprootkey (td : TypeDefinition<_>) (n : Node) =
-                    match td.skipRootKey with
-                    |Some (SpecificKey key) -> n.Key == key
-                    |Some (AnyKey) -> true
-                    |None -> false
+            let inner (typedefs : TypeDefinition<_> list) (node : Node) =
                 let validateType (typedef : TypeDefinition<_>) (n : Node) =
                     let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)
                     //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
@@ -386,9 +388,9 @@ module rec Rules =
                     |Some typedef -> validateType typedef node
                     |None -> OK
                 skipres <&&> nonskipres
-
-            let res = (root.Children <&!&> inner)
-            res
+            let res = (root.Children <&!&> inner normalTypeDefs)
+            let rootres = (inner rootTypeDefs root)
+            res <&&> rootres
         {
             applyNodeRule = (fun (rule, node) -> applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node)
             testSubtype = (fun ((subtypes), (node)) -> testSubtype subtypes node)
@@ -907,9 +909,10 @@ module rec Rules =
                     (fun () ->
                     match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
                     |Some typedef ->
+                        let path2 = if typedef.type_per_file then path else path |> List.tail
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
                         //eprintfn "fc %A" path
-                        let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path |> List.tail)
+                        let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path2)
                         let completion = getCompletionFromPath typerules fixedpath
                         completion
                     |None -> getCompletionFromPath (typeRules |> List.map snd) path)
@@ -934,7 +937,7 @@ module rec Rules =
                                 |Some (filter, negate) -> if n.Key == filter <> negate then result else []
                                 |None -> result
                             let childres =
-                                match def.filenameName, def.skipRootKey with
+                                match def.type_per_file, def.skipRootKey with
                                 |true, _ ->
                                     let subtypes = ruleapplicator.testSubtype(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
                                     def.name::subtypes |> List.map (fun s -> s, (Path.GetFileNameWithoutExtension f, e.Position))

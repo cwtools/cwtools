@@ -89,7 +89,6 @@ module rec ConfigParser =
     type TypeDefinition<'a> = {
         name : string
         nameField : string option
-        filenameName : bool
         path : string
         path_strict : bool
         path_file : string option
@@ -97,6 +96,7 @@ module rec ConfigParser =
         subtypes : SubTypeDefinition<'a> list
         typeKeyFilter : (string * bool) option
         skipRootKey : SkipRootKey option
+        type_per_file : bool
         warningOnly : bool
     }
     type EnumDefinition = string * string list
@@ -406,7 +406,7 @@ module rec ConfigParser =
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
-            let filenameName = node.TagText "name_from_file" == "yes"
+            let type_per_file = node.TagText "type_per_file" == "yes"
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let path_strict = node.TagText "path_strict" == "yes"
             let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
@@ -424,7 +424,7 @@ module rec ConfigParser =
                     |_ -> None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; filenameName = filenameName; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict}
+            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict}
             |None -> None
         |_ -> None
 
@@ -528,7 +528,6 @@ module rec ConfigParser =
         {
             name = "create_starbase"
             nameField = None
-            filenameName = false
             path = "events"
             path_strict = false
             path_file = None
@@ -537,6 +536,7 @@ module rec ConfigParser =
             typeKeyFilter = None
             skipRootKey = None
             warningOnly = false
+            type_per_file = false
         }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -634,7 +634,6 @@ module rec ConfigParser =
         {
             name = "ship_behavior";
             nameField = Some "name";
-            filenameName = false;
             path = "common/ship_behaviors";
             conditions = None;
             subtypes = [];
@@ -643,13 +642,13 @@ module rec ConfigParser =
             warningOnly = false
             path_strict = false
             path_file = None
+            type_per_file = false
         }
     let shipSizeType =
         {
             name = "ship_size";
             path = "common/ship_sizes";
             nameField = None;
-            filenameName = false;
             conditions = None;
             subtypes = [];
             typeKeyFilter = None
@@ -657,6 +656,7 @@ module rec ConfigParser =
             warningOnly = false
             path_strict = false
             path_file = None
+            type_per_file = false
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

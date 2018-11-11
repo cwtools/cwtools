@@ -5,9 +5,9 @@ types = {
     type[ship_size] = {
         path = "game/common/ship_sizes"
     }
-    type[name_from_file] = {
+    type[type_per_file] = {
         path = "game/common/anomalies"
-        name_from_file = yes
+        type_per_file = yes
         subtype[subtype_one] = {
             subtype = yes
         }
@@ -35,8 +35,8 @@ enum[test_enum] = {
 
 alias[effect:<ship_size>] = test
 alias[effect:enum[test_enum]] = test
-alias[effect:<name_from_file>] = test
-alias[effect:<name_from_file.subtype_one>] = test2
+alias[effect:<type_per_file>] = test
+alias[effect:<type_per_file.subtype_one>] = test2
 
 ## scope = ship
 alias[effect:ship_only] = test
@@ -56,6 +56,11 @@ event = {
     country = {
         alias_name[effect] = alias_match_left[effect]
     }
+}
+
+type_per_file = {
+    ## cardinality = 0..1
+    subtype = bool
 }
 
 

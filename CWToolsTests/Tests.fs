@@ -22,6 +22,7 @@ open System.Threading
 open System.Globalization
 open CWTools.Validation.Stellaris
 open MBrace.FsPickler
+open System.Text
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -300,7 +301,7 @@ let embeddedTests =
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
 
         //Test serialization
-        let fileManager = FileManager("./testfiles/embeddedtest/test", Some "", FilesScope.Vanilla, scriptFolders, "stellaris")
+        let fileManager = FileManager("./testfiles/embeddedtest/test", Some "", FilesScope.Vanilla, scriptFolders, "stellaris", Encoding.UTF8)
         let files = fileManager.AllFilesByPath()
         let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
         let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)

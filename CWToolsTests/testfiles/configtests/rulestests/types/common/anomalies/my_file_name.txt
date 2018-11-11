@@ -1,4 +1,5 @@
-something = yes
+subtype = no
+#error
 test = {
-    
+
 }
