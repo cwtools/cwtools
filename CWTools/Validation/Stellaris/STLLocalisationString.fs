@@ -25,7 +25,7 @@ module STLLocalisationString =
     | Ref of string
     | Command of string
     | Chars of string
-    let valueChars = many1Satisfy ( isNoneOf ['$'; '['] )
+    let valueChars = many1Satisfy ( isNoneOf ['$'; '['; ']'] )
 
     let dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
     let dollarColour = pchar '|' .>> dollarChars
