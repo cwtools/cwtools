@@ -10,7 +10,12 @@ country_event = {
             #error
             country_only = test
         }
+        ##Test subtype scopes
+        #error
         ship_only = test
+        country_only = test
+
+
         USA = {
             USA = {
                 #error

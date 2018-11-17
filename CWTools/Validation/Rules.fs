@@ -337,7 +337,7 @@ module rec Rules =
             let pushScope, subtypes = testSubtype (typedef.subtypes) node
             let startingScopeContext =
                 match Option.orElse pushScope options.pushScope with
-                |Some ps -> { Root = ps; From = []; Scopes = [] }
+                |Some ps -> { Root = ps; From = []; Scopes = [ps] }
                 |None -> defaultContext
             let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
             applyNodeRule true context options (ValueField (ValueType.Specific "root")) rules node

@@ -1,0 +1,51 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+}
+
+## scope = ship
+alias[effect:ship_only] = test
+
+## scope = country
+alias[effect:country_only] = test
+
+## scope = { ship country }
+alias[effect:ship_and_country] = test
+
+## scope = country
+alias[trigger:is_country] = bool
+
+## scope = ship
+alias[trigger:is_ship] = bool
+
+event = {
+    option = {
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+}
+
+
+alias[effect:scope_field] = test
+alias[effect:scope_field] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+# alias[effect:OR] = {
+#     alias_name[effect] = alias_match_left[effect]
+# }
+alias[effect:test] = {
+    alias_name[effect] = alias_match_left[effect]
+}
