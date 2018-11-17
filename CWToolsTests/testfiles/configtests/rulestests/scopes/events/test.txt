@@ -7,9 +7,24 @@ country_event = {
                 is_ship = yes
             }
             ship_only = test
+            #error
+            country_only = test
         }
+        ship_only = test
         USA = {
-            
+            USA = {
+                #error
+                ship_only = test
+                country_only = test
+            }
+        }
+        #error
+        event_target:asddas = rar
+        event_target:asd = test
+        event_target:asdf = {
+            random_owned_ship = {
+
+            }
         }
     }
 }

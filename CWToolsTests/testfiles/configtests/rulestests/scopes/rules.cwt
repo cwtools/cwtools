@@ -50,7 +50,10 @@ alias[trigger:enum[test_enum]] = bool
 ## scope = ship
 alias[effect:ship_only] = test
 
-## scope = {ship country}
+## scope = country
+alias[effect:country_only] = test
+
+## scope = { ship country }
 alias[effect:ship_and_country] = test
 
 ## scope = country
@@ -82,14 +85,9 @@ event = {
 }
 
 
-#Test value types
-types = {
-    type[special_project] = {
-        path = "game/common/special_projects"
-    }
-}
-
-special_project = {
-    ## cardinality = 0..inf
-    my_date = date_field
+#Test event_target in alias
+alias[effect:scope_field] = test
+alias[effect:scope_field] = {
+    ## cardinality = 0..1
+    alias_name[effect] = alias_match_left[effect]
 }
