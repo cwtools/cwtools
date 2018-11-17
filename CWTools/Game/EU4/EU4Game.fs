@@ -122,6 +122,7 @@ type EU4Game(settings : EU4Settings) =
         "common/units";
         "common/units_display";
         "common/wargoal_types";
+        "common";
         "customizable_localization";
         "decisions";
         "events";

@@ -1,0 +1,10 @@
+value_one = {
+    test = test
+    test2 = value_two
+}
+
+#error
+value_two = {
+    #error
+    test = blah
+}

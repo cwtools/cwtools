@@ -944,7 +944,8 @@ module rec Rules =
                                 |false, Some (SpecificKey key) ->
                                     e.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect inner)
                                 |false, Some (AnyKey) ->
-                                    e.Children |> List.collect (fun c -> c.Children |> List.collect inner)
+                                    let res = e.Children |> List.collect (fun c -> c.Children |> List.collect inner)
+                                    res
                                 |false, None ->
                                     (e.Children |> List.collect inner)
                             childres

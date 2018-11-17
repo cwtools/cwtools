@@ -1,0 +1,25 @@
+## Do not change tags in here without changing every other reference to them.
+## #If adding new technology, make sure they are uniquely named.
+
+
+## Groups must be defined BEFORE tables.
+
+## Nation Designer Cost is set to match triggers for starting institutions.
+
+skip_me ={
+    value_one = {
+        test = test
+        test2 = value_two
+    }
+
+    value_two = {
+        #error
+        test = blah
+    }
+}
+
+tables = {
+	adm_tech = "technologies/adm.txt"
+	dip_tech = "technologies/dip.txt"
+	mil_tech = "technologies/mil.txt"
+}

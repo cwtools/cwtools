@@ -1,5 +1,6 @@
 #Type in alias
 #Enum in alias
+#Type specific file and skip root
 #Type from file
 types = {
     type[ship_size] = {
@@ -11,6 +12,15 @@ types = {
         subtype[subtype_one] = {
             subtype = yes
         }
+    }
+    type[type_one_file] = {
+        path = "game/common"
+        path_file = "one_file.txt"
+    }
+    type[type_one_file_skip] = {
+        path = "game/common"
+        path_file = "one_file_skip.txt"
+        skip_root_key = skip_me
     }
     type[event] = {
         path = "game/events"
@@ -63,6 +73,19 @@ type_per_file = {
     subtype = bool
 }
 
+type_one_file = {
+    test = test
+    test2 = <type_one_file>
+}
+
+type_one_file_skip = {
+    test = test
+    ## cardinality = 0..1
+    test2 = <type_one_file_skip>
+}
+
+alias[effect:type_one_file] = <type_one_file>
+alias[effect:type_one_file_skip] = <type_one_file_skip>
 
 #Test value types
 types = {

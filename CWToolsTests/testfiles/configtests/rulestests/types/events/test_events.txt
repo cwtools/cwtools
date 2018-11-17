@@ -39,3 +39,17 @@ country_event = {
         ship_only = test
     }
 }
+
+##Test type one file
+country_event = {
+    type_one_file = value_one
+    type_one_file = value_two
+    #error
+    type_one_file = value_fake
+
+    type_one_file_skip = value_one
+    type_one_file_skip = value_two
+    #error
+    type_one_file_skip = value_fake
+}
+
