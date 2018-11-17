@@ -25,7 +25,7 @@ module STLLocalisationString =
     | Ref of string
     | Command of string
     | Chars of string
-    let valueChars = many1Satisfy ( isNoneOf ['$'; '['] )
+    let valueChars = many1Satisfy ( isNoneOf ['$'; '['; ']'] )
 
     let dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
     let dollarColour = pchar '|' .>> dollarChars
@@ -103,7 +103,8 @@ module STLLocalisationString =
             "GetOwnerName";
             "GetControllerName";
             "GetCountry";
-            "GetPlanetMoonCap"
+            "GetPlanetMoonCap";
+            "GetNamePluralInsult";
         ]
     let checkCommand (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
         match localisationCommandContext commands eventtargets setvariables entry command with
