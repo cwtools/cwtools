@@ -393,6 +393,7 @@ module STLScopes =
         "OR", id;
         "NOR", id;
         "NOT", id;
+        "NAND", id;
         "hidden_effect", id;
         "hidden_trigger", id;
     ]
