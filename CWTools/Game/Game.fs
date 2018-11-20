@@ -1,5 +1,5 @@
 namespace CWTools.Games
-// open CWTools.Common.STLConstants
+open CWTools.Common
 // open CWTools.Process.STLScopes
 open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
@@ -30,7 +30,7 @@ type IGame<'S when 'S : comparison> =
     abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
     abstract ScopesAtPos : pos -> string -> string -> OutputScopeContext<'S> option
 
-type IGame<'T, 'S when 'S : comparison> =
+type IGame<'T, 'S when 'S : comparison and 'S :> IScope<'S>> =
     inherit IGame<'S>
     abstract AllEntities : unit -> struct (Entity * Lazy<'T>) list
     abstract References : unit -> References<'T, 'S>

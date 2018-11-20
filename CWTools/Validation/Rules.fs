@@ -22,19 +22,19 @@ open System
 open CWTools.Process.Scopes
 open FParsec
 
-type RuleApplicator<'S, 'T when 'T :> ComputedData and 'S : comparison> = {
-    applyNodeRule : NewRule<'S> list * Node -> ValidationResult
-    testSubtype : SubTypeDefinition<'S> list * Node -> 'S option * string list
-    ruleValidate : unit -> StructureValidator<'T>
-}
+// type RuleApplicator<'S, 'T when 'T :> ComputedData and 'S : comparison> = {
+//     applyNodeRule : NewRule<'S> list * Node -> ValidationResult
+//     testSubtype : SubTypeDefinition<'S> list * Node -> 'S option * string list
+//     ruleValidate : unit -> StructureValidator<'T>
+//}
 // type IRuleApplicator<'S> =
 //     abstract ApplyNodeRule : NewRule<'S> list * Node -> ValidationResult
 //     abstract TestSubtype : SubTypeDefinition<'S> list * Node -> 'S option * string list
 //     abstract RuleValidate : unit -> StructureValidator<'T>
-type RuleContext< ^T when ^T : (static member AnyScope : ^T) and ^T : comparison> =
+type RuleContext<'T when 'T :> IScope<'T>> =
         {
             subtypes : string list
-            scopes : ScopeContext< ^T>
+            scopes : ScopeContext<'T>
             warningOnly : bool
         }
 module rec Rules =
@@ -103,7 +103,7 @@ module rec Rules =
                 if ok then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode]
             |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value" severity) leafornode]
 
-    let inline checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode : ^a) =
+    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) =
         match synced with
         |true ->
             let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -112,7 +112,7 @@ module rec Rules =
         |false ->
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode keys key leafornode
 
-    let inline checkTypeField (typesMap : Collections.Map<_,Set<_, _>>) severity t (key : string) leafornode =
+    let checkTypeField (typesMap : Collections.Map<_,Set<_, _>>) severity t (key : string) leafornode =
         match typesMap.TryFind t with
         |Some values ->
             let value = key.Trim([|'\"'|])
@@ -121,15 +121,15 @@ module rec Rules =
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leafornode]
 
 
-    let inline checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
+    let checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
         let file = key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leafornode]
 
-    let inline checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) =
+    let checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leafornode]
 
-    let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) changeScope anyScope (ctx : RuleContext<_>) (s : ^a )  key leafornode =
+    let checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
         // eprintfn "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope true effectMap triggerMap key scope with
@@ -140,7 +140,7 @@ module rec Rules =
         |_ -> OK
 
 
-    let inline checkField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode : ^a) =
+    let checkField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode) =
         match field with
         |ValueField vt -> checkValidValue enumsMap severity vt key leafornode
         |TypeField t -> checkTypeField typesMap severity t key leafornode
@@ -150,17 +150,19 @@ module rec Rules =
         |IconField folder -> checkIconField files folder key leafornode
         |_ -> OK
 
-    let inline checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode : ^a) =
+    let checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode : IKeyPos) =
         match checkField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (Severity.Error) ctx field key leafornode with
         |OK -> true
         |_ -> false
 
-    let inline checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) (key : string) =
+    let checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) (key : string) =
         let leaf = LeafValue(Value.String key)
         checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx field key leaf
 
     // let inline ruleApplicatorCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
-    let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
+    // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
+    type RuleApplicator<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
+                                    (rootRules : RootRule<'T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, anyScope, changeScope, defaultContext : ScopeContext<_>, defaultLang) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
@@ -206,7 +208,7 @@ module rec Rules =
                     | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                     |x -> [x])
             let valueFun (leaf : Leaf) =
-                match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
+                match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key (leaf :> IKeyPos) -> Some (l, r, o) |_ -> None) with
                 |[] ->
                     if enforceCardinality && ((leaf.Key |> Seq.tryHead |> Option.map ((=) '@') |> Option.defaultValue false) |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
                 |rs -> rs <&??&> (fun (l, r, o) -> applyLeafRule ctx o r leaf) |> mergeValidationErrors "CW240"
@@ -391,15 +393,19 @@ module rec Rules =
             let res = (root.Children <&!&> inner normalTypeDefs)
             let rootres = (inner rootTypeDefs root)
             res <&&> rootres
-        {
-            applyNodeRule = (fun (rule, node) -> applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node)
-            testSubtype = (fun ((subtypes), (node)) -> testSubtype subtypes node)
-            ruleValidate = (fun () -> (fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate))
-        }
+        member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
+        member this.TestSubType(subtypes, node) = testSubtype subtypes node
+        member this.RuleValidate() = (fun _ (es : EntitySet<_>) -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate)
+        // {
+        //     applyNodeRule = (fun (rule, node) -> applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node)
+        //     testSubtype = (fun ((subtypes), (node)) -> testSubtype subtypes node)
+        //     ruleValidate = (fun () -> (fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate))
+        // }
 
 
     // type FoldRules(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, ruleApplicator : IRuleApplicator<_>, changeScope, defaultContext, anyScope) =
-    let inline foldRules (rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, ruleApplicator : RuleApplicator<_,_>, changeScope, defaultContext, anyScope, defaultLang) =
+    type FoldRules<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
+                                        (rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, ruleApplicator : RuleApplicator<'T>, changeScope, defaultContext, anyScope, defaultLang) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let aliases =
@@ -554,7 +560,7 @@ module rec Rules =
             let ctx =
                 match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
                 |Some c, Some typedef ->
-                    let pushScope, subtypes = ruleApplicator.testSubtype (typedef.subtypes, c)
+                    let pushScope, subtypes = ruleApplicator.TestSubType (typedef.subtypes, c)
                     match pushScope with
                     |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
                     |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
@@ -582,8 +588,8 @@ module rec Rules =
                     subtypedrules |> List.collect (
                         function
                         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
-                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue []))
-                       // |x -> [x])
+                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                        |x -> [x])
                 // let expandedrules =
                 //     subtypedrules |> List.collect (
                 //         function
@@ -668,9 +674,9 @@ module rec Rules =
             }
         let test pos entity = //{OutputScopeContext.From = []; Scopes = []; Root = [] :> obj}
             (getInfoAtPos pos entity ) |> Option.map (fun (s, r) -> (convertToOutput s.scopes), r)
-        ((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
-        // member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity )
-        // member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
+        //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
+        member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
+        member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
 
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 
@@ -921,13 +927,13 @@ module rec Rules =
         (fun (pos, entity) -> complete pos entity)
         // member inline __.Complete(pos : pos, entity : Entity) = complete pos entity
 
-    let getTypesFromDefinitions (ruleapplicator : RuleApplicator<_,_>) (types : TypeDefinition<_> list) (es : Entity list) =
+    let getTypesFromDefinitions (ruleapplicator : RuleApplicator<_>) (types : TypeDefinition<_> list) (es : Entity list) =
         let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath))
         let getTypeInfo (def : TypeDefinition<_>) =
             entities |> List.choose (fun (path, e, file) -> if checkPathDir def path file then Some (e.entity, file) else None)
                      |> List.collect (fun (e, f) ->
                             let inner (n : Node) =
-                                let subtypes = ruleapplicator.testSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
+                                let subtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
                                 let key =
                                     match def.nameField with
                                     |Some f -> n.TagText f
@@ -939,7 +945,7 @@ module rec Rules =
                             let childres =
                                 match def.type_per_file, def.skipRootKey with
                                 |true, _ ->
-                                    let subtypes = ruleapplicator.testSubtype(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
+                                    let subtypes = ruleapplicator.TestSubType(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
                                     def.name::subtypes |> List.map (fun s -> s, (Path.GetFileNameWithoutExtension f, e.Position))
                                 |false, Some (SpecificKey key) ->
                                     e.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect inner)

@@ -10,6 +10,7 @@
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Common/STLConstants.fs" />
     <Compile Include="Common/EU4Constants.fs" />
+    <Compile Include="Common/HOI4Constants.fs" />
     <Compile Include="Parser/Types.fs" />
     <Compile Include="Parser/SharedParsers.fs" />
     <Compile Include="Parser/CKParser.fs" />

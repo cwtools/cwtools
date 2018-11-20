@@ -77,11 +77,11 @@ module STLCompute =
 
         //foldNode7 fNode node |> List.ofSeq |> Map.ofList
 
-    let computeSTLData (foldRules : unit -> ('a * 'b) option) (e : Entity) =
+    let computeSTLData (foldRules : unit -> FoldRules<Scope> option) (e : Entity) =
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         let setvariables = STLValidation.getEntitySetVariables e
         let setflags = findAllSetFlags e
         let savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
-        let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value |> snd )(e)) else None)
+        let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes )(e)) else None)
         let hastechs = getAllTechPrereqs e
         STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs)

@@ -5,7 +5,7 @@ open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
 open CWTools.Validation
 
-type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S : comparison> = {
+type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
     heavyExperimentalValidators : (LookupValidator<'T, 'S> * string) list
@@ -14,11 +14,11 @@ type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S : compariso
     resources : IResourceAPI<'T>
     lookup : Lookup<'S>
     lookupValidators : (LookupValidator<'T, 'S> * string) list
-    ruleApplicator : RuleApplicator<'S, 'T> option
+    ruleApplicator : RuleApplicator<'S> option
     useRules : bool
     debugRulesOnly : bool
 }
-type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S>) =
+type ValidationManager<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S>) =
     let resources = settings.resources
     let validators = settings.validators
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
@@ -37,7 +37,7 @@ type ValidationManager<'T, 'S when 'T :> ComputedData and 'S : comparison>(setti
         eprintfn "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
         eprintfn "Validating rules"
-        let rres = (if settings.useRules && settings.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [settings.ruleApplicator.Value.ruleValidate(), "rules"]) else [])
+        let rres = (if settings.useRules && settings.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [settings.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
         //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
         eprintfn "Validating files"
         // let STLFileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]

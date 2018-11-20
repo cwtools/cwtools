@@ -16,7 +16,7 @@ open Microsoft.FSharp.Collections.Tagged
 
 
 
-type Lookup<'S when 'S : comparison>() =
+type Lookup<'S when 'S : comparison and 'S :> IScope<'S>>() =
     let mutable _scriptedTriggers : Effect<'S> list = []
 
     let mutable _scriptedTriggersMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )

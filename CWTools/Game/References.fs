@@ -12,7 +12,7 @@ open CWTools.Common
 
 
 
-type References<'T, 'S when 'S : comparison>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'S>, localisation : ILocalisationAPI list) =
+type References<'T, 'S when 'S : comparison and 'S :> IScope<'S>>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'S>, localisation : ILocalisationAPI list) =
     let entities() = resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
     let events() =
         entities()

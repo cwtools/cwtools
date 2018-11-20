@@ -1,4 +1,5 @@
 namespace CWTools.Games.HOI4
+open CWTools.Common.HOI4Constants
 open CWTools.Localisation
 open CWTools.Validation.ValidationCore
 open CWTools.Games.Files
@@ -146,7 +147,7 @@ type HOI4Game(settings : HOI4Settings) =
     do
         eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
         let files = fileManager.AllFilesByPath()
-        let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
+        let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f)) |_ -> None)
         resources.UpdateFiles(filteredfiles) |> ignore
         let embedded = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
         if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
@@ -160,7 +161,7 @@ type HOI4Game(settings : HOI4Settings) =
         // updateTechnologies()
         updateLocalisation()
         // updateTypeDef()
-    interface IGame<HOI4ComputedData, string> with
+    interface IGame<HOI4ComputedData, Scope> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = [] //(validateAll false (resources.ValidatableEntities()))
@@ -187,7 +188,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, string>(resources, Lookup(), (localisationAPIs |> List.map snd))
+        member __.References() = References<HOI4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
         member __.Complete pos file text = [] //completion pos file text
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
         member __.GoToType pos file text = Some range0

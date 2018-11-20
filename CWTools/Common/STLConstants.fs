@@ -36,6 +36,8 @@ module STLConstants =
             |Any -> "Any/Unknown"
             |x -> sprintf "%A" x
         static member AnyScope = Scope.Any
+        interface IScope<Scope> with
+            member this.AnyScope = Scope.Any
 
     let allScopes = [
             Country;

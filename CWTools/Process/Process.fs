@@ -25,6 +25,10 @@ module List =
     match result with
     | Some ls -> ls
     | None -> add::xs
+
+type IKeyPos =
+    abstract member Key : string
+    abstract member Position : range
 [<Struct>]
 type Leaf =
     val mutable Key : string
@@ -38,6 +42,9 @@ type Leaf =
         let (KeyValueItem (Key(key), value)) = keyvalueitem
         Leaf(key, value, pos |> Option.defaultValue range.Zero)
     static member Create key value = LeafC(Leaf(key, value))
+    interface IKeyPos with
+        member this.Key = this.Key
+        member this.Position = this.Position
 and LeafValue(value : Value, ?pos : range) =
     member val Value = value with get, set
     member this.Key = this.Value.ToRawString()
@@ -45,6 +52,9 @@ and LeafValue(value : Value, ?pos : range) =
     [<JsonIgnore>]
     member this.ToRaw = Value(this.Position, this.Value)
     static member Create value = LeafValue value
+    interface IKeyPos with
+        member this.Key = this.Key
+        member this.Position = this.Position
 
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of lefavalue : LeafValue
 and Node (key : string, pos : range) =
@@ -90,7 +100,9 @@ and Node (key : string, pos : range) =
                                            |CommentC c -> (Comment c))
 
     static member Create key = Node(key)
-
+    interface IKeyPos with
+        member this.Key = this.Key
+        member this.Position = this.Position
 
 module ProcessCore =
 

@@ -99,3 +99,5 @@ type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
         ScopedEffect<'T>(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect)
 
+type IScope<'T> =
+    abstract member AnyScope : 'T

@@ -38,6 +38,7 @@ open CWTools.Validation.Common.CommonValidation
 open CWTools.Validation
 open CWTools.Process.Scopes
 open System.Text
+open CWTools.Validation.Rules
 
 type EmbeddedSettings = {
     triggers : DocEffect list
@@ -191,7 +192,7 @@ type STLGame (settings : StellarisSettings) =
         //     events |> List.map (fun e -> (valEventVals e) )
         //            |> List.choose (function |Invalid es -> Some es |_ -> None)
         //            |> List.collect id
-        let mutable ruleApplicator : CWTools.Validation.RuleApplicator<Scope, _> option = None
+        let mutable ruleApplicator : RuleApplicator<Scope> option = None
         let validationSettings = {
             validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
@@ -350,7 +351,7 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match (info |> fst)(pos, e) with
+                match (info.GetInfo)(pos, e) with
                 |Some (_, Some (t, tv)) ->
                     lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
                 |_ -> None
@@ -361,11 +362,11 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match (info |> fst)(pos, e) with
+                match (info.GetInfo)(pos, e) with
                 |Some (_, Some ((t : string), tv)) ->
                     //eprintfn "tv %A %A" t tv
                     let t = t.Split('.').[0]
-                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info |> snd) e).TryFind t)
+                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
                                    |> List.collect id
                                    |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                    |> Some
@@ -377,7 +378,7 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 // match info.GetInfo(pos, e) with
-                match (info |> fst)(pos, e) with
+                match (info.GetInfo)(pos, e) with
                 |Some (ctx, _) when ctx <> { Root = Scope.Any; From = []; Scopes = [] } ->
                     eprintfn "true scopes"
                     Some (ctx)
@@ -392,11 +393,11 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match (info |> fst)(pos, e) with
+                match (info.GetInfo)(pos, e) with
                 |Some (_, Some ((t : string), tv)) ->
                     //eprintfn "tv %A %A" t tv
                     let t = t.Split('.').[0]
-                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info |> snd) e).TryFind t)
+                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
                                    |> List.collect id
                                    |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                    |> Some
@@ -435,7 +436,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                let tempRuleApplicator : RuleApplicator<_,_> = ruleApplicatorCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
+                let tempRuleApplicator : RuleApplicator<_> = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -445,9 +446,9 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                ruleApplicator <- Some (ruleApplicatorCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default))
+                ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                infoService <- Some (foldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
+                infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
             )
@@ -470,7 +471,7 @@ type STLGame (settings : StellarisSettings) =
             // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
             //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
             let files = fileManager.AllFilesByPath()
-            let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
+            let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f)) |_ -> None)
             resources.UpdateFiles(filteredfiles) |> ignore
             let embeddedFiles =
                 settings.embedded.embeddedFiles

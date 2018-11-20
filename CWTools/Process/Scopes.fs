@@ -5,6 +5,7 @@ open System
 open CWTools.Localisation
 open CWTools.Utilities.Position
 open CWTools.Common
+open Microsoft.FSharp.Reflection
 module Scopes =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
@@ -49,23 +50,23 @@ module Scopes =
         member inline this.GetFrom i =
             if this.From.Length >= i then Some (this.From.Item (i - 1)) else None
 
-    type ScopeContext< ^T when ^T : (static member AnyScope : ^T) and ^T : comparison > =
+    type ScopeContext< 'T when 'T :> IScope<'T> > =
         {
-            Root : ^T
-            From : ^T list
-            Scopes : ^T list
+            Root : 'T
+            From : 'T list
+            Scopes : 'T list
         }
-        member inline this.CurrentScope = match this.Scopes with |[] -> (^T : (static member AnyScope : ^T) ()) | x::_ -> x
-        member inline this.PopScope : ^T list = match this.Scopes with |[] -> [] |_::xs -> xs
-        member inline this.GetFrom i =
-            if this.From.Length >= i then (this.From.Item (i - 1)) else (^T : (static member AnyScope : ^T) ())
+        member this.CurrentScope = match this.Scopes with |[] -> this.Root.AnyScope | x::_ -> x
+        member this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
+        member this.GetFrom i =
+             if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
 
 
 
 
-    type ScopeResult< ^T when ^T : (static member AnyScope : ^T) and ^T : comparison > =
-        | NewScope of newScope : ScopeContext< ^T> * ignoreKeys : string list
-        | WrongScope of command : string * scope : ^T * expected : ^T list
+    type ScopeResult<'T when 'T :> IScope<'T>> =
+        | NewScope of newScope : ScopeContext<'T> * ignoreKeys : string list
+        | WrongScope of command : string * scope : 'T * expected : 'T list
         | NotFound
     // interface IScopeContext<^T> with
     //     member this.CurrentScope = this.CurrentScope

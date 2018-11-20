@@ -97,10 +97,10 @@ module internal SharedParsers =
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
     let hsv = strSkip "hsv" >>. hsvI .>> ws
     let rgbI = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (opt (parseWithPosition valueI .>> ws))
-            (fun a b c d ->
-            match (a, b, c, d) with
-            | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
-            | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
+                (fun a b c d ->
+                match (a, b, c, d) with
+                | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
+                | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
 
 
     let rgb3 = clause (pipe3 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))

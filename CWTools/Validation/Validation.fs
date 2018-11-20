@@ -108,12 +108,12 @@ module ValidationCore =
         | OK
         | Invalid of CWError list
 
-    let inline invData (code : ErrorCode) (l : ^a) (data : option<string>) =
-        let pos = (^a : (member Position : range) l)
-        let key = (^a : (member Key : string) l)
+    let inline invData (code : ErrorCode) (l : IKeyPos) (data : option<string>) =
+        let pos = l.Position
+        let key = l.Key
         code.ID, code.Severity, pos, key.Length, code.Message, data
 
-    let inline inv (code : ErrorCode) (l : ^a) =
+    let inline inv (code : ErrorCode) (l) =
         invData code l None
 
     let invLeafValue (code : ErrorCode) (lv : LeafValue) (data : option<string>) =
@@ -124,7 +124,7 @@ module ValidationCore =
     let invManual (code : ErrorCode) (pos : range) (key : string) (data : string option) =
         code.ID, code.Severity, pos, key.Length, code.Message, data
 
-    let inline invCustom (l : ^a) =
+    let inline invCustom (l) =
         invData (ErrorCodes.CustomError "default error" Severity.Error) l None
     // let inline inv (sev : Severity) (l : ^a) (s : string) =
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
@@ -224,4 +224,4 @@ module ValidationCore =
     type EU4StructureValidator = StructureValidator<EU4ComputedData>
     type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
     type STLFileValidator = FileValidator<STLComputedData>
-    type LookupValidator<'T, 'S when 'T :> ComputedData and 'S : comparison> = Lookup<'S> -> StructureValidator<'T>
+    type LookupValidator<'T, 'S when 'T :> ComputedData and 'S : comparison and 'S :> IScope<'S>> = Lookup<'S> -> StructureValidator<'T>

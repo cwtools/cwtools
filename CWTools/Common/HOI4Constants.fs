@@ -2,17 +2,12 @@ namespace CWTools.Common
 
 open System
 open System.ComponentModel.Design
-module EU4Constants =
+module HOI4Constants =
     type Scope =
-        |Country
-        |Province
-        |TradeNode
-        |Unit
         |Any
         |InvalidScope
         override x.ToString() =
             match x with
-            |TradeNode -> "Trade node"
             |Any -> "Any/Unknown"
             |x -> sprintf "%A" x
         static member AnyScope = Scope.Any
@@ -20,10 +15,7 @@ module EU4Constants =
             member this.AnyScope = Scope.Any
 
     let allScopes = [
-            Country;
-            Province;
-            TradeNode;
-            Unit
+        Scope.Any
             ]
     let allScopesSet = allScopes |> Set.ofList
     let parseScope =
@@ -31,11 +23,6 @@ module EU4Constants =
         x.ToLower()
         |>
             function
-            |"country" -> Scope.Country
-            |"province" -> Scope.Province
-            |"trade_node" -> Scope.TradeNode
-            |"tradenode" -> Scope.TradeNode
-            |"unit" -> Scope.Unit
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any

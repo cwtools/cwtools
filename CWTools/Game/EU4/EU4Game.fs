@@ -144,7 +144,7 @@ type EU4Game(settings : EU4Settings) =
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv", Encoding.GetEncoding(1252))
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
-    let mutable infoService : ('a * (Entity -> Map<string,(string * range) list>)) option = None
+    let mutable infoService : FoldRules<_> option = None
     let mutable completionService = None
     let resourceManager = ResourceManager(EU4Compute.computeEU4Data (fun () -> infoService))
     let resources = resourceManager.Api
@@ -176,7 +176,7 @@ type EU4Game(settings : EU4Settings) =
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
     let lookup = Lookup<Scope>()
-    let mutable ruleApplicator : CWTools.Validation.RuleApplicator<Scope, _> option = None
+    let mutable ruleApplicator : RuleApplicator<Scope> option = None
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; ]
         experimentalValidators = []
@@ -250,7 +250,7 @@ type EU4Game(settings : EU4Settings) =
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
                 lookup.scriptedEffects <- updateScriptedEffects rules
-                lookup.scriptedTriggers <- updateScriptedTriggers rules |> List.map (fun e -> e :> Effect)
+                lookup.scriptedTriggers <- updateScriptedTriggers rules
                 lookup.typeDefs <- types
                 let rulesWithMod = rules @ (lookup.coreEU4Modifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
                 lookup.configRules <- rulesWithMod
@@ -271,7 +271,7 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let tempRuleApplicator = ruleApplicatorCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default)
+            let tempRuleApplicator = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -281,9 +281,9 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            ruleApplicator <- Some (ruleApplicatorCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
+            ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            infoService <- Some (foldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
+            infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
         )
@@ -363,7 +363,7 @@ type EU4Game(settings : EU4Settings) =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            match (info |> fst)(pos, e) with
+            match (info.GetInfo)(pos, e) with
             |Some (_, Some (t, tv)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
             |_ -> None
@@ -373,7 +373,7 @@ type EU4Game(settings : EU4Settings) =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            match (info |> fst)(pos, e) with
+            match (info.GetInfo)(pos, e) with
             |Some (sc, _) ->
                 Some { From = sc.From; Scopes = sc.Scopes; Root = sc.Root}
             |_ -> None
@@ -383,11 +383,11 @@ type EU4Game(settings : EU4Settings) =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            match (info |> fst)(pos, e) with
+            match (info.GetInfo)(pos, e) with
             |Some (_, Some ((t : string), tv)) ->
                 //eprintfn "tv %A %A" t tv
                 let t = t.Split('.').[0]
-                resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info |> snd) e).TryFind t)
+                resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
                                |> List.collect id
                                |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                |> Some
@@ -397,7 +397,7 @@ type EU4Game(settings : EU4Settings) =
     do
         eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
         let files = fileManager.AllFilesByPath()
-        let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
+        let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
         resources.UpdateFiles(filteredfiles) |> ignore
         let embedded = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
         if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
