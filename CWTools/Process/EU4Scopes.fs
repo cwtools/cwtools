@@ -39,6 +39,7 @@ module EU4Scopes =
             ScopedEffect("owner", [Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
+            // Should be rhs only!
             ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Both, defaultDesc, "", true);
         ]
 
