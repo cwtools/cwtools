@@ -83,6 +83,7 @@ type HOI4Game(settings : HOI4Settings) =
         "common/unit_leader";
         "common/unit_tags";
         "common/units";
+        "common/units/equipment";
         "common/wargoals";
         "events";
         "gfx";

@@ -50,7 +50,7 @@ module HOI4Constants =
     type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
         |State
-        |Province
+        |Country
         |Any
 
     type Modifier =

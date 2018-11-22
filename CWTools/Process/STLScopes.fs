@@ -121,7 +121,7 @@ module STLScopes =
         ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase; Scope.Leader], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase; Scope.Leader; Scope.Army], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("pop", [Scope.Pop; Scope.Tile], Scope.Pop, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("last_created_pop", allScopes, Scope.Pop, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("last_created_ambient_object", allScopes, Scope.AmbientObject, EffectType.Both, defaultDesc, "", true);
