@@ -4,18 +4,25 @@ open System
 open System.ComponentModel.Design
 module HOI4Constants =
     type Scope =
+        |State
+        |Country
+        |UnitLeader
         |Any
         |InvalidScope
         override x.ToString() =
             match x with
+            |UnitLeader -> "Unit leader"
             |Any -> "Any/Unknown"
             |x -> sprintf "%A" x
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any
+            member this.MatchesScope target = this = target
 
     let allScopes = [
-        Scope.Any
+        Scope.State;
+        Scope.Country;
+        Scope.UnitLeader;
             ]
     let allScopesSet = allScopes |> Set.ofList
     let parseScope =
@@ -23,6 +30,9 @@ module HOI4Constants =
         x.ToLower()
         |>
             function
+            |"state" -> Scope.State
+            |"country" -> Scope.Country
+            |"unit leader" -> Scope.UnitLeader
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
@@ -39,7 +49,7 @@ module HOI4Constants =
     type ScriptedEffect = ScriptedEffect<Scope>
     type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
-        |Country
+        |State
         |Province
         |Any
 

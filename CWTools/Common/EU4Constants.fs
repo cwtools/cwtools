@@ -18,6 +18,10 @@ module EU4Constants =
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any
+            member this.MatchesScope target =
+                match this, target with
+                |TradeNode, Province -> true
+                |this, target -> this = target
 
     let allScopes = [
             Country;

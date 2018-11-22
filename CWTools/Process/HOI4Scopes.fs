@@ -4,10 +4,10 @@ open NodaTime.TimeZones
 open System
 open CWTools.Localisation
 open CWTools.Utilities.Position
-open CWTools.Common.EU4Constants
+open CWTools.Common.HOI4Constants
 open CWTools.Common
 open CWTools.Process.Scopes
-module EU4Scopes =
+module HOI4Scopes =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
@@ -36,9 +36,9 @@ module EU4Scopes =
 
     let scopedEffects =
         [
-            ScopedEffect("owner", [Scope.Province; Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-            ScopedEffect("controller", [Scope.Province; Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
+            // ScopedEffect("owner", [Scope.Province; Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
+            // ScopedEffect("controller", [Scope.Province; Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
+            // ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
         ]
 
 

@@ -275,7 +275,7 @@ module rec Rules =
             |xs ->
                 match ctx.scopes.CurrentScope with
                 |x when x = anyScope -> OK
-                |s -> if List.contains s xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) leaf])
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) leaf])
             <&&>
             checkField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang severity ctx rule (leaf.Value.ToRawString()) leaf
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) =
@@ -310,7 +310,7 @@ module rec Rules =
             |xs ->
                 match ctx.scopes.CurrentScope with
                 |x when x = anyScope  -> OK
-                |s -> if List.contains s xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) node])
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) node])
             <&&>
             match rule with
             |ScopeField s ->

@@ -12,6 +12,21 @@ types = {
     type[event] = {
         path = "game/events"
     }
+    type[per_file] = {
+        path = "game/common/anomalies"
+        type_per_file = yes
+        ## type_key_filter = sb_file
+        subtype[sb_file] = {
+
+        }
+    }
+    type[invalid] = {
+        path = game/aSD
+    }
+    type[invalid_per_file] = {
+        path = "game/common/global_ship_designs"
+        type_per_file = yes
+    }
 }
 
 event = {
@@ -21,4 +36,11 @@ event = {
     subtype_two = <ship_size.sb_two>
     ## cardinality = 0..inf
     subtype_both = <ship_size>
+
+    ## cardinality = 0..inf
+    subtype_file = <per_file>
+    ## cardinality = 0..inf
+    subtype_invalid = <invalid>
+    ## cardinality = 0..inf
+    subtype_invalid_per_file = <invalid_per_file>
 }

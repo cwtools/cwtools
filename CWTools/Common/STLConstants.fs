@@ -38,6 +38,7 @@ module STLConstants =
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any
+            member this.MatchesScope target = this = target
 
     let allScopes = [
             Country;

@@ -2,4 +2,14 @@ event = {
     subtype_one = blessing_no
     subtype_one = blessing_none
     subtype_two = blessing_yes
+
+    subtype_file = sb_file
+    #error
+    subtype_file = sb_file_3
+
+    #error
+    subtype_invalid = test
+
+    #error
+    subtype_invalid_per_file = test
 }

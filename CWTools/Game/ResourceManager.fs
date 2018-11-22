@@ -255,7 +255,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v; logicalpath = l}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType "root" (mkZeroFile f) (statements |> List.rev)); validate = v; entityType = entityType; overwrite = No}
+                    let filename = Path.GetFileNameWithoutExtension f
+                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType filename (mkZeroFile f) (statements |> List.rev)); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
     let parseFileThenEntity (file : ResourceInput) =
@@ -328,7 +329,9 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         let parsed = CKParser.parseString filetext filename
         match parsed with
         |Failure(_) -> None
-        |Success(s,_,_) -> Some (shipProcess EntityType.Other "root" (mkZeroFile filename) s)
+        |Success(s,_,_) ->
+            let filenamenopath = Path.GetFileNameWithoutExtension filename
+            Some (shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)
 
 
     member __.Api = {

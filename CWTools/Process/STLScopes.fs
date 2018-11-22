@@ -419,7 +419,8 @@ module STLScopes =
                     | None -> (context, false), NotFound
                     | Some e ->
                         let possibleScopes = e.Scopes
-                        let exact = possibleScopes |> List.contains context.CurrentScope
+                        let currentScope = context.CurrentScope :> IScope<_>
+                        let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
                         match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
                         | Scope.Any, _, _, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
                         | Scope.Any, _, _, false -> (context, false), NewScope (context, e.IgnoreChildren)
