@@ -204,7 +204,7 @@ module CWToolsCLI =
         |Failure(msg,_,_) -> false, msg
 
     let serialize game directory scope modFilter docsPath =
-        let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris")
+        let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
         let files = fileManager.AllFilesByPath()
         let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
         let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)

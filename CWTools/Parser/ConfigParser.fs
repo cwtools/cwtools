@@ -111,6 +111,7 @@ module rec ConfigParser =
         |"error" -> Severity.Error
         |"warning" -> Severity.Warning
         |"info" -> Severity.Information
+        |"information" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
     let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
