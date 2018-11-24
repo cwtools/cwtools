@@ -25,6 +25,7 @@ open System.Text
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
     modifiers : Modifier list
+    cachedResourceData : (Resource * Entity) list
 }
 
 type ValidationSettings = {
@@ -44,51 +45,6 @@ type HOI4Settings = {
 
 type HOI4Game(settings : HOI4Settings) =
 
-    let scriptFolders = [
-        "common/abilities";
-        "common/aces";
-        "common/ai_areas";
-        "common/ai_focuses";
-        "common/ai_peace";
-        "common/ai_strategy";
-        "common/ai_strategy_plans";
-        "common/ai_templates";
-        "common/autonomous_states";
-        "common/bookmarks";
-        "common/buildings";
-        "common/continuous_focus";
-        "common/countries";
-        "common/country_leader";
-        "common/country_tags";
-        "common/decisions";
-        "common/difficulty_settings";
-        "common/idea_tags";
-        "common/ideas";
-        "common/ideologies";
-        "common/modifiers";
-        "common/names";
-        "common/national_focus";
-        "common/on_actions";
-        "common/opinion_modifiers";
-        "common/resources";
-        "common/scripted_effects";
-        "common/scripted_localisation";
-        "common/scripted_triggers";
-        "common/state_category";
-        "common/technologies";
-        "common/technology_sharing";
-        "common/technology_tags";
-        "common/terrain";
-        "common/timed_activities";
-        "common/unit_leader";
-        "common/unit_tags";
-        "common/units";
-        "common/units/equipment";
-        "common/wargoals";
-        "events";
-        "gfx";
-        "interface";
-    ]
 
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv", Encoding.UTF8)
 
@@ -348,7 +304,19 @@ type HOI4Game(settings : HOI4Settings) =
         let files = fileManager.AllFilesByPath()
         let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
         resources.UpdateFiles(filteredfiles) |> ignore
-        let embedded = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+        let embeddedFiles =
+            settings.embedded.embeddedFiles
+            |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
+            |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
+        let disableValidate (r, e) : Resource * Entity =
+            match r with
+            |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
+            |x -> x
+            , {e with validate = false}
+
+        // let embeddedFiles = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+        let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
+        let embedded = embeddedFiles @ cached
         if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
         // updateScriptedTriggers()

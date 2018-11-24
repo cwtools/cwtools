@@ -24,6 +24,7 @@ open System.Text
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
     modifiers : Modifier list
+    cachedResourceData : (Resource * Entity) list
 }
 
 type ValidationSettings = {
@@ -302,7 +303,19 @@ type EU4Game(settings : EU4Settings) =
         let files = fileManager.AllFilesByPath()
         let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
         resources.UpdateFiles(filteredfiles) |> ignore
-        let embedded = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+        let embeddedFiles =
+            settings.embedded.embeddedFiles
+            |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
+            |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
+        let disableValidate (r, e) : Resource * Entity =
+            match r with
+            |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
+            |x -> x
+            , {e with validate = false}
+
+        // let embeddedFiles = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+        let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
+        let embedded = embeddedFiles @ cached
         if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
         // updateScriptedTriggers()
