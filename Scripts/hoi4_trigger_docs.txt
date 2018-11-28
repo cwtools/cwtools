@@ -1,0 +1,31 @@
+
+== TRIGGER DOCUMENTATION ==
+state - check state id
+Supported scopes: state
+
+Supported targets: none
+
+if - if_, CIfTrigger, A conditional trigger
+if = { limit = { <triggers> } <trigger> }
+Supported scopes: test
+
+Supported targets:
+
+date - checks for a specific date
+Supported scopes: ???
+
+Supported targets:
+
+skill - compare leader skill levels
+Supported scopes:
+
+Supported targets:
+
+=================
+[20:25:40][ConsoleCmdImpl.cpp:5502]:
+== EFFECT DOCUMENTATION ==
+add_stability - Adds the stability to the country in scope. Example: add_stability = 5
+Supported scopes: country
+
+Supported targets:
+

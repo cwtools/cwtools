@@ -50,6 +50,7 @@
     <Compile Include="Validation/Stellaris/STLRules.fs" />
     <Compile Include="Validation/EU4/EU4Rules.fs" />
     <Compile Include="Validation/EU4/EU4Compute.fs" />
+    <Compile Include="Validation/EU4/EU4LocalisationValidation.fs" />
     <Compile Include="Validation/HOI4/HOI4Compute.fs" />
     <Compile Include="Validation/Stellaris/STLCompute.fs" />
     <Compile Include="Validation/HOI4/HOI4Validation.fs" />

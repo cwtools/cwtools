@@ -49,7 +49,7 @@ type HOI4Game(settings : HOI4Settings) =
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv", Encoding.UTF8)
 
     let mutable infoService : FoldRules<_> option = None
-    let mutable completionService = None
+    let mutable completionService : CompletionService<_> option = None
     let resourceManager = ResourceManager(HOI4Compute.computeHOI4Data (fun () -> infoService))
     let resources = resourceManager.Api
     let validatableFiles() = resources.ValidatableFiles
@@ -182,7 +182,7 @@ type HOI4Game(settings : HOI4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, HOI4 HOI4Lang.Default))
+            completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, HOI4 HOI4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, HOI4 HOI4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -260,7 +260,7 @@ type HOI4Game(settings : HOI4Settings) =
         |Some e, Some completion ->
             eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
             //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-            completion(pos, e)
+            completion.Complete(pos, e)
         |_, _ -> []
     let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput filepath filetext

@@ -29,7 +29,7 @@ module Utils =
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         let returnValue = f()
-        eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+        //eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
         returnValue
 
 
