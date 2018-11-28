@@ -20,6 +20,7 @@ open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.EU4
 open System.Text
+open CWTools.Validation.Rules
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -49,7 +50,7 @@ type EU4Game(settings : EU4Settings) =
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     let mutable infoService : FoldRules<_> option = None
-    let mutable completionService = None
+    let mutable completionService : CompletionService<_> option = None
     let resourceManager = ResourceManager(EU4Compute.computeEU4Data (fun () -> infoService))
     let resources = resourceManager.Api
     let validatableFiles() = resources.ValidatableFiles
@@ -183,7 +184,7 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
+            completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -260,7 +261,7 @@ type EU4Game(settings : EU4Settings) =
         |Some e, Some completion ->
             eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
             //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-            completion(pos, e)
+            completion.Complete(pos, e)
         |_, _ -> []
     let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput filepath filetext

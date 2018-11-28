@@ -86,7 +86,7 @@ type STLGame (settings : StellarisSettings) =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
-        let mutable completionService = None
+        let mutable completionService : CompletionService<_> option = None
         let mutable infoService = None
 
         let resourceManager = ResourceManager(STLCompute.computeSTLData (fun () -> infoService))
@@ -342,7 +342,7 @@ type STLGame (settings : StellarisSettings) =
             |Some e, Some completion ->
                 eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
                 //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-                completion(pos, e)
+                completion.Complete(pos, e)
             |_, _ -> []
 
 
@@ -444,7 +444,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                completionService <- Some (completionServiceCreator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
+                completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

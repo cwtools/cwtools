@@ -34,15 +34,15 @@ type ValidationManager<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and '
             (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             @ (if not settings.experimental then [] else settings.experimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
         //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
-        eprintfn "Validating misc"
+        // eprintfn "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
-        eprintfn "Validating rules"
+        // eprintfn "Validating rules"
         let rres = (if settings.useRules && settings.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [settings.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
         //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
-        eprintfn "Validating files"
+        // eprintfn "Validating files"
         // let STLFileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
         let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
-        eprintfn "Validating effects/triggers"
+        // eprintfn "Validating effects/triggers"
         let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v settings.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> []
         // let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
         // let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
