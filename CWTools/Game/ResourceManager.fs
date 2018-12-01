@@ -45,9 +45,21 @@ type FileResource =
         logicalpath : string
     }
 
+type FileWithContentResource =
+    {
+        scope : string
+        filetext : string
+        filepath : string
+        extension : string
+        logicalpath : string
+        overwrite : Overwrite
+        validate : bool
+    }
+
 type Resource =
     |EntityResource of string * EntityResource
     |FileResource of string * FileResource
+    |FileWithContentResource of string * FileWithContentResource
 
 type EntityResourceInput =
     {
@@ -63,6 +75,15 @@ type FileResourceInput =
         filepath : string
         logicalpath : string
     }
+
+type FileWithContentResourceInput =
+    {
+        scope : string
+        filetext : string
+        filepath : string
+        logicalpath : string
+        validate : bool
+    }
 [<Struct>]
 type Entity =
     {
@@ -76,12 +97,14 @@ type Entity =
 
 type CachedResourceData = {
     resources : (Resource * Entity) list
+    files : (string * string) list
     fileIndexTable : FileIndexTable
 }
 type ResourceInput =
     |EntityResourceInput of EntityResourceInput
     |FileResourceInput of FileResourceInput
     |CachedResourceInput of Resource * Entity
+    |FileWithContentResourceInput of FileWithContentResourceInput
 
 
 
@@ -92,15 +115,17 @@ type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
+type GetFileNames = unit -> string list
 
 type IResourceAPI<'T> =
-    abstract UpdateFile : UpdateFile<'T>
     abstract UpdateFiles : UpdateFiles<'T>
+    abstract UpdateFile : UpdateFile<'T>
     abstract GetResources : GetResources
     abstract ValidatableFiles : ValidatableFiles
     abstract AllEntities : AllEntities<'T>
     abstract ValidatableEntities : ValidatableEntities<'T>
     abstract ForceRecompute : unit -> unit
+    abstract GetFileNames : GetFileNames
 
 type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let memoize keyFunction memFunction =
@@ -269,6 +294,9 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
             |FileResourceInput f ->
                 (FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), [])
                  |> parseEntity
+            |FileWithContentResourceInput f ->
+                (FileWithContentResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath; filetext = f.filetext; overwrite = No; extension = Path.GetExtension(f.filepath); validate = f.validate}), [])
+                 |> parseEntity
 
 
     let saveResults (resource, entity) =
@@ -277,6 +305,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 match resource with
                 |EntityResource (f, _) -> fileMap.Add(f, resource)
                 |FileResource (f, _) -> fileMap.Add(f, resource)
+                |FileWithContentResource (f, _) -> fileMap.Add(f, resource)
             match entity with
             |Some e ->
                 let item = struct(e, lazy (computedDataFunction e))
@@ -308,6 +337,21 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
             |Some struct (olde, oldl) ->
                  em.Add(s, struct ({olde with Entity.overwrite = e.overwrite}, oldl))
         entitiesMap <- res |> List.fold entityMap entitiesMap
+        let filesWithContent = filelist |> List.choose (function |FileWithContentResource (s, e) -> Some ((s, e)) |_ -> None)
+        let processGroup (key, (es : (string * FileWithContentResource) list)) =
+            match es with
+            | [s,e] -> [s, {e with overwrite = No}]
+            | es ->
+                let sorted = es |> List.sortByDescending (fun (s, e) -> if e.scope = "embedded" then "" else if e.scope = "" then "ZZZZZZZZ" else e.scope)
+                let first = sorted |> List.head |> (fun (s, h) -> s, {h with overwrite = Overwrite.Overwrote})
+                // eprintfn "overwrote: %s" (first |> fst)
+                let rest = sorted |> List.skip 1 |> List.map (fun (s, r) -> s, {r with overwrite = Overwrite.Overwritten})
+                // rest |> List.iter (fun (s, _) -> eprintfn "overwritten: %s" s)
+                first::rest
+        let res = filesWithContent |> List.groupBy (fun (s, e) -> e.logicalpath)
+                           |> List.collect processGroup
+        fileMap <- res |> List.fold (fun fm (s, e) -> fm.Add(s, FileWithContentResource (s, e))) fileMap
+
         // eprintfn "print all"
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
 
@@ -323,7 +367,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
     let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
     let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun struct (e, _) -> e.validate)
-
+    let getFileNames() = fileMap |> Map.toList |> List.map snd
+                                 |> List.map (function |EntityResource(_, r) -> r.logicalpath |FileResource(_, r) -> r.logicalpath |FileWithContentResource(_,r) -> r.logicalpath)
     member __.ManualProcessResource = parseFileThenEntity >> snd
     member __.ManualProcess (filename : string) (filetext : string) =
         let parsed = CKParser.parseString filetext filename
@@ -343,4 +388,5 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
             member __.AllEntities = allEntities
             member __.ValidatableEntities = validatableEntities
             member __.ForceRecompute() = forceRecompute()
+            member __.GetFileNames = getFileNames
         }

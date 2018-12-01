@@ -42,7 +42,7 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = false }
+            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false }
             embedded = {
                 triggers = triggers
                 effects = effects
@@ -51,12 +51,12 @@ module Validator =
                 cachedResourceData = []
             }
         }
-        let game = STLGame(options) :> IGame<STLComputedData>
+        let game = STLGame(options) :> IGame<STLComputedData, STLConstants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
         member __.validationErrorList() = game.ValidationErrors() |> List.map (fun (s,c,n,l,e, _) -> {category = s.GetType().Name ; error = e; position = n.ToString()})
-        member val allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope})
+        member val allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
         member val scriptedTriggerList = game.ScriptedTriggers
         member val scriptedEffectList = game.ScriptedEffects
         member val localisationErrorList = game.LocalisationErrors true |> List.map (fun (s,c,n,l,e,_) -> {category = s.GetType().Name ; error = e; position = n.ToString()})

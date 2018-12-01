@@ -194,14 +194,14 @@ module STLLocalisationString =
 
 
 
-    let validateLocalisationFiles (locFolder : string) =
+    let validateLocalisationFiles (locFiles : string list) =
         // eprintfn "%s" locFolder
-        let files = Directory.EnumerateDirectories locFolder
-                    |> List.ofSeq
-                    |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
-        let rootFiles = Directory.EnumerateFiles locFolder |> List.ofSeq
-        let actualFiles = (files @ rootFiles) |> List.filter (fun f -> f.EndsWith ".yml")//(fun f -> f, (FileInfo f). )//File.ReadAllText(f, System.Text.Encoding.UTF8))
-        actualFiles <&!&> (checkLocFileName <&> checkFileEncoding )
+        // let files = Directory.EnumerateDirectories locFolder
+        //             |> List.ofSeq
+        //             |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
+        // let rootFiles = Directory.EnumerateFiles locFolder |> List.ofSeq
+        // let actualFiles = (files @ rootFiles) |> List.filter (fun f -> f.EndsWith ".yml")//(fun f -> f, (FileInfo f). )//File.ReadAllText(f, System.Text.Encoding.UTF8))
+        locFiles <&!&> (checkLocFileName <&> checkFileEncoding )
         // <&&>
         // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
     // let validateLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =

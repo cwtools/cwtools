@@ -35,6 +35,7 @@
     <Compile Include="Parser/HOI4Parser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />
+    <Compile Include="Game/CachedFileManager.fs" />
     <Compile Include="Game/Lookups.fs" />
     <Compile Include="Game/References.fs" />
     <Compile Include="Game/Stellaris/STLLookup.fs" />

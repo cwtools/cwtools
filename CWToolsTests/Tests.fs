@@ -317,7 +317,7 @@ let embeddedTests =
         registry.DeclareSerializable<FParsec.Position>()
         let cache = PicklerCache.FromCustomPicklerRegistry registry
         let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
-        let data = { resources = entities; fileIndexTable = fileIndexTable}
+        let data = { resources = entities; fileIndexTable = fileIndexTable; files = []}
         let pickle = binarySerializer.Pickle data
 
         let unpickled = binarySerializer.UnPickle pickle

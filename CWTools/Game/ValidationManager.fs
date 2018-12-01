@@ -17,6 +17,7 @@ type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S :> IScope<'
     ruleApplicator : RuleApplicator<'S> option
     useRules : bool
     debugRulesOnly : bool
+    localisationKeys : unit -> (Lang * Set<string>) list
 }
 type ValidationManager<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S>) =
     let resources = settings.resources

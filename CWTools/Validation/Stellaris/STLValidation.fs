@@ -206,7 +206,7 @@ module STLValidation =
             let sprites = es.AllOfTypeChildren EntityType.Interface // es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
-            let filenames = rm.GetResources() |> List.choose (function |FileResource (_, e) -> Some (e.logicalpath) |EntityResource (_, e) -> Some (e.logicalpath))
+            let filenames = rm.GetFileNames()
             //eprintfn "sprite filename %A" filenames
             let inner =
                 fun (x : Node) ->

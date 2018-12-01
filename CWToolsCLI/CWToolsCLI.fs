@@ -110,7 +110,7 @@ module CWToolsCLI =
             | None ->
                 DocsParser.parseDocsStream (Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsCLI.game_effects_triggers_1.9.1.txt"))
         match docsParsed with
-        |Success(p, _, _) -> p |> DocsParser.processDocs
+        |Success(p, _, _) -> p |> (DocsParser.processDocs parseScopes)
         |Failure(msg,_,_) -> failwith ("docs parsing failed with " + msg)
     let merge (a : Map<'a, 'b>) (b : Map<'a, 'b>) (f : 'a -> 'b * 'b -> 'b) =
         Map.fold (fun s k v ->
@@ -208,6 +208,10 @@ module CWToolsCLI =
         let files = fileManager.AllFilesByPath()
         let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
         let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+        let files = resources.GetResources()
+                    |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                                |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
+                                                |_ -> None)
         let mkPickler (resolver : IPicklerResolver) =
             let arrayPickler = resolver.Resolve<Leaf array> ()
             let writer (w : WriteState) (ns : Lazy<Leaf array>) =
@@ -222,7 +226,7 @@ module CWToolsCLI =
         // registry.DeclareSerializable<System.LazyHelper>()
         let cache = PicklerCache.FromCustomPicklerRegistry registry
         let binarySerializer = FsPickler.CreateXmlSerializer(picklerResolver = cache) //FsPickler.CreateBinarySerializer(picklerResolver = cache)
-        let data = { resources = entities; fileIndexTable = fileIndexTable}
+        let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
         let pickle = binarySerializer.Pickle data
         File.WriteAllBytes("pickled.cwb", pickle)
 

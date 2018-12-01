@@ -95,6 +95,7 @@ type EU4Game(settings : EU4Settings) =
         ruleApplicator = None
         useRules = true
         debugRulesOnly = false
+        localisationKeys = (fun () -> localisationKeys)
     }
 
     let mutable validationManager = ValidationManager(validationSettings)
@@ -173,7 +174,7 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = localisationKeys
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            let files = resources.GetFileNames() |> Set.ofList
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let tempRuleApplicator = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -354,7 +355,7 @@ type EU4Game(settings : EU4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<EU4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
+        member __.References() = References<_, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
         member __.Complete pos file text = completion pos file text
         member __.ScopesAtPos pos file text = getScopesAtPos pos file text
         member __.GoToType pos file text = getInfoAtPos pos file text

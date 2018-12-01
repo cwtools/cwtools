@@ -24,7 +24,7 @@ module Graphics =
             let pdxmesh = es.AllOfTypeChildren EntityType.GfxGfx
                             |> List.filter (fun e -> e.Key == "objectTypes")
                             |> List.collect (fun e -> e.Children |> List.choose (fun c -> if c.Key == "pdxmesh" then Some c else None))
-            let filenames = rm.GetResources() |> List.choose (function |FileResource (_, e) -> Some (e.logicalpath) |EntityResource (_, e) -> Some e.logicalpath)
+            let filenames = rm.GetFileNames()
             let inner =
                 fun (x : Node) ->
                     match x.Leafs "file" |> Seq.tryHead with
@@ -212,7 +212,7 @@ module Graphics =
         //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
         fun res es ->
             let os = EntitySet (res.AllEntities())
-            let files = res.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            let files = res.GetFileNames() |> Set.ofList
             // eprintfn "%A" files
             // files |> Set.filter (fun s -> s.Contains("great")) |> eprintfn "%A"
             let spriteGenerator (e : Entity) : obj list =

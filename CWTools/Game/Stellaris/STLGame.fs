@@ -102,7 +102,7 @@ type STLGame (settings : StellarisSettings) =
         let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
 
 
-        let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+        // let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
 
         let updateScriptedTriggers () =
@@ -131,20 +131,34 @@ type STLGame (settings : StellarisSettings) =
 
         let updateLocalisation() =
             localisationAPIs <-
-                let locs = fileManager.LocalisationFiles() |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
-                let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> true, l.Api(lang)))
-                match fileManager.ShouldUseEmbedded with
-                |false -> allLocs
-                |true ->
-                    allLocs @ (getEmbeddedFiles()
-                    |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
-                    |> List.map (fun (_, fn, f) -> (fn, f))
-                    |> (fun files -> STLLocalisationService(files))
-                    |> (fun l -> (STL STLLang.Default :: settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
+                let locs = resources.GetResources()
+                            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+                            |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
+                            |> List.groupBy (fun f -> f.validate)
+                            |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> STLLocalisationService)
+                let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
+                allLocs
             localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
+
+        // let updateLocalisation() =
+        //     localisationAPIs <-
+        //         let locs = fileManager.LocalisationFiles() |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
+        //         let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> true, l.Api(lang)))
+        //         match fileManager.ShouldUseEmbedded with
+        //         |false -> allLocs
+        //         |true ->
+        //             allLocs @ (getEmbeddedFiles()
+        //             |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
+        //             |> List.map (fun (_, fn, f) -> (fn, f))
+        //             |> (fun files -> STLLocalisationService(files))
+        //             |> (fun l -> (STL STLLang.Default :: settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
+        //     localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+        //     taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+        //     let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+        //     lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
 
             //TODO: Add loc from embedded
 
@@ -156,25 +170,6 @@ type STLGame (settings : StellarisSettings) =
 
         let updateTechnologies() =
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
-
-
-        // let findDuplicates (sl : Statement list) =
-        //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
-        //     node.Children |> List.groupBy (fun c -> c.Key)
-        //                   |> List.filter (fun (_,v) -> v.Length > 1)
-        //                   |> List.map (fun (k,_) -> k)
-
-        // let validateDuplicates files =
-        //     files |> List.choose (function |(file, parsed) -> Some (file, parsed.statements))
-        //         |> List.groupBy (fun (k,_) -> k)
-        //         |> List.map ((fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
-        //             >> (fun (k, vs) -> k, findDuplicates vs))
-
-        // let validateShips (entities : Node list) =
-        //     let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
-        //     ships |> List.map validateShip
-        //           |> List.choose (function |Invalid es -> Some es |_ -> None)
-        //           |> List.collect id
 
         let parseErrors() =
             resources.GetResources()
@@ -208,53 +203,11 @@ type STLGame (settings : StellarisSettings) =
             ruleApplicator = ruleApplicator
             useRules = useRules
             debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
-    // validators : (StructureValidator<'T> * string) list
-    // experimentalValidators : (StructureValidator<'T> * string) list
-    // heavyExperimentalValidators : (LookupValidator<'T> * string) list
-    // experimental : bool
-    // fileValidators : (FileValidator<'T> * string) list
-    // resources : IResourceAPI<'T>
-    // lookup : Lookup
-    // lookupValidators : (LookupValidator<'T> * string) list
+            localisationKeys = (fun () -> localisationKeys)
         }
 
         let mutable validationManager = ValidationManager(validationSettings)
         let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
-        // let validateAll (shallow : bool) (entities : struct (Entity * Lazy<STLComputedData>) list)  =
-        //     //let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
-        //     eprintfn "Validating %i files" (entities.Length)
-        //     let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
-        //     let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
-
-        //     let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
-        //                         validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
-        //                         validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"; valFlags, "flags"; valMegastructureGraphics, "megastructure";
-        //                         valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"]
-        //     let validators = if useRules && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
-        //     let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
-        //     let oldEntities = EntitySet (resources.AllEntities())
-        //     let newEntities = EntitySet entities
-        //     let runValidators f (validators : (STLStructureValidator * string) list) =
-        //         (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-        //         @ (if not settings.validation.experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-        //     eprintfn "Validating misc"
-        //     //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
-        //     let res = runValidators (fun f -> f oldEntities newEntities) validators
-        //     //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
-        //     eprintfn "Validating files"
-        //     let STLFileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-        //     let fres = STLFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
-        //     eprintfn "Validating effects/triggers"
-        //     let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
-        //     let tres = duration (fun _ ->  valAllTriggers (lookup) oldEntities newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
-        //     let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
-        //     let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
-        //     let evres = duration (fun _ ->  ( if settings.validation.experimental && (not(shallow)) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
-        //     //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
-        //     //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
-        //     let shallow = (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ wres
-        //     let deep = evres
-        //     shallow, deep
         let localisationCheck (entities : struct (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             //let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
@@ -281,7 +234,11 @@ type STLGame (settings : StellarisSettings) =
             // let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
             //                  |> (function |Invalid es -> es |_ -> [])
             //apiVs
-            let locFileValidation = (fileManager.LocalisationFiles() |> List.map fst) <&!&> validateLocalisationFiles
+            let locfiles =  resources.GetResources()
+                            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+                            |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
+                            |> List.map (fun f -> f.filepath)
+            let locFileValidation = validateLocalisationFiles locfiles
             lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&> locFileValidation |> (function |Invalid es -> es |_ -> [])
 
         let makeEntityResourceInput filepath filetext  =
@@ -293,6 +250,15 @@ type STLGame (settings : StellarisSettings) =
                 else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
             let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
             EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
+        let makeFileWithContentResourceInput filepath filetext  =
+            let filepath = Path.GetFullPath(filepath)
+            let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
+            let rootedpath =
+                if indexOfScope = -1
+                then filepath
+                else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
+            let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
+            FileWithContentResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
         let mutable errorCache = Map.empty
         let updateFile (shallow : bool) filepath (filetext : string option) =
             eprintfn "%s" filepath
@@ -301,6 +267,9 @@ type STLGame (settings : StellarisSettings) =
             let res =
                 match filepath with
                 |x when x.EndsWith (".yml") ->
+                    let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                    let resource = makeEntityResourceInput filepath file
+                    resources.UpdateFile(resource) |> ignore
                     updateLocalisation()
                     let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
                     localisationErrors <- Some les
@@ -308,10 +277,6 @@ type STLGame (settings : StellarisSettings) =
                 | _ ->
                     let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                     let resource = makeEntityResourceInput filepath file
-                    // let filepath = Path.GetFullPath(filepath)
-                    // let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
-                    // let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
-                    //eprintfn "%s %s" logicalpath filepath
                     let newEntities = resources.UpdateFile (resource) |> List.map snd
                     match filepath with
                     |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
@@ -434,7 +399,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let loc = localisationKeys
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+                let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath |FileWithContentResource (_, f) -> Some f.logicalpath) |> Set.ofList
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let tempRuleApplicator : RuleApplicator<_> = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -471,12 +436,21 @@ type STLGame (settings : StellarisSettings) =
             // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
             //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
             let files = fileManager.AllFilesByPath()
-            let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f)) |_ -> None)
+            let filteredfiles =
+                if settings.validation.validateVanilla
+                then files
+                else files |> List.choose (function
+                    |FileResourceInput f -> Some (FileResourceInput f)
+                    |FileWithContentResourceInput f -> Some (FileWithContentResourceInput f)
+                    |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f)) |_ -> None)
             resources.UpdateFiles(filteredfiles) |> ignore
             let embeddedFiles =
                 settings.embedded.embeddedFiles
                 |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
-                |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
+                |> List.choose (fun (f, ft) ->
+                    if ft = ""
+                    then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) })
+                    else Some (FileWithContentResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false}))
             let disableValidate (r, e) : Resource * Entity =
                 match r with
                 |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
@@ -532,7 +506,7 @@ type STLGame (settings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = updateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<STLComputedData, _>(resources, lookup, (localisationAPIs |> List.map snd))
+            member __.References() = References<_, _>(resources, lookup, (localisationAPIs |> List.map snd))
             member __.Complete pos file text = completion pos file text
             member __.ScopesAtPos pos file text = scopesAtPos pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
             member __.GoToType pos file text = getInfoAtPos pos file text

@@ -349,4 +349,6 @@ module STLConstants =
         "sound";
         "fonts";
         "flags";
+        "localisation";
+        "localisation_synced"
         ]

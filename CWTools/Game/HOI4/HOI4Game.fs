@@ -93,6 +93,7 @@ type HOI4Game(settings : HOI4Settings) =
         ruleApplicator = None
         useRules = true
         debugRulesOnly = false
+        localisationKeys = (fun () -> localisationKeys)
     }
 
     let mutable validationManager = ValidationManager(validationSettings)
@@ -172,7 +173,7 @@ type HOI4Game(settings : HOI4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = localisationKeys
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            let files = resources.GetFileNames() |> Set.ofList
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let tempRuleApplicator = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, HOI4 HOI4Lang.Default)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
