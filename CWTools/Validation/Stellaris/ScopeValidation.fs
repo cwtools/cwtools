@@ -171,7 +171,7 @@ module ScopeValidation =
                 |WrongScope _ -> false, scopes
                 |NotFound -> false, scopes
 
-    let getScopeContextAtPos (targetpos : pos) (triggers : Effect list) (effects : Effect list) (root : Node) =
+    let getScopeContextAtPos (targetpos : pos) (triggers : Effect<_> list) (effects : Effect<_> list) (root : Node) =
         let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 

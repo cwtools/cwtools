@@ -9,6 +9,7 @@ open CWTools.Common.STLConstants
 open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
+open CWTools.Common
 
 
 type PassFileResult = {
@@ -117,7 +118,7 @@ type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type GetFileNames = unit -> string list
 
-type IResourceAPI<'T> =
+type IResourceAPI<'T when 'T :> ComputedData > =
     abstract UpdateFiles : UpdateFiles<'T>
     abstract UpdateFile : UpdateFile<'T>
     abstract GetResources : GetResources
@@ -127,7 +128,7 @@ type IResourceAPI<'T> =
     abstract ForceRecompute : unit -> unit
     abstract GetFileNames : GetFileNames
 
-type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
+type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T)) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->

@@ -12,11 +12,11 @@ open STLValidation
 open System.Xml.Linq
 open System.Threading
 open CWTools.Utilities.Utils
+open CWTools.Games.Stellaris.STLLookup
 
 module STLLocalisationValidation =
     type S = Severity
-    type LocalisationValidator = STLEntitySet -> (Lang * Set<string>) list -> STLEntitySet -> ValidationResult
-
+    type LocalisationValidator = LocalisationValidator<STLComputedData>
     let inline checkLocKey (leaf : ^a) (keys : Set<string>) (lang : Lang) key =
         if lang = STL STLLang.Default then OK else
         match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
@@ -30,7 +30,7 @@ module STLLocalisationValidation =
         | _, true, _ -> OK
         | _, _, true -> OK
         | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
-    
+
     let inline checkLocKeysLeafOrNode (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leafornode keys l key) OK
 

@@ -30,7 +30,7 @@ type IGame<'S when 'S : comparison> =
     abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
     abstract ScopesAtPos : pos -> string -> string -> OutputScopeContext<'S> option
 
-type IGame<'T, 'S when 'S : comparison and 'S :> IScope<'S>> =
+type IGame<'T, 'S when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData> =
     inherit IGame<'S>
     abstract AllEntities : unit -> struct (Entity * Lazy<'T>) list
     abstract References : unit -> References<'T, 'S>

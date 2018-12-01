@@ -18,12 +18,11 @@ module STLLookup =
 
 
     type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs) =
-        inherit ComputedData()
+        inherit ComputedData(referencedtypes)
         member __.Eventids : string list = eventids
         member __.Setvariables : string list = setvariables
         member __.Setflags : (FlagType * string) list = setflags
         member __.Savedeventtargets : string list = savedeventtargets
-        member __.Referencedtypes : Map<string, (string  * range) list> option = referencedtypes
         member __.Hastechs : string list = hastechs
 
     let getChildrenWithComments (root : Node) =

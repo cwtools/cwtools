@@ -163,4 +163,5 @@ module EU4Constants =
         "sound";
         "tutorial";
         "gfx";
-        "interface";]
+        "interface";
+        "localisation";]

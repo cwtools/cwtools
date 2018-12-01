@@ -225,3 +225,4 @@ module ValidationCore =
     type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
     type STLFileValidator = FileValidator<STLComputedData>
     type LookupValidator<'T, 'S when 'T :> ComputedData and 'S : comparison and 'S :> IScope<'S>> = Lookup<'S> -> StructureValidator<'T>
+    type LocalisationValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> (Lang * Set<string>) list -> EntitySet<'T> -> ValidationResult

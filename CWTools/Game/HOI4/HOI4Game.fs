@@ -21,6 +21,7 @@ open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.HOI4
 open System.Text
+open CWTools.Games.LanguageFeatures
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -63,19 +64,17 @@ type HOI4Game(settings : HOI4Settings) =
 
     let updateLocalisation() =
         localisationAPIs <-
-            let locs = fileManager.LocalisationFiles() |> PSeq.ofList |> PSeq.map (fun (folder, _) -> HOI4LocalisationService({ folder = folder})) |> PSeq.toList
-            let allLocs = locs |> List.collect (fun l -> (settings.validation.langs)|> List.map (fun lang -> true, l.Api(lang)))
-            match fileManager.ShouldUseEmbedded with
-            |false -> allLocs
-            |true ->
-                allLocs @ (getEmbeddedFiles()
-                |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
-                |> List.map (fun (_, fn, f) -> (fn, f))
-                |> (fun files -> HOI4LocalisationService(files))
-                |> (fun l -> (settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
+            let locs = resources.GetResources()
+                        |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+                        |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
+                        |> List.groupBy (fun f -> f.validate)
+                        |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> HOI4LocalisationService)
+            let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
+            allLocs
         localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-        let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
-        let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+        //taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+        //let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+        //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
         ()
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
@@ -94,27 +93,14 @@ type HOI4Game(settings : HOI4Settings) =
         useRules = true
         debugRulesOnly = false
         localisationKeys = (fun () -> localisationKeys)
+        localisationValidators = []
     }
 
     let mutable validationManager = ValidationManager(validationSettings)
     let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
 
-    let localisationCheck (entities : struct (Entity * Lazy<HOI4ComputedData>) list) =
-        eprintfn "Localisation check %i files" (entities.Length)
-        //let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-        //let allEntries = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-        let validators = []
-        // let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
-        //                      valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
-        //                      valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
-        //                      valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
-        //                      valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers;
-        //                      valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers; valAnomalies]
-        let newEntities = EntitySet entities
-        let oldEntities = EntitySet (resources.AllEntities())
-        // let vs = (validators |> List.map (fun v -> v oldEntities localisationKeys newEntities) |> List.fold (<&&>) OK)
-        // ((vs) |> (function |Invalid es -> es |_ -> []))
-        []
+    let localisationCheck (entities : struct (Entity * Lazy<HOI4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
+
     let updateModifiers() =
         lookup.coreHOI4Modifiers <- settings.embedded.modifiers
     let updateScriptedEffects(rules :RootRule<Scope> list) =
@@ -200,15 +186,6 @@ type HOI4Game(settings : HOI4Settings) =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
-    let makeEntityResourceInput filepath filetext  =
-        let filepath = Path.GetFullPath(filepath)
-        let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
-        let rootedpath =
-            if indexOfScope = -1
-            then filepath
-            else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
-        let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
-        EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
     let mutable errorCache = Map.empty
 
     let updateFile (shallow : bool) filepath (filetext : string option) =
@@ -228,7 +205,7 @@ type HOI4Game(settings : HOI4Settings) =
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, Encoding.GetEncoding(1252)))
                 let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
                 let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
-                let resource = makeEntityResourceInput filepath file
+                let resource = makeEntityResourceInput fileManager filepath file
                 //eprintfn "%s %s" logicalpath filepath
                 let newEntities = resources.UpdateFile (resource) |> List.map snd
                 // match filepath with
@@ -252,53 +229,6 @@ type HOI4Game(settings : HOI4Settings) =
 
         eprintfn "Update Time: %i" timer.ElapsedMilliseconds
         res
-
-    let completion (pos : pos) (filepath : string) (filetext : string) =
-        let split = filetext.Split('\n')
-        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-        let resource = makeEntityResourceInput filepath filetext
-        match resourceManager.ManualProcessResource resource, completionService with
-        |Some e, Some completion ->
-            eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-            completion.Complete(pos, e)
-        |_, _ -> []
-    let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
-        let resource = makeEntityResourceInput filepath filetext
-        match resourceManager.ManualProcessResource resource, infoService with
-        |Some e, Some info ->
-            eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            match (info.GetInfo)(pos, e) with
-            |Some (_, Some (t, tv)) ->
-                lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
-            |_ -> None
-        |_, _ -> None
-    let getScopesAtPos (pos : pos) (filepath : string) (filetext : string) : OutputScopeContext<Scope> option =
-        let resource = makeEntityResourceInput filepath filetext
-        match resourceManager.ManualProcessResource resource, infoService with
-        |Some e, Some info ->
-            eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            match (info.GetInfo)(pos, e) with
-            |Some (sc, _) ->
-                Some { From = sc.From; Scopes = sc.Scopes; Root = sc.Root}
-            |_ -> None
-        |_, _ -> None
-    let findAllRefsFromPos (pos : pos) (filepath : string) (filetext : string) : range list option =
-        let resource = makeEntityResourceInput filepath filetext
-        match resourceManager.ManualProcessResource resource, infoService with
-        |Some e, Some info ->
-            eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            match (info.GetInfo)(pos, e) with
-            |Some (_, Some ((t : string), tv)) ->
-                //eprintfn "tv %A %A" t tv
-                let t = t.Split('.').[0]
-                resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
-                               |> List.collect id
-                               |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
-                               |> Some
-            |_ -> None
-        |_, _ -> None
-
 
     do
         eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
@@ -357,10 +287,10 @@ type HOI4Game(settings : HOI4Settings) =
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<HOI4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
-        member __.Complete pos file text = completion pos file text
-        member __.ScopesAtPos pos file text = getScopesAtPos pos file text
-        member __.GoToType pos file text = getInfoAtPos pos file text
-        member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
+        member __.Complete pos file text = completion fileManager completionService resourceManager pos file text
+        member __.ScopesAtPos pos file text = scopesAtPos fileManager resourceManager infoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
+        member __.GoToType pos file text = getInfoAtPos fileManager resourceManager infoService lookup pos file text
+        member __.FindAllRefs pos file text = findAllRefsFromPos fileManager resourceManager infoService pos file text
         member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
         member __.RefreshCaches() = refreshRuleCaches None
         member __.ForceRecompute() = resources.ForceRecompute()
