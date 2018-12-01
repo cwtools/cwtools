@@ -104,5 +104,7 @@ module HOI4Constants =
         "events";
         "gfx";
         "interface";
-        "localisation"
+        "localisation";
+        "history";
+        "map"
     ]

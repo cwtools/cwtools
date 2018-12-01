@@ -53,3 +53,17 @@ country_event = {
     type_one_file_skip = value_fake
 }
 
+##Test complex type pattern
+country_event = {
+    type_one_file_prefix = prefix_value_one
+    #error
+    type_one_file_prefix = pef_value_one
+
+    type_one_file_suffix = value_one_suffix
+    #error
+    type_one_file_suffix = value_one_suff
+
+    type_one_file_both = prefix_value_one_suffix
+    #error
+    type_one_file_both = pref_value_one_suff
+}

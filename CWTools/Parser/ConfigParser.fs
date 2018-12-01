@@ -25,9 +25,13 @@ module rec ConfigParser =
     | Specific of string
     | Percent
     | Date
+
+    type TypeType =
+    | Simple of string
+    | Complex of prefix : string * name : string * suffix : string
     type NewField<'a> =
     | ValueField of ValueType
-    | TypeField of string
+    | TypeField of TypeType
     | ScopeField of 'a
     | LocalisationField of synced : bool
     | FilepathField
@@ -245,7 +249,11 @@ module rec ConfigParser =
         |"filepath" -> FilepathField
         |"date_field" -> ValueField Date
         |x when x.StartsWith "<" && x.EndsWith ">" ->
-            TypeField (x.Trim([|'<'; '>'|]))
+            TypeField (TypeType.Simple (x.Trim([|'<'; '>'|])))
+        |x when x.Contains "<" && x.Contains ">" ->
+            let prefixI = x.IndexOf "<"
+            let suffixI = x.IndexOf ">"
+            TypeField (TypeType.Complex (x.Substring(0,prefixI), x.Substring(prefixI + 1, suffixI - prefixI - 1), x.Substring(suffixI + 1)))
         |"int" -> defaultInt
         |x when x.StartsWith "int[" ->
             match getIntSettingFromString x with
@@ -621,7 +629,7 @@ module rec ConfigParser =
                 NewRule(LeafRule(specificField "base_buildtime", defaultInt), requiredSingle);
                 NewRule(LeafRule(specificField "can_have_federation_design", ValueField ValueType.Bool), requiredSingle);
                 NewRule(LeafRule(specificField "enable_default_design", ValueField ValueType.Bool), requiredSingle);
-                NewRule(LeafRule(specificField "default_behavior", TypeField "ship_behavior"), requiredSingle);
+                NewRule(LeafRule(specificField "default_behavior", TypeField (Simple "ship_behavior")), requiredSingle);
                 NewRule(NodeRule(specificField "prerequisites", []), optionalSingle);
                 NewRule(LeafRule(specificField "combat_disengage_chance", defaultFloat), optionalSingle);
                 NewRule(LeafRule(specificField "has_mineral_upkeep", ValueField ValueType.Bool), requiredSingle);

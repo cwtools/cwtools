@@ -41,6 +41,7 @@ type Lookup<'S when 'S : comparison and 'S :> IScope<'S>>() =
     member val coreModifiers : Modifier list = [] with get, set
     member val coreEU4Modifiers : CWTools.Common.EU4Constants.Modifier list = [] with get, set
     member val coreHOI4Modifiers : CWTools.Common.HOI4Constants.Modifier list = [] with get, set
+    member val HOI4provinces : string list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<'S>>) list = [] with get, set

@@ -87,6 +87,10 @@ type_one_file_skip = {
 alias[effect:type_one_file] = <type_one_file>
 alias[effect:type_one_file_skip] = <type_one_file_skip>
 
+alias[effect:type_one_file_prefix] = prefix_<type_one_file>
+alias[effect:type_one_file_suffix] = <type_one_file>_suffix
+alias[effect:type_one_file_both] = prefix_<type_one_file>_suffix
+
 #Test value types
 types = {
     type[special_project] = {

@@ -22,6 +22,7 @@ open CWTools.Process.Scopes
 open CWTools.Validation.HOI4
 open System.Text
 open CWTools.Games.LanguageFeatures
+open System
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -103,6 +104,19 @@ type HOI4Game(settings : HOI4Settings) =
 
     let updateModifiers() =
         lookup.coreHOI4Modifiers <- settings.embedded.modifiers
+
+    let updateProvinces() =
+        let provinceFile =
+            resources.GetResources()
+            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+        match provinceFile with
+        |None -> ()
+        |Some pf ->
+            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
+            eprintfn "%A" provinces
+            lookup.HOI4provinces <- provinces
     let updateScriptedEffects(rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
@@ -151,7 +165,7 @@ type HOI4Game(settings : HOI4Settings) =
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let allEnums = simpleEnums @ complexEnumDefs
+            let allEnums = simpleEnums @ complexEnumDefs @ ["provinces", lookup.HOI4provinces]
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> Map.ofList
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -256,6 +270,7 @@ type HOI4Game(settings : HOI4Settings) =
         // updateScriptedLoc()
         // updateDefinedVariables()
         updateModifiers()
+        updateProvinces()
         // updateTechnologies()
         updateLocalisation()
         updateTypeDef(settings.rules)
