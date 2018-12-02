@@ -114,10 +114,10 @@ module rec Rules =
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode keys key leafornode
 
     let checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode =
-        let fieldType =
+        let isComplex, fieldType =
             match typetype with
-            |TypeType.Simple t -> t
-            |Complex (_, t, _) -> t
+            |TypeType.Simple t -> false, t
+            |Complex (_, t, _) -> true, t
         let typeKeyMap v =
             match typetype with
             |TypeType.Simple t -> v
@@ -126,8 +126,8 @@ module rec Rules =
         |Some values ->
             let value = key.Trim([|'\"'|])
             if value |> firstCharEquals '@' then OK else
+            let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
 
-            let values = values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts))
             //let values = values typeKeyMap values
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode]
