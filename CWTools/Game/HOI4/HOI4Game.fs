@@ -43,9 +43,11 @@ type HOI4Settings = {
     embedded : EmbeddedSettings
     validation : ValidationSettings
     rules : RulesSettings option
+    scriptFolders : string list option
 }
 
 type HOI4Game(settings : HOI4Settings) =
+    let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
 
 
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv", Encoding.UTF8)

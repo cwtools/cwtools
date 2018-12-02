@@ -41,6 +41,7 @@ let emptyStellarisSettings (rootDirectory) = {
         embeddedFiles = []
         cachedResourceData = []
     }
+    scriptFolders = None
 }
 
 let getAllTestLocs node =

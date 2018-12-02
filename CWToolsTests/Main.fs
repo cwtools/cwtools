@@ -39,6 +39,7 @@ let emptyStellarisSettings (rootDirectory) = {
         embeddedFiles = []
         cachedResourceData = []
     }
+    scriptFolders = None
 }
 let rec getAllFolders dirs =
     if Seq.isEmpty dirs then Seq.empty else

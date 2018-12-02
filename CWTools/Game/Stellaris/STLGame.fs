@@ -68,6 +68,7 @@ type StellarisSettings = {
     embedded : EmbeddedSettings
     validation : ValidationSettings
     rules : RulesSettings option
+    scriptFolders : string list option
 }
 
 //type GameFile = GameFile of result : FileResult
@@ -76,7 +77,7 @@ type STLGame (settings : StellarisSettings) =
         let embeddedSettings = settings.embedded
         let validationSettings = settings.validation
         let useRules = settings.rules.IsSome
-
+        let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
 
         let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris", Encoding.UTF8)
         let vanillaEffects =

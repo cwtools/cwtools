@@ -43,10 +43,12 @@ type EU4Settings = {
     embedded : EmbeddedSettings
     validation : ValidationSettings
     rules : RulesSettings option
+    scriptFolders : string list option
 }
 
 type EU4Game(settings : EU4Settings) =
 
+    let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
 
     let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv", Encoding.GetEncoding(1252))
 

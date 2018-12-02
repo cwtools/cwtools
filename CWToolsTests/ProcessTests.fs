@@ -47,6 +47,7 @@ let emptyStellarisSettings (rootDirectory) = {
         embeddedFiles = []
         cachedResourceData = []
     }
+    scriptFolders = None
 }
 
 let effectMap = Microsoft.FSharp.Collections.Tagged.Map<string,Effect,InsensitiveStringComparer>.Create(InsensitiveStringComparer(), [])
