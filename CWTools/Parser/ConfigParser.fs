@@ -82,6 +82,7 @@ module rec ConfigParser =
         root : 'a option
         this : 'a option
         froms : 'a list option
+        prevs : 'a list option
     }
     type SubTypeDefinition<'a> = {
         name : string
@@ -234,7 +235,12 @@ module rec ConfigParser =
                         let fromfromfrom = if c.Has "fromfromfrom" then c.TagText "fromfromfrom" |> parseScope |> Some else None
                         let fromfromfromfrom = if c.Has "fromfromfromfrom" then c.TagText "fromfromfromfrom" |> parseScope |> Some else None
                         let froms = [from;fromfrom;fromfromfrom;fromfromfromfrom] |> List.choose id
-                        Some { root = root; this = this; froms = Some froms }
+                        let prev = if c.Has "prev" then c.TagText "prev" |> parseScope |> Some else None
+                        let prevprev = if c.Has "prevprev" then c.TagText "prevprev" |> parseScope |> Some else None
+                        let prevprevprev = if c.Has "prevprevprev" then c.TagText "prevprevprev" |> parseScope |> Some else None
+                        let prevprevprevprev = if c.Has "prevprevprevprev" then c.TagText "prevprevprevprev" |> parseScope |> Some else None
+                        let prevs = [prev;prevprev;prevprevprev;prevprevprevprev] |> List.choose id
+                        Some { root = root; this = this; froms = Some froms; prevs = Some prevs }
                     |None -> None
             |None -> None
         { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes; severity = severity; requiredScopes = reqScope }
@@ -524,7 +530,7 @@ module rec ConfigParser =
         let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
         let moduleR = NewRule (LeafRule(specificField "module", ValueField(ValueType.Enum "module")), optionalMany)
         let building = NewRule (LeafRule(specificField "building", ValueField(ValueType.Enum "building")), optionalMany)
-        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), { optionalSingle with replaceScopes = Some { froms = None; root = Some (Scope.Country); this = Some (Scope.Country) }})
+        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), { optionalSingle with replaceScopes = Some { froms = None; root = Some (Scope.Country); this = Some (Scope.Country); prevs = None }})
         let rule = NewRule (NodeRule(specificField "create_starbase", [owner; size; moduleR; building; effect]), optionalMany)
         rule
     let createStarbaseAlias = AliasRule ("effect", createStarbase)

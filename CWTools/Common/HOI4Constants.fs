@@ -33,6 +33,7 @@ module HOI4Constants =
             |"state" -> Scope.State
             |"country" -> Scope.Country
             |"unit leader" -> Scope.UnitLeader
+            |"unit_leader" -> Scope.UnitLeader
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any

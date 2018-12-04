@@ -299,19 +299,23 @@ module rec Rules =
                 |None ->
                     match options.replaceScopes with
                     |Some rs ->
+                        let prevctx =
+                            match rs.prevs with
+                            |Some prevs -> {ctx with scopes = {ctx.scopes with Scopes = prevs}}
+                            |None -> ctx
                         let newctx =
                             match rs.this, rs.froms with
                             |Some this, Some froms ->
-                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                                {prevctx with scopes = {prevctx.scopes with Scopes = this::(prevctx.scopes.PopScope); From = froms}}
                             |Some this, None ->
-                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                                {prevctx with scopes = {prevctx.scopes with Scopes = this::(prevctx.scopes.PopScope)}}
                             |None, Some froms ->
-                                {ctx with scopes = {ctx.scopes with From = froms}}
+                                {prevctx with scopes = {prevctx.scopes with From = froms}}
                             |None, None ->
-                                ctx
+                                prevctx
                         match rs.root with
                         |Some root ->
-                            {ctx with scopes = {ctx.scopes with Root = root}}
+                            {newctx with scopes = {newctx.scopes with Root = root}}
                         |None -> newctx
                     |None ->
                         if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
