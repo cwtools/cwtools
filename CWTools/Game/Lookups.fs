@@ -50,3 +50,4 @@ type Lookup<'S when 'S : comparison and 'S :> IScope<'S>>() =
     member val typeDefs : TypeDefinition<'S> list = [] with get, set
     member val enumDefs : Collections.Map<string, string list> = Map.empty with get, set
     member val typeDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
+    member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
