@@ -38,6 +38,7 @@ module rec ConfigParser =
     | IconField of string
     | AliasField of string
     | SubtypeField of string * bool * NewRule<'a> list
+    | VariableField
     let specificField x = ValueField(ValueType.Specific x)
     type Options<'a> = {
         min : int
@@ -287,6 +288,7 @@ module rec ConfigParser =
             |Some alias -> AliasField alias
             |None -> ValueField ValueType.Scalar
         |"scope_field" -> ScopeField (anyScope)
+        |"variable_field" -> VariableField
         |x when x.StartsWith "scope[" ->
             match getSettingFromString x "scope" with
             |Some target ->
