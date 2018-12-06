@@ -27,6 +27,7 @@ module STLConstants =
         |Design
         |Starbase
         |Star
+        |Deposit
         |InvalidScope
         override x.ToString() =
             match x with
@@ -60,6 +61,7 @@ module STLConstants =
             Starbase;
             Megastructure;
             Star;
+            Deposit;
             ]
     let allScopesSet = allScopes |> Set.ofList
     let parseScope =
@@ -90,9 +92,11 @@ module STLConstants =
             |"design" -> Scope.Design
             |"starbase" -> Scope.Starbase
             |"star" -> Scope.Star
+            |"deposit" -> Scope.Deposit
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
+            |"(unknown)" -> Scope.Any
             |x -> eprintfn "Unexpected scope %O" x; Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
     let parseScopes =

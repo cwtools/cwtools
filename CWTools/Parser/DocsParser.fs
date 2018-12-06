@@ -16,7 +16,7 @@ module DocsParser =
     let private name = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>>. restOfLine false .>> SharedParsers.ws <?> "name"
     let private usage = charsTillString "Supported scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
     let private usageC = charsTillString "Supported Scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
-    let private scope = many1Satisfy ((fun c -> isvaluechar c || c = '?')) .>> many spaces1 <?> "scope"
+    let private scope = many1Satisfy ((fun c -> isvaluechar c || c = '?' || c = '(' || c = ')')) .>> many spaces1 <?> "scope"
     let private scopes = manyTill scope (skipString "Supported targets:" .>> skipManySatisfy (fun c -> c = ' ')) <?> "scopes"
     let private scopesC = manyTill scope (skipString "Supported Targets:" .>> skipManySatisfy (fun c -> c = ' ')) <?> "scopes"
     let private target = many1Satisfy isvaluechar .>> many (skipChar ' ') <?> "target"
