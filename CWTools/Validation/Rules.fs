@@ -132,14 +132,14 @@ module rec Rules =
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode]
 
-    let checkVariableField (varMap : Collections.Map<string,string>) severity (varName : string) (key : string) leafornode =
+    let checkVariableField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode =
         match varMap.TryFind varName with
         |Some values ->
             let value = key.Trim([|'\"'|])
-            if values |> firstCharEquals '@' then OK else
+            if value |> firstCharEquals '@' then OK else
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode]
-        |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode] 
-    
+        |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode]
+
     let checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
         let file = key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leafornode]
@@ -183,7 +183,8 @@ module rec Rules =
     // let inline ruleApplicatorCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
     // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
     type RuleApplicator<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
-                                    (rootRules : RootRule<'T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, string>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, anyScope, changeScope, defaultContext : ScopeContext<_>, defaultLang) =
+                                    (rootRules : RootRule<'T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                                     anyScope, changeScope, defaultContext : ScopeContext<_>, defaultLang) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
@@ -197,6 +198,7 @@ module rec Rules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
         let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
         let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+        //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
 
 
         let isValidValue (value : Value) =
@@ -622,7 +624,7 @@ module rec Rules =
                 //         |x -> [x])
                 let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
                 let innerN (c : Node) =
-                    match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
+                    match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
                     | [] ->
                         // let leftClauseRule =
                         //     expandedrules |>
@@ -639,7 +641,7 @@ module rec Rules =
                         // |r::_ -> Some( NodeC c, r)
                     | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
                 let innerL (leaf : Leaf) =
-                    match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
+                    match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
                     |[] ->
                         // let leftTypeRule =
                         //     expandedrules |>
@@ -733,7 +735,7 @@ module rec Rules =
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 
     type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
-                        (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, changeScope, defaultContext : ScopeContext<'T>, anyScope, defaultLang)  =
+                        (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, varMap, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, changeScope, defaultContext : ScopeContext<'T>, anyScope, defaultLang)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
@@ -841,6 +843,7 @@ module rec Rules =
                     |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
                 |SubtypeRule(_) -> []
+                |_ -> []
                 //TODO: Add leafvalue
                 //|_ -> []
                 // |LeafValueRule
@@ -899,11 +902,11 @@ module rec Rules =
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion
                 |(key, false)::rest ->
-                    match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, rs, o) |_ -> None) with
+                    match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, rs, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest)
                 |(key, true)::rest ->
-                    match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, r, o) |_ -> None) with
+                    match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, r, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs ->
                         //eprintfn "%s %A" key fs

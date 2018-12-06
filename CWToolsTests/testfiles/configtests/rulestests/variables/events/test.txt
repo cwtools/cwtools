@@ -1,0 +1,10 @@
+namespace = test
+
+country_event = {
+    set_test = test1
+    set_test = test2
+    get_test = test1
+    get_test = test2
+    #error
+    get_test = test3
+}

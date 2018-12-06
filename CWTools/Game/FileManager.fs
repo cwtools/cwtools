@@ -65,7 +65,7 @@ module Files =
         do eprintfn "%s %b" rootDirectory (Directory.Exists rootDirectory)
         let allDirsBelowRoot = if Directory.Exists rootDirectory then getAllFoldersUnion [rootDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
         let stellarisDirectory =
-            let dir = allDirsBelowRoot |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName) |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
+            let dir = allDirsBelowRoot |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName || folder.ToLower() = "game") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
             |Some s -> eprintfn "Found %s directory at %s" gameDirName s
             |None -> eprintfn "Couldn't find %s directory, falling back to embedded vanilla files" gameDirName

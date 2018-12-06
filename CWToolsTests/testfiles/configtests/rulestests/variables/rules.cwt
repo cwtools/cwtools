@@ -1,0 +1,12 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    ## cardinality = 0..inf
+    set_test = value_set[test]
+    ## cardinality = 0..inf
+    get_test = value[test]
+}
