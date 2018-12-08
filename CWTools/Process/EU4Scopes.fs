@@ -70,6 +70,7 @@ module EU4Scopes =
         "hidden_effect", id;
         "hidden_trigger", id;
     ]
+    let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
 
     let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =

@@ -28,6 +28,8 @@ type Severity =
 | Information = 3
 | Hint = 4
 
+
+
 type ComputedData(referencedtypes) =
     member val Cache : Map<string, obj list> = Map.empty with get, set
     member __.Referencedtypes : Map<string, (string  * range) list> option = referencedtypes

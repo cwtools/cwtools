@@ -45,6 +45,8 @@ module rec Rules =
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
+
+
     let checkPathDir (t : TypeDefinition<_>) (pathDir : string) (file : string) =
         match t.path_strict with
         |true -> pathDir == t.path.Replace("\\","/")
@@ -139,8 +141,8 @@ module rec Rules =
         |Some values ->
             let value = key.Trim([|'\"'|])
             if value |> firstCharEqualsAmp then OK else
-            if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode]
-        |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode]
+            if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) (min Severity.Warning severity)) leafornode]
+        |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) (min Severity.Warning severity)) leafornode]
 
     let inline checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
         let file = key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
@@ -598,6 +600,7 @@ module rec Rules =
 
 
         let foldCollect fLeaf fLeafValue fComment fNode acc (node : Node) (path: string) =
+            let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
             let fChild (node : Node) ((field, options) : NewRule<_>) =
                 let rules =
                     match field with
@@ -622,27 +625,30 @@ module rec Rules =
                 //         function
                 //         | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue [])
                 //         |x -> [x])
-                let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
                 let innerN (c : Node) =
-                    match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
-                    | [] ->
-                        // let leftClauseRule =
-                        //     expandedrules |>
-                        //     List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
-                        // let leftTypeRule =
-                        //     expandedrules |>
-                        //     List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) c.Key  |_ -> false )
-                        // let leftScopeRule =
-                        //     expandedrules |>
-                        //     List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) c.Key  |_ -> false )
-                        // let leftRules = leftClauseRule @ leftScopeRule @ leftTypeRule
-                        // match leftRules with
-                        Some (NodeC c, (field, options))
-                        // |r::_ -> Some( NodeC c, r)
-                    | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
+                    // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node -> Some (l, rs, o) |_ -> None)
+                    //       |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) -> applyNodeRule enforceCardinality ctx o l r node) createDefault false)
+                    expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None)
+                                  |> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
+                    // | [] ->
+                    //     // let leftClauseRule =
+                    //     //     expandedrules |>
+                    //     //     List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
+                    //     // let leftTypeRule =
+                    //     //     expandedrules |>
+                    //     //     List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) c.Key  |_ -> false )
+                    //     // let leftScopeRule =
+                    //     //     expandedrules |>
+                    //     //     List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) c.Key  |_ -> false )
+                    //     // let leftRules = leftClauseRule @ leftScopeRule @ leftTypeRule
+                    //     // match leftRules with
+                    //     Some (NodeC c, (field, options))
+                    //     // |r::_ -> Some( NodeC c, r)
+                    // | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
                 let innerL (leaf : Leaf) =
-                    match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
-                    |[] ->
+                    expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None)
+                                  |> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (LeafC leaf, ((LeafRule (l, rs)), o))) |> Option.defaultValue( Some (LeafC leaf, (field, options)))
+                    // |[] ->
                         // let leftTypeRule =
                         //     expandedrules |>
                         //     List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) l.Key  |_ -> false )
@@ -651,9 +657,10 @@ module rec Rules =
                         //     List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) l.Key  |_ -> false )
                         // match Option.orElse leftClauseRule leftTypeRule with
                         // |Some r -> Some (LeafC l, r) //#TODO this doesn't correct handle lefttype
-                        Some (LeafC leaf, (field, options))
-                    |(l, rs, o)::_ -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
+                    //     Some (LeafC leaf, (field, options))
+                    // |(l, rs, o)::_ -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
                 let innerLV lv = Some (LeafValueC lv, (field, options))
+                //seq { yield! node.Children |> List.choose innerN; yield! node.Leaves |> List.ofSeq |> List.choose innerL; yield! node.LeafValues |> List.ofSeq |> List.choose innerLV }
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
@@ -715,7 +722,6 @@ module rec Rules =
                     res |> (fun m -> m.Add(v, (node.Key, node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fComment (res) _ _ = res
-            let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
             let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             res
@@ -735,7 +741,7 @@ module rec Rules =
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 
     type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
-                        (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, varMap, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, changeScope, defaultContext : ScopeContext<'T>, anyScope, defaultLang)  =
+                        (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, varMap, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
@@ -814,7 +820,8 @@ module rec Rules =
                 |NodeRule (IconField(folder), innerRules) ->
                     checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
                 |NodeRule (LocalisationField(_), _) -> []
-                |NodeRule (ScopeField(_), _) -> [] //TODO: Scopes
+                |NodeRule (ScopeField(_), innerRules) -> oneToOneScopes |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                //TODO: Scopes better
                 |NodeRule (SubtypeField(_), _) -> []
                 |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
                     types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
@@ -881,6 +888,7 @@ module rec Rules =
                     |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
                     |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
                 |NewField.FilepathField -> files |> Set.toList |> List.map Simple
+                |NewField.ScopeField _ -> oneToOneScopes |> List.map (Simple)
                 |_ -> []
                 //|Field.EffectField -> findRule rootRules rest
                 // |Field.ClauseField rs -> findRule rs rest
@@ -1052,5 +1060,7 @@ module rec Rules =
         complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq
 
     let getDefinedVariables (foldRules : FoldRules<_>) (es : Entity list) =
-        let results = es |> List.toSeq |> PSeq.fold (fun c e -> foldRules.GetDefinedVariables(c,e)) (Collections.Map.empty)//|> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Collections.Map.empty
+        // let results = es |> List.toSeq |> PSeq.fold (fun c e -> foldRules.GetDefinedVariables(c,e)) (Collections.Map.empty)//|> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Collections.Map.empty
+        let results = es |> List.toSeq |> PSeq.map (fun e -> foldRules.GetDefinedVariables(Map.empty,e))
+                            |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) Collections.Map.empty
         results
