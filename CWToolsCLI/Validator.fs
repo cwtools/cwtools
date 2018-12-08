@@ -50,6 +50,7 @@ module Validator =
                 embeddedFiles = []
                 cachedResourceData = []
             }
+            scriptFolders = None
         }
         let game = STLGame(options) :> IGame<STLComputedData, STLConstants.Scope>
         let parserErrors = game.ParserErrors

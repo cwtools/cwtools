@@ -23,7 +23,7 @@ type References<'T, 'S when 'S : comparison and 'S :> IScope<'S> and 'T :> Compu
     let triggers() = lookup.scriptedTriggers |> List.map(fun t -> t.Name)
     let effects() = lookup.scriptedEffects |> List.map(fun e -> e.Name)
     let localisation() =
-        localisation |> List.filter (fun l -> l.GetLang = ((STL STLLang.English)) || l.GetLang = ((HOI4 HOI4Lang.English)))
+        localisation |> List.filter (fun l -> l.GetLang = ((STL STLLang.English)) || l.GetLang = ((HOI4 HOI4Lang.English)) || l.GetLang = (EU4 EU4Lang.English))
                      |> List.collect (fun l -> l.ValueMap |> Map.toList)
     member __.EventIDs = eventIDs()
     member __.ModifierNames = modifiers()

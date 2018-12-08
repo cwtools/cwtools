@@ -16,13 +16,14 @@ open System.Globalization
 
 
 module rec ConfigParser =
+    [<Struct>]
     type ValueType =
-    | Float of float * float
-    | Bool
     | Scalar
-    | Int of int * int
-    | Enum of string
-    | Specific of string
+    | Enum of enumc : string
+    | Specific of valuec : string
+    | Float of minmax: (float*float)
+    | Bool
+    | Int of minmaxi: (int*int)
     | Percent
     | Date
 

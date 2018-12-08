@@ -168,6 +168,25 @@ module ValidationCore =
     let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK
 
     let (<&??&>) es f = es |> Seq.map f |> Seq.reduce (<&?&>)
+    let inline checkNonNull argName arg =
+        match box arg with
+        | null -> nullArg argName
+        | _ -> ()
+    let takeWhileOne predicate (source: seq<_>) =
+        checkNonNull "source" source
+        seq { use e = source.GetEnumerator()
+              let latest = ref Unchecked.defaultof<_>
+              if e.MoveNext()
+              then
+                  latest := e.Current
+                  yield !latest
+                  while e.MoveNext() && (let x = predicate !latest in  latest := e.Current; x) do
+                      yield !latest
+              else () }
+
+    let lazyErrorMerge es f defValue merge =
+        let t = es |> Seq.map f  |> takeWhileOne (fun e -> e |> function |OK -> false |Invalid er -> true) |> List.ofSeq
+        if List.isEmpty t then defValue() else List.reduce (<&?&>) t |> (fun f -> if merge then mergeValidationErrors "CW240" f else f )
 
 
     type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =

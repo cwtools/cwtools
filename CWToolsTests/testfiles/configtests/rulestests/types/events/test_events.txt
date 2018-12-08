@@ -16,8 +16,8 @@ event = {
 
 ##Type from filename
 event = {
-    my_file_name = test
     my_file_name_subtype = test2
+    my_file_name = test
     #Error
     my_file_name = test2
     #Error

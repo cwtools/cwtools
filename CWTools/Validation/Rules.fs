@@ -22,6 +22,7 @@ open System
 open CWTools.Process.Scopes
 open FParsec
 open System.Collections
+open System.Diagnostics
 
 // type RuleApplicator<'S, 'T when 'T :> ComputedData and 'S : comparison> = {
 //     applyNodeRule : NewRule<'S> list * Node -> ValidationResult
@@ -76,35 +77,36 @@ module rec Rules =
     // type ScopeContext = IScopeContext<Scope>
 
     // type RuleContext  = RuleContext<Scope>
-    let firstCharEquals (c : char) = (fun s -> s |> Seq.tryHead |> Option.map ((=) c) |> Option.defaultValue false)
-
+    let firstCharEqualsAmp (s : string) = s.Length > 0 && s.[0] = '@'
     let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (key : string) leafornode =
-        if key |> firstCharEquals '@' then OK else
-            match (vt) with
-            |ValueType.Bool ->
-                if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode]
-            |ValueType.Enum e ->
-                match enumsMap.TryFind e with
-                |Some es -> if es.Contains (key.Trim([|'\"'|])) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode]
-                |None -> Invalid[inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode]
-            |ValueType.Float (min, max) ->
-                match TryParser.parseDouble key with
-                |Some f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode]
-                |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode]
-            |ValueType.Int (min, max) ->
-                match TryParser.parseInt key with
-                |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leafornode]
-                |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode]
-            |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
-            |ValueType.Scalar -> OK
-            |ValueType.Percent -> if key.EndsWith("%") then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode]
-            |ValueType.Date ->
-                let parts = key.Split([|'.'|])
-                let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
-                if ok then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode]
-            |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value" severity) leafornode]
+        if key |> firstCharEqualsAmp then OK else
+                match (vt) with
+                    |ValueType.Scalar ->
+                        OK
+                    |ValueType.Bool ->
+                        if key == "yes" || key == "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode]
+                    |ValueType.Int (min, max) ->
+                        match TryParser.parseInt key with
+                        |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leafornode]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode]
+                    |ValueType.Float (min, max) ->
+                        match TryParser.parseDouble key with
+                        |Some f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode]
+                    |ValueType.Enum e ->
+                        match enumsMap.TryFind e with
+                        |Some es -> if es.Contains (key.Trim([|'\"'|])) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode]
+                        |None -> Invalid[inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode]
+                    |ValueType.Specific s ->
+                        if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
+                    |ValueType.Percent ->
+                        if key.EndsWith("%") then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode]
+                    |ValueType.Date ->
+                        let parts = key.Split([|'.'|])
+                        let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+                        if ok then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode]
 
-    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) =
+    let inline checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) =
         match synced with
         |true ->
             let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -113,7 +115,7 @@ module rec Rules =
         |false ->
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode keys key leafornode
 
-    let checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode =
+    let inline checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode =
         let isComplex, fieldType =
             match typetype with
             |TypeType.Simple t -> false, t
@@ -125,30 +127,30 @@ module rec Rules =
         match typesMap.TryFind fieldType with
         |Some values ->
             let value = key.Trim([|'\"'|])
-            if value |> firstCharEquals '@' then OK else
+            if value |> firstCharEqualsAmp then OK else
             let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
 
             //let values = values typeKeyMap values
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode]
 
-    let checkVariableField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode =
+    let inline checkVariableField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode =
         match varMap.TryFind varName with
         |Some values ->
             let value = key.Trim([|'\"'|])
-            if value |> firstCharEquals '@' then OK else
+            if value |> firstCharEqualsAmp then OK else
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) severity) leafornode]
 
-    let checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
+    let inline checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =
         let file = key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leafornode]
 
-    let checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) =
+    let inline checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leafornode]
 
-    let checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
+    let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
         // eprintfn "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope true effectMap triggerMap key scope with
@@ -159,17 +161,19 @@ module rec Rules =
         |_ -> OK
 
 
-    let checkField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode) =
-        match field with
-        |ValueField vt -> checkValidValue enumsMap severity vt key leafornode
-        |TypeField t -> checkTypeField typesMap severity t key leafornode
-        |ScopeField s -> checkScopeField effectMap triggerMap changeScope anyScope ctx s key leafornode
-        |LocalisationField synced -> checkLocalisationField localisation defaultLang synced key leafornode
-        |FilepathField -> checkFilepathField files key leafornode
-        |IconField folder -> checkIconField files folder key leafornode
-        |VariableSetField v -> OK
-        |VariableField v -> checkVariableField varMap severity v key leafornode
-        |_ -> OK
+
+    let checkField varMap (enumsMap : Collections.Map<_, Set<_, _>>) typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode) =
+            match field with
+            |ValueField vt ->
+                checkValidValue enumsMap severity vt key leafornode
+            |TypeField t -> checkTypeField typesMap severity t key leafornode
+            |ScopeField s -> checkScopeField effectMap triggerMap changeScope anyScope ctx s key leafornode
+            |LocalisationField synced -> checkLocalisationField localisation defaultLang synced key leafornode
+            |FilepathField -> checkFilepathField files key leafornode
+            |IconField folder -> checkIconField files folder key leafornode
+            |VariableSetField v -> OK
+            |VariableField v -> checkVariableField varMap severity v key leafornode
+            |_ -> OK
 
     let checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode : IKeyPos) =
         match checkField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang (Severity.Error) ctx field key leafornode with
@@ -231,21 +235,17 @@ module rec Rules =
                     | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                     |x -> [x])
             let valueFun (leaf : Leaf) =
-                match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key (leaf :> IKeyPos) -> Some (l, r, o) |_ -> None) with
-                |[] ->
-                    if enforceCardinality && ((leaf.Key |> Seq.tryHead |> Option.map ((=) '@') |> Option.defaultValue false) |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
-                |rs -> rs <&??&> (fun (l, r, o) -> applyLeafRule ctx o r leaf) |> mergeValidationErrors "CW240"
+                let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
+                expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key (leaf :> IKeyPos) -> Some (l, r, o) |_ -> None)
+                              |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) -> applyLeafRule ctx o r leaf) createDefault true)
             let nodeFun (node : Node) =
-                match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
-                | [] ->
-                    if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
-                    //|rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
-                | matches -> matches <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o l rs node)
+                let createDefault() = if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
+                expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node -> Some (l, rs, o) |_ -> None)
+                              |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) -> applyNodeRule enforceCardinality ctx o l r node) createDefault false)
             let leafValueFun (leafvalue : LeafValue) =
-                match expandedrules |> List.choose (function |(LeafValueRule (l), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None) with
-                | [] ->
-                    if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue] else OK
-                |rs -> rs <&??&> (fun (l, o) -> applyLeafValueRule ctx o l leafvalue) |> mergeValidationErrors "CW240"
+                let createDefault() = if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue] else OK
+                expandedrules |> Seq.choose (function |(LeafValueRule (l), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None)
+                              |> (fun rs -> lazyErrorMerge rs (fun (l, o) -> applyLeafValueRule ctx o l leafvalue) createDefault true)
             let checkCardinality (node : Node) (rule : NewRule<_>) =
                 match rule with
                 |NodeRule(ValueField (ValueType.Specific key), _), opts
