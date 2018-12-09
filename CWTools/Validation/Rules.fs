@@ -736,7 +736,7 @@ module rec Rules =
         //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
         member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
         member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
-        member __.GetDefinedVariables(ctx, entity : Entity) = getDefVarInEntity ctx entity
+        member __.GetDefinedVariables(entity : Entity) = getDefVarInEntity (Map.empty) entity
 
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 
@@ -1061,6 +1061,6 @@ module rec Rules =
 
     let getDefinedVariables (foldRules : FoldRules<_>) (es : Entity list) =
         // let results = es |> List.toSeq |> PSeq.fold (fun c e -> foldRules.GetDefinedVariables(c,e)) (Collections.Map.empty)//|> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Collections.Map.empty
-        let results = es |> List.toSeq |> PSeq.map (fun e -> foldRules.GetDefinedVariables(Map.empty,e))
+        let results = es |> List.toSeq |> PSeq.map (fun e -> foldRules.GetDefinedVariables(e))
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) Collections.Map.empty
         results

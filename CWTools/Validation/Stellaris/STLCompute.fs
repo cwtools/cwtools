@@ -83,5 +83,6 @@ module STLCompute =
         let setflags = findAllSetFlags e
         let savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
         let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes )(e)) else None)
+        let definedvariable = (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
         let hastechs = getAllTechPrereqs e
-        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs)
+        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable)

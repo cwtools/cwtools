@@ -11,5 +11,6 @@ module EU4Compute =
         // let setflags = findAllSetFlags e
         // let savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
         let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes)(e)) else None)
+        let definedvariable = (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
         // let hastechs = getAllTechPrereqs e
-        EU4ComputedData(referencedtypes)
+        EU4ComputedData(referencedtypes, definedvariable)
