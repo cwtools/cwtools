@@ -124,6 +124,7 @@ module STLConstants =
         |Megastructure
         |PlanetClass
         |Starbase
+        |Resource
         |Any
     type RawStaticModifier =
         {
@@ -160,6 +161,7 @@ module STLConstants =
             | 65536 -> ModifierCategory.Megastructure
             | 131072 -> ModifierCategory.PlanetClass
             | 262144 -> ModifierCategory.Starbase
+            | 524288 -> ModifierCategory.Resource
             |_ -> ModifierCategory.Any
         { tag = raw.tag; categories = [category]; core = true}
 

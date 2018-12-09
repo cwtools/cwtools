@@ -19,6 +19,7 @@ open System.Threading.Tasks
 open FSharp.Collections.ParallelSeq
 open System.Globalization
 open CWTools.Process.Scopes
+open FSharpx.Collections
 
 
 module STLValidation =
@@ -84,6 +85,7 @@ module STLValidation =
         ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
         ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
         ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
+        ModifierCategory.Resource, [Scope.Country; Scope.Planet]
     ]
 
     let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
@@ -443,36 +445,86 @@ module STLValidation =
             [
                 {tag = "shipsize_"+k+"_build_speed_mult"; categories = [ModifierCategory.Starbase]; core = true }
                 {tag = "shipsize_"+k+"_build_cost_mult"; categories = [ModifierCategory.Starbase]; core = true }
-                {tag = "shipsize_"+k+"_upkeep_mult"; categories = [ModifierCategory.Ship]; core = true }
                 {tag = "shipsize_"+k+"_hull_mult"; categories = [ModifierCategory.Ship]; core = true }
-                {tag = "shipsize_"+k+"_hull_add"; categories = [ModifierCategory.Ship]; core = true }
+                // {tag = "shipsize_"+k+"_damage_mult"; categories = [ModifierCategory.Ship]; core = true }
+                // {tag = "shipsize_"+k+"_evasion_addt"; categories = [ModifierCategory.Ship]; core = true }
+                // {tag = "shipsize_"+k+"_disengage_mult"; categories = [ModifierCategory.Ship]; core = true }
             ])
         let shipModifiers = shipKeys |> List.collect shipModifierCreate
+        let weaponTags = es.GlobMatch("**/common/component_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
+        let weaponTagsModifierCreate =
+            (fun k ->
+            [
+                {tag = k+"_weapon_damage_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {tag = k+"_weapon_fire_rate_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {tag = k+"_speed_mult"; categories = [ModifierCategory.Ship]; core = true }
+            ])
+        let weaponModifiers = weaponTags |> List.map (fun l -> l.Value.ToRawString())
+                                             |> List.collect weaponTagsModifierCreate
 
+        let economicCategories = es.GlobMatchChildren("**/common/economic_categories/*.txt")
+        let costExtra = economicCategories |> Seq.collect (fun n -> n.Childs "triggered_cost_modifier" |> Seq.map (fun c -> c.TagText "key"))
+        let producesExtra = economicCategories |> Seq.collect (fun n -> n.Childs "triggered_produces_modifier" |> Seq.map (fun c -> c.TagText "key"))
+        let upkeepExtra = economicCategories |> Seq.collect (fun n -> n.Childs "triggered_upkeep_modifier" |> Seq.map (fun c -> c.TagText "key"))
+        let allCats = economicCategories |> List.map (fun f -> f.Key)
         let stratres = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
         let srKeys = stratres |> List.map (fun f -> f.Key)
+        let resourceModifiersCreate prefix cost produces upkeep =
+            (fun k ->
+            [
+                if cost then
+                    yield {tag = prefix+k+"_cost_add"; categories = [ModifierCategory.Resource]; core = true }
+                    yield {tag = prefix+k+"_cost_mult"; categories = [ModifierCategory.Resource]; core = true }
+                else ()
+                if produces then
+                    yield {tag = prefix+k+"_produces_add"; categories = [ModifierCategory.Resource]; core = true }
+                    yield {tag = prefix+k+"_produces_mult"; categories = [ModifierCategory.Resource]; core = true }
+                else ()
+                if upkeep then
+                    yield {tag = prefix+k+"_upkeep_add"; categories = [ModifierCategory.Resource]; core = true }
+                    yield {tag = prefix+k+"_upkeep_mult"; categories = [ModifierCategory.Resource]; core = true }
+                else ()
+            ]
+            )
+        let globalEconomicModifierCreate =
+            [
+                yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate ec true true true k))
+                yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true k))
+                yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true k))
+                yield! (upkeepExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true k))
+            ]
         let srModifierCreate =
             (fun k ->
             [
-                {tag = "static_resource_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "static_planet_resource_"+k+"_add"; categories = [ModifierCategory.Planet]; core = true }
-                {tag = "tile_resource_"+k+"_mult"; categories = [ModifierCategory.Tile]; core = true }
-                {tag = "country_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_federation_member_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_federation_member_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_subjects_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_subjects_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_strategic_resources_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_strategic_resources_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_planet_classes_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "country_planet_classes_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "tile_building_resource_"+k+"_add"; categories = [ModifierCategory.Tile]; core = true }
-                {tag = "tile_resource_"+k+"_add"; categories = [ModifierCategory.Tile]; core = true }
-                {tag = "planet_resource_"+k+"_add"; categories = [ModifierCategory.Planet]; core = true }
-                {tag = "country_resource_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
-                {tag = "max_"+k; categories = [ModifierCategory.Country]; core = true }
+                yield {tag = "country_resource_max_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
+                yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
+                yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
+                yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
+                yield! (upkeepExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
             ])
+
+        let rModifiers = globalEconomicModifierCreate
         let srModifiers = srKeys |> List.collect srModifierCreate
+
+        let pop_cats = es.GlobMatchChildren("**/common/pop_categories/*.txt") |> List.map (fun f -> f.Key)
+        let popCatModifierCreate =
+            (fun k ->
+                [
+                    {tag = "pop_cat_" + k + "_happiness"; categories = [ModifierCategory.Pop]; core = true}
+                    {tag = "pop_cat_" + k + "_political_power"; categories = [ModifierCategory.Pop]; core = true}
+                ])
+        let popCatModifiers = pop_cats |> List.collect popCatModifierCreate
+
+        let jobs = es.GlobMatchChildren("**/common/pop_jobs/*.txt") |> List.map (fun f -> f.Key)
+        let jobModifierCreate =
+            (fun k ->
+                [
+                    {tag = "job_" + k + "_add"; categories = [ModifierCategory.Planet]; core = true}
+                    {tag = "job_" + k + "_per_pop"; categories = [ModifierCategory.Planet]; core = true}
+                    {tag = "job_" + k + "_per_crime"; categories = [ModifierCategory.Planet]; core = true}
+                ])
+        let jobModifiers = jobs |> List.collect jobModifierCreate
+
         let planetclasses = es.GlobMatchChildren("**/common/planet_classes/*.txt")
         let pcKeys = planetclasses |> List.map (fun f -> f.Key)
         let pcModifiers = pcKeys |> List.map (fun k -> {tag = k+"_habitability"; categories = [ModifierCategory.PlanetClass]; core = true})
@@ -491,7 +543,7 @@ module STLValidation =
                             //|> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
-        shipModifiers @ srModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers
+        shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers
 
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
