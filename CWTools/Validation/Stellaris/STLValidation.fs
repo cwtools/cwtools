@@ -488,10 +488,10 @@ module STLValidation =
             )
         let globalEconomicModifierCreate =
             [
-                yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate ec true true true k))
-                yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true k))
-                yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true k))
-                yield! (upkeepExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true k))
+                yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate ec true true true ""))
+                yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true ""))
+                yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true ""))
+                yield! (upkeepExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true ""))
             ]
         let srModifierCreate =
             (fun k ->
