@@ -23,6 +23,12 @@ module STLLocalisationValidation =
         | true, _ -> OK
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+    let inline checkLocKeyNE (leaf : ^a) (keys : Set<string>) (lang : Lang) key =
+        if lang = STL STLLang.Default then true else
+        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+        | true, _ -> true
+        | _, true -> true
+        | _, false -> false
 
     let inline checkLocName (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string)  =
         match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
@@ -30,9 +36,17 @@ module STLLocalisationValidation =
         | _, true, _ -> OK
         | _, _, true -> OK
         | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+    let inline checkLocNameNE (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string)  =
+        match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+        | false, _, _ -> true
+        | _, true, _ -> true
+        | _, _, true -> true
+        | _, _, false -> false
 
     let inline checkLocKeysLeafOrNode (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leafornode keys l key) OK
+    let inline checkLocKeysLeafOrNodeNE (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
+        keys |> List.fold (fun state (l, keys)  -> state && checkLocKeyNE leafornode keys l key) true
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())

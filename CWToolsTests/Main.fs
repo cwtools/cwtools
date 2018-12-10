@@ -108,7 +108,9 @@ let main argv =
     if Array.tryHead argv = Some "p"
     then perf(true); 0
     elif Array.tryHead argv = Some "u"
-    then perf2(true); 0
+    then
+        perf2(true);
+        perf2(true); 0
     elif Array.tryHead argv = Some "o"
     then perf(false); 0
     elif Array.tryHead argv = Some "t"
