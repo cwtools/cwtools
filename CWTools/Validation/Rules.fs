@@ -172,7 +172,7 @@ module rec Rules =
             //let values = values typeKeyMap values
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode]
-    let inline checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode =
+    let checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode =
         let isComplex, fieldType =
             match typetype with
             |TypeType.Simple t -> false, t
@@ -229,7 +229,7 @@ module rec Rules =
         |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> OK
-    let inline checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
+    let checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
         // eprintfn "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope true effectMap triggerMap key scope with

@@ -125,8 +125,9 @@ module Files =
             let getAllFiles (scope, path) =
                 //eprintfn "%A" path
                 scriptFolders
-                        |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
+                        |> PSeq.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
+                        |> List.ofSeq
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
             let fileToResourceInput (scope, filepath : string) =
                 match Path.GetExtension(filepath) with

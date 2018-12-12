@@ -360,7 +360,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) -> struct (e, lazy (computedDataFunction e)))
 
     let updateFiles files =
-        let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
+        let news = files |> Seq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
         news
 

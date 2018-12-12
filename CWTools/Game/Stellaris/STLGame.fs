@@ -132,18 +132,27 @@ type STLGame (settings : StellarisSettings) =
             lookup.scriptedLoc <- rawLocs
 
         let updateLocalisation() =
+            let log = true
+            let timer = new System.Diagnostics.Stopwatch()
             localisationAPIs <-
+                let timer = new System.Diagnostics.Stopwatch()
                 let locs = resources.GetResources()
                             |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
                             |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
                             |> List.groupBy (fun f -> f.validate)
                             |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> STLLocalisationService)
-                let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
+                let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> PSeq.map (fun lang -> b, l.Api(lang)) |> List.ofSeq)
+                if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
                 allLocs
+            if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+            if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
+            if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
 
 
         let updateDefinedVariables() =
@@ -285,6 +294,7 @@ type STLGame (settings : StellarisSettings) =
                 lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes allentities
                 eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
+                // let results = resourceManager.Api.AllEntities() |> Seq.chunkBySize 1 |> PSeq.collect (fun s -> Seq.map (fun struct(e, (l : Lazy<STLComputedData>)) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e)))) s)
 
                 let results = resourceManager.Api.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                                 |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) Collections.Map.empty
