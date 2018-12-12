@@ -151,6 +151,8 @@ module STLScopes =
         ScopedEffect("owner_main_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, defaultDesc, "", true) //Copied owner
         ScopedEffect("system_star", [Scope.GalacticObject], Scope.Planet, EffectType.Both, defaultDesc, "", true); // Not in PDX
         ScopedEffect("observation_outpost_owner", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true); // Not in PDX
+        ScopedEffect("branch_office_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true); // New with 2.2
+
 
     ]
 // any/every/random_ship
