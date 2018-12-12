@@ -50,7 +50,7 @@ module rec Rules =
     let checkPathDir (t : TypeDefinition<_>) (pathDir : string) (file : string) =
         match t.path_strict with
         |true -> pathDir == t.path.Replace("\\","/")
-        |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
+        |false -> pathDir.StartsWith(t.path.Replace("\\","/"), System.StringComparison.OrdinalIgnoreCase)
         &&
         match t.path_file with
         |Some f -> file == f
@@ -564,6 +564,18 @@ module rec Rules =
                 fLeafValue acc leafvalue rule
             |CommentC comment ->
                 fComment acc comment rule
+        let rec foldRulesA fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
+            let recurse = foldRulesA fNode fChild fLeaf fLeafValue fComment
+            match child with
+            |NodeC node ->
+                let finalAcc = fNode acc node rule
+                fChild node rule |> Array.fold (fun a (c, r) -> recurse a c r) finalAcc
+            |LeafC leaf ->
+                fLeaf acc leaf rule
+            |LeafValueC leafvalue ->
+                fLeafValue acc leafvalue rule
+            |CommentC comment ->
+                fComment acc comment rule
 
         let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
             let fChild (ctx, _) (node : Node) ((field, options) : NewRule<_>) =
@@ -712,11 +724,25 @@ module rec Rules =
                 //         function
                 //         | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue [])
                 //         |x -> [x])
-                let innerN (c : Node) =
-                    // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node -> Some (l, rs, o) |_ -> None)
-                    //       |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) -> applyNodeRule enforceCardinality ctx o l r node) createDefault false)
-                    expandedrules |> Seq.tryFind (function |(NodeRule (l, rs), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c |_ -> false)
-                                  |> Option.bind (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
+                let leafRules = expandedrules |> Seq.choose (function |(LeafRule (l, r), o) -> Some (l, r, o) |_ -> None)
+                let nodeRules = expandedrules |> Seq.choose (function |(NodeRule (l, r), o) -> Some (l, r, o) |_ -> None)
+                let inner (child : Child) =
+                    match child with
+                    |NodeC node ->
+                        nodeRules |> Seq.tryFind (fun (l, r, o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node)
+                                  |> Option.bind (function |(l, rs, o) -> Some (NodeC node, ((NodeRule (l, rs)), o)) |_ -> None)
+                    |LeafC leaf ->
+                        leafRules |> Seq.tryFind (fun (l, r, o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf)
+                                  |> Option.bind (function |(l, r, o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                    |LeafValueC lv -> Some (LeafValueC lv, (field, options))
+                    |CommentC _ -> None
+
+
+                // let innerN (c : Node) =
+                //     // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node -> Some (l, rs, o) |_ -> None)
+                //     //       |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) -> applyNodeRule enforceCardinality ctx o l r node) createDefault false)
+                //     expandedrules |> Seq.tryFind (function |(NodeRule (l, rs), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l c.Key c |_ -> false)
+                //                   |> Option.bind (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
                     // | [] ->
                     //     // let leftClauseRule =
                     //     //     expandedrules |>
@@ -732,9 +758,10 @@ module rec Rules =
                     //     Some (NodeC c, (field, options))
                     //     // |r::_ -> Some( NodeC c, r)
                     // | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
-                let innerL (leaf : Leaf) =
-                    expandedrules |> Seq.tryFind (function |(LeafRule (l, r), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf |_ -> false)
-                                  |> Option.bind (function |(LeafRule (l, r), o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                // let innerL (leaf : Leaf) =
+                //     leafRules |> Seq.tryFind (fun (l, r, o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf)
+                //               |> Option.bind (function |(l, r, o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                    // expandedrules |> Seq.tryFind (function |(LeafRule (l, r), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l leaf.Key leaf |_ -> false)
                     // |[] ->
                         // let leftTypeRule =
                         //     expandedrules |>
@@ -746,9 +773,10 @@ module rec Rules =
                         // |Some r -> Some (LeafC l, r) //#TODO this doesn't correct handle lefttype
                     //     Some (LeafC leaf, (field, options))
                     // |(l, rs, o)::_ -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
-                let innerLV lv = Some (LeafValueC lv, (field, options))
+                // let innerLV lv = Some (LeafValueC lv, (field, options))
                 //seq { yield! node.Children |> List.choose innerN; yield! node.Leaves |> List.ofSeq |> List.choose innerL; yield! node.LeafValues |> List.ofSeq |> List.choose innerLV }
-                (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
+                //(node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
+                node.AllArray |> Array.choose inner
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
             match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
@@ -756,7 +784,7 @@ module rec Rules =
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
                 |[(n, (NodeRule (l, rs), o))] ->
-                    (node.Children |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
+                    (node.Children |> List.fold (fun a c -> foldRulesA fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
                 |_ -> acc
             |_ -> acc
 

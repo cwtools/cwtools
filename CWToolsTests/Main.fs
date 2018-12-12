@@ -95,10 +95,10 @@ let perf3(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
-    let configFiles = (if Directory.Exists "F:\\Games\\Steam\\steamapps\\common\\Stellaris/.cwtools" then getAllFoldersUnion (["F:\\Games\\Steam\\steamapps\\common\\Stellaris/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+    let configFiles = (if Directory.Exists "D:\\Git\\game\\game/.cwtools" then getAllFoldersUnion (["D:\\Git\\game\\game/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
-    let settings = emptyStellarisSettings "F:\\Games\\Steam\\steamapps\\common\\Stellaris"
+    let settings = emptyStellarisSettings "D:\\Git\\game\\game"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false}}
     let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
