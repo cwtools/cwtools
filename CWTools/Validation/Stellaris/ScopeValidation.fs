@@ -95,7 +95,7 @@ module ScopeValidation =
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
-                match changeScope false effects triggers x scopes with
+                match changeScope false false effects triggers ((StringSet.Empty(InsensitiveStringComparer()))) x scopes with
                 |NewScope (s, ignores) ->
                     valNodeTriggers root triggers effects modifiers s ignores node
                     <&&>
@@ -110,6 +110,7 @@ module ScopeValidation =
                     // |Some (_, true) -> OK
                     // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownTrigger node x
+                |_ -> OK
         |_ -> OK
 
     and valEventEffect (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (effect : Child) =
@@ -128,7 +129,7 @@ module ScopeValidation =
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
-                match changeScope false effects triggers x scopes with
+                match changeScope false false effects triggers ((StringSet.Empty(InsensitiveStringComparer()))) x scopes with
                 |NewScope (s, ignores) -> valNodeEffects node triggers effects modifiers s ignores node
                 |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
@@ -140,6 +141,7 @@ module ScopeValidation =
                     // |Some(_, true) -> OK
                     // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownEffect node x
+                |_ -> OK
         |_ -> OK
 
     and valNodeTriggers (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (ignores : string list) (node : Node) =
@@ -166,10 +168,11 @@ module ScopeValidation =
         |x when ["else"] |> List.exists (fun t -> t == x) -> false, scopes
         |x when x.Contains("parameter:") -> false, scopes
         |x ->
-            match changeScope false effects triggers x scopes with
+            match changeScope false false effects triggers (StringSet.Empty(InsensitiveStringComparer())) x scopes with
                 |NewScope (s, _) -> false, s
                 |WrongScope _ -> false, scopes
                 |NotFound -> false, scopes
+                |_ -> false, scopes
 
     let getScopeContextAtPos (targetpos : pos) (triggers : Effect<_> list) (effects : Effect<_> list) (root : Node) =
         let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))

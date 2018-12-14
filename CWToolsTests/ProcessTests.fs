@@ -28,6 +28,7 @@ open CWTools.Validation
 open CWTools.Validation.Rules
 open CWTools.Validation.Stellaris.STLRules
 open CWTools.Process.STLScopes
+open CWTools.Process.Scopes
 
 
 let emptyStellarisSettings (rootDirectory) = {
