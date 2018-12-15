@@ -40,7 +40,8 @@ module rec ConfigParser =
     | AliasField of string
     | SubtypeField of string * bool * NewRule<'a> list
     | VariableSetField of string
-    | VariableField of string
+    | VariableGetField of string
+    | VariableField
     let specificField x = ValueField(ValueType.Specific x)
     type Options<'a> = {
         min : int
@@ -290,7 +291,7 @@ module rec ConfigParser =
             |Some alias -> AliasField alias
             |None -> ValueField ValueType.Scalar
         |"scope_field" -> ScopeField (anyScope)
-        |"variable_field" -> VariableField "var"
+        |"variable_field" -> VariableField
         |x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             |Some variable ->
@@ -299,7 +300,7 @@ module rec ConfigParser =
         |x when x.StartsWith "value[" ->
             match getSettingFromString x "value" with
             |Some variable ->
-                VariableField variable
+                VariableGetField variable
             |None -> ValueField ValueType.Scalar
         |x when x.StartsWith "scope[" ->
             match getSettingFromString x "scope" with

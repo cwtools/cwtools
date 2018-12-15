@@ -79,7 +79,8 @@ module Scopes =
             if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
                 let key, varOnly = if key.StartsWith("var:", StringComparison.OrdinalIgnoreCase) then key.Substring(4), true else key, false
-                let keys = key.Split('.')
+                let ampersandSplit = key.Split([|'@'|], 2)
+                let keys = ampersandSplit.[0].Split('.')
                 let keylength = keys.Length - 1
                 let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
                 let inner ((context : ScopeContext<'T>), (changed : bool)) (nextKey : string) (last : bool) =
@@ -95,15 +96,15 @@ module Scopes =
                         // if skipEffect then (context, false), NotFound else
                         match Option.orElse effectMatch triggerMatch with
                         | None ->
-                            if varOnly
+                            if last && vars.Contains nextKey
                             then
-                                if last && vars.Contains nextKey
-                                then
-                                    (context, false), VarFound
-                                else
-                                    (context, false), VarNotFound nextKey
+                                (context, false), VarFound
                             else
-                                (context, false), NotFound
+                                if varOnly
+                                then
+                                    (context, false), VarNotFound nextKey
+                                else
+                                    (context, false), NotFound
                         | Some e ->
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope :> IScope<_>
@@ -122,6 +123,23 @@ module Scopes =
                     |(_, _), None -> NotFound
                     |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
                     |(_, false), Some r -> r
+                if ampersandSplit.Length > 1
+                then
+                    let keys = ampersandSplit.[1].Split('.')
+                    let keylength = keys.Length - 1
+                    let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
+                    let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                    let tres2 =
+                        match tres with
+                        |(_, _), None -> NotFound
+                        |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                        |(_, false), Some r -> r
+                    match res2, tres2 with
+                    |_, NotFound -> NotFound
+                    |_, VarNotFound s -> VarNotFound s
+                    |VarFound, _ -> VarFound
+                    |_, _ -> NotFound
+                else
                 // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
                 // x
                 res2)

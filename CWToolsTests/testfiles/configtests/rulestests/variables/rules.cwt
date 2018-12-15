@@ -9,4 +9,14 @@ event = {
     set_test = value_set[test]
     ## cardinality = 0..inf
     get_test = value[test]
+
+    ## cardinality = 0..inf
+    save_var = value_set[variable]
+    ## cardinality = 0..inf
+    scope_field = {
+        test = test
+    }
+
+    ## cardinality = 0..inf
+    use_variable = variable_field
 }

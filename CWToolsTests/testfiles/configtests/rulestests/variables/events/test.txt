@@ -8,3 +8,54 @@ country_event = {
     #error
     get_test = test3
 }
+
+country_event = {
+    save_var = my_var
+    FROM = {
+        test = test
+    }
+    var:my_var = {
+        test = test
+    }
+    var:FROM.my_var = {
+        test = test
+    }
+    FROM.my_var = {
+        test = test
+    }
+    #error
+    var:my_var2 = {
+        test = test
+    }
+    #error
+    my_var2 = {
+        test = test
+    }
+}
+
+country_event = {
+    save_var = my_var
+
+    use_variable = my_var
+    use_variable = FROM.my_var
+    use_variable = var:my_var
+    use_variable = var:FROM.my_var
+
+    #error
+    use_variable = my_var2
+}
+
+country_event = {
+    save_var = my_var_at@FROM
+
+    use_variable = my_var_at@PREV
+    use_variable = my_var@PREV
+    use_variable = my_var@my_var
+    use_variable = my_var@FROM.FROM
+    use_variable = my_var@FROM.my_var
+    #error
+    use_variable = my_var@FROM.my_va
+
+    #error
+    use_variable = my_var_no@my_var
+}

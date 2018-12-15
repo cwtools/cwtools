@@ -8,7 +8,7 @@ module STLLocalisation =
     open FParsec
 
     type STLLocalisationService(files : (string * string) list) =
-        // let language : STLLang = 
+        // let language : STLLang =
         //     match lang with
         //     | STL l -> l
         //     | _ -> failwith "Wrong language for localisation"
@@ -32,22 +32,23 @@ module STLLocalisation =
             |"l_russian" -> Some STLLang.Russian
             |"l_polish" -> Some STLLang.Polish
             |"l_braz_por" -> Some STLLang.Braz_Por
+            |"l_simp_chinese" -> Some STLLang.Chinese
             |"l_default" -> Some STLLang.Default
             |_ -> None
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let mutable recordsL : struct (Entry * Lang) list = []
         let mutable records : struct (Entry * Lang) array = [||]
-        let addFile f t = 
+        let addFile f t =
             //eprintfn "%s" f
             match parseLocText t f with
             | Success({key = key; entries = entries}, _, _) ->
                 match keyToLanguage key with
-                |Some l -> 
+                |Some l ->
                     let es = entries |> List.map (fun e -> struct (e, STL l))
                     recordsL <- es@recordsL; (true, es.Length, "")
                 |None ->
                     (true, entries.Length, "")
-            | Failure(msg, _, _) -> 
+            | Failure(msg, _, _) ->
                 (false, 0, msg)
         let addFiles (x : (string * string) list) = List.map (fun (f, t )-> (f, addFile f t)) x
 
@@ -58,29 +59,29 @@ module STLLocalisation =
         let getDesc lang x = recordsLang lang |> List.tryPick (fun r -> if r.key = x then Some r.desc else None) |> Option.defaultValue x
 
         let getKeys lang = recordsLang lang |> List.map (fun r -> r.key)
-        
+
         do
             results <- addFiles files |> dict
             records <- recordsL |> Array.ofList
             recordsL <- []
 
         new(localisationSettings : LocalisationSettings) =
-            eprintfn "Loading STL localisation in %s" localisationSettings.folder 
+            eprintfn "Loading STL localisation in %s" localisationSettings.folder
             match Directory.Exists(localisationSettings.folder) with
-            | true -> 
-                        let files = Directory.EnumerateDirectories localisationSettings.folder 
+            | true ->
+                        let files = Directory.EnumerateDirectories localisationSettings.folder
                                         |> List.ofSeq
                                         |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
                         let rootFiles = Directory.EnumerateFiles localisationSettings.folder |> List.ofSeq
                         let actualFiles = files @ rootFiles |> List.map (fun f -> f, File.ReadAllText(f, System.Text.Encoding.UTF8))
                         STLLocalisationService(actualFiles)
-            | false -> 
+            | false ->
                 eprintfn "%s not found" localisationSettings.folder
                 STLLocalisationService([])
         member __.Api lang = {
             new ILocalisationAPI with
                 member __.Results = results
-                member __.Values = values lang 
+                member __.Values = values lang
                 member __.GetKeys = getKeys lang
                 member __.GetDesc x = getDesc lang x
                 member __.GetLang = lang
