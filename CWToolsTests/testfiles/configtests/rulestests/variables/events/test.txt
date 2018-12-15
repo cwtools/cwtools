@@ -59,3 +59,13 @@ country_event = {
     #error
     use_variable = my_var_no@my_var
 }
+
+country_event = {
+    save_var = FROM.my_scoped_var@PREV
+
+    use_variable = my_scoped_var
+}
+
+country_event = {
+    use_variable = my_preset_variable
+}

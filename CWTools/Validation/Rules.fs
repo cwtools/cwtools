@@ -751,7 +751,7 @@ module rec Rules =
                     // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap localisation files changeScope anyScope defaultLang ctx l node.Key node -> Some (l, rs, o) |_ -> None)
                     //       |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) -> applyNodeRule enforceCardinality ctx o l r node) createDefault false)
                     expandedrules |> Seq.tryFind (function |(NodeRule (l, rs), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l c.Key c |_ -> false)
-                                  |> Option.bind (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
+                                  |> Option.bind (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> Some (NodeC c, (field, options)))//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
                     // | [] ->
                     //     // let leftClauseRule =
                     //     //     expandedrules |>
@@ -787,6 +787,14 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
             match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
+            |Some typedef when typedef.skipRootKey.IsSome ->
+                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                match typedef.skipRootKey.Value, typerules with
+                |SkipRootKey.AnyKey, [(n, (NodeRule (l, rs), o))]  ->
+                    (node.Children |> List.collect (fun n -> n.Children) |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
+                |SkipRootKey.SpecificKey srk, [(n, (NodeRule (l, rs), o))]  ->
+                    (node.Children |> List.collect (fun n -> if n.Key == srk then n.Children else []) |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
+                |_ -> acc
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
@@ -823,25 +831,26 @@ module rec Rules =
             let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             res
         let getDefVarInEntity (ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
+            let getVariableFromString (s : string) = s.Split('@').[0].Split('.') |> Array.last
             let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
                 match field with
                 |LeafRule (_, VariableSetField v) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (leaf.Value.ToRawString().Split('@').[0], leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString (leaf.Value.ToRawString()), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |LeafRule (VariableSetField v, _) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (leaf.Key.Split('@').[0], leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString leaf.Key, leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (field, _) =
                 match field with
                 |LeafValueRule (VariableSetField v) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (leafvalue.Value.ToRawString().Split('@').[0], leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString (leafvalue.Value.ToRawString()), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fNode (res : Collections.Map<string, (string * range) list>) (node : Node) ((field, option) : NewRule<_>) =
                 match field with
                 |NodeRule (VariableSetField v, _) ->
-                    res |> (fun m -> m.Add(v, (node.Key.Split('@').[0], node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString node.Key, node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fComment (res) _ _ = res
 

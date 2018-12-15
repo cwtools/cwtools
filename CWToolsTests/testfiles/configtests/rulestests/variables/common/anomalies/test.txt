@@ -1,0 +1,8 @@
+test = {
+    test = {
+        set_test = my_value
+        get_test = my_value
+        #error
+        get_test = my_false_value
+    }
+}

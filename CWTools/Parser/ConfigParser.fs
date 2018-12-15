@@ -512,19 +512,42 @@ module rec ConfigParser =
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
 
+
+    let processValue (node : Node) (comments : string list) =
+        match node.Key with
+        |x when x.StartsWith("value") ->
+            let enumname = getSettingFromString node.Key "value"
+            let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString().Trim([|'\"'|]))
+            match enumname with
+            |Some en -> Some (en, values)
+            |None -> None
+        |_ -> None
+
+    let processChildValue ((child, comments) : Child * string list) =
+        match child with
+        |NodeC n when n.Key == "values" ->
+            let inner ((child2, comments2) : Child * string list) =
+                match child2 with
+                |NodeC n2 -> (processValue n2 comments2)
+                |_ -> None
+            Some (getNodeComments n |> List.choose inner)
+        |_ -> None
+
+
     let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
         let types = nodes |> List.choose (processChildType parseScope allScopes anyScope) |> List.collect id
         let enums = nodes |> List.choose processChildEnum |> List.collect id
         let complexenums = nodes |> List.choose processComplexChildEnum |> List.collect id
-        rules, types, enums, complexenums
+        let values = nodes |> List.choose processChildValue |> List.collect id
+        rules, types, enums, complexenums, values
 
     let parseConfig (parseScope) (allScopes) (anyScope) filename fileString =
         //eprintfn "parse"
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
+        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [], [])
         |Success(s,_,_) ->
             //eprintfn "parsed %A" s
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)

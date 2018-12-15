@@ -138,6 +138,7 @@ type EU4Game(settings : EU4Settings) =
         let mutable simpleEnums = []
         let mutable complexEnums = []
         let mutable tempTypes = []
+        let mutable tempValues = Map.empty
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         (fun rulesSettings ->
@@ -145,7 +146,7 @@ type EU4Game(settings : EU4Settings) =
             timer.Start()
             match rulesSettings with
             |Some rulesSettings ->
-                let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
                 lookup.scriptedEffects <- updateScriptedEffects rules
                 lookup.scriptedTriggers <- updateScriptedTriggers rules
                 lookup.typeDefs <- types
@@ -154,6 +155,7 @@ type EU4Game(settings : EU4Settings) =
                 simpleEnums <- enums
                 complexEnums <- complexenums
                 tempTypes <- types
+                tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
                 eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
@@ -174,7 +176,10 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
-            lookup.varDefInfo <- getDefinedVariables tempFoldRules (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            let results = resourceManager.Api.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
+                            |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
+
+            lookup.varDefInfo <- results
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
 
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

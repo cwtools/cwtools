@@ -2,6 +2,10 @@ types = {
     type[event] = {
         path = "game/events"
     }
+    type[skipevent] = {
+        path = "game/common/anomalies"
+        skip_root_key = any
+    }
 }
 
 event = {
@@ -19,4 +23,18 @@ event = {
 
     ## cardinality = 0..inf
     use_variable = variable_field
+}
+
+skipevent = {
+    ## cardinality = 0..inf
+    set_test = value_set[skipevent]
+    ## cardinality = 0..inf
+    get_test = value[skipevent]
+
+}
+
+values = {
+    value[variable] = {
+        my_preset_variable
+    }
 }

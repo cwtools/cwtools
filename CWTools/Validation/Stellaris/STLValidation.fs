@@ -85,7 +85,7 @@ module STLValidation =
         ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
         ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
         ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
-        ModifierCategory.Resource, [Scope.Country; Scope.Planet]
+        ModifierCategory.Resource, [Scope.Country; Scope.Planet; Scope.Pop; Scope.Starbase]
     ]
 
     let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =

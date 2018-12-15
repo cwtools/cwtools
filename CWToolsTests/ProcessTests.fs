@@ -109,7 +109,7 @@ let testc =
                           ## cardinality = 0..1\n\
                           effect = effect\n\
                           }"
-            let rules, types, enums, _ = parseConfig parseScope allScopes Scope.Any "" config
+            let rules, types, enums, _, _ = parseConfig parseScope allScopes Scope.Any "" config
             let Typerules = rules |> List.choose (function |TypeRule (_, rs) -> Some (rs) |_ -> None)
             let input =    "create_starbase = {\n\
                             owner = this \n\
