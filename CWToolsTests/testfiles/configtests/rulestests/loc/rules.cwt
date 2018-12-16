@@ -4,6 +4,8 @@ types = {
         localisation = {
             name = "$"
             description = "$_desc"
+            ## required
+            required = "$_required"
         }
     }
     type[event] = {

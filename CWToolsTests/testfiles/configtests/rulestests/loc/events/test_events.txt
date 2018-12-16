@@ -2,7 +2,9 @@ event = {
     type_loc_ref = my_ship
     #error
     #error
+    #error
     type_loc_ref = my_ship_no_loc
+    #error
     #error
     #error
     #error

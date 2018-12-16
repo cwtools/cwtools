@@ -197,13 +197,27 @@ type STLGame (settings : StellarisSettings) =
         let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
         let localisationCheck (entities : struct (Entity * Lazy<STLComputedData>) list) = validationManager.ValidateLocalisation(entities)
 
+        let globalTypeDefLoc () =
+            let validateLoc (values : (string * range) list) (locdef : TypeLocalisation)  =
+                values
+                    |> List.filter (fun (s, _) -> s.Contains(".") |> not)
+                    <&!&> (fun (key, range) ->
+                                let fakeLeaf = LeafValue(Value.Bool true, range)
+                                let lockey = locdef.prefix + key + locdef.suffix
+                                checkLocKeysLeafOrNode localisationKeys lockey fakeLeaf)
+            let validateType (typename : string) (values : (string * range) list) =
+                match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
+                |None -> OK
+                |Some td -> td.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
+            lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateType t l)
         let globalLocalisation () =
             let locfiles =  resources.GetResources()
                             |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
                             |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
                             |> List.map (fun f -> f.filepath)
             let locFileValidation = validateLocalisationFiles locfiles
-            lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&> locFileValidation |> (function |Invalid es -> es |_ -> [])
+            let globalTypeLoc = globalTypeDefLoc()
+            lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
         let mutable errorCache = Map.empty
         let updateFile (shallow : bool) filepath (filetext : string option) =

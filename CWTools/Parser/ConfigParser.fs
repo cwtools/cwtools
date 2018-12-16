@@ -99,6 +99,7 @@ module rec ConfigParser =
         name : string
         prefix : string
         suffix: string
+        required : bool
     }
     type TypeDefinition<'a> = {
         name : string
@@ -441,12 +442,13 @@ module rec ConfigParser =
         let parseLocalisation ((child : Child), comments : string list) =
             match child with
             |LeafC loc ->
+                let required = comments |> List.exists (fun s -> s.Contains "required")
                 let key = loc.Key
                 let value = loc.Value.ToRawString()
                 let dollarIndex = value.IndexOf "$"
                 let prefix = value.Substring(0, dollarIndex)
                 let suffix = value.Substring(dollarIndex + 1)
-                Some { name = key; prefix = prefix; suffix = suffix }
+                Some { name = key; prefix = prefix; suffix = suffix; required = required }
             |_ -> None
         match node.Key with
         |x when x.StartsWith("type") ->
