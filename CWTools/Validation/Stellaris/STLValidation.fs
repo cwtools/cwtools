@@ -444,8 +444,9 @@ module STLValidation =
             (fun k ->
             [
                 {tag = "shipsize_"+k+"_build_speed_mult"; categories = [ModifierCategory.Starbase]; core = true }
-                {tag = "shipsize_"+k+"_build_cost_mult"; categories = [ModifierCategory.Starbase]; core = true }
+                // {tag = "shipsize_"+k+"_build_cost_mult"; categories = [ModifierCategory.Starbase]; core = true }
                 {tag = "shipsize_"+k+"_hull_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {tag = "shipsize_"+k+"_hull_add"; categories = [ModifierCategory.Ship]; core = true }
                 // {tag = "shipsize_"+k+"_damage_mult"; categories = [ModifierCategory.Ship]; core = true }
                 // {tag = "shipsize_"+k+"_evasion_addt"; categories = [ModifierCategory.Ship]; core = true }
                 // {tag = "shipsize_"+k+"_disengage_mult"; categories = [ModifierCategory.Ship]; core = true }
