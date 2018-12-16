@@ -1,0 +1,6 @@
+my_ship = {
+
+}
+my_ship_no_loc = {
+    
+}

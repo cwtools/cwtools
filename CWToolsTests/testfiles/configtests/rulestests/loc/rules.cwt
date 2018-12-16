@@ -1,0 +1,21 @@
+types = {
+    type[ship_size] = {
+        path = "game/common/ship_sizes"
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+ship_size = {
+
+}
+
+event = {
+    ## cardinality = 0..inf
+    type_loc_ref = <ship_size>
+}

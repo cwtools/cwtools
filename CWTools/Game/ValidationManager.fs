@@ -15,6 +15,7 @@ type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S :> IScope<'
     lookup : Lookup<'S>
     lookupValidators : (LookupValidator<'T, 'S> * string) list
     ruleApplicator : RuleApplicator<'S> option
+    foldRules : FoldRules<'S> option
     useRules : bool
     debugRulesOnly : bool
     localisationKeys : unit -> (Lang * Set<string>) list
@@ -51,6 +52,13 @@ type ValidationManager<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and '
         let oldEntities = EntitySet (resources.AllEntities())
         let newEntities = EntitySet entities
         let vs = (settings.localisationValidators |> List.map (fun v -> v oldEntities (settings.localisationKeys()) newEntities) |> List.fold (<&&>) OK)
+        let typeVs =
+            if settings.useRules && settings.foldRules.IsSome
+            then
+                eprintfn "locval"
+                (entities |> List.map (fun struct (e, _) -> e)) <&!&> settings.foldRules.Value.GetTypeLocalisationErrors
+            else OK
+        let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
 

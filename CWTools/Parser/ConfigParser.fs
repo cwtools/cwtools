@@ -95,6 +95,11 @@ module rec ConfigParser =
         pushScope : 'a option
     }
     type SkipRootKey = |SpecificKey of string |AnyKey
+    type TypeLocalisation = {
+        name : string
+        prefix : string
+        suffix: string
+    }
     type TypeDefinition<'a> = {
         name : string
         nameField : string option
@@ -107,6 +112,7 @@ module rec ConfigParser =
         skipRootKey : SkipRootKey option
         type_per_file : bool
         warningOnly : bool
+        localisation : TypeLocalisation list
     }
     type EnumDefinition = string * string list
     type ComplexEnumDef = {
@@ -432,6 +438,16 @@ module rec ConfigParser =
                 |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope)); typeKeyField = typekeyfilter; pushScope = pushScope }
                 |None -> None
             |_ -> None
+        let parseLocalisation ((child : Child), comments : string list) =
+            match child with
+            |LeafC loc ->
+                let key = loc.Key
+                let value = loc.Value.ToRawString()
+                let dollarIndex = value.IndexOf "$"
+                let prefix = value.Substring(0, dollarIndex)
+                let suffix = value.Substring(dollarIndex + 1)
+                Some { name = key; prefix = prefix; suffix = suffix }
+            |_ -> None
         match node.Key with
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
@@ -443,7 +459,9 @@ module rec ConfigParser =
             let skiprootkey = if node.Has "skip_root_key" then (let text = node.TagText "skip_root_key" in if text = "any" then Some SkipRootKey.AnyKey else Some (SkipRootKey.SpecificKey text)) else None
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
-            //eprintfn "cs %A" comments
+            let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
+
+            eprintfn "lt %A" localisation
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 |Some c ->
@@ -454,7 +472,7 @@ module rec ConfigParser =
                     |_ -> None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict}
+            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation}
             |None -> None
         |_ -> None
 
@@ -590,6 +608,7 @@ module rec ConfigParser =
             skipRootKey = None
             warningOnly = false
             type_per_file = false
+            localisation = []
         }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -696,6 +715,7 @@ module rec ConfigParser =
             path_strict = false
             path_file = None
             type_per_file = false
+            localisation = []
         }
     let shipSizeType =
         {
@@ -710,6 +730,7 @@ module rec ConfigParser =
             path_strict = false
             path_file = None
             type_per_file = false
+            localisation = []
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

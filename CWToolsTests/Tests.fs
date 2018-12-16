@@ -145,7 +145,7 @@ let tests =
             ]
     ]
 
-let testFolder folder testsname config configfile configOnly (culture : string) =
+let testFolder folder testsname config configfile configOnly configLoc (culture : string) =
     testList (testsname + culture) [
         Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
         Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
@@ -157,7 +157,7 @@ let testFolder folder testsname config configfile configOnly (culture : string) 
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = configOnly} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
@@ -179,20 +179,20 @@ let testFolder folder testsname config configfile configOnly (culture : string) 
 
 let testSubdirectories dir =
     let dirs = Directory.EnumerateDirectories dir
-    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true (d + "/rules.cwt") true "en-GB")
+    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true (d + "/rules.cwt") true true "en-GB")
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false "" false "en-GB"
-        testFolder "./testfiles/validationtests/gfxtests" "gfx" false "" false "en-GB"
-        testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false "en-GB"
-        testFolder "./testfiles/validationtests/variabletests" "variables" false "" false "en-GB"
-        testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false "en-GB"
-        testFolder "./testfiles/validationtests/eventtests" "events" false "" false "en-GB"
-        testFolder "./testfiles/validationtests/weighttests" "weights" false "" false"en-GB"
-        testFolder "./testfiles/multiplemodtests" "multiple" false "" false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false "ru-RU"
+        testFolder "./testfiles/validationtests/interfacetests" "interface" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/variabletests" "variables" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/eventtests" "events" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/weighttests" "weights" false "" false false "en-GB"
+        testFolder "./testfiles/multiplemodtests" "multiple" false "" false false "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false false "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false false "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]

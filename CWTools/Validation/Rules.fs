@@ -298,6 +298,19 @@ module rec Rules =
         let leaf = LeafValue(Value.String key)
         checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx field key leaf
 
+    let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (localisation) (typeKey : string) (key : string) (leafornode) =
+        eprintfn "vtl %s %s" typeKey key
+        match typedefs |> List.tryFind (fun t -> t.name == typeKey) with
+        |None -> eprintfn "lvf %s %s" typeKey key; OK
+        |Some typedef ->
+            let inner =
+                (fun l ->
+                let lockey = l.prefix + key + l.suffix
+                eprintfn "lv %s" lockey
+                CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
+            eprintfn "lvt %A" typedef.localisation
+            typedef.localisation <&!&> inner
+
     // let inline ruleApplicatorCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
     // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
     type RuleApplicator<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
@@ -856,6 +869,42 @@ module rec Rules =
 
             let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             res
+
+        let validateLocalisationFromTypes (entity : Entity) =
+            let fLeaf (res : ValidationResult) (leaf : Leaf) ((field, _) : NewRule<_>) =
+                match field with
+                |LeafRule (_, TypeField (TypeType.Simple t)) ->
+                // |Field.TypeField t ->
+                    eprintfn "llr"
+                    let typename = t.Split('.').[0]
+                    eprintfn "llr2 %s" typename
+                    validateTypeLocalisation typedefs localisation typename (leaf.Value.ToRawString()) leaf <&&> res
+                |LeafRule (TypeField (TypeType.Simple t), _) ->
+                // |Field.TypeField t ->
+                    let typename = t.Split('.').[0]
+                    validateTypeLocalisation typedefs localisation typename (leaf.Key) leaf <&&> res
+                |_ -> res
+            let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
+                match field with
+                |LeafValueRule (TypeField (TypeType.Simple t)) ->
+                // |Field.TypeField t ->
+                    let typename = t.Split('.').[0]
+                    validateTypeLocalisation typedefs localisation typename (leafvalue.Value.ToRawString()) leafvalue <&&> res
+                |_ -> res
+            let fNode (res : ValidationResult) (node : Node) (field, _) =
+                match field with
+                |NodeRule (TypeField (TypeType.Simple t), _) ->
+                // |Field.TypeField t ->
+                    let typename = t.Split('.').[0]
+                    validateTypeLocalisation typedefs localisation typename (node.Key) node <&&> res
+                |_ -> res
+
+            let fComment (res) _ _ = res
+            let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
+
+            let ctx = OK
+            let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            res
         let convertToOutput s =
             {
                 OutputScopeContext.From = s.From |> List.map (fun f -> f :> obj :?> 'T2)
@@ -868,6 +917,7 @@ module rec Rules =
         member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
         member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
         member __.GetDefinedVariables(entity : Entity) = getDefVarInEntity (Map.empty) entity
+        member __.GetTypeLocalisationErrors(entity : Entity) = validateLocalisationFromTypes entity
 
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 
