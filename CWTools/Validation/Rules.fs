@@ -979,6 +979,12 @@ module rec Rules =
                 |LeafRule(ValueField(ValueType.Specific _), _) -> true
                 |NodeRule(ValueField(ValueType.Specific _), _) -> true
                 |_ -> false
+            let ruleToDistinctKey =
+                function
+                |LeafRule(ValueField(ValueType.Specific s), _) -> s
+                |NodeRule(ValueField(ValueType.Specific s), _) -> s
+                |_ -> ""
+
             let rulePrint (i : int) =
                 function
                 |LeafRule(ValueField(ValueType.Specific s), r) ->
@@ -988,6 +994,7 @@ module rec Rules =
                 |_ -> ""
 
             let requiredRules = rules |> List.filter (fun (f, o) -> o.min >= 1 && filterToCompletion f)
+                                      |> List.distinctBy (fun (f, _) -> ruleToDistinctKey f)
                                       |> List.mapi (fun i (f, _) -> rulePrint i f)
                                       |> String.concat ""
             Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
