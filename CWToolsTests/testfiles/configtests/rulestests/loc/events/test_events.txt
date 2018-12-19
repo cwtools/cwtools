@@ -5,8 +5,8 @@ event = {
     #error
     type_loc_ref = my_ship_no_loc
     #error
-    #error
-    #error
-    #error
     type_loc_ref = my_ship_fake
+    #error
+    #error
+    type_loc_ref = my_ship_sub
 }

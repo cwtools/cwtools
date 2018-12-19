@@ -5,3 +5,7 @@ my_ship = {
 my_ship_no_loc = {
 
 }
+#error
+my_ship_sub = {
+    subtype = yes
+}

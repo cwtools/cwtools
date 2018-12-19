@@ -93,6 +93,7 @@ module rec ConfigParser =
         rules : NewRule<'a> list
         typeKeyField : string option
         pushScope : 'a option
+        localisation : TypeLocalisation list
     }
     type SkipRootKey = |SpecificKey of string |AnyKey
     type TypeLocalisation = {
@@ -424,21 +425,6 @@ module rec ConfigParser =
     // Types
 
     let processType (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) =
-        let parseSubType ((child : Child), comments : string list) =
-            match child with
-            |NodeC subtype when subtype.Key.StartsWith "subtype" ->
-                let typekeyfilter =
-                    match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
-                    |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
-                    |None -> None
-                let pushScope =
-                    match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
-                    |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
-                    |None -> None
-                match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope)); typeKeyField = typekeyfilter; pushScope = pushScope }
-                |None -> None
-            |_ -> None
         let parseLocalisation ((child : Child), comments : string list) =
             match child with
             |LeafC loc ->
@@ -450,6 +436,32 @@ module rec ConfigParser =
                 let suffix = value.Substring(dollarIndex + 1)
                 Some { name = key; prefix = prefix; suffix = suffix; required = required }
             |_ -> None
+        let parseSubTypeLocalisation (subtype : Node) =
+            match subtype.Key.StartsWith("subtype[") with
+            |true ->
+                match getSettingFromString subtype.Key "subtype" with
+                |Some st ->
+                    let res = getNodeComments subtype |> List.choose parseLocalisation
+                    Some (st, res)
+                |_ -> None
+            |_ -> None
+        let parseSubType ((child : Child), comments : string list) =
+            match child with
+            |NodeC subtype when subtype.Key.StartsWith "subtype" ->
+                let typekeyfilter =
+                    match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
+                    |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
+                    |None -> None
+                let pushScope =
+                    match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
+                    |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+                    |None -> None
+                let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope))
+                match getSettingFromString (subtype.Key) "subtype" with
+                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = [] }
+                |None -> None
+            |_ -> None
+
         match node.Key with
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
@@ -462,7 +474,8 @@ module rec ConfigParser =
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
             let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
-
+            let subtypelocalisations = node.Child "localisation" |> Option.map (fun l -> l.Children |> List.choose parseSubTypeLocalisation) |> Option.defaultValue []
+            let subtypes = subtypes |> List.map (fun st -> let loc = subtypelocalisations |> List.filter (fun (stl, _) -> stl = st.name) |> List.collect snd in {st with localisation = loc})
             eprintfn "lt %A" localisation
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with

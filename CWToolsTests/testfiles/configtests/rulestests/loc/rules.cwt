@@ -6,6 +6,14 @@ types = {
             description = "$_desc"
             ## required
             required = "$_required"
+            subtype[sub] = {
+                subsub = "$_sub"
+                ## required
+                subreq = "$_sub_req"
+            }
+        }
+        subtype[sub] = {
+            subtype = yes
         }
     }
     type[event] = {
@@ -14,7 +22,8 @@ types = {
 }
 
 ship_size = {
-
+    ## cardinality = 0..1
+    subtype = bool
 }
 
 event = {

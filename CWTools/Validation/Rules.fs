@@ -300,8 +300,10 @@ module rec Rules =
 
     let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (localisation) (typeKey : string) (key : string) (leafornode) =
         eprintfn "vtl %s %s" typeKey key
-        match typedefs |> List.tryFind (fun t -> t.name == typeKey) with
-        |None -> eprintfn "lvf %s %s" typeKey key; OK
+        let typenames = typeKey.Split('.')
+        let typename = typenames.[0]
+        match typedefs |> List.tryFind (fun t -> t.name == typename) with
+        |None -> eprintfn "lvf %s %s" typename key; OK
         |Some typedef ->
             let inner =
                 (fun l ->
@@ -309,7 +311,15 @@ module rec Rules =
                 eprintfn "lv %s" lockey
                 CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
             eprintfn "lvt %A" typedef.localisation
+            let subtype =
+                if typenames.Length > 1
+                then
+                    match typedef.subtypes |> List.tryFind (fun st -> st.name == typenames.[1]) with
+                    |None -> OK
+                    |Some st -> st.localisation <&!&> inner
+                else OK
             typedef.localisation <&!&> inner
+            <&&> subtype
 
     // let inline ruleApplicatorCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
     // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
@@ -878,25 +888,30 @@ module rec Rules =
                     eprintfn "llr"
                     let typename = t.Split('.').[0]
                     eprintfn "llr2 %s" typename
-                    validateTypeLocalisation typedefs localisation typename (leaf.Value.ToRawString()) leaf <&&> res
+                    let value = leaf.Value.ToRawString()
+                    let sets =
+                        typesMap
+                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                        |> Map.toSeq |> Seq.map fst
+                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value leaf) <&&> res
                 |LeafRule (TypeField (TypeType.Simple t), _) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    validateTypeLocalisation typedefs localisation typename (leaf.Key) leaf <&&> res
+                    validateTypeLocalisation typedefs localisation t (leaf.Key) leaf <&&> res
                 |_ -> res
             let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
                 match field with
                 |LeafValueRule (TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    validateTypeLocalisation typedefs localisation typename (leafvalue.Value.ToRawString()) leafvalue <&&> res
+                    validateTypeLocalisation typedefs localisation t (leafvalue.Value.ToRawString()) leafvalue <&&> res
                 |_ -> res
             let fNode (res : ValidationResult) (node : Node) (field, _) =
                 match field with
                 |NodeRule (TypeField (TypeType.Simple t), _) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    validateTypeLocalisation typedefs localisation typename (node.Key) node <&&> res
+                    validateTypeLocalisation typedefs localisation t (node.Key) node <&&> res
                 |_ -> res
 
             let fComment (res) _ _ = res
