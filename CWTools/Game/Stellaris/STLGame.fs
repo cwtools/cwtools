@@ -207,7 +207,7 @@ type STLGame (settings : StellarisSettings) =
                                 checkLocKeysLeafOrNode localisationKeys lockey fakeLeaf)
             let validateType (typename : string) (values : (string * range) list) =
                 match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
-                |None -> eprintfn "vtvt %A" typename; OK
+                |None -> OK
                 |Some td -> td.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
             let validateSubType (typename : string) (values : (string * range) list) =
                 let splittype = typename.Split([|'.'|], 2)
@@ -293,7 +293,6 @@ type STLGame (settings : StellarisSettings) =
                     complexEnums <- complexenums
                     tempTypes <- types
                     tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
-                    eprintfn "tv %A" tempValues
                     eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
                 |None -> ()
                 let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
@@ -335,6 +334,7 @@ type STLGame (settings : StellarisSettings) =
                 validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = infoService})
             )
         let refreshRuleCaches(rules) =
+            updateModifiers()
             updateTypeDef(rules)
 
         let scopesAtPosSTL pos file text =

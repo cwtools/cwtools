@@ -299,18 +299,15 @@ module rec Rules =
         checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx field key leaf
 
     let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (localisation) (typeKey : string) (key : string) (leafornode) =
-        eprintfn "vtl %s %s" typeKey key
         let typenames = typeKey.Split('.')
         let typename = typenames.[0]
         match typedefs |> List.tryFind (fun t -> t.name == typename) with
-        |None -> eprintfn "lvf %s %s" typename key; OK
+        |None -> OK
         |Some typedef ->
             let inner =
                 (fun l ->
                 let lockey = l.prefix + key + l.suffix
-                eprintfn "lv %s" lockey
                 CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
-            eprintfn "lvt %A" typedef.localisation
             let subtype =
                 if typenames.Length > 1
                 then
@@ -885,9 +882,7 @@ module rec Rules =
                 match field with
                 |LeafRule (_, TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
-                    eprintfn "llr"
                     let typename = t.Split('.').[0]
-                    eprintfn "llr2 %s" typename
                     let value = leaf.Value.ToRawString()
                     let sets =
                         typesMap
@@ -897,21 +892,36 @@ module rec Rules =
                 |LeafRule (TypeField (TypeType.Simple t), _) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    validateTypeLocalisation typedefs localisation t (leaf.Key) leaf <&&> res
+                    let value = leaf.Key
+                    let sets =
+                        typesMap
+                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                        |> Map.toSeq |> Seq.map fst
+                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value leaf) <&&> res
                 |_ -> res
             let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
                 match field with
                 |LeafValueRule (TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    validateTypeLocalisation typedefs localisation t (leafvalue.Value.ToRawString()) leafvalue <&&> res
+                    let value = leafvalue.Value.ToRawString()
+                    let sets =
+                        typesMap
+                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                        |> Map.toSeq |> Seq.map fst
+                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value leafvalue) <&&> res
                 |_ -> res
             let fNode (res : ValidationResult) (node : Node) (field, _) =
                 match field with
                 |NodeRule (TypeField (TypeType.Simple t), _) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    validateTypeLocalisation typedefs localisation t (node.Key) node <&&> res
+                    let value = node.Key
+                    let sets =
+                        typesMap
+                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                        |> Map.toSeq |> Seq.map fst
+                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value node) <&&> res
                 |_ -> res
 
             let fComment (res) _ _ = res
@@ -1052,6 +1062,8 @@ module rec Rules =
                     types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue (p + e + s))) |> Option.defaultValue []
                 |LeafRule (VariableGetField v, _) ->
                     varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                |LeafRule (VariableSetField v, _) ->
+                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
 
                 |LeafValueRule lv ->
                     match lv with
@@ -1059,6 +1071,7 @@ module rec Rules =
                     |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |> Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map Simple
                     |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                     |NewField.VariableGetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
+                    |NewField.VariableSetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
                 |SubtypeRule(_) -> []
                 |_ -> []
@@ -1101,6 +1114,7 @@ module rec Rules =
                 |NewField.FilepathField -> files |> Set.toList |> List.map Simple
                 |NewField.ScopeField _ -> oneToOneScopes |> List.map (Simple)
                 |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
+                |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |NewField.VariableField -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |_ -> []
                 //|Field.EffectField -> findRule rootRules rest

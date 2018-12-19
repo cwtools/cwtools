@@ -476,7 +476,6 @@ module rec ConfigParser =
             let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
             let subtypelocalisations = node.Child "localisation" |> Option.map (fun l -> l.Children |> List.choose parseSubTypeLocalisation) |> Option.defaultValue []
             let subtypes = subtypes |> List.map (fun st -> let loc = subtypelocalisations |> List.filter (fun (stl, _) -> stl = st.name) |> List.collect snd in {st with localisation = loc})
-            eprintfn "lt %A" localisation
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 |Some c ->
