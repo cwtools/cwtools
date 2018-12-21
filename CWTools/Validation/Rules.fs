@@ -80,6 +80,7 @@ module rec Rules =
     // type RuleContext  = RuleContext<Scope>
     let firstCharEqualsAmp (s : string) = s.Length > 0 && s.[0] = '@'
     let quoteArray = [|'\"'|]
+    let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
     let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (key : string) leafornode =
         if key |> firstCharEqualsAmp then OK else
@@ -195,14 +196,14 @@ module rec Rules =
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then OK else
-            if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) (min Severity.Warning severity)) leafornode]
-        |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s" varName) (min Severity.Warning severity)) leafornode]
+            if values.Contains (value.Split(ampArray, 2).[0]) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode]
+        |None -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode]
     let inline checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then true else
-            if values.Contains value then true else false
+            if values.Contains (value.Split(ampArray, 2).[0]) then true else false
         |None -> false
 
     let inline checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) =

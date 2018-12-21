@@ -334,53 +334,6 @@ module STLValidation =
         foldNode2 fNode fCombine OK node
 
 
-    let valFlags : STLStructureValidator =
-        fun os es ->
-            let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? TriggerBlock as x) -> (x :> Node)::acc
-                    | (:? WeightModifierBlock as x) -> (x :> Node)::acc
-                    | _ -> acc
-                    )
-            let triggers = es.All |> List.collect (foldNode7 ftNode)
-            let precursorflags = os.AllOfTypeChildren EntityType.PrecursorCivilizations |> List.collect (fun n -> n.Values |> List.map (fun v -> FlagType.Star, v.Key))
-            let prescriptedcountriesflags =
-                os.AllOfTypeChildren EntityType.PrescriptedCountries
-                |> List.collect (fun n -> n.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())) |> Option.defaultValue [])
-                |> List.map (fun f -> FlagType.Country, f)
-            let fNode = (fun (x : Node) acc ->
-                        let newAcc =
-                            match x.Key with
-                            |"moon"
-                            |"planet" ->
-                                x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Planet, lv.Value.ToRawString())) |> Option.defaultValue []
-                            | _ ->
-                                x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Star, lv.Value.ToRawString())) |> Option.defaultValue []
-                        newAcc @ acc
-                        )
-            let ssflaggenerator (e : Entity) : obj list =
-                if e.entityType = EntityType.SolarSystemInitializers
-                then
-                    let starflags = e.entity.Children |> List.collect (fun x -> x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Star, lv.Value.ToRawString())) |> Option.defaultValue [])
-                    let planetflags = e.entity.Children |> List.collect (foldNode7 fNode)
-                    (starflags @ planetflags) |> List.map (fun a -> upcast a)
-                else []
-            // let ssflaggenerator (e : Entity) : obj list = if e.entityType = EntityType.SolarSystemInitializers then e.entity.Children |> List.collect (foldNode7 fNode) |> List.map (fun a -> upcast a) else []
-            let solarsystemflags = os.AddOrGetCached "flagsolarsystems" ssflaggenerator |> List.map (fun o -> o :?> (FlagType * string))
-            // let solarsystemflags = os.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.collect (foldNode7 fNode)
-            // let solarsystemflags =
-            //     os.AllOfTypeChildren EntityType.SolarSystemInitializers
-            //     |> List.collect (fun n -> n.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())) |> Option.defaultValue [])
-            //     |> List.map (fun f -> FlagType.Star, f)
-            let customFlags = precursorflags @ prescriptedcountriesflags @ solarsystemflags
-            let defFlags =
-                (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setflags)
-                |> (fun f -> f @ customFlags)
-                |> List.map (fun (k, f) -> k, if f.Contains "@" then f.Split('@').[0] else f)
-                |> List.groupBy fst |> List.map (fun (k, vs) -> k, List.map snd vs) |> Map.ofList
-            //let defVars = effects @ opts |> List.collect findAllSetVariables
-            triggers <&!!&> (validateUsedFlags defFlags)
-
     let valTest : STLStructureValidator =
         fun os es ->
             let fNode = (fun (x : Node) acc ->
