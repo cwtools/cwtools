@@ -801,7 +801,10 @@ module rec Rules =
                         // |Some r -> Some (LeafC l, r) //#TODO this doesn't correct handle lefttype
                     //     Some (LeafC leaf, (field, options))
                     // |(l, rs, o)::_ -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
-                let innerLV lv = Some (LeafValueC lv, (field, options))
+                let innerLV (leafvalue : LeafValue) = //Some (LeafValueC lv, (field, options))
+                    expandedrules |> Seq.tryFind (function |(LeafValueRule (lv), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx lv leafvalue.Key leafvalue |_ -> false)
+                                  |> Option.bind (function |(LeafValueRule (lv), o) -> Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
+
                 //seq { yield! node.Children |> List.choose innerN; yield! node.Leaves |> List.ofSeq |> List.choose innerL; yield! node.LeafValues |> List.ofSeq |> List.choose innerLV }
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
@@ -851,26 +854,26 @@ module rec Rules =
             let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             res
         let getDefVarInEntity (ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
-            let getVariableFromString (s : string) = s.Split('@').[0].Split('.') |> Array.last
+            let getVariableFromString (v : string) (s : string) = if v = "variable" then s.Split('@').[0].Split('.') |> Array.last else s.Split('@').[0]
             let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
                 match field with
                 |LeafRule (_, VariableSetField v) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (getVariableFromString (leaf.Value.ToRawString()), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString v (leaf.Value.ToRawString()), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |LeafRule (VariableSetField v, _) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (getVariableFromString leaf.Key, leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString v leaf.Key, leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (field, _) =
                 match field with
                 |LeafValueRule (VariableSetField v) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (getVariableFromString (leafvalue.Value.ToRawString()), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString v (leafvalue.Value.ToRawString()), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fNode (res : Collections.Map<string, (string * range) list>) (node : Node) ((field, option) : NewRule<_>) =
                 match field with
                 |NodeRule (VariableSetField v, _) ->
-                    res |> (fun m -> m.Add(v, (getVariableFromString node.Key, node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString v node.Key, node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fComment (res) _ _ = res
 
