@@ -229,7 +229,7 @@ module rec Rules =
         |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |VarFound -> OK
-        |VarNotFound s -> Invalid[inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" s) Severity.Error) leafornode]
+        |VarNotFound s -> Invalid[inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode]
         |_ -> OK
     let inline checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
         // eprintfn "scope %s %A"key ctx
@@ -247,7 +247,7 @@ module rec Rules =
         match TryParser.parseDouble key, changeScope false true effectMap triggerMap varSet key scope with
         |Some _, _ -> OK
         |_, VarFound -> OK
-        |_, VarNotFound s -> Invalid[inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" s) Severity.Error) leafornode]
+        |_, VarNotFound s -> Invalid[inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode]
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
@@ -434,7 +434,7 @@ module rec Rules =
             |xs ->
                 match ctx.scopes.CurrentScope with
                 |x when x = anyScope -> OK
-                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) leaf])
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf])
             <&&>
             checkField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang severity ctx rule (leaf.Value.ToRawString()) leaf
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) =
@@ -473,7 +473,7 @@ module rec Rules =
             |xs ->
                 match ctx.scopes.CurrentScope with
                 |x when x = anyScope  -> OK
-                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Wrong scope, in %O but expected %A" s xs) Severity.Error) node])
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
             <&&>
             match rule with
             |ScopeField s ->
@@ -484,7 +484,7 @@ module rec Rules =
                     let newCtx = {newCtx with scopes = newScopes}
                     applyClauseField enforceCardinality options.severity newCtx rules node
                 |NotFound _ ->
-                    Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) node]
+                    Invalid [inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node]
                 |WrongScope (command, prevscope, expected) ->
                     Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node]
                 |VarFound ->

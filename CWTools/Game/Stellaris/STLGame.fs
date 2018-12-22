@@ -272,6 +272,41 @@ type STLGame (settings : StellarisSettings) =
             eprintfn "Update Time: %i" timer.ElapsedMilliseconds
             res
 
+        let updateTriggerDocsScopes (rules : RootRule<_> list) =
+            let effects = lookup.scriptedEffectsMap
+            let addRequiredScopesE s (o : ConfigParser.Options<_>) =
+                let newScopes =
+                    match o.requiredScopes with
+                    |[] ->
+                        lookup.scriptedEffectsMap.TryFind(s)
+                            |> Option.map(fun se -> se.Scopes)
+                            |> Option.defaultValue []
+                    |x -> x
+                { o with requiredScopes = newScopes}
+            let addRequiredScopesT s (o : ConfigParser.Options<_>) =
+                let newScopes =
+                    match o.requiredScopes with
+                    |[] ->
+                        lookup.scriptedTriggersMap.TryFind(s)
+                            |> Option.map(fun se -> se.Scopes)
+                            |> Option.defaultValue []
+                    |x -> x
+                { o with requiredScopes = newScopes}
+            rules |> List.map (
+                    function
+                    |AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
+                        AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))
+                    |AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
+                        AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))
+                    |AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
+                        AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))
+                    |AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
+                        AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))
+                    |AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
+                        AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesE s o))
+                    |AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
+                        AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))
+                    |x -> x)
 
         let updateTypeDef =
             let mutable simpleEnums = []
@@ -288,7 +323,8 @@ type STLGame (settings : StellarisSettings) =
                     let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
                     lookup.typeDefs <- types
                     let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
-                    lookup.configRules <- rulesWithMod
+                    let rulesWithEmbeddedScopes = updateTriggerDocsScopes rulesWithMod
+                    lookup.configRules <- rulesWithEmbeddedScopes
                     simpleEnums <- enums
                     complexEnums <- complexenums
                     tempTypes <- types
