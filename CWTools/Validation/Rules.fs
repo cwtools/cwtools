@@ -493,7 +493,6 @@ module rec Rules =
                 |VarNotFound v ->
                     Invalid [inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node]
                 |_ -> Invalid [inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node]
-
             |_ -> applyClauseField enforceCardinality options.severity newCtx rules node
 
         let testSubtype (subtypes : SubTypeDefinition<_> list) (node : Node) =

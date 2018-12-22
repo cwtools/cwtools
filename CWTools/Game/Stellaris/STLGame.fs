@@ -178,7 +178,7 @@ type STLGame (settings : StellarisSettings) =
             fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
             resources = resources
             lookup = lookup
-            lookupValidators = [valAllEffects, "effects"; valAllTriggers, "triggers"; validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
+            lookupValidators = [validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
             ruleApplicator = ruleApplicator
             foldRules = infoService
             useRules = useRules
@@ -272,8 +272,7 @@ type STLGame (settings : StellarisSettings) =
             eprintfn "Update Time: %i" timer.ElapsedMilliseconds
             res
 
-        let updateTriggerDocsScopes (rules : RootRule<_> list) =
-            let effects = lookup.scriptedEffectsMap
+        let addTriggerDocsScopes (rules : RootRule<_> list) =
             let addRequiredScopesE s (o : ConfigParser.Options<_>) =
                 let newScopes =
                     match o.requiredScopes with
@@ -307,6 +306,15 @@ type STLGame (settings : StellarisSettings) =
                     |AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
                         AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))
                     |x -> x)
+        let addModifiersWithScopes () =
+            let modifierOptions (modifier : Modifier) =
+                let requiredScopes =
+                    modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
+                                        |> List.map Set.ofList
+                                        |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
+                {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes}
+            lookup.coreModifiers
+                |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
         let updateTypeDef =
             let mutable simpleEnums = []
@@ -322,8 +330,8 @@ type STLGame (settings : StellarisSettings) =
                 |Some rulesSettings ->
                     let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
                     lookup.typeDefs <- types
-                    let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
-                    let rulesWithEmbeddedScopes = updateTriggerDocsScopes rulesWithMod
+                    let rulesWithMod = rules @ addModifiersWithScopes()
+                    let rulesWithEmbeddedScopes = addTriggerDocsScopes rulesWithMod
                     lookup.configRules <- rulesWithEmbeddedScopes
                     simpleEnums <- enums
                     complexEnums <- complexenums

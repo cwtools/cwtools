@@ -164,7 +164,24 @@ module STLConstants =
             | 524288 -> ModifierCategory.Resource
             |_ -> ModifierCategory.Any
         { tag = raw.tag; categories = [category]; core = true}
+    let categoryScopeList = [
+        ModifierCategory.Army, [Scope.Army; Scope.Planet; Scope.Country]
+        ModifierCategory.Country, [Scope.Country]
+        ModifierCategory.Leader, [Scope.Leader; Scope.Country]
+        ModifierCategory.Megastructure, [Scope.Megastructure; Scope.Country]
+        ModifierCategory.Planet, [Scope.Planet; Scope.Country]
+        ModifierCategory.PlanetClass, [Scope.Planet; Scope.Pop; Scope.Country]
+        ModifierCategory.Pop, [Scope.Pop; Scope.Planet; Scope.Country]
+        ModifierCategory.PopFaction, [Scope.PopFaction; Scope.Country]
+        ModifierCategory.Science, [Scope.Ship; Scope.Country]
+        ModifierCategory.Ship, [Scope.Ship; Scope.Starbase; Scope.Fleet; Scope.Country]
+        ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
+        ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
+        ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
+        ModifierCategory.Resource, [Scope.Country; Scope.Planet; Scope.Pop; Scope.Starbase; Scope.Ship]
+    ]
 
+    let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
     type EntityType =
     |Agenda = 1
     |AmbientObjects = 2
