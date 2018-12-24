@@ -1130,12 +1130,16 @@ module rec Rules =
                 // |Field.ValueField (Enum e) -> if isLeaf then enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple else []
                 // |Field.ValueField v -> if isLeaf then getValidValues v |> Option.defaultValue [] |> List.map Simple else []
             let rec findRule (rules : NewRule<'T> list) (stack) =
-                let expandedRules =
+                let subtypedRules =
                     rules |> List.collect (
+                        function
+                        | SubtypeRule(_, _, cfs), _ -> cfs
+                        |x -> [x])
+                let expandedRules =
+                    subtypedRules |> List.collect (
                         function
                         | LeafRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
                         | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
-                        | SubtypeRule(_, _, cfs), _ -> cfs
                         |x -> [x])
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion

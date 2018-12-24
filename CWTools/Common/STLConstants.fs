@@ -169,7 +169,7 @@ module STLConstants =
         ModifierCategory.Country, [Scope.Country]
         ModifierCategory.Leader, [Scope.Leader; Scope.Country]
         ModifierCategory.Megastructure, [Scope.Megastructure; Scope.Country]
-        ModifierCategory.Planet, [Scope.Planet; Scope.Country]
+        ModifierCategory.Planet, [Scope.Planet; Scope.GalacticObject; Scope.Country]
         ModifierCategory.PlanetClass, [Scope.Planet; Scope.Pop; Scope.Country]
         ModifierCategory.Pop, [Scope.Pop; Scope.Planet; Scope.Country]
         ModifierCategory.PopFaction, [Scope.PopFaction; Scope.Country]
@@ -178,7 +178,7 @@ module STLConstants =
         ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
         ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
         ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
-        ModifierCategory.Resource, [Scope.Country; Scope.Planet; Scope.Pop; Scope.Starbase; Scope.Ship]
+        ModifierCategory.Resource, [Scope.Country; Scope.Planet; Scope.Pop; Scope.Starbase; Scope.Ship; Scope.Leader]
     ]
 
     let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
