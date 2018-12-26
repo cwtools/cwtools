@@ -16,6 +16,8 @@ open CWTools.Validation.Stellaris
 open MBrace.FsPickler
 open CWTools.Process
 open CWTools.Utilities.Position
+open System
+open FSharpPlus.Control
 
 module CWToolsCLI =
     open Argu
@@ -55,13 +57,20 @@ module CWToolsCLI =
         | Info = 4
         | All = 5
         | Localisation = 6
+    type ValidateOutputFormat =
+        | Detailed
+        | Summary
     type ValidateArgs =
         | [<MainCommand; ExactlyOnce; Last>] ValType of ValidateType
+        | OutputFormat of ValidateOutputFormat
+        | OutputFile of filename:string
     with
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
                 | ValType _ -> "Which errors to output"
+                | OutputFormat _ -> "How to output validation errors"
+                | OutputFile _ -> "Output errors to a csv with this filename"
     type ParseArgs =
         | [<MainCommand; ExactlyOnce; Last>] File of string
     with
@@ -77,23 +86,23 @@ module CWToolsCLI =
                 match s with
                 |Parse _ -> "hack"
     type Arguments =
-        | Directory of path : string
-        | Game of Game
-        | Scope of FilesScope
-        | ModFilter of string
+        | [<Inherit>]Directory of path : string
+        | [<Inherit>]Game of Game
+        | [<Inherit>]Scope of FilesScope
+        | [<Inherit>]ModFilter of string
         | DocsPath of string
-        | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
-        | [<CliPrefix(CliPrefix.None)>] List of ParseResults<ListArgs>
-        | [<CliPrefix(CliPrefix.None)>] Parse of ParseResults<ParseArgs>
-        | [<CliPrefix(CliPrefix.None)>] Serialize of ParseResults<SerializeArgs>
+        | [<CustomCommandLine("validate")>] Validate of ParseResults<ValidateArgs>
+        | [<CustomCommandLine("list")>] List of ParseResults<ListArgs>
+        | [<CustomCommandLine("parse")>] Parse of ParseResults<ParseArgs>
+        | [<CustomCommandLine("serialize")>] Serialize of ParseResults<SerializeArgs>
 
     with
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
-                | Directory _ -> "specify the main game directory"
+                | Directory _ -> "specify the main game directory (default: current directory)"
                 | Game _ -> "specify the game"
-                | Validate _ -> "Validate all mod files"
+                | Validate _ -> "Validate all mod files (default: mods)"
                 | List _ -> "List things"
                 | Scope _ -> "which files to include"
                 | ModFilter _ -> "filter to mods with this in name"
@@ -101,7 +110,6 @@ module CWToolsCLI =
                 | Parse _ -> "parse a file"
                 | Serialize _ -> "created serialized files for embedding"
 
-    let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
     let getEffectsAndTriggers docsPath =
         let docsParsed =
@@ -188,16 +196,40 @@ module CWToolsCLI =
     let validate game directory scope modFilter docsPath (results : ParseResults<_>) =
         let  triggers, effects = getEffectsAndTriggers docsPath
         let valType = results.GetResult <@ ValType @>
-        let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles())
-        match valType with
-        | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
-        | ValidateType.Errors -> printfn "%A" (gameObj.validationErrorList())
-        | ValidateType.Localisation ->
-            gameObj.localisationErrorList |> List.iter (fun l -> printfn "%O" l)
-            //printfn "%A" (gameObj.localisationErrorList)
-        | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" (gameObj.validationErrorList()); printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
-        | _ -> failwith "Unexpected validation type"
-
+        let gameObj =
+            match game with
+            |Game.STL -> STL(directory, scope, modFilter, triggers, effects, getConfigFiles())
+            |Game.HOI4 -> HOI4(directory, scope, modFilter, triggers, effects, getConfigFiles())
+        let errors =
+            match valType with
+            | ValidateType.ParseErrors -> (gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse
+            | ValidateType.Errors -> (gameObj.validationErrorList()) |> List.map Error
+            | ValidateType.Localisation ->
+                gameObj.localisationErrorList() |> List.map Error
+                //|> List.iter (fun l -> printfn "%O" l)
+                //printfn "%A" (gameObj.localisationErrorList)
+            | ValidateType.All ->
+                ((gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse)
+                @
+                ((gameObj.validationErrorList()) |> List.map ValidationViewModelRow.Error)
+                // printfn "%A" gameObj.parserErrorList;
+                // pprintfn "%A" (gameObj.validationErrorList());
+                //printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
+            | _ -> failwith "Unexpected validation type"
+        let outputFormat = results.TryGetResult <@ OutputFormat @> |> Option.defaultValue Detailed
+        let outputFile = results.TryGetResult <@ OutputFile @>
+        let ne = Environment.NewLine
+        let result =
+            match outputFormat, outputFile with
+            |Summary, _ -> sprintf "%i errors found" errors.Length
+            |Detailed, None ->
+                List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ne + r.error |Error(r) -> s + ne + r.position + ne + r.error) "" errors
+            |Detailed, Some _ ->
+                List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ",\"" + r.error.Replace(System.Environment.NewLine,"") + "\"" |Error(r) -> s + ne + r.position + "," + r.error) "file,error" errors
+        match outputFile with
+        |Some file ->
+            File.WriteAllText(file, result)
+        |None -> printf "%s" result
     let parse file =
         match CKParser.parseFile file with
         |Success(_,_,_) -> true, ""
@@ -217,7 +249,7 @@ module CWToolsCLI =
             let writer (w : WriteState) (ns : Lazy<Leaf array>) =
                 arrayPickler.Write w "value" (ns.Force())
             let reader (r : ReadState) =
-                let v = arrayPickler.Read r "value" in Lazy.CreateFromValue v
+                let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
             Pickler.FromPrimitives(reader, writer)
         let registry = new CustomPicklerRegistry()
         do registry.RegisterFactory mkPickler
@@ -237,10 +269,13 @@ module CWToolsCLI =
     let main argv =
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-        let results = parser.Parse argv
-        let directory = results.GetResult <@ Directory @>
+        let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter(),
+                                                    checkStructure = false)
+        let results = parser.ParseCommandLine argv
+        // let results = parser.ParseCommandLine argv
+        let directory = results.TryGetResult <@ Directory @> |> Option.defaultValue System.Environment.CurrentDirectory
         let game = results.GetResult <@ Game @>
-        let scope = results.GetResult <@ Scope @>
+        let scope = results.GetResult (Scope, FilesScope.Mods)
         let modFilter = results.GetResult(<@ ModFilter @>, defaultValue = "")
         let docsPath = results.TryGetResult <@ DocsPath @>
         match results.GetSubCommand() with

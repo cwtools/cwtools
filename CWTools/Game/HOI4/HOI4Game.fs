@@ -32,6 +32,7 @@ type EmbeddedSettings = {
 
 type ValidationSettings = {
     langs : Lang list
+    experimental : bool
     validateVanilla : bool
 }
 type RulesSettings = {
@@ -40,6 +41,8 @@ type RulesSettings = {
 }
 type HOI4Settings = {
     rootDirectory : string
+    scope : FilesScope
+    modFilter : string option
     embedded : EmbeddedSettings
     validation : ValidationSettings
     rules : RulesSettings option
@@ -50,7 +53,7 @@ type HOI4Game(settings : HOI4Settings) =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
 
 
-    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv", Encoding.UTF8)
+    let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "hearts of iron iv", Encoding.UTF8)
 
     let mutable infoService : FoldRules<_> option = None
     let mutable completionService : CompletionService<_> option = None
@@ -87,7 +90,7 @@ type HOI4Game(settings : HOI4Settings) =
         validators = [ validateMixedBlocks, "mixed"; ]
         experimentalValidators = []
         heavyExperimentalValidators = []
-        experimental = false
+        experimental = settings.validation.experimental
         fileValidators = []
         resources = resources
         lookup = lookup
