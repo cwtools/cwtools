@@ -135,9 +135,14 @@ module CWToolsCLI =
             yield! getAllFolders dirs
         }
 
-    let getConfigFiles() =
+    let getConfigFiles(gameDir : string option) =
         let configpath = "Main.files.config.cwt"
-        let configFiles = (if Directory.Exists "./.cwtools" then getAllFoldersUnion (["./.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+        let configDir =
+            match gameDir with
+            |Some dir -> Path.Combine(dir, ".cwtools")
+            |None -> "./.cwtools"
+        printfn "%A" gameDir
+        let configFiles = (if Directory.Exists configDir then getAllFoldersUnion ([configDir] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
         let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
         let configs =
             match true, configFiles.Length > 0 with
@@ -149,7 +154,7 @@ module CWToolsCLI =
         configs
     let list game directory scope modFilter docsPath (results : ParseResults<ListArgs>) =
         let triggers, effects = getEffectsAndTriggers docsPath
-        let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles())
+        let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory))
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -196,14 +201,13 @@ module CWToolsCLI =
     let validate game directory scope modFilter docsPath (results : ParseResults<_>) =
         let  triggers, effects = getEffectsAndTriggers docsPath
         let valType = results.GetResult <@ ValType @>
-        let gameObj =
-            match game with
-            |Game.STL -> STL(directory, scope, modFilter, triggers, effects, getConfigFiles())
-            |Game.HOI4 -> HOI4(directory, scope, modFilter, triggers, effects, getConfigFiles())
+        let gameObj = ErrorGame(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory),game)
         let errors =
             match valType with
             | ValidateType.ParseErrors -> (gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse
-            | ValidateType.Errors -> (gameObj.validationErrorList()) |> List.map Error
+            | ValidateType.Errors -> (gameObj.validationErrorList()) |> List.filter (fun e -> e.severity = Severity.Error) |> List.map Error
+            | ValidateType.Warnings ->(gameObj.validationErrorList()) |> List.filter (fun e -> e.severity = Severity.Warning) |> List.map Error
+            | ValidateType.Info ->(gameObj.validationErrorList()) |> List.filter (fun e -> e.severity = Severity.Information) |> List.map Error
             | ValidateType.Localisation ->
                 gameObj.localisationErrorList() |> List.map Error
                 //|> List.iter (fun l -> printfn "%O" l)
@@ -223,9 +227,16 @@ module CWToolsCLI =
             match outputFormat, outputFile with
             |Summary, _ -> sprintf "%i errors found" errors.Length
             |Detailed, None ->
-                List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ne + r.error |Error(r) -> s + ne + r.position + ne + r.error) "" errors
+                let sb = new StringBuilder()
+                errors |> List.iter (fun e -> e |> function |ValidationViewModelRow.Parse(r) -> sb.Append(ne).Append(r.file).Append(ne).Append(r.error) |>ignore |Error(r) ->  sb.Append(ne).Append(r.position).Append(ne).Append(r.error) |> ignore)
+                sb.ToString()
+                // List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ne + r.error |Error(r) -> s + ne + r.position + ne + r.error) "" errors
             |Detailed, Some _ ->
-                List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ",\"" + r.error.Replace(System.Environment.NewLine,"") + "\"" |Error(r) -> s + ne + r.position + "," + r.error) "file,error" errors
+                let sb = new StringBuilder()
+                sb.Append("file,error") |> ignore
+                errors |> List.iter (fun e -> e |> function |ValidationViewModelRow.Parse(r) -> sb.Append(ne).Append(r.file).Append(",\"").Append(r.error.Replace(ne, "")).Append("\"") |> ignore |Error(r) ->  sb.Append(ne).Append(r.position).Append(",").Append(r.error.Replace(ne,"")) |> ignore)
+                sb.ToString()
+                // List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ",\"" + r.error.Replace(System.Environment.NewLine,"") + "\"" |Error(r) -> s + ne + r.position + "," + r.error.Replace(ne, "")) "file,error" errors
         match outputFile with
         |Some file ->
             File.WriteAllText(file, result)
