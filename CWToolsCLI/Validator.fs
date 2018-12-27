@@ -87,7 +87,7 @@ module Validator =
         member val references = game.References
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
-    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config, game : Game) =
+    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config, game : Game, cached, cachedFiles) =
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
         let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
         let STLoptions : StellarisSettings = {
@@ -104,8 +104,8 @@ module Validator =
                 triggers = triggers
                 effects = effects
                 modifiers = []
-                embeddedFiles = []
-                cachedResourceData = []
+                embeddedFiles = cachedFiles
+                cachedResourceData = cached
             }
             scriptFolders = None
         }
@@ -121,8 +121,8 @@ module Validator =
             rules = Some { ruleFiles = config; validateRules = true }
             embedded = {
                 modifiers = []
-                embeddedFiles = []
-                cachedResourceData = []
+                embeddedFiles = cachedFiles
+                cachedResourceData = cached
             }
             scriptFolders = Some HOI4Constants.scriptFolders
         }

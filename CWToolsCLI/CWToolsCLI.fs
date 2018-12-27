@@ -90,11 +90,12 @@ module CWToolsCLI =
         | [<Inherit>]Game of Game
         | [<Inherit>]Scope of FilesScope
         | [<Inherit>]ModFilter of string
+        | [<Inherit>]CacheFile of path : string
         | DocsPath of string
         | [<CustomCommandLine("validate")>] Validate of ParseResults<ValidateArgs>
         | [<CustomCommandLine("list")>] List of ParseResults<ListArgs>
         | [<CustomCommandLine("parse")>] Parse of ParseResults<ParseArgs>
-        | [<CustomCommandLine("serialize")>] Serialize of ParseResults<SerializeArgs>
+        | [<CliPrefix(CliPrefix.None)>] Serialize of ParseResults<SerializeArgs>
 
     with
         interface IArgParserTemplate with
@@ -141,7 +142,6 @@ module CWToolsCLI =
             match gameDir with
             |Some dir -> Path.Combine(dir, ".cwtools")
             |None -> "./.cwtools"
-        printfn "%A" gameDir
         let configFiles = (if Directory.Exists configDir then getAllFoldersUnion ([configDir] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
         let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
         let configs =
@@ -198,10 +198,18 @@ module CWToolsCLI =
 
         | _ -> failwith "Unexpected list type"
 
-    let validate game directory scope modFilter docsPath (results : ParseResults<_>) =
+    let validate game directory scope modFilter docsPath cachePath (results : ParseResults<_>) =
+        let cached, cachedFiles =
+            match cachePath with
+            |Some path ->
+                let doesCacheExist = File.Exists path
+                printfn "%b" doesCacheExist
+                if doesCacheExist then Serializer.deserialize path else [], []
+            |None -> [], []
+        //printfn "%A" cachedFiles
         let  triggers, effects = getEffectsAndTriggers docsPath
         let valType = results.GetResult <@ ValType @>
-        let gameObj = ErrorGame(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory),game)
+        let gameObj = ErrorGame(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory),game, cached, cachedFiles)
         let errors =
             match valType with
             | ValidateType.ParseErrors -> (gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse
@@ -246,34 +254,24 @@ module CWToolsCLI =
         |Success(_,_,_) -> true, ""
         |Failure(msg,_,_) -> false, msg
 
+
     let serialize game directory scope modFilter docsPath =
-        let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
-        let files = fileManager.AllFilesByPath()
-        let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
-        let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
-        let files = resources.GetResources()
-                    |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
-                                                |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
-                                                |_ -> None)
-        let mkPickler (resolver : IPicklerResolver) =
-            let arrayPickler = resolver.Resolve<Leaf array> ()
-            let writer (w : WriteState) (ns : Lazy<Leaf array>) =
-                arrayPickler.Write w "value" (ns.Force())
-            let reader (r : ReadState) =
-                let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
-            Pickler.FromPrimitives(reader, writer)
-        let registry = new CustomPicklerRegistry()
-        do registry.RegisterFactory mkPickler
-        registry.DeclareSerializable<FParsec.Position>()
-        // registry.DeclareSerializable<Lazy<Leaf array>>()
-        // registry.DeclareSerializable<System.LazyHelper>()
-        let cache = PicklerCache.FromCustomPicklerRegistry registry
-        let binarySerializer = FsPickler.CreateXmlSerializer(picklerResolver = cache) //FsPickler.CreateBinarySerializer(picklerResolver = cache)
-        let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
-        let pickle = binarySerializer.Pickle data
-        File.WriteAllBytes("pickled.cwb", pickle)
-
-
+        match game with
+        |Game.STL ->
+            Serializer.serializeSTL directory ""
+        |Game.HOI4 ->
+            Serializer.serializeHOI4 directory ""
+        // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
+        // let files = fileManager.AllFilesByPath()
+        // let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
+        // let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+        // let files = resources.GetResources()
+        //             |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+        //                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
+        //                                         |_ -> None)
+        // let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
+        // let pickle = xmlSerializer.Pickle data
+        // File.WriteAllBytes("pickled.xml", pickle)
 
 
     [<EntryPoint>]
@@ -286,12 +284,13 @@ module CWToolsCLI =
         // let results = parser.ParseCommandLine argv
         let directory = results.TryGetResult <@ Directory @> |> Option.defaultValue System.Environment.CurrentDirectory
         let game = results.GetResult <@ Game @>
-        let scope = results.GetResult (Scope, FilesScope.Mods)
+        let scope = results.TryGetResult <@ Scope @> |> Option.defaultValue FilesScope.Mods
         let modFilter = results.GetResult(<@ ModFilter @>, defaultValue = "")
         let docsPath = results.TryGetResult <@ DocsPath @>
+        let cachePath = results.TryGetResult <@ CacheFile @>
         match results.GetSubCommand() with
         | List r -> list game directory scope modFilter docsPath r
-        | Validate r -> validate game directory scope modFilter docsPath r
+        | Validate r -> validate game directory scope modFilter docsPath cachePath r
         | Directory _
         | Serialize _ -> serialize game directory scope modFilter docsPath
         | Game _ -> failwith "internal error: this code should never be reached"
