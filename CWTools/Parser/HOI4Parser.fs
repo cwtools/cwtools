@@ -26,4 +26,6 @@ module HOI4Parser =
         |Failure(e, _, _) -> eprintfn "modifier file %s failed with %s" filename e; ([])
         |Success(s,_,_) ->
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
-            root.Values |> List.map(fun l -> {tag = l.Key; categories = [parseModifier (l.Value.ToRawString())]; core = true})
+            root.Child "modifiers"
+                |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {tag = l.Key; categories = [parseModifier (l.Value.ToRawString())]; core = true}))
+                |> Option.defaultValue []
