@@ -95,7 +95,7 @@ type STLGame (settings : StellarisSettings) =
         let resources = resourceManager.Api
 
         let validatableFiles() = resources.ValidatableFiles
-        let lookup = Lookup()
+        let lookup = Lookup<Scope, Modifier>()
         let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
         let allLocalisation() = localisationAPIs |> List.map snd
         let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
@@ -451,7 +451,7 @@ type STLGame (settings : StellarisSettings) =
             // ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             // infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
             //resources.ForceRecompute()
-        interface IGame<STLComputedData, Scope> with
+        interface IGame<STLComputedData, Scope, Modifier> with
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (validateAll false (resources.ValidatableEntities())) in s @ d
@@ -478,7 +478,7 @@ type STLGame (settings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = updateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<_, _>(resources, lookup, (localisationAPIs |> List.map snd))
+            member __.References() = References<_, _, Modifier>(resources, lookup, (localisationAPIs |> List.map snd))
             member __.Complete pos file text = completion fileManager completionService resourceManager pos file text
             member __.ScopesAtPos pos file text =
                 scopesAtPosSTL pos file text

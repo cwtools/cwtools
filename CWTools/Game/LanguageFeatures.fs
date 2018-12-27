@@ -39,7 +39,7 @@ module LanguageFeatures =
         |_, _ -> []
 
 
-    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (lookup : Lookup<_>) (pos : pos) (filepath : string) (filetext : string) =
+    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->

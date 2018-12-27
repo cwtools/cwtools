@@ -16,7 +16,7 @@ open Microsoft.FSharp.Collections.Tagged
 
 
 
-type Lookup<'S when 'S : comparison and 'S :> IScope<'S>>() =
+type Lookup<'S, 'T when 'S : comparison and 'S :> IScope<'S>>() =
     let mutable _scriptedTriggers : Effect<'S> list = []
 
     let mutable _scriptedTriggersMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
@@ -37,10 +37,8 @@ type Lookup<'S when 'S : comparison and 'S :> IScope<'S>>() =
         and set (value) = resetEffects(); _scriptedEffects <- value
     member this.scriptedEffectsMap with get() = _scriptedEffectsMap.Force()
 
-    member val staticModifiers : Modifier list = [] with get, set
-    member val coreModifiers : Modifier list = [] with get, set
-    member val coreEU4Modifiers : CWTools.Common.EU4Constants.Modifier list = [] with get, set
-    member val coreHOI4Modifiers : CWTools.Common.HOI4Constants.Modifier list = [] with get, set
+    member val staticModifiers : 'T list = [] with get, set
+    member val coreModifiers : 'T list = [] with get, set
     member val HOI4provinces : string list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set

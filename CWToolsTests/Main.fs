@@ -61,7 +61,7 @@ let perf(b) =
     let settings = emptyStellarisSettings "./testfiles/performancetest/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false}}
-    let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+    let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
@@ -81,7 +81,7 @@ let perf2(b) =
     let settings = emptyStellarisSettings "./testfiles/performancetest2/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false}}
-    let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+    let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then

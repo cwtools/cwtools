@@ -84,7 +84,7 @@ type HOI4Game(settings : HOI4Settings) =
         ()
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
-    let lookup = Lookup<Scope>()
+    let lookup = Lookup<Scope, Modifier>()
     let mutable ruleApplicator : RuleApplicator<Scope> option = None
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; ]
@@ -109,7 +109,7 @@ type HOI4Game(settings : HOI4Settings) =
     let localisationCheck (entities : struct (Entity * Lazy<HOI4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
 
     let updateModifiers() =
-        lookup.coreHOI4Modifiers <- settings.embedded.modifiers
+        lookup.coreModifiers <- settings.embedded.modifiers
 
     let updateProvinces() =
         let provinceFile =
@@ -163,7 +163,7 @@ type HOI4Game(settings : HOI4Settings) =
                 lookup.scriptedEffects <- updateScriptedEffects rules
                 lookup.scriptedTriggers <- updateScriptedTriggers rules
                 lookup.typeDefs <- types
-                let rulesWithMod = rules @ (lookup.coreHOI4Modifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
+                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
                 lookup.configRules <- rulesWithMod
                 simpleEnums <- enums
                 complexEnums <- complexenums
@@ -289,7 +289,7 @@ type HOI4Game(settings : HOI4Settings) =
         // updateTechnologies()
         updateLocalisation()
         updateTypeDef(settings.rules)
-    interface IGame<HOI4ComputedData, Scope> with
+    interface IGame<HOI4ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (validateAll false (resources.ValidatableEntities())) in s @ d
@@ -316,7 +316,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, Scope>(resources, Lookup(), (localisationAPIs |> List.map snd))
+        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (localisationAPIs |> List.map snd))
         member __.Complete pos file text = completion fileManager completionService resourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager resourceManager infoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
         member __.GoToType pos file text = getInfoAtPos fileManager resourceManager infoService lookup pos file text

@@ -145,6 +145,9 @@ module STLConstants =
             /// Is this a core modifier or a static modifier?
             core : bool
         }
+        interface IModifier with
+            member this.Tag = this.tag
+
     let createModifier (raw : RawModifier) =
         let category =
             match raw.category with

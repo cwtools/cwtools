@@ -5,15 +5,15 @@ open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
 open CWTools.Validation
 
-type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison> = {
+type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
-    heavyExperimentalValidators : (LookupValidator<'T, 'S> * string) list
+    heavyExperimentalValidators : (LookupValidator<'T, 'S, 'M> * string) list
     experimental : bool
     fileValidators : (FileValidator<'T> * string) list
     resources : IResourceAPI<'T>
-    lookup : Lookup<'S>
-    lookupValidators : (LookupValidator<'T, 'S> * string) list
+    lookup : Lookup<'S, 'M>
+    lookupValidators : (LookupValidator<'T, 'S, 'M> * string) list
     ruleApplicator : RuleApplicator<'S> option
     foldRules : FoldRules<'S> option
     useRules : bool
@@ -21,7 +21,7 @@ type ValidationManagerSettings<'T, 'S when 'T :> ComputedData and 'S :> IScope<'
     localisationKeys : unit -> (Lang * Set<string>) list
     localisationValidators : LocalisationValidator<'T> list
 }
-type ValidationManager<'T, 'S when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S>) =
+type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S, 'M>) =
     let resources = settings.resources
     let validators = settings.validators
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =

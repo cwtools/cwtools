@@ -96,7 +96,7 @@ let getLocTestInfo node =
 let tests =
     testList "localisation" [
         testList "no loc" [
-                let stl = STLGame(emptyStellarisSettings "./testfiles/localisationtests/gamefiles") :> IGame<STLComputedData, Scope>
+                let stl = STLGame(emptyStellarisSettings "./testfiles/localisationtests/gamefiles") :> IGame<STLComputedData, Scope, Modifier>
                 let parseErrors = stl.ParserErrors()
                 let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
                 let entities = stl.AllEntities()
@@ -125,7 +125,7 @@ let tests =
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles] };
                                             validation = {settings.validation with langs = [STL STLLang.English; STL STLLang.German] }}
-                let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+                let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let parseErrors = stl.ParserErrors()
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
@@ -156,7 +156,7 @@ let testFolder folder testsname config configfile configOnly configLoc (culture 
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = configOnly} else None}
-        let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+        let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
@@ -210,7 +210,7 @@ let testConfigFolder folder testsname config configfile (culture : string) =
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = false} else None}
-        let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+        let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
@@ -239,7 +239,7 @@ let specialtests =
             (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
             let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
             let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
-            let stl = STLGame({settings with embedded = {settings.embedded with modifiers = modifiers}}) :> IGame<STLComputedData, Scope>
+            let stl = STLGame({settings with embedded = {settings.embedded with modifiers = modifiers}}) :> IGame<STLComputedData, Scope, Modifier>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
             Expect.equal (stl.StaticModifiers()) exp ""
@@ -330,8 +330,8 @@ let embeddedTests =
         let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
         let settingsE = { settings with embedded = { settings.embedded with embeddedFiles = filelist; cachedResourceData = cached };}
 
-        let stlE = STLGame(settingsE) :> IGame<STLComputedData, Scope>
-        let stlNE = STLGame(settings) :> IGame<STLComputedData, Scope>
+        let stlE = STLGame(settingsE) :> IGame<STLComputedData, Scope, Modifier>
+        let stlNE = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let eerrors = stlE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
         eprintfn "%A" (stlE.ValidationErrors())
         let neerrors = stlNE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n)
@@ -372,7 +372,7 @@ let overwriteTests =
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };}
-        let stl = STLGame(settings) :> IGame<STLComputedData, Scope>
+        let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let inner (file, ((nodekeys : range list)) )=

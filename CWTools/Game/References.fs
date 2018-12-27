@@ -12,14 +12,14 @@ open CWTools.Common
 
 
 
-type References<'T, 'S when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'S>, localisation : ILocalisationAPI list) =
+type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'S, 'M>, localisation : ILocalisationAPI list) =
     let entities() = resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
     let events() =
         entities()
         |> List.collect(fun e -> e.Children)
         |> List.choose (function | :? Event as e -> Some e |_ -> None)
     let eventIDs() = events() |> List.map (fun e -> e.ID)
-    let modifiers() = lookup.staticModifiers |> List.map(fun m -> m.tag)
+    let modifiers() = lookup.staticModifiers |> List.map(fun m -> m.Tag)
     let triggers() = lookup.scriptedTriggers |> List.map(fun t -> t.Name)
     let effects() = lookup.scriptedEffects |> List.map(fun e -> e.Name)
     let localisation() =

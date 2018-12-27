@@ -241,10 +241,11 @@ module ValidationCore =
         member __.Raw = entities
 
     type STLEntitySet = EntitySet<STLComputedData>
+    type EU4EntitySet = EntitySet<EU4ComputedData>
     type StructureValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> EntitySet<'T> -> ValidationResult
     type STLStructureValidator = StructureValidator<STLComputedData>
     type EU4StructureValidator = StructureValidator<EU4ComputedData>
     type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
     type STLFileValidator = FileValidator<STLComputedData>
-    type LookupValidator<'T, 'S when 'T :> ComputedData and 'S : comparison and 'S :> IScope<'S>> = Lookup<'S> -> StructureValidator<'T>
+    type LookupValidator<'T, 'S, 'M when 'T :> ComputedData and 'S : comparison and 'S :> IScope<'S>> = Lookup<'S, 'M> -> StructureValidator<'T>
     type LocalisationValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> (Lang * Set<string>) list -> EntitySet<'T> -> ValidationResult

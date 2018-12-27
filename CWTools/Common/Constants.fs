@@ -108,3 +108,6 @@ type IScope<'T> =
     abstract member AnyScope : 'T
     /// The first value is or can be coerced to the second
     abstract member MatchesScope : 'T -> bool
+
+type IModifier =
+    abstract member Tag : string

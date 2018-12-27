@@ -74,7 +74,7 @@ module Validator =
             }
             scriptFolders = None
         }
-        let game = STLGame(STLoptions) :> IGame<STLComputedData, STLConstants.Scope>
+        let game = STLGame(STLoptions) :> IGame<STLComputedData, STLConstants.Scope, STLConstants.Modifier>
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
