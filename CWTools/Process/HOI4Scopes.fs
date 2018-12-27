@@ -39,6 +39,7 @@ module HOI4Scopes =
             ScopedEffect("owner", [Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("controller", [Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("capital", [Scope.State], Scope.State, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("global", allScopes, Scope.InvalidScope, EffectType.Both, defaultDesc, "", true);
             // ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
         ]
 

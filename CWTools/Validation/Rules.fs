@@ -242,23 +242,26 @@ module rec Rules =
         |VarNotFound s -> false
         |_ -> true
 
-    let inline checkVariableField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>)  key leafornode =
+    let inline checkVariableField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, changeScope false true effectMap triggerMap varSet key scope with
-        |Some _, _ -> OK
-        |_, VarFound -> OK
-        |_, VarNotFound s -> Invalid[inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode]
+
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap varSet key scope with
+        |_, Some i, _ when isInt && min <= float i && max >= float i -> OK
+        |Some f, _, _ when min <= f && max >= f -> OK
+        |_, _, VarFound -> OK
+        |_, _, VarNotFound s -> Invalid[inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode]
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
-        |_, NotFound _ -> Invalid [inv (ErrorCodes.CustomError "Expecting a variable or number" Severity.Error) leafornode]
+        |_, _, NotFound _ -> Invalid [inv (ErrorCodes.CustomError "Expecting a variable or number" Severity.Error) leafornode]
         |_ -> Invalid [inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode]
-    let inline checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) key leafornode =
+    let inline checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, changeScope false true effectMap triggerMap varSet key scope with
-        |Some _, _ -> true
-        |_, VarFound -> true
-        |_, VarNotFound s -> false
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap varSet key scope with
+        |_, Some i, _ -> isInt && min <= float i && max >= float i
+        |Some f, _, _ -> min <= f && max >= f
+        |_, _, VarFound -> true
+        |_, _, VarNotFound s -> false
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
@@ -276,7 +279,7 @@ module rec Rules =
             |IconField folder -> checkIconField files folder key leafornode
             |VariableSetField v -> OK
             |VariableGetField v -> checkVariableGetField varMap severity v key leafornode
-            |VariableField -> checkVariableField effectMap triggerMap varSet changeScope anyScope ctx key leafornode
+            |VariableField (isInt, (min, max)) -> checkVariableField effectMap triggerMap varSet changeScope anyScope ctx isInt min max key leafornode
             |_ -> OK
     let checkFieldNE varMap (enumsMap : Collections.Map<_, Set<_, _>>) typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode) =
             match field with
@@ -289,7 +292,7 @@ module rec Rules =
             |IconField folder -> checkIconFieldNE files folder key leafornode
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE varMap severity v key leafornode
-            |VariableField -> checkVariableFieldNE effectMap triggerMap varSet changeScope anyScope ctx key leafornode
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE effectMap triggerMap varSet changeScope anyScope ctx isInt min max key leafornode
             |_ -> true
 
     let checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) (key : string) (leafornode : IKeyPos) =
@@ -1118,7 +1121,7 @@ module rec Rules =
                 |NewField.ScopeField _ -> oneToOneScopes |> List.map (Simple)
                 |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
-                |NewField.VariableField -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
+                |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |_ -> []
                 //|Field.EffectField -> findRule rootRules rest
                 // |Field.ClauseField rs -> findRule rs rest

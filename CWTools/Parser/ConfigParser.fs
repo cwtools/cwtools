@@ -41,7 +41,7 @@ module rec ConfigParser =
     | SubtypeField of string * bool * NewRule<'a> list
     | VariableSetField of string
     | VariableGetField of string
-    | VariableField
+    | VariableField of isInt : bool * minmax : (float * float)
     let specificField x = ValueField(ValueType.Specific x)
     type Options<'a> = {
         min : int
@@ -299,7 +299,16 @@ module rec ConfigParser =
             |Some alias -> AliasField alias
             |None -> ValueField ValueType.Scalar
         |"scope_field" -> ScopeField (anyScope)
-        |"variable_field" -> VariableField
+        |"variable_field" -> VariableField (false, (-1E+12, 1E+12))
+        |x when x.StartsWith "variable_field[" ->
+            match getFloatSettingFromString x with
+            |Some (min, max) -> VariableField (false,(min, max))
+            |None -> VariableField (false,(-1E+12, 1E+12))
+        |"int_variable_field" -> VariableField (true, (float Int32.MinValue, float Int32.MaxValue))
+        |x when x.StartsWith "int_variable_field[" ->
+            match getIntSettingFromString x with
+            |Some (min, max) -> VariableField (true,(float min,float max))
+            |None -> VariableField (true,(float Int32.MinValue, float Int32.MaxValue))
         |x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             |Some variable ->

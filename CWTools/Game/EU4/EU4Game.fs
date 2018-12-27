@@ -189,7 +189,7 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator})
+            validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = infoService})
         )
     let refreshRuleCaches(rules) =
         updateTypeDef(rules)

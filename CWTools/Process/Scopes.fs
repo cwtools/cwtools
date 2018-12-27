@@ -76,7 +76,11 @@ module Scopes =
     let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) =
         (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
-            if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
+            if
+                key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
+            then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
                 let key, varOnly = if key.StartsWith("var:", StringComparison.OrdinalIgnoreCase) then key.Substring(4), true else key, false
                 let ampersandSplit = key.Split([|'@'|], 2)
