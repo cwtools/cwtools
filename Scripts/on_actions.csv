@@ -1,4 +1,0 @@
-key,scopes,event
-on_startup,root = country this = country,country
-on_religion_change,root = country this = county,country
-on_siege_won_province,root = country this = country from = province,country
