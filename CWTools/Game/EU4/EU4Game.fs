@@ -97,11 +97,7 @@ type EU4Game(settings : EU4Settings) =
         useRules = true
         debugRulesOnly = false
         localisationKeys = (fun () -> localisationKeys)
-        localisationValidators = [valOpinionModifierLocs; valStaticModifierLocs; valTimedModifierLocs;
-                            valEventModifierLocs; valTriggeredModifierLocs; valProvinceTriggeredModifierLocs;
-                            valUnitTypeLocs; valAdvisorTypeLocs; valTradeGoodLocs; valTradeCompanyLocs;
-                            valTradeCompanyInvestmentLocs; valTradeNodeLocs; valTradingPolicyLocs;
-                            valTradeCenterLocs; valCasusBelliLocs; valWarGoalLocs ]
+        localisationValidators = []
     }
 
     let mutable validationManager = ValidationManager(validationSettings)
