@@ -123,7 +123,7 @@ type HOI4Game(settings : HOI4Settings) =
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             eprintfn "%A" provinces
             lookup.HOI4provinces <- provinces
-    let updateScriptedEffects(rules :RootRule<Scope> list) =
+    let updateScriptedEffects(rules :RootRule<Scope> list) (states : string list) (countries : string list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
         let ruleToEffect(r,o) =
@@ -133,9 +133,12 @@ type HOI4Game(settings : HOI4Settings) =
                 |NodeRule(ValueField(Specific n),_) -> n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
+        let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Both, defaultDesc, "", true));
+        let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true));
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+        @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers(rules :RootRule<Scope> list) =
+    let updateScriptedTriggers(rules :RootRule<Scope> list) states countries =
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
         let ruleToTrigger(r,o) =
@@ -145,7 +148,10 @@ type HOI4Game(settings : HOI4Settings) =
                 |NodeRule(ValueField(Specific n),_) -> n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+        let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Both, defaultDesc, "", true));
+        let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true));
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+        @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
     let updateTypeDef =
         let mutable simpleEnums = []
@@ -160,8 +166,6 @@ type HOI4Game(settings : HOI4Settings) =
             match rulesSettings with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
-                lookup.scriptedEffects <- updateScriptedEffects rules
-                lookup.scriptedTriggers <- updateScriptedTriggers rules
                 lookup.typeDefs <- types
                 let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
                 lookup.configRules <- rulesWithMod
@@ -188,6 +192,16 @@ type HOI4Game(settings : HOI4Settings) =
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+
+            let states = lookup.typeDefInfo.TryFind "state"
+                            |> Option.map (fun sl -> sl |> List.map fst)
+                            |> Option.defaultValue []
+            let countries = lookup.enumDefs.TryFind "country_tag"
+                            // |> Option.map (fun sl -> sl |> List.map fst)
+                            |> Option.defaultValue []
+            lookup.scriptedEffects <- updateScriptedEffects lookup.configRules states countries
+            lookup.scriptedTriggers <- updateScriptedTriggers lookup.configRules states countries
+
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
             let results = resourceManager.Api.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
