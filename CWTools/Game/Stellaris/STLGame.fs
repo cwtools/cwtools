@@ -197,38 +197,13 @@ type STLGame (settings : StellarisSettings) =
         let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
         let localisationCheck (entities : struct (Entity * Lazy<STLComputedData>) list) = validationManager.ValidateLocalisation(entities)
 
-        let globalTypeDefLoc () =
-            let validateLoc (values : (string * range) list) (locdef : TypeLocalisation)  =
-                values
-                    |> List.filter (fun (s, _) -> s.Contains(".") |> not)
-                    <&!&> (fun (key, range) ->
-                                let fakeLeaf = LeafValue(Value.Bool true, range)
-                                let lockey = locdef.prefix + key + locdef.suffix
-                                checkLocKeysLeafOrNode localisationKeys lockey fakeLeaf)
-            let validateType (typename : string) (values : (string * range) list) =
-                match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
-                |None -> OK
-                |Some td -> td.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
-            let validateSubType (typename : string) (values : (string * range) list) =
-                let splittype = typename.Split([|'.'|], 2)
-                if splittype.Length > 1
-                then
-                    match lookup.typeDefs |> List.tryFind (fun td -> td.name = splittype.[0]) with
-                    |None -> OK
-                    |Some td ->
-                        match td.subtypes |> List.tryFind (fun st -> st.name = splittype.[1]) with
-                        |None -> OK
-                        |Some st -> st.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
-                else OK
-            lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateType t l)
-            <&&>(lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateSubType t l))
         let globalLocalisation () =
             let locfiles =  resources.GetResources()
                             |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
                             |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
                             |> List.map (fun f -> f.filepath)
             let locFileValidation = validateLocalisationFiles locfiles
-            let globalTypeLoc = globalTypeDefLoc()
+            let globalTypeLoc = validationManager.ValidateGlobalLocalisation()
             lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
         let mutable errorCache = Map.empty

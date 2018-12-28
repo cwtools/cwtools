@@ -107,6 +107,16 @@ type HOI4Game(settings : HOI4Settings) =
     let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
 
     let localisationCheck (entities : struct (Entity * Lazy<HOI4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
+    let globalLocalisation () =
+        // let locfiles =  resources.GetResources()
+        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
+        //                 |> List.map (fun f -> f.filepath)
+        // let locFileValidation = validateLocalisationFiles locfiles
+        let globalTypeLoc = validationManager.ValidateGlobalLocalisation()
+        // lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&>
+        // locFileValidation <&&>
+        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
     let updateModifiers() =
         lookup.coreModifiers <- settings.embedded.modifiers
@@ -238,11 +248,13 @@ type HOI4Game(settings : HOI4Settings) =
         let res =
             match filepath with
             |x when x.EndsWith (".yml") ->
+                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                let resource = makeFileWithContentResourceInput fileManager filepath file
+                resources.UpdateFile(resource) |> ignore
                 updateLocalisation()
-                // let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                // localisationErrors <- Some les
-                // globalLocalisation()
-                []
+                let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
+                localisationErrors <- Some les
+                globalLocalisation()
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, Encoding.GetEncoding(1252)))
@@ -307,14 +319,14 @@ type HOI4Game(settings : HOI4Settings) =
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (validateAll false (resources.ValidatableEntities())) in s @ d
-        member __.LocalisationErrors(force : bool) = []
-            // let generate =
-            //     let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-            //     localisationErrors <- Some les
-            //     les
-            // match localisationErrors with
-            // |Some les -> if force then generate else les
-            // |None -> generate
+        member __.LocalisationErrors(force : bool) =
+            let generate =
+                let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
+                localisationErrors <- Some les
+                les
+            match localisationErrors with
+            |Some les -> if force then generate else les
+            |None -> generate
 
         //member __.ValidationWarnings = warningsAll
         member __.Folders() = fileManager.AllFolders()

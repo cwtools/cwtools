@@ -4,6 +4,11 @@ open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
 open CWTools.Validation
+open CWTools.Parser.ConfigParser
+open CWTools.Process
+open CWTools.Parser.Types
+open CWTools.Validation.Stellaris.STLLocalisationValidation
+open CWTools.Utilities.Position
 
 type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison> = {
     validators : (StructureValidator<'T> * string) list
@@ -61,7 +66,33 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
+    let globalTypeDefLoc () =
+        let validateLoc (values : (string * range) list) (locdef : TypeLocalisation)  =
+            values
+                |> List.filter (fun (s, _) -> s.Contains(".") |> not)
+                <&!&> (fun (key, range) ->
+                            let fakeLeaf = LeafValue(Value.Bool true, range)
+                            let lockey = locdef.prefix + key + locdef.suffix
+                            checkLocKeysLeafOrNode (settings.localisationKeys()) lockey fakeLeaf)
+        let validateType (typename : string) (values : (string * range) list) =
+            match settings.lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
+            |None -> OK
+            |Some td -> td.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
+        let validateSubType (typename : string) (values : (string * range) list) =
+            let splittype = typename.Split([|'.'|], 2)
+            if splittype.Length > 1
+            then
+                match settings.lookup.typeDefs |> List.tryFind (fun td -> td.name = splittype.[0]) with
+                |None -> OK
+                |Some td ->
+                    match td.subtypes |> List.tryFind (fun st -> st.name = splittype.[1]) with
+                    |None -> OK
+                    |Some st -> st.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
+            else OK
+        settings.lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateType t l)
+        <&&>(settings.lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateSubType t l))
 
 
     member __.Validate((shallow : bool), (entities : struct (Entity * Lazy<'T>) list))  = validate shallow entities
     member __.ValidateLocalisation(entities : struct (Entity * Lazy<'T>) list) = validateLocalisation entities
+    member __.ValidateGlobalLocalisation() = globalTypeDefLoc()
