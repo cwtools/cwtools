@@ -168,7 +168,11 @@ type EU4Game(settings : EU4Settings) =
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let allEnums = simpleEnums @ complexEnumDefs
+            lookup.EU4ScriptedEffectKeys <-  resourceManager.Api.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
+                                                |> List.ofSeq |> List.collect id
+            let scriptedEffectParmas = "scripted_effect_params", (lookup.EU4ScriptedEffectKeys)
+            let scriptedEffectParmasD = "scripted_effect_params_dollar", (lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k))
+            let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD]
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> Map.ofList
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -188,6 +192,7 @@ type EU4Game(settings : EU4Settings) =
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
             lookup.varDefInfo <- results
+
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
 
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

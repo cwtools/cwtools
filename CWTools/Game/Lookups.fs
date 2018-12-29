@@ -40,6 +40,7 @@ type Lookup<'S, 'T when 'S : comparison and 'S :> IScope<'S>>() =
     member val staticModifiers : 'T list = [] with get, set
     member val coreModifiers : 'T list = [] with get, set
     member val HOI4provinces : string list = [] with get, set
+    member val EU4ScriptedEffectKeys : string list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<'S>>) list = [] with get, set

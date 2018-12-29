@@ -78,7 +78,7 @@ module rec Rules =
     // type ScopeContext = IScopeContext<Scope>
 
     // type RuleContext  = RuleContext<Scope>
-    let firstCharEqualsAmp (s : string) = s.Length > 0 && s.[0] = '@'
+    let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@' || s.[0] = '$')
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
@@ -110,32 +110,33 @@ module rec Rules =
                         let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
                         if ok then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode]
     let inline checkValidValueNE (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (key : string) leafornode =
-        if key |> firstCharEqualsAmp then true else
-                match (vt) with
-                    |ValueType.Scalar ->
-                        true
-                    |ValueType.Bool ->
-                        if key == "yes" || key == "no" then true else false
-                    |ValueType.Int (min, max) ->
-                        match TryParser.parseInt key with
-                        |Some i ->  if i <= max && i >= min then true else false
-                        |None -> false
-                    |ValueType.Float (min, max) ->
-                        match TryParser.parseDouble key with
-                        |Some f -> if f <= max && f >= min then true else false
-                        |None -> false
-                    |ValueType.Enum e ->
-                        match enumsMap.TryFind e with
-                        |Some es -> if es.Contains (trimQuote key) then true else false
-                        |None -> false
-                    |ValueType.Specific s ->
-                        if trimQuote key == s then true else false
-                    |ValueType.Percent ->
-                        if key.EndsWith("%") then true else false
-                    |ValueType.Date ->
-                        let parts = key.Split([|'.'|])
-                        let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
-                        if ok then true else false
+        // if key |> firstCharEqualsAmp then true else
+        (match (vt) with
+            |ValueType.Scalar ->
+                true
+            |ValueType.Bool ->
+                if key == "yes" || key == "no" then true else false
+            |ValueType.Int (min, max) ->
+                match TryParser.parseInt key with
+                |Some i ->  if i <= max && i >= min then true else false
+                |None -> false
+            |ValueType.Float (min, max) ->
+                match TryParser.parseDouble key with
+                |Some f -> if f <= max && f >= min then true else false
+                |None -> false
+            |ValueType.Enum e ->
+                match enumsMap.TryFind e with
+                |Some es -> if es.Contains (trimQuote key) then true else false
+                |None -> false
+            |ValueType.Specific s ->
+                if trimQuote key == s then true else false
+            |ValueType.Percent ->
+                if key.EndsWith("%") then true else false
+            |ValueType.Date ->
+                let parts = key.Split([|'.'|])
+                let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+                if ok then true else false)
+        || firstCharEqualsAmp key
 
     let inline checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) =
         match synced with
@@ -253,7 +254,7 @@ module rec Rules =
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
-        |_, _, NotFound _ -> Invalid [inv (ErrorCodes.CustomError "Expecting a variable or number" Severity.Error) leafornode]
+        |_, _, NotFound _ -> Invalid [inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode]
         |_ -> Invalid [inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode]
     let inline checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode =
         let scope = ctx.scopes

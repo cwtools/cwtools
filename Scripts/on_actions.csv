@@ -1,0 +1,43 @@
+key,scopes,event
+on_new_term_election,THIS = country ROOT = country,country_event
+on_ace_promoted,THIS = country root = country FROM = any,country_event
+on_aces_killed_each_other,THIS = country root = country FROM = any prev = any,country_event
+on_ace_killed_by_ace,THIS = country root = country FROM = any prev = any,country_event
+on_ace_killed_other_ace,THIS = country root = country FROM = any prev = any,country_event
+on_ace_killed,THIS = country root = country FROM = any,country_event
+
+on_justifying_wargoal_pulse,THIS = country ROOT = country FROM = country,country_event
+on_wargoal_expire,THIS = country ROOT = country FROM = country,country_event
+on_nuke_drop,THIS = country ROOT = country FROM = state,country_event
+on_border_war_lost,THIS = country ROOT = country,country_event
+on_leave_faction,THIS = country ROOT = country,country_event
+on_create_faction,THIS = country ROOT = country ROOT = country,country_event
+on_offer_join_faction,THIS = country ROOT = country FROM = country,country_event
+on_join_faction,THIS = country ROOT = country FROM = country,country_event
+on_declare_war,THIS = country ROOT = country FROM = country,country_event
+on_faction_formed,THIS = country ROOT = country,country_event
+on_capitulation,THIS = country ROOT = country FROM = country,country_event
+on_uncapitulation,THIS = country ROOT = country,country_event
+on_government_change,THIS = country ROOT = country,country_event
+on_coup_succeeded,THIS = country ROOT = country,country_event
+on_civil_war_end,THIS = country ROOT = country FROM = country,country_event
+on_puppet,THIS = country ROOT = country FROM = country,country_event
+on_release_as_puppet,THIS = country ROOT = country FROM = country,country_event
+on_annex,THIS = country ROOT = country FROM = country,country_event
+on_subject_free,THIS = country ROOT = country FROM = country,country_event
+on_subject_autonomy_level_change,THIS = country ROOT = country FROM = country,country_event
+on_subject_annexed,THIS = country ROOT = country FROM = country,country_event
+on_release_as_free,THIS = country ROOT = country FROM = country,country_event
+on_peaceconference_ended,THIS = country ROOT = country FROM = country,country_event
+
+on_startup,THIS = no_scope ROOT = no_scope,
+
+on_state_control_changed,THIS = country FROM = country FROMFROM = state,country_event
+
+on_unit_leader_created,THIS = unit_leader ROOT = unit_leader,unit_leader_event
+on_unit_leader_level_up,THIS = unit_leader ROOT = unit_leader,unit_leader_event
+
+on_army_leader_daily,THIS = unit_leader ROOT = unit_leader FROM = country,unit_leader_event
+on_army_leader_won_combat,THIS = unit_leader ROOT = unit_leader FROM = country,unit_leader_event
+on_army_leader_lost_combat,THIS = unit_leader ROOT = unit_leader FROM = country,unit_leader_event
+on_army_leader_promoted,THIS = unit_leader ROOT = unit_leader,unit_leader_event

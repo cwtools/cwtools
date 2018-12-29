@@ -2,6 +2,7 @@ namespace CWTools.Validation.EU4
 open CWTools.Common
 open CWTools.Games
 open CWTools.Validation.Rules
+open System
 
 module EU4Compute =
 
@@ -13,4 +14,6 @@ module EU4Compute =
         let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes)(e)) else None)
         let definedvariable = (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
         // let hastechs = getAllTechPrereqs e
-        EU4ComputedData(referencedtypes, definedvariable)
+        let scriptedeffectparams = Some (EU4Validation.getScriptedEffectParamsEntity e)
+
+        EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams)

@@ -90,9 +90,10 @@ module ValidationCore =
         static member ConfigRulesTargetWrongScope = fun scope expected -> { ID = "CW243"; Severity = Severity.Error; Message = sprintf "Target has incorrect scope. Is %s but expect %s" scope expected}
         static member ConfigRulesInvalidTarget = fun expected -> { ID = "CW244"; Severity = Severity.Error; Message = sprintf "This is not a target. Expected a target in scope(s) %s" expected}
         static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
-        static member ConfigRulesUnsetVariable = fun var -> { ID = "CW246"; Severity = Severity.Error; Message = sprintf "The variable %s has not been set" var}
+        static member ConfigRulesUnsetVariable = fun var -> { ID = "CW246"; Severity = Severity.Warning; Message = sprintf "The variable %s has not been set" var}
         static member ConfigRulesRuleWrongScope = fun scope (expected : string) -> { ID = "CW247"; Severity = Severity.Error; Message = sprintf "Trigger/Effect/Modifier used in wrong scope. In %s but expect %s" scope expected}
         static member ConfigRulesInvalidScopeCommand = fun command -> { ID = "CW248"; Severity = Severity.Error; Message = sprintf "Invalid scope command %s" command}
+        static member ConfigRulesExpectedVariableValue = { ID = "CW249"; Severity = Severity.Warning; Message = "Expecting a variable or number" }
         static member PlanetKillerMissing = fun message -> { ID = "CW250"; Severity = Severity.Error; Message = message }
         static member UnnecessaryBoolean = fun bool -> { ID = "CW251"; Severity = Severity.Warning; Message = sprintf "This %s is unnecessary" bool }
         static member UndefinedFlag = fun (variable : string) (flagType : FlagType) -> { ID = "CW252"; Severity = Severity.Warning; Message = sprintf "%s flag of type %A is never set" variable flagType}

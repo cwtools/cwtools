@@ -8,7 +8,24 @@ System.IO.Directory.SetCurrentDirectory (__SOURCE_DIRECTORY__)
 open FSharp.Data
 open System.IO
 
-let eu4 = true
+let eu4 = false
+let hoi4 = true
+
+let hoi4template = """
+	## replace_scope = { $scopes$ }
+	subtype[$type$] = {
+		## cardinality = 0..1
+		random_events = {
+			## cardinality = 0..inf
+			int = 0
+			## cardinality = 0..inf
+			int = <$event$>
+		}
+		## cardinality = 0..1
+		effect = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+	}"""
 let eu4template = """
 	## replace_scope = { $scopes$ }
 	subtype[$type$] = {
@@ -64,7 +81,7 @@ sb.Append """
 """
 sb.Append """on_action = {
 	"""
-let template = if eu4 then eu4template else stltemplate
+let template = if eu4 then eu4template else if hoi4 then hoi4template else stltemplate
 for row in rows.Rows do
   let key = row.GetColumn "key"
   let scopes = row.GetColumn "scopes"

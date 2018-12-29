@@ -35,8 +35,9 @@ type ComputedData(referencedtypes, definedvariable) =
     member __.Referencedtypes : Map<string, (string  * range) list> option = referencedtypes
     member __.Definedvariables : Map<string, (string * range) list> option = definedvariable
 
-type EU4ComputedData(referencedtypes, definedvariable) =
+type EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams) =
     inherit ComputedData(referencedtypes, definedvariable)
+    member __.ScriptedEffectParams : string list option = scriptedeffectparams
 type HOI4ComputedData(referencedtypes, definedvariable) =
     inherit ComputedData(referencedtypes, definedvariable)
 
