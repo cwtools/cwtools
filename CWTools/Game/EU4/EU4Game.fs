@@ -24,6 +24,7 @@ open CWTools.Validation.Rules
 open CWTools.Validation.EU4.EU4LocalisationValidation
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
+open CWTools.Validation.EU4.EU4LocalisationString
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -64,8 +65,16 @@ type EU4Game(settings : EU4Settings) =
     let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
     let mutable localisationErrors : CWError list option = None
     let mutable localisationKeys = []
-
+    let mutable taggedLocalisationKeys = []
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+    let lookup = Lookup<Scope, Modifier>()
+    let updateScriptedLoc () =
+        let rawLocs =
+            resources.AllEntities()
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localization") -> Some (f.entity) |_ -> None)
+            |> List.collect (fun n -> n.Children)
+            |> List.map (fun l -> l.TagText "name")
+        lookup.scriptedLoc <- rawLocs
 
     let updateLocalisation() =
         localisationAPIs <-
@@ -74,15 +83,30 @@ type EU4Game(settings : EU4Settings) =
                         |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
                         |> List.groupBy (fun f -> f.validate)
                         |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> EU4LocalisationService)
-            let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
+            let allLocs = locs |> List.collect (fun (b,l) -> (settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
             allLocs
         localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+        taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+        let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+        let eventtargets =
+            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.enumDefs.TryFind "country_tags" |> Option.defaultValue [])
+        let definedvars =
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
+        lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation eventtargets lookup.scriptedLoc definedvars f taggedLocalisationKeys)
+
         //taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
         //let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
-    let lookup = Lookup<Scope, Modifier>()
     let mutable ruleApplicator : RuleApplicator<Scope> option = None
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
@@ -112,7 +136,7 @@ type EU4Game(settings : EU4Settings) =
         //                 |> List.map (fun f -> f.filepath)
         // let locFileValidation = validateLocalisationFiles locfiles
         let globalTypeLoc = validationManager.ValidateGlobalLocalisation()
-        // lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&>
+        lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&>
         // locFileValidation <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
@@ -284,12 +308,13 @@ type EU4Game(settings : EU4Settings) =
         // updateScriptedTriggers()
         // updateScriptedEffects()
         // updateStaticodifiers()
-        // updateScriptedLoc()
+        updateScriptedLoc()
         // updateDefinedVariables()
         updateModifiers()
         // updateTechnologies()
         updateLocalisation()
         updateTypeDef(settings.rules)
+        updateLocalisation()
     interface IGame<EU4ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()

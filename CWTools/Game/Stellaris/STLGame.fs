@@ -143,7 +143,8 @@ type STLGame (settings : StellarisSettings) =
             localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-            lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
+            let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
+            lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation eventtargets lookup.scriptedLoc lookup.definedScriptVariables f taggedLocalisationKeys)
 
 
         let updateDefinedVariables() =
@@ -418,6 +419,7 @@ type STLGame (settings : StellarisSettings) =
             updateLocalisation()
             if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             updateTypeDef(settings.rules)
+            updateLocalisation()
             eprintfn "Initial cache complete in %i" (timer.Elapsed.Seconds)
 
             // let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )

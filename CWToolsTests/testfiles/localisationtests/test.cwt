@@ -1,0 +1,12 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    after = {
+        save_global_event_target_as = value_set[event_target]
+    }
+
+}

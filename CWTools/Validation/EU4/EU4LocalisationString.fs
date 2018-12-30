@@ -1,15 +1,13 @@
-namespace CWTools.Validation.Stellaris
+namespace CWTools.Validation.EU4
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
-open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Process.STLScopes
+open CWTools.Process.EU4Scopes
 open CWTools.Common
-open CWTools.Common.STLConstants
+open CWTools.Common.EU4Constants
 open DotNet.Globbing
-open STLValidation
 open System.Xml.Linq
 open System.Threading
 open CWTools.Localisation
@@ -20,72 +18,51 @@ open System.IO
 open CWTools.Utilities.Position
 open CWTools.Process.Scopes
 
-module STLLocalisationString =
+module EU4LocalisationString =
 
 
     let hardcodedLocalisation =
         [
-            "playername"
+            "playername";
+            "prov"
         ]
 
 
     let commands =
         [
-            "GetAdj";
-            "GetAllianceName";
-            "GetFleetName";
-            "GetHomeWorldName";
-            "GetLeaderName";
-            "GetName";
-            "GetNamePlural";
-            "GetPlanetMoon";
-            "GetPopFactionName";
-            "GetRandomSpeciesSound";
-            "GetRegnalName";
-            "GetRulerName";
-            "GetRulerTitle";
-            "GetSpeciesAdj";
-            "GetSpeciesClass";
-            "GetSpeciesClassPlural";
-            "GetSpeciesMouthName";
-            "GetSpeciesName";
-            "GetSpeciesNameCompliment";
-            "GetSpeciesNameInsult";
-            "GetSpeciesNamePlural";
-            "GetSpeciesNamePluralCompliment";
-            "GetSpeciesNamePluralInsult";
-            "GetSpeciesOrganName";
-            "GetSpeciesSpawnNamePlural";
-            "GetStarName";
+            "GetAreaName";
+            "GetAdjective";
+            "GetAdm";
+            "GetCapitalName";
+            "GetDip";
+            "GetFlagshipName";
+            "GetGroupName";
             "GetHerHim";
-            "GetSheHe";
-            "GetSheHeCap";
+            "GetHerHimCap";
             "GetHerHis";
             "GetHerHisCap";
-            "LastKilledCountryName";
-            "GetSpeciesSpawnName"; //Vanilla usage
-            "GetHeirTitle"; //Vanilla usage
-            "GetHeirName"; //Vanilla usage
-            "GetAdjective"; //Vanilla usage
-            "GetSpeciesClassName"; //Vanilla usage
-            "GetHimHer"; //Vanilla usage
-            "GetNumPlayerFleetsGoneMIA"; //Vanilla usage
-            "GetNumPlayerWormholeStationsDestroyed"; //Vanilla usage;
-            "StarName";
-            "GetTitle"; // STNH
-            "GetLeaderTitle"; // STNH
-            "GetHisHer"; // STNH
-            "GetMidGameDate"; // STNH
-            "GetPersonalityName"; // STNH
-            "GetSpeciesPlural"; // STNH
-            "GetHisHerCap"; // STNH
-            "MainDefender";
-            "MainAttacker";
-            "GetOwnerName";
-            "GetControllerName";
-            "GetCountry";
-            "GetPlanetMoonCap";
-            "GetNamePluralInsult";
+            "GetHerselfHimself";
+            "GetHerselfHimselfCap";
+            "GetSheHe";
+            "GetSheHeCap";
+            "GetMil";
+            "GetName";
+            "GetTitle";
+            "GetTradeGoodsName";
+            "GetWomanMan";
+            "GetYear";
+            "GovernmentName";
+            "GetXEDip";
+            "GetErEreDip";
+            "GetDateText";
+            "GetDate";
+            "GetYear";
+            "GetMonth";
+            "GetReligiousSchool";
+            "GetCultureName";
+            "GetCultureGroupName";
+            "GetReligionName";
+            "GetReligionGroupName";
         ]
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
