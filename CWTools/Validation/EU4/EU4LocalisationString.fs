@@ -67,29 +67,6 @@ module EU4LocalisationString =
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
     let processLocalisation = processLocalisationBase localisationCommandContext commands
-    // let checkCommand localisationCommandContext (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
-    //     match localisationCommandContext commands eventtargets setvariables entry command with
-    //     | ContextResult.Found _ -> OK
-    //     | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand entry.key s) (entry.position) entry.key None ]
-
-    // let processLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
-    //     let lang = api |> fst
-    //     let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
-    //     let all = api |> snd
-    //     let eventtargetsnormal = (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Savedeventtargets))
-    //     let eventtargetsglobal = effects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None) |> List.collect (fun e -> e.GlobalEventTargets @ e.SavedEventTargets)
-    //     let eventtargets = eventtargetsnormal @ eventtargetsglobal
-    //     let extractResult =
-    //         function
-    //         |Success (v, _, _) -> v
-    //         |Failure _ -> []
-    //     let parseLoc (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Command s -> Some s |_ -> None)
-    //     let parseLocRef (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
-    //     let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandContext (scriptedLoc @ commands) eventtargets setvariables m s) }))
-    //     result
-        // let parsed = all |> Map.map (fun k v -> v, parseLocString v.desc "" |> extractResult)
-        // (parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Command s -> Some s |_ -> None) <&!&> localisationCommandContext e (scriptedLoc @ commands) eventtargets setvariables ))
-
 
     let checkFileEncoding (file : string) =
             use fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) in
@@ -143,28 +120,4 @@ module EU4LocalisationString =
 
 
     let validateLocalisationFiles (locFiles : string list) =
-        // eprintfn "%s" locFolder
-        // let files = Directory.EnumerateDirectories locFolder
-        //             |> List.ofSeq
-        //             |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
-        // let rootFiles = Directory.EnumerateFiles locFolder |> List.ofSeq
-        // let actualFiles = (files @ rootFiles) |> List.filter (fun f -> f.EndsWith ".yml")//(fun f -> f, (FileInfo f). )//File.ReadAllText(f, System.Text.Encoding.UTF8))
         locFiles <&!&> (checkLocFileName <&> checkFileEncoding )
-        // <&&>
-        // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
-    // let validateLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
-    //     let lang = api |> fst
-    //     let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(STLStringComparer()))
-    //     let all = api |> snd
-    //     let eventtargetsnormal = (os.AllWithData |> List.collect (fun (_, d) -> d.Force().savedeventtargets))
-    //     let eventtargetsglobal = effects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None) |> List.collect (fun e -> e.GlobalEventTargets @ e.SavedEventTargets)
-    //     let eventtargets = eventtargetsnormal @ eventtargetsglobal
-    //     let extractResult =
-    //         function
-    //         |Success (v, _, _) -> v
-    //         |Failure _ -> []
-
-    //     let parsed = all |> Map.map (fun k v -> v, parseLocString v.desc "" |> extractResult)
-    //     parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Ref s -> Some s |_ -> None) <&!&> checkRef lang keys e )
-    //     <&&>
-    //     (parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Command s -> Some s |_ -> None) <&!&> checkCommand e (scriptedLoc @ commands) eventtargets setvariables ))

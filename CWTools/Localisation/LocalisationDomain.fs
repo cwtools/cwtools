@@ -23,6 +23,8 @@ type ILocalisationAPI =
     abstract GetKeys : string list
     abstract GetDesc : string -> string
     abstract GetLang : Lang
+type ILocalisationAPICreator =
+    abstract Api : Lang -> ILocalisationAPI
 
 
 type LocalisationSettings =

@@ -41,45 +41,57 @@ open System.Text
 open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 
-type EmbeddedSettings = {
-    triggers : DocEffect list
-    effects : DocEffect list
-    modifiers : Modifier list
-    embeddedFiles : (string * string) list
-    cachedResourceData : (Resource * Entity) list
-}
+// type EmbeddedSettings = {
+//     triggers : DocEffect list
+//     effects : DocEffect list
+//     modifiers : Modifier list
+//     embeddedFiles : (string * string) list
+//     cachedResourceData : (Resource * Entity) list
+// }
 
-type RulesSettings = {
-    ruleFiles : (string * string) list
-    validateRules : bool
-    debugRulesOnly : bool
-}
+// type RulesSettings = {
+//     ruleFiles : (string * string) list
+//     validateRules : bool
+//     debugRulesOnly : bool
+// }
 
-type ValidationSettings = {
-    langs : Lang list
-    validateVanilla : bool
-    experimental : bool
-}
+// type ValidationSettings = {
+//     langs : Lang list
+//     validateVanilla : bool
+//     experimental : bool
+// }
 
-type StellarisSettings = {
-    rootDirectory : string
-    scope : FilesScope
-    modFilter : string option
-    embedded : EmbeddedSettings
-    validation : ValidationSettings
-    rules : RulesSettings option
-    scriptFolders : string list option
-}
+// type StellarisSettings = {
+//     rootDirectory : string
+//     scope : FilesScope
+//     modFilter : string option
+//     embedded : EmbeddedSettings
+//     validation : ValidationSettings
+//     rules : RulesSettings option
+//     scriptFolders : string list option
+// }
+module STLGameFunctions =
+    let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
+        let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
+        processLocalisation eventtargets lookup.scriptedLoc lookup.definedScriptVariables
 
+type StellarisSettings = GameSettings<Modifier, Scope>
 //type GameFile = GameFile of result : FileResult
 
 type STLGame (settings : StellarisSettings) =
-        let embeddedSettings = settings.embedded
-        let validationSettings = settings.validation
-        let useRules = settings.rules.IsSome
-        let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
+        let game = GameObject<Scope, Modifier, STLComputedData>
+                    (settings, "stellaris", scriptFolders, STLCompute.computeSTLData,
+                     (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
+                     STLGameFunctions.processLocalisationFunction,
+                     Encoding.UTF8)
+        let lookup = game.Lookup
+        let resources = game.Resources
+        let fileManager = game.FileManager
 
-        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris", Encoding.UTF8)
+        let useRules = settings.rules.IsSome
+        // let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
+
+        // let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris", Encoding.UTF8)
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
@@ -88,27 +100,27 @@ type STLGame (settings : StellarisSettings) =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
-        let mutable completionService : CompletionService<_> option = None
-        let mutable infoService = None
+        // let mutable completionService : CompletionService<_> option = None
+        // let mutable infoService = None
 
-        let resourceManager = ResourceManager(STLCompute.computeSTLData (fun () -> infoService))
-        let resources = resourceManager.Api
+        // let resourceManager = ResourceManager(STLCompute.computeSTLData (fun () -> infoService))
+        // let resources = resourceManager.Api
 
-        let validatableFiles() = resources.ValidatableFiles
-        let lookup = Lookup<Scope, Modifier>()
-        let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
-        let allLocalisation() = localisationAPIs |> List.map snd
-        let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
-        let mutable localisationKeys = []
-        let mutable taggedLocalisationKeys = []
-        let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
+        // let validatableFiles() = resources.ValidatableFiles
+        // let lookup = Lookup<Scope, Modifier>()
+        // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
+        // let allLocalisation() = localisationAPIs |> List.map snd
+        // let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
+        // let mutable localisationKeys = []
+        // let mutable taggedLocalisationKeys = []
+        // let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
 
 
         // let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
 
         let updateScriptedTriggers () =
-            lookup.scriptedTriggers <- STLLookup.updateScriptedTriggers resources vanillaTriggers
+            game.Lookup.scriptedTriggers <- STLLookup.updateScriptedTriggers resources vanillaTriggers
 
 
         let updateScriptedEffects () =
@@ -131,20 +143,20 @@ type STLGame (settings : StellarisSettings) =
                 |> List.map (fun l -> l.TagText "name")
             lookup.scriptedLoc <- rawLocs
 
-        let updateLocalisation() =
-            localisationAPIs <-
-                let locs = resources.GetResources()
-                            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-                            |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
-                            |> List.groupBy (fun f -> f.validate)
-                            |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> STLLocalisationService)
-                let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
-                allLocs
-            localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
-            let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-            let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
-            lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation eventtargets lookup.scriptedLoc lookup.definedScriptVariables f taggedLocalisationKeys)
+        // let updateLocalisation() =
+        //     localisationAPIs <-
+        //         let locs = resources.GetResources()
+        //                     |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+        //                     |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
+        //                     |> List.groupBy (fun f -> f.validate)
+        //                     |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> STLLocalisationService)
+        //         let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
+        //         allLocs
+        //     localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+        //     taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+        //     let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+        //     let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
+        //     lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation eventtargets lookup.scriptedLoc lookup.definedScriptVariables f taggedLocalisationKeys)
 
 
         let updateDefinedVariables() =
@@ -181,10 +193,10 @@ type STLGame (settings : StellarisSettings) =
             lookup = lookup
             lookupValidators = [validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
             ruleApplicator = ruleApplicator
-            foldRules = infoService
+            foldRules = game.infoService
             useRules = useRules
             debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
-            localisationKeys = (fun () -> localisationKeys)
+            localisationKeys = (fun () -> game.LocalisationManager.localisationKeys)
             localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
@@ -205,7 +217,7 @@ type STLGame (settings : StellarisSettings) =
                             |> List.map (fun f -> f.filepath)
             let locFileValidation = validateLocalisationFiles locfiles
             let globalTypeLoc = validationManager.ValidateGlobalLocalisation()
-            lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+            lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
         let mutable errorCache = Map.empty
         let updateFile (shallow : bool) filepath (filetext : string option) =
@@ -218,9 +230,9 @@ type STLGame (settings : StellarisSettings) =
                     let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                     let resource = makeFileWithContentResourceInput fileManager filepath file
                     resources.UpdateFile(resource) |> ignore
-                    updateLocalisation()
+                    game.LocalisationManager.UpdateAllLocalisation()
                     let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                    localisationErrors <- Some les
+                    game.LocalisationManager.localisationErrors <- Some les
                     globalLocalisation()
                 | _ ->
                     let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
@@ -323,7 +335,7 @@ type STLGame (settings : StellarisSettings) =
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                let loc = localisationKeys
+                let loc = game.LocalisationManager.localisationKeys
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath |FileWithContentResource (_, f) -> Some f.logicalpath) |> Set.ofList
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -335,7 +347,7 @@ type STLGame (settings : StellarisSettings) =
                 eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
 
-                let results = resourceManager.Api.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
+                let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                                 |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
                 lookup.varDefInfo <- results
@@ -345,13 +357,13 @@ type STLGame (settings : StellarisSettings) =
                 tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
                 eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, STL STLLang.Default))
+                game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
+                game.infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
                 // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = infoService})
+                validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = game.infoService})
             )
         let refreshRuleCaches(rules) =
             updateModifiers()
@@ -359,7 +371,7 @@ type STLGame (settings : StellarisSettings) =
 
         let scopesAtPosSTL pos file text =
             let resource = makeEntityResourceInput fileManager file text
-            match resourceManager.ManualProcessResource resource, infoService with
+            match game.ResourceManager.ManualProcessResource resource, game.infoService with
             |Some e, Some info ->
                 // match info.GetInfo(pos, e) with
                 match (info.GetInfo)(pos, e) with
@@ -416,10 +428,10 @@ type STLGame (settings : StellarisSettings) =
             updateModifiers()
             updateTechnologies()
             if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
-            updateLocalisation()
+            game.LocalisationManager.UpdateAllLocalisation()
             if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             updateTypeDef(settings.rules)
-            updateLocalisation()
+            game.LocalisationManager.UpdateAllLocalisation()
             eprintfn "Initial cache complete in %i" (timer.Elapsed.Seconds)
 
             // let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
@@ -435,9 +447,9 @@ type STLGame (settings : StellarisSettings) =
             member __.LocalisationErrors(force : bool) =
                 let generate =
                     let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                    localisationErrors <- Some les
+                    game.LocalisationManager.localisationErrors <- Some les
                     les
-                match localisationErrors with
+                match game.LocalisationManager.localisationErrors with
                 |Some les -> if force then generate else les
                 |None -> generate
 
@@ -455,13 +467,13 @@ type STLGame (settings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = updateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<_, _, Modifier>(resources, lookup, (localisationAPIs |> List.map snd))
-            member __.Complete pos file text = completion fileManager completionService resourceManager pos file text
+            member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.localisationAPIs |> List.map snd))
+            member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text =
                 scopesAtPosSTL pos file text
                 |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
-            member __.GoToType pos file text = getInfoAtPos fileManager resourceManager infoService lookup pos file text
-            member __.FindAllRefs pos file text = findAllRefsFromPos fileManager resourceManager infoService pos file text
+            member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.infoService lookup pos file text
+            member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.infoService pos file text
             member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
             member __.RefreshCaches() = refreshRuleCaches None
             member __.ForceRecompute() = resources.ForceRecompute()

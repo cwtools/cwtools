@@ -106,3 +106,6 @@ module CK2Localisation =
                 member __.GetLang = CK2 lang
                 member __.ValueMap = valueMap lang
             }
+
+        // interface ILocalisationAPICreator with
+        //     member this.Api l = this.Api l

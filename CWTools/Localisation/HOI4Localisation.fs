@@ -84,3 +84,5 @@ module HOI4Localisation =
                 member __.GetLang = lang
                 member __.ValueMap = valueMap lang
             }
+        interface ILocalisationAPICreator with
+            member this.Api l = this.Api l

@@ -23,65 +23,93 @@ open CWTools.Validation.HOI4
 open System.Text
 open CWTools.Games.LanguageFeatures
 open System
+open CWTools.Validation.HOI4.HOI4LocalisationString
+open CWTools.Games
 
-type EmbeddedSettings = {
-    embeddedFiles : (string * string) list
-    modifiers : Modifier list
-    cachedResourceData : (Resource * Entity) list
-}
+// type EmbeddedSettings = {
+//     embeddedFiles : (string * string) list
+//     modifiers : Modifier list
+//     cachedResourceData : (Resource * Entity) list
+// }
 
-type ValidationSettings = {
-    langs : Lang list
-    experimental : bool
-    validateVanilla : bool
-}
-type RulesSettings = {
-    ruleFiles : (string * string) list
-    validateRules : bool
-}
-type HOI4Settings = {
-    rootDirectory : string
-    scope : FilesScope
-    modFilter : string option
-    embedded : EmbeddedSettings
-    validation : ValidationSettings
-    rules : RulesSettings option
-    scriptFolders : string list option
-}
+// type ValidationSettings = {
+//     langs : Lang list
+//     experimental : bool
+//     validateVanilla : bool
+// }
+// type RulesSettings = {
+//     ruleFiles : (string * string) list
+//     validateRules : bool
+// }
+// type HOI4Settings = {
+//     rootDirectory : string
+//     scope : FilesScope
+//     modFilter : string option
+//     embedded : EmbeddedSettings
+//     validation : ValidationSettings
+//     rules : RulesSettings option
+//     scriptFolders : string list option
+// }
+module HOI4GameFunctions =
+    let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
+        let eventtargets =
+            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.enumDefs.TryFind "country_tags" |> Option.defaultValue [])
+        let definedvars =
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
+        processLocalisation eventtargets lookup.scriptedLoc definedvars
+
+type HOI4Settings = GameSettings<Modifier, Scope>
 
 type HOI4Game(settings : HOI4Settings) =
-    let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
+    let game = GameObject<Scope, Modifier, HOI4ComputedData>
+                (settings, "hearts of iron iv", scriptFolders, HOI4Compute.computeHOI4Data,
+                 (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
+                 HOI4GameFunctions.processLocalisationFunction,
+                 Encoding.UTF8)
+    let lookup = game.Lookup
+    let resources = game.Resources
+    let fileManager = game.FileManager
+
+    // let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
 
 
-    let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "hearts of iron iv", Encoding.UTF8)
+    // let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "hearts of iron iv", Encoding.UTF8)
 
-    let mutable infoService : FoldRules<_> option = None
-    let mutable completionService : CompletionService<_> option = None
-    let resourceManager = ResourceManager(HOI4Compute.computeHOI4Data (fun () -> infoService))
-    let resources = resourceManager.Api
-    let validatableFiles() = resources.ValidatableFiles
-    let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
-    let allLocalisation() = localisationAPIs |> List.map snd
-    let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
-    let mutable localisationErrors : CWError list option = None
-    let mutable localisationKeys = []
+    // let mutable infoService : FoldRules<_> option = None
+    // let mutable completionService : CompletionService<_> option = None
+    // let resourceManager = ResourceManager(HOI4Compute.computeHOI4Data (fun () -> infoService))
+    // let resources = resourceManager.Api
+    // let validatableFiles() = resources.ValidatableFiles
+    // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
+    // let allLocalisation() = localisationAPIs |> List.map snd
+    // let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
+    // let mutable localisationErrors : CWError list option = None
+    // let mutable localisationKeys = []
 
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
-    let updateLocalisation() =
-        localisationAPIs <-
-            let locs = resources.GetResources()
-                        |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-                        |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
-                        |> List.groupBy (fun f -> f.validate)
-                        |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> HOI4LocalisationService)
-            let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
-            allLocs
-        localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-        //taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
-        //let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-        //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
-        ()
+    // let updateLocalisation() =
+    //     localisationAPIs <-
+    //         let locs = resources.GetResources()
+    //                     |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+    //                     |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml")
+    //                     |> List.groupBy (fun f -> f.validate)
+    //                     |> List.map (fun (b, fs) -> b, fs |> List.map (fun f -> f.filepath, f.filetext) |> HOI4LocalisationService)
+    //         let allLocs = locs |> List.collect (fun (b,l) -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> b, l.Api(lang)))
+    //         allLocs
+    //     localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+    //     //taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+    //     //let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+    //     //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
+    //     ()
         //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
         //TODO: Add processed loc bacck
     let lookup = Lookup<Scope, Modifier>()
@@ -96,10 +124,10 @@ type HOI4Game(settings : HOI4Settings) =
         lookup = lookup
         lookupValidators = []
         ruleApplicator = ruleApplicator
-        foldRules = infoService
+        foldRules = game.infoService
         useRules = true
         debugRulesOnly = false
-        localisationKeys = (fun () -> localisationKeys)
+        localisationKeys = (fun () -> game.LocalisationManager.localisationKeys)
         localisationValidators = []
     }
 
@@ -193,7 +221,7 @@ type HOI4Game(settings : HOI4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let loc = localisationKeys
+            let loc = game.LocalisationManager.localisationKeys
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let files = resources.GetFileNames() |> Set.ofList
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -213,7 +241,7 @@ type HOI4Game(settings : HOI4Settings) =
             lookup.scriptedTriggers <- updateScriptedTriggers lookup.configRules states countries
 
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
-            let results = resourceManager.Api.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
+            let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
             lookup.varDefInfo <- results
@@ -222,13 +250,13 @@ type HOI4Game(settings : HOI4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, HOI4 HOI4Lang.Default))
+            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, HOI4 HOI4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, HOI4 HOI4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, HOI4 HOI4Lang.Default))
+            game.infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, HOI4 HOI4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = infoService })
+            validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = game.infoService })
         )
     let refreshRuleCaches(rules) =
         updateTypeDef(rules)
@@ -251,9 +279,9 @@ type HOI4Game(settings : HOI4Settings) =
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                 let resource = makeFileWithContentResourceInput fileManager filepath file
                 resources.UpdateFile(resource) |> ignore
-                updateLocalisation()
+                game.LocalisationManager.UpdateAllLocalisation()
                 let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                localisationErrors <- Some les
+                game.LocalisationManager.localisationErrors <- Some les
                 globalLocalisation()
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
@@ -313,8 +341,9 @@ type HOI4Game(settings : HOI4Settings) =
         updateModifiers()
         updateProvinces()
         // updateTechnologies()
-        updateLocalisation()
+        game.LocalisationManager.UpdateAllLocalisation()
         updateTypeDef(settings.rules)
+        game.LocalisationManager.UpdateAllLocalisation()
     interface IGame<HOI4ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
@@ -322,9 +351,9 @@ type HOI4Game(settings : HOI4Settings) =
         member __.LocalisationErrors(force : bool) =
             let generate =
                 let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                localisationErrors <- Some les
+                game.LocalisationManager.localisationErrors <- Some les
                 les
-            match localisationErrors with
+            match game.LocalisationManager.localisationErrors with
             |Some les -> if force then generate else les
             |None -> generate
 
@@ -342,12 +371,12 @@ type HOI4Game(settings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = updateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (localisationAPIs |> List.map snd))
-        member __.Complete pos file text = completion fileManager completionService resourceManager pos file text
-        member __.ScopesAtPos pos file text = scopesAtPos fileManager resourceManager infoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
-        member __.GoToType pos file text = getInfoAtPos fileManager resourceManager infoService lookup pos file text
-        member __.FindAllRefs pos file text = findAllRefsFromPos fileManager resourceManager infoService pos file text
-        member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
+        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (game.LocalisationManager.localisationAPIs |> List.map snd))
+        member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
+        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.infoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.infoService lookup pos file text
+        member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.infoService pos file text
+        member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
         member __.RefreshCaches() = refreshRuleCaches None
         member __.ForceRecompute() = resources.ForceRecompute()
 

@@ -40,6 +40,7 @@
     <Compile Include="Game/References.fs" />
     <Compile Include="Game/Stellaris/STLLookup.fs" />
     <Compile Include="Validation/Validation.fs" />
+    <Compile Include="Game/LocalisationManager.fs" />
     <Compile Include="Validation/LocalisationString.fs" />
     <Compile Include="Validation/Common/CommonValidation.fs" />
     <Compile Include="Validation/Stellaris/STLValidation.fs" />
@@ -58,6 +59,7 @@
     <Compile Include="Validation/EU4/EU4Compute.fs" />
     <Compile Include="Validation/HOI4/HOI4Compute.fs" />
     <Compile Include="Validation/Stellaris/STLCompute.fs" />
+    <Compile Include="Validation/HOI4/HOI4LocalisationValidation.fs" />
     <Compile Include="Validation/HOI4/HOI4Validation.fs" />
     <Compile Include="Game/ValidationManager.fs" />
     <Compile Include="Game/Game.fs" />

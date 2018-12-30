@@ -10,7 +10,7 @@ open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Utilities.Position
 
-type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison> = {
+type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
     heavyExperimentalValidators : (LookupValidator<'T, 'S, 'M> * string) list
@@ -26,7 +26,7 @@ type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> ISco
     localisationKeys : unit -> (Lang * Set<string>) list
     localisationValidators : LocalisationValidator<'T> list
 }
-type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison>(settings : ValidationManagerSettings<'T, 'S, 'M>) =
+type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>(settings : ValidationManagerSettings<'T, 'S, 'M>) =
     let resources = settings.resources
     let validators = settings.validators
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
