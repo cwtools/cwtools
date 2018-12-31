@@ -26,28 +26,8 @@ open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
 open CWTools.Validation.EU4.EU4LocalisationString
 
-// type EmbeddedSettings = {
-//     embeddedFiles : (string * string) list
-//     modifiers : Modifier list
-//     cachedResourceData : (Resource * Entity) list
-// }
-
-// type ValidationSettings = {
-//     langs : Lang list
-//     validateVanilla : bool
-// }
-// type RulesSettings = {
-//     ruleFiles : (string * string) list
-//     validateRules : bool
-// }
-// type EU4Settings = {
-//     rootDirectory : string
-//     embedded : EmbeddedSettings
-//     validation : ValidationSettings
-//     rules : RulesSettings option
-//     scriptFolders : string list option
-// }
 module EU4GameFunctions =
+    type GameObject = GameObject<Scope, Modifier, EU4ComputedData>
     let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
@@ -62,31 +42,39 @@ module EU4GameFunctions =
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         processLocalisation eventtargets lookup.scriptedLoc definedvars
-type EU4Settings = GameSettings<Modifier, Scope>
+    let globalLocalisation (game : GameObject) =
+        // let locfiles =  resources.GetResources()
+        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
+        //                 |> List.map (fun f -> f.filepath)
+        // let locFileValidation = validateLocalisationFiles locfiles
+        let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
+        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
+        // locFileValidation <&&>
+        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
+type EU4Settings = GameSettings<Modifier, Scope>
+open EU4GameFunctions
 type EU4Game(settings : EU4Settings) =
+    let validationSettings = {
+        validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
+        experimentalValidators = []
+        heavyExperimentalValidators = []
+        experimental = false
+        fileValidators = []
+        lookupValidators = []
+        useRules = true
+        debugRulesOnly = false
+        localisationValidators = []
+    }
     let game = GameObject<Scope, Modifier, EU4ComputedData>
                 (settings, "europa universalis iv", scriptFolders, EU4Compute.computeEU4Data,
                  (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                  EU4GameFunctions.processLocalisationFunction,
-                 Encoding.GetEncoding(1252))
-    // let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
-
-    // let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "europa universalis iv", Encoding.GetEncoding(1252))
-
-    // // let computeEU4Data (e : Entity) = EU4ComputedData()
-    // let mutable infoService : FoldRules<_> option = None
-    // let mutable completionService : CompletionService<_> option = None
-    // let resourceManager = ResourceManager(EU4Compute.computeEU4Data (fun () -> infoService))
-    // let resources = resourceManager.Api
-    // let validatableFiles() = resources.ValidatableFiles
-    // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
-    // let allLocalisation() = localisationAPIs |> List.map snd
-    // let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
-    // let mutable localisationErrors : CWError list option = None
-    // let mutable localisationKeys = []
-    // let mutable taggedLocalisationKeys = []
-    // let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+                 Encoding.GetEncoding(1252),
+                 validationSettings,
+                 globalLocalisation,
+                 (fun _ _ -> ()))
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
@@ -99,44 +87,10 @@ type EU4Game(settings : EU4Settings) =
         game.Lookup.scriptedLoc <- rawLocs
 
 
+    // let mutable validationManager = ValidationManager(validationSettings)
+    // let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
 
-        //taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
-        //let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-        //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
-        //lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
-        //TODO: Add processed loc bacck
-    let mutable ruleApplicator : RuleApplicator<Scope> option = None
-    let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
-        experimentalValidators = []
-        heavyExperimentalValidators = []
-        experimental = false
-        fileValidators = []
-        resources = game.Resources
-        lookup = lookup
-        lookupValidators = []
-        ruleApplicator = ruleApplicator
-        foldRules = game.infoService
-        useRules = true
-        debugRulesOnly = false
-        localisationKeys = (fun () -> game.LocalisationManager.localisationKeys)
-        localisationValidators = []
-    }
-
-    let mutable validationManager = ValidationManager(validationSettings)
-    let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
-
-    let localisationCheck (entities : struct (Entity * Lazy<EU4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
-    let globalLocalisation () =
-        // let locfiles =  resources.GetResources()
-        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
-        //                 |> List.map (fun f -> f.filepath)
-        // let locFileValidation = validateLocalisationFiles locfiles
-        let globalTypeLoc = validationManager.ValidateGlobalLocalisation()
-        lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
-        // locFileValidation <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+    // let localisationCheck (entities : struct (Entity * Lazy<EU4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
 
     let updateModifiers() =
             lookup.coreModifiers <- addGeneratedModifiers settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
@@ -222,11 +176,12 @@ type EU4Game(settings : EU4Settings) =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            ruleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
+            game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            game.infoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
+            game.InfoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, game.RuleApplicator.Value, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            validationManager <- ValidationManager({validationSettings with ruleApplicator = ruleApplicator; foldRules = game.infoService})
+            game.RefreshValidationManager()
+            // validationManager <- ValidationManager({validationSettings with ruleApplicator = game.ruleApplicator; foldRules = game.infoService})
         )
     let refreshRuleCaches(rules) =
         updateTypeDef(rules)
@@ -235,53 +190,53 @@ type EU4Game(settings : EU4Settings) =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
-    let mutable errorCache = Map.empty
+    // let mutable errorCache = Map.empty
 
-    let updateFile (shallow : bool) filepath (filetext : string option) =
-        eprintfn "%s" filepath
-        let timer = new System.Diagnostics.Stopwatch()
-        timer.Start()
-        let res =
-            match filepath with
-            |x when x.EndsWith (".yml") ->
-                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
-                let resource = makeFileWithContentResourceInput game.FileManager filepath file
-                resources.UpdateFile(resource) |> ignore
-                game.LocalisationManager.UpdateAllLocalisation()
-                let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                game.LocalisationManager.localisationErrors <- Some les
-                globalLocalisation()
-            | _ ->
-                let filepath = Path.GetFullPath(filepath)
-                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, Encoding.GetEncoding(1252)))
-                let rootedpath = filepath.Substring(filepath.IndexOf(game.FileManager.ScopeDirectory) + (game.FileManager.ScopeDirectory.Length))
-                let logicalpath = game.FileManager.ConvertPathToLogicalPath rootedpath
-                let resource = makeEntityResourceInput game.FileManager filepath file
+    // let updateFile (shallow : bool) filepath (filetext : string option) =
+    //     eprintfn "%s" filepath
+    //     let timer = new System.Diagnostics.Stopwatch()
+    //     timer.Start()
+    //     let res =
+    //         match filepath with
+    //         |x when x.EndsWith (".yml") ->
+    //             let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+    //             let resource = makeFileWithContentResourceInput game.FileManager filepath file
+    //             resources.UpdateFile(resource) |> ignore
+    //             game.LocalisationManager.UpdateAllLocalisation()
+    //             let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
+    //             game.LocalisationManager.localisationErrors <- Some les
+    //             globalLocalisation()
+    //         | _ ->
+    //             let filepath = Path.GetFullPath(filepath)
+    //             let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, Encoding.GetEncoding(1252)))
+    //             let rootedpath = filepath.Substring(filepath.IndexOf(game.FileManager.ScopeDirectory) + (game.FileManager.ScopeDirectory.Length))
+    //             let logicalpath = game.FileManager.ConvertPathToLogicalPath rootedpath
+    //             let resource = makeEntityResourceInput game.FileManager filepath file
 
-                //eprintfn "%s %s" logicalpath filepath
-                let newEntities = resources.UpdateFile (resource) |> List.map snd
-                // match filepath with
-                // |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
-                // |x when x.Contains("scripted_effects") -> updateScriptedEffects()
-                // |x when x.Contains("static_modifiers") -> updateStaticodifiers()
-                // |_ -> ()
-                // updateDefinedVariables()
-                // validateAll true newEntities @ localisationCheck newEntities
-                match shallow with
-                    |true ->
-                        let (shallowres, _) = (validateAll shallow newEntities)
-                        let shallowres = shallowres @ (localisationCheck newEntities)
-                        let deep = errorCache |> Map.tryFind filepath |> Option.defaultValue []
-                        shallowres @ deep
-                    |false ->
-                        let (shallowres, deepres) = (validateAll shallow newEntities)
-                        let shallowres = shallowres @ (localisationCheck newEntities)
-                        errorCache <- errorCache.Add(filepath, deepres)
-                        shallowres @ deepres
+    //             //eprintfn "%s %s" logicalpath filepath
+    //             let newEntities = resources.UpdateFile (resource) |> List.map snd
+    //             // match filepath with
+    //             // |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
+    //             // |x when x.Contains("scripted_effects") -> updateScriptedEffects()
+    //             // |x when x.Contains("static_modifiers") -> updateStaticodifiers()
+    //             // |_ -> ()
+    //             // updateDefinedVariables()
+    //             // validateAll true newEntities @ localisationCheck newEntities
+    //             match shallow with
+    //                 |true ->
+    //                     let (shallowres, _) = (validateAll shallow newEntities)
+    //                     let shallowres = shallowres @ (localisationCheck newEntities)
+    //                     let deep = errorCache |> Map.tryFind filepath |> Option.defaultValue []
+    //                     shallowres @ deep
+    //                 |false ->
+    //                     let (shallowres, deepres) = (validateAll shallow newEntities)
+    //                     let shallowres = shallowres @ (localisationCheck newEntities)
+    //                     errorCache <- errorCache.Add(filepath, deepres)
+    //                     shallowres @ deepres
 
 
-        eprintfn "Update Time: %i" timer.ElapsedMilliseconds
-        res
+    //     eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+    //     res
 
     do
         eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
@@ -316,10 +271,10 @@ type EU4Game(settings : EU4Settings) =
     interface IGame<EU4ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (validateAll false (resources.ValidatableEntities())) in s @ d
+        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool) =
                 let generate =
-                    let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
+                    let les = (game.ValidationManager.ValidateLocalisation (resources.ValidatableEntities())) @ globalLocalisation(game)
                     game.LocalisationManager.localisationErrors <- Some les
                     les
                 match game.LocalisationManager.localisationErrors with
@@ -338,13 +293,13 @@ type EU4Game(settings : EU4Settings) =
         member __.ScriptedTriggers() = lookup.scriptedTriggers
         member __.ScriptedEffects() = lookup.scriptedEffects
         member __.StaticModifiers() = [] //lookup.staticModifiers
-        member __.UpdateFile shallow file text = updateFile shallow file text
+        member __.UpdateFile shallow file text =game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.localisationAPIs |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
-        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.infoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.infoService lookup pos file text
-        member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.infoService pos file text
+        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
         member __.RefreshCaches() = refreshRuleCaches None
         member __.ForceRecompute() = resources.ForceRecompute()

@@ -13,6 +13,7 @@ open System.Text
 open CWTools.Localisation
 open System.Resources
 open CWTools.Utilities.Utils
+open System.IO
 
 type IGame =
     abstract ParserErrors : unit -> (string * string * Position) list
@@ -70,7 +71,9 @@ type GameSettings<'M, 'S when 'S : comparison> = {
 
 type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
     (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, localisationService, processLocalisation,
-     encoding : Encoding) as this =
+     encoding : Encoding, validationSettings,
+     globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
+     afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
 
     let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding)
@@ -78,17 +81,69 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : FoldRules<_> option = None
     // let mutable completionService : CompletionService<_> option = None
-    let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.infoService))
+    let mutable ruleApplicator : RuleApplicator<'S> option = None
+    let mutable infoService : FoldRules<'S> option = None
+    let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService))
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = Lookup<'S, 'M>()
     let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation)
+    let validationServices() =
+        {
+            resources = resourceManager.Api
+            lookup = lookup
+            ruleApplicator = ruleApplicator
+            foldRules = infoService
+            localisationKeys = (fun () -> this.LocalisationManager.localisationKeys)
+        }
+    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices())
+
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []
     // let mutable taggedLocalisationKeys = []
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
-    member val ruleApplicator : RuleApplicator<'S> option = None with get, set
-    member val infoService : FoldRules<'S> option = None with get, set
+    let mutable errorCache = Map.empty
+    let updateFile (shallow : bool) filepath (filetext : string option) =
+        eprintfn "%s" filepath
+        let timer = new System.Diagnostics.Stopwatch()
+        timer.Start()
+        let res =
+            match filepath with
+            |x when x.EndsWith (".yml") ->
+                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                let resource = LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
+                this.Resources.UpdateFile(resource) |> ignore
+                this.LocalisationManager.UpdateAllLocalisation()
+                let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities())) @ globalLocalisation(this)
+                this.LocalisationManager.localisationErrors <- Some les
+                globalLocalisation(this)
+            | _ ->
+                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
+                let resource = LanguageFeatures.makeEntityResourceInput fileManager filepath file
+                let newEntities = this.Resources.UpdateFile (resource) |> List.map snd
+                afterUpdateFile this filepath
+                match shallow with
+                |true ->
+                    let (shallowres, _) = (validationManager.Validate(shallow, newEntities))
+                    let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
+                    let deep = errorCache |> Map.tryFind filepath |> Option.defaultValue []
+                    shallowres @ deep
+                |false ->
+                    let (shallowres, deepres) = (validationManager.Validate(shallow, newEntities))
+                    let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
+                    errorCache <- errorCache.Add(filepath, deepres)
+                    shallowres @ deepres
+                //validateAll shallow newEntities @ localisationCheck newEntities
+        eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+        res
+
+
+    member __.RuleApplicator with get() = ruleApplicator
+    member __.RuleApplicator with set(value) = ruleApplicator <- value
+    // member val ruleApplicator : RuleApplicator<'S> option = None with get, set
+    member __.InfoService with get() = infoService
+    member __.InfoService with set(value) = infoService <- value
+    // member val infoService : FoldRules<'S> option = None with get, set
     member val completionService : CompletionService<'S> option = None with get, set
 
     member __.Resources : IResourceAPI<'T> = resourceManager.Api
@@ -97,4 +152,9 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
     member __.FileManager = fileManager
-    member __.LocalisationManager = localisationManager
+    member __.LocalisationManager : LocalisationManager<'S, 'T, 'M> = localisationManager
+    member __.ValidationManager = validationManager
+    member __.Settings = settings
+    member __.UpdateFile shallow file text = updateFile shallow file text
+    member this.RefreshValidationManager() =
+        validationManager <- ValidationManager(validationSettings, validationServices())
