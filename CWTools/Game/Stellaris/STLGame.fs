@@ -252,7 +252,6 @@ module STLGameFunctions =
             // if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             game.LocalisationManager.UpdateAllLocalisation()
             // if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
-            eprintfn "test test"
             updateTypeDef game game.Settings.rules
             game.LocalisationManager.UpdateAllLocalisation()
 
@@ -470,7 +469,7 @@ type STLGame (settings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = game.UpdateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.localisationAPIs |> List.map snd))
+            member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text =
                 scopesAtPosSTL pos file text

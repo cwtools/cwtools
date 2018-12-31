@@ -323,7 +323,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (game.LocalisationManager.localisationAPIs |> List.map snd))
+        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

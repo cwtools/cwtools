@@ -110,8 +110,8 @@ type ResourceInput =
 
 
 
-type UpdateFile<'T> = ResourceInput -> (Resource * struct (Entity * Lazy<'T>)) list
-type UpdateFiles<'T> = ResourceInput list -> (Resource *  struct (Entity * Lazy<'T>)) list
+type UpdateFile<'T> = ResourceInput -> (Resource * struct (Entity * Lazy<'T>) option)
+type UpdateFiles<'T> = ResourceInput list -> (Resource *  struct (Entity * Lazy<'T>) option) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
@@ -312,8 +312,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 let item = struct(e, lazy (computedDataFunction e))
                 // eprintfn "e %A %A %A" e.filepath e.logicalpath e.overwrite
                 entitiesMap <- entitiesMap.Add(e.filepath, item)
-                yield resource, item
-            |None -> ()
+                yield resource, Some item
+            |None -> yield resource, None
         }
 
     let updateOverwrite() =
@@ -363,7 +363,10 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
         news
-
+    let updateFile file =
+        let res = updateFiles [file]
+        if res.Length > 1 then eprintfn "File %A returned multiple resources" (file) else ()
+        res.[0]
     let getResources() = fileMap |> Map.toList |> List.map snd
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
     let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
@@ -383,7 +386,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     member __.Api = {
         new IResourceAPI<'T> with
             member __.UpdateFiles = updateFiles
-            member __.UpdateFile = (fun f -> updateFiles([f]))
+            member __.UpdateFile = updateFile
             member __.GetResources = getResources
             member __.ValidatableFiles = validatableFiles
             member __.AllEntities = allEntities

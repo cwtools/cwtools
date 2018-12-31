@@ -111,16 +111,18 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             match filepath with
             |x when x.EndsWith (".yml") ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
-                let resource = LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
-                this.Resources.UpdateFile(resource) |> ignore
-                this.LocalisationManager.UpdateAllLocalisation()
+                let resourceInput = LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
+                let resource, _ = this.Resources.UpdateFile(resourceInput)
+                match resource with
+                |FileWithContentResource (_, r) -> this.LocalisationManager.UpdateLocalisationFile r
+                |_ -> ()
                 let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities())) @ globalLocalisation(this)
                 this.LocalisationManager.localisationErrors <- Some les
                 globalLocalisation(this)
             | _ ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
                 let resource = LanguageFeatures.makeEntityResourceInput fileManager filepath file
-                let newEntities = this.Resources.UpdateFile (resource) |> List.map snd
+                let newEntities = [this.Resources.UpdateFile (resource)] |> List.choose snd
                 afterUpdateFile this filepath
                 match shallow with
                 |true ->
