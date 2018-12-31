@@ -53,49 +53,12 @@ module HOI4GameFunctions =
         // locFileValidation <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
-type HOI4Settings = GameSettings<Modifier, Scope>
-open HOI4GameFunctions
-type HOI4Game(settings : HOI4Settings) =
-    let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; ]
-        experimentalValidators = []
-        heavyExperimentalValidators = []
-        experimental = settings.validation.experimental
-        fileValidators = []
-        lookupValidators = []
-        useRules = true
-        debugRulesOnly = false
-        localisationValidators = []
-    }
+    let updateModifiers (game : GameObject) =
+        game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let game = GameObject<Scope, Modifier, HOI4ComputedData>
-                (settings, "hearts of iron iv", scriptFolders, HOI4Compute.computeHOI4Data,
-                 (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 HOI4GameFunctions.processLocalisationFunction,
-                 Encoding.UTF8,
-                 validationSettings,
-                 globalLocalisation,
-                 (fun _ _ -> ()))
-    let lookup = game.Lookup
-    let resources = game.Resources
-    let fileManager = game.FileManager
-
-    let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
-
-    // let lookup = Lookup<Scope, Modifier>()
-
-
-    // let mutable validationManager = ValidationManager(validationSettings)
-    // let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
-
-    // let localisationCheck (entities : struct (Entity * Lazy<HOI4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
-
-    let updateModifiers() =
-        lookup.coreModifiers <- settings.embedded.modifiers
-
-    let updateProvinces() =
+    let updateProvinces (game : GameObject) =
         let provinceFile =
-            resources.GetResources()
+            game.Resources.GetResources()
             |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
             |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
         match provinceFile with
@@ -104,7 +67,8 @@ type HOI4Game(settings : HOI4Settings) =
             let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             eprintfn "%A" provinces
-            lookup.HOI4provinces <- provinces
+            game.Lookup.HOI4provinces <- provinces
+
     let updateScriptedEffects(rules :RootRule<Scope> list) (states : string list) (countries : string list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
@@ -135,7 +99,7 @@ type HOI4Game(settings : HOI4Settings) =
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
-    let updateTypeDef =
+    let updateTypeDef (game : GameObject) =
         let mutable simpleEnums = []
         let mutable complexEnums = []
         let mutable tempTypes = []
@@ -143,6 +107,8 @@ type HOI4Game(settings : HOI4Settings) =
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         (fun rulesSettings ->
+            let lookup = game.Lookup
+            let resources = game.Resources
             let timer = new System.Diagnostics.Stopwatch()
             timer.Start()
             match rulesSettings with
@@ -203,6 +169,58 @@ type HOI4Game(settings : HOI4Settings) =
             game.RefreshValidationManager()
             // validationManager <- ValidationManager({validationSettings with ruleApplicator = game.ruleApplicator; foldRules = game.infoService })
         )
+    let afterInit (game : GameObject) =
+        // updateScriptedTriggers()
+        // updateScriptedEffects()
+        // updateStaticodifiers()
+        // updateScriptedLoc()
+        // updateDefinedVariables()
+        updateModifiers(game)
+        updateProvinces(game)
+        // updateTechnologies()
+        game.LocalisationManager.UpdateAllLocalisation()
+        updateTypeDef game game.Settings.rules
+        game.LocalisationManager.UpdateAllLocalisation()
+
+type HOI4Settings = GameSettings<Modifier, Scope>
+open HOI4GameFunctions
+type HOI4Game(settings : HOI4Settings) =
+    let validationSettings = {
+        validators = [ validateMixedBlocks, "mixed"; ]
+        experimentalValidators = []
+        heavyExperimentalValidators = []
+        experimental = settings.validation.experimental
+        fileValidators = []
+        lookupValidators = []
+        useRules = true
+        debugRulesOnly = false
+        localisationValidators = []
+    }
+
+    let game = GameObject<Scope, Modifier, HOI4ComputedData>.CreateGame
+                (settings, "hearts of iron iv", scriptFolders, HOI4Compute.computeHOI4Data,
+                 (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
+                 HOI4GameFunctions.processLocalisationFunction,
+                 Encoding.UTF8,
+                 validationSettings,
+                 globalLocalisation,
+                 (fun _ _ -> ()))
+                 afterInit
+    let lookup = game.Lookup
+    let resources = game.Resources
+    let fileManager = game.FileManager
+
+    let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+
+    // let lookup = Lookup<Scope, Modifier>()
+
+
+    // let mutable validationManager = ValidationManager(validationSettings)
+    // let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
+
+    // let localisationCheck (entities : struct (Entity * Lazy<HOI4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
+
+
     let refreshRuleCaches(rules) =
         updateTypeDef(rules)
 
@@ -258,37 +276,26 @@ type HOI4Game(settings : HOI4Settings) =
         // eprintfn "Update Time: %i" timer.ElapsedMilliseconds
         // res
 
-    do
-        eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
-        let files = fileManager.AllFilesByPath()
-        let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
-        resources.UpdateFiles(filteredfiles) |> ignore
-        let embeddedFiles =
-            settings.embedded.embeddedFiles
-            |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
-            |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
-        let disableValidate (r, e) : Resource * Entity =
-            match r with
-            |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
-            |x -> x
-            , {e with validate = false}
+    // do
+    //     eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+    //     let files = fileManager.AllFilesByPath()
+    //     let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
+    //     resources.UpdateFiles(filteredfiles) |> ignore
+    //     let embeddedFiles =
+    //         settings.embedded.embeddedFiles
+    //         |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
+    //         |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
+    //     let disableValidate (r, e) : Resource * Entity =
+    //         match r with
+    //         |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
+    //         |x -> x
+    //         , {e with validate = false}
 
-        // let embeddedFiles = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
-        let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
-        let embedded = embeddedFiles @ cached
-        if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
+    //     // let embeddedFiles = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+    //     let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
+    //     let embedded = embeddedFiles @ cached
+    //     if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
-        // updateScriptedTriggers()
-        // updateScriptedEffects()
-        // updateStaticodifiers()
-        // updateScriptedLoc()
-        // updateDefinedVariables()
-        updateModifiers()
-        updateProvinces()
-        // updateTechnologies()
-        game.LocalisationManager.UpdateAllLocalisation()
-        updateTypeDef(settings.rules)
-        game.LocalisationManager.UpdateAllLocalisation()
     interface IGame<HOI4ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
@@ -321,8 +328,8 @@ type HOI4Game(settings : HOI4Settings) =
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
-        member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
-        member __.RefreshCaches() = refreshRuleCaches None
+        member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
+        member __.RefreshCaches() = refreshRuleCaches game None
         member __.ForceRecompute() = resources.ForceRecompute()
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

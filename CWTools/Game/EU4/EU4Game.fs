@@ -52,48 +52,15 @@ module EU4GameFunctions =
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         // locFileValidation <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
-
-type EU4Settings = GameSettings<Modifier, Scope>
-open EU4GameFunctions
-type EU4Game(settings : EU4Settings) =
-    let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
-        experimentalValidators = []
-        heavyExperimentalValidators = []
-        experimental = false
-        fileValidators = []
-        lookupValidators = []
-        useRules = true
-        debugRulesOnly = false
-        localisationValidators = []
-    }
-    let game = GameObject<Scope, Modifier, EU4ComputedData>
-                (settings, "europa universalis iv", scriptFolders, EU4Compute.computeEU4Data,
-                 (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 EU4GameFunctions.processLocalisationFunction,
-                 Encoding.GetEncoding(1252),
-                 validationSettings,
-                 globalLocalisation,
-                 (fun _ _ -> ()))
-    let lookup = game.Lookup
-    let resources = game.Resources
-    let fileManager = game.FileManager
-    let updateScriptedLoc () =
+    let updateScriptedLoc (game : GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localization") -> Some (f.entity) |_ -> None)
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.scriptedLoc <- rawLocs
-
-
-    // let mutable validationManager = ValidationManager(validationSettings)
-    // let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
-
-    // let localisationCheck (entities : struct (Entity * Lazy<EU4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
-
-    let updateModifiers() =
-            lookup.coreModifiers <- addGeneratedModifiers settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
+    let updateModifiers (game : GameObject) =
+            game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
     let updateScriptedEffects(rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
@@ -118,7 +85,7 @@ type EU4Game(settings : EU4Settings) =
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
 
-    let updateTypeDef =
+    let updateTypeDef (game : GameObject) =
         let mutable simpleEnums = []
         let mutable complexEnums = []
         let mutable tempTypes = []
@@ -126,6 +93,8 @@ type EU4Game(settings : EU4Settings) =
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         (fun rulesSettings ->
+            let lookup = game.Lookup
+            let resources = game.Resources
             let timer = new System.Diagnostics.Stopwatch()
             timer.Start()
             match rulesSettings with
@@ -183,6 +152,52 @@ type EU4Game(settings : EU4Settings) =
             game.RefreshValidationManager()
             // validationManager <- ValidationManager({validationSettings with ruleApplicator = game.ruleApplicator; foldRules = game.infoService})
         )
+    let afterInit (game : GameObject) =
+        // updateScriptedTriggers()
+        // updateScriptedEffects()
+        // updateStaticodifiers()
+        updateScriptedLoc(game)
+        // updateDefinedVariables()
+        updateModifiers(game)
+        // updateTechnologies()
+        game.LocalisationManager.UpdateAllLocalisation()
+        updateTypeDef game game.Settings.rules
+        game.LocalisationManager.UpdateAllLocalisation()
+type EU4Settings = GameSettings<Modifier, Scope>
+open EU4GameFunctions
+type EU4Game(settings : EU4Settings) =
+    let validationSettings = {
+        validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
+        experimentalValidators = []
+        heavyExperimentalValidators = []
+        experimental = false
+        fileValidators = []
+        lookupValidators = []
+        useRules = true
+        debugRulesOnly = false
+        localisationValidators = []
+    }
+    let game = GameObject<Scope, Modifier, EU4ComputedData>.CreateGame
+                ((settings, "europa universalis iv", scriptFolders, EU4Compute.computeEU4Data,
+                 (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
+                 EU4GameFunctions.processLocalisationFunction,
+                 Encoding.GetEncoding(1252),
+                 validationSettings,
+                 globalLocalisation,
+                 (fun _ _ -> ()))) 
+                 afterInit
+    let lookup = game.Lookup
+    let resources = game.Resources
+    let fileManager = game.FileManager
+
+
+    // let mutable validationManager = ValidationManager(validationSettings)
+    // let validateAll shallow newEntities = validationManager.Validate(shallow, newEntities)
+
+    // let localisationCheck (entities : struct (Entity * Lazy<EU4ComputedData>) list) = validationManager.ValidateLocalisation(entities)
+
+
+
     let refreshRuleCaches(rules) =
         updateTypeDef(rules)
 
@@ -258,16 +273,7 @@ type EU4Game(settings : EU4Settings) =
         let embedded = embeddedFiles @ cached
         if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
-        // updateScriptedTriggers()
-        // updateScriptedEffects()
-        // updateStaticodifiers()
-        updateScriptedLoc()
-        // updateDefinedVariables()
-        updateModifiers()
-        // updateTechnologies()
-        game.LocalisationManager.UpdateAllLocalisation()
-        updateTypeDef(settings.rules)
-        game.LocalisationManager.UpdateAllLocalisation()
+
     interface IGame<EU4ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
@@ -300,8 +306,8 @@ type EU4Game(settings : EU4Settings) =
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
-        member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
-        member __.RefreshCaches() = refreshRuleCaches None
+        member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
+        member __.RefreshCaches() = refreshRuleCaches game None
         member __.ForceRecompute() = resources.ForceRecompute()
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

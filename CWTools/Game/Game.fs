@@ -136,7 +136,41 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
                 //validateAll shallow newEntities @ localisationCheck newEntities
         eprintfn "Update Time: %i" timer.ElapsedMilliseconds
         res
+    let initialLoad() =
+            eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+            let timer = new System.Diagnostics.Stopwatch()
+            timer.Start()
+            // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
+            //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
+            // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
+            //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
+            let files = fileManager.AllFilesByPath()
+            let filteredfiles =
+                if settings.validation.validateVanilla
+                then files
+                else files |> List.choose (function
+                    |FileResourceInput f -> Some (FileResourceInput f)
+                    |FileWithContentResourceInput f -> Some (FileWithContentResourceInput f)
+                    |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f)) |_ -> None)
+            resourceManager.Api.UpdateFiles(filteredfiles) |> ignore
+            let embeddedFiles =
+                settings.embedded.embeddedFiles
+                |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
+                |> List.choose (fun (f, ft) ->
+                    if ft = ""
+                    then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) })
+                    else Some (FileWithContentResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false}))
+            let disableValidate (r, e) : Resource * Entity =
+                match r with
+                |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
+                |x -> x
+                , {e with validate = false}
+            let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
+            let embedded = embeddedFiles @ cached
+            if fileManager.ShouldUseEmbedded then resourceManager.Api.UpdateFiles(embedded) |> ignore else ()
 
+
+    do initialLoad()
 
     member __.RuleApplicator with get() = ruleApplicator
     member __.RuleApplicator with set(value) = ruleApplicator <- value
@@ -151,10 +185,14 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.Lookup : Lookup<'S, 'M> = lookup
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
-    member __.FileManager = fileManager
+    member __.FileManager = (fun () -> fileManager)()
     member __.LocalisationManager : LocalisationManager<'S, 'T, 'M> = localisationManager
     member __.ValidationManager = validationManager
     member __.Settings = settings
     member __.UpdateFile shallow file text = updateFile shallow file text
-    member this.RefreshValidationManager() =
+    member __.RefreshValidationManager() =
         validationManager <- ValidationManager(validationSettings, validationServices())
+    static member CreateGame settings afterInit =
+        let game = GameObject(settings)
+        afterInit game
+        game
