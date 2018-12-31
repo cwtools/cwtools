@@ -78,6 +78,7 @@ module STLCompute =
         //foldNode7 fNode node |> List.ofSeq |> Map.ofList
 
     let computeSTLData (foldRules : unit -> FoldRules<Scope> option) (e : Entity) =
+        let withRulesData = foldRules().IsSome
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         let setvariables = STLValidation.getEntitySetVariables e
         let setflags = findAllSetFlags e
@@ -85,4 +86,10 @@ module STLCompute =
         let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes )(e)) else None)
         let definedvariable = (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
         let hastechs = getAllTechPrereqs e
-        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable)
+        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData)
+
+    let computeSTLDataUpdate (foldRules : unit -> FoldRules<Scope> option) (e : Entity) (data : STLComputedData) =
+        let withRulesData = foldRules().IsSome
+        data.Referencedtypes <- (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes)(e)) else None)
+        data.Definedvariables <- (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
+        data.WithRulesData <- withRulesData

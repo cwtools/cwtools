@@ -126,9 +126,10 @@ type IResourceAPI<'T when 'T :> ComputedData > =
     abstract AllEntities : AllEntities<'T>
     abstract ValidatableEntities : ValidatableEntities<'T>
     abstract ForceRecompute : unit -> unit
+    abstract ForceRulesDataGenerate : unit -> unit
     abstract GetFileNames : GetFileNames
 
-type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T)) =
+type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit)) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -355,7 +356,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
 
         // eprintfn "print all"
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
-
+    let forceRulesData() =
+        entitiesMap |> Map.toSeq |> PSeq.iter (fun (_,(struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
     let forceRecompute() =
         entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) -> struct (e, lazy (computedDataFunction e)))
 
@@ -382,7 +384,6 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             let filenamenopath = Path.GetFileNameWithoutExtension filename
             Some (shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)
 
-
     member __.Api = {
         new IResourceAPI<'T> with
             member __.UpdateFiles = updateFiles
@@ -392,5 +393,6 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             member __.AllEntities = allEntities
             member __.ValidatableEntities = validatableEntities
             member __.ForceRecompute() = forceRecompute()
+            member __.ForceRulesDataGenerate() = forceRulesData()
             member __.GetFileNames = getFileNames
         }

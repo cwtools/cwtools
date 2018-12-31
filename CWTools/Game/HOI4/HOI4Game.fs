@@ -99,14 +99,15 @@ module HOI4GameFunctions =
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
-    let updateTypeDef (game : GameObject) =
+    let updateTypeDef =
         let mutable simpleEnums = []
         let mutable complexEnums = []
         let mutable tempTypes = []
         let mutable tempValues = Map.empty
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
-        (fun rulesSettings ->
+        let mutable rulesDataGenerated = false
+        (fun  (game : GameObject) rulesSettings ->
             let lookup = game.Lookup
             let resources = game.Resources
             let timer = new System.Diagnostics.Stopwatch()
@@ -121,6 +122,7 @@ module HOI4GameFunctions =
                 complexEnums <- complexenums
                 tempTypes <- types
                 tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
+                rulesDataGenerated <- false
                 eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
@@ -151,6 +153,9 @@ module HOI4GameFunctions =
             lookup.scriptedTriggers <- updateScriptedTriggers lookup.configRules states countries
 
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
+            game.InfoService <- Some tempFoldRules
+            if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
+
             let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
@@ -199,6 +204,7 @@ type HOI4Game(settings : HOI4Settings) =
 
     let game = GameObject<Scope, Modifier, HOI4ComputedData>.CreateGame
                 (settings, "hearts of iron iv", scriptFolders, HOI4Compute.computeHOI4Data,
+                HOI4Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                  HOI4GameFunctions.processLocalisationFunction,
                  Encoding.UTF8,

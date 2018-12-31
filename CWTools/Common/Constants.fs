@@ -30,16 +30,17 @@ type Severity =
 
 
 
-type ComputedData(referencedtypes, definedvariable) =
+type ComputedData(referencedtypes, definedvariable, withRulesData) =
     member val Cache : Map<string, obj list> = Map.empty with get, set
-    member __.Referencedtypes : Map<string, (string  * range) list> option = referencedtypes
-    member __.Definedvariables : Map<string, (string * range) list> option = definedvariable
+    member val WithRulesData : bool = withRulesData with get,set
+    member val Referencedtypes : Map<string, (string  * range) list> option = referencedtypes with get, set
+    member val Definedvariables : Map<string, (string * range) list> option = definedvariable with get, set
 
-type EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams) =
-    inherit ComputedData(referencedtypes, definedvariable)
+type EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData) =
+    inherit ComputedData(referencedtypes, definedvariable, withRulesData)
     member __.ScriptedEffectParams : string list option = scriptedeffectparams
-type HOI4ComputedData(referencedtypes, definedvariable) =
-    inherit ComputedData(referencedtypes, definedvariable)
+type HOI4ComputedData(referencedtypes, definedvariable, withRulesData) =
+    inherit ComputedData(referencedtypes, definedvariable, withRulesData)
 
 type EffectType = |Effect |Trigger |Both
 type Effect<'T when 'T : comparison> internal (name, scopes, effectType) =

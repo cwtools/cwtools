@@ -87,6 +87,7 @@ let perf2(b) =
     if b then
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities()
+        stl.RefreshCaches()
         ()
     else ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds

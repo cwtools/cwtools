@@ -85,14 +85,15 @@ module EU4GameFunctions =
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
 
-    let updateTypeDef (game : GameObject) =
+    let updateTypeDef  =
         let mutable simpleEnums = []
         let mutable complexEnums = []
         let mutable tempTypes = []
         let mutable tempValues = Map.empty
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
-        (fun rulesSettings ->
+        let mutable rulesDataGenerated = false
+        (fun (game : GameObject) rulesSettings ->
             let lookup = game.Lookup
             let resources = game.Resources
             let timer = new System.Diagnostics.Stopwatch()
@@ -109,6 +110,7 @@ module EU4GameFunctions =
                 complexEnums <- complexenums
                 tempTypes <- types
                 tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
+                rulesDataGenerated <- false
                 eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
@@ -133,6 +135,9 @@ module EU4GameFunctions =
             // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
+            game.InfoService <- Some tempFoldRules
+            if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
+
             let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
@@ -179,13 +184,14 @@ type EU4Game(settings : EU4Settings) =
     }
     let game = GameObject<Scope, Modifier, EU4ComputedData>.CreateGame
                 ((settings, "europa universalis iv", scriptFolders, EU4Compute.computeEU4Data,
-                 (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 EU4GameFunctions.processLocalisationFunction,
-                 Encoding.GetEncoding(1252),
-                 validationSettings,
-                 globalLocalisation,
-                 (fun _ _ -> ())))
-                 afterInit
+                    EU4Compute.computeEU4DataUpdate,
+                     (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
+                     EU4GameFunctions.processLocalisationFunction,
+                     Encoding.GetEncoding(1252),
+                     validationSettings,
+                     globalLocalisation,
+                     (fun _ _ -> ())))
+                     afterInit
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager

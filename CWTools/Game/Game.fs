@@ -70,7 +70,7 @@ type GameSettings<'M, 'S when 'S : comparison> = {
 }
 
 type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
-    (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, localisationService, processLocalisation,
+    (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService, processLocalisation,
      encoding : Encoding, validationSettings,
      globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
      afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit) as this =
@@ -83,7 +83,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     // let mutable completionService : CompletionService<_> option = None
     let mutable ruleApplicator : RuleApplicator<'S> option = None
     let mutable infoService : FoldRules<'S> option = None
-    let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService))
+    let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService))
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = Lookup<'S, 'M>()
     let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation)

@@ -17,8 +17,8 @@ module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
 
 
-    type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable) =
-        inherit ComputedData(referencedtypes, definedvariable)
+    type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData) =
+        inherit ComputedData(referencedtypes, definedvariable, withRulesData)
         member __.Eventids : string list = eventids
         member __.Setvariables : string list = setvariables
         member __.Setflags : (FlagType * string) list = setflags
