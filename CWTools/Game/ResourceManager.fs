@@ -272,7 +272,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     //      match file with
     //                 |CachedResourceInput (r, s) -> r, s
     //                 |EntityResourceInput e ->
-    //                     // eprintfn "%A %A" e.logicalpath e.filepath
+    //                     // log "%A %A" e.logicalpath e.filepath
     //                     e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
     //                 |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
 
@@ -290,7 +290,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         match file with
             |CachedResourceInput (r, e) -> r, Some e
             |EntityResourceInput e ->
-                // eprintfn "%A %A" e.logicalpath e.filepath
+                // log "%A %A" e.logicalpath e.filepath
                 e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
                     |> parseEntity
             |FileResourceInput f ->
@@ -311,7 +311,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             match entity with
             |Some e ->
                 let item = struct(e, lazy (computedDataFunction e))
-                // eprintfn "e %A %A %A" e.filepath e.logicalpath e.overwrite
+                // log "e %A %A %A" e.filepath e.logicalpath e.overwrite
                 entitiesMap <- entitiesMap.Add(e.filepath, item)
                 yield resource, Some item
             |None -> yield resource, None
@@ -326,9 +326,9 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             | es ->
                 let sorted = es |> List.sortByDescending (fun (s, e) -> if e.scope = "embedded" then "" else if e.scope = "" then "ZZZZZZZZ" else e.scope)
                 let first = sorted |> List.head |> (fun (s, h) -> s, {h with overwrite = Overwrite.Overwrote})
-                // eprintfn "overwrote: %s" (first |> fst)
+                // log "overwrote: %s" (first |> fst)
                 let rest = sorted |> List.skip 1 |> List.map (fun (s, r) -> s, {r with overwrite = Overwrite.Overwritten})
-                // rest |> List.iter (fun (s, _) -> eprintfn "overwritten: %s" s)
+                // rest |> List.iter (fun (s, _) -> log "overwritten: %s" s)
                 first::rest
         let res = entities |> List.groupBy (fun (s, e) -> e.logicalpath)
                            |> List.collect processGroup
@@ -346,16 +346,16 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             | es ->
                 let sorted = es |> List.sortByDescending (fun (s, e) -> if e.scope = "embedded" then "" else if e.scope = "" then "ZZZZZZZZ" else e.scope)
                 let first = sorted |> List.head |> (fun (s, h) -> s, {h with overwrite = Overwrite.Overwrote})
-                // eprintfn "overwrote: %s" (first |> fst)
+                // log "overwrote: %s" (first |> fst)
                 let rest = sorted |> List.skip 1 |> List.map (fun (s, r) -> s, {r with overwrite = Overwrite.Overwritten})
-                // rest |> List.iter (fun (s, _) -> eprintfn "overwritten: %s" s)
+                // rest |> List.iter (fun (s, _) -> log "overwritten: %s" s)
                 first::rest
         let res = filesWithContent |> List.groupBy (fun (s, e) -> e.logicalpath)
                            |> List.collect processGroup
         fileMap <- res |> List.fold (fun fm (s, e) -> fm.Add(s, FileWithContentResource (s, e))) fileMap
 
-        // eprintfn "print all"
-        // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
+        // log "print all"
+        // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
     let forceRulesData() =
         entitiesMap |> Map.toSeq |> PSeq.iter (fun (_,(struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
     let forceRecompute() =
@@ -367,7 +367,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         news
     let updateFile file =
         let res = updateFiles [file]
-        if res.Length > 1 then eprintfn "File %A returned multiple resources" (file) else ()
+        if res.Length > 1 then log (sprintf "File %A returned multiple resources" (file)) else ()
         res.[0]
     let getResources() = fileMap |> Map.toList |> List.map snd
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)

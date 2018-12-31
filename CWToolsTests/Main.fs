@@ -105,7 +105,7 @@ let main argv =
     CultureInfo.DefaultThreadCurrentUICulture <-CultureInfo("ru-RU");
     Thread.CurrentThread.CurrentCulture <- CultureInfo("ru-RU");
     Thread.CurrentThread.CurrentUICulture <- CultureInfo("ru-RU");
-
+    CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
     if Array.tryHead argv = Some "p"
     then perf(true); 0
     elif Array.tryHead argv = Some "u"

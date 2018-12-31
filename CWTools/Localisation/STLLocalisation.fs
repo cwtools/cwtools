@@ -2,6 +2,7 @@ namespace CWTools.Localisation
 open System.Collections.Generic
 open System.IO
 open CWTools.Common
+open CWTools.Utilities.Utils
 
 module STLLocalisation =
     open YAMLLocalisationParser
@@ -39,7 +40,7 @@ module STLLocalisation =
         let mutable recordsL : struct (Entry * Lang) list = []
         let mutable records : struct (Entry * Lang) array = [||]
         let addFile f t =
-            //eprintfn "%s" f
+            //log "%s" f
             match parseLocText t f with
             | Success({key = key; entries = entries}, _, _) ->
                 match keyToLanguage key with
@@ -66,7 +67,7 @@ module STLLocalisation =
             recordsL <- []
 
         new(localisationSettings : LocalisationSettings) =
-            eprintfn "Loading STL localisation in %s" localisationSettings.folder
+            log (sprintf "Loading STL localisation in %s" localisationSettings.folder)
             match Directory.Exists(localisationSettings.folder) with
             | true ->
                         let files = Directory.EnumerateDirectories localisationSettings.folder
@@ -76,7 +77,7 @@ module STLLocalisation =
                         let actualFiles = files @ rootFiles |> List.map (fun f -> f, File.ReadAllText(f, System.Text.Encoding.UTF8))
                         STLLocalisationService(actualFiles)
             | false ->
-                eprintfn "%s not found" localisationSettings.folder
+                log (sprintf "%s not found" localisationSettings.folder)
                 STLLocalisationService([])
         member __.Api lang = {
             new ILocalisationAPI with

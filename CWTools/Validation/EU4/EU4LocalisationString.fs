@@ -83,7 +83,7 @@ module EU4LocalisationString =
         if filename = "languages.yml" then OK else
         let fileHeader = File.ReadLines(file) |> Seq.tryFind (fun l -> l.Trim().StartsWith("#") |> not && l.Trim().Length > 0)
                                               |> Option.map (fun h -> h.Trim().Replace(":",""))
-        // eprintfn "lcfn %s %A" filename fileHeader
+        // log "lcfn %s %A" filename fileHeader
         let keyToLanguage =
             function
             |(x : string) when x.IndexOf("l_english",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.English

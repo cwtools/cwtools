@@ -6,6 +6,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 open FParsec
+open CWTools.Utilities.Utils
 
 module Files =
 
@@ -17,14 +18,14 @@ module Files =
 
     type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding) =
         let normalisedScopeDirectory = rootDirectory.Replace("\\","/").TrimStart('.')
-        do eprintfn "normalised %s" normalisedScopeDirectory
+        do log (sprintf "normalised %s" normalisedScopeDirectory)
         let normalisedScopeDirectoryLength = normalisedScopeDirectory.Length
         let convertPathToLogicalPath =
             fun (path : string) ->
                 let path = path.Replace("\\","/")
-                // eprintfn "conv %A" path
+                // log "conv %A" path
                 let path = let index = path.IndexOf(normalisedScopeDirectory) in if index >= 0 then path.Substring(index + normalisedScopeDirectoryLength) else path
-                // eprintfn "conv2 %A" path
+                // log "conv2 %A" path
                 //let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
                 if path.StartsWith "gfx\\" || path.StartsWith "gfx/" then path else
                 let pathContains (part : string) =
@@ -62,13 +63,13 @@ module Files =
                 yield! dirs
                 yield! getAllFolders dirs
             }
-        do eprintfn "%s %b" rootDirectory (Directory.Exists rootDirectory)
+        do logNormal (sprintf "Workspace root is %s, exists: %b" rootDirectory (Directory.Exists rootDirectory))
         let allDirsBelowRoot = if Directory.Exists rootDirectory then getAllFoldersUnion [rootDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
         let stellarisDirectory =
             let dir = allDirsBelowRoot |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName || folder.ToLower() = "game") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
-            |Some s -> eprintfn "Found %s directory at %s" gameDirName s
-            |None -> eprintfn "Couldn't find %s directory, falling back to embedded vanilla files" gameDirName
+            |Some s -> logNormal (sprintf "Found %s directory at %s" gameDirName s)
+            |None -> logNormal (sprintf "Couldn't find vanilla %s directory, falling back to embedded vanilla files" gameDirName)
             dir
         let mods =
             let getModFiles modDir =
@@ -82,22 +83,22 @@ module Files =
 
             let modDirs = allDirsBelowRoot |> List.filter(fun (_, folder) -> folder.ToLower() = "mod" || folder.ToLower() = "mods")
             match modDirs with
-            | [] -> eprintfn "%s" "Didn't find any mod directories"
+            | [] -> logNormal (sprintf "%s" "Didn't find any mod directories")
             | x ->
-                eprintfn "Found %i mod directories:" x.Length
-                x |> List.iter (fun d -> eprintfn "%s" (fst d))
+                log (sprintf "Found %i mod directories:" x.Length)
+                x |> List.iter (fun d -> log (sprintf "%s" (fst d)))
             let dotModFiles = (rootDirectory, Path.GetFileName rootDirectory)::modDirs |> List.collect (fst >> getModFiles)
             match dotModFiles with
-            | [] -> eprintfn "%s" "Didn't find any mods"
+            | [] -> logNormal (sprintf "%s" "Didn't find any mods in subfolders")
             | x ->
-                eprintfn "Found %i mods:" x.Length
-                x |> List.iter (fun (n, p, _) -> eprintfn "%s, %s" n p)
+                logNormal (sprintf "Found %i mods:" x.Length)
+                x |> List.iter (fun (n, p, _) -> (logNormal (sprintf "%s, %s" n p)))
             dotModFiles |> List.distinct
         let modFolders =
             let folders = mods |> List.filter (fun (n, _, _) -> modFilter |> function |None -> true |Some mf -> n.Contains(mf))
                                 |> List.map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
-            eprintfn "Mod folders"
-            folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)
+            log (sprintf "Mod folders")
+            folders |> List.iter (fun (n, f) -> log (sprintf "%s, %s" n f))
             folders
 
 
@@ -106,15 +107,15 @@ module Files =
             |None, _ ->
                 // if modFolders.Length > 0 then modFolders
                 // else
-                    if modFolders.Length = 0 then eprintfn "Couldn't find the game directory or any mods" else ()
+                    if modFolders.Length = 0 then logNormal (sprintf "Couldn't find the game directory or any mods") else ()
                     let checkIsGameFolder = (fun (f : string) -> f.Contains "common" || f.Contains "events" || f.Contains "interface" || f.Contains "gfx" || f.Contains "localisation")
                     let foundAnyFolders = Directory.EnumerateDirectories rootDirectory |> List.ofSeq |> List.exists checkIsGameFolder
                     match foundAnyFolders with
                     | true ->
-                        eprintfn "I think you opened a mod folder directly"
+                        logNormal (sprintf "I think you opened a mod folder directly")
                         (Path.GetFileName rootDirectory, rootDirectory)::modFolders
                     | false ->
-                        eprintfn "I don't think you opened a mod folder directly"
+                        logNormal (sprintf "I don't think you opened a mod folder directly")
                         modFolders
             |Some s, All -> ("vanilla", s) :: (modFolders)
             |_, Mods -> (modFolders)
@@ -123,7 +124,7 @@ module Files =
 
         let allFilesByPath =
             let getAllFiles (scope, path) =
-                //eprintfn "%A" path
+                //log "%A" path
                 scriptFolders
                         |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))

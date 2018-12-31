@@ -2,6 +2,7 @@ namespace CWTools.Common
 
 open System
 open System.ComponentModel.Design
+open CWTools.Utilities.Utils
 module EU4Constants =
     type Scope =
         |Country
@@ -43,7 +44,7 @@ module EU4Constants =
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
-            |x -> eprintfn "Unexpected scope %O" x; Scope.Any) //failwith ("unexpected scope" + x.ToString()))
+            |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
     let parseScopes =
         function

@@ -66,7 +66,7 @@ module HOI4GameFunctions =
         |Some pf ->
             let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
-            eprintfn "%A" provinces
+            log (sprintf "%A" provinces)
             game.Lookup.HOI4provinces <- provinces
 
     let updateScriptedEffects(rules :RootRule<Scope> list) (states : string list) (countries : string list) =
@@ -123,24 +123,24 @@ module HOI4GameFunctions =
                 tempTypes <- types
                 tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
                 rulesDataGenerated <- false
-                eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
+                log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allEnums = simpleEnums @ complexEnumDefs @ ["provinces", lookup.HOI4provinces]
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> Map.ofList
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = game.LocalisationManager.localisationKeys
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let files = resources.GetFileNames() |> Set.ofList
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let tempRuleApplicator = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, HOI4 HOI4Lang.Default)
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
 
             let states = lookup.typeDefInfo.TryFind "state"
@@ -162,15 +162,15 @@ module HOI4GameFunctions =
             lookup.varDefInfo <- results
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
 
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, HOI4 HOI4Lang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, HOI4 HOI4Lang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.InfoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, game.RuleApplicator.Value, changeScope, defaultContext, Scope.Any, HOI4 HOI4Lang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RefreshValidationManager()
             // validationManager <- ValidationManager({validationSettings with ruleApplicator = game.ruleApplicator; foldRules = game.infoService })
         )
@@ -239,7 +239,7 @@ type HOI4Game(settings : HOI4Settings) =
     // let mutable errorCache = Map.empty
 
     // let updateFile (shallow : bool) filepath (filetext : string option) =
-    //     eprintfn "%s" filepath
+    //     log "%s" filepath
     //     let timer = new System.Diagnostics.Stopwatch()
     //     timer.Start()
     //     let res =
@@ -258,7 +258,7 @@ type HOI4Game(settings : HOI4Settings) =
     //             let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
     //             let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
     //             let resource = makeEntityResourceInput fileManager filepath file
-    //             //eprintfn "%s %s" logicalpath filepath
+    //             //log "%s %s" logicalpath filepath
     //             let newEntities = resources.UpdateFile (resource) |> List.map snd
     //             // match filepath with
     //             // |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
@@ -279,11 +279,11 @@ type HOI4Game(settings : HOI4Settings) =
     //                     errorCache <- errorCache.Add(filepath, deepres)
     //                     shallowres @ deepres
 
-        // eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+        // log "Update Time: %i" timer.ElapsedMilliseconds
         // res
 
     // do
-    //     eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+    //     log "Parsing %i files" (fileManager.AllFilesByPath().Length)
     //     let files = fileManager.AllFilesByPath()
     //     let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
     //     resources.UpdateFiles(filteredfiles) |> ignore
@@ -329,7 +329,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs |> List.map snd))
+        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

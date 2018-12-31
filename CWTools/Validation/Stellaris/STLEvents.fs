@@ -63,12 +63,12 @@ module STLEventValidation =
         let fCombine = (@)
         let directCalls = event.Children |> List.collect (foldNode7 fNode) // |> List.fold (@) []
         let referencedProjects = event.Children |> List.collect (foldNode7 fpNode)
-        //eprintfn "%s projs %A" (event.ID) referencedProjects
+        //log "%s projs %A" (event.ID) referencedProjects
         let projectKeys = ["on_success"; "on_fail"; "on_start"; "on_progress_25"; "on_progress_50"; "on_progress_75";]
         let getProjectTarget (n : Node) =
             n.Children |> List.filter (fun c -> List.contains c.Key projectKeys) |> List.collect (foldNode7 fNode)
         let projectTargets = projects |> List.filter (fun (_, pk) -> List.contains (pk) referencedProjects) |> List.collect (fun (p, _) -> getProjectTarget p)
-        //eprintfn "%s proj targets %A" (event.ID) projectTargets
+        //log "%s proj targets %A" (event.ID) projectTargets
         directCalls @ projectTargets
 
     let findAllUsedEventTargets (event : Node) =
@@ -136,23 +136,23 @@ module STLEventValidation =
 
     let checkEventChain (effects : ScriptedEffect list) (sinits : Node list) (projects : (Node * string) list) (globals : Set<string>) (events : Event list) =
         let mutable current = events |> List.map (fun e -> ((e.ID, e), findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
-                                        //|> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
-                                        //|> (fun f -> eprintfn "%A" f; f)
+                                        //|> List.map (fun (e, s, u, r, x) -> log "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
+                                        //|> (fun f -> log "%A" f; f)
                                         |> List.map (addScriptedEffectTargets effects)
                                         |> List.map (addSystemInitializer sinits)
-                                        //|> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
+                                        //|> List.map (fun (e, s, u, r, x) -> log "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         |> List.map (fun (e, s, u, r, x) -> e, s, s, Set.difference u s, r, x, x)
         let getRequiredTargets (ids : string list) =
             if List.isEmpty ids then Set.empty else
                 let ret = ids |> List.choose (fun x -> current |> List.tryPick (fun ((e2id, e2),_ ,_ , u2, _, _, _) -> if e2id = x then Some (Set.toList u2) else  None)) |> List.collect id |> Set.ofList
-               // eprintfn "%A" ret
+               // log "%A" ret
                 ret
 
         let getExistsTargets (currentx) (ids : string list) =
             let inter = ids |> List.choose (fun x -> current |> List.tryPick (fun ((e2id, e2),_, _, u2, _, _ ,x2) -> if e2id = x then Some (u2, x2) else None))
             let all = inter |> List.fold (fun xs (u, x) -> Set.union(Set.union u x) xs) currentx
             let ret = inter |> List.fold (fun xs (u, x) -> xs |> Set.toList |> List.fold (fun nxs nx -> if Set.contains nx u && not(Set.contains nx x) then nxs else nx::nxs) [] |> Set.ofList) all
-            // eprintfn "%A" ret
+            // log "%A" ret
             ret
 
         let update (e, os, s, u, r, ox, x) =
@@ -166,13 +166,13 @@ module STLEventValidation =
         let mutable i = 0
 
         let step (es) =
-            //eprintfn "%A" current
+            //log "%A" current
             i <- i + 1
             let before = current
             current <- es |> List.map update
             current = before || i > 100
         while (not(step current)) do ()
-        //current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s has %A and needs %A" (e.ID) s u)
+        //current |> List.iter (fun (e, s, u, r) -> log "event %s has %A and needs %A" (e.ID) s u)
 
         // let getSourceSetTargets (ids : string list) =
         //     let inner = (fun (x : string) -> current |> List.pick (fun (e2, s2, _, _) -> if e2.ID = x then Some (s2) else None))
@@ -199,7 +199,7 @@ module STLEventValidation =
         let mutable i = 0
 
         let step (es) =
-            //eprintfn "%A" current
+            //log "%A" current
             i <- i + 1
             let before = current
             current <- es |> List.map downOptimistic
@@ -218,15 +218,15 @@ module STLEventValidation =
         let mutable i = 0
 
         let step (es) =
-            //eprintfn "%A" i
+            //log "%A" i
             i <- i + 1
             let before = current
             current <- es |> List.map downPessimistic
             current = before || i > 100
         while (not(step current)) do ()
-        //current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s has %A and needs %A" (e.ID) s u)
-       // current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s is missing %A" (e.ID) (Set.difference u s))
-       // current |> List.iter (fun (e, os, s, u, r, ox, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
+        //current |> List.iter (fun (e, s, u, r) -> log "event %s has %A and needs %A" (e.ID) s u)
+       // current |> List.iter (fun (e, s, u, r) -> log "event %s is missing %A" (e.ID) (Set.difference u s))
+       // current |> List.iter (fun (e, os, s, u, r, ox, x) -> log "%s %A %A %A %A" e.ID s u r x;)
 
         let missing = current |> List.filter (fun (e, os, s, u, r, ox, x) -> not(Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
         let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) ->
@@ -253,13 +253,13 @@ module STLEventValidation =
             let projectsWithTags = projects |> List.map (fun p -> p, p.TagText("key"))
             let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.ID, f))
                         |> List.filter (fun (_, f) -> Map.containsKey f eids)
-                        //|> (fun f -> eprintfn "%A" f; f)
+                        //|> (fun f -> log "%A" f; f)
                         |> List.collect(fun (s, t) -> [s,t; t,s])
-                        //|> (fun f -> eprintfn "%A" f; f)
+                        //|> (fun f -> log "%A" f; f)
                         //|> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
                         |> (fun es -> ((events |> List.map (fun f -> f.ID), es)))
                         |> connectedComponents
-                        //|> (fun f -> eprintfn "%A" f; f)
+                        //|> (fun f -> log "%A" f; f)
                         |> List.map (fun set -> set |> List.map (fun (event) -> eids.[event] ))
             if chains |> List.isEmpty then OK else
                 let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
@@ -267,7 +267,7 @@ module STLEventValidation =
                 let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
                 let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
                 let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
-                //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
+                //log "%s" (globals |> Set.toList |> String.concat ", ")
                 let filteredChains = chains |> List.choose (fun c -> if c.Length > 500 then None else Some c)
                 filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
 

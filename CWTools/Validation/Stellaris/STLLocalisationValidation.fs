@@ -291,9 +291,9 @@ module STLLocalisationValidation =
             (traditions |> List.map inner |> List.fold (<&&>) OK)
 
     // let valTraditionLocCats (cats : Node list) (traditions : Node list) (keys : (Lang * Set<string>) list) =
-    //     //eprintfn "%A" cats
+    //     //log "%A" cats
     //     let catres, starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun (rs, ss, fs, ts) (r, s, f, t) -> rs <&&> r, s::ss,  f::fs, ts @ t) (OK, [], [], [])
-    //     //eprintfn "%A %A %A" starts finishes trads
+    //     //log "%A %A %A" starts finishes trads
     //     let tradres = traditions |> List.fold (fun state trad -> state <&&> (valTraditionLocs trad keys starts finishes trads)) OK
     //     catres <&&> tradres
 

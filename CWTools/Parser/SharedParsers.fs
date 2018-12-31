@@ -2,13 +2,14 @@
 open FParsec
 open CWTools.Utilities.Position
 open Types
+open CWTools.Utilities.Utils
 
 module internal SharedParsers =
     let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
         fun stream ->
-            eprintfn "%A: Entering %s" stream.Position label
+            log (sprintf "%A: Entering %s" stream.Position label)
             let reply = p stream
-            eprintfn "%A: Leaving %s (%A)" stream.Position label reply.Status
+            log (sprintf "%A: Leaving %s (%A)" stream.Position label reply.Status)
             reply
 
     let betweenL (popen: Parser<_,_>) (pclose: Parser<_,_>) (p: Parser<_,_>) label =

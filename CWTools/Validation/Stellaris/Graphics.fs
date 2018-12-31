@@ -99,7 +99,7 @@ module Graphics =
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
-            //eprintfn "assets %A" assets
+            //log "assets %A" assets
             let inner =
                 fun (s : Node) ->
                     match s.TagText "ship_size", s.Leafs "entity" |> Seq.tryHead with
@@ -197,7 +197,7 @@ module Graphics =
         let path =
             match folder with
             |Buildings -> "gfx/interface/icons/buildings/" + file + ".dds"
-        //eprintfn "%A" files
+        //log "%A" files
         files |> Set.contains path
 
     let valIconWithInterface (sprites : Collections.Set<string>) (files : Collections.Set<string>) (folder : gfxFolders) (key : string) (node : Node) =
@@ -213,8 +213,8 @@ module Graphics =
         fun res es ->
             let os = EntitySet (res.AllEntities())
             let files = res.GetFileNames() |> Set.ofList
-            // eprintfn "%A" files
-            // files |> Set.filter (fun s -> s.Contains("great")) |> eprintfn "%A"
+            // log "%A" files
+            // files |> Set.filter (fun s -> s.Contains("great")) |> log "%A"
             let spriteGenerator (e : Entity) : obj list =
                 if e.entityType = EntityType.Interface
                 then e.entity.Children |> List.filter (fun e -> e.Key = "spriteTypes")

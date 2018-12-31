@@ -3,6 +3,8 @@ namespace CWTools.Common
 open System
 open System.ComponentModel.Design
 open System
+open CWTools.Utilities.Utils
+
 module STLConstants =
     /// Blackninja9939: Country, leader, galatic object, planet, ship, fleet, pop, ambient object, army, tile, species, pop faction, sector and alliance
     /// Blackninja9939: War and Megastructure are scopes too
@@ -97,7 +99,7 @@ module STLConstants =
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
             |"(unknown)" -> Scope.Any
-            |x -> eprintfn "Unexpected scope %O" x; Scope.Any) //failwith ("unexpected scope" + x.ToString()))
+            |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
     let parseScopes =
         function

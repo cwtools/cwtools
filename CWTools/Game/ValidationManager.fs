@@ -35,7 +35,7 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
     let resources = services.resources
     let validators = settings.validators
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
-        eprintfn "Validating %i files" (entities.Length)
+        log (sprintf "Validating %i files" (entities.Length))
         let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
         let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
@@ -44,13 +44,13 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         let runValidators f (validators : (StructureValidator<'T> * string) list) =
             (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             @ (if not settings.experimental then [] else settings.experimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-        // eprintfn "Validating misc"
+        // log "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
-        // eprintfn "Validating rules"
+        // log "Validating rules"
         let rres = (if settings.useRules && services.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [services.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
-        // eprintfn "Validating files"
+        // log "Validating files"
         let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
-        // eprintfn "Validating effects/triggers"
+        // log "Validating effects/triggers"
         let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> []
         let hres = if settings.experimental && (not (shallow)) then settings.heavyExperimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> [] else []
         let shallow = if settings.debugRulesOnly then rres else res @ fres @ lres @ rres
@@ -58,14 +58,13 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         shallow, deep
 
     let validateLocalisation (entities : struct (Entity * Lazy<'T>) list) =
-        eprintfn "Localisation check %i files" (entities.Length)
+        log (sprintf "Localisation check %i files" (entities.Length))
         let oldEntities = EntitySet (resources.AllEntities())
         let newEntities = EntitySet entities
         let vs = (settings.localisationValidators |> List.map (fun v -> v oldEntities (services.localisationKeys()) newEntities) |> List.fold (<&&>) OK)
         let typeVs =
             if settings.useRules && services.foldRules.IsSome
             then
-                eprintfn "locval"
                 (entities |> List.map (fun struct (e, _) -> e)) <&!&> services.foldRules.Value.GetTypeLocalisationErrors
             else OK
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs

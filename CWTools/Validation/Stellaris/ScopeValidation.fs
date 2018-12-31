@@ -326,8 +326,8 @@ module ScopeValidation =
         newWmb.All <- newWmb.All |> List.filter (function |LeafC l -> (not (List.contains l.Key excludes)) | _ -> true)
         newWmb.All <- newWmb.All |> List.filter (function |NodeC l -> (not (List.contains l.Key excludes)) | _ -> true)
         newWmb.Scope <- wmb.Scope
-        // eprintfn "%A" (wmb.Values |> List.map (fun  c -> c.Key))
-        // eprintfn "%A" (newWmb.Values |> List.map (fun  c -> c.Key))
+        // log "%A" (wmb.Values |> List.map (fun  c -> c.Key))
+        // log "%A" (newWmb.Values |> List.map (fun  c -> c.Key))
         newWmb :> Node
 
     let validateModifierBlocks : LookupValidator<STLComputedData, _, _> =

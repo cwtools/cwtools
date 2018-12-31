@@ -29,12 +29,12 @@ module LanguageFeatures =
 
     let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
-        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
+        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); s.Insert(pos.Column, "x") else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, completionService with
         |Some e, Some completion ->
-            eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-            //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
+            log (sprintf "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            //log "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
             completion.Complete(pos, e)
         |_, _ -> []
 
@@ -43,7 +43,7 @@ module LanguageFeatures =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
-            eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            log (sprintf "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, Some (t, tv)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
@@ -54,10 +54,10 @@ module LanguageFeatures =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
-            eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            log (sprintf "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, Some ((t : string), tv)) ->
-                //eprintfn "tv %A %A" t tv
+                //log "tv %A %A" t tv
                 let t = t.Split('.').[0]
                 resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
                                |> List.collect id
@@ -73,7 +73,6 @@ module LanguageFeatures =
             // match info.GetInfo(pos, e) with
             match (info.GetInfo)(pos, e) with
             |Some (ctx, _) when ctx <> { Root = anyScope; From = []; Scopes = [] } ->
-                eprintfn "true scopes"
                 Some (ctx)
             |_ ->
                 None

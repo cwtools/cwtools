@@ -14,6 +14,7 @@ open CWTools.Localisation
 open System.Resources
 open CWTools.Utilities.Utils
 open System.IO
+open CWTools.Utilities.Utils
 
 type IGame =
     abstract ParserErrors : unit -> (string * string * Position) list
@@ -93,7 +94,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             lookup = lookup
             ruleApplicator = ruleApplicator
             foldRules = infoService
-            localisationKeys = (fun () -> this.LocalisationManager.localisationKeys)
+            localisationKeys = localisationManager.LocalisationKeys
         }
     let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices())
 
@@ -104,7 +105,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
     let mutable errorCache = Map.empty
     let updateFile (shallow : bool) filepath (filetext : string option) =
-        eprintfn "%s" filepath
+        log (sprintf "%s" filepath)
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         let res =
@@ -115,7 +116,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
                 let resource, _ = this.Resources.UpdateFile(resourceInput)
                 match resource with
                 |FileWithContentResource (_, r) -> this.LocalisationManager.UpdateLocalisationFile r
-                |_ -> ()
+                |_ -> logNormal (sprintf "Localisation file failed to parse %s" filepath)
                 let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities())) @ globalLocalisation(this)
                 this.LocalisationManager.localisationErrors <- Some les
                 globalLocalisation(this)
@@ -136,10 +137,10 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
                     errorCache <- errorCache.Add(filepath, deepres)
                     shallowres @ deepres
                 //validateAll shallow newEntities @ localisationCheck newEntities
-        eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+        log (sprintf "Update Time: %i" timer.ElapsedMilliseconds)
         res
     let initialLoad() =
-            eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+            log (sprintf "Parsing %i files" (fileManager.AllFilesByPath().Length))
             let timer = new System.Diagnostics.Stopwatch()
             timer.Start()
             // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))

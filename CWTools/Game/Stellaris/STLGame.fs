@@ -74,7 +74,8 @@ module STLGameFunctions =
     type GameObject = GameObject<Scope, Modifier, STLComputedData>
     let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
-        processLocalisation eventtargets lookup.scriptedLoc lookup.definedScriptVariables
+        let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
+        processLocalisation (eventtargets @ globaleventtargets) lookup.scriptedLoc lookup.definedScriptVariables
 
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
@@ -202,47 +203,47 @@ module STLGameFunctions =
                 tempTypes <- types
                 tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
                 rulesDataGenerated <- false
-                eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
+                log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
             |None -> ()
             let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allEnums = simpleEnums @ complexEnumDefs
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> Map.ofList
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = game.LocalisationManager.localisationKeys
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath |FileWithContentResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let tempRuleApplicator : RuleApplicator<_> = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes allentities
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             game.InfoService <- Some tempFoldRules
             if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
                             |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
             lookup.varDefInfo <- results
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, STL STLLang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.InfoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, game.RuleApplicator.Value, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RefreshValidationManager()
         )
 
@@ -254,9 +255,9 @@ module STLGameFunctions =
             updateDefinedVariables(game)
             updateModifiers(game)
             updateTechnologies(game)
-            // if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
+            // if log then log "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             game.LocalisationManager.UpdateAllLocalisation()
-            // if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
+            // if log then log "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
             updateTypeDef game game.Settings.rules
             game.LocalisationManager.UpdateAllLocalisation()
 
@@ -323,7 +324,7 @@ type STLGame (settings : StellarisSettings) =
         let validateTechnology (entities : (string * Node) list) =
             let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/"))
             tech
-            // tech |> List.iter (fun (f, t) -> eprintfn "%s" f)
+            // tech |> List.iter (fun (f, t) -> log "%s" f)
 
 
         // let mutable validationManager = ValidationManager(validationSettings)
@@ -333,7 +334,7 @@ type STLGame (settings : StellarisSettings) =
 
         // let mutable errorCache = Map.empty
         // let updateFile (shallow : bool) filepath (filetext : string option) =
-        //     eprintfn "%s" filepath
+        //     log "%s" filepath
         //     let timer = new System.Diagnostics.Stopwatch()
         //     timer.Start()
         //     let res =
@@ -369,7 +370,7 @@ type STLGame (settings : StellarisSettings) =
         //                 errorCache <- errorCache.Add(filepath, deepres)
         //                 shallowres @ deepres
         //             //validateAll shallow newEntities @ localisationCheck newEntities
-        //     eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+        //     log "Update Time: %i" timer.ElapsedMilliseconds
         //     res
 
 
@@ -384,16 +385,14 @@ type STLGame (settings : StellarisSettings) =
                 // match info.GetInfo(pos, e) with
                 match (info.GetInfo)(pos, e) with
                 |Some (ctx, _) when ctx <> { Root = Scope.Any; From = []; Scopes = [] } ->
-                    eprintfn "true scopes"
                     Some (ctx)
                 |_ ->
-                    eprintfn "fallback scopes"
                     getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
             |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
             |_ -> None
 
         // do
-        //     eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+        //     log "Parsing %i files" (fileManager.AllFilesByPath().Length)
         //     let timer = new System.Diagnostics.Stopwatch()
         //     timer.Start()
         //     // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
@@ -426,7 +425,7 @@ type STLGame (settings : StellarisSettings) =
         //     if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
         //     let log = true
-        //     eprintfn "Parsing complete in %i" (timer.Elapsed.Seconds)
+        //     log "Parsing complete in %i" (timer.Elapsed.Seconds)
         //     timer.Restart()
         //     // updateScriptedTriggers(game)
         //     // updateScriptedEffects(game)
@@ -435,12 +434,12 @@ type STLGame (settings : StellarisSettings) =
         //     // updateDefinedVariables(game)
         //     // updateModifiers()
         //     // updateTechnologies()
-        //     // if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
+        //     // if log then log "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
         //     // game.LocalisationManager.UpdateAllLocalisation()
-        //     // if log then eprintfn "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
+        //     // if log then log "time %i" (timer.ElapsedMilliseconds); timer.Restart() else ()
         //     // updateTypeDef(settings.rules)
         //     // game.LocalisationManager.UpdateAllLocalisation()
-        //     eprintfn "Initial cache complete in %i" (timer.Elapsed.Seconds)
+        //     log "Initial cache complete in %i" (timer.Elapsed.Seconds)
 
             // let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             // let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
@@ -475,7 +474,7 @@ type STLGame (settings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = game.UpdateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs |> List.map snd))
+            member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text =
                 scopesAtPosSTL pos file text

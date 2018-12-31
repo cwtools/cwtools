@@ -2,6 +2,8 @@ namespace CWTools.Common
 
 open System
 open System.ComponentModel.Design
+open CWTools.Utilities.Utils
+
 module HOI4Constants =
     type Scope =
         |State
@@ -37,7 +39,7 @@ module HOI4Constants =
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
-            |x -> eprintfn "Unexpected scope %O" x; Scope.Any) //failwith ("unexpected scope" + x.ToString()))
+            |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
     let parseScopes =
         function

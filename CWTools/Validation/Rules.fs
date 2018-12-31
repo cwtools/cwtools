@@ -222,7 +222,7 @@ module rec Rules =
         if files.Contains value then true else false
 
     let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
-        // eprintfn "scope %s %A"key ctx
+        // log "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope false true effectMap triggerMap varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
@@ -233,7 +233,7 @@ module rec Rules =
         |VarNotFound s -> Invalid[inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode]
         |_ -> OK
     let inline checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode =
-        // eprintfn "scope %s %A"key ctx
+        // log "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope true true effectMap triggerMap varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
@@ -623,7 +623,7 @@ module rec Rules =
 
         let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
             let fChild (ctx, _) (node : Node) ((field, options) : NewRule<_>) =
-                // eprintfn "child acc %A %A" ctx field
+                // log "child acc %A %A" ctx field
                 let rules =
                     match field with
                     //| Field.LeftTypeField (t, f) -> inner f newCtx n
@@ -646,13 +646,13 @@ module rec Rules =
                 let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
                 let leafMatch = node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos)
                 let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
-                // eprintfn "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
+                // log "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
                 // let ctx = { RuleContext.subtypes = []; scop es = defaultContext; warningOnly = false }
                 match childMatch, leafMatch, leafValueMatch with
                 |Some c, _, _ ->
                     match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l c.Key c -> Some (l, rs, o) |_ -> None) with
                     | [] ->
-                            // eprintfn "fallback match %s %A" (node.Key) expandedrules
+                            // log "fallback match %s %A" (node.Key) expandedrules
                             Some (NodeC c, (field, options))
                     | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
                 |_, Some leaf, _ ->
@@ -665,7 +665,7 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\","/")
             let file = Path.GetFileName logicalpath
             let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
-            //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
+            //log "%O %A %A" pos pathDir (typedefs |> List.tryHead)
             match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
             |Some c, Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
@@ -685,7 +685,7 @@ module rec Rules =
             let fComment (ctx) _ _ = ctx
             let fNode (ctx, res) (node : Node) ((field, options) : NewRule<_>) =
                 // let anyScope = ( ^a : (static member AnyScope : ^a) ())
-                // eprintfn "info fnode inner %s %A %A %A" (node.Key) options field ctx
+                // log "info fnode inner %s %A %A %A" (node.Key) options field ctx
                 let newCtx =
                     match options.pushScope with
                     |Some ps ->
@@ -718,10 +718,10 @@ module rec Rules =
                     let newCtx =
                         match changeScope false true effectMap triggerMap varSet key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
-                            // eprintfn "cs %A %A %A" s node.Key current
+                            // log "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
                         |VarFound ->
-                            // eprintfn "cs %A %A %A" s node.Key current
+                            // log "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
                         |_ -> newCtx
                     newCtx, res
@@ -731,7 +731,7 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
             let file = Path.GetFileName entity.logicalpath
             let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
-            // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
+            // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
                 match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
                 |Some c, Some typedef ->
@@ -1018,7 +1018,7 @@ module rec Rules =
 
 
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
-           //eprintfn "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
+           //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
            match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos ((c.Key, false) :: stack) c
            | None ->
@@ -1027,7 +1027,7 @@ module rec Rules =
                 | None -> stack
 
         and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * bool) list) =
-            //eprintfn "%A" stack
+            //log "%A" stack
             let rec convRuleToCompletion (rule : NewRule<_>) =
                 let r, o = rule
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
@@ -1107,8 +1107,8 @@ module rec Rules =
                 //     |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                 //     |_ -> []
             let fieldToRules (field : NewField<'T>) =
-                //eprintfn "%A" types
-                //eprintfn "%A" field
+                //log "%A" types
+                //log "%A" field
                 match field with
                 |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
@@ -1155,9 +1155,9 @@ module rec Rules =
                     match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, r, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs ->
-                        //eprintfn "%s %A" key fs
+                        //log "%s %A" key fs
                         let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
-                        //eprintfn "res %A" res
+                        //log "res %A" res
                         res
                     // match expandedRules |> List.filter (fun (k,_,_) -> k == key) with
                     // |[] ->
@@ -1187,17 +1187,17 @@ module rec Rules =
                     //         expandedRules |> List.collect convRuleToCompletion
                     // |fs -> fs |> List.collect (fun (_, _, f) -> fieldToRules f)
             let res = findRule rules stack |> List.distinct
-            //eprintfn "res2 %A" res
+            //log "res2 %A" res
             res
 
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
             let file = Path.GetFileName entity.logicalpath
-            // eprintfn "%A" typedefs
-            // eprintfn "%A" pos
-            // eprintfn "%A" entity.logicalpath
-            // eprintfn "%A" pathDir
+            // log "%A" typedefs
+            // log "%A" pos
+            // log "%A" entity.logicalpath
+            // log "%A" pathDir
             let typekeyfilter (td : TypeDefinition<_>) (n : string) =
                 match td.typeKeyFilter with
                 |Some (filter, negate) -> n == filter <> negate
@@ -1214,7 +1214,7 @@ module rec Rules =
                     match xs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
                     |Some typedef ->
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                        //eprintfn "sc %A" path
+                        //log "sc %A" path
                         let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path |> List.tail |> List.tail)
                         let completion = getCompletionFromPath typerules fixedpath
                         Some completion
@@ -1226,12 +1226,12 @@ module rec Rules =
                     |Some typedef ->
                         let path2 = if typedef.type_per_file then path else if path.Length > 0 then path |> List.tail else path
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                        //eprintfn "fc %A" path
+                        //log "fc %A" path
                         let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path2)
                         let completion = getCompletionFromPath typerules fixedpath
                         completion
                     |None -> getCompletionFromPath (typeRules |> List.map snd) path)
-            //eprintfn "res3 %A" res
+            //log "res3 %A" res
             res
         //(fun (pos, entity) -> complete pos entity)
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
@@ -1272,7 +1272,7 @@ module rec Rules =
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
         let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
         let rec inner (enumtree : Node) (node : Node) =
-            // eprintfn "%A %A" (enumtree.ToRaw) (node.Position.FileName)
+            // log "%A %A" (enumtree.ToRaw) (node.Position.FileName)
             match enumtree.Children with
             |head::_ ->
                 if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
@@ -1290,10 +1290,10 @@ module rec Rules =
                         |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
             let cpath = complexenum.path.Replace("\\","/")
-            // eprintfn "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
+            // log "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
             let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
                                   |> List.collect (fun e -> if complexenum.start_from_root then inner complexenum.nameTree e else  e.Children |> List.collect (inner complexenum.nameTree))
-            // eprintfn "%A %A" complexenum.name values
+            // log "%A %A" complexenum.name values
             complexenum.name, values
         complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq
 

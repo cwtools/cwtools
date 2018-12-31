@@ -111,28 +111,28 @@ module EU4GameFunctions =
                 tempTypes <- types
                 tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
                 rulesDataGenerated <- false
-                eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
+                log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.EU4ScriptedEffectKeys <-  game.Resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
                                                 |> List.ofSeq |> List.collect id
             let scriptedEffectParmas = "scripted_effect_params", (lookup.EU4ScriptedEffectKeys)
             let scriptedEffectParmasD = "scripted_effect_params_dollar", (lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k))
             let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD]
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> Map.ofList
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = game.LocalisationManager.localisationKeys
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let files = resources.GetFileNames() |> Set.ofList
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let tempRuleApplicator = RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default)
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
             game.InfoService <- Some tempFoldRules
@@ -145,15 +145,15 @@ module EU4GameFunctions =
 
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
 
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, EU4 EU4Lang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.InfoService <- Some (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, game.RuleApplicator.Value, changeScope, defaultContext, Scope.Any, EU4 EU4Lang.Default))
-            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RefreshValidationManager()
             // validationManager <- ValidationManager({validationSettings with ruleApplicator = game.ruleApplicator; foldRules = game.infoService})
         )
@@ -214,7 +214,7 @@ type EU4Game(settings : EU4Settings) =
     // let mutable errorCache = Map.empty
 
     // let updateFile (shallow : bool) filepath (filetext : string option) =
-    //     eprintfn "%s" filepath
+    //     log "%s" filepath
     //     let timer = new System.Diagnostics.Stopwatch()
     //     timer.Start()
     //     let res =
@@ -234,7 +234,7 @@ type EU4Game(settings : EU4Settings) =
     //             let logicalpath = game.FileManager.ConvertPathToLogicalPath rootedpath
     //             let resource = makeEntityResourceInput game.FileManager filepath file
 
-    //             //eprintfn "%s %s" logicalpath filepath
+    //             //log "%s %s" logicalpath filepath
     //             let newEntities = resources.UpdateFile (resource) |> List.map snd
     //             // match filepath with
     //             // |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
@@ -256,11 +256,11 @@ type EU4Game(settings : EU4Settings) =
     //                     shallowres @ deepres
 
 
-    //     eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+    //     log "Update Time: %i" timer.ElapsedMilliseconds
     //     res
 
     do
-        eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+        log (sprintf "Parsing %i files" (fileManager.AllFilesByPath().Length))
         let files = fileManager.AllFilesByPath()
         let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f) )|_ -> None)
         resources.UpdateFiles(filteredfiles) |> ignore
@@ -307,7 +307,7 @@ type EU4Game(settings : EU4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text =game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs |> List.map snd))
+        member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

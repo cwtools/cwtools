@@ -194,7 +194,7 @@ module STLValidation =
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
             let filenames = rm.GetFileNames()
-            //eprintfn "sprite filename %A" filenames
+            //log "sprite filename %A" filenames
             let inner =
                 fun (x : Node) ->
                    Seq.append (x.Leafs "textureFile") (x.Leafs "effectFile")
@@ -545,16 +545,16 @@ module STLValidation =
             // let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts// |> List.collect getPrereqs
             // let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers// |> List.collect getPrereqs
             // let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs; ] |> Set.ofList
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allPrereqs = os.AddOrGetCached "techprereqs" getPrereqGen |> List.map (fun s -> s :?> string) |> Set.ofList
             let hastechs = (es.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs)) @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allPrereqs = (hastechs) |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
             //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let techPrereqs = techList |> List.collect snd |> Set.ofList
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let techChildren = techList |> List.map (fun (name, _) -> name, Set.contains name techPrereqs)
             // let techChildren = getTechnologies os @ getTechnologies es
             //                     |> (fun l -> l |> List.map (fun (name, _) -> name, l |> List.exists (fun (_, ts2) -> ts2 |> List.contains name)))
@@ -562,9 +562,9 @@ module STLValidation =
                                 |> List.map fst
                                 |> Set.ofList
 
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let techs = es.AllOfTypeChildren EntityType.Technology
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let inner (t : Node) =
                 let isPreReq = t.Has "prereqfor_desc"
                 let isMod = t.Has "modifier"
@@ -575,7 +575,7 @@ module STLValidation =
                 let hasFeatureFlag = t.Has "feature_flags"
                 if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid [inv (ErrorCodes.UnusedTech (t.Key)) t]
             let res = techs <&!&> inner
-            // eprintfn "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             res
 
 

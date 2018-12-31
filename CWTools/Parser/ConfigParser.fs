@@ -153,8 +153,8 @@ module rec ConfigParser =
                 | ((_, _), _) -> (false, [])
         //let fNode = (fun (node:Node) (children) ->
         let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
-        //eprintfn "%s %A" node.Key (node.All |> List.rev)
-        //eprintfn "%A" one
+        //log "%s %A" node.Key (node.All |> List.rev)
+        //log "%A" one
         let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l)))
         let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         let new2 = one @ two @ three
@@ -395,7 +395,7 @@ module rec ConfigParser =
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
                 let innerRule = configNode parseScope allScopes anyScope node comments rn
-                // eprintfn "%s %A" a innerRule
+                // log "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
                 TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
@@ -488,7 +488,7 @@ module rec ConfigParser =
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 |Some c ->
-                    //eprintfn "c %A" c
+                    //log "c %A" c
                     match c.Contains "=", c.Contains "<>" with
                     |true, _ -> Some (c.Substring(c.IndexOf "=" + 1).Trim(), false)
                     |_, true -> Some (c.Substring(c.IndexOf "<>" + 2).Trim(), true)
@@ -585,14 +585,14 @@ module rec ConfigParser =
         rules, types, enums, complexenums, values
 
     let parseConfig (parseScope) (allScopes) (anyScope) filename fileString =
-        //eprintfn "parse"
+        //log "parse"
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [], [])
+        |Failure(e, _, _) -> log (sprintf "config file %s failed with %s" filename e); ([], [], [], [], [])
         |Success(s,_,_) ->
-            //eprintfn "parsed %A" s
+            //log "parsed %A" s
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
-            //eprintfn "processConfig"
+            //log "processConfig"
             processConfig parseScope allScopes anyScope root
 
 

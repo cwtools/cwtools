@@ -2,6 +2,7 @@ namespace CWTools.Localisation
 open System.Collections.Generic
 open System.IO
 open CWTools.Common
+open CWTools.Utilities.Utils
 
 module HOI4Localisation =
     open YAMLLocalisationParser
@@ -35,7 +36,7 @@ module HOI4Localisation =
         let mutable recordsL : struct (Entry * Lang) list = []
         let mutable records : struct (Entry * Lang) array = [||]
         let addFile f t =
-            //eprintfn "%s" f
+            //log "%s" f
             match parseLocText t f with
             | Success({key = key; entries = entries}, _, _) ->
                 match keyToLanguage key with
@@ -62,7 +63,7 @@ module HOI4Localisation =
             recordsL <- []
 
         new(localisationSettings : LocalisationSettings) =
-            eprintfn "Loading HOI4 localisation in %s" localisationSettings.folder
+            log (sprintf "Loading HOI4 localisation in %s" localisationSettings.folder)
             match Directory.Exists(localisationSettings.folder) with
             | true ->
                         let files = Directory.EnumerateDirectories localisationSettings.folder
@@ -72,7 +73,7 @@ module HOI4Localisation =
                         let actualFiles = files @ rootFiles |> List.map (fun f -> f, File.ReadAllText(f, System.Text.Encoding.UTF8))
                         HOI4LocalisationService(actualFiles)
             | false ->
-                eprintfn "%s not found" localisationSettings.folder
+                log (sprintf "%s not found" localisationSettings.folder)
                 HOI4LocalisationService([])
         //new (settings : CK2Settings) = HOI4LocalisationService(settings.HOI4Directory.localisationDirectory, settings.ck2Language)
         member __.Api lang= {

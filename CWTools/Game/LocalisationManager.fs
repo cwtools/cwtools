@@ -11,8 +11,8 @@ type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> an
     (resources : IResourceAPI<'T>, localisationService : _ -> ILocalisationAPICreator, langs : Lang list, lookup: Lookup<_,_>,
      processLocalisation : (Lookup<'S,'M> -> (Lang * LocKeySet) list -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry<_>>)) as this =
     let mutable localisationAPIMap : Map<string * Lang, (bool * ILocalisationAPI)> = Map.empty
-    let allLocalisation() = this.LocalisationAPIs |> List.map snd
-    let validatableLocalisation() = this.LocalisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
+    let allLocalisation() = this.LocalisationAPIs() |> List.map snd
+    let validatableLocalisation() = this.LocalisationAPIs() |> List.choose (fun (validate, api) -> if validate then Some api else None)
     let parseLocFile (locFile : FileWithContentResource) =
         if locFile.overwrite <> Overwritten && locFile.extension = ".yml"
         then
@@ -32,6 +32,8 @@ type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> an
         let loc = parseLocFile locFile |> Option.defaultValue []
         let newMap = loc |> List.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
         localisationAPIMap <- newMap
+        this.localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+        this.taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
     let updateProcessedLocalisation() =
         let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
         let processLoc = processLocalisation lookup this.taggedLocalisationKeys
@@ -43,4 +45,5 @@ type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> an
     member val taggedLocalisationKeys : (Lang * LocKeySet) list = [] with get, set
     member this.UpdateAllLocalisation() = updateAllLocalisationSources(); updateProcessedLocalisation()
     member __.UpdateLocalisationFile (locFile : FileWithContentResource) = updateLocalisationSource locFile
-    member __.LocalisationAPIs : (bool * ILocalisationAPI) list = localisationAPIMap |> Map.toList |> List.map snd
+    member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap |> Map.toList |> List.map snd
+    member this.LocalisationKeys() = this.localisationKeys

@@ -23,7 +23,7 @@ module EU4Parser =
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        |Failure(e, _, _) -> eprintfn "modifier file %s failed with %s" filename e; ([])
+        |Failure(e, _, _) -> log (sprintf "modifier file %s failed with %s" filename e); ([])
         |Success(s,_,_) ->
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
             root.Child "modifiers"

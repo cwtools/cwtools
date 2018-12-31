@@ -29,22 +29,29 @@ module Utils =
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         let returnValue = f()
-        //eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+        //log "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
         returnValue
 
 
     type LogLevel =
     |Silent
+    |Normal
     |Verbose
+
 
     let mutable loglevel = Silent
 
-    let log format =
-        match loglevel with
-        |Silent -> ignore
-        |Verbose -> Printf.eprintfn format
+    let logInner level message =
+        match loglevel, level with
+        |Silent, _ -> ()
+        |Normal, Normal -> Printf.eprintfn "%s: %s" (System.DateTime.Now.ToString("HH:mm:ss")) message
+        |Verbose, _ -> Printf.eprintfn "%s: %s" (System.DateTime.Now.ToString("HH:mm:ss")) message
+        |_, _ -> ()
+        // |Verbose -> logWith logger format
 
-    let logVerbose format = log format
+    let logVerbose message = logInner Verbose message
+    let logNormal message = logInner Normal message
+    let log = logVerbose
 
     let mkZeroFile file = mkRange file (mkPos 0 0) (mkPos 10000 0)
 
