@@ -183,7 +183,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     // member val infoService : FoldRules<'S> option = None with get, set
     member val completionService : CompletionService<'S> option = None with get, set
 
-    member __.Resources : IResourceAPI<'T> = resourceManager.Api
+    member __.Resources : IResourceAPI<'T> = resourceManager.Api;
     member __.ResourceManager = resourceManager
     member __.Lookup : Lookup<'S, 'M> = lookup
     // member __.AllLocalisation() = localisationManager.allLocalisation()

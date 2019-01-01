@@ -222,6 +222,7 @@ module STLGameFunctions =
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
@@ -235,7 +236,6 @@ module STLGameFunctions =
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, STL STLLang.Default))

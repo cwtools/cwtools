@@ -9,7 +9,7 @@ open CWTools.Process.Scopes
 
 type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
     (resources : IResourceAPI<'T>, localisationService : _ -> ILocalisationAPICreator, langs : Lang list, lookup: Lookup<_,_>,
-     processLocalisation : (Lookup<'S,'M> -> (Lang * LocKeySet) list -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry<_>>)) as this =
+     processLocalisation : (Lookup<'S,'M> -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry<_>>)) as this =
     let mutable localisationAPIMap : Map<string * Lang, (bool * ILocalisationAPI)> = Map.empty
     let allLocalisation() = this.LocalisationAPIs() |> List.map snd
     let validatableLocalisation() = this.LocalisationAPIs() |> List.choose (fun (validate, api) -> if validate then Some api else None)
@@ -36,7 +36,7 @@ type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> an
         this.taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
     let updateProcessedLocalisation() =
         let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-        let processLoc = processLocalisation lookup this.taggedLocalisationKeys
+        let processLoc = processLocalisation lookup
         lookup.proccessedLoc <- validatableEntries |> List.map processLoc
 
     // member val localisationAPIs : (bool * ILocalisationAPI) list = [] with get, set
