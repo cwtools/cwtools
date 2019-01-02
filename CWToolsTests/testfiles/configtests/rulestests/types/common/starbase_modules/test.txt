@@ -1,0 +1,12 @@
+one = {
+    #error
+    error = error
+}
+two = {
+    #error
+    error = error
+}
+three = {
+    ## absence of error indicated no validation, hence pass
+    error = error
+}

@@ -36,6 +36,15 @@ types = {
         }
 
     }
+    ## type_key_filter = { one two }
+    type[multi_match] = {
+        path = "game/common/starbase_modules"
+    }
+    ## type_key_filter <> { one two }
+    type[multi_mismatch] = {
+        path = "game/common/starbase_buildings"
+    }
+
 }
 enums = {
 enum[test_enum] = {
@@ -101,4 +110,11 @@ types = {
 special_project = {
     ## cardinality = 0..inf
     my_date = date_field
+}
+
+multi_match = {
+}
+
+multi_mismatch = {
+
 }

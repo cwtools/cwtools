@@ -110,7 +110,7 @@ module rec ConfigParser =
         path_file : string option
         conditions : Node option
         subtypes : SubTypeDefinition<'a> list
-        typeKeyFilter : (string * bool) option
+        typeKeyFilter : (string list * bool) option
         skipRootKey : SkipRootKey list
         type_per_file : bool
         warningOnly : bool
@@ -497,10 +497,20 @@ module rec ConfigParser =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 |Some c ->
                     //log "c %A" c
-                    match c.Contains "=", c.Contains "<>" with
-                    |true, _ -> Some (c.Substring(c.IndexOf "=" + 1).Trim(), false)
-                    |_, true -> Some (c.Substring(c.IndexOf "<>" + 2).Trim(), true)
-                    |_ -> None
+                    let valid = c.Contains "=" || c.Contains "<>"
+                    if valid
+                    then
+                        let negative = c.Contains "<>"
+                        let rhs =
+                            if negative
+                            then c.Substring(c.IndexOf "<>" + 2).Trim()
+                            else c.Substring(c.IndexOf "=" + 1).Trim()
+                        let values =
+                            match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                            |true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> List.ofArray
+                            |false -> [rhs]
+                        Some (values, negative)
+                    else None
                 |None -> None
             match typename with
             |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation}

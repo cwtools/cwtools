@@ -1,0 +1,11 @@
+one = {
+    ## absence of error tests the filter
+    error = error
+}
+two = {
+    error = error
+}
+three = {
+    #error
+    error = error
+}
