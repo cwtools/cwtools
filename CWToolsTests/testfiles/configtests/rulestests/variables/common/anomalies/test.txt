@@ -6,3 +6,13 @@ test = {
         get_test = my_false_value
     }
 }
+
+skip = {
+    test = {
+        specific_set_test = my_value_1
+        specific_get_test = my_value_1
+
+        #error
+        specific_get_test = my_false_value
+    }
+}

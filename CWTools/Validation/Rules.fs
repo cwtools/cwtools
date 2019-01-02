@@ -47,6 +47,7 @@ module rec Rules =
 
 
     let checkPathDir (t : TypeDefinition<_>) (pathDir : string) (file : string) =
+        eprintfn "tt %s %s %s" t.name t.path pathDir
         match t.path_strict with
         |true -> pathDir == t.path.Replace("\\","/")
         |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
@@ -524,11 +525,10 @@ module rec Rules =
                 match td.typeKeyFilter with
                 |Some (filter, negate) -> n.Key == filter <> negate
                 |None -> true
-            let skiprootkey (td : TypeDefinition<_>) (n : Node) =
-                match td.skipRootKey with
-                |Some (SpecificKey key) -> n.Key == key
-                |Some (AnyKey) -> true
-                |None -> false
+            let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
+                match skipRootKey with
+                |(SpecificKey key) -> n.Key == key
+                |(AnyKey) -> true
 
             let inner (typedefs : TypeDefinition<_> list) (node : Node) =
                 let validateType (typedef : TypeDefinition<_>) (n : Node) =
@@ -544,23 +544,15 @@ module rec Rules =
                         |None -> applyNodeRuleRoot typedef rs o n
                     |_ ->
                         OK
-
-                let skipres =
-                    match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t node) with
-                    |[] -> OK
-                    |xs ->
-                        node.Children <&!&>
-                            (fun c ->
-                                match xs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t c) with
-                                |Some typedef -> validateType typedef c
-                                |None -> OK
-                            )
-
-                let nonskipres =
-                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t node && t.skipRootKey.IsNone) with
-                    |Some typedef -> validateType typedef node
-                    |None -> OK
-                skipres <&&> nonskipres
+                let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
+                let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (n : Node) =
+                    match skipRootKeyStack with
+                    |[] -> if typekeyfilter t n then validateType t n else OK
+                    |head::tail ->
+                        if skiprootkey head n
+                        then n.Children <&!&> validateTypeSkipRoot t tail
+                        else OK
+                pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
             let res = (root.Children <&!&> inner normalTypeDefs)
             let rootres = (inner rootTypeDefs root)
             res <&&> rootres
@@ -813,22 +805,48 @@ module rec Rules =
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
-            match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
-            |Some typedef when typedef.skipRootKey.IsSome ->
-                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
-                match typedef.skipRootKey.Value, typerules with
-                |SkipRootKey.AnyKey, [(n, (NodeRule (l, rs), o))]  ->
-                    (node.Children |> List.collect (fun n -> n.Children) |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
-                |SkipRootKey.SpecificKey srk, [(n, (NodeRule (l, rs), o))]  ->
-                    (node.Children |> List.collect (fun n -> if n.Key == srk then n.Children else []) |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
-                |_ -> acc
-            |Some typedef ->
-                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+            let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
+                match td.typeKeyFilter with
+                |Some (filter, negate) -> n.Key == filter <> negate
+                |None -> true
+            let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
+                match skipRootKey with
+                |(SpecificKey key) -> n.Key == key
+                |(AnyKey) -> true
+            let foldRulesNode rs o =
+                (fun a c ->
+                    foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o))
+            let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
+            let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
+                match skipRootKeyStack with
+                |[] -> if typekeyfilter t n then foldRulesNode rs o acc n else acc
+                |head::tail ->
+                    if skiprootkey head n
+                    then n.Children |> List.fold (foldRulesSkipRoot rs o t tail) acc
+                    else acc
+            let foldRulesBase (n : Node) acc (t : TypeDefinition<_>) =
+                let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
                 match typerules with
-                |[(n, (NodeRule (l, rs), o))] ->
-                    (node.Children |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
+                |[(_, (NodeRule (_, rs), o))] ->
+                    n.Children |> List.fold (foldRulesSkipRoot rs o t t.skipRootKey) acc
                 |_ -> acc
-            |_ -> acc
+            pathFilteredTypes |> List.fold (foldRulesBase node) acc
+            // match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file) with
+            // |Some typedef when typedef.skipRootKey.IsSome ->
+            //     let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+            //     match typedef.skipRootKey.Value, typerules with
+            //     |SkipRootKey.AnyKey, [(n, (NodeRule (l, rs), o))]  ->
+            //         (node.Children |> List.collect (fun n -> n.Children) |> List.fold (foldRulesNode rs o) acc)
+            //     |SkipRootKey.SpecificKey srk, [(n, (NodeRule (l, rs), o))]  ->
+            //         (node.Children |> List.collect (fun n -> if n.Key == srk then n.Children else []) |> List.fold (foldRulesNode rs o) acc)
+            //     |_ -> acc
+            // |Some typedef ->
+            //     let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+            //     match typerules with
+            //     |[(n, (NodeRule (l, rs), o))] ->
+            //         (node.Children |> List.fold (fun a c -> foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)) acc)
+            //     |_ -> acc
+            // |_ -> acc
 
         let getTypesInEntity (entity : Entity) =
             let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
@@ -1027,7 +1045,7 @@ module rec Rules =
                 | None -> stack
 
         and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * bool) list) =
-            //log "%A" stack
+            log (sprintf "%A" stack)
             let rec convRuleToCompletion (rule : NewRule<_>) =
                 let r, o = rule
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
@@ -1197,42 +1215,59 @@ module rec Rules =
             // log "%A" typedefs
             // log "%A" pos
             // log "%A" entity.logicalpath
-            // log "%A" pathDir
+            log  (sprintf "tb %A" pathDir)
             let typekeyfilter (td : TypeDefinition<_>) (n : string) =
                 match td.typeKeyFilter with
                 |Some (filter, negate) -> n == filter <> negate
                 |None -> true
-            let skiprootkey (td : TypeDefinition<_>) (n : string) =
-                match td.skipRootKey with
-                |Some (SpecificKey key) -> n == key
-                |Some (AnyKey) -> true
-                |None -> false
-            let skipcomp =
-                match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
-                |[] -> None
-                |xs ->
-                    match xs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
-                    |Some typedef ->
-                        let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                        //log "sc %A" path
-                        let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path |> List.tail |> List.tail)
-                        let completion = getCompletionFromPath typerules fixedpath
-                        Some completion
-                    |None -> None
-            let res =
-                skipcomp |> Option.defaultWith
-                    (fun () ->
-                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
-                    |Some typedef ->
-                        let path2 = if typedef.type_per_file then path else if path.Length > 0 then path |> List.tail else path
-                        let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                        //log "fc %A" path
-                        let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path2)
-                        let completion = getCompletionFromPath typerules fixedpath
-                        completion
-                    |None -> getCompletionFromPath (typeRules |> List.map snd) path)
-            //log "res3 %A" res
-            res
+            let skiprootkey (skipRootKey : SkipRootKey) (s : string) =
+                match skipRootKey with
+                |(SpecificKey key) -> s == key
+                |(AnyKey) -> true
+            let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
+            let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
+            let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * bool) list) =
+                let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
+                match skipRootKeyStack, path with
+                |_, [] ->
+                    getCompletionFromPath typerules []
+                |[], (head, _)::tail ->
+                    //eprintfn "hhh %s %s %A %A" t.name head tail typerules
+                    if typekeyfilter t head
+                    then
+                        getCompletionFromPath typerules ((t.name, false)::tail) else [Simple "typefilfail"]
+                |head::tail, (pathhead, _)::pathtail ->
+                    if skiprootkey head pathhead
+                    then validateTypeSkipRoot t tail pathtail
+                    else [Simple "skipfail"]
+            pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+            // pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
+            // let skipcomp =
+            //     match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
+            //     |[] -> None
+            //     |xs ->
+            //         match xs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
+            //         |Some typedef ->
+            //             let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
+            //             //log "sc %A" path
+            //             let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path |> List.tail |> List.tail)
+            //             let completion = getCompletionFromPath typerules fixedpath
+            //             Some completion
+            //         |None -> None
+            // let res =
+            //     skipcomp |> Option.defaultWith
+            //         (fun () ->
+            //         match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir file && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
+            //         |Some typedef ->
+            //             let path2 = if typedef.type_per_file then path else if path.Length > 0 then path |> List.tail else path
+            //             let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
+            //             //log "fc %A" path
+            //             let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path2)
+            //             let completion = getCompletionFromPath typerules fixedpath
+            //             completion
+            //         |None -> getCompletionFromPath (typeRules |> List.map snd) path)
+            // //log "res3 %A" res
+            // res
         //(fun (pos, entity) -> complete pos entity)
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
@@ -1256,12 +1291,12 @@ module rec Rules =
                                 |true, _ ->
                                     let subtypes = ruleapplicator.TestSubType(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
                                     def.name::subtypes |> List.map (fun s -> s, (Path.GetFileNameWithoutExtension f, e.Position))
-                                |false, Some (SpecificKey key) ->
+                                |false, [(SpecificKey key)] ->
                                     e.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect inner)
-                                |false, Some (AnyKey) ->
+                                |false, [(AnyKey)] ->
                                     let res = e.Children |> List.collect (fun c -> c.Children |> List.collect inner)
                                     res
-                                |false, None ->
+                                |false, _ ->
                                     (e.Children |> List.collect inner)
                             childres
                             @

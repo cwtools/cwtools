@@ -111,7 +111,7 @@ module rec ConfigParser =
         conditions : Node option
         subtypes : SubTypeDefinition<'a> list
         typeKeyFilter : (string * bool) option
-        skipRootKey : SkipRootKey option
+        skipRootKey : SkipRootKey list
         type_per_file : bool
         warningOnly : bool
         localisation : TypeLocalisation list
@@ -470,7 +470,15 @@ module rec ConfigParser =
                 |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = [] }
                 |None -> None
             |_ -> None
-
+        let getSkipRootKey (node : Node) =
+            let createSkipRoot (s : string) = if s == "any" then SkipRootKey.AnyKey else SkipRootKey.SpecificKey s
+            match node.Has "skip_root_key", node.TagText "skip_root_key" with
+            |_, "any" -> [SkipRootKey.AnyKey]
+            |true, "" -> node.Child "skip_root_key" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> createSkipRoot (lv.Value.ToRawString())))
+                                                    |> Option.defaultValue Seq.empty
+                                                    |> Seq.toList
+            |true, x -> [SkipRootKey.SpecificKey x]
+            |false, _ -> []
         match node.Key with
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
@@ -479,7 +487,7 @@ module rec ConfigParser =
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let path_strict = node.TagText "path_strict" == "yes"
             let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
-            let skiprootkey = if node.Has "skip_root_key" then (let text = node.TagText "skip_root_key" in if text = "any" then Some SkipRootKey.AnyKey else Some (SkipRootKey.SpecificKey text)) else None
+            let skiprootkey = getSkipRootKey node
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
             let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
@@ -628,7 +636,7 @@ module rec ConfigParser =
             conditions = None
             subtypes = []
             typeKeyFilter = None
-            skipRootKey = None
+            skipRootKey = []
             warningOnly = false
             type_per_file = false
             localisation = []
@@ -733,7 +741,7 @@ module rec ConfigParser =
             conditions = None;
             subtypes = [];
             typeKeyFilter = None
-            skipRootKey = None
+            skipRootKey = []
             warningOnly = false
             path_strict = false
             path_file = None
@@ -748,7 +756,7 @@ module rec ConfigParser =
             conditions = None;
             subtypes = [];
             typeKeyFilter = None
-            skipRootKey = None
+            skipRootKey = []
             warningOnly = false
             path_strict = false
             path_file = None

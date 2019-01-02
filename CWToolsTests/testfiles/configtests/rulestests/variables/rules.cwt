@@ -4,7 +4,11 @@ types = {
     }
     type[skipevent] = {
         path = "game/common/anomalies"
-        skip_root_key = any
+        skip_root_key = { any }
+    }
+    type[skipspecificevent] = {
+        path = "game/common/anomalies"
+        skip_root_key = { skip }
     }
 }
 
@@ -30,6 +34,18 @@ skipevent = {
     set_test = value_set[skipevent]
     ## cardinality = 0..inf
     get_test = value[skipevent]
+
+    ## cardinality = 0..inf
+    specific_set_test = scalar
+    ## cardinality = 0..inf
+    specific_get_test = scalar
+}
+
+skipspecificevent = {
+    ## cardinality = 0..inf
+    specific_set_test = value_set[specificskipevent]
+    ## cardinality = 0..inf
+    specific_get_test = value[specificskipevent]
 
 }
 
