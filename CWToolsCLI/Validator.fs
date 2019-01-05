@@ -66,11 +66,13 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = false }
+            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false }
             embedded = {
                 modifiers = []
                 embeddedFiles = []
                 cachedResourceData = []
+                triggers = []
+                effects = []
             }
             scriptFolders = None
         }
@@ -118,11 +120,13 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = true }
+            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false }
             embedded = {
                 modifiers = []
                 embeddedFiles = cachedFiles
                 cachedResourceData = cached
+                triggers = []
+                effects = []
             }
             scriptFolders = Some HOI4Constants.scriptFolders
         }

@@ -44,8 +44,11 @@ let serializeSTL folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, STLConstants.scriptFolders, "stellaris", Encoding.UTF8)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> FoldRules<STLConstants.Scope> option = (fun () -> (None))
-    let resources = ResourceManager<STLComputedData>(STLCompute.computeSTLData computefun).Api
-    let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let resources = ResourceManager<STLComputedData>(STLCompute.computeSTLData computefun, STLCompute.computeSTLDataUpdate computefun).Api
+    let entities =
+        resources.UpdateFiles(files)
+         |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+         |> List.map (fun (r, (struct (e, _))) -> r, e)
     let files = resources.GetResources()
                 |> List.choose (function |FileResource (_, r) -> Some (r.filepath, "")
                                          |FileWithContentResource (_, r) -> Some (r.filepath, r.filetext)
@@ -58,8 +61,11 @@ let serializeEU4 folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, EU4Constants.scriptFolders, "stellaris", Encoding.UTF8)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> FoldRules<EU4Constants.Scope> option = (fun () -> (None))
-    let resources = ResourceManager<EU4ComputedData>(EU4Compute.computeEU4Data computefun).Api
-    let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let resources = ResourceManager<EU4ComputedData>(EU4Compute.computeEU4Data computefun, EU4Compute.computeEU4DataUpdate computefun).Api
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
     let files = resources.GetResources()
                 |> List.choose (function |FileResource (_, r) -> Some (r.filepath, "")
                                          |FileWithContentResource (_, r) -> Some (r.filepath, r.filetext)
@@ -71,8 +77,11 @@ let serializeHOI4 folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> FoldRules<HOI4Constants.Scope> option = (fun () -> (None))
-    let resources = ResourceManager<HOI4ComputedData>(HOI4Compute.computeHOI4Data computefun).Api
-    let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let resources = ResourceManager<HOI4ComputedData>(HOI4Compute.computeHOI4Data computefun, HOI4Compute.computeHOI4DataUpdate computefun).Api
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
     let files = resources.GetResources()
                 |> List.choose (function |FileResource (_, r) -> Some (r.filepath, "")
                                          |FileWithContentResource (_, r) -> Some (r.filepath, r.filetext)

@@ -1044,7 +1044,7 @@ module rec Rules =
                 | None -> stack
 
         and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * bool) list) =
-            log (sprintf "%A" stack)
+            // log (sprintf "%A" stack)
             let rec convRuleToCompletion (rule : NewRule<_>) =
                 let r, o = rule
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
@@ -1214,7 +1214,7 @@ module rec Rules =
             // log "%A" typedefs
             // log "%A" pos
             // log "%A" entity.logicalpath
-            log  (sprintf "tb %A" pathDir)
+            // log  (sprintf "tb %A" pathDir)
             let typekeyfilter (td : TypeDefinition<_>) (n : string) =
                 match td.typeKeyFilter with
                 |Some (values, negate) -> ((values |> List.exists ((==) n))) <> negate
@@ -1233,11 +1233,11 @@ module rec Rules =
                 |[], (head, _)::tail ->
                     if typekeyfilter t head
                     then
-                        getCompletionFromPath typerules ((t.name, false)::tail) else [Simple "typefilfail"]
+                        getCompletionFromPath typerules ((t.name, false)::tail) else []
                 |head::tail, (pathhead, _)::pathtail ->
                     if skiprootkey head pathhead
                     then validateTypeSkipRoot t tail pathtail
-                    else [Simple "skipfail"]
+                    else []
             pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
             // pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
             // let skipcomp =
