@@ -50,8 +50,8 @@ let serializeSTL folder cacheDirectory =
          |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
          |> List.map (fun (r, (struct (e, _))) -> r, e)
     let files = resources.GetResources()
-                |> List.choose (function |FileResource (_, r) -> Some (r.filepath, "")
-                                         |FileWithContentResource (_, r) -> Some (r.filepath, r.filetext)
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
     let pickle = xmlSerializer.Pickle data
@@ -67,8 +67,8 @@ let serializeEU4 folder cacheDirectory =
         |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
         |> List.map (fun (r, (struct (e, _))) -> r, e)
     let files = resources.GetResources()
-                |> List.choose (function |FileResource (_, r) -> Some (r.filepath, "")
-                                         |FileWithContentResource (_, r) -> Some (r.filepath, r.filetext)
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
     let pickle = xmlSerializer.Pickle data
@@ -83,8 +83,8 @@ let serializeHOI4 folder cacheDirectory =
         |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
         |> List.map (fun (r, (struct (e, _))) -> r, e)
     let files = resources.GetResources()
-                |> List.choose (function |FileResource (_, r) -> Some (r.filepath, "")
-                                         |FileWithContentResource (_, r) -> Some (r.filepath, r.filetext)
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
     let pickle = xmlSerializer.Pickle data
