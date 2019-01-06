@@ -1,4 +1,0 @@
-OR = {
-    father = { is_ruler = yes}
-    is_primary_heir = yes
-}   

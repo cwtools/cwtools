@@ -8,10 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{E7569F
 		paket.dependencies = paket.dependencies
 	EndProjectSection
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CK2EventsTests", "CK2EventsTests\CK2EventsTests.fsproj", "{F16BFA60-D782-4525-B370-5307FCCE096E}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CK2 Events", "CK2EventsUI\CK2 Events.fsproj", "{1B660CF2-87C6-4381-B297-F7FF03D84F07}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CW Tools", "CWTools\CWTools.fsproj", "{20A27DD3-DC4B-43E7-B261-533CACCBC69A}"
 EndProject
 Global
