@@ -103,6 +103,7 @@ module ValidationCore =
         static member MissingLocFileLangHeader = { ID = "CW256"; Severity = Severity.Error; Message = "Localisation file should start with \"l_language:\" on the first line (or a comment)"}
         static member LocFileLangMismatch = fun (name : STLLang) (header : STLLang) -> { ID = "CW257"; Severity = Severity.Error; Message = sprintf "Localisation file's name has language %A doesn't match the header language %A" name header }
         static member LocFileLangWrongPlace = { ID = "CW258"; Severity = Severity.Information; Message = "Localisation file name should end with \"l_language.yml\""}
+        static member RecursiveLocRef = { ID = "CW259"; Severity = Severity.Error; Message = "This localisation string refers to itself"}
 
         static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}

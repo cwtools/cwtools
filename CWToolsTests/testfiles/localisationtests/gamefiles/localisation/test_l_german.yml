@@ -7,4 +7,7 @@
   defined_event:0 "[defined_event.GetName]"
   #error
   missing_command:0 "[defined_event.NotReal]"
+  #error
   defined_scipted_loc:0 "[defined_event.DefLoc]"
+  #error
+  self_ref:0 "$self_ref$"

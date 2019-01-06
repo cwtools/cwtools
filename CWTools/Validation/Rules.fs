@@ -1007,6 +1007,15 @@ module rec Rules =
             // let value = folder + "/" + key + ".dds"
             // if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leafornode]
 
+        let scopeCompletionList =
+            let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
+                                                    |> Option.defaultValue []
+                                                    |> List.map (fun s -> "event_target:" + s)
+            let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
+                                                    |> Option.defaultValue []
+                                                    |> List.map (fun s -> "event_target:" + s)
+            evs @ gevs @ oneToOneScopes
+
         let createSnippetForClause (rules : NewRule<_> list) (description : string option) (key : string) =
             let filterToCompletion =
                 function
@@ -1059,7 +1068,8 @@ module rec Rules =
                 |NodeRule (IconField(folder), innerRules) ->
                     checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
                 |NodeRule (LocalisationField(_), _) -> []
-                |NodeRule (ScopeField(_), innerRules) -> oneToOneScopes |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                |NodeRule (ScopeField(_), innerRules) ->
+                    scopeCompletionList |> List.map (fun e -> createSnippetForClause innerRules o.description e)
                 //TODO: Scopes better
                 |NodeRule (SubtypeField(_), _) -> []
                 |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
@@ -1078,7 +1088,8 @@ module rec Rules =
                 |LeafRule (FilepathField(_), _) -> []
                 |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
                 |LeafRule (LocalisationField(_), _) -> []
-                |LeafRule (ScopeField(_), _) -> [] //TODO: Scopes
+                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map keyvalue
+                    //TODO: Scopes
                 |LeafRule (SubtypeField(_), _) -> []
                 |LeafRule (TypeField(TypeType.Simple t), _) ->
                     types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
@@ -1136,7 +1147,7 @@ module rec Rules =
                     |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
                     |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
                 |NewField.FilepathField -> files |> Set.toList |> List.map Simple
-                |NewField.ScopeField _ -> oneToOneScopes |> List.map (Simple)
+                |NewField.ScopeField _ -> scopeCompletionList |> List.map (Simple)
                 |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
