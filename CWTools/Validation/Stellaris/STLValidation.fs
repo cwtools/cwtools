@@ -476,13 +476,21 @@ module STLValidation =
             ])
         let buildingModifiers = buildingTags |> List.map (fun l -> l.Value.ToRawString())
                                              |> List.collect buildingTagModifierCreate
+        let buildingWithModCap = es.GlobMatchChildren("**/common/buildings/*.txt") |> List.filter (fun n -> n.TagText "is_capped_by_modifier" == "yes")
+        let buildingWithModCapCreate =
+            (fun k ->
+            [
+                {tag = k+"_max"; categories = [ModifierCategory.Planet]; core = true }
+            ])
+        let buildingWithModCapModifiers = buildingWithModCap |> List.map (fun n -> n.Key)
+                                                             |> List.collect buildingWithModCapCreate
         let countryTypeKeys = es.GlobMatchChildren("**/common/country_types/*.txt") |> List.map (fun f -> f.Key)
         let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {tag = "damage_vs_country_type_"+k+"_mult"; categories = [ModifierCategory.Ship]; core = true})
         let speciesKeys = es.GlobMatchChildren("**/common/species_archetypes/*.txt")
                             //|> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
-        shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers
+        shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
 
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
