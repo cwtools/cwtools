@@ -208,6 +208,7 @@ type HOI4Game(settings : HOI4Settings) =
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                  HOI4GameFunctions.processLocalisationFunction,
                  Encoding.UTF8,
+                 Encoding.GetEncoding(1252),
                  validationSettings,
                  globalLocalisation,
                  (fun _ _ -> ()))

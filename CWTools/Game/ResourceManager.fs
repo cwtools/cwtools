@@ -129,7 +129,7 @@ type IResourceAPI<'T when 'T :> ComputedData > =
     abstract ForceRulesDataGenerate : unit -> unit
     abstract GetFileNames : GetFileNames
 
-type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit)) =
+type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit), encoding, fallbackencoding) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -286,12 +286,25 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                     Some { filepath = f; logicalpath = l; entity = (shipProcess entityType filename (mkZeroFile f) (statements |> List.rev)); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
+    let changeEncoding (filestring : string) (source : System.Text.Encoding) (target : System.Text.Encoding) =
+        let conv = System.Text.Encoding.Convert(source, target, source.GetBytes(filestring))
+        target.GetString(conv)
+
+    let parseFileInner (filetext : string) (filename : string) =
+        let res = CKParser.parseString filetext (System.String.Intern(filename))
+        match res with
+        | Success(_,_,_) -> res
+        | Failure(_,_,_) ->
+            let res2 = CKParser.parseString (changeEncoding filetext encoding fallbackencoding) (System.String.Intern(filename))
+            match res2 with
+            |Success(_,_,_) -> res2
+            |Failure(_,_,_) -> res
     let parseFileThenEntity (file : ResourceInput) =
         match file with
             |CachedResourceInput (r, e) -> r, Some e
             |EntityResourceInput e ->
                 // log "%A %A" e.logicalpath e.filepath
-                e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
+                e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> parseFileInner t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
                     |> parseEntity
             |FileResourceInput f ->
                 (FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), [])

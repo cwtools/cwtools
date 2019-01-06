@@ -187,6 +187,7 @@ type EU4Game(settings : EU4Settings) =
                     EU4Compute.computeEU4DataUpdate,
                      (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      EU4GameFunctions.processLocalisationFunction,
+                     Encoding.UTF8,
                      Encoding.GetEncoding(1252),
                      validationSettings,
                      globalLocalisation,

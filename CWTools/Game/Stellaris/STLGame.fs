@@ -295,6 +295,7 @@ type STLGame (settings : StellarisSettings) =
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      STLGameFunctions.processLocalisationFunction,
                      Encoding.UTF8,
+                     Encoding.GetEncoding(1252),
                      validationSettings,
                      STLGameFunctions.globalLocalisation,
                      STLGameFunctions.afterUpdateFile)
