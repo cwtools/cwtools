@@ -179,6 +179,7 @@ module STLGameFunctions =
                     |x -> x)
 
     let updateTypeDef =
+        let mutable baseRules = []
         let mutable simpleEnums = []
         let mutable complexEnums = []
         let mutable tempTypes = []
@@ -195,6 +196,7 @@ module STLGameFunctions =
             |Some rulesSettings ->
                 let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
                 lookup.typeDefs <- types
+                baseRules <- rules
                 let rulesWithMod = rules @ addModifiersWithScopes(game)
                 let rulesWithEmbeddedScopes = addTriggerDocsScopes game rulesWithMod
                 lookup.configRules <- rulesWithEmbeddedScopes
@@ -205,6 +207,9 @@ module STLGameFunctions =
                 rulesDataGenerated <- false
                 log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
             |None -> ()
+            let rulesWithMod = baseRules @ addModifiersWithScopes(game)
+            let rulesWithEmbeddedScopes = addTriggerDocsScopes game rulesWithMod
+            lookup.configRules <- rulesWithEmbeddedScopes
             let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allEnums = simpleEnums @ complexEnumDefs
