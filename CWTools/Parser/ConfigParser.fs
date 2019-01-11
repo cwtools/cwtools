@@ -439,6 +439,7 @@ module rec ConfigParser =
             |LeafC loc ->
                 let required = comments |> List.exists (fun s -> s.Contains "required")
                 let key = loc.Key
+                eprintfn "pl %s %b" key required
                 let value = loc.Value.ToRawString()
                 let dollarIndex = value.IndexOf "$"
                 let prefix = value.Substring(0, dollarIndex)

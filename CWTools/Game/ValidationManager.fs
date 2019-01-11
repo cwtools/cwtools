@@ -79,9 +79,12 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
                             let lockey = locdef.prefix + key + locdef.suffix
                             checkLocKeysLeafOrNode (services.localisationKeys()) lockey fakeLeaf)
         let validateType (typename : string) (values : (string * range) list) =
+            eprintfn "vt %s" typename
             match services.lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
             |None -> OK
-            |Some td -> td.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
+            |Some td ->
+                eprintfn "vtd %A" td.localisation
+                td.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
         let validateSubType (typename : string) (values : (string * range) list) =
             let splittype = typename.Split([|'.'|], 2)
             if splittype.Length > 1

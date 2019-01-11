@@ -20,7 +20,7 @@ module CommonValidation =
     let validateEU4NaiveNot : StructureValidator<_> =
         fun _ es ->
             let fNode = (fun (x : Node) children ->
-                if x.Key == "NOT" && x.All.Length > 1
+                if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1
                  then Invalid [inv (ErrorCodes.CustomError "Reminder: NOT does not mean NOT AND" Severity.Information) x]
                 else children
                 )
