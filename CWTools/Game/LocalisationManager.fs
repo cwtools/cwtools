@@ -41,6 +41,7 @@ type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> an
 
     // member val localisationAPIs : (bool * ILocalisationAPI) list = [] with get, set
     member val localisationErrors : CWError list option = None with get, set
+    member val globalLocalisationErrors : CWError list option = None with get, set
     member val localisationKeys : (Lang * Set<string>) list= [] with get, set
     member val taggedLocalisationKeys : (Lang * LocKeySet) list = [] with get, set
     member this.UpdateAllLocalisation() = updateAllLocalisationSources(); updateProcessedLocalisation()

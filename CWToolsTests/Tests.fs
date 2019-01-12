@@ -101,7 +101,7 @@ let tests =
                 let settings = { settings with rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false } }
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let parseErrors = stl.ParserErrors()
-                let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
+                let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k) -> n)
                 let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
@@ -133,7 +133,7 @@ let tests =
                 let parseErrors = stl.ParserErrors()
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
-                let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
+                let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k) -> n)
                 let testLocKeys = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : range list), (noreq : range list), (nodekeys : range list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
@@ -143,7 +143,7 @@ let tests =
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
                 // eprintfn "%A" (stl.LocalisationErrors(true))
                 let locErrorCodes = [ "CW225"; "CW226"; "CW254"; "CW255"; "CW256"; "CW257"; "CW258"; "CW259"]
-                let globalLocError = stl.LocalisationErrors(true) |> List.filter (fun (c, s, n, l, f, k) -> List.contains c locErrorCodes)
+                let globalLocError = stl.LocalisationErrors(true, true) |> List.filter (fun (c, s, n, l, f, k) -> List.contains c locErrorCodes)
                 yield testCase "globalLoc" <| fun () ->
                     Expect.hasCountOf globalLocError 8u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
             ]
@@ -161,7 +161,7 @@ let testFolder folder testsname config configfile configOnly configLoc (culture 
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = configOnly} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
-        let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)

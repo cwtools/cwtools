@@ -457,14 +457,20 @@ type STLGame (settings : StellarisSettings) =
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
-            member __.LocalisationErrors(force : bool) =
-                let generate =
-                    let les = (game.ValidationManager.ValidateLocalisation (resources.ValidatableEntities())) @ globalLocalisation(game)
+            member __.LocalisationErrors(force : bool, forceGlobal : bool) =
+                let genGlobal() =
+                    let ges = (globalLocalisation(game))
+                    game.LocalisationManager.globalLocalisationErrors <- Some ges
+                    ges
+                let genAll() =
+                    let les = (game.ValidationManager.ValidateLocalisation (resources.ValidatableEntities()))
                     game.LocalisationManager.localisationErrors <- Some les
                     les
-                match game.LocalisationManager.localisationErrors with
-                |Some les -> if force then generate else les
-                |None -> generate
+                match game.LocalisationManager.localisationErrors, game.LocalisationManager.globalLocalisationErrors with
+                |Some les, Some ges -> (if force then genAll() else les) @ (if forceGlobal then genGlobal() else ges)
+                |None, Some ges -> (genAll()) @ (if forceGlobal then genGlobal() else ges)
+                |Some les, None -> (if force then genAll() else les) @ (genGlobal())
+                |None, None -> (genAll()) @ (genGlobal())
 
             //member __.ValidationWarnings = warningsAll
             member __.Folders() = fileManager.AllFolders()
