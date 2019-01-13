@@ -5,6 +5,7 @@
   #error
   missing_event:0 "[missing.GetName]"
   defined_event:0 "[defined_event.GetName]"
+  defined_event:0 "[defined_event.GetName2]"
   #error
   missing_command:0 "[defined_event.NotReal]"
   #error

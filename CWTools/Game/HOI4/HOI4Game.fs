@@ -98,6 +98,15 @@ module HOI4GameFunctions =
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true));
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
+    let addModifiersWithScopes (game : GameObject) =
+        let modifierOptions (modifier : Modifier) =
+            let requiredScopes =
+                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
+                                    |> List.map Set.ofList
+                                    |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
+            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes}
+        game.Lookup.coreModifiers
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
     let updateTypeDef =
         let mutable simpleEnums = []
@@ -116,7 +125,7 @@ module HOI4GameFunctions =
             |Some rulesSettings ->
                 let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
                 lookup.typeDefs <- types
-                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
+                let rulesWithMod = rules @ addModifiersWithScopes game
                 lookup.configRules <- rulesWithMod
                 simpleEnums <- enums
                 complexEnums <- complexenums

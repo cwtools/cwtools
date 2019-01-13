@@ -9,6 +9,9 @@ module HOI4Constants =
         |State
         |Country
         |UnitLeader
+        //Modifier scopes
+        |Air
+        //Misc
         |Any
         |InvalidScope
         override x.ToString() =
@@ -36,6 +39,7 @@ module HOI4Constants =
             |"country" -> Scope.Country
             |"unit leader" -> Scope.UnitLeader
             |"unit_leader" -> Scope.UnitLeader
+            |"air" -> Scope.Air
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any
@@ -54,6 +58,9 @@ module HOI4Constants =
     type ModifierCategory =
         |State
         |Country
+        |Unit
+        |UnitLeader
+        |Air
         |Any
 
     type Modifier =
@@ -65,6 +72,16 @@ module HOI4Constants =
         }
         interface IModifier with
             member this.Tag = this.tag
+
+    let categoryScopeList = [
+        ModifierCategory.Country, [Scope.Country]
+        ModifierCategory.UnitLeader, [Scope.UnitLeader; Scope.Country]
+        ModifierCategory.Unit, [Scope.UnitLeader; Scope.Country]
+        ModifierCategory.State, [Scope.Any]
+        ModifierCategory.Air, [Scope.Air; Scope.Country]
+    ]
+    let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
+
     let scriptFolders = [
         "common/abilities";
         "common/aces";

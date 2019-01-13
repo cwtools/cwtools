@@ -17,6 +17,9 @@ module HOI4Parser =
         function
         |"state" -> ModifierCategory.State
         |"country" -> ModifierCategory.Country
+        |"unit" -> ModifierCategory.Unit
+        |"unit_leader" -> ModifierCategory.UnitLeader
+        |"air" -> ModifierCategory.Air
         |_ -> ModifierCategory.Any
     //     csv.Rows |> Seq.map(fun r -> r.Columns.[0])
 
@@ -30,7 +33,7 @@ module HOI4Parser =
                 |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {tag = l.Key; categories = [parseModifier (l.Value.ToRawString())]; core = true}))
                 |> Option.defaultValue []
 
-    let getLocCommands (node : Node) =
+    let private getLocCommands (node : Node) =
         let simple = node.Values |> List.map (fun v -> v.Key, [parseScope (v.Value.ToRawString())])
         let complex = node.Children |> List.map (fun v -> v.Key, (v.LeafValues |> Seq.map (fun lv -> parseScope (lv.Value.ToRawString())) |> List.ofSeq))
         simple @ complex
