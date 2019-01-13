@@ -312,7 +312,10 @@ module rec Rules =
             let inner =
                 (fun l ->
                 let lockey = l.prefix + key + l.suffix
-                CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
+                if l.optional
+                then OK
+                else
+                    CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
             let subtype =
                 if typenames.Length > 1
                 then

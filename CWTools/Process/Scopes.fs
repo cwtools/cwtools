@@ -73,7 +73,9 @@ module Scopes =
         | VarNotFound of var : string
     // type EffectMap<'T> = Map<string, Effect<'T>, InsensitiveStringComparer>
 
-    let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) =
+    let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefix) =
+        let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
+        let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
             if
@@ -82,7 +84,7 @@ module Scopes =
                 || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
             then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
-                let key, varOnly = if key.StartsWith("var:", StringComparison.OrdinalIgnoreCase) then key.Substring(4), true else key, false
+                let key, varOnly = if varStartsWith key then varSubstring key, true else key, false
                 let ampersandSplit = key.Split([|'@'|], 2)
                 let keys = ampersandSplit.[0].Split('.')
                 let keylength = keys.Length - 1

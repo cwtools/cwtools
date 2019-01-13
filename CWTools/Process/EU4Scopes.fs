@@ -72,7 +72,7 @@ module EU4Scopes =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = createChangeScope<Scope> oneToOneScopes
+    let changeScope = createChangeScope<Scope> oneToOneScopes "variable:"
 
     // let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =
     //     let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key

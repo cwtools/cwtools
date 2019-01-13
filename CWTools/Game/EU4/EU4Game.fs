@@ -115,8 +115,8 @@ module EU4GameFunctions =
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            lookup.EU4ScriptedEffectKeys <-  game.Resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
-                                                |> List.ofSeq |> List.collect id
+            lookup.EU4ScriptedEffectKeys <- "scaled_skill" :: (game.Resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
+                                                |> List.ofSeq |> List.collect id)
             let scriptedEffectParmas = "scripted_effect_params", (lookup.EU4ScriptedEffectKeys)
             let scriptedEffectParmasD = "scripted_effect_params_dollar", (lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k))
             let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD]
