@@ -497,5 +497,6 @@ type STLGame (settings : StellarisSettings) =
             member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
             member __.RefreshCaches() = refreshRuleCaches game None
             member __.ForceRecompute() = resources.ForceRecompute()
+            member __.Types() = game.Lookup.typeDefInfo
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

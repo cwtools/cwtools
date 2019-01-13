@@ -29,6 +29,7 @@ type IGame =
     abstract ReplaceConfigRules : (string * string) list -> unit
     abstract RefreshCaches : unit -> unit
     abstract ForceRecompute : unit -> unit
+    abstract Types : unit ->  Map<string,(string * range) list>
 
 type IGame<'S when 'S : comparison> =
     inherit IGame
