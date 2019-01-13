@@ -47,10 +47,11 @@ module LocalisationString =
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
-    let processLocalisationBase localisationCommandContext commands (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (api : (Lang * Map<string, Entry>))=
+    let processLocalisationBase<'S> localisationCommandContext (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry<'S>>=
         // let lang = api |> fst
         // let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
         // let all = api |> snd
+        let commands = commands |> List.map fst
         let extractResult =
             function
             |Success (v, _, _) -> v

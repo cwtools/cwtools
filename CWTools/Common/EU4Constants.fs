@@ -9,6 +9,15 @@ module EU4Constants =
         |Province
         |TradeNode
         |Unit
+        //Loc scopes
+        |Monarch
+        |Heir
+        |Consort
+        |RebelFaction
+        |Religion
+        |Culture
+        |Advisor
+        //Misc
         |Any
         |InvalidScope
         override x.ToString() =
@@ -41,6 +50,13 @@ module EU4Constants =
             |"trade_node" -> Scope.TradeNode
             |"tradenode" -> Scope.TradeNode
             |"unit" -> Scope.Unit
+            |"monarch" -> Scope.Monarch
+            |"hier" -> Scope.Heir
+            |"consort" -> Scope.Consort
+            |"rebel_faction" -> Scope.RebelFaction
+            |"religion" -> Scope.Religion
+            |"culture" -> Scope.Culture
+            |"advisor" -> Scope.Advisor
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any

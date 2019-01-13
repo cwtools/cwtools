@@ -10,3 +10,7 @@ event = {
     }
 
 }
+
+localisation_commands = {
+    GetName = any
+}

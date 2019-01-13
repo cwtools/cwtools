@@ -87,9 +87,10 @@ module STLLocalisationString =
             "GetPlanetMoonCap";
             "GetNamePluralInsult";
         ]
+    let locCommands = commands |> List.map (fun c -> c, allScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = processLocalisationBase localisationCommandContext commands
+    let processLocalisation = processLocalisationBase<Scope> localisationCommandContext
     // let checkCommand localisationCommandContext (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
     //     match localisationCommandContext commands eventtargets setvariables entry command with
     //     | ContextResult.Found _ -> OK

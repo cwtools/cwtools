@@ -33,6 +33,7 @@
     <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Parser/EU4Parser.fs" />
     <Compile Include="Parser/HOI4Parser.fs" />
+    <Compile Include="Parser/STLParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />
     <Compile Include="Game/CachedFileManager.fs" />

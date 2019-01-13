@@ -28,7 +28,7 @@ open CWTools.Games
 
 module HOI4GameFunctions =
     type GameObject = GameObject<Scope, Modifier, HOI4ComputedData>
-    let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -41,7 +41,7 @@ module HOI4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation eventtargets lookup.scriptedLoc definedvars
+        processLocalisation localisationCommands eventtargets lookup.scriptedLoc definedvars
     let globalLocalisation (game : GameObject) =
         // let locfiles =  resources.GetResources()
         //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
@@ -201,12 +201,13 @@ type HOI4Game(settings : HOI4Settings) =
         debugRulesOnly = false
         localisationValidators = []
     }
+    let settings = { settings with embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
 
     let game = GameObject<Scope, Modifier, HOI4ComputedData>.CreateGame
                 (settings, "hearts of iron iv", scriptFolders, HOI4Compute.computeHOI4Data,
                 HOI4Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 HOI4GameFunctions.processLocalisationFunction,
+                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                  Encoding.UTF8,
                  Encoding.GetEncoding(1252),
                  validationSettings,

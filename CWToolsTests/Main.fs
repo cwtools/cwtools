@@ -38,6 +38,7 @@ let emptyStellarisSettings (rootDirectory) = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
+        localisationCommands = []
     }
     scriptFolders = None
 }

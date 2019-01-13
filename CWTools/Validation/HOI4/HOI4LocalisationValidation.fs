@@ -63,6 +63,7 @@ module HOI4LocalisationString =
             "GetReligionName";
             "GetReligionGroupName";
         ]
+    let locCommands = commands |> List.map (fun c -> c, allScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = processLocalisationBase localisationCommandContext commands
+    let processLocalisation = processLocalisationBase<Scope> localisationCommandContext

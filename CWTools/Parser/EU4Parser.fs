@@ -9,6 +9,7 @@ open FSharp.Data
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils
+open Types
 
 module EU4Parser =
     // let loadModifiers (fileStream : StreamReader) =
@@ -28,5 +29,20 @@ module EU4Parser =
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
             root.Child "modifiers"
                 |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {tag = l.Key; categories = [parseModifier (l.Value.ToRawString())]; core = true}))
+                |> Option.defaultValue []
+
+    let getLocCommands (node : Node) =
+        let simple = node.Values |> List.map (fun v -> v.Key, [parseScope (v.Value.ToRawString())])
+        let complex = node.Children |> List.map (fun v -> v.Key, (v.LeafValues |> Seq.map (fun lv -> parseScope (lv.Value.ToRawString())) |> List.ofSeq))
+        simple @ complex
+
+    let loadLocCommands filename fileString =
+        let parsed = CKParser.parseString fileString filename
+        match parsed with
+        |Failure(e, _, _) -> log (sprintf "loccommands file %s failed with %s" filename e); ([])
+        |Success(s,_,_) ->
+            let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
+            root.Child "localisation_commands"
+                |> Option.map getLocCommands
                 |> Option.defaultValue []
 

@@ -28,7 +28,7 @@ open CWTools.Validation.EU4.EU4LocalisationString
 
 module EU4GameFunctions =
     type GameObject = GameObject<Scope, Modifier, EU4ComputedData>
-    let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -41,7 +41,7 @@ module EU4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation eventtargets lookup.scriptedLoc definedvars
+        processLocalisation localisationCommands eventtargets lookup.scriptedLoc definedvars
     let globalLocalisation (game : GameObject) =
         // let locfiles =  resources.GetResources()
         //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
@@ -182,11 +182,14 @@ type EU4Game(settings : EU4Settings) =
         debugRulesOnly = false
         localisationValidators = []
     }
+
+    let settings = { settings with embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
+
     let game = GameObject<Scope, Modifier, EU4ComputedData>.CreateGame
                 ((settings, "europa universalis iv", scriptFolders, EU4Compute.computeEU4Data,
                     EU4Compute.computeEU4DataUpdate,
                      (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     EU4GameFunctions.processLocalisationFunction,
+                     EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      Encoding.UTF8,
                      Encoding.GetEncoding(1252),
                      validationSettings,

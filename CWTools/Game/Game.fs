@@ -48,6 +48,7 @@ type EmbeddedSettings<'S,'M when 'S : comparison> = {
     embeddedFiles : (string * string) list
     modifiers : 'M list
     cachedResourceData : (Resource * Entity) list
+    localisationCommands : (string * ('S list)) list
 }
 
 type ValidationSettings = {

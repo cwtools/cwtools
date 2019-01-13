@@ -72,10 +72,10 @@ open CWTools.Games.LanguageFeatures
 // }
 module STLGameFunctions =
     type GameObject = GameObject<Scope, Modifier, STLComputedData>
-    let processLocalisationFunction (lookup : Lookup<Scope, Modifier>) =
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
-        processLocalisation (eventtargets @ globaleventtargets) lookup.scriptedLoc lookup.definedScriptVariables
+        processLocalisation localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc lookup.definedScriptVariables
 
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
@@ -293,12 +293,13 @@ type STLGame (settings : StellarisSettings) =
                              valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers; valAnomalies]
 
     }
-        let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }}
+        let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
+                                       embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
         let game = GameObject<Scope, Modifier, STLComputedData>.CreateGame
                     (settings, "stellaris", scriptFolders, STLCompute.computeSTLData,
                     STLCompute.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     STLGameFunctions.processLocalisationFunction,
+                     STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      Encoding.UTF8,
                      Encoding.GetEncoding(1252),
                      validationSettings,

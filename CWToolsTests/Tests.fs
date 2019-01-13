@@ -40,6 +40,7 @@ let emptyStellarisSettings (rootDirectory) = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
+        localisationCommands = []
     }
     scriptFolders = None
 }
@@ -125,8 +126,10 @@ let tests =
             testList "with loc" [
                 let configtext = ["./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt"]
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
+                let locCommands = STLParser.loadLocCommands "./testfiles/localisationtests/test.cwt" (File.ReadAllText "./testfiles/localisationtests/test.cwt")
+
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
-                let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles] };
+                let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles]; localisationCommands = locCommands };
                                             validation = {settings.validation with langs = [STL STLLang.English; STL STLLang.German] };
                                             rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false } }
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
