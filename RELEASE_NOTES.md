@@ -1,3 +1,5 @@
+## New in 0.3.0 (Released 2019/01/15)
+* Update to newer features
 ## New in 0.2.0 (Released 2018/07/29)
 * Update build system
 ## New in 0.1.1 (Released 2018/02/24)
