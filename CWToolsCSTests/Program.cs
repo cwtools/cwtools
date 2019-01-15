@@ -13,6 +13,50 @@ using static CWTools.Utilities.Position;
 
 namespace CWToolsCSTests
 {
+    public class MyValue {
+        public string Value {get; set;}
+    }
+    public class MyKeyValue {
+        public string Key {get;set;}
+        public string Value {get;set;}
+    }
+    public class MyNode {
+        public string Key {get; set;}
+        public List<MyKeyValue> KeyValues {get; set;}
+        public List<MyNode> Nodes {get; set;}
+        public List<MyValue> Values {get; set;}
+    }
+
+    public static class MappingSample {
+        public static MyValue ToMyValue(LeafValue lv) {
+            return new MyValue { Value = lv.Key };
+        }
+
+        public static MyKeyValue ToMyKeyValue(Leaf l) {
+            return new MyKeyValue { Key = l.Key, Value = l.Value.ToRawString() };
+        }
+
+        public static MyNode ToMyNode(Node n) {
+            var nodes = n.AllChildren.Where(x => x.IsNodeC).Select(x => ToMyNode(x.node)).ToList();
+            var leaves = n.AllChildren.Where(x => x.IsLeafC).Select(x => ToMyKeyValue(x.leaf)).ToList();
+            var values = n.AllChildren.Where(x => x.IsLeafValueC).Select(x => ToMyValue(x.lefavalue)).ToList();
+            return new MyNode { Key = n.Key, Nodes = nodes, Values = values, KeyValues = leaves};
+        }
+        public static MyNode MapToMyNode() {
+            //Support UTF-8
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            //Parse event file
+            var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
+
+            var eventFile = parsed.GetResult();
+
+            //"Process" result into nicer format
+            var processed = CK2Process.processEventFile(eventFile);
+
+            return ToMyNode(processed);
+        }
+    }
     class Program
     {
         static void Main(string[] args)
