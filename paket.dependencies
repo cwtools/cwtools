@@ -7,8 +7,6 @@ nuget Expecto >= 5.0
 nuget FParsec 1.0.4-RC3
 nuget FSharp.Data 3.0.0-beta
 nuget Microsoft.AspNetCore.App
-nuget Newtonsoft.Json.FSharp
-nuget NodaTime < 2.0
 nuget runtime.win-x64.Microsoft.NETCore.App
 nuget runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy
 nuget runtime.win-x64.Microsoft.NETCore.DotNetHostResolver

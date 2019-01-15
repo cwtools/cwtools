@@ -8,7 +8,6 @@ open CWTools.Common
 open CWTools.Common.EU4Constants
 open DotNet.Globbing
 open CWTools.Games
-open Newtonsoft.Json.Linq
 open CWTools.Utilities.Utils
 open System
 open Microsoft.FSharp.Collections.Tagged

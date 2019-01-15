@@ -2,14 +2,18 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <DependsOnNETStandard>true</DependsOnNETStandard>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
-    <PackageReference Include="FParsec" Version="1.0.3" />
+    <!-- <PackageReference Include="FParsec" Version="1.0.4-RC3" /> -->
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="cwtools" Version="0.1.1"/>
+    <!-- <PackageReference Include="cwtools" Version="0.1.1"/> -->
+    <ProjectReference Include="..\CWTools\CWTools.fsproj">
+      <Name>CWTools.fsproj</Name>
+    </ProjectReference>
+
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 namespace CWTools.Process
 
 open CWTools.Parser
-open Newtonsoft.Json
 open System
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
@@ -34,7 +33,6 @@ type Leaf =
     val mutable Key : string
     val mutable Value : Value
     val mutable Position : range
-    [<JsonIgnore>]
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
     new(key : string, value : Value, pos : range) = { Key = key; Value = value; Position = pos }
     //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
@@ -49,7 +47,6 @@ and LeafValue(value : Value, ?pos : range) =
     member val Value = value with get, set
     member this.Key = this.Value.ToRawString()
     member val Position = defaultArg pos range.Zero
-    [<JsonIgnore>]
     member this.ToRaw = Value(this.Position, this.Value)
     static member Create value = LeafValue value
     interface IKeyPos with
@@ -91,7 +88,6 @@ and Node (key : string, pos : range) =
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
 
-    [<JsonIgnore>]
     member this.ToRaw : Statement list = this.All |>
                                          List.map (function
                                            |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw)))

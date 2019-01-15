@@ -8,6 +8,8 @@ using CWTools.Process;
 using Microsoft.FSharp.Core;
 using System.IO;
 using CWTools.CSharp;
+using static CWTools.Parser.Types;
+using static CWTools.Utilities.Position;
 
 namespace CWToolsCSTests
 {
@@ -20,7 +22,7 @@ namespace CWToolsCSTests
 
             //Parse event file
             var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
-            
+
             var eventFile = parsed.GetResult();
 
             //"Process" result into nicer format
@@ -28,9 +30,9 @@ namespace CWToolsCSTests
 
             //Find interesting event
             var myEvent = processed.Events.FirstOrDefault(x => x.ID == "test.1");
-            
+
             //Add is_triggered_only = true
-            var leaf = new Leaf("is_triggered_only", Value.NewBool(true));
+            var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true)), FSharpOption<range>.None);
             myEvent.AllChildren.Add(Child.NewLeafC(leaf));
             // or
             // myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true)));

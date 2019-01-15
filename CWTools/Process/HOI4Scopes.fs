@@ -1,6 +1,5 @@
 namespace CWTools.Process
 
-open NodaTime.TimeZones
 open System
 open CWTools.Localisation
 open CWTools.Utilities.Position
