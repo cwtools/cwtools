@@ -35,7 +35,7 @@ module HOI4Scopes =
 
     let scopedEffects =
         [
-            ScopedEffect("owner", [Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("owner", [Scope.UnitLeader, Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("controller", [Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("capital", [Scope.State], Scope.State, EffectType.Both, defaultDesc, "", true);
             ScopedEffect("global", allScopes, Scope.InvalidScope, EffectType.Both, defaultDesc, "", true);
