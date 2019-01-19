@@ -56,7 +56,7 @@ let emptyStellarisSettings (rootDirectory) = {
 let effectMap = Microsoft.FSharp.Collections.Tagged.Map<string,Effect,InsensitiveStringComparer>.Create(InsensitiveStringComparer(), [])
 [<Tests>]
 let tests =
-    testList "process stl" [
+    ptestList "process stl" [
         testCase "option" <| fun () ->
             let input =    "country_event = {\
                             option = {\

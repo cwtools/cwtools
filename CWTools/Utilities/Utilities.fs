@@ -96,4 +96,4 @@ type StringResourceManager() =
         ints.[id]
 
 module StringResource =
-    let stringManager = StringResourceManager()
+    let mutable stringManager = StringResourceManager()

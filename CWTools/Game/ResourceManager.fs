@@ -9,6 +9,7 @@ open CWTools.Common.STLConstants
 open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
+open CWTools.Utilities
 open CWTools.Common
 
 
@@ -100,6 +101,7 @@ type CachedResourceData = {
     resources : (Resource * Entity) list
     files : (string * string) list
     fileIndexTable : FileIndexTable
+    stringResourceManager : StringResourceManager
 }
 type ResourceInput =
     |EntityResourceInput of EntityResourceInput

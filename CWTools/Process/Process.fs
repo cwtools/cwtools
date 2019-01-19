@@ -105,13 +105,13 @@ and Node (key : string, pos : range) =
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
     member this.All with get () = all |> List.ofSeq
     member this.All with set(value : Child list) = all <- (value |> List.toArray); reset()
-    member this.Nodes = this.AllChildren |> Seq.choose (function |NodeC n -> Some n |_ -> None)
+    member this.Nodes = all |> Seq.choose (function |NodeC n -> Some n |_ -> None)
     member this.Children = this.Nodes |> List.ofSeq
-    member this.Leaves = this.AllChildren |> Seq.choose (function |LeafC l -> Some l |_ -> None)
+    member this.Leaves = all |> Seq.choose (function |LeafC l -> Some l |_ -> None)
     member this.Values = this.Leaves |> List.ofSeq
-    member this.Comments = this.AllChildren |> Seq.choose (function |CommentC c -> Some c |_ -> None)
-    member this.LeafValues = this.AllChildren |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
-    member this.Has x = this.AllChildren |> (Seq.exists (bothFind x))
+    member this.Comments = all |> Seq.choose (function |CommentC c -> Some c |_ -> None)
+    member this.LeafValues = all |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
+    member this.Has x = all |> (Seq.exists (bothFind x))
     member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key == x -> Some l.Value |_ -> None)
     member __.Leafs x = leaves() |> Array.choose (function |l when l.Key == x -> Some l |_ -> None) |> Array.toSeq
     member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq

@@ -159,7 +159,9 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
                 else files |> List.choose (function
                     |FileResourceInput f -> Some (FileResourceInput f)
                     |FileWithContentResourceInput f -> Some (FileWithContentResourceInput f)
-                    |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f)) |_ -> None)
+                    |EntityResourceInput f -> (if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
+                    |_ -> None
+                    )
             resourceManager.Api.UpdateFiles(filteredfiles) |> ignore
             let embeddedFiles =
                 settings.embedded.embeddedFiles

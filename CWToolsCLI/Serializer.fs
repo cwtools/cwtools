@@ -17,6 +17,7 @@ open CWTools.Validation.Stellaris
 open MBrace.FsPickler
 open CWTools.Process
 open CWTools.Utilities.Position
+open CWTools.Utilities
 open CWTools.Games.EU4
 open CWTools.Validation.EU4
 open CWTools.Validation.Rules
@@ -53,7 +54,7 @@ let serializeSTL folder cacheDirectory =
                 |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
                                          |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
-    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = xmlSerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
@@ -70,7 +71,7 @@ let serializeEU4 folder cacheDirectory =
                 |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
                                          |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
-    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = xmlSerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "eu4.cwb"), pickle)
 let serializeHOI4 folder cacheDirectory =
@@ -86,7 +87,7 @@ let serializeHOI4 folder cacheDirectory =
                 |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
                                          |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
-    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files}
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = xmlSerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "hoi4.cwb"), pickle)
 
@@ -100,6 +101,7 @@ let deserialize path =
         //                 |> (fun f -> use ms = new MemoryStream() in f.CopyTo(ms); ms.ToArray())
         let cached = xmlSerializer.UnPickle<CachedResourceData> cacheFile
         fileIndexTable <- cached.fileIndexTable
+        StringResource.stringManager <- cached.stringResourceManager
         cached.resources, cached.files
     |false -> [], []
 

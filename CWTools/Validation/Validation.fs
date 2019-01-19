@@ -148,6 +148,10 @@ module ValidationCore =
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
 
+    let (<&&&>) e f =
+        match f with
+        |OK -> Invalid [e]
+        |Invalid es -> Invalid (e::es)
     let (<&?&>) f1 f2 =
         match f1, f2 with
         |OK, OK -> OK
@@ -158,18 +162,18 @@ module ValidationCore =
     let mergeValidationErrors (errorcode : string) =
         let rec mergeErrorsInner es =
             match es with
-            | [] -> es
-            | [res] -> es
+            // | [] -> es
+            | [] -> failwith "mergeErrorsInner somehow got an empty error list"
+            | [res] -> res
             | head::head2::tail ->
                 let (e1c, e1s, e1r, e1l, e1m, e1d), (_, _, _, _, e2m, _) = head, head2
                 mergeErrorsInner ((e1c, e1s, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d)::tail)
-        function
-        |OK -> OK
-        |Invalid es -> Invalid (mergeErrorsInner es)
+        mergeErrorsInner
 
     // Parallelising something this small makes it slower!
     let (<&!!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK
     let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK
+    let applyToAll es f e = es |> Seq.fold f e
 
     let (<&??&>) es f = es |> Seq.map f |> Seq.reduce (<&?&>)
     let inline checkNonNull argName arg =
@@ -188,10 +192,40 @@ module ValidationCore =
                       yield !latest
               else () }
 
-    let inline lazyErrorMerge es f defValue merge =
-        let t = es |> Seq.map f  |> takeWhileOne (fun e -> e |> function |OK -> false |Invalid er -> true) |> List.ofSeq
-        t |> Seq.tryHead |> Option.map (fun s -> Seq.fold (<&?&>) s t |>  (fun f -> if merge then mergeValidationErrors "CW240" f else f )) |> Option.defaultValue (defValue())
-        // if t |> Seq.cache |> Seq.isEmpty then defValue() else Seq.reduce (<&?&>) t |> (fun f -> if merge then mergeValidationErrors "CW240" f else f )
+    let merger original news =
+        match original, news with
+        |_, Invalid [] -> None
+        |_, Invalid [res] -> Some res
+        |Invalid [], Invalid es |OK, Invalid es -> Some (mergeValidationErrors "CW240" es)
+        |Invalid (head::_), Invalid es ->
+            let t = List.takeWhile ((<>) head) es
+            match t with
+            |[] -> None
+            |[res] -> Some res
+            |_ -> Some (mergeValidationErrors "CW240" t)
+        |_, OK -> None
+    let lazyErrorMerge rs f defValue (errors : ValidationResult) merge =
+        // let mutable state = errors
+        let mutable foundOK = false
+        let mutable any = false
+        //Take every potential rule
+        let res =
+            rs |> Seq.fold (fun es r ->
+            if foundOK
+            then es
+            else (let x = f r es in if x = es then foundOK <- true; x else any <- true; x)) errors
+        match foundOK, any, merge with
+        |true, _, _ -> errors
+        |_, false, _ -> defValue()
+        |_, true, true -> (merger errors res) |> Option.map (fun e -> e <&&&> errors ) |> Option.defaultValue errors
+        |_, true, false -> res
+        // if foundOK then errors else (if any then state else defValue())
+        // let t = es |> Seq.map f  |> takeWhileOne (fun e -> e |> function |OK -> false |Invalid er -> true) |> List.ofSeq
+        // t |> Seq.tryHead |> Option.map (fun s -> Seq.fold (<&?&>) s t) |> Option.defaultValue (defValue())
+    // let inline lazyErrorMerge es f defValue merge =
+    //     let t = es |> Seq.map f  |> takeWhileOne (fun e -> e |> function |OK -> false |Invalid er -> true) |> List.ofSeq
+    //     t |> Seq.tryHead |> Option.map (fun s -> Seq.fold (<&?&>) s t |>  (fun f -> if merge then mergeValidationErrors "CW240" f else f )) |> Option.defaultValue (defValue())
+    //     // if t |> Seq.cache |> Seq.isEmpty then defValue() else Seq.reduce (<&?&>) t |> (fun f -> if merge then mergeValidationErrors "CW240" f else f )
 
 
     type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =

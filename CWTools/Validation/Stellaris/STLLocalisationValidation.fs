@@ -23,6 +23,12 @@ module STLLocalisationValidation =
         | true, _ -> OK
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+    let inline checkLocKeyN (leaf : ^a) (keys : Set<string>) (lang : Lang) errors key  =
+        if lang = STL STLLang.Default then errors else
+        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+        | true, _ -> errors
+        | _, true -> errors
+        | _, false -> invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key) <&&&> errors
     let inline checkLocKeyNE (leaf : ^a) (keys : Set<string>) (lang : Lang) key =
         if lang = STL STLLang.Default then true else
         match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
@@ -36,6 +42,12 @@ module STLLocalisationValidation =
         | _, true, _ -> OK
         | _, _, true -> OK
         | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+    let inline checkLocNameN (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string) (errors) =
+        match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+        | false, _, _ -> errors
+        | _, true, _ -> errors
+        | _, _, true -> errors
+        | _, _, false -> invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key) <&&&> errors
     let inline checkLocNameNE (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string)  =
         match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | false, _, _ -> true
@@ -45,6 +57,8 @@ module STLLocalisationValidation =
 
     let inline checkLocKeysLeafOrNode (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leafornode keys l key) OK
+    let inline checkLocKeysLeafOrNodeN (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) (errors) =
+        keys |> List.fold (fun state (l, keys)  -> checkLocKeyN leafornode keys l state key) errors
     let inline checkLocKeysLeafOrNodeNE (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
         keys |> List.fold (fun state (l, keys)  -> state && checkLocKeyNE leafornode keys l key) true
 
