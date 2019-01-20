@@ -236,7 +236,7 @@ module STLLocalisationValidation =
 
     let valBuildingLocs : LocalisationValidator =
         fun _ keys es ->
-            let entities = es.AllOfTypeChildren EntityType.Buildings
+            let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
             let inner =
                 fun node ->
                     let keyres = checkKeyAndDesc keys node
@@ -248,7 +248,7 @@ module STLLocalisationValidation =
 
     let valScriptedTriggers : LocalisationValidator =
         fun _ keys es ->
-            let entities = es.AllOfTypeChildren EntityType.ScriptedTriggers
+            let entities = es.GlobMatchChildren("**/common/scripted_triggers/*.txt")
             let inner =
                 fun (node : Node) ->
                     node.Children <&!&> (getLocKeys keys ["text"; "fail_text"])
@@ -326,13 +326,13 @@ module STLLocalisationValidation =
 
     let valWarGoals : LocalisationValidator =
         fun _ keys es ->
-            let wargoals = es.AllOfTypeChildren EntityType.WarGoals
+            let wargoals = es.GlobMatchChildren("**/common/war_goals/*.txt")
             let inner = checkLocNodeKeyAdvs keys "war_goal_" [""; "_desc"]
             wargoals <&!&> inner
 
     let valBuildingTags : LocalisationValidator =
         fun _ keys es ->
-            let buildtags = es.AllOfType EntityType.BuildingTags |> List.map fst
+            let buildtags = es.GlobMatchChildren("**/common/building_tags/*.txt") //|> List.map fst
             OK
             //buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocLeafValueKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
 
@@ -410,18 +410,18 @@ module STLLocalisationValidation =
 
     let valModules : LocalisationValidator =
         fun _ keys es ->
-            let mods = es.AllOfTypeChildren EntityType.StarbaseModules @ (es.AllOfTypeChildren EntityType.StarbaseBuilding)
+            let mods = es.GlobMatchChildren("**/common/starbase_modules/*.txt") @ (es.GlobMatchChildren("**/common/starbase_buildings/*.txt"))
             let inner = checkLocNodeKeyAdvs keys "sm_" [""; "_desc"]
             mods <&!&> inner
     let valOpinionModifiers : LocalisationValidator =
         fun _ keys es ->
-            let opinionMods = es.AllOfTypeChildren EntityType.OpinionModifiers
+            let opinionMods = es.GlobMatchChildren("**/common/opinion_modifiers/*.txt")
             let inner = checkLocNodeKeyAdvs keys "" ["";]
             opinionMods <&!&> inner
 
     let valAnomalies : LocalisationValidator =
         fun _ keys es ->
-            let anomalies = es.AllOfTypeChildren EntityType.Anomalies
+            let anomalies = es.GlobMatchChildren("**/common/anomalies/*.txt")
             let inner (node : Node) = checkLocNodeKeyAdvs keys "" [""] node <&&> (checkLocNodeTag keys "desc" node)
             anomalies <&!&> inner
 
@@ -449,7 +449,7 @@ module STLLocalisationValidation =
 
     let valSpecialProjects : LocalisationValidator =
         fun _ keys es ->
-            let projs = es.AllOfTypeChildren EntityType.SpecialProjects
+            let projs = es.GlobMatchChildren("**/common/special_projects/*.txt")
             let inner = checkLocNodeTagAdvs keys "" [""; "_DESC"] "key"
             projs <&!&> inner
 
@@ -483,7 +483,7 @@ module STLLocalisationValidation =
 
     let valTileBlockers : LocalisationValidator =
         fun _ keys es ->
-            let tileblockers = es.AllOfTypeChildren EntityType.TileBlockers
+            let tileblockers = es.GlobMatchChildren("**/common/tile_blockers/*.txt")
             let inner = checkLocNodeKeyAdvs keys "" [""; "_desc"]
             tileblockers <&!&> inner
 
@@ -547,4 +547,4 @@ module STLLocalisationValidation =
 
     let valStarbaseType : LocalisationValidator =
         fun _ keys es ->
-            es.AllOfTypeChildren EntityType.StarbaseTypes <&!&> checkLocNodeKeyAdvs keys "" [""]
+            es.GlobMatchChildren("**/common/starbase_types/*.txt") <&!&> checkLocNodeKeyAdvs keys "" [""]

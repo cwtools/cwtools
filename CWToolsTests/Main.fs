@@ -113,6 +113,9 @@ let main argv =
     then
         perf2(true);
         perf2(true); 0
+    elif Array.tryHead argv = Some "i"
+    then
+        perf2(true); 0
     elif Array.tryHead argv = Some "o"
     then perf(false); 0
     elif Array.tryHead argv = Some "t"

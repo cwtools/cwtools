@@ -15,6 +15,7 @@ open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
 open System
 open CWTools.Utilities.Position
+open CWTools.Utilities
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
@@ -325,7 +326,7 @@ let embeddedTests =
         registry.DeclareSerializable<FParsec.Position>()
         let cache = PicklerCache.FromCustomPicklerRegistry registry
         let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
-        let data = { resources = entities; fileIndexTable = fileIndexTable; files = []}
+        let data = { resources = entities; fileIndexTable = fileIndexTable; files = []; stringResourceManager = StringResource.stringManager}
         let pickle = binarySerializer.Pickle data
 
         let unpickled = binarySerializer.UnPickle pickle
