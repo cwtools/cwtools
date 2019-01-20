@@ -612,7 +612,7 @@ module rec ConfigParser =
         |Failure(e, _, _) -> log (sprintf "config file %s failed with %s" filename e); ([], [], [], [], [])
         |Success(s,_,_) ->
             //log "parsed %A" s
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s |> List.rev)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
             //log "processConfig"
             processConfig parseScope allScopes anyScope root
 

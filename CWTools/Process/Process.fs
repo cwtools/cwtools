@@ -103,6 +103,8 @@ and Node (key : string, pos : range) =
     member val Scope : Scope = Scope.Any with get, set
     member __.AllChildren with get () = all |> ResizeArray<Child>
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
+    member __.AllArray with get () = all
+    member __.AllArray with set(value) = all <- value; reset()
     member this.All with get () = all |> List.ofSeq
     member this.All with set(value : Child list) = all <- (value |> List.toArray); reset()
     member this.Nodes = all |> Seq.choose (function |NodeC n -> Some n |_ -> None)
@@ -144,12 +146,13 @@ module ProcessCore =
         //let node = Activator.CreateInstance(typeof<'T>, bindingFlags ,null, paramList, null) :?> Node
         // let node =  Activator.CreateInstance(typeof<'T>, key, pos) :?> 'T |> postinit :> Node//  |> postinit// :?> Node |> postinit
         let node =  Node(key, pos) |> postinit//  |> postinit// :?> Node |> postinit
-        sl |> List.iter (fun e -> inner node e) |> ignore
+        let children = sl |> List.map (fun e -> inner node e)
+        node.All <- children
         node
 
     type LookupContext = { complete : bool; parents : string list; scope : string; previous : string; entityType : EntityType }
     let processNodeSimple _ = processNode id
-    type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Node -> Statement -> unit) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
+    type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Node -> Statement -> Child) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
 
     let fst3 (x, _, _) = x
     let snd3 (_, x, _) = x
@@ -168,14 +171,14 @@ module ProcessCore =
                 // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
                 // |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
                 // |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
-                ) >> (fun f a b c -> NodeC (f a b c |> (fun n -> n.All <- n.All |> List.rev; n)))
+                ) >> (fun f a b c -> NodeC (f a b c |> (fun n -> n)))
         and processNodeInner (c : LookupContext) (node : Node) statement =
             //log "%A" node.Key
             match statement with
-            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos c sl::node.All
-            | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All
-            | Comment(c) -> node.All <- CommentC c::node.All
-            | Value(pos, v) -> node.All <- LeafValueC(LeafValue(v, pos))::node.All
+            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> lookup k pos c sl
+            | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
+            | Comment(c) -> CommentC c
+            | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
         member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
         member __.ProcessNode(entityType : EntityType) = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
 

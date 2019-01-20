@@ -21,7 +21,7 @@ module STLParser =
         match parsed with
         |Failure(e, _, _) -> log (sprintf "loccommands file %s failed with %s" filename e); ([])
         |Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s |> List.rev)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
             root.Child "localisation_commands"
                 |> Option.map getLocCommands
                 |> Option.defaultValue []

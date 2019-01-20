@@ -285,7 +285,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v; logicalpath = l}) ->
                     let entityType = filepathToEntityType f
                     let filename = Path.GetFileNameWithoutExtension f
-                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType filename (mkZeroFile f) (statements |> List.rev)); validate = v; entityType = entityType; overwrite = No}
+                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType filename (mkZeroFile f) (statements)); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
     let changeEncoding (filestring : string) (source : System.Text.Encoding) (target : System.Text.Encoding) =
