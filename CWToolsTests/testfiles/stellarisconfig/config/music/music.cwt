@@ -1,0 +1,23 @@
+types = {
+	## type_key_filter = song
+	type[song] = {
+		name_field = name
+		path = "game/music"
+  }
+  	## type_key_filter = music
+	type[music] = {
+		name_field = name
+		path = "game/music"
+  }
+}
+#TODO: Add check for files existance, currently set to scalar!
+
+song = {
+	name = scalar
+}
+music = {
+	name = <song>	
+	file = scalar 
+	## cardinality = 0..1
+	volume = float
+}

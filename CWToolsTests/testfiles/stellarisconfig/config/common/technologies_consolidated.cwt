@@ -1,0 +1,209 @@
+types = {
+	type[technology] = {
+		path = "game/common/technology"
+		path_strict = yes
+		subtype[repeatable] = {
+			levels = int[-1..100]
+		}
+		subtype[start_tech] = {
+			start_tech = yes
+		}
+	}
+	type[technology_tier] = {
+		path = "game/common/technology/tier"
+	}
+	# a tech category causes the game to autogenerate a unique modifier:
+	# category_tech_category_key_research_speed_mult
+	# each of these modifiers requires localisation and a GFX (gfx/interface/icons/modifiers - same name as the tech_category key)
+	type[technology_category] = {
+		path = "game/common/technology/category"
+	}
+}
+
+
+
+
+technology = {
+	area = enum[research_areas]
+	tier = <technology_tier>
+	category = { <technology_category> }
+
+	## cardinality = 0..1
+	icon = icon[gfx/interface/icons/technologies]
+
+	subtype[start_tech] = {
+		## cardinality = 0..1
+		cost = 0
+	}
+
+	subtype[!start_tech] = {
+		cost = int
+		## cardinality = 0..1
+		is_rare = bool
+		## cardinality = 0..1
+		is_dangerous = bool
+		weight = int
+		#usually in ""
+
+		## cardinality = 0..1
+		levels = int[-1..100]
+	}
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..100
+		<technology>
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	gateway = scalar #can be any string
+
+	subtype[repeatable] = {
+		cost_per_level = int
+	}
+
+	## cardinality = 0..1
+	### a weight group increases the chances of a technology appearing - if another tech of a similar group is picked.
+	weight_groups = {
+		## cardinality = 0..inf
+		value_set[tech_weight_group]
+	}
+	## cardinality = 0..inf
+	mod_weight_if_group_picked = {
+		## cardinality = 0..inf
+		value[tech_weight_group] = float
+	}
+
+
+	## cardinality = 0..1
+	start_tech = bool
+	## cardinality = 0..1
+	is_reverse_engineerable = bool
+
+	## cardinality = 0..1
+	ai_update_type = enum[tech_ai_type]
+
+
+
+	## cardinality = 0..1
+	feature_flags = {
+		## cardinality = 0..100
+		enum[feature_flags]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	modifier = {
+		## cardinality = 0..1
+		description = localisation
+
+		## cardinality = 0..1
+		description_parameters = {
+			POINTS = int
+		}
+
+		## cardinality = 0..1
+		alias_name[modifier] = alias_match_left[modifier]
+
+		## cardinality = 0..1
+		show_only_custom_tooltip = no
+		## cardinality = 0..1
+		custom_tooltip = localisation
+	}
+
+	## cardinality = 0..1
+	prereqfor_desc = {
+		## cardinality = 0..4
+		hide_prereq_for_desc = enum[prereq_for_categories]
+		## cardinality = 0..4
+		enum[prereq_for_categories] = {
+			title = localisation
+			desc = localisation
+		}
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	weight_modifier = {
+		## cardinality = 0..1
+		factor = float
+		## cardinality = 0..1
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	ai_weight = {
+		## cardinality = 0..1
+		factor = float
+		## cardinality = 0..1
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+enums = {
+	enum[prereq_for_categories] = {
+		ship
+		custom
+		component
+		diplo_action
+		feature
+		resource
+	}
+	enum[feature_flags] = {
+		experimental_subspace_navigation
+		robot_leaders
+		megaengineering
+		assist_research
+		tech_automated_exploration
+		wormhole_stabilization
+		gateway_activation
+		gateway_construction
+		jump_method
+		planetary_ftl_inhibitor
+		build_terraform_station
+		terraform_inhabited
+		uplifting
+		modify_traits
+		pop_self_modification
+		habitability_gene_modding
+		bliss_standard
+		campaign_edicts
+		unity_ambitions
+		modify_robots
+		advanced_gene_modding
+		add_advanced_traits
+		droids
+		robots
+		synths
+	}
+	enum[technology_areas] = {
+		engineering
+		society
+		physics
+	}
+	enum[tech_ai_type] = {
+		all
+		military
+	}
+}
+
+
+# Should actually be a number
+### This should be a number
+technology_tier = {
+	## cardinality = 0..1
+	previously_unlocked = int
+}
+
+
+technology_category = {
+  icon = filepath
+}

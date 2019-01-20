@@ -48,7 +48,7 @@ module STLEventValidation =
             //         loop (cg::acc) g' start' nodes'
             // loop [] g start nodes
 
-    let findAllReferencedEvents (projects : (Node * string) list) (event : Event) =
+    let findAllReferencedEvents (projects : (Node * string) list) (event : Node) =
         let eventEffectKeys = ["ship_event"; "pop_event"; "fleet_event"; "pop_faction_event"; "country_event"; "planet_event"]
         let fNode = (fun (x : Node) children ->
                         match x.Key with
@@ -95,7 +95,7 @@ module STLEventValidation =
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
-    let findAllExistsEventTargets (event : Event) =
+    let findAllExistsEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let inner (leaf : Leaf) = if leaf.Key == "exists" && leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString().Substring(13).Split('.').[0]) else None
                         (x.Values |> List.choose inner) @ children
@@ -111,7 +111,7 @@ module STLEventValidation =
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
-    let addScriptedEffectTargets (effects : ScriptedEffect list) (((eid, e), s, u, r, x) : (string * Event) * Set<string> * Set<string> * string list * Set<string>) =
+    let addScriptedEffectTargets (effects : ScriptedEffect list) (((eid, e), s, u, r, x) : (string * Node) * Set<string> * Set<string> * string list * Set<string>) =
         let fNode = (fun (x : Node) (s, u) ->
                         let inner (leaf : Leaf) = effects |> List.tryFind (fun e -> leaf.Key == e.Name) |> Option.map (fun e -> e.SavedEventTargets, e.UsedEventTargets)
                         x.Values |> List.choose inner |> List.fold (fun (s, u) (s2, u2) -> s@s2, u@u2) (s, u))
@@ -119,7 +119,7 @@ module STLEventValidation =
         let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
         ((eid, e), s2 |> Set.ofList, u2 |> Set.ofList, r, x)
 
-    let addSystemInitializer (sinits : Node list) (((eid, e), s, u, r, x) : (string * Event) * Set<string> * Set<string> * string list * Set<string>) =
+    let addSystemInitializer (sinits : Node list) (((eid, e), s, u, r, x) : (string * Node) * Set<string> * Set<string> * string list * Set<string>) =
         let fNode = (fun (x : Node) (s, u) ->
                         match x.Key with
                         |"spawn_system" ->
@@ -133,8 +133,8 @@ module STLEventValidation =
         let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
         ((eid, e), s2 |> Set.ofList, u2 |> Set.ofList, r, x)
 
-    let checkEventChain (effects : ScriptedEffect list) (sinits : Node list) (projects : (Node * string) list) (globals : Set<string>) (events : Event list) =
-        let mutable current = events |> List.map (fun e -> ((e.ID, e), findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
+    let checkEventChain (effects : ScriptedEffect list) (sinits : Node list) (projects : (Node * string) list) (globals : Set<string>) (events : Node list) =
+        let mutable current = events |> List.map (fun e -> ((e.TagText "id", e), findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
                                         //|> List.map (fun (e, s, u, r, x) -> log "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         //|> (fun f -> log "%A" f; f)
                                         |> List.map (addScriptedEffectTargets effects)
@@ -186,7 +186,7 @@ module STLEventValidation =
             let inner = (fun (x : string) -> current |> List.choose (fun ((e2id, e2), _, _, _, r2,_, x2) -> if List.contains x r2 && e2id <> x then Some (x2) else None))
             inner id
 
-        let downOptimistic (((eid, e) : (string * Event)), os, s, u, r, ox, x) =
+        let downOptimistic (((eid, e) : (string * Node)), os, s, u, r, ox, x) =
             (eid, e),
             os,
             Set.union os (getSourceSetTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.union) f)),
@@ -205,7 +205,7 @@ module STLEventValidation =
             current = before || i > 100
         while (not(step current)) do ()
 
-        let downPessimistic (((eid, e) : (string * Event)), os, s, u, r, ox, x) =
+        let downPessimistic (((eid, e) : (string * Node)), os, s, u, r, ox, x) =
             (eid, e),
             os,
             Set.union os (getSourceSetTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f)),
@@ -231,10 +231,10 @@ module STLEventValidation =
         let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) ->
                                                     not(Set.difference (Set.difference u s) globals |> Set.isEmpty)
                                                     && (Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let createError ((eid, e) : (string * Event), os, s, u, _, _, x) =
+        let createError ((eid, e) : (string * Node), os, s, u, _, _, x) =
              let needed = Set.difference (Set.difference u (Set.union s x)) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.UnsavedEventTarget (eid) needed) e]
-        let createWarning ((eid, e) : (string * Event), os, s, u, _, _, _) =
+        let createWarning ((eid, e) : (string * Node), os, s, u, _, _, _) =
              let needed = Set.difference (Set.difference u s) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.MaybeUnsavedEventTarget (eid) needed) e]
         missing <&!&> createError
@@ -246,17 +246,17 @@ module STLEventValidation =
     let getEventChains : LookupValidator<_, _, _> =
         fun lu os es ->
             let reffects = lu.scriptedEffects
-            let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            let eids = events |> List.map (fun e -> e.ID, e) |> Map.ofList
+            let events = es.GlobMatchChildren("**/events/*.txt")
+            let eids = events |> List.map (fun e -> e.TagText "id", e) |> Map.ofList
             let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
             let projectsWithTags = projects |> List.map (fun p -> p, p.TagText("key"))
-            let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.ID, f))
+            let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.TagText "id", f))
                         |> List.filter (fun (_, f) -> Map.containsKey f eids)
                         //|> (fun f -> log "%A" f; f)
                         |> List.collect(fun (s, t) -> [s,t; t,s])
                         //|> (fun f -> log "%A" f; f)
                         //|> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
-                        |> (fun es -> ((events |> List.map (fun f -> f.ID), es)))
+                        |> (fun es -> ((events |> List.map (fun f -> f.TagText "id"), es)))
                         |> connectedComponents
                         //|> (fun f -> log "%A" f; f)
                         |> List.map (fun set -> set |> List.map (fun (event) -> eids.[event] ))

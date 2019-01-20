@@ -1,0 +1,475 @@
+types = {
+	## type_key_filter = is_valid_rival
+	type[is_valid_rival] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_add_claim
+	type[can_add_claim] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_get_claim_from_lost_system
+	type[can_get_claim_from_lost_system] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = species_has_citizenship
+	type[species_has_citizenship] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = should_abduct_pop
+	type[should_abduct_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_auto_migrate_pop
+	type[can_auto_migrate_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = pop_can_live_on_planet
+	type[pop_can_live_on_planet] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = pop_can_flee_to_country
+	type[pop_can_flee_to_country] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_vote_in_democratic_election
+	type[can_vote_in_democratic_election] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_generate_leader_from_pop
+	type[can_generate_leader_from_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_generate_leader_from_species
+	type[can_generate_leader_from_species] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_generate_military_leader_from_pop
+	type[can_generate_military_leader_from_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_generate_army_from_planet
+	type[can_generate_army_from_planet] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_release_vassal
+	type[can_release_vassal] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_release_vassal_from_species
+	type[can_release_vassal_from_species] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_generate_army_from_species
+	type[can_generate_army_from_species] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_modify_species
+	type[can_modify_species] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = subject_can_expand
+	type[subject_can_expand] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_take_hostile_actions
+	type[can_take_hostile_actions] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_declare_war
+	type[can_declare_war] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_colonize_planet
+	type[can_colonize_planet] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_colonize_outside_borders
+	type[can_colonize_outside_borders] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_terraform_planet
+	type[can_terraform_planet] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_colonize_with_pop
+	type[can_colonize_with_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = pop_has_no_happiness
+	type[pop_has_no_happiness] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = is_bio_trophy
+	type[is_bio_trophy] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = pop_eats_energy
+	type[pop_eats_energy] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_be_hostile_towards
+	type[can_be_hostile_towards] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_resettle_pop
+	type[can_resettle_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_resettle_pop_planet
+	type[can_resettle_pop_planet] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_pop_procreate
+	type[can_pop_procreate] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = should_kill_growing_pop
+	type[should_kill_growing_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_orbital_bombard
+	type[can_orbital_bombard] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = colony_ship_rushed
+	type[colony_ship_rushed] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_planet_support_orbital_station
+	type[can_planet_support_orbital_station] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = has_full_sensor_range
+	type[has_full_sensor_range] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = show_notification_for_ground_combat
+	type[show_notification_for_ground_combat] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = should_apply_neighbor_rival_modifier
+	type[should_apply_neighbor_rival_modifier] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = are_rebels_hostile
+	type[are_rebels_hostile] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = should_colony_be_destroyed_on_pc_change
+	type[should_colony_be_destroyed_on_pc_change] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = is_extradimensional_portal
+	type[is_extradimensional_portal] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = is_extradimensional_anchor
+	type[is_extradimensional_anchor] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = will_anger_fallen_empire
+	type[will_anger_fallen_empire] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_species_have_rights
+	type[can_species_have_rights] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_have_robot_pops
+	type[can_have_robot_pops] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_stop_purge_pop_manually
+	type[can_stop_purge_pop_manually] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_purge_pop_manually
+	type[can_purge_pop_manually] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = is_owner_pop
+	type[is_owner_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = is_owned_pop
+	type[is_owned_pop] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = fleet_uses_templates
+	type[fleet_uses_templates] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_starbase_repair_ships
+	type[can_starbase_repair_ships] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_spawn_debris
+	type[can_spawn_debris] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = ai_should_restrict_system
+	type[ai_should_restrict_system] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_subjugate_empires
+	type[can_subjugate_empires] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_jump_drive
+	type[can_jump_drive] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_have_piracy_risk
+	type[can_have_piracy_risk] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_spawn_occupation_armies
+	type[can_spawn_occupation_armies] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = system_blocks_sensors
+	type[system_blocks_sensors] = {
+		path = "game/common/game_rules"
+	}
+	## type_key_filter = can_enter_system_by_jump
+	type[can_enter_system_by_jump] = {
+		path = "game/common/game_rules"
+	}
+}
+
+is_valid_rival = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_add_claim = {
+	## replace_scope = { this = system root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_get_claim_from_lost_system = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+species_has_citizenship = {
+	## replace_scope = { this = species root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+should_abduct_pop = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_auto_migrate_pop = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+pop_can_live_on_planet = {
+	## replace_scope = { this = pop root = planet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+pop_can_flee_to_country = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_vote_in_democratic_election = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_generate_leader_from_pop = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_generate_leader_from_species = {
+	## replace_scope = { this = species root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_generate_military_leader_from_pop = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_generate_army_from_planet = {
+	## replace_scope = { this = country root = species }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_release_vassal = {
+	## replace_scope = { this = country root = planet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_release_vassal_from_species = {
+	## replace_scope = { this = country root = species }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_generate_army_from_species = {
+	## replace_scope = { this = country root = species }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_modify_species = {
+	## replace_scope = { this = country root = species }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+subject_can_expand = {
+	## replace_scope = { this = country root = country from = system }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_take_hostile_actions = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_declare_war = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_colonize_planet = {
+	## replace_scope = { this = planet root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_colonize_outside_borders = {
+	## replace_scope = { this = planet root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_terraform_planet = {
+	## replace_scope = { this = planet root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_colonize_with_pop = {
+	## replace_scope = { this = pop root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+pop_has_no_happiness = {
+	## replace_scope = { this = pop root = pop from = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+is_bio_trophy = {
+	## replace_scope = { this = species root = species from = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+pop_eats_energy = {
+	## replace_scope = { this = pop root = pop from = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_be_hostile_towards = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_resettle_pop = {
+	## replace_scope = { this = pop from = country fromfrom = tile }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_resettle_pop_planet = {
+	## replace_scope = { this = planet root = planet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_pop_procreate = {
+	## replace_scope = { this = pop root = pop }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+should_kill_growing_pop = {
+	## replace_scope = { this = pop root = pop }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_orbital_bombard = {
+	## replace_scope = { this = planet root = fleet from = planet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+colony_ship_rushed = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_planet_support_orbital_station = {
+	## replace_scope = { this = planet root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+has_full_sensor_range = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+show_notification_for_ground_combat = {
+	## replace_scope = { this = planet root = country from = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+should_apply_neighbor_rival_modifier = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+are_rebels_hostile = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+should_colony_be_destroyed_on_pc_change = {
+	## replace_scope = { this = planet root = planet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+is_extradimensional_portal = {
+	## replace_scope = { this = fleet root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+is_extradimensional_anchor = {
+	## replace_scope = { this = fleet root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+will_anger_fallen_empire = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_species_have_rights = {
+	## replace_scope = { this = species root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_have_robot_pops = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_stop_purge_pop_manually = {
+	## replace_scope = { this = pop root = pop }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_purge_pop_manually = {
+	## replace_scope = { this = pop root = pop }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+is_owner_pop = {
+	## replace_scope = { this = pop root = pop }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+is_owned_pop = {
+	## replace_scope = { this = pop root = pop }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+fleet_uses_templates = {
+	## replace_scope = { this = fleet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_starbase_repair_ships = {
+	## replace_scope = { this = starbase root = starbase }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_spawn_debris = {
+	## replace_scope = { this = ship root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+ai_should_restrict_system = {
+	## replace_scope = { this = system root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_subjugate_empires = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_jump_drive = {
+	## replace_scope = { this = fleet root = fleet }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_have_piracy_risk = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_spawn_occupation_armies = {
+	## replace_scope = { this = country root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+system_blocks_sensors = {
+	## replace_scope = { this = system root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+can_enter_system_by_jump = {
+	## replace_scope = { this = system root = country }
+	alias_name[trigger] = alias_match_left[trigger]
+}

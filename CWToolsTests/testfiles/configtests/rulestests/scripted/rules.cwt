@@ -1,0 +1,62 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+	type[scripted_trigger] = {
+		path = "game/common/scripted_triggers"
+	}
+	type[scripted_effect] = {
+		path = "game/common/scripted_effects"
+	}
+}
+
+## scope = ship
+alias[effect:set_ship_flag] = test
+
+## scope = country
+alias[effect:set_country_flag] = test
+
+## scope = { ship country }
+alias[effect:ship_and_country] = test
+
+## scope = country
+alias[trigger:has_country_flag] = bool
+
+## scope = ship
+alias[trigger:has_ship_flag] = bool
+
+alias[trigger:<scripted_trigger>] = bool
+alias[effect:<scripted_effect>] = bool
+
+event = {
+    option = {
+        alias_name[effect] = alias_match_left[effect]
+    }
+    trigger = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+}
+
+
+alias[effect:scope_field] = test
+alias[effect:scope_field] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+# alias[effect:OR] = {
+#     alias_name[effect] = alias_match_left[effect]
+# }
+alias[effect:test] = {
+    alias_name[effect] = alias_match_left[effect]
+}

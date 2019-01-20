@@ -12,6 +12,7 @@ open System.Xml.Linq
 open System.Threading
 open CWTools.Utilities.Utils
 open CWTools.Validation.Stellaris.STLLocalisationValidation
+open CWTools.Games
 
 module EU4LocalisationValidation =
     type LocalisationValidator = EntitySet<EU4ComputedData> -> (Lang * Set<string>) list -> EntitySet<EU4ComputedData> -> ValidationResult

@@ -1,0 +1,113 @@
+types = {
+	type[diplomatic_action] = {
+		path = "game/common/diplomatic_actions"
+	}
+}
+
+#TODO Confirm
+#TODO Document
+diplomatic_action = {
+	## cardinality = 0..1
+	###decides if this diplomactic action type is listed in diplomatic view.
+	is_listed = bool
+	
+	## cardinality = 0..1
+	###the technologies required to enable the player to send this diplomatic action.
+	prerequisites = {
+		## cardinality = 0..100
+		<technology>
+	}
+
+	## cardinality = 0..1
+	###will require the actor to be at peace for this action to pass the possible check.
+	requires_actor_peace = bool
+	
+	## cardinality = 0..1
+	show_to_alliance_members = bool
+	
+	## cardinality = 0..1
+	###will require the alliance of the actor to vote for this action before passing it on to the recipient.
+	requires_alliance_vote = bool
+
+	## cardinality = 0..1
+	requires_unanimous_vote = bool
+
+	## cardinality = 0..1
+	###true by default, will require the actor to be independent.
+	requires_actor_independence = bool
+
+	## cardinality = 0..1
+	###true by default, will require the recipient to be independent.
+	requires_recipient_independence = bool
+
+	## cardinality = 0..1
+	###false by default, if the actor is in a federation, he has to be the leader of it.
+	requires_actor_federation_leader = bool
+
+	## cardinality = 0..1
+	###true by default, if the recipient is in a federation, he has to be the leader of it.
+	requires_recipient_federation_leader = bool
+
+	## cardinality = 0..1
+	requires_recipient_peace = bool
+
+	## cardinality = 0..1
+	requires_recipient_alliance_vote = bool
+
+	## cardinality = 0..1
+	###false by default, will show your alliance members when you decline a proposal of this type.
+	show_decline_to_alliance_members = bool
+
+	## cardinality = 0..1
+	###decides whether actor gets a response on acceptance (otherwise just on decline)
+	should_show_accept_message = bool
+
+	## cardinality = 0..1
+	###decides if the recipient gets a message showing the diplomatic action.
+	should_show_auto_accept_message_recipient = bool
+
+	## cardinality = 0..1
+	###decides if the recipient automatically opens this message.
+	should_open_auto_accept_message_recipient = bool
+
+	## cardinality = 0..1
+	###decides if the actor gets a reply showing the diplomatic action.
+	should_show_auto_accept_message_actor = bool
+
+	## cardinality = 0..1
+	###decides if a message notification is sent to all countries who have communications with actor or recipient
+	should_notify_all_communications = bool
+
+	## cardinality = 0..1
+	diplo_view_acceptance_icon = bool
+
+	## cardinality = 0..1
+	auto_accepted = bool
+
+	## cardinality = 0..1
+	AI_acceptance_base_value = int
+
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country from = country }
+	###root is actor, from is recipient, decides if the action is shown
+	potential = { alias_name[trigger] = alias_match_left[trigger] }
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country from = country }
+	###root is actor, from is recipient, decides if the action is still possible
+	possible = { alias_name[trigger] = alias_match_left[trigger] }
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country from = country }
+	###root is actor, from is recipient, decides if the action is proposable
+	proposable = { alias_name[trigger] = alias_match_left[trigger] }
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country from = country }
+	on_accept = { alias_name[effect] = alias_match_left[effect] }
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country from = country }
+	on_decline = { alias_name[effect] = alias_match_left[effect] }
+}

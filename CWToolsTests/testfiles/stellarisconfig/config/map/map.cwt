@@ -1,0 +1,169 @@
+types = {
+	type[map_galaxy_setting] = {
+		path = "game/map/galaxy" #no key! read the note.
+	}
+	type[map_setup_scenerio] = {
+		path = "game/map/setup_scenerios"
+		name_field = name
+	}
+}
+
+#NOTE 1
+#the map component has two sub-folders. With the setup_scenerios folder there should be no problem as it is.
+#but the game/map/galaxy folder poses two problems: there is one file there called base.txt
+#this was formarly a lua file - so its a sort of defines file. The way it works is that it has overwrites within the same folder
+#each file - elliptical.txt, ring.txt, spiral_2.txt and spiral_4.txt has a value, and potentially more
+#that overwrites the values in base.txt. It seems to me that the filename for these acts as a key, and that key is loaded from a setup scenerio
+#in what i so far defined as an enum[galaxy_shapes]. Thus there is a different verification procedure necessary for this folder.
+
+#NOTE 2
+#some settings in this folder have no containers at all. This poses a problem.
+
+map_galaxy_setting = { #this one is just a dummy container. In effect there is no container in these files! Container is filename.
+	### Core radius is x% of the galaxy radius
+	##cardinality = 0..1
+	core_radius_perc = float
+	### Number of stars in core
+	##cardinality = 0..1
+	num_stars_core_perc = float
+	### Min distance between stars
+	##cardinality = 0..1
+	stars_min_dist = float
+
+	##cardinality = 0..1
+	countries = {
+		### int*int Ideal square distance between countries
+		ideal_sq_dist_between = int
+		### int*int Min square distance between countries
+		min_sq_dist_between = int
+	}
+
+	##cardinality = 0..1
+	fallen_empires = {
+		### int*int Ideal square distance between countries
+		ideal_sq_dist_between = int
+		### int*int Min square distance between countries
+		min_sq_dist_between = int
+		### Number of military fleets the empire will start with
+		max_military_fleet_count = int
+		ships_per_fleet = int
+	}
+
+	##cardinality = 0..1
+	alias_name[galaxy_shape] = alias_match_left[galaxy_shape]
+}
+
+alias[galaxy_shape:ring] = {
+	### Percentage of radius to use as the width of the ring
+	width = float
+	### Percentage of radius to use as the offset from center for the ring
+	offset = float
+}
+
+alias[galaxy_shape:arms] = {
+	### Tightness of winding
+	tightness_winding = float
+	### Arm width in degrees
+	width = float
+	### Maximum outliers distance from arms
+	fuzz = float
+	### Separation (in degrees) between each arm
+	seperation = float
+}
+
+map_setup_scenerio = {
+	name = scalar
+	### priority decides in which order the scenarios are listed
+	priority = int
+	num_stars = int
+	### should be less than 500, preferably less than ~460
+	radius = int
+	### limits player customization
+	num_empires = {
+		min = int
+		max = int
+	}
+	num_empire_default = int
+	fallen_empire_default = int
+	fallen_empire_max = int
+	marauder_empire_default = int
+	marauder_empire_max = int
+	advanced_empire_default = int
+	colonizable_planet_odds = float
+	primitive_odds = float
+	crisis_strength = float
+	##cardinality = 0..1
+	default = bool
+
+	cluster_count = {
+		method = enum[cluster_method]
+		value = int
+		max = int
+	}
+	cluster_radius = int
+	cluster_distance_from_core = int
+
+	max_hyperlane_distance = int
+
+	home_system_partitions = {
+		max_systems = int
+		min_systems = int
+
+		min_bridges = int
+		max_bridges = int
+
+		method = enum[home_system_method]
+	}
+
+	open_space_partitions = {
+		max_systems = int
+		min_systems= int
+
+		min_bridges = int
+		max_bridges = int
+
+		method = enum[open_space_method]
+	}
+
+	num_nebulas	= int
+	nebula_size = int
+	nebula_min_dist = int
+
+	num_wormhole_pairs = {
+		min = int
+		max = int
+	}
+	num_wormhole_pairs_default = int
+	num_gateways = {
+		min = int
+		max = int
+	}
+	num_gateways_default = int
+	num_hyperlanes = {
+		min = float
+		max = float
+	}
+	num_hyperlanes_default = int
+
+	##cardinality = 1..inf
+	supports_shape = enum[galaxy_shapes]
+}
+
+enums = {
+	enum[cluster_method] = {
+		one_every_x_empire
+		constant
+	}
+	enum[home_system_method] = {
+		breadth_first
+	}
+	enum[open_space_method] = {
+		depth_first
+	}
+	enum[galaxy_shapes] = {
+		elliptical
+		spiral_2
+		spiral_4
+		ring
+	}
+}

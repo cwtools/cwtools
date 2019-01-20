@@ -1,10 +1,7 @@
 ##Test embedded file was overwritten
 namespace = test
 country_event = {
+    #error
+    test = test_var
     is_triggered_only = yes
-    id = event.2
-    trigger = {
-        #error
-        check_variable = { which = test_var value = 1 }
-    }
 }

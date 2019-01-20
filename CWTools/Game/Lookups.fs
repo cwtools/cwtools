@@ -36,6 +36,8 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
         with get () = _scriptedEffects
         and set (value) = resetEffects(); _scriptedEffects <- value
     member this.scriptedEffectsMap with get() = _scriptedEffectsMap.Force()
+    member val onlyScriptedEffects : Effect<'S> list = [] with get, set
+    member val onlyScriptedTriggers : Effect<'S> list = [] with get, set
 
     member val staticModifiers : 'M list = [] with get, set
     member val coreModifiers : 'M list = [] with get, set

@@ -1,0 +1,35 @@
+namespace = test
+
+country_event = {
+    option = {
+        #error
+        set_ship_flag = test
+        OR = {
+            OR = {
+                #error
+                set_ship_flag = test
+                #error
+                as = as
+            }
+        }
+        test = {
+            test = {
+                #error
+                set_ship_flag = test
+                #error
+                as = as
+            }
+        }
+        test_scripted_effect_none = yes
+        #error
+        test_scripted_effect_ship = yes
+        test_scripted_effect_country = yes
+    }
+
+    trigger = {
+        test_scripted_trigger_none = yes
+        #error
+        test_scripted_trigger_ship = yes
+        test_scripted_trigger_country = yes
+    }
+}

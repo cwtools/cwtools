@@ -1,0 +1,193 @@
+#subtype[species_trait] needs a lack of leader_trait = yes. Using [!leader_trait] for now
+
+types = {
+	type[trait] = {
+		path = "game/common/traits"
+
+		subtype[leader_trait] = {
+			leader_trait = { }
+			leader_trait = all
+		}
+		subtype[ruler_trait] = {
+			leader_class = { ruler }
+		}
+		subtype[scientist_trait] = {
+			leader_class = { scientist }
+		}
+		subtype[species_trait] = {
+			## cardinality = 0..1
+			leader_trait = no
+		}
+	}
+}
+
+trait = {
+	## cardinality = 0..1
+	### Default = no
+	immortal_leaders = bool
+
+	subtype[species_trait] = {
+		## cardinality = 0..1
+		cost = int
+		## cardinality = 0..1
+		icon = filepath
+		allowed_archetypes = {
+			## cardinality = 1..inf
+			<species_archetype>
+		}
+		# This should be expanded into subtypes
+		## replace_scope = { this = country root = country }
+		modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+		## replace_scope = { this = planet root = planet }
+		assembling_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+		## replace_scope = { this = planet root = planet }
+		declining_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+		## replace_scope = { this = planet root = planet }
+		growing_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+		## cardinality = 0..1
+		### Default = yes
+		sapient = bool
+		## cardinality = 0..1
+		### Default = no
+		forced_happiness = bool
+		## cardinality = 0..1
+		sorting_priority = int
+		## cardinality = 0..1
+		modification = bool
+		## cardinality = 0..1
+		### Default = no
+		improves_leaders = bool
+		## cardinality = 0..1
+		### Default = no
+		advanced_trait = bool
+		## cardinality = 0..1
+		leader_trait = no
+		## cardinality = 0..1
+		leader_age_min = int
+		## cardinality = 0..1
+		leader_age_max = int
+		## replace_scope = { this = species root = species from = country }
+		## cardinality = 0..1
+		species_potential_add = {
+			## cardinality = 0..inf
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+		## replace_scope = { this = species root = species from = country }
+		## cardinality = 0..1
+		species_possible_remove = {
+			## cardinality = 0..inf
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+		## cardinality = 0..1
+		prerequisites = {
+			## cardinality = 0..100
+			<technology>
+		}
+		## cardinality = 0..1
+		opposites = {
+			## cardinality = 1..100
+			<trait.species_trait>
+		}
+
+		## cardinality = 0..1
+		potential_crossbreeding_chance = float
+
+		## cardinality = 0..1
+		slave_cost = {
+			energy = int
+		}
+	}
+
+	subtype[leader_trait] = {
+
+		cost = int
+		icon = filepath
+
+		### Default = yes
+		modification = bool
+
+		leader_trait = {
+			## cardinality = 1..5
+			enum[leader_classes]
+		}
+		leader_trait = all
+		## cardinality = 0..1
+		### Default = no
+		hide_age = bool
+		## cardinality = 0..1
+		can_retreat = bool #admiral
+		## cardinality = 0..1
+		## replace_scope = { this = country root = country }
+		modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		self_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+		## cardinality = 0..1
+		prerequisites = {
+			## cardinality = 0..100
+			<technology>
+		}
+		## cardinality = 0..1
+		leader_class = {
+			## cardinality = 1..5
+			enum[leader_classes]
+		}
+
+		## cardinality = 0..1
+		leader_potential_add = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 0..1
+		requires_traits = {
+			## cardinality = 1..100
+			<trait.species_trait>
+		}
+		## cardinality = 0..1
+		opposites = {
+			## cardinality = 1..100
+			<trait.leader_trait>
+		}
+	}
+	## cardinality = 0..1
+	ai_categories = {
+		## cardinality = 1..4
+		enum[trait_ai_classes]
+	}
+
+	## cardinality = 0..1
+	initial = bool
+	## cardinality = 0..1
+	randomized = bool
+
+	## cardinality = 0..1
+	custom_tooltip = localisation
+
+	## cardinality = 0..1
+	ai_weight = {
+		weight = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+enums = {
+	enum[trait_ai_classes] = {
+		engineering
+		physics
+		society
+		survey
+	}
+}

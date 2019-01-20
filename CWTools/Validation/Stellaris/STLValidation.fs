@@ -92,7 +92,7 @@ module STLValidation =
     /// Not mandatory, but performance reasons, suggested by Caligula
     /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
     /// Create issue if none are true
-    let validateEventValsInternal (event : Event) =
+    let validateEventValsInternal (event : Node) =
         let isMTTH = event.Has "mean_time_to_happen"
         let isTrig = event.Has "is_triggered_only"
         let isOnce = event.Has "fire_only_once"
@@ -111,8 +111,7 @@ module STLValidation =
     let validateEvents : STLStructureValidator =
         fun _ es ->
             let ships =
-                es.All |> List.collect (fun n -> n.Children)
-                   |> List.choose (function | :? Event as s -> Some s |_ -> None)
+                es.AllOfTypeChildren EntityType.Events
             ships <&!&> (fun s -> (validateEventValsInternal) s)
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
@@ -154,7 +153,6 @@ module STLValidation =
     let valButtonEffects : STLStructureValidator =
         fun os es ->
             let effects = (os.GlobMatchChildren("**/common/button_effects/*.txt"))
-                            |> List.filter (fun e -> e :? Button_Effect)
                             |> List.map (fun e -> e.Key)
             let buttons = es.AllOfTypeChildren EntityType.Interface
             let fNode = (fun (x : Node) children ->
@@ -539,7 +537,7 @@ module STLValidation =
             // let getPrereqsPar lists = lists |> PSeq.collect (fun ns -> List.collect getPrereqs ns) |> List.ofSeq
             let getPrereqGen (e : Entity) : obj list =
                 if List.contains e.entityType [EntityType.Buildings; EntityType.ShipSizes; EntityType.SectionTemplates; EntityType.ComponentTemplates;
-                                                EntityType.StrategicResources; EntityType.Armies; EntityType.Edicts; EntityType.TileBlockers]
+                                                EntityType.StrategicResources; EntityType.Armies; EntityType.Edicts; EntityType.TileBlockers; EntityType.Deposits]
                 then List.collect getPrereqs (e.entity.Children)
                 else []
 

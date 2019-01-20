@@ -1,0 +1,65 @@
+types = {
+	type[edict] = {
+		path = "game/common/edicts"
+
+		subtype[edict_ambition] = {
+			is_ambition = yes
+		}
+	}
+}
+
+# TODO Confirm
+# TODO Document
+edict = {
+	length = int
+
+	subtype[!edict_ambition] = {
+		resources = {
+			category = <economic_category>
+			alias_name[economic_template] = alias_match_left[economic_template]
+		}
+	}
+
+	subtype[edict_ambition] = {
+		is_ambition = yes
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..100
+		<technology>
+	}
+
+	## cardinality = 0..1
+	show_tech_unlock_if = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	ai_weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}
+

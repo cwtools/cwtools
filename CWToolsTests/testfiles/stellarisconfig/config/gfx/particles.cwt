@@ -1,0 +1,520 @@
+types = {
+	type[particle] = {
+		name_field = name
+		severity = warning
+		path = "game/gfx/particles"
+		skip_root_key = objectTypes
+	}
+	## type_key_filter = particle
+  	type[particle_type] = {
+		name_field = name
+		severity = warning
+		path = "game/gfx/particles"
+	}
+}
+
+#TODO: Shader keys
+
+particle = {
+		name = scalar
+		type = <particle_type>
+		## cardinality = 0..1
+		scale = float
+}
+
+particle_type = {
+	name = scalar
+	## cardinality = 1..inf
+	subsystem = {
+		## cardinality = 0..1
+		name = scalar #this appear to be non-mandatory!
+		## cardinality = 0..1
+		max_amount = int
+		## cardinality = 0..1
+		slave_particles = int
+		## cardinality = 0..1
+		emitter_type = enum[emitter_type]
+		## cardinality = 0..1
+		invert = bool
+		## cardinality = 0..1
+		trail = bool
+		## cardinality = 0..1
+		local_space = bool
+		## cardinality = 0..1
+		billboard = bool
+		## cardinality = 0..1
+		hide = bool
+		## cardinality = 0..1
+		texture={
+			file = filepath
+			shader = scalar #<shader>
+			## cardinality = 0..1
+			x = int
+			## cardinality = 0..1
+			y = int
+		}
+		alias_name[subsystem_color] = alias_match_left[subsystem_color]
+		## cardinality = 0..1
+		position={
+			## cardinality = 0..1
+			x = float
+			## cardinality = 0..1
+			y = float
+			## cardinality = 0..1
+			z = float
+		}
+		duration = float
+		life = {
+			## cardinality = 1..2
+			float
+		}
+		life = float
+		alias_name[emission] = alias_match_left[emission]
+		size = {
+			# cardinality = 0..2
+			#float
+			## cardinality = 1..2
+			scalar
+		}
+		size = float
+		#TODO handle "4.00,grow"
+		size = scalar
+		## cardinality = 0..1
+		rotation = float
+		## cardinality = 0..1
+		rotation = {
+			## cardinality = 1..2
+			scalar
+		}
+		## cardinality = 0..1
+		rotation_speed_roll = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		sort = enum[sort_type]
+		## cardinality = 0..1
+		rotation_speed = float
+		## cardinality = 0..1
+		rotation_speed = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		rotation_speed_yaw = float
+		## cardinality = 0..1
+		rotation_speed_pitch = float
+		## cardinality = 0..1
+		sphere_emitter_radius = float
+		## cardinality = 0..1
+		sphere_emitter_radius = {
+			## cardinality = 2..2
+			scalar
+		}
+		## cardinality = 0..1
+		sphere_emitter_yaw = float
+		## cardinality = 0..1
+		sphere_emitter_yaw = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		sphere_emitter_pitch = float
+		## cardinality = 0..1
+		sphere_emitter_pitch = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		start = float
+		## cardinality = 0..1
+		start = {
+			## cardinality = 1..2
+			float
+		}
+		alias_name[emission] = alias_match_left[emission]
+		## cardinality = 0..1
+		box_emitter_x = float
+		## cardinality = 0..1
+		box_emitter_x = scalar
+		## cardinality = 0..1
+		box_emitter_x = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		box_emitter_y = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		box_emitter_y = scalar
+		## cardinality = 0..1
+		box_emitter_z = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		box_emitter_z = scalar
+		## cardinality = 0..1
+		velocity = float
+		## cardinality = 0..1
+		velocity = {
+			## cardinality = 1..2
+			float
+		}
+		## cardinality = 0..1
+		velocity_pitch = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		velocity_pitch = scalar
+		## cardinality = 0..1
+		velocity_yaw = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		velocity_yaw = float
+		## cardinality = 0..1
+		emitter_pitch = float
+		## cardinality = 0..1
+		emitter_pitch = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		emitter_yaw = float
+		## cardinality = 0..1
+		emitter_yaw = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		emission_pulse_duration = float
+		## cardinality = 0..1
+		emission_pulse_silence = float
+		## cardinality = 0..1
+		particle_pitch = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		particle_pitch = float
+		## cardinality = 0..1
+		particle_yaw = {
+			## cardinality = 2..2
+			scalar
+		}
+		## cardinality = 0..1
+		particle_yaw = scalar
+		## cardinality = 0..1
+		particle_roll = {
+			## cardinality = 2..2
+			float
+		}
+		## cardinality = 0..1
+		force = scalar #this keeps bugging out, so scalar for now.
+		## cardinality = 0..1
+		childsystem = {
+			## cardinality = 0..1
+			name = scalar #this appear to be non-mandatory!
+			## cardinality = 0..1
+			max_amount = int
+			## cardinality = 0..1
+			slave_particles = int
+			## cardinality = 0..1
+			emitter_type = enum[emitter_type]
+			## cardinality = 0..1
+			invert = bool
+			## cardinality = 0..1
+			trail = bool
+			## cardinality = 0..1
+			local_space = bool
+			## cardinality = 0..1
+			billboard = bool
+			## cardinality = 0..1
+			hide = bool
+			## cardinality = 0..1
+			texture={
+				file = filepath
+				shader = scalar #<shader>
+				## cardinality = 0..1
+				x = int
+				## cardinality = 0..1
+				y = int
+			}
+			alias_name[subsystem_color] = alias_match_left[subsystem_color]
+			## cardinality = 0..1
+			position={
+				## cardinality = 0..1
+				x = float
+				## cardinality = 0..1
+				y = float
+				## cardinality = 0..1
+				z = float
+			}
+			duration = float
+			life = {
+				## cardinality = 1..2
+				float
+			}
+			life = float
+			alias_name[emission] = alias_match_left[emission]
+			size = {
+				# cardinality = 0..2
+				#float
+				## cardinality = 1..2
+				scalar
+			}
+			size = float
+			## cardinality = 0..1
+			rotation = float
+			## cardinality = 0..1
+			rotation = {
+				## cardinality = 1..2
+				scalar
+			}
+			## cardinality = 0..1
+			rotation_speed_roll = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			sort = enum[sort_type]
+			## cardinality = 0..1
+			rotation_speed = float
+			## cardinality = 0..1
+			rotation_speed = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			rotation_speed_pitch = float
+			## cardinality = 0..1
+			sphere_emitter_radius = float
+			## cardinality = 0..1
+			sphere_emitter_radius = {
+				## cardinality = 2..2
+				scalar
+			}
+			## cardinality = 0..1
+			sphere_emitter_yaw = float
+			## cardinality = 0..1
+			sphere_emitter_yaw = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			sphere_emitter_pitch = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			start = float
+			## cardinality = 0..1
+			start = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			box_emitter_x = float
+			## cardinality = 0..1
+			box_emitter_x = scalar
+			## cardinality = 0..1
+			box_emitter_x = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			box_emitter_y = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			box_emitter_y = scalar
+			## cardinality = 0..1
+			box_emitter_z = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			box_emitter_z = scalar
+			## cardinality = 0..1
+			velocity = float
+			## cardinality = 0..1
+			velocity = {
+				## cardinality = 0..2
+				float
+			}
+			## cardinality = 0..1
+			velocity_pitch = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			velocity_pitch = scalar
+			## cardinality = 0..1
+			velocity_yaw = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			velocity_yaw = float
+			## cardinality = 0..1
+			emitter_pitch = float
+			## cardinality = 0..1
+			emitter_pitch = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			emitter_yaw = float
+			## cardinality = 0..1
+			emitter_yaw = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			emission_pulse_duration = float
+			## cardinality = 0..1
+			emission_pulse_silence = float
+			## cardinality = 0..1
+			particle_pitch = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			particle_pitch = float
+			## cardinality = 0..1
+			particle_yaw = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			particle_yaw = float
+			## cardinality = 0..1
+			particle_roll = {
+				## cardinality = 2..2
+				float
+			}
+			## cardinality = 0..1
+			force = scalar #this keeps bugging out, so scalar for now.
+		}
+	}
+
+	## cardinality = 0..inf
+	animation = {
+		name = scalar
+		start = float
+		duration = float
+		## cardinality = 0..1
+		repeat = bool
+		minValue = float
+		maxValue = float
+		curve = {
+			#have seen as many as 18
+			## cardinality = 4..inf
+			float
+		}
+		op = enum[animation_op] #defined in lights!
+		time = enum[animation_life]
+	}
+	## cardinality = 0..inf
+	force={
+		name = scalar
+		type = enum[force_type]
+		## cardinality = 0..1
+		position = {
+			## cardinality = 3..3
+			float
+		}
+		## cardinality = 0..1
+		direction = {
+			## cardinality = 3..3
+			float
+		}
+		## cardinality = 0..1
+		local_force = bool
+		## cardinality = 0..1
+		yaw = float
+		## cardinality = 0..1
+		division = int
+		## cardinality = 0..1
+		amount = float
+	}
+}
+
+alias[subsystem_color:color] = {
+	## cardinality = 0..1
+	r = { float[0.0..255.0] }
+	## cardinality = 0..1
+	g = { float[0.0..255.0] }
+	## cardinality = 0..1
+	b = { float[0.0..255.0] }
+	## cardinality = 0..1
+	alpha = {
+		## cardinality = 0..1
+		float[0.0..255.0]
+		## cardinality = 0..2
+		scalar
+	}
+	 
+	 
+	## cardinality = 0..1
+	#x = float[0.0..255.0]
+	x = scalar
+	## cardinality = 0..1
+	#y = float[0.0..255.0]
+	y = scalar
+	## cardinality = 0..1
+	#z = float[0.0..255.0]
+	z = scalar
+	## cardinality = 0..1
+	alpha = scalar
+	#alpha = float[0.0..255.0] #float,<particle_animation>
+}
+
+#Better to split in two aliases, but it was defaulting to the first as alpha = { scalar ... } was correct
+#alias[subsystem_color:color] = {
+#}
+
+alias[emission:emission] = float
+alias[emission:emission] = scalar
+alias[emission:emission] = {
+	## cardinality = 1..2
+	float
+}
+enums = {
+	enum[emitter_type] = {
+		point
+		sphere
+		box
+	}
+	enum[animation_life] = {
+		life
+		life_abs
+		system
+		spawn
+	}
+	enum[force_type] = {
+		planar
+		friction
+		point
+		spin
+		turbulence
+	}
+	enum[sort_type] = {
+		depth
+		age
+	}
+	complex_enum[particle_force] = {
+		path = "game/gfx/particles"
+		name = {
+			force = {
+				name = enum_name
+			}
+		}
+	}
+}

@@ -26,3 +26,14 @@ module CommonValidation =
                 )
             let fCombine = (<&&>)
             es.All <&!&> foldNode2 fNode fCombine OK
+
+    let validateNOTMultiple : StructureValidator<_> =
+        fun _ es ->
+            let fNode = (fun (x : Node) children ->
+                if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1
+                then inv ErrorCodes.IncorrectNotUsage x <&&&> children else children
+                )
+            let fCombine = (<&&>)
+            (es.AllEffects <&!&> foldNode2 fNode fCombine OK)
+            <&&>
+            (es.AllTriggers <&!&> foldNode2 fNode fCombine OK)

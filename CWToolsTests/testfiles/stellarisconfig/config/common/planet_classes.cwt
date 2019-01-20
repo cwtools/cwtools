@@ -1,0 +1,159 @@
+types = {
+	## type_key_filter <> random_list
+	type[planet_class] = {
+		path = "game/common/planet_classes"
+		subtype[star] = {
+			star = yes
+		}
+		subtype[planet] = {
+			## cardinality = 0..1
+			star = no
+		}
+		subtype[habitable_planet] = {
+			## cardinality = 0..1
+			colonizable = yes
+		}
+	}
+	## type_key_filter = random_list
+	type[planet_class_random_list] = {
+		path = "game/common/planet_classes"
+		name_field = "name"
+	}
+
+}
+
+#TODO Confirm
+#TODO Expand to add colonizable subtype
+planet_class = {
+	## cardinality = 0..1
+	atmosphere_color = colour[hsv]
+	## cardinality = 0..1
+	atmosphere_intensity = float
+	## cardinality = 0..1
+	atmosphere_width = float
+	entity = scalar #TODO: entity somehow
+	## cardinality = 0..1
+	overlay_entity = scalar
+	## cardinality = 0..1
+	entity_scale = float
+	## cardinality = 0..1
+	outliner_planet_type = special
+	## cardinality = 0..1
+	fixed_entity_scale = bool
+	## cardinality = 0..1
+	icon_frame = int
+	subtype[planet] = {
+		icon_frame = int
+		## cardinality = 0..1
+		habitat = bool
+		## cardinality = 0..1
+		outliner_planet_type = special
+	}
+	subtype[star] = {
+		## cardinality = 0..1
+		star_gfx = bool
+	}
+	## cardinality = 0..1
+	spawn_odds = float
+	## cardinality = 0..1
+	production_spawn_chance = float
+	## cardinality = 0..1
+	#only for planets defined as colonizable!
+	city_color_lut = scalar
+	## cardinality = 0..1
+	extra_orbit_size = float
+	## cardinality = 0..1
+	extra_planet_count = float
+	## cardinality = 0..1
+	chance_of_ring = float
+	## cardinality = 0..1
+	min_distance_from_sun = int
+	## cardinality = 0..1
+	max_distance_from_sun = int
+	## cardinality = 0..1
+	planet_size = {
+		min = int
+		max = int
+	}
+	## cardinality = 0..1
+	planet_size = int
+	## cardinality = 0..1
+	moon_size = int
+	## cardinality = 0..1
+	moon_size = {
+		min = int
+		max = int
+	}
+	#only for planets defined as colonizable!
+	## cardinality = 0..1
+	climate = localisation
+	## cardinality = 0..1
+	enable_tilt = bool
+	## cardinality = 0..1
+	place_entity_on_planet_plane = bool
+	## cardinality = 0..1
+	entity_face_object = bool
+	## cardinality = 0..1
+	colonizable = bool
+	## cardinality = 0..1
+	habitat = bool
+	## cardinality = 0..1
+	starting_planet = bool
+	## cardinality = 0..1
+	can_be_moon = bool #this should be checked against solar system initializers - only planets defined as can_be_mmon can be spawned as moons there!
+	## cardinality = 0..1
+	space_monster_target = bool
+	## cardinality = 0..1
+	asteroid = bool
+	## cardinality = 0..1
+	star = bool
+	## cardinality = 0..1
+	ringworld = bool
+	## cardinality = 0..1
+	show_city = bool
+	## cardinality = 0..1
+	show_health_bar_in_planet_view = bool
+	## cardinality = 0..1
+	ideal = bool
+	## cardinality = 0..1
+	can_be_invaded = bool
+	## cardinality = 0..1
+	orbit_lines = bool
+	## cardinality = 0..1
+	### applies when within own borders only
+	has_colonization_influence_cost = bool
+	## cardinality = 0..1
+	survey_time_factor = float
+	## cardinality = 0..1
+	colonization_tech = { <technology> }
+	## cardinality = 0..1
+	###this is only required if using a picture defined for another planet
+	picture = scalar
+	## cardinality = 0..1
+	###this is only required if using a tile-set defined for another planet
+	tile_set = <planet_class>
+	## cardinality = 0..1
+	## replace_scope = { this = planet root = planet }
+	modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	allowed_archetypes = {
+		## cardinality = 0..100
+		<species_archetype>
+	}
+	## cardinality = 0..1
+	uses_alternative_skies_for_moons = bool
+
+	## cardinality = 0..1
+	fixed_city_level = int
+}
+
+planet_class_random_list = {
+	name = scalar
+	planets = {
+		## cardinality = 1..inf
+		<planet_class>
+	}
+}

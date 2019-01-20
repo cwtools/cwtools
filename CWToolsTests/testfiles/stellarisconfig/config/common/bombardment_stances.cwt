@@ -1,0 +1,31 @@
+types = {
+	type[bombardment_stance] = {
+		path = "game/common/bombardment_stances"
+	}
+}
+
+# TODO Confirm
+# TODO Refine
+# TODO Document
+bombardment_stance = {
+	## replace_scope = { root = fleet this = fleet }
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	icon_frame = int
+	default = bool
+	stop_when_armies_dead = bool
+	abduct_pops = bool
+	planet_damage = float
+	army_damage = float
+	kill_pop_chance = float
+	min_pops_to_kill_pop = int
+#	add_blocker_chance = float
+#	max_blockers = int
+	## replace_scope = { root = fleet this = fleet from = planet }
+	ai_weight = {
+		weight = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+
+	}
+}

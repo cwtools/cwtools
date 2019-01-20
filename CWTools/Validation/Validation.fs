@@ -249,15 +249,14 @@ module ValidationCore =
                             | :? Option as e -> e.AsEffectBlock::acc
                             |_ -> acc
                                 )
-
-            this.All |> List.collect (foldNode7 fNode)
+            entities |> List.collect (fun struct (_, d) -> d.Force().EffectBlocks |> Option.defaultValue [])
         member this.AllTriggers=
             let fNode = (fun (x : Node) acc ->
                             match x with
                             | :? TriggerBlock as e -> e::acc
                             |_ -> acc
                                 )
-            this.All |> List.collect (foldNode7 fNode)
+            entities |> List.collect (fun struct (_, d) -> d.Force().TriggerBlocks |> Option.defaultValue [])
         member this.AllModifiers=
             let fNode = (fun (x : Node) acc ->
                             match x with

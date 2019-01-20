@@ -1,0 +1,103 @@
+types = {
+	type[bypass] = {
+		path = "game/common/bypass"
+		subtype[scripted] = {
+			connection_type = scripted_connection
+		}
+	}
+}
+
+
+# TODO Confirm
+# TODO Document
+### These defines the type of bypasses that exist in game. This is only the logical connection between system
+### These can be added to megastructures
+
+bypass = {
+	### the localization key used in triggers and effects for the type
+	name = localisation
+	### whether this type can be automatically used by the pathfinding (otherwise you'll have to right click the object containing it)
+	is_pathfind = bool
+	## cardinality = 0..1
+	### whether this bypass type needs to be 'seen' before it can be used
+	requires_exploration = bool
+	### whether this type needs an action or can be used automagically
+	uses_action = bool
+	### whether bypasses of these types are automatically active on creation, or if they need to be researched/upgraded to be activated
+	always_active = bool
+	### time spent "prepping" in the system before going through the bypass
+	windup_time = int
+	### time spent "recovering" in the system after going through the bypass
+	winddown_time = int
+	### 0 means instant
+	ftl_multiplier = float
+	## cardinality = 0..1
+	### whether you can "see through" the bypass and extends your sensor range to the other side
+	extends_sensors = bool
+	icon_frame = int
+	### whether countries remember meeting a specific instance of that type, or if they just remember seeing the type in general
+	remember_instances = bool
+	galactic_map_tooltip_header = localisation
+	galactic_map_tooltip_desc = localisation
+	connection_type = enum[bypass_connection_type]
+	### what effect to spawn on the ship when they jump through the bypass
+	ftl_ship_effect 	= scalar #TODO gfx effect
+	### what effect to spawn on the bypass when a ship jumps through
+	ftl_bypass_effect	= <model_entity>
+	## cardinality = 0..1
+	bypass_effect 		= scalar #TODO gfx effect
+	### number of days to wait for the jump animation to be played
+	animation_time = int
+	## cardinality = 0..1
+	prerequisites = {
+		## severity = info
+		## cardinality = 1..inf
+		<technology>
+	}
+	## cardinality = 0..1
+	### an effect that is called just before the jump of a right click "explore" action of a fleet
+	on_pre_explore = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country from = country }
+	### trigger to evaluate if a country can use bypasses of this type. this: country, from: (optional) system owner; default: { always = yes }
+	country_can_use = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	#unsure about scope here
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	### The name of the on-action event that will be fired upon entering FTL (if set)
+	### THIS = Fleet
+	### FROM = System jumping to
+	### FROMFROM = System jumped from
+	on_action = scalar #TODO expand
+	subtype[scripted] = {
+		scripted_connection = {
+
+			## replace_scope = { this = system root = system }
+			### defines endpoints that can only reach the "nexus"
+			node = {
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+
+			## replace_scope = { this = system root = system }
+			### defines endpoint(s) that can reach all "nodes" (but not other nexuses)
+			nexus = {
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+		}
+	}
+}
+
+enums = {
+	enum[bypass_connection_type] = {
+		any_other
+		one_to_one
+		scripted_connection
+	}
+}

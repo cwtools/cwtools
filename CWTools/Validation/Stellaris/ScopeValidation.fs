@@ -38,15 +38,15 @@ module ScopeValidation =
         | "add_modifier" -> valStaticModifier modifiers scopes (node.TagText "modifier") node
         | _ -> OK
 
-    let eventScope (event : Event) =
-        match event.Key with
-        |"country_event" -> Scope.Country
-        |"fleet_event" -> Scope.Fleet
-        |"ship_event" -> Scope.Ship
-        |"pop_faction_event" -> Scope.PopFaction
-        |"pop_event" -> Scope.Pop
-        |"planet_event" -> Scope.Planet
-        |_ -> Scope.Army
+    // let eventScope (event : Event) =
+    //     match event.Key with
+    //     |"country_event" -> Scope.Country
+    //     |"fleet_event" -> Scope.Fleet
+    //     |"ship_event" -> Scope.Ship
+    //     |"pop_faction_event" -> Scope.PopFaction
+    //     |"pop_event" -> Scope.Pop
+    //     |"planet_event" -> Scope.Planet
+    //     |_ -> Scope.Army
 
     let inline handleUnknownTrigger (root : ^a) (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with

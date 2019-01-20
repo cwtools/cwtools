@@ -1,0 +1,1639 @@
+
+enums = {
+	enum[basic_scopes] = {
+		country
+		pop
+		planet
+		pop_faction
+		system
+		leader
+		sector
+		star
+		galactic_object
+		species
+		ambient_object
+		fleet
+		ship
+		war
+		army
+	}
+}
+
+
+
+alias[trigger:scope_field] = { alias_name[trigger] = alias_match_left[trigger] }
+
+#These are not required as covered by scope_field
+# alias[trigger:NOT] = {
+#	## cardinality = 1..1
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# alias[trigger:NOR] = { alias_name[trigger] = alias_match_left[trigger] }
+# alias[trigger:NAND] = { alias_name[trigger] = alias_match_left[trigger] }
+# alias[trigger:AND] = { alias_name[trigger] = alias_match_left[trigger] }
+# alias[trigger:OR] = { alias_name[trigger] = alias_match_left[trigger] }
+# alias[trigger:hidden_trigger] = { alias_name[trigger] = alias_match_left[trigger] }
+
+
+#Hard-coded Scopes covered by scope_field
+
+# ## push_scope = species
+# alias[trigger:species] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = planet
+# alias[trigger:planet] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = country
+# alias[trigger:owner] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = country
+# alias[trigger:controller] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = leader
+# alias[trigger:ruler] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = planet
+# alias[trigger:capital_scope] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = planet
+# alias[trigger:orbit] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = tile
+# alias[trigger:orbital_deposit_tile] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = system
+# alias[trigger:solar_system] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = country
+# alias[trigger:space_owner] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = pop_faction
+# alias[trigger:pop_faction] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = planet
+# alias[trigger:home_planet] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = country
+# alias[trigger:overlord] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = leader
+# alias[trigger:leader] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = starbase
+# alias[trigger:starbase] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+
+
+
+
+
+# ## push_scope = country
+# ###Scope (/context) switch
+# alias[trigger:planet_owner] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = pop
+# ###Scope (/context) switch
+# alias[trigger:pop] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+
+# ###Scope (/context) switch
+# ###Report to Caligula how this works
+# alias[trigger:alliance] = { alias_name[trigger] = alias_match_left[trigger] }
+
+
+# ## push_scope = country
+# ###Scope (/context) switch
+# alias[trigger:attacker] = { alias_name[trigger] = alias_match_left[trigger] }
+
+# ## push_scope = tile
+# ###Scope (/context) switch
+# alias[trigger:best_tile_for_pop] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = sector
+# ###Scope (/context) switch
+# alias[trigger:core_sector] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = fleet
+# ###Scope (/context) switch
+# alias[trigger:fleet] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+
+# ## push_scope = leader
+# ###Scope (/context) switch
+# alias[trigger:heir] = { alias_name[trigger] = alias_match_left[trigger] }
+
+# ## push_scope = country
+# ###Scope (/context) switch
+# ###Tell Caligula how this works
+# alias[trigger:defender] = { alias_name[trigger] = alias_match_left[trigger] }
+
+
+# ## push_scope = ambient_object
+# ###Scope (/context) switch
+# alias[trigger:last_created_ambient_object] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = army
+# ###Scope (/context) switch
+# alias[trigger:last_created_army] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = country
+# ###Scope (/context) switch
+# alias[trigger:last_created_country] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = fleet
+# ###Scope (/context) switch
+# alias[trigger:last_created_fleet] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = leader
+# ###Scope (/context) switch
+# alias[trigger:last_created_leader] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = pop
+# ###Scope (/context) switch
+# alias[trigger:last_created_pop] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = pop_faction
+# ###Scope (/context) switch
+# alias[trigger:last_created_pop_faction] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = ship
+# ###Scope (/context) switch
+# alias[trigger:last_created_ship] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = species
+# ###Scope (/context) switch
+# alias[trigger:last_created_species] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = system
+# ###Scope (/context) switch
+# alias[trigger:last_created_system] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = country
+# ###Scope (/context) switch
+# alias[trigger:last_refugee_country] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ###Scope (/context) switch
+# alias[trigger:no_scope] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = fleet
+# ###Scope (/context) switch
+# alias[trigger:mining_station] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = species
+# ###Scope (/context) switch
+# alias[trigger:owner_species] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+
+# ## push_scope = fleet
+# ###Scope (/context) switch
+# alias[trigger:research_station] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = star
+# ###Scope (/context) switch
+# alias[trigger:system_star] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = tile
+# ###Scope (/context) switch
+# alias[trigger:tile] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = sector
+# ###Scope (/context) switch
+# alias[trigger:sector] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+# ## push_scope = star
+# ###Scope (/context) switch
+# alias[trigger:star] = {
+# 	alias_name[trigger] = alias_match_left[trigger]
+# }
+
+## push_scope = country
+alias[trigger:observation_outpost_owner] = {
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+
+## push_scope = fleet
+alias[trigger:observation_outpost] = {
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+## push_scope = country
+alias[trigger:any_playable_country] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = fleet
+alias[trigger:any_owned_fleet] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+alias[trigger:any_orbital_station] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = planet
+alias[trigger:any_planet_within_border] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = ship
+alias[trigger:any_owned_ship] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = ship
+alias[trigger:any_ship] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = planet
+alias[trigger:any_moon] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = war
+alias[trigger:any_war] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_defender] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_attacker] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = planet
+alias[trigger:any_system_planet] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = planet
+alias[trigger:any_owned_planet] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = planet
+alias[trigger:any_controlled_planet] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_country] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = pop
+alias[trigger:any_pop] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = fleet
+alias[trigger:any_fleet_in_orbit] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = fleet
+alias[trigger:any_research_station] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = fleet
+alias[trigger:any_mining_station] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = system
+alias[trigger:any_rim_system] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = ship
+alias[trigger:any_ship_in_system] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = leader
+alias[trigger:any_owned_leader] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = pop
+alias[trigger:any_owned_pop] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = sector
+###Iterate through all sectors
+alias[trigger:any_sector] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = sector
+###Iterate through owned sectors
+alias[trigger:any_owned_sector] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = ambient_object
+alias[trigger:any_ambient_object] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = ambient_object
+alias[trigger:any_system_ambient_object] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_bordering_country] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_member] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = system
+###Checks if any of the system's neighboring systems meet the specified criteria
+alias[trigger:any_neighbor_system] = {
+	## cardinality = 0..1
+	ignore_hyperlanes = bool
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_subject] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_relation] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = army
+alias[trigger:any_owned_army] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = army
+alias[trigger:any_planet_army] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_neighbor_country] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = fleet
+alias[trigger:any_combatant_fleet] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = leader
+alias[trigger:any_pool_leader] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = megastructure
+alias[trigger:any_megastructure] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = megastructure
+alias[trigger:any_owned_megastructure] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = megastructure
+alias[trigger:any_system_megastructure] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = species
+alias[trigger:any_owned_pop_species] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = starbase
+alias[trigger:any_owned_starbase] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = system
+alias[trigger:any_system] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = system
+alias[trigger:any_system_within_border] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_war_participant] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = system
+###Conditions in trigger = { } filters the systems within the min/max steps limits. If no system meets the condition, the trigger will return as false. Conditions outside of the trigger = { } will check whether these conditions are true for *the closest* system for which the trigger conditions and min_steps conditions.
+alias[trigger:closest_system] = {
+	##cardinality = 0..1
+	min_steps = int
+	##cardinality = 0..1
+	max_steps = int
+
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+
+
+
+
+
+# Effect Scopes
+
+alias[effect:scope_field] = { alias_name[effect] = alias_match_left[effect] }
+
+#scope_field stuff
+
+# push_scope = leader
+#alias[effect:last_created_leader] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = country
+#alias[effect:last_created_country] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = fleet
+#alias[effect:last_created_fleet] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = pop
+#alias[effect:last_created_pop] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = species
+#alias[effect:last_created_species] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = ambient_object
+#alias[effect:last_created_ambient_object] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = species
+#alias[effect:species] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = starbase
+#alias[effect:starbase] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = planet
+#alias[effect:capital_scope] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+
+# push_scope = planet
+#alias[effect:orbit] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = tile
+#alias[effect:orbital_deposit_tile] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = species
+#alias[effect:owner_species] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = country
+#alias[effect:overlord] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = system
+#alias[effect:solar_system] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = country
+#alias[effect:space_owner] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = pop_faction
+#alias[effect:pop_faction] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = planet
+#alias[effect:home_planet] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = planet
+#alias[effect:planet] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+# push_scope = country
+#alias[effect:owner] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+
+# push_scope = country
+#alias[effect:controller] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+
+# push_scope = leader
+#alias[effect:ruler] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+
+# push_scope = leader
+#alias[effect:leader] = {
+#	alias_name[effect] = alias_match_left[effect]
+#}
+
+## push_scope = leader
+### Executes enclosed effects on a random leader owned by scoped country that meets the limit criteria
+alias[effect:every_owned_leader] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = leader
+alias[effect:random_owned_leader] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = leader
+###Iterate through each leader that is recruitable for the country
+alias[effect:every_pool_leader] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = leader
+###Iterate through each leader that is recruitable for the country
+alias[effect:random_owned_leader] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+	}
+}
+
+## push_scope = country
+alias[effect:every_war_participant] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_war_participant] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = army
+alias[effect:every_owned_army] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = army
+alias[effect:random_owned_army] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = system
+alias[effect:every_system_within_border] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = system
+alias[effect:random_system_within_border] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = starbase
+alias[effect:every_owned_starbase] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = starbase
+alias[effect:random_owned_starbase] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = pop_faction
+alias[effect:every_pop_faction] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = pop_faction
+alias[effect:random_pop_faction] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = pop
+alias[effect:every_owned_pop] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = pop
+alias[effect:random_owned_pop] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = pop
+alias[effect:every_pop] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = pop
+alias[effect:random_pop] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = country
+alias[effect:every_relation] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_relation] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = country
+alias[effect:every_country] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_country] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = planet
+alias[effect:every_owned_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:random_owned_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = country
+alias[effect:every_playable_country] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_playable_country] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = system
+alias[effect:every_system_in_cluster] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:observation_outpost_owner] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = fleet
+alias[effect:observation_outpost] = {
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:every_planet_within_border] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:random_planet_within_border] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = fleet
+alias[effect:every_mining_station] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = fleet
+alias[effect:random_mining_station] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = fleet
+alias[effect:every_research_station] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = fleet
+alias[effect:random_research_station] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = country
+alias[effect:every_subject] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_subject] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = fleet
+alias[effect:every_owned_fleet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = fleet
+alias[effect:random_owned_fleet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = country
+alias[effect:every_neighbor_country] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_neighbor_country] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = system
+alias[effect:every_neighbor_system] = {
+	##cardinality = 0..1
+	ignore_hyperlanes = bool
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = system
+alias[effect:random_neighbor_system] = {
+	##cardinality = 0..1
+	ignore_hyperlanes = bool
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = fleet
+alias[effect:every_fleet_in_system] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = fleet
+alias[effect:random_fleet_in_system] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = ambient_object
+alias[effect:random_ambient_object] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = ambient_object
+alias[effect:random_system_ambient_object] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = ambient_object
+alias[effect:every_ambient_object] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = ambient_object
+alias[effect:every_system_ambient_object] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = sector
+###Select a random sector out of all sectors
+alias[effect:random_sector] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = sector
+###Select a random owned sector
+alias[effect:random_owned_sector] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = sector
+###Run an effect on every sector in the game
+alias[effect:every_sector] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = sector
+###Run an effect on every sector owned by the country
+alias[effect:every_owned_sector] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = system
+alias[effect:every_rim_system] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = system
+alias[effect:random_rim_system] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = planet
+alias[effect:random_moon] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = planet
+alias[effect:every_moon] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:every_system_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:random_system_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = ship
+alias[effect:every_ship] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:every_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:random_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = ship
+alias[effect:every_owned_ship] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = ship
+alias[effect:random_owned_ship] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = planet
+alias[effect:every_controlled_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = planet
+alias[effect:random_controlled_planet] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+
+## push_scope = system
+alias[effect:closest_system] = {
+	##cardinality = 0..1
+	min_steps = int
+	##cardinality = 0..1
+	max_steps = int
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+
+## push_scope = country
+alias[effect:every_war_defender] = {
+	enemy = scope[country]
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = country
+alias[effect:random_war_defender] = {
+	enemy = scope[country]
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = country
+alias[effect:every_war_attacker] = {
+	enemy = scope[country]
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+
+## push_scope = country
+alias[effect:random_war_attacker] = {
+	enemy = scope[country]
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = megastructure
+alias[effect:random_megastructure] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = megastructure
+alias[effect:every_megastructure] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = megastructure
+alias[effect:random_owned_megastructure] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = megastructure
+alias[effect:every_owned_megastructure] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = megastructure
+alias[effect:random_system_megastructure] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+
+	}
+}
+
+## push_scope = megastructure
+alias[effect:every_system_megastructure] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+
+## push_scope = system
+alias[effect:random_system] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+	}
+}
+
+## push_scope = system
+alias[effect:every_system] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+
+#2.2
+
+## scope = planet
+## push_scope = deposit
+###Checks if any deposits on the planet meet the criteria
+alias[effect:any_deposit] = {
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+## scope = planet
+## push_scope = deposit
+###Executes on every deposit on planet
+alias[effect:every_deposit] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+## scope = planet
+## push_scope = deposit
+###Executes enclosed effects on a random deposit on the scoped planet that meets the limit criteria
+alias[effect:random_deposit] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+
+	##cardinality = 0..1
+	weights = {
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_mult] = alias_match_left[modifier_rule_add_mult]
+	}
+}
+
+
+## push_scope = country
+alias[trigger:branch_office_owner] = {
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+## push_scope = country
+alias[effect:branch_office_owner] = {
+	alias_name[effect] = alias_match_left[effect]
+}

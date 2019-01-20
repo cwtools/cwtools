@@ -1,0 +1,248 @@
+
+root = no_scope this = no_scope
+	on_game_start
+	on_monthly_pulse
+	on_yearly_pulse
+	on_bi_yearly_pulse
+	on_five_year_pulse
+	on_decade_pulse
+	on_mid_game_pulse
+	on_late_game_pulse
+	
+root = country this = country
+	on_game_start_country
+	on_monthly_pulse_country
+	on_yearly_pulse_country
+	on_bi_yearly_pulse_country
+	on_five_year_pulse_country
+	on_decade_pulse_country
+	on_mid_game_pulse_country
+	on_late_game_pulse_country
+	on_become_advanced_empire
+	on_press_begin
+	on_tutorial_level_changed
+	on_join_alliance
+	on_leave_alliance
+	on_ruler_set
+	on_policy_changed
+	on_ship_designed
+	on_tech_increased
+	empire_init_add_technologies
+	empire_init_create_ships
+	on_election_started
+	on_election_ended
+	on_pirate_spawn
+
+root = planet this = planet
+	on_colonization_started
+	on_colonized
+	on_colony_destroyed
+	on_building_complete
+	on_building_queued
+	on_building_unqueued
+	on_building_upgraded
+	on_building_demolished
+	on_district_complete
+	on_building_replaced
+	on_district_queued
+	on_district_unqueued
+	on_district_demolished
+	on_blocker_cleared
+	on_colony_1_year_old
+	on_colony_2_years_old
+	on_colony_3_years_old
+	on_colony_4_years_old
+	on_colony_5_years_old
+	on_colony_6_years_old
+	on_colony_7_years_old
+	on_colony_8_years_old
+	on_colony_9_years_old
+	on_colony_10_years_old
+
+root = country this = country from = country
+	on_custom_diplomacy
+	on_entering_war
+	on_country_destroyed
+	on_pre_communications_established
+	on_post_communications_established
+	on_war_ended
+
+this = planet root = planet from = country
+	on_initialize_advanced_colony
+	on_terraforming_begun
+	on_terraforming_complete
+	on_planet_bombarded
+	on_planet_zero_pops
+	on_planet_zero_health_ground_combat
+	on_planet_ownerless
+	on_planet_transfer
+	on_planet_conquer
+	
+this = country root = country from = country fromfrom = fleet fromfromfrom = system
+	on_first_contact
+	on_enforce_borders
+	
+this = country root = country from = country fromfrom = planet
+	on_planet_attackers_win
+	on_planet_attackers_lose
+	on_planet_defenders_win
+	on_planet_defenders_lose
+	
+this = country root = country from = system
+	on_system_first_visited
+	on_system_lost
+	on_system_gained
+	
+this = ship root = ship from = system fromfrom = country
+	on_entering_system_first_time
+	on_entering_system
+	
+this = fleet root = fleet from = system
+	on_entering_system_fleet
+	
+this = fleet root = fleet from = system fromfrom = system
+	on_crossing_border
+	on_emergency_ftl
+	on_entering_gateway
+	on_entering_wormhole
+		
+this = planet root = planet from = country fromfrom = fleet
+	on_planet_surveyed
+	
+this = country root = country from = system fromfrom = fleet
+	on_system_survey
+	
+this = ship root = ship from = system
+	on_system_survey_ship
+
+this = country root = country from = fleet fromfrom = fleet
+	on_entering_battle
+	on_fleet_destroyed_victim
+	on_fleet_destroyed_perp
+	on_space_battle_won
+	on_space_battle_lost
+	
+this = country root = country from = ship fromfrom = ship
+	on_ship_destroyed_victim
+	on_ship_destroyed_perp
+	on_ship_disengaged_victim
+	on_ship_disengaged_perp
+	
+this = country root = country from = fleet
+	on_fleet_disbanded
+	on_fleet_detected
+	
+this = country root = country from = fleet fromfrom = planet
+	on_fleet_auto_move_arrival
+
+this = ship root = ship from = planet
+	on_survey
+	on_building_mining_station
+	on_building_research_station
+	on_building_outpost_station
+	on_building_wormhole_station
+	on_building_starbase_outpost
+	on_building_observation_station
+	on_building_starbase_ai
+	on_building_starbase_exd
+	on_building_starbase_swarm
+	on_building_starbase_marauder
+	on_building_(PlaceholderForMoreStationShipSizes)
+	on_ship_built
+
+this = ship root = ship from = ship
+	on_ship_disabled
+	
+this = ship root = ship
+	on_ship_enabled
+	on_ship_upgraded
+
+this = planet root = planet from = species
+	on_uplift_completion
+
+this = pop root = pop from = planet
+	on_purge_begun
+	on_purge_canceled
+	on_pop_abducted
+	on_pop_added
+
+this = pop root = pop
+	on_pop_enslaved
+	on_pop_emancipated
+	on_pop_rights_change
+
+this = country root = country from = leader
+	on_leader_death
+	on_leader_level_up
+	on_ruler_removed
+	on_ruler_back_to_pre_ruler_class
+	on_leader_spawned
+
+this = ship root = ship from = country
+	on_ship_order
+	
+this = country root = country from = war
+	on_war_beginning
+	
+this = country root = country from = species
+	on_modification_complete
+	
+this = planet root = planet from = country fromfrom = country
+	on_planet_occupied
+
+this = planet root = planet from = army
+	on_army_recruited
+
+this = country root = country from = country fromfrom = war
+	on_war_won
+	on_war_lost
+	
+this = country root = country from = country fromfrom = country fromfromfrom = country fromfromfromfrom = war
+	on_status_quo
+	on_status_quo_forced
+	
+this = planet root = planet from = country fromfrom = pop
+	on_pop_grown
+	on_pop_assembled
+	on_pop_purged
+	on_pop_declined
+	on_pop_displaced
+
+this = country root = country from = planet
+	on_rebels_take_planet
+	on_rebels_take_planet_owner_switched
+
+this = fleet root = fleet from = planet
+	on_fleet_enter_orbit
+	
+root = country this = country from = megastructure fromfrom = system fromfromfrom = fleet
+	on_megastructure_built
+	
+root = country this = country from = megastructure fromfrom = system
+	on_megastructure_upgrade_begin
+	on_megastructure_upgraded
+
+root = fleet this = fleet
+	on_jump_drive
+	
+
+this = planet root = planet from = species fromfrom = species
+	empire_init_capital_planet
+	
+this = ship root = ship from = country
+	on_starbase_transfer
+
+root = fleet this = fleet from = fleet fromfrom = fleet fromfromfrom = fleet
+	on_fleet_combat_joined_attacker
+	on_fleet_combat_joined_defender
+
+this = pop root = pop from = country fromfrom = country
+	on_slave_sold_on_market
+
+this = planet root = planet from = fleet
+	on_destroy_planet_with_PLANET_KILLER_CRACKER
+	on_destroy_planet_with_PLANET_KILLER_SHIELDER
+	on_destroy_planet_with_PLANET_KILLER_NEUTRON
+	on_destroy_planet_with_PLANET_KILLER_GODRAY
+	on_destroy_planet_with_PLANET_KILLER_NANOBOTS
+	on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT(PlaceholderForMore)

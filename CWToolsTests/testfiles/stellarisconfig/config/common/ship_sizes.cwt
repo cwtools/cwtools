@@ -1,0 +1,237 @@
+types = {
+	type[ship_size] = {
+		path = "game/common/ship_sizes"
+		subtype[station] = {
+			is_space_station = yes
+		}
+		subtype[ship] = {
+			## cardinality = 0..1
+			is_space_station = no
+		}
+		subtype[starbase] = {
+			class = shipclass_starbase
+		}
+	}
+}
+
+
+ship_size = {
+	## cardinality = 0..2
+	graphical_culture = {
+		## cardinality = 1..inf
+		<graphical_culture>
+	}
+	## cardinality = 0..2
+	graphical_culture = bool
+	## cardinality = 0..1
+	is_space_object = yes
+	## cardinality = 0..1
+	can_be_inspected = bool
+	## cardinality = 0..1
+	pre_communications_name = localisation
+	## cardinality = 0..1
+	entity = <model_entity>
+	## cardinality = 0..1
+	# reference to other ship_sizes + _entity, handled by manual validator
+	entity = scalar
+	## cardinality = 0..1
+	formation_priority = int
+	## cardinality = 0..1
+	max_speed = float
+	## cardinality = 0..1
+	acceleration = float
+	## cardinality = 0..1
+	rotation_speed = float
+	## cardinality = 0..1
+	collision_radius = float
+	## cardinality = 0..1
+	max_hitpoints = int
+	## cardinality = 0..1
+	is_listed = bool
+	## cardinality = 0..1
+	components_add_to_cost = bool
+	## cardinality = 0..1
+	is_designable = bool
+	## cardinality = 0..1
+	### may be deprecated, tell Dayshine and Caligula if yes
+	build_time = int
+	## cardinality = 0..1
+	is_civilian = bool
+	## cardinality = 0..1
+	build_block_radius = int
+	## cardinality = 0..1
+	can_disable = bool
+	subtype[starbase] = {
+		## cardinality = 0..1
+		## replace_scope = { this = starbase root = starbase }
+		modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+	}
+	subtype[!starbase] = {
+		## cardinality = 0..1
+		## replace_scope = { this = ship root = ship }
+		modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = ship root = ship }
+	ship_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	size_multiplier = float
+	## cardinality = 0..1
+	fleet_slot_size = int
+	## cardinality = 0..1
+	section_slots = {
+		## cardinality = 1..inf
+		scalar = { #this is connected to the section templates and global ship designs files!
+			## cardinality = 1..inf
+			locator = enum[locators] #this is connected to the ship asset files.
+			## cardinality = 1..inf
+			locator = scalar #TODO: Some locators are in .mesh files, so are missed by the enum
+		}
+	}
+	## cardinality = 0..1
+	combat_size_multiplier = int
+	## cardinality = 0..1
+	num_target_locators = int
+	## cardinality = 0..1
+	is_space_station = bool
+	## cardinality = 0..1
+	icon_frame = int
+	## cardinality = 0..1
+	base_buildtime = int
+	## cardinality = 0..1
+	can_have_federation_design = bool
+	## cardinality = 0..1
+	enable_default_design = bool
+	## cardinality = 0..1
+	default_behavior = <ship_behavior>
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..inf
+		<technology>
+	}
+	#this is where ship classes are defined! this is important for other files, and it also causes the game to auto generate modifiers for each shipclass!
+	class = enum[shipsize_classes]
+	## cardinality = 0..1
+	construction_type = starbase
+	## cardinality = 0..1
+	construction_type = starbase_shipyard
+	## cardinality = 0..1
+	construction_type = spaceport
+	## cardinality = 0..1
+	construction_type = starbase_defenses
+	## cardinality = 0..1
+	## replace_scope = { root = starbase this = starbase }
+	possible_starbase = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = starbase this = starbase }
+	potential_starbase = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	required_component_set = <component_set.required_component> #this is linked to required components defined as such under component_sets, and is also linked to global_ship_designs!
+	## cardinality = 0..1
+	valid_target_aggressive_stance = bool
+	## cardinality = 0..1
+	auto_upgrade = bool
+	## cardinality = 0..1
+	ship_class_icon_frame = int
+	## cardinality = 0..1
+	uses_name_prefix = bool
+	## cardinality = 0..1
+	takes_name_from_ship_design = bool
+	## cardinality = 0..1
+	flip_control_on_disable = bool
+	## cardinality = 0..1
+	combat_disengage_chance = float
+	## cardinality = 0..1
+	empire_limit = {
+		base = int
+		## cardinality = 0..1
+		max = int
+		## cardinality = 0..1
+		naval_cap_div = int
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	potential_country = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	possible_country = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = planet this = planet }
+	potential_planet = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = planet this = planet }
+	possible_planet = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	resources = {
+		category = <economic_category>
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	min_upgrade_cost = {
+		## cardinality = 1..inf
+		<resource> = float
+	}
+
+}
+
+#enums = { #you can change, mod, remove and add new shipclasses. This is not an enum!
+#	enum[shipsize_classes] = {
+#		shipclass_military
+#		shipclass_military_station
+#		shipclass_military_special
+#		shipclass_mining_station
+#		shipclass_research_station
+#		shipclass_terraform_station
+#		shipclass_observation_station
+#		shipclass_outpost_station
+#		shipclass_orbital_station
+#		shipclass_transport
+#		shipclass_starbase
+#		shipclass_constructor
+#		shipclass_colonizer
+#		shipclass_science_ship
+#	}
+#}
+
+#ship_class = {
+#	name = key #i dunno how to do this, but a shipclass entry is a must.
+#}
+
+enums = {
+	complex_enum[shipsize_classes] = {
+		path = "game/common/ship_sizes"
+		name = {
+			class = enum_name
+		}
+	}
+	complex_enum[section_slots] = {
+		path = "game/common/ship_sizes"
+		name = {
+			section_slots = {
+				enum_name = {
+				}
+			}
+		}
+	}
+}
+

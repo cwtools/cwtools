@@ -1,0 +1,138 @@
+#all the types defined in this file are nestled within bitmapfonts = {
+#please see interface/fonts.gfx - this file is weird.
+types = {
+	## type_key_filter = bitmapfont
+	type[bitmapfont] = {
+		name_field = name
+		skip_root_key = bitmapfonts
+		path = "game/interface" #see game/interface/fonts.gfx
+	}
+	## type_key_filter = bitmapfont_override
+	type[bitmapfont_override] = {
+		skip_root_key = bitmapfonts
+		path = "game/interface" #see game/interface/fonts.gfx
+	}
+	## type_key_filter = textcolors
+	type[textcolors] = {
+		skip_root_key = bitmapfonts
+		path = "game/interface"
+	}
+}
+#these are the defines for the text coloring used in localisations. For example in the localisation "§HGhost Signal§!" the
+#H color code refers to what is defined in the example below from vanilla. Text colors should be thus parsed and checked against
+#the localisation if they are changed or new ones added.
+#example:
+#textcolors = {
+#	M = { 35 206 255 }
+#	L = { 195 176 145 }
+#	G = { 41 225 38 }
+#	R = { 242 86 70 }
+#	Y = { 247 252 52 }
+#	H = { 251 170 41 }
+#	T = { 255 255 255 }
+#	E = { 135 255 207 }
+#	S = { 228 156 42 }
+#	W = { 255 255 255 }
+#  g = { 128 128 128 }
+#}
+
+enums = {
+	complex_enum[textcolors] = {
+		path = "game/interface"
+		name = {
+			textcolors = {
+				enum_name = { }
+			}
+		}
+	}
+
+	enum[font_languages] = {
+		l_russian
+		l_polish
+		l_simp_chinese
+	}
+}
+
+
+textcolors = {
+	## cardinality = 14..inf
+	scalar = {  #these should really have a unique ID each - so they can be refered to. They are linked to in GUI files in /interface.
+		## cardinality = 3..3
+		int[0..255]
+	}
+}
+
+bitmapfont = {
+	name = scalar
+	#TODO: This should be filepath + extension
+	## cardinality = 0..1
+	path = scalar
+	## cardinality = 0..1
+	fontfiles = {
+		## cardinality = 1..inf
+		scalar
+	}
+	#TODO: hex
+	color = scalar
+	## cardinality = 0..1
+	cursor_offset = {
+		## cardinality = 2..2
+		int
+	}
+	## cardinality = 0..1
+	selection_offset = {
+		## cardinality = 2..2
+		int
+	}
+	# cardinality = 0..1 #textcolors can appear for each bitmapfont as well. it seems these override the global colors defined above it in the list. see the file.
+	#textcolors = {
+	#	key = {
+	#		## cardinality = 3..3
+	#		float
+	#	}
+	#}
+}
+
+bitmapfont_override = {
+	name = <bitmapfont>
+	## cardinality = 0..1
+	ttf_font = <font>
+	## cardinality = 0..1
+	ttf_size = int
+	## cardinality = 0..1
+	vertical_offset = int
+	## cardinality = 0..1
+	fontfiles = {
+		## severity = info
+		#I'm not sure about this
+		## cardinality = 1..inf
+		scalar #todo: some kind of filepath but not one that CW Tools currently knows
+	}
+	languages = {
+		#I'm not sure about this - probably some set number. -Caligula: Set to 3 as there are only 3 names defined in the enum. Note: It is erroring anyway, not sure why.
+		## cardinality = 1..3
+		enum[font_languages]
+	}
+}
+
+#bitmapfont entries are connected to the fonts defined at game/fonts and the file there (see pull requests).
+#example:
+# bitmapfont = {
+#		name = "cg_16b" -> name defined at game/fonts
+#		path = "gfx/fonts/cg_16b" -> file path to ttf or otf file
+#		color = 0xffffffff -> hex color code: this needs to be addressed somehow
+#		cursor_offset = { -3 -5 }
+#		selection_offset = { 0 3 }
+#	}
+
+
+#overrides appear to replace defines for fonts for speciesi languages:
+#example:
+#	 bitmapfont_override = {
+#		name = "cg_16b"
+#		fontfiles = {
+#			"gfx/fonts/stellaris_main"
+#		}
+#		languages = { "l_russian" "l_polish" }
+#	 }
+

@@ -1,0 +1,36 @@
+types = {
+	type[terraform_link] = {
+		path = "game/common/terraform"
+	}
+}
+
+terraform_link = {
+	###country scope, from = planet
+	from = <planet_class>
+	to = <planet_class>
+	energy = int
+	duration = int
+	## cardinality = 0..1
+	###displayed in game, hence functions like after effect and requires localisations in the same way.
+	## replace_scope = { this = country root = country from = planet }
+	condition = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country from = planet }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country from = planet }
+	effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country from = planet }
+	ai_weight = {
+		## cardinality = 0..1
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}	

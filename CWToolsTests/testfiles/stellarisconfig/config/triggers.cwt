@@ -1,0 +1,1858 @@
+
+alias[trigger:if] = {
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+alias[trigger:else_if] = {
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+alias[trigger:else] = { alias_name[trigger] = alias_match_left[trigger] }
+
+
+
+alias[trigger:has_faction] = <pop_faction>
+alias[trigger:is_pop_faction_type] = <pop_faction>
+
+
+
+
+#Relative Power - lacks checking the >, < etc
+alias[trigger:relative_power] = {
+	who = scope[country]
+	## cardinality = 0..1
+	category = enum[relative_power_categories]
+	value = enum[relative_power_values]
+}
+
+enums = {
+	enum[relative_power_categories] = {
+		all
+		fleet
+		naval_capacity
+		technology
+	}
+	enum[relative_power_values] = {
+		pathetic
+		inferior
+		equivalent
+		superior
+		overwhelming
+	}
+	enum[research_areas] = {
+		physics
+		engineering
+		society
+	}
+	enum[genders] = {
+		female
+		male
+		indeterminable
+	}
+	enum[hyperlane_euclidean] = {
+		hyperlane
+		euclidean
+	}
+	enum[election_types] = {
+		none
+		democratic
+		oligarchic
+	}
+	enum[war_sides] = {
+		attackers
+		defenders
+	}
+}
+
+alias[trigger:has_election_type] = enum[election_types]
+
+
+alias[trigger:has_modifier] = <static_modifier>
+
+alias[trigger:has_opinion_modifier] = {
+	who = scope[country]
+	modifier = <opinion_modifier>
+	##cardinality = 0..1
+	is_reverse = bool
+}
+
+#flags
+## severity = warning
+alias[trigger:has_country_flag] = value[country_flag]
+## severity = warning
+alias[trigger:has_planet_flag] = value[planet_flag]
+## severity = warning
+alias[trigger:has_pop_faction_flag] = value[pop_faction_flag]
+## severity = warning
+alias[trigger:has_star_flag] = value[star_flag]
+## severity = warning
+alias[trigger:has_species_flag] = value[species_flag]
+## severity = warning
+alias[trigger:has_pop_flag] = value[pop_flag]
+## severity = warning
+alias[trigger:has_fleet_flag] = value[fleet_flag]
+## severity = warning
+alias[trigger:has_ship_flag] = value[ship_flag]
+## severity = warning
+alias[trigger:has_global_flag] = value[global_flag]
+## severity = warning
+alias[trigger:has_leader_flag] = value[leader_flag]
+## severity = warning
+alias[trigger:has_ambient_object_flag] = value[ambient_object_flag]
+## severity = warning
+alias[trigger:has_megastructure_flag] = value[megastructure_flag]
+
+
+alias[trigger:has_relation_flag] = {
+	who = scope[country]
+	flag = value[relation_flag]
+	## cardinality = 0..1
+	is_reverse = bool
+}
+
+alias[trigger:reverse_has_relation_flag] = {
+	who = scope[country]
+	flag = value[relation_flag]
+}
+
+alias[trigger:has_government] = <government>
+alias[trigger:has_authority] = <authority>
+alias[trigger:has_valid_civic] = <civic>
+alias[trigger:has_civic] = <civic>
+alias[trigger:has_invalid_civic] = <civic>
+alias[trigger:has_policy_flag] = enum[policy_flag]
+
+
+alias[trigger:leader_of_faction] = <pop_faction>
+alias[trigger:leader_of_faction] = bool
+
+
+alias[trigger:is_same_value] = scope[any]
+
+
+#should check for <> too
+## replace_scope = { this = pop }
+alias[trigger:pop_percentage] = {
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	percentage = float[0.0..1.0]
+}
+
+#should check for <> too
+alias[trigger:support] = float[0.0..1.0]
+alias[trigger:used_naval_capacity_percent] = float
+alias[trigger:num_moons] = int
+
+alias[trigger:is_country_type] = <country_type>
+alias[trigger:has_ethic] = <ethos>
+alias[trigger:pop_has_ethic] = <ethos>
+
+
+#country only
+alias[trigger:is_angry_to] = scope[country]
+alias[trigger:is_patronizing_to] = scope[country]
+alias[trigger:is_dismissive_to] = scope[country]
+alias[trigger:is_threatened_to] = scope[country]
+alias[trigger:is_protective_to] = scope[country]
+alias[trigger:is_neutral_to] = scope[country]
+alias[trigger:is_friendly_to] = scope[country]
+alias[trigger:is_loyal_to] = scope[country]
+alias[trigger:is_cordial_to] = scope[country]
+alias[trigger:is_belligerent_to] = scope[country]
+alias[trigger:is_imperious_to] = scope[country]
+alias[trigger:is_arrogant_to] = scope[country]
+alias[trigger:is_enigmatic_to] = scope[country]
+alias[trigger:is_berserker_to] = scope[country]
+alias[trigger:is_hostile_to] = scope[country]
+alias[trigger:is_domineering_to] = scope[country]
+alias[trigger:is_unfriendly_to] = scope[country]
+alias[trigger:is_disloyal_to] = scope[country]
+alias[trigger:is_custodial_to] = scope[country]
+alias[trigger:is_rival] = scope[country]
+alias[trigger:is_in_federation_with] = scope[country]
+alias[trigger:has_defensive_pact] = scope[country]
+alias[trigger:has_research_agreement] = scope[country]
+alias[trigger:has_communications] = scope[country]
+alias[trigger:is_guaranteeing] = scope[country]
+alias[trigger:has_truce] = scope[country]
+alias[trigger:is_at_war_with] = scope[country]
+alias[trigger:is_within_borders_of] = scope[country]
+alias[trigger:has_non_aggression_pact] = scope[country]
+alias[trigger:is_controlled_by] = scope[country]
+alias[trigger:is_neighbor_of] = scope[country]
+alias[trigger:is_original_owner] = scope[country]
+alias[trigger:is_owned_by] = scope[country]
+alias[trigger:is_same_empire] = scope[country]
+alias[trigger:has_migration_access] = scope[country]
+alias[trigger:has_closed_borders] = scope[country]
+
+alias[trigger:is_same_species] = scope[country]
+alias[trigger:is_same_species] = scope[pop]
+alias[trigger:is_same_species] = scope[species]
+alias[trigger:is_same_species] = scope[leader]
+alias[trigger:is_same_species] = scope[ship] #Colony ship
+
+###Checks if the scoped object is originally of the same species, or currently of the exact same species instance, as another object
+alias[trigger:is_exact_same_species] = scope[species]
+alias[trigger:is_exact_same_species] = scope[country]
+alias[trigger:is_exact_same_species] = scope[pop]
+alias[trigger:is_subspecies] = scope[species]
+alias[trigger:is_subspecies] = scope[country]
+alias[trigger:is_subspecies] = scope[pop]
+#any scope
+alias[trigger:exists] = scope[any]
+
+alias[trigger:is_hostile] = scope[country]
+
+###Checks if the planet is the same as target planet
+alias[trigger:is_planet] = scope[planet]
+###Checks if the pop is the same as target pop
+alias[trigger:is_pop] = scope[pop]
+###Checks if the ship is the same as target ship
+alias[trigger:is_ship] = scope[ship]
+###Checks if the army is the same as target army
+alias[trigger:is_army] = scope[army]
+###Checks if the country is the same as target country
+alias[trigger:is_country] = scope[country]
+
+
+
+#should also check < >
+alias[trigger:habitability] = {
+	###This only works with who = pop or who = species. Who = country creates an error log entry (Vanilla usage of it is a bug) -Caligula
+	who = scope[pop]
+	who = scope[species]
+	value = float[0.0..1.0]
+}
+
+#should also check < >
+alias[trigger:has_hp] = int
+alias[trigger:has_hp_percentage] = float[0.0..1.0]
+
+###Checks if the leader has a specific experience level
+alias[trigger:has_level] = int
+
+#should also check < > and <=
+alias[trigger:end_game_years_passed] = int
+alias[trigger:mid_game_years_passed] = int
+
+alias[trigger:has_federation] = bool
+alias[trigger:is_at_war] = bool
+alias[trigger:is_ai] = bool
+alias[trigger:is_being_purged] = bool
+alias[trigger:is_enslaved] = bool
+alias[trigger:has_orbital_bombardment] = bool
+alias[trigger:has_owner] = bool
+alias[trigger:has_ground_combat] = bool
+alias[trigger:always] = bool
+alias[trigger:is_subject] = bool
+alias[trigger:is_under_colonization] = bool
+alias[trigger:recently_lost_war] = bool
+alias[trigger:is_colony] = bool
+alias[trigger:is_in_combat] = bool
+alias[trigger:is_star] = bool
+alias[trigger:is_asteroid] = bool
+alias[trigger:has_any_strategic_resource] = bool
+alias[trigger:is_war_leader] = bool
+alias[trigger:is_occupied_flag] = bool
+
+alias[trigger:is_planet_class] = <planet_class>
+alias[trigger:is_star_class] = <star_class>
+alias[trigger:is_ringworld] = bool
+alias[trigger:is_homeworld] = bool
+###checks if the planet/ship/fleet/system is inside a nebula
+alias[trigger:is_inside_nebula] = bool
+###Checks if the planet has a moon
+alias[trigger:has_moon] = bool
+###Checks the planet's number of moons
+alias[trigger:num_moons] = int
+###Checks if the planet can theoretically be colonized
+alias[trigger:is_colonizable] = bool
+
+alias[trigger:is_ideal_planet_class] = {
+	who = scope[country]
+	who = scope[pop]
+	status = bool
+}
+
+###Returns true if the scopes system contains at least one natural wormhole
+alias[trigger:has_natural_wormhole] = bool
+
+
+#ideally would check scopes and then planet/country edict
+alias[trigger:has_edict] = <edict>
+
+
+alias[trigger:is_war_participant] = {
+	who = scope[country]
+	## cardinality = 0..1
+	side = scope[country]
+	## cardinality = 0..1
+	side = enum[war_sides]
+}
+
+alias[trigger:opinion] = {
+	who = scope[country]
+	value = int
+}
+
+#should check <>
+alias[trigger:happiness] = float[0.0..1.0]
+alias[trigger:vassals] = int
+###Checks the number of regular empires in the galaxy
+alias[trigger:num_empires] = int
+# ###Checks the number of members in the alliance
+#alias[trigger:members] = int
+###Checks the country's number of established communications
+alias[trigger:num_communications] = int
+alias[trigger:num_ascension_perks] = int
+alias[trigger:num_ascension_perk_slots] = int
+alias[trigger:num_owned_active_gateways] = int
+alias[trigger:num_active_gateways] = int
+alias[trigger:num_trait_points] = int
+alias[trigger:has_skill] = int[1..10]
+###Checks the war exhaustion of the war's attackers
+alias[trigger:attacker_exhaustion_score] = int
+###Checks the war exhaustion of the war's defenders
+alias[trigger:defender_war_exhaustion] = int
+###Checks the country's total war exhaustion for all offensive wars
+alias[trigger:off_war_exhaustion_sum] = int
+###Checks the country's total war exhaustion for all defemsove wars
+alias[trigger:def_war_exhaustion_sum] = int
+###Checks the scope's total fleet power
+alias[trigger:fleet_power] = int
+
+###is_megastructure_type = <name of type>. Compares the type of scope's mega structure to a type from the database
+alias[trigger:is_megastructure_type] = <megastructure>
+###is_upgrading = <yes/no>. Checks if the scope's fleet or mega structure is currently upgrading
+alias[trigger:is_upgrading] = bool
+alias[trigger:has_ring] = bool
+alias[trigger:is_moon] = bool
+alias[trigger:pops_have_happiness] = bool
+alias[trigger:is_pirate] = bool
+# ###Checks if the planet/fleet is controlled by a sector
+#alias[trigger:sector_controlled] = bool
+###Checks if the scoped ship design, ship or fleet (all ships) has a designable ship size.
+alias[trigger:is_designable] = bool
+
+
+alias[trigger:leader_class] = enum[leader_classes]
+alias[trigger:pre_ruler_leader_class] = enum[leader_classes_no_ruler]
+
+alias[trigger:has_mission] = <observation_station_mission>
+
+#these should check < and > too
+alias[trigger:years_passed] = int
+alias[trigger:num_owned_planets] = int
+alias[trigger:planet_stability] = int[0..100]
+alias[trigger:num_pops] = int
+alias[trigger:planet_size] = int
+###Checks the number of fallen empires in the galaxy
+alias[trigger:num_fallen_empires] = int
+alias[trigger:colony_age] = int
+alias[trigger:num_ethics] = int
+
+
+alias[trigger:is_ship_size] = <ship_size>
+
+alias[trigger:is_ship_class] = enum[shipsize_classes]
+
+alias[trigger:is_researching_area] = enum[research_areas]
+#should have < >
+alias[trigger:count_tech_options] = {
+	area = enum[research_areas]
+	count = int
+}
+
+## push_scope = leader
+alias[trigger:research_leader] = {
+	area = enum[research_areas]
+	## cardinality = 1..100
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+
+###Checks the average ethics divergence on the planet. Not used in Vanilla, testing advised. Please inform Dayshine and Caligula on the results of the tests!
+alias[trigger:ethos] = float[0.0..1.0]
+
+alias[trigger:gender] = enum[genders]
+
+###Checks if the country is a primitive, pre-FTL civilization
+alias[trigger:is_primitive] = bool
+alias[trigger:is_sapient] = bool
+alias[trigger:is_preventing_anomaly] = bool
+alias[trigger:has_observation_outpost] = bool
+alias[trigger:starting_system] = bool
+###Checks if the planet is still owned by its first colonizer
+alias[trigger:original_owner] = bool
+###Checks if the pop is a robot
+alias[trigger:is_robot_pop] = bool
+###Checks if the scoped fleet is an alliance fleet.
+alias[trigger:is_alliance_fleet] = bool
+alias[trigger:is_capital] = bool
+alias[trigger:has_blocker] = bool
+alias[trigger:has_blocker] = <deposit.blocker>
+
+
+###Checks if the planet can be colonized by target country
+alias[trigger:can_colonize] = {
+	who = scope[country]
+	status = bool
+}
+###Checks the relative amount of already-researched tech between the country and target country
+alias[trigger:tech_unlocked_ratio] = {
+	who = scope[country]
+	ratio = float[0.0..1.0]
+}
+
+alias[trigger:has_ascension_perk] = <ascension_perk>
+
+#alias[trigger:ascension_perk] = <ascension_perk>
+
+alias[trigger:has_technology] = <technology>
+
+###Checks if a country has the given tradition and it is not swapped.
+alias[trigger:has_non_swapped_tradition] = <tradition>
+
+###Checks if a country has the given swapped tradition.
+alias[trigger:has_swapped_tradition] = enum[tradition_swap]
+
+alias[trigger:check_variable] = {
+	which = value[variable]
+	## cardinality = 1..2
+	value = float
+	## cardinality = 1..2
+	value = scope[any]
+	## cardinality = 1..2
+	value = value[variable]
+}
+
+
+#Corrections needed:
+#	source = scope (possibly any?)
+#	min/max_distance now (very nearly exclusively) use <= for max and >= for min. Presumably there was a reason for the change and this should be enforced
+#	min should not be higher than max
+#	bypass_empire = country + only if not uses_bypass = no
+#	TODO: use_bypasses without bypass_empire does not work and should be an error
+#	min/max_jumps cannot have type = euclidean
+###Checks the ship/fleet/planet/leader/pop/system's galaxy map distance to target in absolute units
+alias[trigger:distance] = {
+	#Leader scope does not appear to work correctly -Caligula
+	source = scope[planet]
+	source = scope[system]
+	source = scope[pop]
+	source = scope[fleet]
+	source = scope[ship]
+	## cardinality = 0..1
+	###Must use >= or will create error log entry
+	min_distance = int
+	## cardinality = 0..1
+	###Must use <= or will create error log entry
+	max_distance = int
+	## cardinality = 0..1
+	###Euclidean means the shortest distance from A to B, "as the crow flies" (hyperlane by default)
+	type = enum[hyperlane_euclidean]
+	## cardinality = 0..1
+	###Whether to use bypasses (wormholes/gateways) when evaluating distance (yes by default). Caligula's note: I think it is no by default. If it is "yes", it requires bypass_empire to work
+	use_bypasses = bool
+	## cardinality = 0..1
+	###Determines what bypass can be used. This parameter is ignored if uses_bypass=false. If unset, bypasses will be ignored. It will check the bypasses available to the specified country. To check all possible bypasses, use e.g. the global event country.
+	bypass_empire = scope[country]
+	## cardinality = 0..1
+	min_jumps = int
+	## cardinality = 0..1
+	max_jumps = int
+}
+
+alias[trigger:is_species_class] = <species_class>
+
+#could be refined to check leader or species traits depending on scope
+alias[trigger:has_trait] = <trait>
+
+alias[trigger:pop_has_trait] = <trait.species_trait>
+alias[trigger:has_ruler_trait] = <trait.ruler_trait>
+
+
+
+###Checks if a species/pop/leader has a particular citizenship type in their country
+alias[trigger:has_citizenship_type] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[citizenship_types]
+}
+###Checks if a species/pop/leader has a particular military service type in their country
+alias[trigger:has_military_service_type] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[military_service_types]
+}
+###Checks if a species/pop/leader has a particular purge type in their country
+alias[trigger:has_purge_type] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[purge_types]
+}
+###Checks if a species/pop/leader has a particular slavery type in their country
+alias[trigger:has_slavery_type] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[slavery_types]
+}
+
+###Checks if the pop is prevented from reproducing
+alias[trigger:has_population_control] = bool
+###Checks if the pop is prevented from reproducing
+alias[trigger:has_population_control] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[population_controls]
+}
+###Checks if the pop is prevented from migrating
+alias[trigger:has_migration_control] = bool
+	###Checks if the pop is prevented from migrating
+alias[trigger:has_migration_control] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[migration_controls]
+}
+###Checks if a species/pop/leader has a particular living standard in their country
+alias[trigger:has_living_standard] = {
+	## cardinality = 0..1
+	country = scope[country]
+	type = enum[living_standards]
+}
+
+
+alias[trigger:custom_tooltip] = localisation
+alias[trigger:custom_tooltip] = {
+	## cardinality = 0..1
+	text = localisation
+	## cardinality = 0..1
+	fail_text = localisation
+	## cardinality = 0..1
+	success_text = localisation
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+#< >
+alias[trigger:years_of_peace] = {
+	## cardinality = 0..1
+	delay = int
+	value = int
+}
+alias[trigger:fleet_size] = int
+
+alias[trigger:is_difficulty] = int[0..4]
+
+
+alias[trigger:has_building] = bool
+alias[trigger:has_building] = <building>
+
+alias[trigger:has_building_construction] = bool
+alias[trigger:has_building_construction] = <building>
+
+alias[trigger:has_ai_personality] = <ai_personality>
+alias[trigger:has_ai_personality_behaviour] = enum[ai_personality_behaviours]
+
+
+#check < >
+alias[trigger:has_country_resource] = {
+	type = <resource>
+	amount = int
+}
+alias[trigger:has_resource] = <resource>
+alias[trigger:has_resource] = bool
+alias[trigger:has_resource] = {
+	type = <resource>
+	amount = int
+}
+
+alias[trigger:has_strategic_resource] = bool
+
+alias[trigger:has_monthly_income] = {
+	resource = <resource>
+	value = int
+}
+
+alias[trigger:has_deposit] = bool
+alias[trigger:has_deposit] = <deposit>
+
+###Checks if the planet has a deposit for a specific ship class
+alias[trigger:has_deposit_for] = enum[shipsize_classes]
+
+
+alias[trigger:can_be_subject] = {
+	overlord = scope[country]
+	subject_type = <subject_type>
+}
+
+alias[trigger:is_subject_type] = <subject_type>
+
+
+###Checks if the country has claims on the given country or system.
+alias[trigger:has_claim] = scope[country]
+alias[trigger:has_claim] = scope[system]
+
+
+alias[trigger:local_has_dlc] = enum[DLCs]
+alias[trigger:host_has_dlc] = enum[DLCs]
+###Checks if the game is running in multiplayer
+alias[trigger:is_multiplayer] = bool
+
+
+###Appears to now work with yes/no (only)
+alias[trigger:member_of_faction] = bool
+
+###Checks if the country has a specific event chain
+alias[trigger:has_event_chain] = <event_chain>
+
+###Checks if the country has completed a specific counter in an event chain
+alias[trigger:has_completed_event_chain_counter] = {
+	event_chain = <event_chain>
+	counter = enum[event_chain_counter]
+}
+
+###Checks if the country has a specific special project available
+alias[trigger:has_special_project] = <special_project>
+
+
+#scripted triggers
+alias[trigger:<scripted_trigger>] = bool
+
+
+
+
+#Generated
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+### Checks the country's total army maintenance expenses for the previous month, in energy credits
+alias[trigger:army_maintenance] = int
+
+### Checks the army's type
+alias[trigger:army_type] = <army>
+
+
+### Checks the war exhaustion of the war's attackers
+alias[trigger:attacker_war_exhaustion] = int
+
+### Checks the country's energy credit balance
+alias[trigger:balance] = int
+
+
+
+### Returns true if the specified number of sub-triggers return true
+###calc_true_if = { amount = 2 <trigger> <trigger> <trigger> }
+alias[trigger:calc_true_if] = {
+	amount = int
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+### Checks if the country can change a specific policy
+alias[trigger:can_change_policy] = <policy>
+
+### Checks if the country is allowed to control target country's border access to the country
+alias[trigger:can_control_access_for] = scope[country]
+
+### Checks if the country can declare war against target country
+alias[trigger:can_declare_war] = {
+	target = scope[country]
+	attacker_war_goal = <war_goal>
+}
+
+
+### Checks if scoped pop can join a faction. Please confirm this is yes/no (not faction) with Dayshine
+alias[trigger:can_join_factions] = bool
+
+### Checks if one of the faction's parameters is the same as target scope
+alias[trigger:check_pop_faction_parameter] = {
+	which = enum[pop_faction_parameters]
+	value = scope[any]
+}
+
+### Checks the country's total colony maintenance expenses for the previous month, in energy credits
+alias[trigger:colony_maintenance] = int
+
+### Checks the country's command limit
+alias[trigger:command_limit] = int
+
+### The enclosed trigger will be completely ignored if the condition in "trigger" isn't true. Useful to hide part of tooltips that are not relevant.
+### Please confirm usage with Dayshine
+alias[trigger:conditional_tooltip] = {
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+### Checks the country's construction expenses for the previous month
+alias[trigger:construction_expenses] = int
+
+### Shows custom text only when the associated trigger fails
+alias[trigger:custom_tooltip_fail] = {
+	text = localisation
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+### Shows custom text only when the associated trigger passes
+alias[trigger:custom_tooltip_success] = {
+	text = localisation
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+### Trigger an assertion to stop the debugger when encountering this trigger; returns the value it is assigned
+alias[trigger:debug_break] = scalar
+
+
+### Checks the ship/fleet/planet/leader/pop/system's distance to the galactic core in percent, where center = 0 and galactic rim = 100
+alias[trigger:distance_to_core_percent] = int
+
+### Checks the ship/fleet/planet/system's galaxy map distance to target empire
+alias[trigger:distance_to_empire] = {
+	who = scope[country]
+	distance = int
+}
+
+### Checks the country's monthly energy credit expenses
+alias[trigger:expenses] = int
+
+### For 'desc={trigger={' use. Shows custom text when the associated trigger fails.
+alias[trigger:fail_text] = {
+	text = localisation
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+### Checks the country's federation expenses for the previous month
+alias[trigger:federation_expenses] = int
+
+
+### Compares the former citizenship type with the given one.
+alias[trigger:former_citizenship_type] = enum[citizenship_types]
+
+### Compares the former living standard type with the given one.
+alias[trigger:former_living_standard_type] = enum[living_standards]
+
+### Compares the former migration control type with the given one.
+alias[trigger:former_migration_control_type] = enum[migration_controls]
+
+### Compares the former military service type with the given one.
+alias[trigger:former_military_service_type] = enum[military_service_types]
+
+### Compares the former population control type with the given one.
+alias[trigger:former_population_control_type] = enum[population_controls]
+
+### Compares the former purge type with the given one.
+alias[trigger:former_purge_type] = enum[purge_types]
+
+### Compares the former slavery type with the given one.
+alias[trigger:former_slavery_type] = enum[slavery_types]
+
+### Checks if the country has a specific percentage (0.00-1.00) of the galaxy within its borders
+alias[trigger:galaxy_percentage] = float[0.0..1.0]
+
+### Checks if the country has specific graphical culture
+alias[trigger:graphical_culture] = <graphical_culture>
+
+### Checks the average happiness on the planet
+alias[trigger:happiness_planet] = int
+
+### Checks if the system is accessible to the target country with construction vessels
+alias[trigger:has_access_fleet] = scope[country]
+
+### Checks if the planet has an anomaly
+alias[trigger:has_anomaly] = bool
+
+### Checks if the scope has a megastructure
+alias[trigger:has_any_megastructure] = bool
+
+### Checks if the planet has an army
+alias[trigger:has_army] = bool
+
+### Check if the country has federation association status with target country
+alias[trigger:has_association_status] = scope[country]
+
+### Checks if the fleet/ship has an active auto-move target set
+alias[trigger:has_auto_move_target] = bool
+
+### Checks if the country has a valid casus belli (any casus belli or a specific one) on the given country.
+alias[trigger:has_casus_belli] = {
+	target = scope[country]
+	## cardinality = 0..1
+	type = <casus_belli>
+}
+
+### Checks if the pop is prevented from migrating
+alias[trigger:has_colonization_control] = bool
+
+### Checks the planet's progress towards completing colonization
+alias[trigger:has_colony_progress] = int
+
+### Checks if a ship has a certain component
+alias[trigger:has_component] = <component_template>
+
+### Checks if two countries have a migration treaty.
+alias[trigger:has_diplo_migration_treaty] = scope[country]
+
+### Checks if the country has established contact with target country
+alias[trigger:has_established_contact] = scope[country]
+
+### Checks if the country has a specific ship design available
+alias[trigger:has_existing_ship_design] = <ship_size>
+
+### Checks if the leader has a specific amount of experience
+alias[trigger:has_experience] = int
+
+### Checks if the ship/fleet has a specific fleet order. survey_planet_order is a valid entry, I (Caligula) don't know any others but there are likely some
+alias[trigger:has_fleet_order] = scalar #TODO fleet order
+
+### Checks if the system has a hyperlane connection to target system
+alias[trigger:has_hyperlane_to] = scope[galactic_object]
+alias[trigger:has_hyperlane_to] = scope[country]
+
+### Checks if the leader has any, or a specific, mandate
+alias[trigger:has_mandate] = bool
+alias[trigger:has_mandate] = <mandate>
+
+### Checks if a country or star has a megastructure. Does not accept boolean.
+alias[trigger:has_megastructure] = <megastructure>
+
+### Checks if the planet has an orbital mining station
+alias[trigger:has_mining_station] = bool
+
+### Checks if a country has a certain notification modifier
+alias[trigger:has_notification_modifier] = <notification_modifier>
+
+#has_orbital_bombardment_stance = selective
+
+### Checks to what degree the planet is being bombarded
+alias[trigger:has_orbital_bombardment_stance] = <bombardment_stance>
+
+### Checks if the planet has any kind of orbital station
+alias[trigger:has_orbital_station] = bool
+
+### Checks if the system has planet of specific class
+alias[trigger:has_planet_class] = <planet_class>
+
+### Checks if the planet has a specific planet modifier
+alias[trigger:has_planet_modifier] = <planet_modifier>
+
+### Checks if the scoped country has a specific point of interest in its situation log
+alias[trigger:has_point_of_interest] = {
+	poi = value[point_of_interest]
+}
+
+### Checks if a system contains any fleets, stations, mega structures or colonized planets.
+alias[trigger:has_presence] = bool
+
+### Checks if the planet has an orbital researc station
+alias[trigger:has_research_station] = bool
+
+### Checks if a country has the same ethos (complete set of ethics) as a country or pop
+alias[trigger:has_same_ethos] = scope[country]
+
+### Checks the scoped country has ever encountered a bypass of a given type before
+alias[trigger:has_seen_any_bypass] = <bypass>
+
+### Checks the scoped country has encountered a specific bypass before
+alias[trigger:has_seen_specific_bypass] = scope[galactic_object] #TODO bypass scope? -Is this correct?
+
+### Checks if the starbase has a specific building, WARNING: Does not count queued buildings
+alias[trigger:has_starbase_building] = <starbase_building>
+
+### Checks if the starbase has a specific module
+alias[trigger:has_starbase_module] = <starbase_module>
+
+### Compares the starbase ship size
+alias[trigger:has_starbase_size] = <ship_size> #TODO starbase ship size
+
+### Checks the current status of the scoped ship or fleet.
+alias[trigger:has_status] = enum[colossus_status]
+
+enums = {
+	enum[colossus_status] = {
+		charging
+		firing
+	}
+}
+
+### Checks if the country has surveyed any planet of a specific class
+alias[trigger:has_surveyed_class] = <planet_class>
+
+### Checks if the country has a tech research option currently available
+alias[trigger:has_tech_option] = <technology>
+
+### Checks if a country has the given tradition.
+alias[trigger:has_tradition] = <tradition>
+
+### Checks if two countries have a research agreement.
+alias[trigger:has_tributary] = scope[country]
+
+### Checks if the country has a valid AI personality
+alias[trigger:has_valid_ai_personality] = bool
+
+### Checks if a war goal is set.
+alias[trigger:has_war_goal] = bool
+
+
+### Checks if the country's ideal planet class is a specific class
+alias[trigger:ideal_planet_class] = <planet_class>
+
+### Checks the country's monthly energy credit income
+alias[trigger:income] = int
+
+### Checks the country's intel level of target system
+alias[trigger:intel_level] = enum[intel_level]
+### Checks the country's intel level of target system
+alias[trigger:intel_level] = {
+	level = enum[intel_level]
+	system = scope[system]
+}
+
+enums = {
+	enum[intel_level] = {
+		none
+		low
+		medium
+		high
+		full
+	}
+}
+
+#inverted_switch = {
+# 	trigger = pop_has_ethic
+# 	ethic_xenophile = { <trigger> }
+# 	ethic_xenophobe = { <trigger> }
+# 	default = { <trigger> }
+# }
+
+### Switch case for a trigger treated as NOT.
+alias[trigger:inverted_switch] = {
+	trigger = scalar
+	## cardinality = 0..inf
+	scalar = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+### checks if a country has an advisor
+alias[trigger:is_advisor_active] = bool
+
+# ### Checks if the pop is being purged via script effect
+#alias[trigger:is_being_force_purged] = bool
+
+### Checks if the ship/fleet is being repaired
+alias[trigger:is_being_repaired] = bool
+
+### Checks if the system is bottleneck within the range NDefines::NGameplay::SYSTEM_BOTTLENECK_RADIUSis_bottleneck_system = yes
+alias[trigger:is_bottleneck_system] = bool
+
+### Checks if a system has the bridge flag or not.
+alias[trigger:is_bridge] = bool
+
+### Checks if the scoped construction ship is building the specified thing
+###is_constructing = megastructure | <megastructure type> | starbase | mining_station | research_station | observation_post | <ship class>
+alias[trigger:is_constructing] = megastructure
+alias[trigger:is_constructing] = <megastructure>
+alias[trigger:is_constructing] = <ship_size>
+alias[trigger:is_constructing] = enum[construction_type]
+
+enums = {
+	enum[construction_type] = {
+		starbase
+		mining_station
+		research_station
+		observation_post
+	}
+}
+
+### Check if current game allows crises
+alias[trigger:is_crises_allowed] = bool
+
+### Checks if the spatial object is its owner's custom capital location
+alias[trigger:is_custom_capital_location] = bool
+
+### Checks if the ship is damaged
+alias[trigger:is_damaged] = bool
+
+### Checks if the ship/fleet is disabled
+alias[trigger:is_disabled] = bool
+
+### Checks if a leader is a special event leader (defined in create_leader)
+alias[trigger:is_event_leader] = bool
+
+### Checks if the country is the leader of their federation
+alias[trigger:is_federation_leader] = bool
+
+### Checks if the ship/fleet is idfle
+alias[trigger:is_fleet_idle] = bool
+
+#is_in_cluster = resource_cluster_3
+
+### Checks if the planet/system belongs to a specific spawning cluster
+alias[trigger:is_in_cluster] = scalar #TODO cluster?
+
+### Checks if the planet/ship/fleet/system is inside the borders of the target country
+alias[trigger:is_inside_border] = scope[country]
+
+### Check if current game is running in ironman mode
+alias[trigger:is_ironman] = bool
+
+### checks if a planet/country has a particular species as its dominant species
+alias[trigger:is_majority_species] = scope[species]
+
+### Checks if the country is the overlord of any subject countries
+alias[trigger:is_overlord] = bool
+
+### Checks if the country has an overlord attitude towards target country
+alias[trigger:is_overlord_to] = scope[country]
+
+### Checks if the planet/country/ship/system/ambient object has a specific point of interest for a specific event chain for a specific country
+alias[trigger:is_point_of_interest] = {
+	id = scalar
+	event_chain = <event_chain>
+	owner = scope[country]
+}
+
+### Checks if the country's AI prefers weapons using this component tag
+alias[trigger:is_preferred_weapons] = enum[component_tags]
+
+### Checks if the planet is the system's primary star
+alias[trigger:is_primary_star] = bool
+
+### Checks if the country is currently researching a specific technology
+alias[trigger:is_researching_technology] = <technology>
+
+### Checks if the system is on the galactic rim
+alias[trigger:is_rim_system] = bool
+
+### Checks if the pop/country is of the same species class as another pop/country
+alias[trigger:is_same_species_class] = scope[pop]
+alias[trigger:is_same_species_class] = scope[country]
+
+### Checks if the scope is set for appropriate target
+alias[trigger:is_scope_set] = scope[any]
+
+### Checks if the current scope is valid
+alias[trigger:is_scope_valid] = bool
+
+### Checks if the pop/country's founder species is of a specific pre-defined species
+alias[trigger:is_species] = scalar #TODO species
+
+### Checks if the planet/system has been survey by target country
+alias[trigger:is_surveyed] = {
+	who = scope[country]
+	status = bool
+}
+
+### Checks if the planet has ever been terraformed
+alias[trigger:is_terraformed] = bool
+
+### Checks if the planet is currently being terraformed
+alias[trigger:is_terraforming] = bool
+
+### Checks the country's tutorial level (0 off, 1 limited, 2 full)
+alias[trigger:is_tutorial_level] = int
+
+### Checks if the pop is unemployed
+alias[trigger:is_unemployed] = bool
+
+### Checks to see if target scope is valid for the country/planet/tile/army
+alias[trigger:is_valid] = scope[any]
+
+### Checks if the last policy changed by the country was a specific policy
+alias[trigger:last_changed_policy] = <policy>
+
+### Check if the last species rights type changed for the pop or leader is of type type
+alias[trigger:last_changed_species_rights_type] = enum[species_rights_type]
+
+
+### Checks if the country's last researched technology was a specific tech
+alias[trigger:last_increased_tech] = <technology>
+
+
+### Prints a message to game.log for debugging purposes
+## scope = all
+alias[trigger:log] = scalar
+
+### Checks if the local human is logged in to a Pdx account. This WILL cause an out of sync if used for anything that can change the game state
+alias[trigger:logged_in_to_pdx_account] = bool
+
+### Checks the country's max naval capacity in absolute numbers
+alias[trigger:max_naval_capacity] = int
+
+
+
+### Checks if the observation post has achieved specific progress in a mission
+alias[trigger:mission_progress] = float[0.0..1.0]
+
+### Checks the country's number of armies
+alias[trigger:num_armies] = int
+
+### Checks the planet's total amount of energy
+alias[trigger:num_energy] = int
+
+### Checks the planet's total amount of engineering research
+alias[trigger:num_engineering] = int
+
+### Checks the country's number of fleets
+alias[trigger:num_fleets] = int
+
+### Checks how many of target country's ships that the country has destroyed
+alias[trigger:num_killed_ships] = {
+	target = scope[country]
+	value = int
+}
+
+### Checks the number of marauder empires specified by the galaxy setup
+alias[trigger:num_marauder_empires_to_spawn] = int
+
+### Checks the planet's total amount of minerals
+alias[trigger:num_minerals] = int
+
+### Checks the planet's number of modifiers
+alias[trigger:num_modifiers] = int
+
+### Checks the planet's total amount of physics research
+alias[trigger:num_physics] = int
+
+### Checks the country's number of researched rare technologies
+alias[trigger:num_rare_techs] = int
+
+### Checks the country/fleet's number of ships
+alias[trigger:num_ships] = int
+
+### Checks the planet's total amount of society research
+alias[trigger:num_society] = int
+
+### Checks if the number of species on a planet, in an empire or in a pop faction is according to the argument. Does not count genetically modified species as unique.
+alias[trigger:num_species] = int
+
+### Counts the number of starbases owned by the scoped country
+alias[trigger:num_starbases] = int
+
+### Checks how many planets the country has taken from target country
+alias[trigger:num_taken_planets] = {
+	target = scope[country]
+	value = int
+}
+
+### Checks the country/pop/leader/species' number of traits
+alias[trigger:num_traits] = int
+
+### Checks if the number of species on a planet, in an empire or in a pop faction is according to the argument. Counts genetically modified species as unique.
+alias[trigger:num_unique_species] = int
+
+### Checks how far removed the country/pop's ethos is from target's
+alias[trigger:opposing_ethics_divergence] = {
+	steps = int
+	who = scope[country]
+	who = scope[pop]
+}
+
+
+### Checks if the scoped country controls any system containing a bypass of a specific type
+alias[trigger:owns_any_bypass] = <bypass>
+
+### Checks if the pop is allowed to live on its planet
+alias[trigger:pop_can_live_on_planet] = bool
+
+# ### Checks if a pop, or the pops of a particular species can reproduce
+#alias[trigger:pop_can_reproduce] = bool
+
+### Checks the maintenace costs of a pop
+alias[trigger:pop_maintenance_cost] = int
+
+### Checks if a pop is currently producing a particular resource
+alias[trigger:pop_produces_resource] = {
+	type = <resource>
+	amount = float
+}
+
+### Checks the country's gross amount of produced energy credits
+alias[trigger:produced_energy] = int
+
+
+### Checks the country's running energy credit balance
+alias[trigger:running_balance] = int
+
+
+### Checks the country's total ship maintenance expenses for the previous month, in energy credits
+alias[trigger:ship_maintenance] = int
+
+### Checks if a pop's planet has a specific percentage (0.00-1.00) of the same species enslaved
+alias[trigger:species_planet_slave_percentage] = float[0.0..1.0]
+
+### Checks if the species (or pop/empire's dominant species) uses a certain portrait
+alias[trigger:species_portrait] = <portrait>
+### Checks if the species (or pop/empire's dominant species) uses a certain portrait
+alias[trigger:species_portrait] = <portrait_group>
+
+
+
+
+### Checks the country's total orbital station maintenance expenses for the previous month, in energy credits
+alias[trigger:station_maintenance] = int
+
+### Checks the country's amount of stored engineering research
+alias[trigger:stored_engineering_points] = int
+
+### Checks the country's amount of stored physics research
+alias[trigger:stored_physics_points] = int
+
+### Checks the country's amount of stored society research
+alias[trigger:stored_society_points] = int
+
+### Checks if the country is allowed by its overlord to take diplomatic action towards target country
+alias[trigger:subject_can_diplomacy] = scope[country]
+
+### For 'desc={trigger={' use. Shows custom text when the associated trigger passes.
+alias[trigger:success_text] = {
+	text = localisation
+	## cardinality = 0..inf
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+#switch = {
+# 	trigger = pop_has_ethic
+# 	ethic_xenophile = { <trigger> }
+# 	ethic_xenophobe = { <trigger> }
+# 	default = { <trigger> }
+# }
+
+### Switch case for a trigger
+alias[trigger:switch] = {
+	trigger = scalar
+	## cardinality = 0..inf
+	scalar = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+
+### Checks if planet is terraformed by country.
+alias[trigger:terraformed_by] = scope[country]
+
+### For 'desc={trigger={' use. Shows custom text
+alias[trigger:text] = localisation
+
+### Checks target country's opinion value of the current country
+alias[trigger:their_opinion] = {
+	who = scope[country]
+	value = int
+}
+
+
+
+### Checks the country's energy credits expenses from trade for the previous month
+alias[trigger:trade_expenses] = int
+
+### Checks the country's energy credits income from trade for the previous month
+alias[trigger:trade_income] = int
+
+### Checks the country's trust of the target country
+alias[trigger:trust] = {
+	who = scope[country]
+	value = int
+}
+
+### Checks a mega structure amount of upgrade days left.
+alias[trigger:upgrade_days_left] = int
+
+### Checks the country's used naval capacity in absolute numbers
+alias[trigger:used_naval_capacity_integer] = int
+
+### Checks if a war has a specific war goal
+alias[trigger:using_war_goal] = {
+	type = <war_goal>
+	owner = scope[country]
+}
+
+### Checks if the scoped fleet can target the given planet with its planet killer weapon
+alias[trigger:valid_planet_killer_target] = scope[planet]
+
+### Checks amount of target country's fleets that went MIA when the war began
+alias[trigger:war_begun_num_fleets_gone_mia] = {
+	who = scope[country]
+	value = int
+}
+
+#would_join_war = { attacker = <target> defender = <target> side = <target> }
+
+### Checks if the country would join the side of target country in a hypothetical war
+alias[trigger:would_join_war] = {
+	attacker = scope[country]
+	defender = scope[country]
+	side = scope[country]
+}
+
+
+## scope = country
+alias[trigger:is_researching_special_project] = <special_project>
+
+
+
+#Count stuff
+
+## scope = any
+## replace_scope = { this = sector }
+###Iterate through all sectors in the game
+alias[trigger:count_sector] = {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## scope = country
+## replace_scope = { this = sector }
+###Iterate through every owned sector
+alias[trigger:count_owned_sector] = {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = country }
+### Iterate through all bordering countries of a system
+alias[trigger:count_bordering_country] = {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = fleet }
+### Iterate through each fleet this fleet is in combat with
+alias[trigger:count_combatant_fleet] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = country }
+### Iterate through all countries
+alias[trigger:count_country] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = deposit }
+### Checks the number of deposits on the tile/planet that meet the specified criteria
+alias[trigger:count_deposits] =  {
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = megastructure }
+### Iterate through each megastructure
+alias[trigger:count_megastructure] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = country }
+### Iterate through all neighbor countries
+alias[trigger:count_neighbor_country] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = army }
+### Iterate through each army that is owned by the country
+alias[trigger:count_owned_army] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = megastructure }
+### Iterate through each owned megastructure
+alias[trigger:count_owned_megastructure] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = pop }
+### Iterate through all owned pops
+alias[trigger:count_owned_pop] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = species }
+### Iterate through each species of a country's owned pops
+alias[trigger:count_owned_pop_species] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = starbase }
+### Iterate through every owned starbase
+alias[trigger:count_owned_starbase] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = army }
+### Iterate through each defending army on a planet
+alias[trigger:count_planet_army] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = planet }
+### Checks the planets in system that meet the criteria
+alias[trigger:count_planets] =  {
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = leader }
+### Iterate through each leader that is recruitable for the country
+alias[trigger:count_pool_leader] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = country }
+### Iterate through all relations
+alias[trigger:count_relation] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = system }
+### Iterate through all rim systems
+alias[trigger:count_rim_system] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+### Checks the number of starbase modules that are of the specified type
+alias[trigger:count_starbase_modules] =  {
+	count = int
+	type = <starbase_module>
+}
+
+#TODO ship_size
+### Checks if the scoped country has a specified quantity of a starbase size
+alias[trigger:count_starbase_sizes] =  {
+	count = int
+	starbase_size = <ship_size> #<ship_size.starbase>
+}
+
+## replace_scope = { this = system }
+### Iterate through all systems
+alias[trigger:count_system] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = megastructure }
+### Iterate through each megastructure in system
+alias[trigger:count_system_megastructure] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = system }
+### Iterate through all systems within the country's borders
+alias[trigger:count_system_within_border] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = country }
+### Iterate through all war participants
+alias[trigger:count_war_participant] =  {
+	count = all
+	count = int
+	## cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+}
+
+## replace_scope = { this = country }
+### Checks the number of participants in the war on a specific side that meet the specified criteria
+alias[trigger:count_war_participants] = {
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	side = scope[country]
+	count = int
+}
+
+#Count triggers: Should all check for < > on the ints
+## replace_scope = { this = pop_faction }
+alias[trigger:count_pop_factions] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = species }
+alias[trigger:count_species] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = species }
+alias[trigger:count_exact_species] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = ship }
+alias[trigger:count_fleet_ships] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = ship }
+alias[trigger:count_system_ships] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = army }
+alias[trigger:count_armies] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = ship }
+alias[trigger:count_ships] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = ship }
+alias[trigger:count_owned_ships] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = pop }
+alias[trigger:count_owned_pops] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = pop }
+alias[trigger:count_pops] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+## replace_scope = { this = country }
+alias[trigger:count_diplo_ties] = {
+	count = int
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+#side should be one of the previous two scopes
+#< >
+## replace_scope = { this = country }
+###Checks the amount of potential war participants in a specific war that meet the specified criteria
+alias[trigger:count_potential_war_participants] = {
+	attacker = scope[country]
+	defender = scope[country]
+	side = scope[country]
+	## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	count = int
+}
+
+
+
+
+
+#2.2
+
+###Checks the pop_faction's approval level. Is a float (0.0-1.0).
+alias[trigger:faction_approval] = float[0.0..1.0]
+
+###Check if scoped species is half species of specific/any species
+alias[trigger:is_half_species] = scope[species]
+
+###Check if scoped species is half species of specific/any species
+alias[trigger:is_half_species] = any
+
+###Checks if the last building queued/unqueued/built/demolished/upgraded was the specified building
+alias[trigger:last_building_changed] = <building>
+
+alias[trigger:empire_size] = int
+
+###Checks if the last district queued/unqueued/built/demolished/upgraded was the specified district
+alias[trigger:last_building_changed] = <district>
+
+###Checks the planet's available housing
+alias[trigger:free_housing] = int
+
+###Checks if the pop's species is allowed to live on its planet
+alias[trigger:pop_can_live_on_planet] = bool
+
+###Checks the number of in-game days passed since the 2200.1.1 start
+alias[trigger:days_passed] = int
+
+###Checks the planet's available amenities
+alias[trigger:free_amenities] = int
+
+###Checks the planet's available amenities
+alias[trigger:has_deficit] = <resource>
+
+###Checks the planet's available amenities
+alias[trigger:has_commercial_pact] = scope[country]
+
+###Checks specific resource stockpile for the country scope
+alias[trigger:resource_stockpile_compare] = {
+	resource = <resource>
+	value = float
+}
+
+###Checks specific resource income value for the country scope
+alias[trigger:resource_income_compare] = {
+	resource = <resource>
+	value = float
+}
+
+###Checks if the pop is being assimilated
+alias[trigger:is_being_assimilated] = bool
+
+###Checks the number of guaranteed colonies defined in setup
+alias[trigger:num_guaranteed_colonies] = int
+
+###Check if the planet has a branch office owned by target country/any country/no country
+alias[trigger:has_branch_office] = bool
+
+###Check if the planet has a branch office owned by target country/any country/no country
+alias[trigger:has_branch_office] = scope[country]
+
+###Checks if the country is a criminal syndicate
+alias[trigger:is_criminal_syndicate] = bool
+
+###Checks if scoped deposit is a blocker-type
+alias[trigger:is_blocker] = bool
+
+###Checks the planet's number of branch office slots available for new constructions
+alias[trigger:free_branch_office_building_slots] = int
+
+###Checks the planet's branch officevalue
+alias[trigger:branch_office_value] = {
+	who = scope[country]
+	value = int
+}
+
+###Checks the number of jobs compared to pops on the planet
+alias[trigger:free_jobs] = int
+
+###Checks the planet's devastation
+alias[trigger:planet_devastation] = int[0..100]
+
+###Checks if the pop has the chosen pop category
+alias[trigger:is_pop_category] = <social_strata>
+
+###Checks if scoped country won the game
+alias[trigger:won_the_game] = bool
+
+###Checks the country's percentage of communications with playable empires
+alias[trigger:perc_communications_with_playable] = int
+
+###Compares the crime present on the planet with the given value
+alias[trigger:planet_crime] = int[0..100]
+
+###Checks if the pop has a specific job, or any job if set to "yes", or none if set to "unemployed"
+alias[trigger:has_job] = <job>
+
+###Checks if the pop has a specific job, or any job if set to "yes", or none if set to "unemployed"
+alias[trigger:has_job] = yes
+
+###Checks if the pop has a specific job, or any job if set to "yes", or none if set to "unemployed"
+alias[trigger:has_job] = unemployed
+
+###Checks if deposit is specified type
+alias[trigger:is_deposit_type] = <deposit>
+
+###Checks if country has a built species defined
+alias[trigger:has_built_species] = bool
+
+###Checks the number the planet has of any, or a specific, building
+alias[trigger:num_buildings] = {
+	type = any
+	type = <building>
+	value = int
+}
+
+###Checks the number the planet has of any, or a specific, district
+alias[trigger:num_districts] = {
+	type = any
+	type = <district>
+	value = int
+}
+
+###Checks the number of available slots the planet has of any, or a specific, district
+alias[trigger:num_free_districts] = {
+	type = any
+	type = <district>
+	value = int
+}
+
+###Checks if the pop can work a job
+alias[trigger:can_work_job] = bool
+
+###Checks if a pop's planet has a specific percentage (0.00-1.00) of the same species enslaved
+alias[trigger:species_planet_slave_percentage] = float[0.0..1.0]
+
+###Checks if a system has trade route going through.
+alias[trigger:has_trade_route] = bool
+
+###Checks the trade value going through the system.
+alias[trigger:trade_route_value] = int
+
+###Checks the intercepted trade value ratio going through the system.
+alias[trigger:trade_intercepted_percentage] = int[0..100]
+
+###Checks the intercepted trade value going through the system.
+alias[trigger:trade_intercepted_value] = int
+
+###Checks the protected trade value going through the system.
+alias[trigger:trade_protected_value] = int
+
+###Checks the protected trade value ratio going through the system.
+alias[trigger:trade_protected_percentage] = int[0..100]
+
+###Counts the number trade routes in the empire.
+alias[trigger:num_trade_routes] = int
+
+###Checks the country's number of controlled systems.
+alias[trigger:controlled_systems] = int
+
+###Checks the country has planets that are unexploited
+alias[trigger:exploitable_planets] = int
+
+###Checks the country controls planets that are colonizable
+alias[trigger:controlled_colonizable] = int
+
+###Checks how many plans the AI have for colonization (lighter than controlled_colonizable for AI)
+alias[trigger:ai_colonize_plans] = int
+
+###Checks the country's number of scientists
+alias[trigger:scientist_count] = int
+
+###Checks if the country AI has any plans to expand
+alias[trigger:scientist_count] = bool
+
+###Checks if resource is enabled on the Galactic Market
+alias[trigger:is_on_market] = <resource>
+
+###Checks the country's highest threat against it
+alias[trigger:highest_threat] = int
+
+###Checks if the target country is the country's rival
+alias[trigger:has_rival] = scope[country]
+
+###Checks if the target country is the country's overlord
+alias[trigger:has_overlord] = scope[country]
+
+###Counts the number of sectors owned by the scoped country
+alias[trigger:num_sectors] = int
+
+alias[trigger:free_district_slots] = int
+
+alias[trigger:has_ai_expansion_plan] = bool
+
+alias[trigger:has_district] = <district>
+
+alias[trigger:has_active_event] = {
+	## cardinality = 0..inf
+	<event>
+}
+
+alias[trigger:free_building_slots] = int
+
+alias[trigger:is_archetype] = <species_archetype>

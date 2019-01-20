@@ -1,0 +1,199 @@
+#the *.asset files under gfx/portraits will require attention from dayshine since they do not follow the same kind of format found under /common
+#the stuff here is a draft that will need to be reviewed and the cwtools code will need to be updated
+
+types = {
+	type[portrait] = {
+		skip_root_key = portraits
+		severity = warning
+		path = "game/gfx/portraits/portraits"
+	}
+	type[portrait_group] = {
+		skip_root_key = portrait_groups
+		severity = warning
+		path = "game/gfx/portraits/portraits"
+	}
+}
+
+portrait = {
+	entity = <model_entity>
+	clothes_selector = <asset_selector.clothes>
+	hair_selector = <asset_selector.hair>
+	## cardinality = 0..1
+	greeting_sound = <sound_effect>
+	## cardinality = 0..1
+	character_textures = {
+		## cardinality = 1..inf
+		filepath
+	}
+}
+
+portrait_group = {
+	## cardinality = 0..1
+	default = <portrait>
+	## cardinality = 0..1
+	game_setup = {
+		## cardinality = 0..inf
+		add = {
+			## replace_scope = { this = country root = country }
+			## cardinality = 0..1
+			trigger = {
+				## cardinality = 0..inf
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..inf
+				scope[leader] = { gender = enum[gender] }
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+		## cardinality = 0..inf
+		set = {
+			## replace_scope = { this = country root = country }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				scope[leader] = { gender = enum[gender] }
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+	}
+	## cardinality = 0..1
+	leader = {
+		## cardinality = 0..inf
+		add = {
+			## replace_scope = { this = leader root = leader }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				gender = enum[gender]
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+		## cardinality = 0..inf
+		set = {
+			## replace_scope = { this = leader root = leader }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				gender = enum[gender]
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+	}
+	## cardinality = 0..1
+	ruler = {
+		## cardinality = 0..inf
+		add = {
+			## replace_scope = { this = leader root = leader }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				gender = enum[gender]
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+		## cardinality = 0..inf
+		set = {
+			## replace_scope = { this = leader root = leader }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				gender = enum[gender]
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+	}
+	## cardinality = 0..1
+	pop = {
+		## cardinality = 0..inf
+		add = {
+			## replace_scope = { this = pop root = pop }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				scope[leader] = { gender = enum[gender] }
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+		## cardinality = 0..inf
+		set = {
+			## replace_scope = { this = pop root = pop }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				scope[leader] = { gender = enum[gender] }
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+	}
+	## cardinality = 0..1
+	species = {
+		## cardinality = 0..inf
+		add = {
+			## replace_scope = { this = species root = species }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				scope[leader] = { gender = enum[gender] }
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+		## cardinality = 0..inf
+		set = {
+			## replace_scope = { this = species root = species }
+			## cardinality = 0..1
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+				## cardinality = 0..1
+				scope[leader] = { gender = enum[gender] }
+			}
+			portraits = {
+				## cardinality = 0..inf
+				<portrait>
+			}
+		}
+	}
+}
+
+enums = {
+	enum[gender] = {
+		male
+		female
+	}
+}
+
+#other than the above there is also a bunch of other data stored under gfx/portraits/00_portraits_main.txt
+#this stuff though will require attention from dayshine to be added.

@@ -41,6 +41,7 @@ open CWTools.Process.Scopes
 open System.Text
 open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
+open CWTools.Common
 
 // type EmbeddedSettings = {
 //     triggers : DocEffect list
@@ -83,7 +84,9 @@ module STLGameFunctions =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = game.Settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
-        game.Lookup.scriptedTriggers <- STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
+        let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
+        game.Lookup.scriptedTriggers <- sts @ ts
+        game.Lookup.onlyScriptedTriggers <- sts
 
 
     let updateScriptedEffects (game : GameObject) =
@@ -91,7 +94,9 @@ module STLGameFunctions =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = game.Settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ ve
-        game.Lookup.scriptedEffects <- STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.scriptedTriggers)
+        let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.scriptedTriggers)
+        game.Lookup.scriptedEffects <- ses @ es
+        game.Lookup.onlyScriptedEffects <- ses
 
     let updateStaticodifiers (game : GameObject) =
         let rawModifiers =
@@ -145,6 +150,14 @@ module STLGameFunctions =
         game.Lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
     let addTriggerDocsScopes (game : GameObject) (rules : RootRule<_> list) =
+            let scriptedOptions (effect : ScriptedEffect) =
+                {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes}
+            let getAllScriptedEffects =
+                game.Lookup.onlyScriptedEffects |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
+                                                |> List.map (fun se -> AliasRule("effect", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
+            let getAllScriptedTriggers =
+                game.Lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
+                                                |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
             let addRequiredScopesE s (o : ConfigParser.Options<_>) =
                 let newScopes =
                     match o.requiredScopes with
@@ -163,21 +176,25 @@ module STLGameFunctions =
                             |> Option.defaultValue []
                     |x -> x
                 { o with requiredScopes = newScopes}
-            rules |> List.map (
+            rules |> List.collect (
                     function
                     |AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
-                        AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))
+                        [AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
                     |AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
-                        AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))
+                        [AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
                     |AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
-                        AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))
+                        [AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
                     |AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
-                        AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))
+                        [AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
                     |AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
-                        AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesE s o))
+                        [AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesE s o))]
                     |AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
-                        AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))
-                    |x -> x)
+                        [AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
+                        getAllScriptedEffects
+                    |AliasRule ("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
+                        getAllScriptedTriggers
+                    |x -> [x])
 
     let updateTypeDef =
         let mutable baseRules = []
@@ -278,13 +295,13 @@ type STLGame (settings : StellarisSettings) =
         validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                             validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                             validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"; valMegastructureGraphics, "megastructure";
-                            valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"]
+                            valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"]
         experimentalValidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
         heavyExperimentalValidators = [getEventChains, "event chains"]
         experimental = settings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
         lookupValidators = [validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
-        useRules = settings.rules.IsSome
+        useRules = settings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
         localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                              valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;

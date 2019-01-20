@@ -1,22 +1,22 @@
 #key
 #key_desc
-test_building = {
+test_buildings = {
 	base_buildtime = 720
 	empire_unique = yes
-	
+
 	cost = {
 		minerals = 500
 		influence = 100
 	}
-	
+
 	required_resources = {
 		energy = 7
 	}
-	
+
 	produced_resources = {
 		unity = 6
 	}
-	
+
 	country_modifier = {
 		pop_government_ethic_attraction = 0.10
 		planet_unrest_mult = -0.1
@@ -31,7 +31,6 @@ test_building = {
 		planet = {
 			is_capital = yes
 		}
-		custom_tooltip = "test_required"
 	}
 
 	destroy_if = {
@@ -43,7 +42,7 @@ test_building = {
 			}
 		}
 	}
-	
+
 	allow = {
 		custom_tooltip = {
             text = "test_required"
@@ -53,8 +52,8 @@ test_building = {
 	prerequisites = {
 		"tech_galactic_benevolence"
 	}
-	
+
 	ai_weight = {
-		weight = 20	
+		weight = 20
 	}
 }

@@ -1,0 +1,354 @@
+
+types = {
+	type[country_type] = {
+		path = "game/common/country_types"
+	}
+}
+
+country_type = {
+
+	## cardinality = 0..1
+	has_pulse_events = bool
+	## cardinality = 0..1
+	can_use_invalid_technology = bool
+
+
+	## cardinality = 0..1
+	can_own_empty_planets = bool
+	## cardinality = 0..1
+	playable = bool
+ 	## cardinality = 0..1
+	randomize_ethos = bool
+	## cardinality = 0..1
+	shuffle_pop_ethos = bool
+	## cardinality = 0..1
+	sub_title = localisation
+	## cardinality = 0..1
+	sub_title_desc = localisation
+	## cardinality = 0..1
+	needs_survey = bool
+ 	## cardinality = 0..1
+	has_complete_sensor = bool
+	## cardinality = 0..1
+	has_capital = bool
+	## cardinality = 0..1
+	enforces_borders = bool
+	## cardinality = 0..1
+	can_planets_be_attacked = bool
+	## cardinality = 0..1
+	colonizing_title = localisation
+	## cardinality = 0..1
+	colonizing_desc = localisation
+	## cardinality = 0..1
+	orbital_bombardment = bool
+	## cardinality = 0..1
+	diplomatic_wars = bool
+	## cardinality = 0..1
+	attack_unarmed_orbital_stations = bool
+	## cardinality = 0..1
+	ship_disengagement = bool
+	## cardinality = 0..1
+	army_disengagement = bool
+	## cardinality = 0..1
+	min_navy_for_wars = int
+ 	## cardinality = 0..1
+	min_assault_armies_for_wars = int
+ 	## cardinality = 0..1
+	share_communications = bool
+	## cardinality = 0..1
+	relations = bool
+	## cardinality = 0..1
+	fallen_empire = bool
+	## cardinality = 0..1
+	awakened_fallen_empire = bool
+	## cardinality = 0..1
+	piracy_risk	= bool
+ 	## cardinality = 0..1
+	uses_special_buildables = bool #this is tied to special_buildable in global_ship_designs - designs should be checked against country types!
+	## cardinality = 0..1
+	show_in_contacts_list = bool
+	## cardinality = 0..1
+	minimalist_contacts_list_profile = bool
+	## cardinality = 0..1
+	government = bool
+ 	## cardinality = 0..1
+	custom_starbase = <ship_size.starbase>
+	## cardinality = 0..1
+	destroys_starbases = bool
+	## cardinality = 0..1
+	can_have_their_comms_shared = bool
+	## cardinality = 0..1
+	hide_names_if_no_communication = bool
+	## cardinality = 0..1
+	mid_game_crisis = bool
+	## cardinality = 0..1
+	end_game_crisis = bool
+	## cardinality = 0..1
+	custom_diplomacy = bool
+	## cardinality = 0..1
+	custom_opinion = bool
+	## cardinality = 0..1
+	scaled_difficulty_bonuses = float
+	## cardinality = 0..1
+	destroys_starbases = bool
+	## cardinality = 0..1
+	is_space_critter = bool #this might be a subtype
+	## cardinality = 0..1
+	blocks_pirate = bool
+	## cardinality = 0..1
+	### This is a star flag
+	#TODO Work out how to make this a star flag
+	home_system = scalar
+	## cardinality = 0..1
+	### This is a star flag
+	#TODO Work out how to make this a star flag
+	hub_system = scalar
+	## cardinality = 0..1
+	default_ships = bool
+	## cardinality = 0..1
+	is_enclave = bool
+	## cardinality = 0..1
+	counts_for_victory = bool
+	## cardinality = 0..1
+	has_difficulty_bonuses = bool
+	## cardinality = 0..1
+	pop_growth = bool
+	## cardinality = 0..1
+	share_survey_data = bool
+	## cardinality = 0..1
+	blocks_piracy = bool
+	## cardinality = 0..1
+	is_the_shroud = bool
+	## cardinality = 0..1
+	pre_communications_fleet_name = localisation
+	## cardinality = 0..1
+	observable = bool
+	## cardinality = 0..1
+	faction = {
+		## cardinality = 0..1
+		neutral = bool
+		## cardinality = 0..1
+		hostile = bool
+		## cardinality = 0..1
+		follow = bool
+		## cardinality = 0..1
+		auto_delete = bool
+		## cardinality = 0..1
+		needs_border_access = bool
+		## cardinality = 0..1
+		generate_borders = bool
+		## cardinality = 0..1
+		needs_colony = bool
+		## cardinality = 0..1
+		primitive = bool
+		## cardinality = 0..1
+		primitive_age = localisation
+		## cardinality = 0..1
+		hostile_when_attacked = bool
+		## cardinality = 0..1
+		show_borders_in_us = bool
+		## cardinality = 0..1
+		pirate = bool
+		## cardinality = 0..1
+		space_creatures = bool
+	}
+
+	ai = {
+		enabled = bool
+		## cardinality = 0..1
+		declare_war = bool
+		## cardinality = 0..1
+		colonizer = bool
+		## cardinality = 0..1
+		internal_policies = bool
+		## cardinality = 0..1
+		modification = bool
+		## cardinality = 0..1
+		construction = bool
+		## cardinality = 0..1
+		tech = bool
+		## cardinality = 0..1
+		avoid_enemies = bool
+		## cardinality = 0..1
+		min_navy_for_wars = float
+		## cardinality = 0..1
+		min_assault_armies_for_wars = int
+		## cardinality = 0..1
+		government = bool
+		## cardinality = 0..1
+		traditions = bool
+		## cardinality = 0..1
+		follow = bool
+		## cardinality = 0..1
+		starbase_upgrade = bool
+		## cardinality = 0..1
+		limited_construction = bool
+
+		## cardinality = 0..1
+		can_use_market = bool
+		
+		## cardinality = 0..1
+		ship_data = {
+			## cardinality = 0..inf
+			#this should be tied to the ship_sizes file, for verification. If you can add a blue warning - the AI will not build a ship if its not defined under country_type
+			#TODO Add validator for undefined ship sizes
+			<ship_size> = {
+				## cardinality = 0..1
+				min = int
+				## cardinality = 0..1
+				max = int
+				## cardinality = 0..1
+				system_mult = float
+				## cardinality = 0..1
+				planet_mult = float
+				## cardinality = 0..inf
+				#TODO Check if this can be replaced with modifier_rule alias
+				fraction = {
+					## cardinality = 0..1
+					base = int[0..100] #max 100!, its fractions from a whole - 100% being the total ship production of said country
+					## cardinality = 0..1
+					#yes - this one is weird, see the army_data for an example (in the file)
+					factor = int
+					## replace_scope = { this = country root = country }
+					## cardinality = 0..inf
+					modifier = {
+						## cardinality = 0..1
+						add = int
+						## cardinality = 0..1
+						factor = float
+						## cardinality = 0..inf
+						alias_name[trigger] = alias_match_left[trigger]
+					}
+				}
+			}
+		}
+		## cardinality = 0..1
+		army_data = {
+			## cardinality = 0..inf
+			#this should be tied to the army file, for verification. If you can add a blue warning - the AI will not build an army if its not defined under country_type
+			#TODO Add validator for undefined armies
+			<army> = {
+				## cardinality = 0..1
+				min = int
+				## cardinality = 0..1
+				max = int
+				## cardinality = 0..1
+				system_mult = float
+				## cardinality = 0..inf
+				#TODO Check if can be replaced with modifier_rule alias
+				fraction = {
+					## cardinality = 0..1
+					base = int[0..100] #max 100!, its fractions from a whole - 100% being the total ship production of said country
+					## cardinality = 0..1
+					factor = int #yes - this one is weird, see the army_data for an example (in the file)
+					## replace_scope = { this = country root = country }
+					## cardinality = 0..inf
+					modifier = {
+						## cardinality = 0..1
+						add = int
+						## cardinality = 0..1
+						factor = float
+						## cardinality = 0..inf
+						alias_name[trigger] = alias_match_left[trigger]
+					}
+				}
+			}
+		}
+		#TODO Check if this even works as a rule, maybe replace with enum
+		## cardinality = 0..1
+		modules = {
+			## cardinality = 0..inf
+			enum[country_type_module]
+		}
+	}
+	### used with extradimensional invaders
+	## cardinality = 0..1
+	targets = {
+		## cardinality = 0..inf
+		<country_type>
+	}
+	
+	## cardinality = 0..1
+	replace_scope = { this = country root = country }
+	## cardinality = 0..1
+	trade_routes_available = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	modules = {
+		## cardinality = 0..1
+		standard_event_module = {}
+		## cardinality = 0..1
+		standard_economy_module = {}
+		## cardinality = 0..1
+		standard_leader_module = {}
+		## cardinality = 0..1
+		standard_diplomacy_module = {}
+		## cardinality = 0..1
+		standard_technology_module = {}
+		## cardinality = 0..1
+		standard_pop_factions_module = {}
+		## cardinality = 0..1
+		standard_expansion_module = {}
+		## cardinality = 0..1
+		basic_technology_module = {}
+		## cardinality = 0..1
+		standard_species_rights_module = {}
+		## cardinality = 0..1
+		exclusive_diplomacy_module = {
+			## cardinality = 0..1
+			contact_rule = always
+			## cardinality = 0..1
+			contact_rule = script_only
+			## cardinality = 0..1
+			can_receive = {
+				## cardinality = 0..inf
+				<diplomatic_action>
+			}
+			## cardinality = 0..1
+			can_send = {
+				## cardinality = 0..inf
+				<diplomatic_action>
+			}
+		}
+		## cardinality = 0..1
+		tiered_technology_module = {
+			tier = int
+			rare = bool
+		}
+		## cardinality = 0..1
+		all_technology_module = {}
+		## cardinality = 0..1
+		standard_trade_routes_module = {}
+	}
+	## cardinality = 0..1
+	resources = {
+		category = country_base
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+	## cardinality = 0..1
+	branch_office_resources = {
+		category = planet_branch_offices
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+}
+
+enums = {
+	enum[country_type_module] = {
+			military_minister_module
+			foreign_minister_module
+			interior_minister_module
+			horde_interior_minister_module
+			horde_military_minister_module
+			space_monsters_module
+			anti_crisis_military_minister_module
+			invaders_military_minister_module
+			invaders_interior_minister_module
+			swarm_interior_minister_module
+			swarm_military_minister_module
+			machine_interior_minister_module
+			machine_military_minister_module
+			berserk_military_minister_module
+	}
+}

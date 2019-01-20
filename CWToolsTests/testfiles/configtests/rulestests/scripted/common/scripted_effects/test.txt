@@ -1,0 +1,15 @@
+test_scripted_effect_ship = {
+    OR = {
+        set_ship_flag = yes
+    }
+}
+
+test_scripted_effect_country = {
+    OR = {
+        set_country_flag = yes
+    }
+}
+
+test_scripted_effect_none = {
+
+}

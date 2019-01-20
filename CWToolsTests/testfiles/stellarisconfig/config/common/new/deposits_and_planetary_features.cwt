@@ -1,0 +1,140 @@
+
+types = {
+	type[deposit] = {
+		path = "game/common/deposits"
+		path_strict = yes
+
+		#some guesswork here...
+		subtype[colonisable] = {
+			is_for_colonizeable = yes
+		}
+		subtype[orbital] = {
+			station = scalar
+		}
+		subtype[blocker] = {
+			category = <deposit_category.blocker>
+		}
+		subtype[null] = {
+			is_null = yes
+		}
+	}
+	type[deposit_category] = {
+		path = "game/common/deposit_categories"
+		subtype[blocker] = {
+			blocker = yes
+		}
+	}
+}
+
+#deposits/planetary features
+
+## push_scope = planet
+deposit = {
+	subtype[!null] = {
+		is_for_colonizeable = bool
+	}
+	subtype[null] = {
+		###this makes the deposit transparent, used by vanilla to designate an "empty" deposit.
+		is_null = yes
+	}
+	## cardinality = 0..1
+	use_for_min_max_adjustments = bool
+
+	#blocker?
+	## cardinality = 0..1
+	icon = icon[gfx/interface/icons/deposits]
+
+	subtype[blocker] = {
+		## cardinality = 0..1
+		time = int
+		## cardinality = 0..1
+		on_cleared = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+		## cardinality = 0..1
+		can_be_cleared = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+		## cardinality = 0..1
+		blocker_swap_types = {
+			## cardinality = 1..inf
+			<deposit>
+		}
+		## cardinality = 0..1
+		use_weights_for_blocker_swap_types = bool
+
+		## cardinality = 0..1
+		all_blocker_swap_types = yes
+
+		## cardinality = 0..1
+		prerequisites = {
+			## cardinality = 0..inf
+			<technology>
+		}
+	}
+
+	subtype[colonisable] = {
+		## replace_scope = { this = planet root = planet }
+		planet_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+		## cardinality = 0..1
+		use_weights_for_terraforming_swap_types = bool
+		## cardinality = 0..1
+		should_swap_deposit_on_terraforming = bool
+		## cardinality = 0..1
+		terraforming_swap_types = {
+			## cardinality = 1..inf
+			<deposit>
+		}
+
+		category = <deposit_category>
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	drop_weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	subtype[orbital] = {
+		station = shipclass_mining_station
+		station = shipclass_research_station
+		## cardinality = 0..1
+		## replace_scope = { this = planet root = planet }
+		planet_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+	}
+
+	alias_name[triggered_planet_modifier] = alias_match_left[triggered_planet_modifier]
+
+	## cardinality = 0..1
+	resources = {
+		category = <economic_category>
+
+		alias_name[economic_template] = alias_match_left[economic_template]
+
+		#to be analysed whether you can have cost, upkeep, produces everywhere
+#		subtype[!blocker] = {
+#			## cardinality = 0..0
+#			cost = {
+#			}
+#		}
+	}
+}
+
+
+
+deposit_category = {
+	## cardinality = 0..1
+	blocker = yes
+	## cardinality = 0..1
+	important = yes
+}
+
+

@@ -4,6 +4,12 @@ country_event = {
     option = {
         #error
         ship_only = test
+        Or = {
+
+        }
+        oR = {
+
+        }
         OR = {
             OR = {
                 #error
@@ -19,6 +25,17 @@ country_event = {
                 #error
                 as = as
             }
+        }
+    }
+}
+
+country_event = {
+    option = {
+        uniquetestteST = {
+
+        }
+        uniquetesttest = {
+
         }
     }
 }

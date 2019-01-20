@@ -1,0 +1,51 @@
+
+types = {
+	type[agenda] = {
+		path = "game/common/agendas"
+	}
+	type[mandate] = {
+		path = "game/common/mandates"
+	}
+}
+
+agenda = {
+	## replace_scope = { this = leader root = leader from = country }
+	weight_modifier = {
+		enum[factor_weight] = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	## replace_scope = { this = country root = country }
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+mandate = {
+	## replace_scope = { this = planet root = planet }
+	#im not 100% about the scopes here, this is what vanilla appear to be. It uses owner to scope to country
+	valid = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	parameters = {
+		## cardinality = 0..1
+		self = country
+		## cardinality = 0..1
+		enemy = country
+		## cardinality = 0..1
+		#these are targets or scopes. master = country, planet = planet, self = country, enemy = country are what appears in vanilla
+		master = country
+		## cardinality = 0..1
+		planet = planet
+	}
+	## replace_scope = { this = planet root = planet } #im not 100% about the scopes here, this is what vanilla appear to be. It uses owner to scope to c ocountry
+	## cardinality = 0..1
+	on_term_started = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## replace_scope = { this = planet root = planet } #im not 100% about the scopes here, this is what vanilla appear to be. It uses owner to scope to c ocountry
+	## cardinality = 0..1
+	on_term_ended = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}

@@ -1,0 +1,18 @@
+
+
+types = {
+	type[scripted_loc] = {
+		name_field = "name"
+		path = "game/common/scripted_loc"
+	}
+}
+
+scripted_loc = {
+	name = scalar
+	## cardinality = 1..inf
+	text = {
+		## cardinality = 0..1
+		trigger = { alias_name[trigger] = alias_match_left[trigger] }
+		localization_key = localisation
+	}
+}

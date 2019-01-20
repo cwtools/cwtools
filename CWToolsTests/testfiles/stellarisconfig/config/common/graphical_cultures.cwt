@@ -1,0 +1,102 @@
+types = {
+	type[graphical_culture] = {
+		path = "game/common/graphical_culture"
+	}
+}
+
+graphical_culture = {
+	##cardinality = 0..1
+	fallback = <graphical_culture>
+	##cardinality = 0..1
+	ship_color = bool
+	ship_lighting = {
+
+		cam_light_1_dir = {
+			## cardinality = 3..3
+			float
+		}
+		cam_light_2_dir = {
+			## cardinality = 3..3
+			float
+		}
+		cam_light_3_dir = {
+			## cardinality = 3..3
+			float
+		}
+
+		## cardinality = 0..1
+		### Amount of light when near
+		## cardinality = 0..1
+		intensity_near = float
+		## cardinality = 0..1
+		### Amount when far away
+		intensity_far = float
+		## cardinality = 0..1
+		### Near threshold
+		near_value = int
+		## cardinality = 0..1
+		### Far threshold
+		far_value = int
+		## cardinality = 0..1
+		rim_start_near = float
+		## cardinality = 0..1
+		rim_stop_near = float
+		## cardinality = 0..1
+		rim_start_far = float
+		## cardinality = 0..1
+		rim_stop_far = float
+		## cardinality = 0..1
+		rim_start_far = float
+		## cardinality = 0..1
+		rim_stop_far = float
+		## cardinality = 0..1
+		ambient_near = float
+		## cardinality = 0..1
+		ambient_far = float
+	}
+
+	## cardinality = 0..1
+	randomized = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	selectable = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+
+# graphical_culture = {
+# 	### which icon to use in the main gui
+# 	icon = scalar
+# 	###-- override tooltip generation with a hardcoded method. Currently supported: opinion
+# 	## cardinality = 0..1
+# 	hardcoded_tooltip = opinion
+# 	###-- can the player click on other empires to see the map mode from their point of view?
+# 	## cardinality = 0..1
+# 	can_change_point_of_view = bool
+# 	## cardinality = 0..1
+# 	###-- should terra incognita be rendered when this map mode is active?
+# 	enable_terra_incognita = bool
+
+# 	## cardinality = 0..inf
+# 	###-- the bread and butter of the map modes. A country will be colored with the first color block who's condition is met
+# 	color = {
+# 		###-- you can also use hsv {...}
+# 		## cardinality = 0..1
+# 		value = {
+# 			## cardinality = 3..4
+# 			float
+# 		}
+# 		## cardinality = 0..1
+# 		###-- Tooltip to be shown if this is the selected color. suports [This.GetName] etc
+# 		custom_tooltip = localisation
+# 		## cardinality = 0..1
+# 		## replace_scope = { root = country this = country }
+# 		###-- simple AND trigger for evaluation. Will also generate a tooltip if neither hardcoded_tooltip or custom_tooltip is defined
+# 		condition = {
+# 			alias_name[trigger] = alias_match_left[trigger]
+# 		}
+# 	}
+
+# }

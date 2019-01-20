@@ -1,0 +1,688 @@
+types = {
+	type[authority] = {
+		path = "game/common/governments/authorities"
+	}
+	type[government] = {
+		path = "game/common/governments"
+		path_strict = yes
+	}
+	type[civic] = {
+		path = "game/common/governments/civics"
+	}
+}
+
+authority = {
+
+	## cardinality = 0..1
+	icon = filepath
+	## cardinality = 0..1
+	potential = {
+		## cardinality = 0..1
+		text = localisation
+
+		## cardinality = 0..1
+		always = bool
+
+		## cardinality = 0..1
+		ethics = {
+			#originally: 0..3 but actually this number can be higher, some mods add more ethic options
+			## cardinality = 0..inf
+			value = <ethos>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+		}
+
+		## cardinality = 0..1
+		country_type = {
+			## cardinality = 0..1
+			value = <country_type>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+		}
+	}
+	## cardinality = 0..1
+	possible = {
+		## cardinality = 0..1
+		text = localisation
+
+		## cardinality = 0..1
+		always = bool
+
+		## cardinality = 0..1
+		ethics = {
+			#originally: 0..3 but actually this number can be higher, some mods add more ethic options
+			## cardinality = 0..inf
+			value = <ethos>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+		}
+
+		## cardinality = 0..1
+		country_type = {
+			## cardinality = 0..1
+			value = <country_type>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+		}
+	}
+	## replace_scope = { this = no_scope root = no_scope } #this can check has_dlc and other likewise triggers, but thats it.
+	## cardinality = 0..1
+	random_weight = {
+		## cardinality = 0..1
+		value = int
+		## cardinality = 0..inf
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	## cardinality = 0..1
+	traits = {
+		## cardinality = 0..inf
+		trait = <trait>
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	country_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	playable = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	has_heir = bool
+	## cardinality = 0..1
+	election_type = enum[election_types]
+	## cardinality = 0..1
+	### default = 0, hence required if defined to oligarchic or democratic
+	election_term_years = int
+	## cardinality = 0..1
+	### acts like random = int
+	election_term_variance = int
+	## cardinality = 0..1
+	re_election_allowed = bool
+	## cardinality = 0..1
+	can_have_emergency_elections = bool
+	## cardinality = 0..1
+	### influence cost!
+	emergency_election_cost = int
+	## cardinality = 0..1
+	### default = -1, which equals limitless
+	max_election_candidates = int
+	## cardinality = 0..1
+	can_reform = bool
+	### is tied to the agena files if = yes
+	## cardinality = 0..1
+	has_agendas = bool
+	### is tied to the mandate files if = yes
+	## cardinality = 0..1
+	uses_mandates = bool
+	## cardinality = 0..1
+	has_factions = bool
+	## cardinality = 0..1
+	valid_for_released_vassal = bool
+	## cardinality = 0..1
+	localization_postfix = enum[authority_postfixes]
+	## cardinality = 0..1
+	localization_postfix = scalar
+
+	## cardinality = 0..1
+	tags = {
+		## cardinality = 1..inf
+		localisation
+	}
+}
+
+enums = {
+	enum[election_types] = {
+		none
+		oligarchic
+		democratic
+	}
+	enum[authority_postfixes] = {
+		hive_mind
+		machine_intelligence
+	}
+}
+
+government = {
+	### Determines if a government name can be chosen. AND trigger, scope: country; valid triggers: has_ethic, has_authority, has_valid_civic; everything else is undefined behavior!
+	## replace_scope = { root = country this = country }
+	possible = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = country root = country }
+	### scriptable value, scope: country; the (possible) government type with the biggest weight is assigned to the country
+	weight = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	ruler_title = localisation
+	## cardinality = 0..1
+	ruler_title_female = localisation
+	## cardinality = 0..1
+	heir_title = localisation
+	## cardinality = 0..1
+	heir_title_female = localisation
+	## cardinality = 0..1
+	use_regnal_names = bool
+	## cardinality = 0..1
+	dynastic_last_names = bool
+	## cardinality = 0..1
+	should_force_rename = bool
+	## cardinality = 0..1
+	leader_class = enum[leader_classes_no_ruler]
+
+	## cardinality = 0..1
+	## replace_scope = { this = leader root = leader }
+	election_candidates = {
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+civic = {
+	## cardinality = 0..1
+	### AND trigger, no scope; use this to prevent the civic from being selectable by the player (UI)
+	playable = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	icon = filepath
+	## cardinality = 0..1
+	### requirements list, supports country_type, ethics, authority and civics. See ../readme_requirements.txt
+	potential = {
+		## cardinality = 0..1
+		text = localisation
+
+		## cardinality = 0..1
+		always = bool
+
+		## cardinality = 0..1
+		ethics = {
+			#originally: 0..3 but actually this number can be higher, some mods add more ethic options
+			## cardinality = 0..inf
+			value = <ethos>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+		}
+
+		## cardinality = 0..1
+		country_type = {
+			## cardinality = 0..1
+			value = <country_type>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+		}
+
+		## cardinality = 0..1
+		authority = {
+			## cardinality = 0..1
+			value = <authority>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <authority>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <authority>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <authority>
+			}
+		}
+
+		## cardinality = 0..1
+		civics = {
+			## cardinality = 0..3
+			value = <civic>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <civic>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <civic>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <civic>
+			}
+		}
+	}
+	## cardinality = 0..1
+	### requirements list, supports country_type, ethics, authority and civics. See ../readme_requirements.txt
+	possible = {
+		## cardinality = 0..1
+		text = localisation
+
+		## cardinality = 0..1
+		always = bool
+
+		## cardinality = 0..1
+		ethics = {
+			## cardinality = 0..3
+			value = <ethos>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <ethos>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <ethos>
+			}
+		}
+
+		## cardinality = 0..1
+		country_type = {
+			## cardinality = 0..1
+			value = <country_type>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <country_type>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <country_type>
+			}
+		}
+
+		## cardinality = 0..1
+		authority = {
+			## cardinality = 0..1
+			value = <authority>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <authority>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <authority>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <authority>
+			}
+		}
+
+		## cardinality = 0..1
+		civics = {
+			## cardinality = 0..3
+			value = <civic>
+
+			## cardinality = 0..inf
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <civic>
+			}
+			## cardinality = 0..inf
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <civic>
+			}
+			## cardinality = 0..inf
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## severity = info
+				## cardinality = 2..99
+				value = <civic>
+			}
+		}
+	}
+	## cardinality = 0..1
+	###default: yes
+	pickable_at_start = bool
+
+	## cardinality = 0..1
+	###default: yes, set to no to prevent adding or removing this after creation of the empire
+	modification = bool
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	### scriptable weight for randomizing a civic; required, else the civic will not get assigned randomly
+	random_weight = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	### modifier added to the country if the civic is selected and valid
+	## replace_scope = { this = country root = country }
+	modifier = {
+		## cardinality = 0..1
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	### localisation of custom effects
+	description = localisation
+
+	## cardinality = 0..1
+	###default: no
+	can_build_ruler_ship = bool
+
+	## cardinality = 0..1
+	### default: empty; trait set to enforce on the primary species. They cannot be removed, but more can be added if points/picks permit
+	traits = {
+		## cardinality = 1..5
+		trait = <trait>
+	}
+
+	## cardinality = 0..1
+	### default: none; if present, will enable secondary species customization in empire designer and will create secondary species & pops at galaxy generation time (see empire_init_create_capital_secondary_pops)
+	has_secondary_species = {
+		title = localisation
+		## cardinality = 0..1
+		traits = {
+			## cardinality = 1..5
+			trait = <trait>
+		}
+	}
+
+	## cardinality = 0..1
+	homeworld = <planet_class>
+}
+
+#aliases - used in species_classes and perhaps other places.
+
+alias[government_trigger:authority] = {
+	## cardinality = 0..1
+	value = <authority>
+	## cardinality = 0..inf
+	OR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..inf
+		value = <authority>
+	}
+	## cardinality = 0..inf
+	NOT = {
+		## cardinality = 0..1
+		text = localisation
+		value = <authority>
+	}
+	## cardinality = 0..inf
+	NOR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..inf
+		value = <authority>
+	}
+}
+alias[government_trigger:country_type] = {
+	## cardinality = 0..1
+	value = <country_type>
+
+	## cardinality = 0..inf
+	OR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..99
+		value = <country_type>
+	}
+	## cardinality = 0..inf
+	NOT = {
+		## cardinality = 0..1
+		text = localisation
+		value = <country_type>
+	}
+	## cardinality = 0..inf
+	NOR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..99
+		value = <country_type>
+	}
+}
+alias[government_trigger:ethics] = {
+	## cardinality = 0..3
+	value = <ethos>
+
+	## cardinality = 0..inf
+	OR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..99
+		value = <ethos>
+	}
+	## cardinality = 0..inf
+	NOT = {
+		## cardinality = 0..1
+		text = localisation
+		value = <ethos>
+	}
+	## cardinality = 0..inf
+	NOR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..99
+		value = <ethos>
+	}
+}
+alias[government_trigger:civics] = {
+	## cardinality = 0..3
+	value = <civic>
+
+	## cardinality = 0..inf
+	OR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..99
+		value = <civic>
+	}
+	## cardinality = 0..inf
+	NOT = {
+		## cardinality = 0..1
+		text = localisation
+		value = <civic>
+	}
+	## cardinality = 0..inf
+	NOR = {
+		## cardinality = 0..1
+		text = localisation
+		## severity = info
+		## cardinality = 2..99
+		value = <civic>
+	}
+}

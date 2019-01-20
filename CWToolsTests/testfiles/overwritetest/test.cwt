@@ -1,0 +1,14 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    ## cardinality = 0..inf
+    set = value_set[test]
+    ## cardinality = 0..inf
+    test = value[test]
+    ## cardinality = 0..inf
+    is_triggered_only = yes
+}

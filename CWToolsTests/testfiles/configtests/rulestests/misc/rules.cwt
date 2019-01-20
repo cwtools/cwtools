@@ -49,3 +49,6 @@ alias[effect:scope_field] = {
 alias[effect:test] = {
     alias_name[effect] = alias_match_left[effect]
 }
+alias[effect:uniquetesttest] = {
+    alias_name[effect] = alias_match_left[effect]
+}

@@ -1,0 +1,75 @@
+
+types = {
+	type[army] = {
+		path = "game/common/armies"
+	}
+}
+
+#TODO subtypes, and make stricter this was an initial pass
+#This is a draft guess (assuming that only the resources bit has changed)
+## push_scope = planet
+army = {
+	## cardinality = 0..1
+	resources = {
+		category = armies
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	defensive = bool
+	## cardinality = 0..1
+	is_building_spawned = bool
+	## cardinality = 0..1
+	is_pop_spawned = bool
+	## cardinality = 0..1
+	damage = float
+	## cardinality = 0..1
+	health = float
+	## cardinality = 0..1
+	has_morale = bool
+	## cardinality = 0..1
+	morale = float
+	## cardinality = 0..1
+	morale_damage = float
+	## cardinality = 0..1
+	collateral_damage = float
+	## cardinality = 0..1
+	war_exhaustion = float
+	## cardinality = 0..1
+	icon_frame = int
+	## cardinality = 0..1
+	has_species = bool
+	## cardinality = 0..1
+	time = int
+	## cardinality = 0..1
+	pop_limited = bool
+	## cardinality = 0..1
+	rebel = bool
+	## cardinality = 0..1
+	occupation = bool
+	## cardinality = 0..1
+	prerequisites = {
+		<technology>
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	show_tech_unlock_if = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	on_queued = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## cardinality = 0..1
+	on_unqueued = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}

@@ -7,6 +7,7 @@ open CWTools.Validation.Rules
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils
+open CWTools.Games
 module STLCompute =
 
     let getAllTechPrereqs (e : Entity) =
@@ -79,17 +80,22 @@ module STLCompute =
 
     let computeSTLData (foldRules : unit -> FoldRules<Scope> option) (e : Entity) =
         let withRulesData = foldRules().IsSome
-        let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
+        let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (fun ee -> if ee.Has "id" then Some (ee.TagText "id") else None) else []
+        // let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         let setvariables = STLValidation.getEntitySetVariables e
         let setflags = findAllSetFlags e
         let savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
         let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes )(e)) else None)
         let definedvariable = (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
+        let effectBlocks, triggersBlocks = (if foldRules().IsSome then let (e, t) = ((foldRules().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         let hastechs = getAllTechPrereqs e
-        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData)
+        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
     let computeSTLDataUpdate (foldRules : unit -> FoldRules<Scope> option) (e : Entity) (data : STLComputedData) =
         let withRulesData = foldRules().IsSome
         data.Referencedtypes <- (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes)(e)) else None)
         data.Definedvariables <- (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
+        let effectBlocks, triggersBlocks = (if foldRules().IsSome then let (e, t) = ((foldRules().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
+        data.EffectBlocks <- effectBlocks
+        data.TriggerBlocks <- triggersBlocks
         data.WithRulesData <- withRulesData

@@ -238,7 +238,7 @@ module STLLocalisationValidation =
         fun _ keys es ->
             let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
             let inner =
-                fun node ->
+                fun (node : Node) ->
                     let keyres = checkKeyAndDesc keys node
                     //let failtext = node.Children <&!&> ((checkLocNodeTag keys "text") <&> (checkLocNodeTag keys "fail_text"))
                     //let failtext = node.Children |> List.map ((checkLocNodeTag keys "text") <&> (checkLocNodeTag keys "fail_text")) |> List.fold (<&&>) OK

@@ -1,0 +1,229 @@
+
+types = {
+	type[economic_category] = {
+		path = "game/common/economic_categories"
+		subtype[has_parent] = {
+			parent = scalar
+		}
+		subtype[hidden] = {
+			hidden = yes
+		}
+	}
+}
+
+economic_category = {
+	## cardinality = 0..1
+    parent = <economic_category>
+	## cardinality = 0..1
+	use_for_ai_budget = yes
+	subtype[!hidden] = {
+		icon = "dummy"
+	}
+	subtype[hidden] = {
+		hidden = yes
+	}
+
+	## cardinality = 0..1
+	hidden = bool
+
+	## cardinality = 0..inf
+	triggered_produces_modifier = {
+		subtype[has_parent] = {
+			## cardinality = 0..1
+			use_parent_icon = yes
+		}
+		key = localisation
+		## cardinality = 0..1
+		trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+	}
+	## cardinality = 0..inf
+	triggered_cost_modifier = {
+		key = localisation
+		## cardinality = 0..1
+		trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+		## cardinality = 0..1
+		use_parent_icon = yes
+	}
+	## cardinality = 0..inf
+	triggered_upkeep_modifier = {
+		key = scalar
+		## cardinality = 0..1
+		trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+	}
+	## cardinality = 0..1
+	ai_use_parent_for_resources_upkeep = {
+		<resource>
+	}
+}
+
+
+alias[economic_template:cost] = {
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	<resource> = float
+}
+
+alias[economic_template:produces] = {
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	<resource> = float
+}
+
+alias[economic_template:upkeep] = {
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	<resource> = float
+}
+
+alias[economic_template_no_produce:cost] = {
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	<resource> = float
+}
+
+alias[economic_template_no_produce:upkeep] = {
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	<resource> = float
+}
+
+## replace_scope = { this = planet root = planet }
+alias[triggered_planet_modifier:triggered_planet_modifier] = {
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+## replace_scope = { this = planet root = planet }
+alias[triggered_planet_modifier_pop:triggered_planet_modifier] = {
+	## replace_scope = { this = pop root = pop }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+## replace_scope = { this = planet root = planet }
+alias[triggered_planet_modifier_direct:triggered_planet_modifier] = {
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..inf
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..inf
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier
+	}
+}
+
+## replace_scope = { this = system root = system }
+alias[triggered_system_modifier_starbase:triggered_system_modifier] = {
+	## replace_scope = { this = starbase root = starbase }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+## replace_scope = { this = country root = country }
+alias[triggered_country_modifier_starbase:triggered_country_modifier] = {
+	## replace_scope = { this = starbase root = starbase }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+## replace_scope = { this = country root = country }
+alias[triggered_country_modifier_pop:triggered_country_modifier] = {
+	## replace_scope = { this = pop root = pop }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+## replace_scope = { this = pop root = pop }
+alias[triggered_pop_modifier:triggered_pop_modifier] = {
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+## replace_scope = { this = starbase root = starbase }
+alias[triggered_station_modifier:triggered_station_modifier] = {
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+## replace_scope = { this = starbase root = starbase }
+alias[triggered_station_modifier_starbase:triggered_station_modifier] = {
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}
+
+alias[triggered_desc:triggered_desc] = {
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	text = localisation
+}
+

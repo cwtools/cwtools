@@ -1,0 +1,199 @@
+types = {
+	## type_key_filter = category
+	type[sound_category] = {
+		name_field = name
+		#*.asset file
+		path = "game/sound"
+	}
+	## type_key_filter = soundgroup
+	type[sound_group] = {
+		name_field = name
+		 #*.asset file
+		path = "game/sound"
+	}
+	## type_key_filter = master_compressor
+	type[sound_master_compressor] = {
+		#*.asset file
+		path = "game/sound"
+	}
+	## type_key_filter = music_compressor
+	type[sound_music_compressor] = {
+		#*.asset file
+		path = "game/sound"
+	}
+	## type_key_filter = falloff
+	type[sound_falloff] = {
+		name_field = name
+		#*.asset file
+		path = "game/sound"
+	}
+	## type_key_filter = soundeffect
+	type[sound_effect] = {
+		name_field = name
+		#*.asset file
+		path = "game/sound"
+	}
+	## type_key_filter = sound
+	type[sound] = {
+		#these are links between a key and a *.wav file, they are used in other parts
+		name_field = name
+		#*.asset file
+		path = "game/sound"
+	}
+}
+
+#TODO: Add better filepath handling
+
+sound_category = {
+	name = scalar
+	soundeffects = {
+		## cardinality = 0..inf
+		<sound_effect>
+	}
+	## cardinality = 0..1
+	compressor = {
+		enabled = bool
+		pregain = float
+		postgain = float
+		ratio = float
+		threshold = float
+		attacktime = float
+		releasetime = float
+	}
+}
+
+sound_group = {
+	#seems to be tied to languages ! please check the vanilla file and see.
+	name = scalar
+	## cardinality = 0..inf
+	soundoverride = {
+		name = <sound>
+		file = scalar #filepath
+	}
+	## cardinality = 0..1
+	soundeffectoverrides = {
+		## cardinality = 0..inf
+		<sound_effect> = <sound_effect>
+	}
+	## cardinality = 0..1
+	soundfileoverrides = {
+		## cardinality = 0..inf
+		<sound> = scalar #filepath
+	}
+	## cardinality = 0..1
+	sort_order = int
+}
+
+sound_master_compressor = {
+	pregain = float
+	postgain = float
+	ratio = float
+	threshold = float
+	attacktime = float
+	releasetime = float
+}
+
+sound_music_compressor = {
+	enabled = bool
+	pregain = float
+	postgain = float
+	ratio = float
+	threshold = float
+	attacktime = float
+	releasetime = float
+}
+
+sound_falloff = {
+	name = scalar
+	## cardinality = 0..1
+	type = enum[falloff_type] #vanilla only uses linear, but i assume there are other types. Should ask someone who knows.
+	## cardinality = 0..1
+	height_scale = float
+	min_distance = float
+	max_distance = float
+}
+
+sound_effect = {
+	name = scalar
+	## cardinality = 0..1
+	loop = bool
+	sounds = {
+		## cardinality = 0..inf
+		weighted_sound = {
+			sound = <sound>
+			weight = int
+		}
+		## cardinality = 0..inf
+		sound = <sound>
+	}
+	## cardinality = 0..1
+	max_audible = int
+	#vanilla only uses fail, should check this with mods/people who know this shit
+	## cardinality = 0..1
+	max_audible_behaviour = enum[audible_behaviour]
+
+	#none or one of these!
+	## cardinality = 0..1
+	volume = float
+	## cardinality = 0..1
+	#TODO: Work out if 0.8dw was a typo or real
+	#reason for this is that vanilla allows for "volume = 0.8dw". Maybe there is a better way of doing this?
+	#volume = scalar
+
+	## cardinality = 0..1
+	looping_volume_random_offset = bool
+	## cardinality = 0..1
+	looping_delay_random_offset = bool
+	## cardinality = 0..1
+	looping_playbackrate_random_offset = bool
+	## cardinality = 0..1
+	volume_random_offset = {
+		## cardinality = 2..2
+		#number range appears to be -1 to 1
+		float
+	}
+	## cardinality = 0..1
+	is3d = bool
+	## cardinality = 0..1
+	fade_out = float
+	## cardinality = 0..1
+	fade_in = float
+	## cardinality = 0..1
+	playbackrate_random_offset = {
+		## cardinality = 2..2
+		float
+	}
+	## cardinality = 0..1
+	delay_random_offset = {
+		## cardinality = 2..2
+		float
+	}
+	## cardinality = 0..1
+	playbackrate = int
+	## cardinality = 0..1
+	falloff = <sound_falloff>
+	## cardinality = 0..1
+	random_sound_when_looping = bool
+}
+
+sound = {
+	name = scalar
+	file = scalar #filepath
+	## cardinality = 0..1
+	volume = float
+	## cardinality = 0..1
+	always_load = bool
+	## cardinality = 0..1
+	priority = int
+}
+
+enums = {
+	enum[falloff_type] = {
+		linear
+	}
+	enum[audible_behaviour] = {
+		fail
+	}
+}
+
+

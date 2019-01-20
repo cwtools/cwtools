@@ -1,0 +1,239 @@
+types = {
+	type[section_template] = {
+		name_field = "key"
+		path = "game/common/section_templates"
+	}
+}
+
+section_template = {
+  key = localisation
+  ## cardinality = 0..inf
+  ship_size = <ship_size>
+  ## cardinality = 0..inf
+  #TODO section slots
+  fits_on_slot = enum[section_slots]
+  entity = scalar #TODO: graphical culture <model_entity>
+
+	## cardinality = 0..1
+	###As far as I can tell, this is unused (the Vanilla ones refer to non-existent sprites and I couldn't find an ingame effect) -Caligula
+	icon = scalar
+
+  ## cardinality = 0..1
+  icon_frame = int
+  ## cardinality = 0..1
+  should_draw_components = bool
+	## cardinality = 0..1
+	resources = {
+		category = ship_sections
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+  	prerequisites = {
+		## cardinality = 0..inf
+	  	<technology>
+	}
+  ## cardinality = 0..inf
+  component_slot = {
+    name = scalar
+	#TODO slot size
+	#slot_size = <weapon_slot_size>
+	slot_size = scalar
+    slot_type = enum[slot_type]
+    locatorname = enum[locators]
+    locatorname = scalar #TODO: Some locators are in .mesh files, so are missed by the enum
+    ## cardinality = 0..1
+	is_side_slot = bool
+    ## cardinality = 0..1
+	rotation = int
+	## cardinality = 0..1
+	position = {
+		x = float
+		y = float
+	}
+	## cardinality = 0..1
+	section_instance = int
+  }
+  ## cardinality = 0..1
+  small_utility_slots = int
+  ## cardinality = 0..1
+  medium_utility_slots = int
+  ## cardinality = 0..1
+  large_utility_slots = int
+  ## cardinality = 0..1
+  aux_utility_slots = int
+	## cardinality = 0..1
+  ai_weight = {
+		## cardinality = 0..1
+		weight = float
+		## cardinality = 0..1
+		factor = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+enums = {
+  	enum[slot_type] = {
+     	strike_craft
+    	weapon
+   	}
+	complex_enum[component_slots] = {
+		path = "game/common/section_templates"
+		name = {
+			component_slot = {
+				name = enum_name
+			}
+		}
+	}
+	enum[utility_component_slots] = {
+		SMALL_UTILITY_1
+SMALL_UTILITY_2
+SMALL_UTILITY_3
+SMALL_UTILITY_4
+SMALL_UTILITY_5
+SMALL_UTILITY_6
+SMALL_UTILITY_7
+SMALL_UTILITY_8
+SMALL_UTILITY_9
+SMALL_UTILITY_10
+SMALL_UTILITY_11
+SMALL_UTILITY_12
+SMALL_UTILITY_13
+SMALL_UTILITY_14
+SMALL_UTILITY_15
+SMALL_UTILITY_16
+SMALL_UTILITY_17
+SMALL_UTILITY_18
+SMALL_UTILITY_19
+SMALL_UTILITY_20
+SMALL_UTILITY_21
+SMALL_UTILITY_22
+SMALL_UTILITY_23
+SMALL_UTILITY_24
+SMALL_UTILITY_25
+SMALL_UTILITY_26
+SMALL_UTILITY_27
+SMALL_UTILITY_28
+SMALL_UTILITY_29
+SMALL_UTILITY_30
+MEDIUM_UTILITY_1
+MEDIUM_UTILITY_2
+MEDIUM_UTILITY_3
+MEDIUM_UTILITY_4
+MEDIUM_UTILITY_5
+MEDIUM_UTILITY_6
+MEDIUM_UTILITY_7
+MEDIUM_UTILITY_8
+MEDIUM_UTILITY_9
+MEDIUM_UTILITY_10
+MEDIUM_UTILITY_11
+MEDIUM_UTILITY_12
+MEDIUM_UTILITY_13
+MEDIUM_UTILITY_14
+MEDIUM_UTILITY_15
+MEDIUM_UTILITY_16
+MEDIUM_UTILITY_17
+MEDIUM_UTILITY_18
+MEDIUM_UTILITY_19
+MEDIUM_UTILITY_20
+MEDIUM_UTILITY_21
+MEDIUM_UTILITY_22
+MEDIUM_UTILITY_23
+MEDIUM_UTILITY_24
+MEDIUM_UTILITY_25
+MEDIUM_UTILITY_26
+MEDIUM_UTILITY_27
+MEDIUM_UTILITY_28
+MEDIUM_UTILITY_29
+MEDIUM_UTILITY_30
+LARGE_UTILITY_1
+LARGE_UTILITY_2
+LARGE_UTILITY_3
+LARGE_UTILITY_4
+LARGE_UTILITY_5
+LARGE_UTILITY_6
+LARGE_UTILITY_7
+LARGE_UTILITY_8
+LARGE_UTILITY_9
+LARGE_UTILITY_10
+LARGE_UTILITY_11
+LARGE_UTILITY_12
+LARGE_UTILITY_13
+LARGE_UTILITY_14
+LARGE_UTILITY_15
+LARGE_UTILITY_16
+LARGE_UTILITY_17
+LARGE_UTILITY_18
+LARGE_UTILITY_19
+LARGE_UTILITY_20
+LARGE_UTILITY_21
+LARGE_UTILITY_22
+LARGE_UTILITY_23
+LARGE_UTILITY_24
+LARGE_UTILITY_25
+LARGE_UTILITY_26
+LARGE_UTILITY_27
+LARGE_UTILITY_28
+LARGE_UTILITY_29
+LARGE_UTILITY_30
+LARGE_UTILITY_31
+LARGE_UTILITY_32
+LARGE_UTILITY_33
+LARGE_UTILITY_34
+LARGE_UTILITY_35
+LARGE_UTILITY_36
+LARGE_UTILITY_37
+LARGE_UTILITY_38
+LARGE_UTILITY_39
+LARGE_UTILITY_40
+LARGE_UTILITY_41
+LARGE_UTILITY_42
+LARGE_UTILITY_43
+LARGE_UTILITY_44
+LARGE_UTILITY_45
+LARGE_UTILITY_46
+LARGE_UTILITY_47
+LARGE_UTILITY_48
+LARGE_UTILITY_49
+LARGE_UTILITY_50
+LARGE_UTILITY_51
+LARGE_UTILITY_52
+LARGE_UTILITY_53
+LARGE_UTILITY_54
+LARGE_UTILITY_55
+LARGE_UTILITY_56
+LARGE_UTILITY_57
+LARGE_UTILITY_58
+LARGE_UTILITY_59
+LARGE_UTILITY_60
+AUX_UTILITY_1
+AUX_UTILITY_2
+AUX_UTILITY_3
+AUX_UTILITY_4
+AUX_UTILITY_5
+AUX_UTILITY_6
+AUX_UTILITY_7
+AUX_UTILITY_8
+AUX_UTILITY_9
+AUX_UTILITY_10
+AUX_UTILITY_11
+AUX_UTILITY_12
+AUX_UTILITY_13
+AUX_UTILITY_14
+AUX_UTILITY_15
+AUX_UTILITY_16
+AUX_UTILITY_17
+AUX_UTILITY_18
+AUX_UTILITY_19
+AUX_UTILITY_20
+AUX_UTILITY_21
+AUX_UTILITY_22
+AUX_UTILITY_23
+AUX_UTILITY_24
+AUX_UTILITY_25
+AUX_UTILITY_26
+AUX_UTILITY_27
+AUX_UTILITY_28
+AUX_UTILITY_29
+AUX_UTILITY_30
+	}
+}

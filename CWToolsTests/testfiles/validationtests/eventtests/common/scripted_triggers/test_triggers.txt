@@ -2,15 +2,15 @@ exists_intimidated_state = {
 	any_country = {
 		OR = {
 			has_country_flag = yes
-            #error
-            has_ship_flag = yes
-            #error
-            fake_effect = yes
+            ##error
+            ##has_ship_flag = yes
+            ##error
+            ##fake_effect = yes
         }
-        #error
-        has_ship_flag = yes
-        #error
-        fake_effect = yes
+        ##error
+        ##has_ship_flag = yes
+        ##error
+        ##fake_effect = yes
 
 	}
 }

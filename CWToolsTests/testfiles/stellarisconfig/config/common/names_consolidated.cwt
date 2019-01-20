@@ -1,0 +1,377 @@
+types = { #these are all connected. I added the others so whoever does these in the end knows where to look.
+	type[name_list] = {
+		path = "game/common/name_lists"
+
+		subtype[random] = {
+			## cardinality = 0..0
+			randomized = bool
+		}
+	}
+	## type_key_filter <> named_lists
+	type[species_name] = {
+		path = "game/common/species_names"
+		name_field = "name"
+	}
+	type[species_named_list] = {
+		path = "game/common/species_names"
+		skip_root_key = named_lists
+	}
+	## type_key_filter = empire_name_parts_list
+	type[random_empire_name_part] = {
+		path = "game/common/random_names"
+	}
+	## type_key_filter = empire_name_format
+	type[random_empire_name_format] = {
+		path = "game/common/random_names"
+	}
+}
+
+#TODO: Confirm
+#TODO: Add warning if ship_size doesn't have name list block
+name_list = {
+	## cardinality = 0..1
+	language = scalar
+
+	## cardinality = 0..1
+	selectable = {
+		## replace_scope = { this = country root = country } #i think, might be no_scope though
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	trigger = {
+		## cardinality = 0..1
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	###It appears that randomized = yes will be read as randomized = no. Anyway yes is default.
+	randomized = no
+	## cardinality = 0..1
+	alias = scalar
+	## cardinality = 0..1
+	should_name_home_system_planets = bool
+	## cardinality = 0..1
+	ship_names = {
+		## cardinality = 0..1
+		generic = {
+			## cardinality = 0..inf
+			scalar
+		}
+
+		#buildable ship sizes (have a prerequisite and/or defined as designable!) that are not defined in a name list will get a generic
+		#name if its defined for the given country/species. Otherwise they will not get a name! This is a serious problem for ship mods
+		#and a warning should be added to cwtools checking this!
+
+		## cardinality = 0..inf
+		<ship_size> = {
+			## cardinality = 0..inf
+			scalar
+
+			## cardinality = 0..1
+			sequential_name = scalar
+
+			## cardinality = 0..1
+			random_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+	}
+	## cardinality = 0..1
+	fleet_names = {
+		## cardinality = 0..1
+		generic = {
+			## cardinality = 0..inf
+			scalar
+		}
+		#formula for name generation
+		## cardinality = 0..1
+		sequential_name = scalar
+		## cardinality = 0..1
+		random_names = {
+			## cardinality = 0..inf
+			scalar
+		}
+	}
+	## cardinality = 0..1
+	army_names = {
+		## cardinality = 0..1
+		generic = {
+			## cardinality = 0..inf
+			scalar
+			#formula for name generation
+			## cardinality = 0..1
+			sequential_name = scalar
+		}
+
+		#armies that can be built and do not defined in a name list will get a generic
+		#name if its defined for the given country/species. Otherwise they will not get a name! a warning should be added to cwtools checking this!
+
+		## cardinality = 0..inf
+		<army> = {
+			## cardinality = 0..1
+			names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			sequential_name = scalar
+			## cardinality = 0..1
+			random_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+	}
+	## cardinality = 0..1
+	planet_names = {
+		## cardinality = 0..1
+		generic = {
+			names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+
+		#armies that can be built and do not defined in a name list will get a generic
+		#name if its defined for the given country/species. Otherwise they will not get a name! a warning should be added to cwtools checking this!
+
+		## cardinality = 0..inf
+		<planet_class> = {
+			names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+	}
+	## cardinality = 0..1
+	ship_class_names = {
+		## cardinality = 0..1
+		generic = {
+			## cardinality = 0..inf
+			scalar
+		}
+		## cardinality = 0..inf
+		<ship_size> = {
+			## cardinality = 0..inf
+			scalar
+		}
+	}
+	## cardinality = 0..1
+	character_names = {
+		## cardinality = 0..1
+		default = {
+			## cardinality = 0..1
+			use_full_regnal_name = bool
+			## cardinality = 0..1
+			full_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			full_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			full_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			first_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			first_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			first_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			second_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			second_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			second_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_first_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_first_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_first_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_second_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+		## cardinality = 0..inf
+		scalar = {
+			weight = int
+			## cardinality = 0..1
+			use_full_regnal_name = bool
+			## cardinality = 0..1
+			full_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			full_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			full_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			first_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			first_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			first_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			second_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			second_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			second_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_first_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_first_names_male = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_first_names_female = {
+				## cardinality = 0..inf
+				scalar
+			}
+			## cardinality = 0..1
+			regnal_second_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+	}
+
+	## cardinality = 0..1
+	ruler_names = {
+		default = {
+			full_names = {
+				## cardinality = 0..inf
+				scalar
+			}
+		}
+	}
+}
+
+### Define possible parts of empire name here, such as "Glorious Empire of". When generating random name for empire, format can refer to it via <key> and pick random part.
+random_empire_name_part = {
+	### Unique ID by which list can be referred to from name format via <key>.
+	key = scalar
+	### List of possible parts. Random weights to the right are optional
+	parts = {
+		## cardinality = 0..inf
+		scalar = int
+		## cardinality = 0..inf
+		scalar
+	}
+}
+
+### This block contains rules for picking a specific name format
+random_empire_name_format = {
+	## replace_scope = { root = country this = country }
+	### Conditional weight for choosing this format
+	random_weight = {
+		## cardinality = 0..1
+		factor = float
+		## cardinality = 0..1
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	### Reference to localisation string for generating random name
+	format = localisation_synced
+	### String used to determine prefix for empire's ship. (Default being ISS). Usually matches name format. Optional for countries that would not ever have ships, e. g. Primitives.
+	## cardinality = 0..1
+	prefix_format = scalar
+	### Not quite clear what it does. Matches [] string retrieval in game format. If you know what it does, please contact CW Tools developer Dayshine.
+	noun = scalar
+}
+
+species_name = {
+	## cardinality = 1..inf
+	### Unique key for your species name entry
+	scalar = {
+		### Name of a species, singular, e. g. Human
+		name = scalar
+		### Plural for the species name, e. g. Humans
+		plural = scalar
+		### Name of the home planet, if this entry is used when generating random playable empire on game start, e. g. Earth
+		home_planet = scalar
+		### Name of the home system, if this entry is used when generating random playable empire on game start, e. g. Sol
+		home_system = scalar
+		### ID of the name list picked if this entry is used when generating random player empire on game start, e. g. HUMAN1. It cannot be a non-randomizable name list (creates species with blank names). It is unclear whether selectable = { always = no } will also avoid this bug, let Dayshine and Caligula know if it does.
+		name_list = <name_list>
+		## cardinality = 0..1
+		language = scalar
+	}
+}
+
+species_named_list = {
+	## cardinality = 1..inf
+	scalar = {
+		name = scalar
+		plural = scalar
+		## cardinality = 0..1
+		language = scalar
+	}
+}

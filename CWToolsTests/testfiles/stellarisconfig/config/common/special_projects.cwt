@@ -1,0 +1,164 @@
+types = {
+	type[special_project] = {
+		name_field = "key"
+		path = "game/common/special_projects"
+
+		subtype[cost] = {
+			cost = int[1..9999999]
+		}
+	}
+}
+
+
+special_project = {
+	key = localisation
+	## cardinality = 0..1
+	cost = int
+	## cardinality = 0..1
+	cost = {
+		base = int
+		alias_name[scaled_modifier_rule] = alias_match_left[scaled_modifier_rule]
+	}
+	## cardinality = 0..1
+	timelimit = int
+	## cardinality = 0..1
+	days_to_research = int
+	## cardinality = 0..1
+	location = bool
+	## cardinality = 0..1
+	icon = filepath
+
+
+	subtype[cost] = {
+		tech_department = enum[tech_departments]
+	}
+
+	subtype[!cost] = {
+		## cardinality = 0..1
+		tech_department = enum[tech_departments]
+	}
+
+	## cardinality = 0..1
+	picture =  <sprite>
+
+	event_scope = enum[sp_event_scopes]
+
+	## cardinality = 0..1
+	event_chain = <event_chain>
+
+	## cardinality = 0..1
+	same_option_group_as = {
+		## cardinality = 1..100
+		<special_project>
+	}
+
+	## cardinality = 0..1
+	sound = no
+
+	## cardinality = 0..1
+	AI_wait_days = {
+		weight = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	requirements = {
+		## cardinality = 0..1
+		shipclass_military = int
+		## cardinality = 0..1
+		shipclass_constructor = int
+		## cardinality = 0..1
+		shipclass_science_ship = int
+		## cardinality = 0..1
+		shipclass_colonizer = int
+		## cardinality = 0..1
+		shipclass_transport = int
+
+		## cardinality = 0..1
+		leader = enum[leader_classes]
+
+		## cardinality = 0..1
+		assault_armies = int
+		## cardinality = 0..1
+		defense_armies = int
+
+		## cardinality = 0..1
+		research_station = yes
+
+		## cardinality = 0..1
+		mining_station = yes
+
+		## cardinality = 0..1
+		observation_station = yes
+
+		## cardinality = 0..1
+		skill = int[1..10]
+
+		## cardinality = 0..1
+		fleet_power > int
+
+		## cardinality = 0..1
+		is_founder_species = bool
+		## cardinality = 0..1
+		has_trait = <trait.leader_trait>
+	}
+
+	## push_scope = country
+	## cardinality = 0..1
+	###this = country (project owner); from = event scope (planet or ship, MIGHT NOT EXIST); fromfrom = project creation scope (usually equals location)
+	abort_trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	###this = event scope (ship or planet); from = project creation scope (usually equals location)
+	on_success = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..1
+	on_progress_25 = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..1
+	on_progress_50 = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..1
+	on_progress_75 = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..1
+	on_start = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## push_scope = country
+	## cardinality = 0..1
+	###this = country (project owner); from = project creation scope (usually equals location)
+	on_fail = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## push_scope = country
+	## cardinality = 0..1
+	### new thing from 2.1.3 patch, have it from?
+	on_cancel = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}
+
+
+enums = {
+	enum[tech_departments] = {
+		society_technology
+		engineering_technology
+		physics_technology
+	}
+
+	enum[sp_event_scopes] = {
+		ship_event
+		planet_event
+	}
+}

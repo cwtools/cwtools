@@ -1,0 +1,178 @@
+#sprites are saved in *.gfx files (like meshes) and are by and large stored in /interface
+
+types = {
+	## type_key_filter = progressbartype
+	type[progressbartype] = {
+		name_field = name
+		path = "game/interface"
+		skip_root_key = spriteTypes
+		severity = warning
+	}
+	## type_key_filter = PieChartType
+	type[piechart] = { #these are links that start with the GFX_ prefix in vanilla
+		name_field = name
+		path = "game/interface"
+		skip_root_key = spriteTypes
+		severity = warning
+
+	}
+	type[sprite] = { #these are links that start with the GFX_ prefix in vanilla
+		name_field = name
+		path = "game/interface"
+		skip_root_key = spriteTypes
+		severity = warning
+		## type_key_filter = spriteType
+		subtype[normal] = {}
+		## type_key_filter = corneredTileSpriteType
+		subtype[cornered_tile] = {}
+		## type_key_filter = flagSpriteType
+		subtype[flag_sprite] = {}
+		## type_key_filter = frameAnimatedSpriteType
+		subtype[framed_animated_sprite] = {}
+		## type_key_filter = textSpriteType
+		subtype[text_sprite] = {}
+	}
+}
+
+#TODO: Rework to use types inside the top level
+
+progressbartype = {
+	name = scalar
+
+	#either texturefile, or both texturefile1 and 2 - need to be worked out.
+
+	## cardinality = 0..1
+	textureFile = filepath
+	## cardinality = 0..1
+	textureFile1 = filepath
+	## cardinality = 0..1
+	textureFile2 = filepath
+
+	effectFile = filepath #shader file
+
+	color = {
+		## cardinality = 3..3
+		float
+	}
+	colortwo = {
+		## cardinality = 3..3
+		float
+	}
+	size = { x = int y = int }
+	## cardinality = 0..1
+	horizontal = bool
+}
+
+sprite = {
+	name = scalar
+	## cardinality = 0..1
+	textureFile = filepath
+	## cardinality = 0..1
+	masking_texture = filepath
+	## cardinality = 0..1
+	effectFile = filepath
+	## cardinality = 0..1
+	alwaysTransparent = bool
+	## cardinality = 0..1
+	transParencecheck = bool
+	## cardinality = 0..1
+	borderSize = { x = int y = int }
+	## cardinality = 0..1
+	hitbox_margin = { x = int y = int }
+	## cardinality = 0..1
+	noOfFrames = int
+	## cardinality = 0..1
+	type = enum[sprite_type]
+	## cardinality = 0..1
+	character = bool
+	## cardinality = 0..1
+	tilingCenter = bool
+	## cardinality = 0..1
+	clicksound = <sound_effect>
+	## cardinality = 0..1
+	loadType = scalar
+	## cardinality = 0..1
+	legacy_lazy_load = bool
+	## cardinality = 0..inf
+	animation = {
+		## cardinality = 0..1
+		animationmaskfile = filepath
+		## cardinality = 0..1
+		animationtexturefile = filepath
+		## cardinality = 0..1
+		animationrotation = float[-360..360]
+		## cardinality = 0..1
+		animationlooping = bool
+		## cardinality = 0..1
+		animationtime = float
+		## cardinality = 0..1
+		animationdelay = float
+		## cardinality = 0..1
+		animationblendmode = enum[animation_mode]
+		## cardinality = 0..1
+		animationtype = enum[animation_type]
+		## cardinality = 0..1
+		animationrotationoffset = { x = float y = float }
+		## cardinality = 0..1
+		animationtexturescale = { x = float y = float }
+		## cardinality = 0..1
+		animationframes = {
+			## cardinality = 1..3
+			int
+		}
+	}
+	#flag_sprite only!
+	## cardinality = 0..1
+	bg_position = { x = int y = int }
+	## cardinality = 0..1
+	bg_size = { width = int height = int }
+	## cardinality = 0..1
+	symbol_position = { x = int y = int }
+	## cardinality = 0..1
+	symbol_size = { width = int height = int }
+	## cardinality = 0..1
+	texture_size = enum[texture_size]
+
+	#framed_animated_sprite only!
+	## cardinality = 0..1
+	play_on_show = bool
+	## cardinality = 0..1
+	animation_rate_fps = int
+	## cardinality = 0..1
+	looping = bool
+
+	#cornered_tile_sprite
+	## cardinality = 0..1
+	size = {
+		x = int
+		y = int
+	}
+}
+
+piechart = {
+	name = scalar
+	size = int
+}
+
+enums = {
+  enum[animation_mode] = {
+    overlay
+    add
+    multiply
+  }
+  enum[animation_type] = {
+    scrolling
+    rotating
+    pulsing
+	rotating_ccw
+	rotating_cw
+  }
+  enum[sprite_type] = {
+  	planet
+	room
+	character
+  }
+  enum[texture_size] = {
+  	small
+  }
+}

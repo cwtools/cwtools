@@ -1,0 +1,316 @@
+types = {
+	## type_key_filter <> random_list
+	type[solar_system_initializer] = {
+		path = "game/common/solar_system_initializers"
+		subtype[fallen_empire_initializer] = {
+			usage = fallen_empire_init
+		}
+	}
+	## type_key_filter = random_list
+	type[solar_system_initializer_random_list] = {
+		name_field = name
+		path = "game/common/solar_system_initializers"
+	}
+}
+
+solar_system_initializer = {
+	## cardinality = 0..1
+	name = localisation_synced
+	#the class below here represents star class, which is the icon of the system in galactic view.
+	class = <star_class> #this also includes random lists of stars, as defined in the star_classes files
+	class = enum[star_class_random_list]
+	## cardinality = 0..1
+	flags = { #star_flag
+		## cardinality = 0..inf
+		value_set[star_flag]
+	}
+	## cardinality = 0..inf
+	asteroid_belt = {
+		type = <asteroid_belt_type> #this is defined in under common/asteroid_belts
+		radius = int
+	}
+	## cardinality = 0..inf
+	usage = enum[usage_type]
+	## cardinality = 0..1
+	usage_odds = float
+	## cardinality = 0..1
+	usage_odds = {
+		## cardinality = 0..1
+		base = float
+		## cardinality = 0..inf
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	## cardinality = 0..1
+	### accepts negative numbers, negative numbers = unrestricted
+	max_instances = int
+
+	## cardinality = 0..1
+	spawn_chance = int
+	## cardinality = 0..1
+	scaled_spawn_chance = int
+	## cardinality = 0..1
+	scaled_spawn_settings = scalar
+	## cardinality = 0..1
+	prevent_anomalies = bool
+	## cardinality = 0..1
+	primitive_system = bool
+	## cardinality = 0..1
+	inner_radius_offset = int
+	## cardinality = 0..1
+	outer_radius_offset = int
+	subtype[!fallen_empire_initializer] = {
+		## cardinality = 0..inf
+		## replace_scope = { this = planet root = any = prev = system }
+		alias_name[planet_initializer] = alias_match_left[planet_initializer]
+	}
+	subtype[fallen_empire_initializer] = {
+		## cardinality = 0..inf
+		## replace_scope = { this = planet root = country = prev = system }
+		alias_name[planet_initializer] = alias_match_left[planet_initializer]
+	}
+
+	## cardinality = 0..inf
+	change_orbit = int
+	## cardinality = 0..inf
+	change_orbit = { min = int max = int }
+
+	subtype[!fallen_empire_initializer] = {
+		###the scope here is galactic_object scope, with prev being set to the previous system that was initialized by this tree ( if any ). Root will point to the first system in the tree or the root of the calling event.
+		## replace_scope = { this = galactic_object root = any }
+		## cardinality = 0..1
+		init_effect = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+	}
+	subtype[fallen_empire_initializer] = {
+		###the scope here is galactic_object scope, with prev being set to the previous system that was initialized by this tree ( if any ). Root will point to the first system in the tree or the root of the calling event.
+		## replace_scope = { this = galactic_object root = country }
+		## cardinality = 0..1
+		init_effect = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+	}
+
+	## cardinality = 0..inf
+	neighbor_system = {
+		initializer = <solar_system_initializer>
+
+		#one of these varients is required
+		distance = int
+		distance = { min = int max = int }
+		## cardinality = 0..1
+		spawn_chance = int
+		## cardinality = 0..1
+		trigger = {
+			## cardinality = 0..inf
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+	}
+}
+alias[planet_initializer:planet] = {
+	## cardinality = 0..1
+	name = localisation_synced
+	### count is optional, default to 1 if isn't specified or written at all
+	## cardinality = 0..1
+	count = int
+	## cardinality = 0..1
+	count = { min = int max = int }
+	## cardinality = 0..1
+	entity = scalar
+
+
+	### the class in planet init represents planet_class, not star_class. class = star means the planet class of this star is star.
+	## cardinality = 0..1
+	class = random
+	## cardinality = 0..1
+	class = <planet_class>
+	## cardinality = 0..1
+	class = <planet_class_random_list>
+	## cardinality = 0..1
+	class = star
+	## cardinality = 0..1
+	class = enum[solar_sys_init_planet_class]
+	## cardinality = 0..1
+	class = ideal_design_class
+
+	## cardinality = 0..1
+	orbit_distance = float
+	## cardinality = 0..1
+	orbit_distance = { min = int max = int }
+
+	## cardinality = 0..1
+	change_orbit = int
+	#everything below this point is optional
+	## cardinality = 0..1
+	flags = { #planet flags
+		## cardinality = 0..inf
+		value_set[planet_flag]
+	}
+
+	## cardinality = 0..inf
+	orbit_angle = random
+	## cardinality = 0..inf
+	orbit_angle = int
+	## cardinality = 0..inf
+	orbit_angle = { min = int max = int }
+	## cardinality = 0..inf
+	orbit_angle = random
+
+	## cardinality = 0..inf
+	size = int
+	## cardinality = 0..inf
+	size = { min = int max = int }
+
+	## cardinality = 0..1
+	has_ring = bool
+	## cardinality = 0..1
+	home_planet = bool
+	## cardinality = 0..1
+	starting_planet = bool
+#	## cardinality = 0..1
+#	tile_blockers = none
+	## cardinality = 0..inf
+	tile_blocker = <deposit.blocker>
+	## cardinality = 0..1
+	modifiers = none
+	## cardinality = 0..inf
+	modifier = <planet_modifier>
+	## cardinality = 0..inf
+	resource = <resource>
+	## cardinality = 0..1
+	anomaly = <anomaly_category>
+	## cardinality = 0..1
+	anomaly = none
+
+	## cardinality = 0..1
+	deposit_blockers = none
+
+	## cardinality = 0..1
+	satellite_naming_policy = enum[satellite_naming_policy]
+
+	## cardinality = 0..1
+	starting_planet = bool
+
+	## severity = info
+	### The scope will be a planet scope, with prev being the system. prevprev will be the system that triggered this system's initialization ( if any ). Root will be the fallen empire.
+	## cardinality = 0..1
+	init_effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## push_scope = planet
+	alias_name[planet_initializer] = alias_match_left[planet_initializer]
+	## push_scope = planet
+	alias_name[moon_initializer] = alias_match_left[moon_initializer]
+
+}
+alias[moon_initializer:moon] = {
+	## cardinality = 0..1
+	name = localisation_synced
+	### count is optional, default to 1 if isn't specified or written at all
+	## cardinality = 0..1
+	count = int
+	## cardinality = 0..1
+	count = { min = int max = int }
+	## cardinality = 0..1
+	entity = scalar
+
+
+	### the class in planet init represents planet_class, not star_class. class = star means the planet class of this star is star.
+	## cardinality = 0..1
+	class = random
+	## cardinality = 0..1
+	class = <planet_class>
+	## cardinality = 0..1
+	class = <planet_class_random_list>
+	## cardinality = 0..1
+	class = star
+	## cardinality = 0..1
+	class = enum[solar_sys_init_planet_class]
+
+	## cardinality = 0..1
+	orbit_distance = float
+	## cardinality = 0..1
+	orbit_distance = { min = int max = int }
+
+	## cardinality = 0..1
+	change_orbit = int
+	#everything below this point is optional
+	## cardinality = 0..1
+	flags = { #planet flags
+		## cardinality = 0..inf
+		value_set[planet_flag]
+	}
+
+	## cardinality = 0..inf
+	orbit_angle = random
+	## cardinality = 0..inf
+	orbit_angle = int
+	## cardinality = 0..inf
+	orbit_angle = { min = int max = int }
+
+	## cardinality = 0..inf
+	size = int
+	## cardinality = 0..inf
+	size = { min = int max = int }
+
+	## cardinality = 0..1
+	has_ring = bool
+	## cardinality = 0..1
+	home_planet = bool
+	## cardinality = 0..1
+	starting_planet = bool
+	## cardinality = 0..1
+	tile_blockers = none
+	## cardinality = 0..inf
+	tile_blocker = <deposit.blocker>
+	## cardinality = 0..1
+	modifiers = none
+	## cardinality = 0..inf
+	modifier = <planet_modifier>
+	## cardinality = 0..inf
+	resource = <resource>
+	## cardinality = 0..1
+	anomaly = <anomaly_category>
+	## cardinality = 0..1
+	anomaly = none
+
+	## cardinality = 0..1
+	starting_planet = bool
+
+	### The scope will be a planet scope, with prev being the system. prevprev will be the system that triggered this system's initialization ( if any ). Root will be the first system in this initializer tree
+	## cardinality = 0..1
+	init_effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..1
+	deposit_blockers = none
+}
+
+solar_system_initializer_random_list = {
+	name = scalar
+	## cardinality = 1..inf
+	<solar_system_initializer> = int
+}
+
+enums = {
+	enum[usage_type] = {
+		empire_init
+		misc_system_init
+		custom_empire
+		fallen_empire_init
+	}
+	enum[satellite_naming_policy] = {
+		upper_case_roman_numerals
+		lower_case_latin_letters
+	}
+	enum[solar_sys_init_planet_class] = {
+		random
+		random_colonizable
+		random_non_ideal
+		random_non_colonizable
+		ideal_planet_class
+		random_asteroid
+		none
+	}
+}

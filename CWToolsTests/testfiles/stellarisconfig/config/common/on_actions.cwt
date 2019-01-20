@@ -1,0 +1,2746 @@
+types = {
+    type[on_action] = {
+        path = "game/common/on_actions"
+        start_from_root = yes
+        ## type_key_filter = on_game_start
+        subtype[on_game_start] = { }
+        ## type_key_filter = on_monthly_pulse
+        subtype[on_monthly_pulse] = { }
+        ## type_key_filter = on_yearly_pulse
+        subtype[on_yearly_pulse] = { }
+        ## type_key_filter = on_bi_yearly_pulse
+        subtype[on_bi_yearly_pulse] = { }
+        ## type_key_filter = on_five_year_pulse
+        subtype[on_five_year_pulse] = { }
+        ## type_key_filter = on_decade_pulse
+        subtype[on_decade_pulse] = { }
+        ## type_key_filter = on_mid_game_pulse
+        subtype[on_mid_game_pulse] = { }
+        ## type_key_filter = on_late_game_pulse
+        subtype[on_late_game_pulse] = { }
+        ## type_key_filter = on_game_start_country
+        subtype[on_game_start_country] = { }
+        ## type_key_filter = on_monthly_pulse_country
+        subtype[on_monthly_pulse_country] = { }
+        ## type_key_filter = on_yearly_pulse_country
+        subtype[on_yearly_pulse_country] = { }
+        ## type_key_filter = on_bi_yearly_pulse_country
+        subtype[on_bi_yearly_pulse_country] = { }
+        ## type_key_filter = on_five_year_pulse_country
+        subtype[on_five_year_pulse_country] = { }
+        ## type_key_filter = on_decade_pulse_country
+        subtype[on_decade_pulse_country] = { }
+        ## type_key_filter = on_mid_game_pulse_country
+        subtype[on_mid_game_pulse_country] = { }
+        ## type_key_filter = on_late_game_pulse_country
+        subtype[on_late_game_pulse_country] = { }
+        ## type_key_filter = on_become_advanced_empire
+        subtype[on_become_advanced_empire] = { }
+        ## type_key_filter = on_press_begin
+        subtype[on_press_begin] = { }
+        ## type_key_filter = on_tutorial_level_changed
+        subtype[on_tutorial_level_changed] = { }
+        ## type_key_filter = on_join_alliance
+        subtype[on_join_alliance] = { }
+        ## type_key_filter = on_leave_alliance
+        subtype[on_leave_alliance] = { }
+        ## type_key_filter = on_ruler_set
+        subtype[on_ruler_set] = { }
+        ## type_key_filter = on_policy_changed
+        subtype[on_policy_changed] = { }
+        ## type_key_filter = on_ship_designed
+        subtype[on_ship_designed] = { }
+        ## type_key_filter = on_tech_increased
+        subtype[on_tech_increased] = { }
+        ## type_key_filter = empire_init_add_technologies
+        subtype[empire_init_add_technologies] = { }
+        ## type_key_filter = empire_init_create_ships
+        subtype[empire_init_create_ships] = { }
+        ## type_key_filter = on_election_started
+        subtype[on_election_started] = { }
+        ## type_key_filter = on_election_ended
+        subtype[on_election_ended] = { }
+        ## type_key_filter = on_pirate_spawn
+        subtype[on_pirate_spawn] = { }
+        ## type_key_filter = on_colonization_started
+        subtype[on_colonization_started] = { }
+        ## type_key_filter = on_colonized
+        subtype[on_colonized] = { }
+        ## type_key_filter = on_colony_destroyed
+        subtype[on_colony_destroyed] = { }
+        ## type_key_filter = on_building_complete
+        subtype[on_building_complete] = { }
+        ## type_key_filter = on_building_queued
+        subtype[on_building_queued] = { }
+        ## type_key_filter = on_building_unqueued
+        subtype[on_building_unqueued] = { }
+        ## type_key_filter = on_building_upgraded
+        subtype[on_building_upgraded] = { }
+        ## type_key_filter = on_building_demolished
+        subtype[on_building_demolished] = { }
+        ## type_key_filter = on_district_complete
+        subtype[on_district_complete] = { }
+        ## type_key_filter = on_building_replaced
+        subtype[on_building_replaced] = { }
+        ## type_key_filter = on_district_queued
+        subtype[on_district_queued] = { }
+        ## type_key_filter = on_district_unqueued
+        subtype[on_district_unqueued] = { }
+        ## type_key_filter = on_district_demolished
+        subtype[on_district_demolished] = { }
+        ## type_key_filter = on_blocker_cleared
+        subtype[on_blocker_cleared] = { }
+        ## type_key_filter = on_colony_1_year_old
+        subtype[on_colony_1_year_old] = { }
+        ## type_key_filter = on_colony_2_years_old
+        subtype[on_colony_2_years_old] = { }
+        ## type_key_filter = on_colony_3_years_old
+        subtype[on_colony_3_years_old] = { }
+        ## type_key_filter = on_colony_4_years_old
+        subtype[on_colony_4_years_old] = { }
+        ## type_key_filter = on_colony_5_years_old
+        subtype[on_colony_5_years_old] = { }
+        ## type_key_filter = on_colony_6_years_old
+        subtype[on_colony_6_years_old] = { }
+        ## type_key_filter = on_colony_7_years_old
+        subtype[on_colony_7_years_old] = { }
+        ## type_key_filter = on_colony_8_years_old
+        subtype[on_colony_8_years_old] = { }
+        ## type_key_filter = on_colony_9_years_old
+        subtype[on_colony_9_years_old] = { }
+        ## type_key_filter = on_colony_10_years_old
+        subtype[on_colony_10_years_old] = { }
+        ## type_key_filter = on_custom_diplomacy
+        subtype[on_custom_diplomacy] = { }
+        ## type_key_filter = on_entering_war
+        subtype[on_entering_war] = { }
+        ## type_key_filter = on_country_destroyed
+        subtype[on_country_destroyed] = { }
+        ## type_key_filter = on_pre_communications_established
+        subtype[on_pre_communications_established] = { }
+        ## type_key_filter = on_post_communications_established
+        subtype[on_post_communications_established] = { }
+        ## type_key_filter = on_war_ended
+        subtype[on_war_ended] = { }
+        ## type_key_filter = on_initialize_advanced_colony
+        subtype[on_initialize_advanced_colony] = { }
+        ## type_key_filter = on_terraforming_begun
+        subtype[on_terraforming_begun] = { }
+        ## type_key_filter = on_terraforming_complete
+        subtype[on_terraforming_complete] = { }
+        ## type_key_filter = on_planet_bombarded
+        subtype[on_planet_bombarded] = { }
+        ## type_key_filter = on_planet_zero_pops
+        subtype[on_planet_zero_pops] = { }
+        ## type_key_filter = on_planet_zero_health_ground_combat
+        subtype[on_planet_zero_health_ground_combat] = { }
+        ## type_key_filter = on_planet_ownerless
+        subtype[on_planet_ownerless] = { }
+        ## type_key_filter = on_planet_transfer
+        subtype[on_planet_transfer] = { }
+        ## type_key_filter = on_planet_conquer
+        subtype[on_planet_conquer] = { }
+        ## type_key_filter = on_first_contact
+        subtype[on_first_contact] = { }
+        ## type_key_filter = on_enforce_borders
+        subtype[on_enforce_borders] = { }
+        ## type_key_filter = on_planet_attackers_win
+        subtype[on_planet_attackers_win] = { }
+        ## type_key_filter = on_planet_attackers_lose
+        subtype[on_planet_attackers_lose] = { }
+        ## type_key_filter = on_planet_defenders_win
+        subtype[on_planet_defenders_win] = { }
+        ## type_key_filter = on_planet_defenders_lose
+        subtype[on_planet_defenders_lose] = { }
+        ## type_key_filter = on_system_first_visited
+        subtype[on_system_first_visited] = { }
+        ## type_key_filter = on_system_lost
+        subtype[on_system_lost] = { }
+        ## type_key_filter = on_system_gained
+        subtype[on_system_gained] = { }
+        ## type_key_filter = on_entering_system_first_time
+        subtype[on_entering_system_first_time] = { }
+        ## type_key_filter = on_entering_system
+        subtype[on_entering_system] = { }
+        ## type_key_filter = on_entering_system_fleet
+        subtype[on_entering_system_fleet] = { }
+        ## type_key_filter = on_crossing_border
+        subtype[on_crossing_border] = { }
+        ## type_key_filter = on_emergency_ftl
+        subtype[on_emergency_ftl] = { }
+        ## type_key_filter = on_entering_gateway
+        subtype[on_entering_gateway] = { }
+        ## type_key_filter = on_entering_wormhole
+        subtype[on_entering_wormhole] = { }
+        ## type_key_filter = on_planet_surveyed
+        subtype[on_planet_surveyed] = { }
+        ## type_key_filter = on_system_survey
+        subtype[on_system_survey] = { }
+        ## type_key_filter = on_system_survey_ship
+        subtype[on_system_survey_ship] = { }
+        ## type_key_filter = on_entering_battle
+        subtype[on_entering_battle] = { }
+        ## type_key_filter = on_fleet_destroyed_victim
+        subtype[on_fleet_destroyed_victim] = { }
+        ## type_key_filter = on_fleet_destroyed_perp
+        subtype[on_fleet_destroyed_perp] = { }
+        ## type_key_filter = on_space_battle_won
+        subtype[on_space_battle_won] = { }
+        ## type_key_filter = on_space_battle_lost
+        subtype[on_space_battle_lost] = { }
+        ## type_key_filter = on_ship_destroyed_victim
+        subtype[on_ship_destroyed_victim] = { }
+        ## type_key_filter = on_ship_destroyed_perp
+        subtype[on_ship_destroyed_perp] = { }
+        ## type_key_filter = on_ship_disengaged_victim
+        subtype[on_ship_disengaged_victim] = { }
+        ## type_key_filter = on_ship_disengaged_perp
+        subtype[on_ship_disengaged_perp] = { }
+        ## type_key_filter = on_fleet_disbanded
+        subtype[on_fleet_disbanded] = { }
+        ## type_key_filter = on_fleet_detected
+        subtype[on_fleet_detected] = { }
+        ## type_key_filter = on_fleet_auto_move_arrival
+        subtype[on_fleet_auto_move_arrival] = { }
+        ## type_key_filter = on_survey
+        subtype[on_survey] = { }
+        ## type_key_filter = on_building_mining_station
+        subtype[on_building_mining_station] = { }
+        ## type_key_filter = on_building_research_station
+        subtype[on_building_research_station] = { }
+        ## type_key_filter = on_building_outpost_station
+        subtype[on_building_outpost_station] = { }
+        ## type_key_filter = on_building_wormhole_station
+        subtype[on_building_wormhole_station] = { }
+        ## type_key_filter = on_building_starbase_outpost
+        subtype[on_building_starbase_outpost] = { }
+        ## type_key_filter = on_building_observation_station
+        subtype[on_building_observation_station] = { }
+        ## type_key_filter = on_building_starbase_ai
+        subtype[on_building_starbase_ai] = { }
+        ## type_key_filter = on_building_starbase_exd
+        subtype[on_building_starbase_exd] = { }
+        ## type_key_filter = on_building_starbase_swarm
+        subtype[on_building_starbase_swarm] = { }
+        ## type_key_filter = on_building_starbase_marauder
+        subtype[on_building_starbase_marauder] = { }
+        ## type_key_filter = on_building__PlaceholderForMoreStationShipSizes
+        subtype[on_building__PlaceholderForMoreStationShipSizes] = { }
+        ## type_key_filter = on_ship_built
+        subtype[on_ship_built] = { }
+        ## type_key_filter = on_ship_disabled
+        subtype[on_ship_disabled] = { }
+        ## type_key_filter = on_ship_enabled
+        subtype[on_ship_enabled] = { }
+        ## type_key_filter = on_ship_upgraded
+        subtype[on_ship_upgraded] = { }
+        ## type_key_filter = on_uplift_completion
+        subtype[on_uplift_completion] = { }
+        ## type_key_filter = on_purge_begun
+        subtype[on_purge_begun] = { }
+        ## type_key_filter = on_purge_canceled
+        subtype[on_purge_canceled] = { }
+        ## type_key_filter = on_pop_abducted
+        subtype[on_pop_abducted] = { }
+        ## type_key_filter = on_pop_added
+        subtype[on_pop_added] = { }
+        ## type_key_filter = on_pop_enslaved
+        subtype[on_pop_enslaved] = { }
+        ## type_key_filter = on_pop_emancipated
+        subtype[on_pop_emancipated] = { }
+        ## type_key_filter = on_pop_rights_change
+        subtype[on_pop_rights_change] = { }
+        ## type_key_filter = on_leader_death
+        subtype[on_leader_death] = { }
+        ## type_key_filter = on_leader_level_up
+        subtype[on_leader_level_up] = { }
+        ## type_key_filter = on_ruler_removed
+        subtype[on_ruler_removed] = { }
+        ## type_key_filter = on_ruler_back_to_pre_ruler_class
+        subtype[on_ruler_back_to_pre_ruler_class] = { }
+        ## type_key_filter = on_leader_spawned
+        subtype[on_leader_spawned] = { }
+        ## type_key_filter = on_ship_order
+        subtype[on_ship_order] = { }
+        ## type_key_filter = on_war_beginning
+        subtype[on_war_beginning] = { }
+        ## type_key_filter = on_modification_complete
+        subtype[on_modification_complete] = { }
+        ## type_key_filter = on_planet_occupied
+        subtype[on_planet_occupied] = { }
+        ## type_key_filter = on_army_recruited
+        subtype[on_army_recruited] = { }
+        ## type_key_filter = on_war_won
+        subtype[on_war_won] = { }
+        ## type_key_filter = on_war_lost
+        subtype[on_war_lost] = { }
+        ## type_key_filter = on_status_quo
+        subtype[on_status_quo] = { }
+        ## type_key_filter = on_status_quo_forced
+        subtype[on_status_quo_forced] = { }
+        ## type_key_filter = on_pop_grown
+        subtype[on_pop_grown] = { }
+        ## type_key_filter = on_pop_assembled
+        subtype[on_pop_assembled] = { }
+        ## type_key_filter = on_pop_purged
+        subtype[on_pop_purged] = { }
+        ## type_key_filter = on_pop_declined
+        subtype[on_pop_declined] = { }
+        ## type_key_filter = on_pop_displaced
+        subtype[on_pop_displaced] = { }
+        ## type_key_filter = on_rebels_take_planet
+        subtype[on_rebels_take_planet] = { }
+        ## type_key_filter = on_rebels_take_planet_owner_switched
+        subtype[on_rebels_take_planet_owner_switched] = { }
+        ## type_key_filter = on_fleet_enter_orbit
+        subtype[on_fleet_enter_orbit] = { }
+        ## type_key_filter = on_megastructure_built
+        subtype[on_megastructure_built] = { }
+        ## type_key_filter = on_megastructure_upgrade_begin
+        subtype[on_megastructure_upgrade_begin] = { }
+        ## type_key_filter = on_megastructure_upgraded
+        subtype[on_megastructure_upgraded] = { }
+        ## type_key_filter = on_jump_drive
+        subtype[on_jump_drive] = { }
+        ## type_key_filter = empire_init_capital_planet
+        subtype[empire_init_capital_planet] = { }
+        ## type_key_filter = on_starbase_transfer
+        subtype[on_starbase_transfer] = { }
+        ## type_key_filter = on_fleet_combat_joined_attacker
+        subtype[on_fleet_combat_joined_attacker] = { }
+        ## type_key_filter = on_fleet_combat_joined_defender
+        subtype[on_fleet_combat_joined_defender] = { }
+        ## type_key_filter = on_slave_sold_on_market
+        subtype[on_slave_sold_on_market] = { }
+        ## type_key_filter = on_destroy_planet_with_PLANET_KILLER_CRACKER
+        subtype[on_destroy_planet_with_PLANET_KILLER_CRACKER] = { }
+        ## type_key_filter = on_destroy_planet_with_PLANET_KILLER_SHIELDER
+        subtype[on_destroy_planet_with_PLANET_KILLER_SHIELDER] = { }
+        ## type_key_filter = on_destroy_planet_with_PLANET_KILLER_NEUTRON
+        subtype[on_destroy_planet_with_PLANET_KILLER_NEUTRON] = { }
+        ## type_key_filter = on_destroy_planet_with_PLANET_KILLER_GODRAY
+        subtype[on_destroy_planet_with_PLANET_KILLER_GODRAY] = { }
+        ## type_key_filter = on_destroy_planet_with_PLANET_KILLER_NANOBOTS
+        subtype[on_destroy_planet_with_PLANET_KILLER_NANOBOTS] = { }
+        ## type_key_filter = on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT_PlaceholderForMore
+        subtype[on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT_PlaceholderForMore] = { }
+    }
+}
+on_action = {
+
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_game_start] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_monthly_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_yearly_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_bi_yearly_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_five_year_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_decade_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_mid_game_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = no_scope this = no_scope }
+    subtype[on_late_game_pulse] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.scopeless>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.scopeless>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_game_start_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_monthly_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_yearly_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_bi_yearly_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_five_year_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_decade_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_mid_game_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_late_game_pulse_country] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_become_advanced_empire] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_press_begin] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_tutorial_level_changed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_join_alliance] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_leave_alliance] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_ruler_set] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_policy_changed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_ship_designed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_tech_increased] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[empire_init_add_technologies] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[empire_init_create_ships] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_election_started] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_election_ended] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country }
+    subtype[on_pirate_spawn] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colonization_started] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colonized] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_destroyed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_building_complete] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_building_queued] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_building_unqueued] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_building_upgraded] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_building_demolished] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_district_complete] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_building_replaced] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_district_queued] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_district_unqueued] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_district_demolished] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_blocker_cleared] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_1_year_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_2_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_3_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_4_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_5_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_6_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_7_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_8_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_9_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = planet this = planet }
+    subtype[on_colony_10_years_old] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { root = country this = country from = country }
+    subtype[on_custom_diplomacy] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = country }
+    subtype[on_entering_war] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = country }
+    subtype[on_country_destroyed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = country }
+    subtype[on_pre_communications_established] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = country }
+    subtype[on_post_communications_established] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = country }
+    subtype[on_war_ended] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_initialize_advanced_colony] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_terraforming_begun] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_terraforming_complete] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_planet_bombarded] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_planet_zero_pops] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_planet_zero_health_ground_combat] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_planet_ownerless] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_planet_transfer] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country }
+    subtype[on_planet_conquer] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = fleet fromfromfrom = system }
+    subtype[on_first_contact] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = fleet fromfromfrom = system }
+    subtype[on_enforce_borders] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = planet }
+    subtype[on_planet_attackers_win] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = planet }
+    subtype[on_planet_attackers_lose] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = planet }
+    subtype[on_planet_defenders_win] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = planet }
+    subtype[on_planet_defenders_lose] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = system }
+    subtype[on_system_first_visited] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = system }
+    subtype[on_system_lost] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = system }
+    subtype[on_system_gained] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = system fromfrom = country }
+    subtype[on_entering_system_first_time] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = system fromfrom = country }
+    subtype[on_entering_system] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = fleet root = fleet from = system }
+    subtype[on_entering_system_fleet] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = fleet root = fleet from = system fromfrom = system }
+    subtype[on_crossing_border] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = fleet root = fleet from = system fromfrom = system }
+    subtype[on_emergency_ftl] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = fleet root = fleet from = system fromfrom = system }
+    subtype[on_entering_gateway] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = fleet root = fleet from = system fromfrom = system }
+    subtype[on_entering_wormhole] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = fleet }
+    subtype[on_planet_surveyed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = country root = country from = system fromfrom = fleet }
+    subtype[on_system_survey] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = system }
+    subtype[on_system_survey_ship] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet fromfrom = fleet }
+    subtype[on_entering_battle] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet fromfrom = fleet }
+    subtype[on_fleet_destroyed_victim] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet fromfrom = fleet }
+    subtype[on_fleet_destroyed_perp] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet fromfrom = fleet }
+    subtype[on_space_battle_won] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet fromfrom = fleet }
+    subtype[on_space_battle_lost] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = ship fromfrom = ship }
+    subtype[on_ship_destroyed_victim] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = ship fromfrom = ship }
+    subtype[on_ship_destroyed_perp] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = ship fromfrom = ship }
+    subtype[on_ship_disengaged_victim] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = ship fromfrom = ship }
+    subtype[on_ship_disengaged_perp] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet }
+    subtype[on_fleet_disbanded] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet }
+    subtype[on_fleet_detected] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = fleet fromfrom = planet }
+    subtype[on_fleet_auto_move_arrival] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_survey] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_mining_station] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_research_station] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_outpost_station] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_wormhole_station] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_starbase_outpost] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_observation_station] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_starbase_ai] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_starbase_exd] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_starbase_swarm] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building_starbase_marauder] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_building__PlaceholderForMoreStationShipSizes] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = planet }
+    subtype[on_ship_built] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = ship }
+    subtype[on_ship_disabled] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship }
+    subtype[on_ship_enabled] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = ship root = ship }
+    subtype[on_ship_upgraded] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = species }
+    subtype[on_uplift_completion] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = pop root = pop from = planet }
+    subtype[on_purge_begun] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = pop root = pop from = planet }
+    subtype[on_purge_canceled] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = pop root = pop from = planet }
+    subtype[on_pop_abducted] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = pop root = pop from = planet }
+    subtype[on_pop_added] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = pop root = pop }
+    subtype[on_pop_enslaved] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = pop root = pop }
+    subtype[on_pop_emancipated] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = pop root = pop }
+    subtype[on_pop_rights_change] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = country root = country from = leader }
+    subtype[on_leader_death] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = leader }
+    subtype[on_leader_level_up] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = leader }
+    subtype[on_ruler_removed] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = leader }
+    subtype[on_ruler_back_to_pre_ruler_class] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = leader }
+    subtype[on_leader_spawned] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = country }
+    subtype[on_ship_order] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { this = country root = country from = war }
+    subtype[on_war_beginning] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = species }
+    subtype[on_modification_complete] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = country }
+    subtype[on_planet_occupied] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = army }
+    subtype[on_army_recruited] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = war }
+    subtype[on_war_won] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = war }
+    subtype[on_war_lost] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = country fromfromfrom = country fromfromfromfrom = war }
+    subtype[on_status_quo] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = country fromfrom = country fromfromfrom = country fromfromfromfrom = war }
+    subtype[on_status_quo_forced] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = pop }
+    subtype[on_pop_grown] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = pop }
+    subtype[on_pop_assembled] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = pop }
+    subtype[on_pop_purged] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = pop }
+    subtype[on_pop_declined] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = country fromfrom = pop }
+    subtype[on_pop_displaced] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = country root = country from = planet }
+    subtype[on_rebels_take_planet] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = country root = country from = planet }
+    subtype[on_rebels_take_planet_owner_switched] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { this = fleet root = fleet from = planet }
+    subtype[on_fleet_enter_orbit] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { root = country this = country from = megastructure fromfrom = system fromfromfrom = fleet }
+    subtype[on_megastructure_built] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = megastructure fromfrom = system }
+    subtype[on_megastructure_upgrade_begin] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = country this = country from = megastructure fromfrom = system }
+    subtype[on_megastructure_upgraded] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.country>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.country>
+        }
+    }
+    ## replace_scope = { root = fleet this = fleet }
+    subtype[on_jump_drive] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = species fromfrom = species }
+    subtype[empire_init_capital_planet] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = ship root = ship from = country }
+    subtype[on_starbase_transfer] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.ship>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.ship>
+        }
+    }
+    ## replace_scope = { root = fleet this = fleet from = fleet fromfrom = fleet fromfromfrom = fleet }
+    subtype[on_fleet_combat_joined_attacker] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { root = fleet this = fleet from = fleet fromfrom = fleet fromfromfrom = fleet }
+    subtype[on_fleet_combat_joined_defender] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.fleet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.fleet>
+        }
+    }
+    ## replace_scope = { this = pop root = pop from = country fromfrom = country }
+    subtype[on_slave_sold_on_market] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.pop>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.pop>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = fleet }
+    subtype[on_destroy_planet_with_PLANET_KILLER_CRACKER] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = fleet }
+    subtype[on_destroy_planet_with_PLANET_KILLER_SHIELDER] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = fleet }
+    subtype[on_destroy_planet_with_PLANET_KILLER_NEUTRON] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = fleet }
+    subtype[on_destroy_planet_with_PLANET_KILLER_GODRAY] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = fleet }
+    subtype[on_destroy_planet_with_PLANET_KILLER_NANOBOTS] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+    ## replace_scope = { this = planet root = planet from = fleet }
+    subtype[on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT_PlaceholderForMore] = {
+        ## cardinality = 0..1
+        events = {
+            ## cardinality = 0..inf
+            <event.planet>
+        }
+        ## cardinality = 0..1
+        random_events = {
+            ## cardinality = 0..inf
+            int = 0
+            ## cardinality = 0..inf
+            int = <event.planet>
+        }
+    }
+}

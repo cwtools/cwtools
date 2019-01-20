@@ -1,0 +1,129 @@
+types = {
+	type[opinion_modifier] = {
+		path = "game/common/opinion_modifiers"
+
+		subtype[triggered_opinion_modifier] = {
+			trigger = { }
+		}
+		subtype[block_triggered] = {
+			block_triggered = yes
+		}
+		
+	}
+	type[static_modifier] = {
+		path = "game/common/static_modifiers"
+	}
+	type[planet_modifier] = {
+		path = "game/common/planet_modifiers"
+
+		subtype[null] = {
+			is_null = yes
+		}
+	}
+	type[notification_modifier] = {
+		path = "game/common/notification_modifiers"
+	}
+}
+
+
+static_modifier = {
+	alias_name[modifier] = alias_match_left[modifier]
+	## cardinality = 0..1
+	icon_frame = int[0..9]
+	## cardinality = 0..1
+	icon = filepath
+	## cardinality = 0..1
+	important = bool
+	## cardinality = 0..1
+	custom_tooltip = localisation
+	## cardinality = 0..1
+	show_only_custom_tooltip = bool
+	## cardinality = 0..1
+	apply_modifier_to_other_planets = <static_modifier>
+}
+
+
+opinion_modifier = {
+	## replace_scope = { this = country root = country from = country }
+	opinion = {
+		## cardinality = 0..1
+		base = float
+
+		###root = country with the opinion, from = country it has the opinion of
+		## cardinality = 0..inf
+		alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+	}
+	opinion = float
+
+	subtype[!triggered_opinion_modifier] = {
+		## cardinality = 0..1
+		## replace_scope = { this = country root = country from = country }
+		decay = {
+			## cardinality = 0..1
+			base = int
+
+			###root = country with the opinion, from = country it has the opinion of
+			## cardinality = 0..inf
+			alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+		}
+
+		## cardinality = 0..1
+		###No by default
+		accumulative = bool
+
+		## cardinality = 0..1
+		###For use with accumulative if the base is negative
+		min = int[-9999...-1]
+		## cardinality = 0..1
+		###For use with accumulative if the base is positive
+		max = int[1...999]
+
+		## cardinality = 0..1
+		unique = bool
+
+		##cardinality = 0..1
+		monthly = yes
+
+		##cardinality = 0..1
+		months = int
+	}
+	
+	subtype[block_triggered] = {
+		### stops modifier from automatically triggering when trigger evaluates to true
+		block_triggered = yes
+		## cardinality = 0..1
+		###For use with accumulative if the base is negative
+		min = int[-9999...-1]
+		## cardinality = 0..1
+		###For use with accumulative if the base is positive
+		max = int[1...999]
+	}
+	
+
+	subtype[triggered_opinion_modifier] = {
+		###root = country with the opinion, from = country it has the opinion of
+		## replace_scope = { this = country root = country from = country }
+		trigger = { alias_name[trigger] = alias_match_left[trigger] }
+	}
+}
+
+
+planet_modifier = {
+	## cardinality = 0..1
+	is_null = bool
+
+	spawn_chance = {
+		## cardinality = 0..1
+		value = int
+
+		alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+	}
+
+	subtype[!null] = {
+		modifier = <static_modifier>
+	}
+}
+
+notification_modifier = {
+	icon = filepath
+}

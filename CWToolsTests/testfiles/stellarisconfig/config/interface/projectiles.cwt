@@ -1,0 +1,160 @@
+types = {
+	## type_key_filter = projectile_
+	type[projectile] = {
+		path = "game/gfx/projectiles"
+		name_field = name
+		severity = warning
+	}
+	type[planet_killer_animation] = {
+		path = "game/gfx/projectiles/planet_destruction"
+	}
+}
+
+#there appear to be differences between different projectile types with beam weapons having specific fields. The problem of defining these
+#is that what the devs define as specific data for different weapon types is occasionally mixed between them. For example autocannons have beam specific data defined for them.
+#i therefore decided not to differentiate between subtypes, but you guys can change this as far as im concerned. -exnihil
+#see the comments below.
+
+projectile = {
+	name = "key" #this is where the projectile key is defined, the
+	color = {
+    	## cardinality = 4..4
+		float[0..1]
+	}
+	hit_entity = <model_entity>
+	shield_hit_entity = <model_entity>
+	muzzle_flash_entity = <model_entity>
+	windup_entity = <model_entity>
+	texture = filepath
+
+	hit = {
+		alpha_curve = {
+			## cardinality = 6..8
+			float
+		}
+		duration = float
+	}
+	miss = {
+		alpha_curve = {
+			## cardinality = 6..8
+			float
+		}
+		duration = float
+	}
+	shield_impact = {
+		size = enum[projectile_impact_size]
+		loop_duration = float
+		delay = float
+	}
+
+	#beam specific data
+	width = float
+	texture_scroll_speed = float
+	texture_tiling = float
+
+	#ballistic specific
+	entity = <model_entity>
+	speed = float
+	###Speed of projectile might be scaled up in order to guarantee reaching the target within <max_duration> seconds
+	max_duration = float
+}
+
+planet_killer_animation = {
+ 	texture = filepath
+	color = {
+    	## cardinality = 4..4
+		float[0..1]
+	}
+	## cardinality = 0..1
+	planet_dissolve_color_mult = {
+    	## cardinality = 3..3
+		float
+	}
+	windup_entity = <model_entity>
+ 	ship_fire_entity = <model_entity>
+ 	planet_hit_entity = <model_entity>
+ 	megastructure_hit_entity = <model_entity>
+	## cardinality = 0..1
+	planet_overlay_entity = <model_entity>
+	windup = {
+		duration = float
+	}
+	### If the ship's entity has a state called "kill_planet"
+	### and that state has an event with id "beam_start" then
+	### the game will delay this state until that event has
+	### fired. This allows the entities to set their own timing
+	### and allows more freedom in the animations.
+	### width, texture_scroll_speed, texture_tiling, and alpha all support animation curves and constant assignment
+	### for example, width = 1.0 will give the beam a constant width of 1.0
+	### width = { 0.0 1.0 	1.0 2.0 } will make the beam start with a width of 1.0 and interpolate to a width of 2.0 after one second has passed
+	### width = { timestamp value timestamp value timestamp value }
+	### timestamp values are scaled so that 1.0 matches duration
+ 	start = {
+ 		duration = float
+ 		width = {
+			## cardinality = 2..8
+			float
+ 		}
+ 		texture_scroll_speed = {
+			## cardinality = 2..6
+			float
+ 		}
+ 		texture_tiling = float
+ 		alpha = {
+			## cardinality = 4..8
+			float
+ 		}
+ 	}
+ 	in_progress = {
+ 		duration = float
+ 		width = {
+			## cardinality = 2..8
+			float
+ 		}
+ 		texture_scroll_speed = {
+			## cardinality = 2..2
+			float
+ 		}
+ 		texture_tiling = {
+			## cardinality = 2..2
+			float
+ 		}
+ 		alpha = {
+			## cardinality = 4..8
+			float
+ 		}
+ 	}
+ 	end = {
+ 		duration = float
+ 		width = {
+			## cardinality = 2..8
+			float
+ 		}
+ 		texture_scroll_speed = float
+ 		texture_tiling = float
+ 		alpha = {
+			## cardinality = 4..8
+			float
+ 		}
+ 	}
+
+	fade = {
+		###  <Fade-in/out start/end percentage> <Width in world units>
+		fade_in = {
+			## cardinality = 2..2
+			float
+		}
+		fade_out = {
+			## cardinality = 2..2
+			float
+		}
+	}
+}
+
+enums = {
+	enum[projectile_impact_size] = {
+		small
+		medium
+		large
+	}
+}

@@ -1,0 +1,165 @@
+
+types = {
+	type[job] = {
+		path = "game/common/pop_jobs"
+		localisation = {
+			## required
+			name = "job_$"
+			## required
+			plural = "job_$_plural"
+			## required
+			desc = "job_$_desc"
+		}
+	}
+	type[social_strata] = {
+		path = "game/common/pop_categories"
+	}
+}
+
+enums = {
+	enum[job_categories] = {
+		specialist
+		worker
+		simple_drone
+		complex_drone
+		pre_sapients
+		ruler
+		precursor
+	}
+}
+
+## push_scope = pop
+job = {
+	category = <social_strata>
+	## cardinality = 0..1
+	condition_string = localisation
+	## cardinality = 0..1
+	building_icon = <building>
+	## cardinality = 0..1
+	building_icon = icon[gfx/interface/icons/buildings]
+	#building_icon = <sprite>
+	## cardinality = 0..1
+	clothes_texture_index = int
+	## cardinality = 0..1
+	icon = icon[gfx/interface/icons/jobs]
+	## cardinality = 0..1
+	icon = <job>
+
+	## cardinality = 0..1
+	is_capped_by_modifier = bool
+	## cardinality = 0..1
+	can_set_priority = bool
+	## cardinality = 0..1
+	is_pre_sapient = bool
+
+	possible = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	resources = {
+		category = <economic_category>
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = pop root = pop }
+	pop_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## replace_scope = { this = country root = country }
+	## cardinality = 0..1
+	country_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## replace_scope = { this = planet root = planet }
+	## cardinality = 0..1
+	planet_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	alias_name[triggered_planet_modifier_pop] = alias_match_left[triggered_planet_modifier_pop]
+	## cardinality = 0..1
+	alias_name[triggered_country_modifier_pop] = alias_match_left[triggered_country_modifier_pop]
+	## cardinality = 0..1
+	alias_name[triggered_pop_modifier] = alias_match_left[triggered_pop_modifier]
+
+	weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+
+
+
+
+## push_scope = pop
+social_strata = {
+	rank = int
+	clothes_texture_index = int
+
+	###This is called whenever a Pop is created, moved to a different planet, or gets a new owner
+	## cardinality = 0..1
+	assign_to_pop = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## replace_scope = { this = pop root = pop }
+	pop_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	###scope: pop to be resettled
+	allow_resettlement = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	should_apply_unemployment_penalties = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = planet root = planet }
+	unemployment_penalties = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	resettlement_cost = {
+		<resource> = int
+	}
+
+	## cardinality = 0..1
+	unemployment_resources = {
+		category = <economic_category>
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	resources = {
+		category = <economic_category>
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	keep_from_former_job = bool
+	## cardinality = 0..1
+	demotion_time = int
+	## cardinality = 0..1
+	change_job_threshold = float
+	## cardinality = 0..1
+	display_category = <social_strata>
+
+	## cardinality = 0..inf
+	alias_name[triggered_planet_modifier] = alias_match_left[triggered_planet_modifier]
+}

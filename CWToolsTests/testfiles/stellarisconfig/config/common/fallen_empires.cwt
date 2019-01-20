@@ -1,0 +1,23 @@
+types = {
+	type[fallen_empires] = {
+		path = "game/common/fallen_empires"
+	}
+}
+
+#TODO Confirm
+fallen_empires = {
+	graphical_culture = <graphical_culture>
+	initializer = <solar_system_initializer.fallen_empire_initializer>
+	## cardinality = 0..1
+	possible = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	create_country_effect = {
+		## cardinality = 0..1
+		#create_species = { }
+		# initializer scope root as created country, but in theory user may create country inside initializer
+		## cardinality = 0..1
+		#create_country = { }
+		alias_name[effect] = alias_match_left[effect]
+	}
+}

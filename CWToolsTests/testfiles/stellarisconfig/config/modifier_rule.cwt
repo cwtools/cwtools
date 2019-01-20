@@ -1,0 +1,73 @@
+
+
+#needs some "or"s
+alias[modifier_rule:modifier] = {
+	enum[add_factor_weight] = float
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+alias[modifier_rule_factor:modifier] = {
+	factor = float
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+#for only "add = int" (opinion modifiers, for example)
+alias[modifier_rule_add:modifier] = {
+	add = int
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+#for only "factor/add" (anomalies, for example)
+alias[modifier_rule_add_factor:modifier] = {
+	enum[add_factor] = float
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+#for effect modifiers?
+alias[modifier_rule_add_mult:modifier] = {
+	enum[add_mult] = float
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+#for only parameter cases
+alias[scaled_modifier_rule:scaled_modifier] = {
+	limit = { alias_name[trigger] = alias_match_left[trigger]  }
+	## cardinality = 1..1
+	scope = scope[any]
+	## cardinality = 1..1
+	calc = enum[scaled_modifier_calc]
+	## cardinality = 0..1
+	factor = float
+	## cardinality = 0..1
+	add = float
+	## cardinality = 0..1
+	div = float
+}
+
+#calculation types for scaled_modifier
+enums = {
+	enum[scaled_modifier_calc] = {
+		pop_count
+		pop_happiness
+		planet_distance_empire
+		planets_in_country
+	}
+	enum[add_mult] = {
+		add
+		mult
+	}
+	enum[add_factor] = {
+		add
+		factor
+	}
+	enum[add_factor_weight] = {
+		add
+		factor
+		weight
+	}
+	enum[factor_weight] = {
+		factor
+		weight
+	}
+}
+

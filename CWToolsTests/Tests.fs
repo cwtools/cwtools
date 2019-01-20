@@ -24,6 +24,7 @@ open System.Globalization
 open CWTools.Validation.Stellaris
 open MBrace.FsPickler
 open System.Text
+open CWTools.Parser.CKPrinter
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -107,6 +108,7 @@ let tests =
                 let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
+                eprintfn "%A" (entities |> List.head |> (fun struct (e, _)  -> printKeyValueList (e.entity.ToRaw) 0))
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 yield testCase ("parse2") <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
@@ -153,17 +155,42 @@ let tests =
             ]
     ]
 
-let testFolder folder testsname config configfile configOnly configLoc (culture : string) =
+let rec getAllFolders dirs =
+    if Seq.isEmpty dirs then Seq.empty else
+        seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
+              yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders }
+
+let getAllFoldersUnion dirs =
+    seq {
+        yield! dirs
+        yield! getAllFolders dirs
+    }
+
+let configFilesFromDir folder =
+    let configFiles =
+        if Directory.Exists folder
+        then
+            getAllFoldersUnion ([folder] |> Seq.ofList)
+                                |> Seq.collect (Directory.EnumerateFiles)
+        else
+            if File.Exists folder
+            then [folder] |> Seq.ofList
+            else Seq.empty
+    configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
+                |> List.map (fun f -> f, File.ReadAllText f)
+
+let testFolder folder testsname config configValidate configfile configOnly configLoc (culture : string) =
     testList (testsname + culture) [
         Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
         Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
-        let configtext = if config then [configfile, File.ReadAllText configfile] else []
+        let configtext = if config then configFilesFromDir configfile else []
+        // configtext |> Seq.iter (fun (fn, _) -> eprintfn "%s" fn)
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = configOnly} else None}
+                                            rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
@@ -187,20 +214,20 @@ let testFolder folder testsname config configfile configOnly configLoc (culture 
 
 let testSubdirectories dir =
     let dirs = Directory.EnumerateDirectories dir
-    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true (d + "/rules.cwt") true true "en-GB")
+    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d + "/rules.cwt") true true "en-GB")
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false "" false false "en-GB"
-        testFolder "./testfiles/validationtests/gfxtests" "gfx" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/interfacetests" "interface" false false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx" false false "" false false "en-GB"
         // testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false false "en-GB"
-        testFolder "./testfiles/validationtests/variabletests" "variables" false "" false false "en-GB"
+        // testFolder "./testfiles/validationtests/variabletests" "variables" true false "./testfiles/stellarisconfig" false false "en-GB"
         // testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false false "en-GB"
-        testFolder "./testfiles/validationtests/eventtests" "events" false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false "en-GB"
         // testFolder "./testfiles/validationtests/weighttests" "weights" false "" false false "en-GB"
-        testFolder "./testfiles/multiplemodtests" "multiple" false "" false false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true "./testfiles/configtests/test.cwt" false false "ru-RU"
+        testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]
@@ -374,12 +401,14 @@ let embeddedTests =
 let overwriteTests =
     testList "overwrite" [
         // eprintfn "%A" filelist
+        let configtext = ["./testfiles/overwritetest/test.cwt", File.ReadAllText "./testfiles/overwritetest/test.cwt"]
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
-        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };}
+        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };
+                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false}}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
@@ -390,7 +419,7 @@ let overwriteTests =
             let missing = remove_all expected fileErrorPositions
             let extras = remove_all fileErrorPositions expected
             //eprintfn "%A" fileErrors
-            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all %A" extras expected )
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all %A, actual %A" extras expected fileErrors )
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]

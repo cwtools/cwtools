@@ -1,0 +1,15 @@
+test_scripted_trigger_ship = {
+    OR = {
+        has_ship_flag = yes
+    }
+}
+
+test_scripted_trigger_country = {
+    OR = {
+        has_country_flag = yes
+    }
+}
+
+test_scripted_trigger_none = {
+
+}

@@ -1,0 +1,67 @@
+types = {
+	type[subject_type] = {
+		path = "game/common/subjects"
+	}
+}
+
+subject_type = {
+	## replace_scope = { this = country root = country from = country }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	become_vassal = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country from = country }
+	effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+	## cardinality = 0..1
+	tech_cost_mult = float
+	## cardinality = 0..1
+	can_expand = bool
+	## cardinality = 0..1
+	overlord_influence = float
+	## cardinality = 0..1
+	joins_overlord_wars = bool
+	## cardinality = 0..1
+	calls_overlord_to_war = bool
+	## cardinality = 0..1
+	can_do_diplomacy = bool
+	## cardinality = 0..1
+	overlord_becomes_warleader = bool
+	## cardinality = 0..1
+	gets_sensor = bool
+	## cardinality = 0..1
+	gets_access = bool
+	## cardinality = 0..1
+	can_be_integrated = bool
+	## cardinality = 0..1
+	research_agreement = bool
+	## cardinality = 0..1
+	research_sharing = bool
+	## cardinality = 0..1
+	can_switch_to = {
+		## cardinality = 1..inf
+		<subject_type>
+	}
+	## cardinality = 0..1
+	diplo_threat = float
+	## cardinality = 0..1
+	subject_tax_rate = {
+		## cardinality = 0..inf
+		<resource> = float[0.0..1.0]
+	}
+	## cardinality = 0..1
+	overlord_resources = {
+		category = subjects
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+	## cardinality = 0..1
+	subject_resources = {
+		category = subjects
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+}

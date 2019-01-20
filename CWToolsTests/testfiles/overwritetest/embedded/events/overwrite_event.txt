@@ -1,9 +1,5 @@
 ##Test events to be overwritten
 namespace = test
 country_event = {
-    is_triggered_only = yes
-    id = test.1
-    immediate = { 
-        set_variable = { which = test_var value = 1 }
-    }
+    set = test_var
 }

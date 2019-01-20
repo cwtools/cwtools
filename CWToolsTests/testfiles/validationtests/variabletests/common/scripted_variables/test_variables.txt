@@ -1,2 +1,0 @@
-@test_var = 10
-@Test_var2 = 20

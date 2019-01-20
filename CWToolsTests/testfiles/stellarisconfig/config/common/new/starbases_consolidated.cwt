@@ -1,0 +1,260 @@
+types = {
+	type[starbase_building] = {
+		path = "game/common/starbase_buildings"
+	}
+	type[starbase_level] = {
+		path = "game/common/starbase_levels"
+	}
+	type[starbase_module] = {
+		path = "game/common/starbase_modules"
+	}
+	type[starbase_type] = {
+		path = "game/common/starbase_types"
+	}
+}
+
+## replace_scope = { this = starbase root = starbase from = country }
+starbase_building = {
+	icon = <sprite>
+	## cardinality = 0..1
+	construction_days = int
+	## cardinality = 0..1
+	initial = bool
+	## cardinality = 0..1
+	ai_build_at_chokepoint = bool
+	## cardinality = 0..1
+	ai_build_outside_chokepoint = bool
+	## cardinality = 0..1
+	show_in_tech = <technology>
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	### entries in possible are displayed in game. Use custom_tooltip to replace localisations.
+	possible = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	equipped_component = <component_template>
+
+	## cardinality = 0..inf
+	custom_tooltip = localisation
+
+
+	resources = {
+		category = starbase_buildings
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	ai_weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	#To verify the stuff below this
+
+	## cardinality = 0..1
+	### ship modifiers, apply on the starbase itself
+	## replace_scope = { this = starbase root = starbase }
+	station_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###ship modifiers, apply in orbit of the starbase
+	## replace_scope = { this = ship root = ship }
+	ship_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###ship modifiers, apply in orbit of the starbase
+	## replace_scope = { this = ship root = ship }
+	orbit_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###planet modifiers, apply on system planets.
+	## replace_scope = { this = planet root = planet }
+	system_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###country modifiers
+	## replace_scope = { this = country root = country }
+	country_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	alias_name[triggered_system_modifier_starbase] = alias_match_left[triggered_system_modifier_starbase]
+	alias_name[triggered_country_modifier_starbase] = alias_match_left[triggered_country_modifier_starbase]
+	alias_name[triggered_station_modifier_starbase] = alias_match_left[triggered_station_modifier_starbase]
+}
+
+#Done based on educated guesswork
+## replace_scope = { this = starbase root = starbase from = country }
+starbase_module = {
+	## cardinality = 0..1
+	section = <section_template>
+	## cardinality = 0..1
+	icon =  <sprite>
+	## cardinality = 0..1
+	construction_days = int
+	## cardinality = 0..1
+	initial = bool
+	## cardinality = 0..1
+	ai_build_at_chokepoint = bool
+	## cardinality = 0..1
+	ai_build_outside_chokepoint = bool
+	## cardinality = 0..1
+	show_in_tech = <technology>
+
+	resources = {
+		category = starbase_modules
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	### entries in possible are displayed in game. Use custom_tooltip to replace localisations.
+	possible = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	equipped_component = <component_template>
+
+	## cardinality = 0..inf
+	custom_tooltip = localisation
+
+	## cardinality = 0..1
+	### ship modifiers, apply on the starbase itself
+	## replace_scope = { this = starbase root = starbase }
+	station_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###ship modifiers, apply in orbit of the starbase
+	## replace_scope = { this = ship root = ship }
+	ship_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###ship modifiers, apply in orbit of the starbase
+	## replace_scope = { this = ship root = ship }
+	orbit_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###planet modifiers, apply on system planets.
+	## replace_scope = { this = planet root = planet }
+	system_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	###country modifiers
+	## replace_scope = { this = country root = country }
+	country_modifier = {
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	alias_name[triggered_system_modifier_starbase] = alias_match_left[triggered_system_modifier_starbase]
+	alias_name[triggered_country_modifier_starbase] = alias_match_left[triggered_country_modifier_starbase]
+
+	## cardinality = 0..1
+	ai_weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+starbase_level = {
+	ship_size = <ship_size>
+	## cardinality = 0..1
+	next_level = <starbase_level>
+	## cardinality = 0..1
+	### Default yes, if yes starbase will be shown in outliner
+	show_in_outliner = bool
+	## cardinality = 0..1
+	### Default no, if yes empire shield will be shown even if there's no colony
+	display_empire_shield = bool
+	## cardinality = 0..1
+	### Default yes, if yes starbase map icon will be shown even if there's no colony
+	display_map_icon = bool
+	## cardinality = 0..1
+	### Default 0, used for claim cost and required module/building level
+	level_weight = int
+	## cardinality = 0..1
+	### Determines which levels are more important to upgrade from
+	## replace_scope = { this = starbase root = starbase from = country }
+	ai_weight = {
+		## cardinality = 0..1
+		weight = float
+		## cardinality = 0..1
+		factor = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+starbase_type = {
+	## replace_scope = { this = starbase root = starbase from = country }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = starbase root = starbase from = country }
+	weight_modifier = {
+		## cardinality = 1..1 #one of these is required
+		base = float
+		## cardinality = 0..1
+		factor = float
+		## cardinality = 0..1
+		add = int
+		## cardinality = 0..1
+		add = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	## cardinality = 0..1
+	ai_design = {
+		#one of these is required
+		## cardinality = 0..1
+		min = {
+			## cardinality = 1..1 #one of these is required
+			base = int
+		}
+		#one of these is required
+		## cardinality = 0..1
+		ratio = {
+			#one of these is required
+			base = float #this is a fraction from 100% of the base defined under min = {}!, total of fractions should not exceeed 100%
+			## cardinality = 0..inf
+			## replace_scope = { this = starbase root = starbase from = country }
+			modifier = {
+				add = float #this increases or reduces parts of the fraciton, i.e. +0.05, -0.1 etc.
+				## cardinality = 1..inf
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+		}
+		buildings = {
+			## cardinality = 0..inf
+			<starbase_building> = { base = float } #these probably also accept modifiers
+		}
+		modules = {
+			## cardinality = 0..inf
+			<starbase_module> = { base = float } #these probably also accept modifiers
+		}
+	}
+}

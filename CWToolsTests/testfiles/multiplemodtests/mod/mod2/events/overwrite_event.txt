@@ -2,10 +2,6 @@
 namespace = test
 country_event = {
     is_triggered_only = yes
-    id = test.1
-    trigger = {
-        has_country_flag = yes
-        #error
-        has_planet_flag = yes
-    }
+    #error
+    test = not_set
 }

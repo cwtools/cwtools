@@ -1,0 +1,62 @@
+
+types = {
+	type[resource] = {
+		path = "game/common/strategic_resources"
+
+		subtype[tradable] = {
+			tradable = yes
+		}
+		subtype[max] = {
+			max = int
+		}
+	}
+}
+
+
+## push_scope = country
+resource = {
+	## cardinality = 0..1
+	tradable = bool
+
+	subtype[tradable] = {
+		market_amount = int
+		market_price = int
+		max = int
+	}
+	## cardinality = 0..1
+	max = int
+
+	## cardinality = 0..1
+	deficit_modifier = <static_modifier>
+
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..1
+		<technology>
+	}
+
+	## cardinality = 0..1
+	visibility_prerequisite = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	ai_weight = {
+		weight = float
+		#TBC
+#		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	
+	## cardinality = 0..1
+	tooltip_decimals = int
+
+	## cardinality = 0..1
+	ai_wants = {
+		base = int
+	}
+	
+	subtype[max] = {
+		## cardinality = 0..1
+		fixed_max_amount = yes
+	}
+}

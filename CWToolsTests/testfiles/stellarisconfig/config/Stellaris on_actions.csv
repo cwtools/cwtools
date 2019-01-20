@@ -1,0 +1,204 @@
+key,scopes,event
+on_game_start,root = no_scope this = no_scope,scopeless
+on_monthly_pulse,root = no_scope this = no_scope,scopeless
+on_yearly_pulse,root = no_scope this = no_scope,scopeless
+on_bi_yearly_pulse,root = no_scope this = no_scope,scopeless
+on_five_year_pulse,root = no_scope this = no_scope,scopeless
+on_decade_pulse,root = no_scope this = no_scope,scopeless
+on_mid_game_pulse,root = no_scope this = no_scope,scopeless
+on_late_game_pulse,root = no_scope this = no_scope,scopeless
+,,
+on_game_start_country,root = country this = country,country
+on_monthly_pulse_country,root = country this = country,country
+on_yearly_pulse_country,root = country this = country,country
+on_bi_yearly_pulse_country,root = country this = country,country
+on_five_year_pulse_country,root = country this = country,country
+on_decade_pulse_country,root = country this = country,country
+on_mid_game_pulse_country,root = country this = country,country
+on_late_game_pulse_country,root = country this = country,country
+on_become_advanced_empire,root = country this = country,country
+on_press_begin,root = country this = country,country
+on_tutorial_level_changed,root = country this = country,country
+on_join_alliance,root = country this = country,country
+on_leave_alliance,root = country this = country,country
+on_ruler_set,root = country this = country,country
+on_policy_changed,root = country this = country,country
+on_ship_designed,root = country this = country,country
+on_tech_increased,root = country this = country,country
+empire_init_add_technologies,root = country this = country,country
+empire_init_create_ships,root = country this = country,country
+on_election_started,root = country this = country,country
+on_election_ended,root = country this = country,country
+on_pirate_spawn,root = country this = country,country
+,,
+on_colonization_started,root = planet this = planet,planet
+on_colonized,root = planet this = planet,planet
+on_colony_destroyed,root = planet this = planet,planet
+on_building_complete,root = planet this = planet,planet
+on_building_queued,root = planet this = planet,planet
+on_building_unqueued,root = planet this = planet,planet
+on_building_upgraded,root = planet this = planet,planet
+on_building_demolished,root = planet this = planet,planet
+on_district_complete,root = planet this = planet,planet
+on_building_replaced,root = planet this = planet,planet
+on_district_queued,root = planet this = planet,planet
+on_district_unqueued,root = planet this = planet,planet
+on_district_demolished,root = planet this = planet,planet
+on_blocker_cleared,root = planet this = planet,planet
+on_colony_1_year_old,root = planet this = planet,planet
+on_colony_2_years_old,root = planet this = planet,planet
+on_colony_3_years_old,root = planet this = planet,planet
+on_colony_4_years_old,root = planet this = planet,planet
+on_colony_5_years_old,root = planet this = planet,planet
+on_colony_6_years_old,root = planet this = planet,planet
+on_colony_7_years_old,root = planet this = planet,planet
+on_colony_8_years_old,root = planet this = planet,planet
+on_colony_9_years_old,root = planet this = planet,planet
+on_colony_10_years_old,root = planet this = planet,planet
+,,
+on_custom_diplomacy,root = country this = country from = country,country
+on_entering_war,root = country this = country from = country,country
+on_country_destroyed,root = country this = country from = country,country
+on_pre_communications_established,root = country this = country from = country,country
+on_post_communications_established,root = country this = country from = country,country
+on_war_ended,root = country this = country from = country,country
+,,
+on_initialize_advanced_colony,this = planet root = planet from = country,planet
+on_terraforming_begun,this = planet root = planet from = country,planet
+on_terraforming_complete,this = planet root = planet from = country,planet
+on_planet_bombarded,this = planet root = planet from = country,planet
+on_planet_zero_pops,this = planet root = planet from = country,planet
+on_planet_zero_health_ground_combat,this = planet root = planet from = country,planet
+on_planet_ownerless,this = planet root = planet from = country,planet
+on_planet_transfer,this = planet root = planet from = country,planet
+on_planet_conquer,this = planet root = planet from = country,planet
+,,
+on_first_contact,this = country root = country from = country fromfrom = fleet fromfromfrom = system,country
+on_enforce_borders,this = country root = country from = country fromfrom = fleet fromfromfrom = system,country
+,,
+on_planet_attackers_win,this = country root = country from = country fromfrom = planet,country
+on_planet_attackers_lose,this = country root = country from = country fromfrom = planet,country
+on_planet_defenders_win,this = country root = country from = country fromfrom = planet,country
+on_planet_defenders_lose,this = country root = country from = country fromfrom = planet,country
+,,
+on_system_first_visited,this = country root = country from = system,country
+on_system_lost,this = country root = country from = system,country
+on_system_gained,this = country root = country from = system,country
+,,
+on_entering_system_first_time,this = ship root = ship from = system fromfrom = country,ship
+on_entering_system,this = ship root = ship from = system fromfrom = country,ship
+,,
+on_entering_system_fleet,this = fleet root = fleet from = system,fleet
+,,
+on_crossing_border,this = fleet root = fleet from = system fromfrom = system,fleet
+on_emergency_ftl,this = fleet root = fleet from = system fromfrom = system,fleet
+on_entering_gateway,this = fleet root = fleet from = system fromfrom = system,fleet
+on_entering_wormhole,this = fleet root = fleet from = system fromfrom = system,fleet
+,,
+on_planet_surveyed,this = planet root = planet from = country fromfrom = fleet,planet
+,,
+on_system_survey,this = country root = country from = system fromfrom = fleet,country
+,,
+on_system_survey_ship,this = ship root = ship from = system,ship
+,,
+on_entering_battle,this = country root = country from = fleet fromfrom = fleet,country
+on_fleet_destroyed_victim,this = country root = country from = fleet fromfrom = fleet,country
+on_fleet_destroyed_perp,this = country root = country from = fleet fromfrom = fleet,country
+on_space_battle_won,this = country root = country from = fleet fromfrom = fleet,country
+on_space_battle_lost,this = country root = country from = fleet fromfrom = fleet,country
+,,
+on_ship_destroyed_victim,this = country root = country from = ship fromfrom = ship,country
+on_ship_destroyed_perp,this = country root = country from = ship fromfrom = ship,country
+on_ship_disengaged_victim,this = country root = country from = ship fromfrom = ship,country
+on_ship_disengaged_perp,this = country root = country from = ship fromfrom = ship,country
+,,
+on_fleet_disbanded,this = country root = country from = fleet,country
+on_fleet_detected,this = country root = country from = fleet,country
+,,
+on_fleet_auto_move_arrival,this = country root = country from = fleet fromfrom = planet,country
+,,
+on_survey,this = ship root = ship from = planet,ship
+on_building_mining_station,this = ship root = ship from = planet,ship
+on_building_research_station,this = ship root = ship from = planet,ship
+on_building_outpost_station,this = ship root = ship from = planet,ship
+on_building_wormhole_station,this = ship root = ship from = planet,ship
+on_building_starbase_outpost,this = ship root = ship from = planet,ship
+on_building_observation_station,this = ship root = ship from = planet,ship
+on_building_starbase_ai,this = ship root = ship from = planet,ship
+on_building_starbase_exd,this = ship root = ship from = planet,ship
+on_building_starbase_swarm,this = ship root = ship from = planet,ship
+on_building_starbase_marauder,this = ship root = ship from = planet,ship
+on_building__PlaceholderForMoreStationShipSizes,this = ship root = ship from = planet,ship
+on_ship_built,this = ship root = ship from = planet,ship
+,,
+on_ship_disabled,this = ship root = ship from = ship,ship
+,,
+on_ship_enabled,this = ship root = ship,ship
+on_ship_upgraded,this = ship root = ship,ship
+,,
+on_uplift_completion,this = planet root = planet from = species,planet
+,,
+on_purge_begun,this = pop root = pop from = planet,pop
+on_purge_canceled,this = pop root = pop from = planet,pop
+on_pop_abducted,this = pop root = pop from = planet,pop
+on_pop_added,this = pop root = pop from = planet,pop
+,,
+on_pop_enslaved,this = pop root = pop,pop
+on_pop_emancipated,this = pop root = pop,pop
+on_pop_rights_change,this = pop root = pop,pop
+,,
+on_leader_death,this = country root = country from = leader,country
+on_leader_level_up,this = country root = country from = leader,country
+on_ruler_removed,this = country root = country from = leader,country
+on_ruler_back_to_pre_ruler_class,this = country root = country from = leader,country
+on_leader_spawned,this = country root = country from = leader,country
+,,
+on_ship_order,this = ship root = ship from = country,ship
+,,
+on_war_beginning,this = country root = country from = war,country
+,,
+on_modification_complete,this = country root = country from = species,country
+,,
+on_planet_occupied,this = planet root = planet from = country fromfrom = country,planet
+,,
+on_army_recruited,this = planet root = planet from = army,planet
+,,
+on_war_won,this = country root = country from = country fromfrom = war,country
+on_war_lost,this = country root = country from = country fromfrom = war,country
+,,
+on_status_quo,this = country root = country from = country fromfrom = country fromfromfrom = country fromfromfromfrom = war,country
+on_status_quo_forced,this = country root = country from = country fromfrom = country fromfromfrom = country fromfromfromfrom = war,country
+,,
+on_pop_grown,this = planet root = planet from = country fromfrom = pop,planet
+on_pop_assembled,this = planet root = planet from = country fromfrom = pop,planet
+on_pop_purged,this = planet root = planet from = country fromfrom = pop,planet
+on_pop_declined,this = planet root = planet from = country fromfrom = pop,planet
+on_pop_displaced,this = planet root = planet from = country fromfrom = pop,planet
+,,
+on_rebels_take_planet,this = country root = country from = planet,country
+on_rebels_take_planet_owner_switched,this = country root = country from = planet,country
+,,
+on_fleet_enter_orbit,this = fleet root = fleet from = planet,fleet
+,,
+on_megastructure_built,root = country this = country from = megastructure fromfrom = system fromfromfrom = fleet,country
+,,
+on_megastructure_upgrade_begin,root = country this = country from = megastructure fromfrom = system,country
+on_megastructure_upgraded,root = country this = country from = megastructure fromfrom = system,country
+,,
+on_jump_drive,root = fleet this = fleet,fleet
+,,
+empire_init_capital_planet,this = planet root = planet from = species fromfrom = species,planet
+,,
+on_starbase_transfer,this = ship root = ship from = country,ship
+,,
+on_fleet_combat_joined_attacker,root = fleet this = fleet from = fleet fromfrom = fleet fromfromfrom = fleet,fleet
+on_fleet_combat_joined_defender,root = fleet this = fleet from = fleet fromfrom = fleet fromfromfrom = fleet,fleet
+,,
+on_slave_sold_on_market,this = pop root = pop from = country fromfrom = country,pop
+,,
+on_destroy_planet_with_PLANET_KILLER_CRACKER,this = planet root = planet from = fleet,planet
+on_destroy_planet_with_PLANET_KILLER_SHIELDER,this = planet root = planet from = fleet,planet
+on_destroy_planet_with_PLANET_KILLER_NEUTRON,this = planet root = planet from = fleet,planet
+on_destroy_planet_with_PLANET_KILLER_GODRAY,this = planet root = planet from = fleet,planet
+on_destroy_planet_with_PLANET_KILLER_NANOBOTS,this = planet root = planet from = fleet,planet
+on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT_PlaceholderForMore,this = planet root = planet from = fleet,planet

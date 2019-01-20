@@ -1,0 +1,55 @@
+types = {
+	type[global_ship_design] = {
+		path = "game/common/global_ship_designs"
+		name_field = "name"
+	}
+}
+
+#TODO Confirm
+#TODO Document
+global_ship_design = {
+	## cardinality = 0..1
+	name = localisation_synced
+	## cardinality = 0..1
+	ship_size = <ship_size>
+	## cardinality = 0..1
+	hide_size = bool
+	## cardinality = 0..1
+	is_event_design = bool
+	## cardinality = 0..1
+	use_design_name = bool
+
+	## cardinality = 0..1
+	country_type = <country_type>
+	#these two triggers are connected. You need to have is_special_builable = yes + a trigger for this to work
+	## cardinality = 0..1
+	is_special_buildable = bool
+	## cardinality = 0..1
+	allow_buildable_trigger = <scripted_trigger>
+
+	## cardinality = 0..inf
+	section = {
+		## cardinality = 0..1
+		template = <section_template>
+		## cardinality = 0..1
+		#TODO Section slots
+		slot = enum[section_slots] #this is connected to ship_sizes and section templates!
+		## cardinality = 0..inf
+		component = {
+			#one slot, of one type! so one of the these two varients- and these need to match the component template as it is defined!
+			## cardinality = 0..1
+			#TODO check slot sizes
+			slot = enum[component_slots]
+			## cardinality = 0..1
+			slot = enum[utility_component_slots]
+			# cardinality = 0..1
+			#TODO check slot sizes
+			#slot = <weapon_slot_size>
+			## cardinality = 1..1
+			template = <component_template>
+		}
+	}
+	#TODO Check this
+	## cardinality = 0..inf
+	required_component = <component_template.utility_component_template>
+}

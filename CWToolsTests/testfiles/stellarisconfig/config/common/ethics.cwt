@@ -1,0 +1,89 @@
+
+types = {
+	type[ethos] = {
+		path = "game/common/ethics"
+
+		## type_key_filter = ethic_categories
+		subtype[ethic_categories] = {
+		}
+
+		subtype[actual_ethics] = {
+			category_value = int
+		}
+	}
+}
+
+# TODO Confirm
+# TODO Document
+ethos = {
+	subtype[ethic_categories] = {
+		## cardinality = 0..100
+		scalar = {}
+	}
+	subtype[actual_ethics] = {
+		cost = int
+
+		#theoretically this should link to the ethic categories, not sure how to do that though (or whether it is worth it)
+		category = scalar
+		category_value = int[0..4]
+
+		## cardinality = 0..1
+		###Yes by default
+		use_for_pops = bool
+
+		## cardinality = 0..1
+		category_opposite = bool
+
+		## cardinality = 0..1
+		regular_variant = <ethos>
+
+		## cardinality = 0..1
+		fanatic_variant = <ethos>
+
+		## cardinality = 0..1
+		###always = yes by default
+		playable = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## replace_scope = { this = country root = country }
+		country_modifier = {
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+
+		tags = {
+			## cardinality = 0..inf
+			localisation
+		}
+
+		random_weight = {
+			value = int
+			alias_name[modifier_rule] = alias_match_left[modifier_rule]
+		}
+
+		## cardinality = 0..100
+		pop_attraction_tag = {
+			desc = localisation
+			## replace_scope = { root = country this = country }
+			###Scope = country
+			trigger = {
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+		}
+
+		## cardinality = 0..1
+		###Root = country
+		## replace_scope = { root = country this = country }
+		country_attraction = {
+			value = float
+			alias_name[modifier_rule] = alias_match_left[modifier_rule]
+		}
+		## cardinality = 0..1
+		###Root = pop, from = planet
+		## replace_scope = { root = pop this = pop from = planet }
+		pop_attraction = {
+			value = float
+			alias_name[modifier_rule] = alias_match_left[modifier_rule]
+		}
+	}
+}

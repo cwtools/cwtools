@@ -86,11 +86,19 @@ type StringResourceManager() =
         let ok = strings.TryGetValue(s, &res)
         if ok then res  else
         lock monitor (fun () ->
-            i <- i + 1
-            let res = i
-            strings.[s] <- res;
-            ints.[res] <- s;
-            res
+            let ls = s.ToLower()
+            let lok = strings.TryGetValue(ls, &res)
+            if lok
+            then
+                strings.[ls] <- res;
+                res
+            else
+                i <- i + 1
+                let res = i
+                strings.[ls] <- res;
+                strings.[s] <- res;
+                ints.[res] <- s;
+                res
         )
     member x.GetStringForID(id) =
         ints.[id]

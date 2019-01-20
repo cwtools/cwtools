@@ -1,0 +1,308 @@
+
+#I got frustrated at there being SO MANY files, so I have thrown a whole lot together in here -Caligula
+
+types = {
+	type[ambient_object] = {
+		name_field = "name"
+		path = "game/common/ambient_objects"
+		subtype[show_name] = {
+			show_name = yes
+		}
+	}
+	type[country_color] = {
+		path = "game/common/colors"
+		## type_key_filter = country
+		subtype[default] = {}
+		## type_key_filter = fallen_empire
+		subtype[fallen_empire] = {}
+		## type_key_filter = faction
+		subtype[faction] = {}
+		## type_key_filter = pirate
+		subtype[pirate] = {}
+		## type_key_filter = species
+		subtype[species] = {}
+	}
+	type[asteroid_belt_type] = { #reason for this rename is the way vanilla names stuff, creating ambiguity.
+		path = "game/common/asteroid_belts"
+	}
+	type[attitude] = {
+		path = "game/common/attitudes"
+	}
+	type[button_effect] = {
+		path = "game/common/button_effects"
+	}
+	type[country_customization] = {
+		path = "game/common/country_customization"
+	}
+	type[system_type] = {
+		path = "game/common/system_types"
+	}
+	## type_key_filter = part
+	type[start_screen_message] = {
+		path = "game/common/start_screen_messages"
+	}
+	type[precursors] = {
+		name = key
+		path = "common/precursor_civilizations"
+	}
+	type[sector_type] = {
+		path = "game/common/sector_types"
+	}
+	type[map_mode] = {
+		path = "game/common/map_modes"
+	}
+	type[ai_budget] = {
+		path = "game/common/ai_budget"
+	}
+}
+
+ambient_object = {
+	subtype[show_name] = {
+		###Cannot use localisation_synced! The Vanilla case NAME_Syzygy_Remains is a bug.
+		name = localisation
+	}
+	subtype[!show_name] = {
+		name = scalar
+	}
+	## cardinality = 0..1
+	description = localisation
+	## cardinality = 0..1
+	tooltip = localisation
+	entity = <model_entity>
+	selectable = bool
+	show_name = bool
+}
+
+
+country_color = {
+	subtype[default] = {
+		##cardinality = 0..inf
+		colour[rgb]
+		##cardinality = 0..inf
+		colour[hsv]
+	}
+	subtype[fallen_empire] = {
+		##cardinality = 0..inf
+		colour[rgb]
+		##cardinality = 0..inf
+		colour[hsv]
+	}
+	subtype[faction] = {
+		##cardinality = 0..inf
+		colour[rgb]
+		##cardinality = 0..inf
+		colour[hsv]
+	}
+	subtype[pirate] = {
+		##cardinality = 0..inf
+		colour[rgb]
+		##cardinality = 0..inf
+		colour[hsv]
+	}
+	subtype[species] = {
+		##cardinality = 0..inf
+		colour[rgb]
+		##cardinality = 0..inf
+		colour[hsv]
+	}
+}
+
+
+#TODO Confirm
+#TODO Add mesh/shader references
+asteroid_belt_type = {
+	## cardinality = 1..inf
+	mesh = scalar
+	## cardinality = 0..1
+	shader = scalar
+}
+
+
+
+##TODO confirm and refine
+attitude = {
+	type = scalar
+	behaviour = {
+		## cardinality = 0..1
+		attack = bool
+		## cardinality = 0..1
+		weaken = bool
+		## cardinality = 0..1
+		alliance = bool
+		## cardinality = 0..1
+		vassalize = bool
+		## cardinality = 0..1
+		trade = bool
+		## cardinality = 0..1
+		coexist = bool
+	}
+}
+
+
+# TODO Confirm
+# TODO Document
+button_effect = {
+	## replace_scope = { this = any root = any from = country }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = any root = any from = country }
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = any root = any from = country }
+	## cardinality = 0..1
+	effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}
+
+
+
+#TODO Confirm
+#TODO DOcument
+#TODO Expand shelter
+country_customization = {
+	colony_shelter = {
+		#the building should be defined as capital! and probably level 0 as well. Please add a check for this
+		#the planet classes should be defined as colonizable!
+		default = <building>
+		## cardinality = 0..inf
+		<planet_class> = <building>
+	}
+	## cardinality = 0..1
+	graphical_culture_for_random_empire = {
+		## cardinality = 0..inf
+		<graphical_culture> = {
+			## cardinality = 0..inf
+			modifier = {
+				add = int
+				species_portrait = <portrait>
+			}
+		}
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	weight = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule_add] = alias_match_left[modifier_rule_add]
+	}
+}
+
+
+
+
+system_type = {
+	## replace_scope = { this = system root = system }
+	#TODO: it appears so, but the file uses owner (not space_owner). Check pls
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## replace_scope = { this = system root = system }
+	#TODO: it appears so, but the file uses owner (not space_owner). Check pls
+	## cardinality = 0..1
+	weight_modifier = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+
+start_screen_message = {
+	location = int
+	localization = localisation
+
+	## replace_scope = { root = country this = country }
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+}
+
+  #this is a rather useless file. I have no idea what this does really - seems to be a weight modifier tied to hardcode.
+
+precursors = {
+	##cardinality = 1..inf
+	value_set[star_flag] = int
+}
+
+
+sector_type = {
+	system_scores = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	local_capital_scores = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	resource_conversion_table = {
+		energy = int
+		minerals = int
+	}
+	max_jumps = int
+}
+
+
+#TODO Confirm
+#TODO Colours
+map_mode = {
+	icon =  <sprite>
+	enable_terra_incognita = bool
+	## cardinality = 0..1
+	can_change_point_of_view = bool
+	## cardinality = 0..1
+	shortcut = scalar
+	## cardinality = 0..1
+	display_claims = bool
+
+	## cardinality = 1..inf
+	color = {
+		## cardinality = 1..1
+        value = country
+		## cardinality = 1..1
+		value = {
+			##cardinality = 3..4
+			float
+		}
+		## cardinality = 0..1
+		custom_tooltip = localisation
+		## cardinality = 0..1
+		hardcoded_tooltip = enum[hardcoded_map_mode_tooltip]
+		## replace_scope = { root = country this = country from = country }
+        condition = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+    }
+}
+enums = {
+	enum[hardcoded_map_mode_tooltip] = {
+		opinion
+		country
+	}
+}
+
+## replace_scope = { this = country root = country }
+ai_budget = {
+	resource = <resource>
+	type = expenditure
+	type = upkeep
+	category = <economic_category>
+
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	fraction = {
+		weight = float
+	}
+
+	## cardinality = 0..1
+	static_max = {
+		base = int
+	}
+}

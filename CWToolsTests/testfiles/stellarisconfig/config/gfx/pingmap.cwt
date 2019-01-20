@@ -1,0 +1,12 @@
+types = {
+	type[pingmap] = {
+		path = "game/gfx/pingmap"
+	}
+}
+pingmap = {
+	system_entity = <model_entity>
+	galaxy_entity = <model_entity>
+	system_normal_zoom = int
+	galaxy_normal_zoom = int
+	duration = int
+}

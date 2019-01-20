@@ -1,0 +1,311 @@
+#these are files that define links for different gfx files (models and icons).
+#they include rooms, hair, dress and various other elements related to portraits.
+#please note: room asset selector specifically is called in diplomatic events like this:
+#picture_event_data = { room = cgm_menu_room } - the room = key part is related to an asset selector. This needs to be worked out in diplomatic
+#events as well, to connect to the appropriate asset selector! You can see the menu events for my CGM mods for an example. -- exnihil
+#also - please check the vanilla asset selectors. Basically there are several different kinds but they all seem to function identically,
+#the difference between them appears to be determined by the key!
+
+types = {
+	type[asset_selector] = {
+		path = "game/gfx/portraits/asset_selectors"
+		severity = warning
+		subtype[clothes] = {
+
+		}
+		subtype[hair] = {#this is identical in structure to the clothes asset selector, only difference is the key!
+
+		}
+		
+		## type_key_filter = room_selector
+		subtype[room] = {
+
+		}
+		subtype[entity] = {#i'm not sure how these work and why.
+			default = <model_entity>
+		}
+	}
+}
+
+ #default has no trigger attached  it.
+ #assets written under default replace the default entry given a trigger, or if no default is defined - when fulfilling the trigger.
+ #see other.txt for the default no texture.
+
+asset_selector = {
+	subtype[clothes] = {
+		#clothes and hair selectors link directly to a dds files using filepath, room selectors point to textures that end with "_room.dds" but remove the file ending
+		#entity selectors link to a model entity using its key. This is a way to distinguish between them I guess.
+
+		default = filepath
+
+
+		## cardinality = 0..1
+		## replace_scope = { this = no_scope root = no_scope }
+		no_texture = {
+			default = filepath
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = no_scope root = no_scope }
+		game_setup = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = species root = species }
+		species = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = pop root = pop }
+		pop = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		leader = {
+			## cardinality = 0..1
+			default = filepath #these do not have default in vanilla, but i assume default is supported.
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		ruler = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+	}
+	subtype[hair] = {
+		#clothes and hair selectors link directly to a dds files using filepath, room selectors point to textures that end with "_room.dds" but remove the file ending
+		#entity selectors link to a model entity using its key. This is a way to distinguish between them I guess.
+
+		default = filepath
+
+
+		## cardinality = 0..1
+		## replace_scope = { this = no_scope root = no_scope }
+		no_texture = {
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = no_scope root = no_scope }
+		game_setup = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = species root = species }
+		species = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = pop root = pop }
+		pop = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		leader = {
+			## cardinality = 0..1
+			default = filepath #these do not have default in vanilla, but i assume default is supported
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		ruler = {
+			## cardinality = 0..1
+			default = filepath
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			filepath = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+	}
+	subtype[room] = {
+		#room selectors use a special way to link to dds files stored under gfx/portraits/city_sets
+		##by pointingto a file that ends with _room.dds, always.
+		#this needs to be worked out by dayshine!
+
+		default = scalar #the room file link as explained in the above comment!
+		
+		## cardinality = 0..1
+		## replace_scope = { this = country root = country }
+		game_setup = {
+			## cardinality = 0..inf
+			scalar = { 
+				alias_name[trigger] = alias_match_left[trigger] 
+			}
+		}	
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		ruler = {
+			## cardinality = 0..1
+			default = scalar #the room file link as explained in the above comment!
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			scalar = { alias_name[trigger] = alias_match_left[trigger] } #the scalar here is the same kind of file link as in the above!
+  		}
+	}
+	subtype[entity] = {
+		#see entity_selectors.txt
+
+		default = <model_entity>
+
+		## cardinality = 0..1
+		## replace_scope = { this = leader root = leader }
+		ruler = {
+			## cardinality = 0..1
+			default = <model_entity>
+			## cardinality = 0..inf
+			random = {
+				## cardinality = 0..1
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				list = {
+					## cardinality = 0..inf
+					filepath
+				}
+			}
+			## cardinality = 0..inf
+			<model_entity> = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+	}
+}

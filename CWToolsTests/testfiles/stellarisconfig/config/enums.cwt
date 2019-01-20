@@ -1,0 +1,21 @@
+
+enums = {
+	enum[leader_classes] = {
+		ruler
+		scientist
+		admiral
+		governor
+		general
+	}
+	enum[leader_classes_no_ruler] = {
+		scientist
+		admiral
+		governor
+		general
+	}
+	enum[days_months_years] = {
+		days
+		months
+		years
+	}
+}

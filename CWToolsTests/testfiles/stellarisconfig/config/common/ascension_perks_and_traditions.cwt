@@ -1,0 +1,148 @@
+
+types = {
+	type[ascension_perk] = {
+		path = "game/common/ascension_perks"
+	}
+	type[tradition] = {
+		path = "game/common/traditions"
+	}
+	type[tradition_category] = { #this defines the contents of tradition trees
+		path = "game/common/tradition_categories"
+	}
+}
+
+enums = {
+	complex_enum[tradition_swap] = {
+		path = "game/common/tradition"
+		name = {
+			tradition_swap = {
+				name = enum_name
+			}
+		}
+	}
+}
+
+
+
+ascension_perk = {
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	possible = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	on_enabled = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	modifier = {
+		## cardinality = 0..1
+		description = localisation
+		## cardinality = 0..1
+		description_parameters = {
+			COST_MULT = float
+			POINTS = float
+		}
+
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	ai_weight = {
+		factor = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+tradition = {
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	modifier = { ###accepts only country modifiers
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## replace_scope = { this = country root = country }
+	### the ai_weight in traditions applies both to the main traditions and the tradition swaps, there are no seperate fields.
+	## cardinality = 0..1
+	ai_weight = {
+		## cardinality = 0..1
+		factor = float
+		## cardinality = 0..1
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	possible = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	 ## replace_scope = { this = country root = country }
+	on_enabled = {
+		## cardinality = 0..inf
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..inf
+	alias_name[tradition_swap] = alias_match_left[tradition_swap]
+}
+alias[tradition_swap:tradition_swap] = {
+	name = localisation
+	## cardinality = 0..1
+	inherit_icon = bool
+	## cardinality = 0..1
+	inherit_name = bool
+	## cardinality = 0..1
+	inherit_effects = bool
+	## cardinality = 0..1
+	###accepts only country modifiers
+	## replace_scope = { this = country root = country }
+	modifier = {
+		## cardinality = 0..1
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## replace_scope = { this = country root = country }
+	###this determines the chances of a tradition swap appearing for a given empire IF multiple swaps are potential. It is unused in vanilla.
+	weight = {
+		## cardinality = 0..1
+		factor = float
+		## cardinality = 0..1
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = country root = country }
+	## cardinality = 0..1
+	on_enabled = {
+		## cardinality = 0..inf
+		alias_name[effect] = alias_match_left[effect]
+	}
+}
+
+tradition_category = {
+	adoption_bonus = <tradition>
+	finish_bonus = <tradition>
+	traditions = {
+		## cardinality = 1..inf
+		<tradition>
+	}
+	## cardinality = 0..inf
+	alias_name[tradition_swap] = alias_match_left[tradition_swap]
+
+}

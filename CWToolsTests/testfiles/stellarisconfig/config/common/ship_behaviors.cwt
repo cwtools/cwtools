@@ -1,0 +1,69 @@
+types = {
+	type[ship_behavior] = {
+		name_field = "name"
+		path = "game/common/ship_behaviors"
+	}
+}
+
+ship_behavior = {
+	name = scalar
+	## cardinality = 0..1
+	desc = localisation
+
+	## cardinality = 0..1
+	preferred_attack_range = int
+	## cardinality = 0..1
+	preferred_attack_range = enum[combat_range]
+
+	## cardinality = 0..1
+	formation_distance = int
+	## cardinality = 0..1
+	formation_distance = enum[combat_range]
+
+	## cardinality = 0..1
+	return_to_formation_distance = int
+	## cardinality = 0..1
+	return_to_formation_distance = enum[combat_range]
+
+	## cardinality = 0..1
+	collision_awareness = float
+
+	## cardinality = 0..1
+	collision_strafe = float
+
+	## cardinality = 0..1
+	collision_radius = float
+	## cardinality = 0..1
+	attack_move_pattern = enum[move_pattern]
+	## cardinality = 0..1
+	passive_move_pattern = enum[move_pattern]
+
+	## cardinality = 0..1
+	source_target_anchor_factor = float
+	## cardinality = 0..1
+	combat_source_anchor = enum[combat_anchor]
+	## cardinality = 0..1
+	combat_target_anchor = enum[combat_anchor]
+	## cardinality = 0..1
+	ignore_combat_movement = bool
+}
+enums = {
+	enum[move_pattern] = {
+		none
+		stationary
+		charge
+		orbit
+		follow
+		stay_at_range
+		flee
+	}
+	enum[combat_anchor] = {
+		root
+		parent
+	}
+	enum[combat_range] = {
+		min
+		max
+		median
+	}
+}

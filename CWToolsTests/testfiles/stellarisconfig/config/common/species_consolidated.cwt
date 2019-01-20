@@ -1,0 +1,273 @@
+types = {
+	type[species_class] = {
+		path = "game/common/species_classes"
+	}
+	type[species_archetype] = {
+		path = "game/common/species_archetypes"
+	}
+	type[species_rights] = {
+		path = "game/common/species_rights"
+	}
+}
+
+
+#make sure trait points cannot be above max, ideally
+species_archetype = {
+	## cardinality = 0..1
+	species_trait_points = int
+	## cardinality = 0..1
+	species_max_traits = int
+	## cardinality = 0..1
+	inherit_traits_from = {
+		<species_archetype>
+	}
+	## cardinality = 0..1
+	inherit_trait_points_from = <species_archetype>
+}
+
+
+#TODO Document
+
+species_class = {
+	## cardinality = 0..1
+	archetype = <species_archetype>
+	## cardinality = 0..1
+	## replace_scope = { this = pop root = pop }
+	modifier = {
+		## cardinality = 0..1
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	playable = bool
+	## cardinality = 0..1
+	playable = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	randomized = bool
+	## cardinality = 0..1
+	randomized = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	uplifted_into = <species_class>
+	## cardinality = 0..1
+	uplifted_portraits = {
+		## cardinality = 0..inf
+		<portrait>
+		## cardinality = 0..inf
+		<portrait_group>
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	possible = {
+		## cardinality = 0..1
+		always = bool
+		## cardinality = 0..1
+		text = localisation
+		## cardinality = 0..1
+		alias_name[government_trigger] = alias_match_left[government_trigger]
+	}
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	possible_secondary = {
+		## cardinality = 0..1
+		always = bool
+		## cardinality = 0..1
+		text = localisation
+		## cardinality = 0..1
+		alias_name[government_trigger] = alias_match_left[government_trigger]
+	}
+	## cardinality = 0..1
+	portraits = {
+		## cardinality = 0..inf
+		<portrait>
+		## cardinality = 0..inf
+		<portrait_group>
+	}
+	## cardinality = 0..inf
+	custom_portraits = {
+		## replace_scope = { root = no_scope this = no_scope }
+		## cardinality = 0..1
+		randomized = {
+			## cardinality = 0..1
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+		## replace_scope = { root = no_scope this = no_scope }
+		## cardinality = 0..1
+		playable = {
+			## cardinality = 0..1
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+		portraits = {
+			## cardinality = 0..inf
+			<portrait>
+			## cardinality = 0..inf
+			<portrait_group>
+		}
+	}
+	## cardinality = 0..1
+	non_randomized_portraits = {
+		## cardinality = 0..inf
+		<portrait>
+		## cardinality = 0..inf
+		<portrait_group>
+
+	}
+	## cardinality = 0..1
+	gender = bool
+	## cardinality = 0..1
+	graphical_culture = <graphical_culture>
+	## cardinality = 0..1
+	move_pop_sound_effect = scalar #should be connected to sounds under game/sound
+	## cardinality = 0..1
+	robotic = bool
+	## cardinality = 0..1
+	use_climate_preference = bool
+	## cardinality = 0..1
+	portrait_modding = bool
+	## cardinality = 0..1
+	leader_age_min = int
+	## cardinality = 0..1
+	leader_age_max = int
+
+	## cardinality = 0..1
+	resources = {
+		category = <economic_category>
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+}
+
+
+
+#sub-types don't work here as all sorts of things are bundled into one file without coding divisions between them. But afaik there is no way of adding new ones, they are all hardcoded, so the enums are sufficient.
+
+species_rights = {
+	token = scalar
+	#localisation is complicated. I guess there is a default unless there is a name defined
+	## cardinality = 0..1
+	name = localisation
+
+	## cardinality = 0..1
+	new_pop_weight = float
+
+	## cardinality = 0..1
+	## replace_scope = { this = army root = army }
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = pop root = pop }
+	pop_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = pop root = pop }
+	free_pop_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = species root = species from = country }
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## replace_scope = { this = species root = species from = country }
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## replace_scope = { this = species root = species from = country }
+	ai_will_do = {
+		factor = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	alias_name[triggered_pop_modifier] = alias_match_left[triggered_pop_modifier]
+}
+
+enums = {
+	enum[citizenship_types] = {
+		citizenship_full
+		citizenship_full_machine
+		citizenship_assimilation
+		citizenship_organic_trophy
+		citizenship_limited
+		citizenship_caste_system
+		citizenship_caste_system_limited
+		citizenship_slavery
+		citizenship_purge
+		citizenship_purge_machine
+		citizenship_robot_servitude
+	}
+	enum[military_service_types] = {
+		military_service_full
+		military_service_limited
+		military_service_none
+	}
+	enum[slavery_types] = {
+		slavery_normal
+		slavery_domestic
+		slavery_military
+		slavery_matrix
+		slavery_livestock
+	}
+	enum[purge_types] = {
+		purge_matrix
+		purge_normal
+		purge_neutering
+		purge_displacement
+		purge_labor_camps
+		purge_processing
+	}
+	enum[living_standards] = {
+		living_standard_deassimilation
+		living_standard_ego_assimilation
+		living_standard_tech_assimilation
+		living_standard_psi_assimilation
+		living_standard_organic_trophy
+		living_standard_chemical_bliss
+		living_standard_academic_privilege
+		living_standard_utopian
+		living_standard_good
+		living_standard_normal
+		living_standard_poor
+		living_standard_subsistence
+		living_standard_servitude
+		living_standard_hive_mind
+		living_standard_none
+		living_standard_shared_burden
+		living_standard_stratified
+	}
+	enum[migration_controls] = {
+		migration_control_yes
+		migration_control_no
+	}
+	enum[population_controls] = {
+		population_control_yes
+		population_control_no
+	}
+	#unused
+	enum[colonization_controls] = {
+		colonization_control_yes
+		colonization_control_no
+	}
+	enum[species_rights_type] = {
+		citizenship
+		military_service
+		slavery
+		purge
+		living_standard
+		migration_control
+		population_control
+		colonization_control
+		none
+	}
+}
+
+
+

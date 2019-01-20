@@ -1,0 +1,172 @@
+types = {
+	type[diplo_phrase] = {
+		path = "game/common/diplo_phrases"
+
+		## type_key_filter = greetings
+		subtype[greetings] = {
+		}
+
+		## type_key_filter = action_offer_trade_deal
+		subtype[trade_offer] = {
+		}
+
+		## type_key_filter = action_declare_war
+		subtype[declare_war] = {
+		}
+	}
+}
+
+#the types and stuff aren't important as they aren't referred to elsewhere, I am just making sure it validates the triggers and stuff
+
+#TODO: scalar = { should be localisation = {
+
+#TODO: find out whether opinion does anything
+
+#TODO Confirm
+#TODO Document
+diplo_phrase = {
+	subtype[greetings] = {
+		## cardinality = 0..inf
+		scalar = {
+			## replace_scope = { root = country this = country from = country }
+			trigger = { alias_name[trigger] = alias_match_left[trigger] }
+			## cardinality = 0..1
+			weight = {
+				weight = int
+			}
+		}
+	}
+
+	subtype[!greetings] = {
+
+		## cardinality = 0..inf
+		select = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+
+		## cardinality = 0..inf
+		consider = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+
+		## cardinality = 0..inf
+		propose = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+
+		## cardinality = 0..inf
+		accept = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+
+		## cardinality = 0..inf
+		refuse = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+
+		## cardinality = 0..inf
+		propose_vote = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+	}
+
+
+	subtype[trade_offer] = {
+		## cardinality = 0..inf
+		propose = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+				## cardinality = 0..1
+				only_for_gift = yes
+
+				## cardinality = 0..1
+				only_for_trade = yes
+			}
+		}
+		## cardinality = 0..inf
+		accept = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+				## cardinality = 0..1
+				only_for_gift = yes
+
+				## cardinality = 0..1
+				only_for_trade = yes
+			}
+		}
+	}
+
+	subtype[declare_war] = {
+		opinion = {
+			## cardinality = 0..inf
+			scalar = {
+				## replace_scope = { root = country this = country from = country }
+				trigger = { alias_name[trigger] = alias_match_left[trigger] }
+				## cardinality = 0..1
+				weight = {
+					weight = int
+				}
+			}
+		}
+	}
+}

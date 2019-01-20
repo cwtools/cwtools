@@ -1,0 +1,35 @@
+types = {
+	type[event_chain] = {
+		path = "game/common/event_chains"
+	}
+}
+
+enums = {
+	complex_enum[event_chain_counter] = {
+		path = "game/common/event_chains"
+		name = {
+			counter = {
+				enum_name = {
+
+				}
+			}
+		}
+	}
+}
+
+event_chain = {
+	## cardinality = 0..1
+	icon = filepath
+	## cardinality = 0..1
+	picture =  <sprite>
+
+	## cardinality = 0..inf
+	counter = {
+		## cardinality = 0..inf
+		#TODO: Replace with localisation when supported
+		scalar = {
+			## cardinality = 0..1
+			max = int
+		}
+	}
+}

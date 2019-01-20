@@ -12,6 +12,20 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities
 open CWTools.Common
 
+type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
+    member val Cache : Map<string, obj list> = Map.empty with get, set
+    member val WithRulesData : bool = withRulesData with get,set
+    member val Referencedtypes : Map<string, (string  * range) list> option = referencedtypes with get, set
+    member val Definedvariables : Map<string, (string * range) list> option = definedvariable with get, set
+    member val EffectBlocks : Node list option = effectBlocks with get, set
+    member val TriggerBlocks : Node list option = triggersBlocks with get, set
+
+type EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks) =
+    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+    member __.ScriptedEffectParams : string list option = scriptedeffectparams
+type HOI4ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
+    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+
 
 type PassFileResult = {
     parseTime : int64

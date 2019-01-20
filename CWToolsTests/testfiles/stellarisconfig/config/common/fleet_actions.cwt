@@ -1,0 +1,123 @@
+
+### Adds actions to the scoped fleet's action queue
+alias[effect:queue_actions] = {
+	alias_name[fleet_action] = alias_match_left[fleet_action]
+}
+
+alias[fleet_action:repeat] = {
+    
+	## cardinality = 0..1
+    max_iterations = int
+    
+	## cardinality = 0..1
+    while = {
+		###TODO: ID seems to have to be in quotes (Vanilla also does that). Also, I think they are meant to be unique ideas, but I'm not sure about that. -Caligula
+		id = scalar
+        alias_name[trigger] = alias_match_left[trigger]
+    }   
+
+    alias_name[fleet_action] = alias_match_left[fleet_action]    
+}
+
+###This requires the fleet to be a planet destroyer
+alias[fleet_action:destroy_planet] = {
+	skip_rules = bool
+	target = scope[planet]
+}
+
+alias[fleet_action:find_random_system] = {
+	## cardinality = 0..1
+	## push_scope = system
+    trigger = {
+		###TODO: ID seems to have to be in quotes (Vanilla also does that). Also, I think they are meant to be unique ideas, but I'm not sure about that. -Caligula
+		id = scalar
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## push_scope = system
+    found_system = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+   
+	## cardinality = 0..1
+    failed = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+}
+
+alias[fleet_action:find_random_planet] = {
+	## cardinality = 0..1
+	## push_scope = planet
+    trigger = {
+		###TODO: ID seems to have to be in quotes (Vanilla also does that). Also, I think they are meant to be unique ideas, but I'm not sure about that. -Caligula
+		id = scalar
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## push_scope = planet
+    found_planet = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+	
+	## cardinality = 0..1
+    failed = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+}
+
+alias[fleet_action:find_closest_system] = {
+	## cardinality = 0..1
+	## push_scope = system
+    trigger = {
+		###TODO: ID seems to have to be in quotes (Vanilla also does that). Also, I think they are meant to be unique ideas, but I'm not sure about that. -Caligula
+		id = scalar
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## push_scope = system
+    found_system = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+    
+	## cardinality = 0..1
+    failed = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+}
+
+alias[fleet_action:find_closest_planet] = {
+	## cardinality = 0..1
+	## push_scope = planet
+    trigger = {
+		###TODO: ID seems to have to be in quotes (Vanilla also does that). Also, I think they are meant to be unique ideas, but I'm not sure about that. -Caligula
+		id = scalar
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## push_scope = planet
+    found_planet = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }
+    
+	## cardinality = 0..1
+    failed = {
+        alias_name[fleet_action] = alias_match_left[fleet_action] 
+    }    
+}
+
+alias[fleet_action:effect] = {
+	###TODO: ID seems to have to be in quotes (Vanilla also does that). Also, I think they are meant to be unique ideas, but I'm not sure about that. -Caligula
+    id = scalar
+    alias_name[effect] = alias_match_left[effect]
+}
+
+
+alias[fleet_action:wait] = int
+alias[fleet_action:wait] = {
+    duration = int
+	## cardinality = 0..1
+	random = int
+}
+
+alias[fleet_action:move_to] = scope[planet]
+alias[fleet_action:move_to] = scope[galactic_object]
+alias[fleet_action:move_to] = scope[fleet]
+alias[fleet_action:move_to] = scope[starbase]
+
+alias[fleet_action:orbit_planet] = scope[planet]

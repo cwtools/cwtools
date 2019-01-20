@@ -1,0 +1,129 @@
+types = {
+	type[buildable_pop] = {
+		path = "game/common/unused"
+	}
+}
+
+#TODO Confirm
+#TODO Document
+buildable_pop = {
+	## cardinality = 0..1
+	prerequisites = { <technology> }
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	show_tech_unlock_if = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	cost = {
+		## cardinality = 0..inf
+		<resource.accumulative> = float
+	}
+	## replace_scope = { this = country root = country }
+	## cardinality = 0..1
+	potential_build = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = tile root = tile }
+	## cardinality = 0..1
+	tile_potential = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## replace_scope = { this = country root = country }
+	## cardinality = 0..1
+	allow = {
+		## cardinality = 0..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	#species = can either point to a predefined target, to a species_class only or be defined, but only one of these! Please note: one of them is required!
+	## cardinality = 0..1
+	species_class = <species_class>
+	## cardinality = 0..1
+	# Check if this accepts species
+	species = founder_species #example from vanilla: species = founder_species
+	## cardinality = 0..1
+	species = {
+		name = localisation
+		## cardinality = 0..1
+		name_list = <name_list>
+		class = <species_class>
+		portrait = <portrait>
+		traits = {
+			## cardinality = 0..inf
+			trait = <trait>
+		}
+		new_pop_resource_requirement = {
+			#one of these two
+			#type can receive any string - the game uses the string as a counter. By default there is something called "robot_food"
+			#but other mods also define custom strings and this works without issue. Examples: STNH and Stellar Expansion: Cloning
+
+			## cardinality = 0..1
+			type = <resource>
+			## cardinality = 0..1
+			type = scalar
+
+			value = float #this represents the required amount of the specified resource or dummy-resource for a pop to grow.
+		}
+
+		pops_auto_growth = float
+
+		#this is the amount of growth the pop generates every game month.
+		#Growth is in effect an amount of the resource or dummy-resource that is accumulated monthly.
+
+		#one of these two is required!
+		## cardinality = 0..1
+		pop_ethics = no
+		## cardinality = 0..1
+		pop_ethics = random
+		## cardinality = 0..1
+		pop_ethics = {
+			## cardinality = 0..inf
+			<ethos>
+		}
+
+		pop_maintenance = float
+
+		## cardinality = 0..1
+		pops_auto_upgrade_to = <buildable_pop>
+		## cardinality = 0..1
+		pops_can_be_colonizers = bool
+		## cardinality = 0..1
+		pops_can_migrate = bool
+		## cardinality = 0..1
+		pops_can_reproduce = bool
+		## cardinality = 0..1
+		pops_can_join_factions = bool
+		## cardinality = 0..1
+		can_generate_leaders = bool
+		## cardinality = 0..1
+		pops_can_be_slaves = bool
+		## cardinality = 0..1
+		pops_have_happiness = bool
+		## cardinality = 0..1
+		consumer_goods = bool
+	}
+
+	## cardinality = 0..1
+	portrait = {
+		## cardinality = 0..inf
+		<portrait> = {
+			## cardinality = 0..inf
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+	}
+}
+
+enums = {
+	complex_enum[buildable_pop_species] = {
+		path = "game/common/buildable_pops"
+		name = {
+			species = {
+				name = enum_name
+			}
+		}
+	}
+}

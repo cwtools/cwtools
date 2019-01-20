@@ -1,0 +1,57 @@
+
+types = {
+	type[decision] = {
+		path = "game/common/decisions"
+		localisation = {
+			## required
+			name = "$"
+			## required
+			desc = "$_desc"
+		}
+
+	}
+}
+
+## replace_scope = { this = planet root = planet from = country }
+decision = {
+	## cardinality = 0..1
+	owned_planets_only = bool
+	## cardinality = 0..1
+	enactment_time = int
+	## cardinality = 0..1
+	sound = <sound>
+	## cardinality = 0..1
+	icon = icon[gfx/interface/icons/decisions]
+    #icon = <sprite>
+
+	## cardinality = 0..1
+	resources = {
+		category = decisions
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	ai_weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 1..inf
+		<technology>
+	}
+}

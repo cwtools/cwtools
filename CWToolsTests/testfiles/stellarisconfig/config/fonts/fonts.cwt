@@ -1,0 +1,24 @@
+#defined fonts are used in /interface/*.gui files. They can be added to the game!
+types = {
+	## type_key_filter = font
+	type[font] = {
+		name_field = name
+		path = "game/fonts"
+   }
+ }
+ 
+ font = {
+	name = scalar
+	
+	fontstyle = {
+		style = enum[font_style]
+		### supports *.ttf and *.otf files!
+		file = filepath 
+	}
+}
+
+enums = { 
+  enum[font_style] = {
+    regular
+   }
+ }

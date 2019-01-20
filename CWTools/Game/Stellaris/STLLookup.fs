@@ -17,8 +17,8 @@ module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
 
 
-    type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData) =
-        inherit ComputedData(referencedtypes, definedvariable, withRulesData)
+    type STLComputedData(eventids, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
+        inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
         member __.Eventids : string list = eventids
         member __.Setvariables : string list = setvariables
         member __.Setflags : (FlagType * string) list = setflags
@@ -51,7 +51,7 @@ module STLLookup =
             before = final || i > 10
         while (not (ff())) do ()
 
-        final @ vanillaTriggers
+        final, vanillaTriggers
 
     let manualEffectScopeOverrides =
         [
@@ -84,4 +84,4 @@ module STLLookup =
                                     let newScopes = manualEffectScopeOverrides.[ve.Name]
                                     (DocEffect(ve.Name, newScopes, ve.Type, ve.Desc, ve.Usage)) :> Effect
                                   | x -> x)
-        final @ adjustedEffects
+        final, adjustedEffects

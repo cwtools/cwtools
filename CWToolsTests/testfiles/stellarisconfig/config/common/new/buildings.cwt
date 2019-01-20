@@ -1,0 +1,128 @@
+#Add branch office subtype
+types = {
+	type[building] = {
+		path = "game/common/buildings"
+	}
+}
+
+enums = {
+	enum[building_categories] = {
+		army
+		manufacturing
+		government
+		pop_assembly
+		resource
+		unity
+		research
+		trade
+		amenity
+	}
+}
+
+
+## push_scope = planet
+building = {
+	## cardinality = 0..1
+	base_buildtime = int
+
+	## cardinality = 0..1
+	category = enum[building_categories]
+
+	## cardinality = 0..1
+	icon = icon[gfx/interface/icons/buildings] #todo: filepath
+	## cardinality = 0..1
+	icon = <building>
+	## cardinality = 0..1
+	capital = bool
+	## cardinality = 0..1
+	can_demolish = bool
+	## cardinality = 0..1
+	can_be_ruined = bool
+	## cardinality = 0..1
+	can_be_disabled = bool
+	## cardinality = 0..1
+	can_build = no
+	## cardinality = 0..1
+	base_cap_amount = int
+	## cardinality = 0..1
+	add_to_first_building_slot = yes
+	## cardinality = 0..1
+	is_capped_by_modifier = bool
+	## cardinality = 0..1
+	branch_office_building = bool
+
+	## cardinality = 0..1
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { root = country this = country }
+	show_tech_unlock_if = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	alias_name[triggered_planet_modifier_direct] = alias_match_left[triggered_planet_modifier_direct]
+	alias_name[triggered_desc] = alias_match_left[triggered_desc]
+
+	## cardinality = 0..1
+	resources = {
+		category = planet_branch_office_buildings
+		category = planet_buildings
+		alias_name[economic_template] = alias_match_left[economic_template]
+	}
+
+	## cardinality = 0..1
+	upgrades = {
+		## cardinality = 0..1
+		<building>
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = planet root = planet }
+	planet_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..inf
+		<technology>
+	}
+
+	## cardinality = 0..1
+	ai_weight = {
+		enum[factor_weight] = float
+		alias_name[modifier_rule_factor] = alias_match_left[modifier_rule_factor]
+	}
+
+	## cardinality = 0..1
+	ai_resource_production = {
+		<resource> = int
+		trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+	}
+
+	## cardinality = 0..1
+	convert_to = {
+		## cardinality = 1..inf
+		<building>
+	}
+
+	## cardinality = 0..1
+	## replace_scope = { this = country root = country }
+	country_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	## replace_scope = { this = army root = army }
+	army_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}

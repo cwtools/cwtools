@@ -1,0 +1,96 @@
+#find a way to get the subtypes working, no idea how
+
+types = {
+	type[policy] = {
+		path = "game/common/policies"
+
+		subtype[policy_option] = {
+
+		}
+	}
+}
+
+enums = {
+	complex_enum[policy_flag] = {
+		path = "game/common/policies"
+		name = {
+			option = {
+				policy_flags = {
+					enum_name
+				}
+			}
+		}
+	}
+}
+
+enums = {
+	complex_enum[policy_option] = {
+		path = "game/common/policies"
+		name = {
+			option = {
+				name = enum_name
+			}
+		}
+	}
+}
+
+policy = {
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 2..20
+	option = {
+		name = localisation
+
+		## cardinality = 0..1
+		policy_flags = {
+			## cardinality = 0..10
+			scalar
+		}
+
+		## cardinality = 0..1
+		on_enabled = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+
+		## cardinality = 0..1
+		on_disabled = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+
+		## cardinality = 0..1
+		potential = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 0..1
+		valid = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 0..1
+		## replace_scope = { this = country root = country }
+		modifier = {
+			## cardinality = 0..1
+			alias_name[modifier] = alias_match_left[modifier]
+		}
+
+		## cardinality = 0..1
+		prerequisites = { <technology> }
+
+		## cardinality = 0..1
+		AI_weight = {
+			## cardinality = 0..1
+			factor = float
+			## cardinality = 0..1
+			weight = float
+			alias_name[modifier_rule] = alias_match_left[modifier_rule]
+		}
+	}
+}
