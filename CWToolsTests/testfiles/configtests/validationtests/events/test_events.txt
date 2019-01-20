@@ -31,7 +31,6 @@ country_event = {
 
         }
         #error
-        #error
         set_nname = test
         capital_scope = {
             if = {

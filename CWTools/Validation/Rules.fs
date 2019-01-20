@@ -297,7 +297,7 @@ module rec Rules =
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE varMap severity v key
             |VariableField (isInt, (min, max))-> checkVariableFieldNE effectMap triggerMap varSet changeScope anyScope ctx isInt min max key
-            |_ -> true
+            |_ -> false
 
     let checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
         checkFieldNE varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (Severity.Error) ctx field id key
@@ -374,13 +374,20 @@ module rec Rules =
         let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : Node) errors =
             let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let subtypedrules =
-                rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(r, o)]))
-            let expandedrules =
+                rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> []))
+            let expandedbaserules =
+                rules |> List.collect (
+                    function
+                    | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                    | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                    |x -> [])
+            let expandedsubtypedrules =
                 subtypedrules |> List.collect (
                     function
                     | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                     | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
-                    |x -> [x])
+                    |x -> [])
+            let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
             let valueFun innerErrors (leaf : Leaf) =
                 let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
                 expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId leaf.Key -> Some (l, r, o) |_ -> None)
@@ -757,15 +764,23 @@ module rec Rules =
                     // | Field.LeftScopeField rs -> rs
                     | _ -> []
                 let subtypedrules =
-                    rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [(r, o)]))
+                    rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> []))
                 // let subtypedrules =
-                //     rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (_, _, ClauseField cfs) -> cfs | x -> [(s, o, x)]))
-                let expandedrules =
+                //     rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [(r, o)]))
+
+                let expandedbaserules =
+                    rules |> List.collect (
+                        function
+                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                        |x -> [])
+                let expandedsubtypedrules =
                     subtypedrules |> List.collect (
                         function
                         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
-                        |x -> [x])
+                        |x -> [])
+                let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
                 // let expandedrules =
                 //     subtypedrules |> List.collect (
                 //         function
