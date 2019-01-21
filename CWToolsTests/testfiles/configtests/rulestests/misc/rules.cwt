@@ -52,3 +52,13 @@ alias[effect:test] = {
 alias[effect:uniquetesttest] = {
     alias_name[effect] = alias_match_left[effect]
 }
+alias[effect:if] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+alias[effect:random_list] = {
+	##cardinality = 0..inf
+	int = {
+        test = scalar
+	}
+}

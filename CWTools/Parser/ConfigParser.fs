@@ -21,7 +21,7 @@ module rec ConfigParser =
     type ValueType =
     | Scalar
     | Enum of enumc : string
-    | Specific of valuec : StringToken
+    | Specific of valuec : StringLowerToken
     | Float of minmax: (float*float)
     | Bool
     | Int of minmaxi: (int*int)
@@ -43,7 +43,7 @@ module rec ConfigParser =
     | VariableSetField of string
     | VariableGetField of string
     | VariableField of isInt : bool * minmax : (float * float)
-    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
+    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x).lower)
     type Options<'a> = {
         min : int
         max : int
@@ -331,7 +331,7 @@ module rec ConfigParser =
             |Some target ->
                 ScopeField (parseScope target)
             |None -> ValueField ValueType.Scalar
-        |x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
+        |x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|])).lower))
 
 
     let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
@@ -400,9 +400,9 @@ module rec ConfigParser =
                 // log "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
-                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x).lower), innerRules), options))
         |x ->
-            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x).lower), innerRules), options))
 
     let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
     let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }

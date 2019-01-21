@@ -31,10 +31,27 @@ country_event = {
 
 country_event = {
     option = {
-        uniquetestteST = {
+        UNIQUETESTTEST = {
 
         }
         uniquetesttest = {
+
+        }
+        if = {
+
+        }
+        IF = {
+
+        }
+    }
+}
+
+country_event = {
+    option = {
+        random_list = {
+            123456 = {
+                test = Int
+            }
 
         }
     }

@@ -33,14 +33,14 @@ type IKeyPos =
     abstract member Position : range
 [<Struct>]
 type Leaf =
-    val mutable KeyId : StringToken
+    val mutable KeyId : StringTokens
     // val mutable Key : string
-    val mutable private _valueId : StringToken
+    val mutable private _valueId : StringTokens
     val mutable private _value : Value
     val mutable Position : range
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId)
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal)
         and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
     member this.ValueId
         with get () = this._valueId
@@ -72,7 +72,7 @@ and LeafValue(value : Value, ?pos : range) =
         with get () = this._value
         and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
 
-    member this.Key = StringResource.stringManager.GetStringForID(this.ValueId)
+    member this.Key = StringResource.stringManager.GetStringForID(this.ValueId.normal)
     member val Position = defaultArg pos range.Zero
     member this.ToRaw = Value(this.Position, this._value)
     static member Create value = LeafValue value
@@ -96,7 +96,7 @@ and Node (key : string, pos : range) =
     member val KeyId = StringResource.stringManager.InternIdentifierToken(key) with get, set
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId)
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal)
         and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member val Position = pos

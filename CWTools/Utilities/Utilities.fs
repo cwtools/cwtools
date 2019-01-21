@@ -74,33 +74,52 @@ module TryParser =
     let (|Double|_|) = parseDouble
 
 type StringToken = int
+type StringLowerToken = int
+type StringTokens =
+    struct
+        val lower: StringLowerToken
+        val normal: StringToken
+        new(lower, normal) = { lower = lower; normal = normal }
+    end
 
 [<Sealed>]
 type StringResourceManager() =
-    let strings = new System.Collections.Generic.Dictionary<string, StringToken>(1024)
+    let strings = new System.Collections.Generic.Dictionary<string, StringTokens>(1024)
     let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
     let mutable i = 0
     let monitor = new Object()
     member x.InternIdentifierToken(s) =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
-        if ok then res  else
+        if ok then res else
         lock monitor (fun () ->
             let ls = s.ToLower()
             let lok = strings.TryGetValue(ls, &res)
             if lok
             then
-                strings.[ls] <- res;
-                res
-            else
+                let stringID = i
                 i <- i + 1
-                let res = i
-                strings.[ls] <- res;
+                let resn = new StringTokens(res.lower, stringID)
+                strings.[s] <- resn;
+                ints.[stringID] <- s
+                resn
+            else
+                let stringID = i
+                let lowID = i + 1
+                i <- i + 2
+                let res = new StringTokens(lowID, stringID)
+                let resl = new StringTokens(lowID, lowID)
                 strings.[s] <- res;
-                ints.[res] <- s;
+                strings.[ls] <- resl;
+                ints.[lowID] <- ls;
+                ints.[stringID] <- s;
                 res
         )
-    member x.GetStringForID(id) =
+    member x.GetStringForIDs(id : StringTokens) =
+        ints.[id.normal]
+    member x.GetLowerStringForIDs(id : StringTokens) =
+        ints.[id.lower]
+    member x.GetStringForID(id : StringToken) =
         ints.[id]
 
 module StringResource =

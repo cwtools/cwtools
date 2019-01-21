@@ -131,8 +131,8 @@ let testc =
     ]
 
 let leftScope = RootRule.AliasRule("effect", (NodeRule((ScopeField Scope.Any), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany))
-let eopEffect = RootRule.AliasRule("effect", (NodeRule((ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken "every_owned_planet"))), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some Scope.Planet} ))
-let logEffect = RootRule.AliasRule("effect", (LeafRule((NewField.ValueField (ConfigParser.ValueType.Specific (StringResource.stringManager.InternIdentifierToken "log"))), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some Scope.Planet} ))
+let eopEffect = RootRule.AliasRule("effect", (NodeRule((ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken "every_owned_planet").lower)), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some Scope.Planet} ))
+let logEffect = RootRule.AliasRule("effect", (LeafRule((NewField.ValueField (ConfigParser.ValueType.Specific (StringResource.stringManager.InternIdentifierToken "log").lower)), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some Scope.Planet} ))
 
 [<Tests>]
 let testsv =
