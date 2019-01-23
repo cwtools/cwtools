@@ -112,7 +112,7 @@ let testc =
                           effect = effect\n\
                           }"
             let rules, types, enums, _, _ = parseConfig parseScope allScopes Scope.Any "" config
-            let Typerules = rules |> List.choose (function |TypeRule (_, rs) -> Some (rs) |_ -> None)
+            let Typerules = rules |> List.choose (function |TypeRule (_, rs) -> Some (rs) |_ -> None) |> Array.ofList
             let input =    "create_starbase = {\n\
                             owner = this \n\
                             owner = this \n\
@@ -130,8 +130,8 @@ let testc =
 
     ]
 
-let leftScope = RootRule.AliasRule("effect", (NodeRule((ScopeField Scope.Any), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany))
-let eopEffect = RootRule.AliasRule("effect", (NodeRule((ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken "every_owned_planet").lower)), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some Scope.Planet} ))
+let leftScope = RootRule.AliasRule("effect", (NodeRule((ScopeField Scope.Any), [|LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany|]), optionalMany))
+let eopEffect = RootRule.AliasRule("effect", (NodeRule((ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken "every_owned_planet").lower)), [|LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany|]), {optionalMany with pushScope = Some Scope.Planet} ))
 let logEffect = RootRule.AliasRule("effect", (LeafRule((NewField.ValueField (ConfigParser.ValueType.Specific (StringResource.stringManager.InternIdentifierToken "log").lower)), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some Scope.Planet} ))
 
 [<Tests>]
@@ -148,7 +148,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ["medium"; "large"]); ("module", ["trafficControl"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
                 let rules = RuleApplicator<Scope>([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
-                let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
+                let errors = rules.ApplyNodeRule([|ConfigParser.createStarbase|], node)
                 match errors with
                 | OK -> ()
                 | Invalid es -> Expect.isEmpty es (sprintf "should be empty: %A" es)
@@ -165,7 +165,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = ConfigParser.createStarbaseEnums |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
                 let rules = RuleApplicator<Scope>([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
-                let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
+                let errors = rules.ApplyNodeRule([|ConfigParser.createStarbase|], node)
                 match errors with
                 | OK -> ()
                 | Invalid es -> Expect.equal (es.Length) 3 (sprintf "Following lines are not expected to have an error %A" es )
@@ -178,7 +178,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
                 let rules = RuleApplicator<Scope>([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty,Map.empty, enums, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
-                let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
+                let errors = rules.ApplyNodeRule([|ConfigParser.createStarbase|], node)
                 match errors with
                 | OK -> ()
                 | Invalid es -> Expect.equal 2 (es.Length) (sprintf "Following lines are not expected to have an error %A" es )
@@ -194,7 +194,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
                 let rules = RuleApplicator<Scope>([TypeRule ("create_starbase", ConfigParser.createStarbase)], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
-                let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
+                let errors = rules.ApplyNodeRule([|ConfigParser.createStarbase|], node)
                 match errors with
                 | OK -> ()
                 | Invalid es -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
@@ -214,7 +214,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
                 let rules = RuleApplicator<Scope>([TypeRule ("create_starbase", ConfigParser.createStarbase); createStarbaseAlias], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
-                let errors = rules.ApplyNodeRule([ConfigParser.createStarbase], node)
+                let errors = rules.ApplyNodeRule([|ConfigParser.createStarbase|], node)
                 match errors with
                 | OK -> ()
                 | Invalid es -> Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es )

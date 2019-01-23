@@ -39,7 +39,7 @@ module rec ConfigParser =
     | FilepathField
     | IconField of string
     | AliasField of string
-    | SubtypeField of string * bool * NewRule<'a> list
+    | SubtypeField of string * bool * NewRule<'a> array
     | VariableSetField of string
     | VariableGetField of string
     | VariableField of isInt : bool * minmax : (float * float)
@@ -55,10 +55,10 @@ module rec ConfigParser =
         requiredScopes : 'a list
     }
     type RuleType<'a> =
-    |NodeRule of left : NewField<'a> * rules : NewRule<'a> list
+    |NodeRule of left : NewField<'a> * rules : NewRule<'a> array
     |LeafRule of left : NewField<'a> * right : NewField<'a>
     |LeafValueRule of right : NewField<'a>
-    |SubtypeRule of string * bool * NewRule<'a> list
+    |SubtypeRule of string * bool * NewRule<'a> array
     type NewRule<'a> = RuleType<'a> * Options<'a>
     // type ObjectType =
     // | Tech
@@ -91,7 +91,7 @@ module rec ConfigParser =
     }
     type SubTypeDefinition<'a> = {
         name : string
-        rules : NewRule<'a> list
+        rules : NewRule<'a> array
         typeKeyField : string option
         pushScope : 'a option
         localisation : TypeLocalisation list
@@ -344,7 +344,7 @@ module rec ConfigParser =
     let configNode (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
         let options = getOptionsFromComments parseScope allScopes anyScope comments
-        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
+        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope) |> Array.ofList
         let rule =
             match key with
             |x when x.StartsWith "subtype[" ->
@@ -391,7 +391,7 @@ module rec ConfigParser =
     let configRootNode (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
         let children = getNodeComments node
         let options = getOptionsFromComments parseScope allScopes anyScope comments
-        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
+        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope) |> Array.ofList
         match node.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
@@ -418,6 +418,7 @@ module rec ConfigParser =
                 |Some "rgb" -> [rgbRule]
                 |Some "hsv" -> [hsvRule]
                 |_ -> [rgbRule; hsvRule]
+            let colourRules = colourRules |> Array.ofList
             NewRule(NodeRule(leftfield, colourRules), options)
         |x ->
             let rightfield = processKey parseScope anyScope rightkey
@@ -468,7 +469,7 @@ module rec ConfigParser =
                     match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
                     |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
                     |None -> None
-                let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope))
+                let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope)) |> Array.ofList
                 match getSettingFromString (subtype.Key) "subtype" with
                 |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = [] }
                 |None -> None
@@ -630,8 +631,8 @@ module rec ConfigParser =
         let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
         let moduleR = NewRule (LeafRule(specificField "module", ValueField(ValueType.Enum "module")), optionalMany)
         let building = NewRule (LeafRule(specificField "building", ValueField(ValueType.Enum "building")), optionalMany)
-        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), { optionalSingle with replaceScopes = Some { froms = None; root = Some (Scope.Country); this = Some (Scope.Country); prevs = None }})
-        let rule = NewRule (NodeRule(specificField "create_starbase", [owner; size; moduleR; building; effect]), optionalMany)
+        let effect = NewRule (NodeRule(specificField "effect", [|(LeafRule (AliasField "effect", AliasField "effect")), optionalMany|]), { optionalSingle with replaceScopes = Some { froms = None; root = Some (Scope.Country); this = Some (Scope.Country); prevs = None }})
+        let rule = NewRule (NodeRule(specificField "create_starbase", [|owner; size; moduleR; building; effect|]), optionalMany)
         rule
     let createStarbaseAlias = AliasRule ("effect", createStarbase)
     let createStarbaseEnums =
@@ -678,10 +679,10 @@ module rec ConfigParser =
 
     let building =
         let inner =
-            [
+            [|
                 NewRule (LeafRule(specificField "allow", ValueField ValueType.Scalar), requiredSingle)
                 NewRule (LeafRule(specificField "empire_unique", ValueField ValueType.Bool), optionalSingle)
-            ]
+            |]
         NewRule(NodeRule(specificField "building", inner), optionalMany)
 
     // formation_priority = @corvette_formation_priority
@@ -719,17 +720,17 @@ module rec ConfigParser =
     // required_component_set = "combat_computers"
     let shipsize =
         let inner =
-            [
+            [|
                 NewRule(LeafRule(specificField "formation_priority", defaultInt), optionalSingle);
                 NewRule(LeafRule(specificField "max_speed", defaultFloat), requiredSingle);
                 NewRule(LeafRule(specificField "acceleration", defaultFloat), requiredSingle);
                 NewRule(LeafRule(specificField "rotation_speed", defaultFloat), requiredSingle);
                 NewRule(LeafRule(specificField "collision_radius", defaultFloat), optionalSingle);
                 NewRule(LeafRule(specificField "max_hitpoints", defaultInt), requiredSingle);
-                NewRule(NodeRule(specificField "modifier", []), optionalSingle);
+                NewRule(NodeRule(specificField "modifier", [||]), optionalSingle);
                 NewRule(LeafRule(specificField "size_multiplier", defaultInt), requiredSingle);
                 NewRule(LeafRule(specificField "fleet_slot_size", defaultInt), requiredSingle);
-                NewRule(NodeRule(specificField "section_slots", []), optionalSingle);
+                NewRule(NodeRule(specificField "section_slots", [||]), optionalSingle);
                 NewRule(LeafRule(specificField "num_target_locators", defaultInt), requiredSingle);
                 NewRule(LeafRule(specificField "is_space_station", ValueField ValueType.Bool), requiredSingle);
                 NewRule(LeafRule(specificField "icon_frame", defaultInt), requiredSingle);
@@ -737,13 +738,13 @@ module rec ConfigParser =
                 NewRule(LeafRule(specificField "can_have_federation_design", ValueField ValueType.Bool), requiredSingle);
                 NewRule(LeafRule(specificField "enable_default_design", ValueField ValueType.Bool), requiredSingle);
                 NewRule(LeafRule(specificField "default_behavior", TypeField (Simple "ship_behavior")), requiredSingle);
-                NewRule(NodeRule(specificField "prerequisites", []), optionalSingle);
+                NewRule(NodeRule(specificField "prerequisites", [||]), optionalSingle);
                 NewRule(LeafRule(specificField "combat_disengage_chance", defaultFloat), optionalSingle);
                 NewRule(LeafRule(specificField "has_mineral_upkeep", ValueField ValueType.Bool), requiredSingle);
                 NewRule(LeafRule(specificField "class", ValueField ValueType.Scalar), requiredSingle);
                 NewRule(LeafRule(specificField "construction_type", ValueField ValueType.Scalar), requiredSingle);
                 NewRule(LeafRule(specificField "required_component_set", ValueField ValueType.Scalar), requiredSingle);
-            ]
+            |]
         NewRule(NodeRule(specificField "ship_size", inner), optionalMany)
 
     let shipBehaviorType =
