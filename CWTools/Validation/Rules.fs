@@ -369,25 +369,67 @@ module rec Rules =
         //     |ValueType.Specific s -> key = s
         //     |ValueType.Percent -> key.EndsWith("%")
         //     |_ -> true
+        let monitor = new Object()
+
+        let memoizeRulesInner memFunction =
+            let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
+            fun (rules : NewRule<_> array) (subtypes : string list) ->
+                lock monitor (fun () ->
+                    match dict.TryGetValue(rules) with
+                    | (true, v) ->
+                        match v.TryGetValue(subtypes) with
+                        |(true, v2) -> v2
+                        |_ ->
+                            let temp = memFunction rules subtypes
+                            v.Add(subtypes, temp)
+                            temp
+                    | _ ->
+                        let temp = memFunction rules subtypes
+                        let innerDict = new System.Collections.Generic.Dictionary<_,_>()
+                        innerDict.Add(subtypes, temp)
+                        dict.Add(rules, innerDict)
+                        temp
+                )
+        let memoizeRules =
+            let memFunction =
+                fun rules subtypes ->
+                    let subtypedrules =
+                        rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else [||]) | x -> [||]))
+                    let expandedbaserules =
+                        rules |> Array.collect (
+                            function
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            |x -> [||])
+                    let expandedsubtypedrules =
+                        subtypedrules |> Array.collect (
+                            function
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            |x -> [||])
+                    seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+            memoizeRulesInner memFunction
 
 
         let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> array) (startNode : Node) errors =
             let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
-            let subtypedrules =
-                rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else [||]) | x -> [||]))
-            let expandedbaserules =
-                rules |> Array.collect (
-                    function
-                    | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                    | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                    |x -> [||])
-            let expandedsubtypedrules =
-                subtypedrules |> Array.collect (
-                    function
-                    | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                    | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                    |x -> [||])
-            let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+            // TODO: Memoize expanded rules depending  on ctx.subtypes ad rules?
+            let expandedrules = memoizeRules rules ctx.subtypes
+            // let subtypedrules =
+            //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else [||]) | x -> [||]))
+            // let expandedbaserules =
+            //     rules |> Array.collect (
+            //         function
+            //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+            //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+            //         |x -> [||])
+            // let expandedsubtypedrules =
+            //     subtypedrules |> Array.collect (
+            //         function
+            //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+            //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+            //         |x -> [||])
+            // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
             let valueFun innerErrors (leaf : Leaf) =
                 let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
                 expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None)
@@ -599,6 +641,47 @@ module rec Rules =
         let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
         let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
 
+        let monitor = new Object()
+
+        let memoizeRulesInner memFunction =
+            let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
+            fun (rules : NewRule<_> array) (subtypes : string list) ->
+                lock monitor (fun () ->
+                    match dict.TryGetValue(rules) with
+                    | (true, v) ->
+                        match v.TryGetValue(subtypes) with
+                        |(true, v2) -> v2
+                        |_ ->
+                            let temp = memFunction rules subtypes
+                            v.Add(subtypes, temp)
+                            temp
+                    | _ ->
+                        let temp = memFunction rules subtypes
+                        let innerDict = new System.Collections.Generic.Dictionary<_,_>()
+                        innerDict.Add(subtypes, temp)
+                        dict.Add(rules, innerDict)
+                        temp
+                )
+        let memoizeRules =
+            let memFunction =
+                fun rules subtypes ->
+                    let subtypedrules =
+                        rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else [||]) | x -> [||]))
+                    let expandedbaserules =
+                        rules |> Array.collect (
+                            function
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            |x -> [||])
+                    let expandedsubtypedrules =
+                        subtypedrules |> Array.collect (
+                            function
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                            |x -> [||])
+                    seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+            memoizeRulesInner memFunction
+
         let rec singleFoldRules fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
             let recurse = singleFoldRules fNode fChild fLeaf fLeafValue fComment
             match child with
@@ -773,22 +856,23 @@ module rec Rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
                     | _ -> [||]
-                let subtypedrules =
-                    rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
+                // let subtypedrules =
+                //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
 
-                let expandedbaserules =
-                    rules |> Array.collect (
-                        function
-                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        |x -> [||])
-                let expandedsubtypedrules =
-                    subtypedrules |> Array.collect (
-                        function
-                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        |x -> [||])
-                let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+                // let expandedbaserules =
+                //     rules |> Array.collect (
+                //         function
+                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         |x -> [||])
+                // let expandedsubtypedrules =
+                //     subtypedrules |> Array.collect (
+                //         function
+                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         |x -> [||])
+                // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+                let expandedrules = memoizeRules rules ctx.subtypes
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
@@ -838,22 +922,23 @@ module rec Rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
                     | _ -> [||]
-                let subtypedrules =
-                    rules |> Seq.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
+                // let subtypedrules =
+                //     rules |> Seq.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
 
-                let expandedbaserules =
-                    rules |> Seq.collect (
-                        function
-                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        |x -> [||])
-                let expandedsubtypedrules =
-                    subtypedrules |> Seq.collect (
-                        function
-                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        |x -> [||])
-                let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+                // let expandedbaserules =
+                //     rules |> Seq.collect (
+                //         function
+                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         |x -> [||])
+                // let expandedsubtypedrules =
+                //     subtypedrules |> Seq.collect (
+                //         function
+                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
+                //         |x -> [||])
+                // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+                let expandedrules = memoizeRules rules ctx.subtypes
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
