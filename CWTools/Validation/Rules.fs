@@ -271,39 +271,54 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
 
-
-    let checkField varMap (enumsMap : Collections.Map<_, Set<_, _>>) typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) (leafornode) errors =
+    type checkFieldParams<'S when 'S :> IScope<'S> and 'S : comparison> =
+        {
+            varMap : Collections.Map<string, StringSet>
+            enumsMap : Collections.Map<string, StringSet>
+            typesMap : Collections.Map<string,StringSet>
+            effectMap : Map<string,Effect<'S>,InsensitiveStringComparer>
+            triggerMap : Map<string,Effect<'S>,InsensitiveStringComparer>
+            varSet : StringSet
+            localisation : (Lang * Collections.Set<string>) list
+            files : Collections.Set<string>
+            changeScope : bool -> bool -> EffectMap<'S> -> EffectMap<'S> -> StringSet -> string -> ScopeContext<'S> -> ScopeResult<'S>
+            anyScope : 'S
+            defaultLang : Lang
+            severity : Severity
+            ctx : RuleContext<'S>
+        }
+    let checkField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) (leafornode) errors =
             match field with
             |ValueField vt ->
-                checkValidValue enumsMap severity vt id key leafornode errors
-            |TypeField t -> checkTypeField typesMap severity t key leafornode errors
-            |ScopeField s -> checkScopeField effectMap triggerMap varSet changeScope anyScope ctx s key leafornode errors
-            |LocalisationField synced -> checkLocalisationField localisation defaultLang synced key leafornode errors
-            |FilepathField -> checkFilepathField files key leafornode errors
-            |IconField folder -> checkIconField files folder key leafornode errors
+                checkValidValue p.enumsMap p.severity vt id key leafornode errors
+            |TypeField t -> checkTypeField p.typesMap p.severity t key leafornode errors
+            |ScopeField s -> checkScopeField p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx s key leafornode errors
+            |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLang synced key leafornode errors
+            |FilepathField -> checkFilepathField p.files key leafornode errors
+            |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
-            |VariableGetField v -> checkVariableGetField varMap severity v key leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField effectMap triggerMap varSet changeScope anyScope ctx isInt min max key leafornode errors
+            |VariableGetField v -> checkVariableGetField p.varMap p.severity v key leafornode errors
+            |VariableField (isInt, (min, max)) -> checkVariableField p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |_ -> errors
-    let checkFieldNE varMap (enumsMap : Collections.Map<_, Set<_, _>>) typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
+    let checkFieldNE (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
-                checkValidValueNE enumsMap severity vt id key
-            |TypeField t -> checkTypeFieldNE typesMap severity t key
-            |ScopeField s -> checkScopeFieldNE effectMap triggerMap varSet changeScope anyScope ctx s key
-            |LocalisationField synced -> checkLocalisationFieldNE localisation defaultLang synced key
-            |FilepathField -> checkFilepathFieldNE files key
-            |IconField folder -> checkIconFieldNE files folder key
+                checkValidValueNE p.enumsMap p.severity vt id key
+            |TypeField t -> checkTypeFieldNE p.typesMap p.severity t key
+            |ScopeField s -> checkScopeFieldNE p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx s key
+            |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLang synced key
+            |FilepathField -> checkFilepathFieldNE p.files key
+            |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
-            |VariableGetField v -> checkVariableGetFieldNE varMap severity v key
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE effectMap triggerMap varSet changeScope anyScope ctx isInt min max key
+            |VariableGetField v -> checkVariableGetFieldNE p.varMap p.severity v key
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
             |_ -> false
 
-    let checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
-        checkFieldNE varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (Severity.Error) ctx field id key
+    let checkLeftField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
+        checkFieldNE p field id key
 
-    let checkFieldByKey varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
-        checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx field id key
+    let checkFieldByKey (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
+        checkLeftField p field id key
 
     let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (localisation) (typeKey : string) (key : string) (leafornode) =
         let typenames = typeKey.Split('.')
@@ -343,7 +358,7 @@ module rec Rules =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
-                        |> List.map (fun (k, vs) -> k, vs |> List.map snd |> Array.ofList)
+                        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
@@ -373,7 +388,7 @@ module rec Rules =
 
         let memoizeRulesInner memFunction =
             let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
-            fun (rules : NewRule<_> array) (subtypes : string list) ->
+            fun (rules : NewRule<_> list) (subtypes : string list) ->
                 lock monitor (fun () ->
                     match dict.TryGetValue(rules) with
                     | (true, v) ->
@@ -394,24 +409,25 @@ module rec Rules =
             let memFunction =
                 fun rules subtypes ->
                     let subtypedrules =
-                        rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else [||]) | x -> [||]))
+                        rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else []) | x -> []))
                     let expandedbaserules =
-                        rules |> Array.collect (
+                        rules |> List.collect (
                             function
-                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            |x -> [||])
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            |x -> [])
                     let expandedsubtypedrules =
-                        subtypedrules |> Array.collect (
+                        subtypedrules |> List.collect (
                             function
-                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            |x -> [||])
-                    seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            |x -> [])
+                    expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+                    // seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
             memoizeRulesInner memFunction
 
 
-        let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> array) (startNode : Node) errors =
+        let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : Node) errors =
             let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             // TODO: Memoize expanded rules depending  on ctx.subtypes ad rules?
             let expandedrules = memoizeRules rules ctx.subtypes
@@ -430,17 +446,32 @@ module rec Rules =
             //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
             //         |x -> [||])
             // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+            let p = {
+                varMap = varMap
+                enumsMap = enumsMap
+                typesMap = typesMap
+                effectMap = effectMap
+                triggerMap = triggerMap
+                varSet = varSet
+                localisation = localisation
+                files = files
+                changeScope = changeScope
+                anyScope = anyScope
+                defaultLang = defaultLang
+                ctx = ctx
+                severity = Severity.Error
+            }
             let valueFun innerErrors (leaf : Leaf) =
                 let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
-                expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None)
+                expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
             let nodeFun innerErrors (node : Node) =
                 let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
-                expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l node.KeyId.lower node.Key -> Some (l, rs, o) |_ -> None)
+                expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l node.KeyId.lower node.Key -> Some (l, rs, o) |_ -> None)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
             let leafValueFun innerErrors (leafvalue : LeafValue) =
                 let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
-                expandedrules |> Seq.choose (function |(LeafValueRule (l), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leafvalue.ValueId.lower leafvalue.Key -> Some (l, o) |_ -> None)
+                expandedrules |> Seq.choose (function |(LeafValueRule (l), o) when checkLeftField p l leafvalue.ValueId.lower leafvalue.Key -> Some (l, o) |_ -> None)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
             let checkCardinality (node : Node) innerErrors (rule : NewRule<_>) =
                 match rule with
@@ -456,17 +487,17 @@ module rec Rules =
                 |LeafRule(AliasField(_), _), _
                 |LeafValueRule(AliasField(_)), _ -> innerErrors
                 |NodeRule(l, _), opts ->
-                    let total = node.Children |> List.filter (fun child -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l child.KeyId.lower child.Key) |> List.length
+                    let total = node.Children |> List.filter (fun child -> checkLeftField p l child.KeyId.lower child.Key) |> List.length
                     if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
                     else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %A, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
                 |LeafRule(l, r), opts ->
-                    let total = node.Values |> List.filter (fun leaf -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId.lower leaf.Key) |> List.length
+                    let total = node.Values |> List.filter (fun leaf -> checkLeftField p l leaf.KeyId.lower leaf.Key) |> List.length
                     if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
                     else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %A %A, expecting at most %i" l r opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
                 |LeafValueRule(l), opts ->
-                    let total = node.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leafvalue.ValueId.lower leafvalue.Key) |> List.length
+                    let total = node.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField p l leafvalue.ValueId.lower leafvalue.Key) |> List.length
                     if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
                     else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %A, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
@@ -485,10 +516,42 @@ module rec Rules =
         and applyLeafValueRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leafvalue : LeafValue) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             // let errors = OK
-            checkField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang severity ctx rule (leafvalue.ValueId.lower) (leafvalue.Value.ToRawString()) leafvalue errors
+            let p = {
+                varMap = varMap
+                enumsMap = enumsMap
+                typesMap = typesMap
+                effectMap = effectMap
+                triggerMap = triggerMap
+                varSet = varSet
+                localisation = localisation
+                files = files
+                changeScope = changeScope
+                anyScope = anyScope
+                defaultLang = defaultLang
+                ctx = ctx
+                severity = severity
+            }
+
+            checkField p rule (leafvalue.ValueId.lower) (leafvalue.Value.ToRawString()) leafvalue errors
 
         and applyLeafRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leaf : Leaf) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
+            let p = {
+                varMap = varMap
+                enumsMap = enumsMap
+                typesMap = typesMap
+                effectMap = effectMap
+                triggerMap = triggerMap
+                varSet = varSet
+                localisation = localisation
+                files = files
+                changeScope = changeScope
+                anyScope = anyScope
+                defaultLang = defaultLang
+                ctx = ctx
+                severity = severity
+            }
+
             // let errors = OK
             (match options.requiredScopes with
             |[] -> OK
@@ -497,8 +560,8 @@ module rec Rules =
                 |x when x = anyScope -> OK
                 |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf])
             <&&>
-            checkField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang severity ctx rule (leaf.ValueId.lower) (leaf.Value.ToRawString()) leaf errors
-        and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> array) (node : Node) errors =
+            checkField p rule (leaf.ValueId.lower) (leaf.Value.ToRawString()) leaf errors
+        and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let newCtx  =
                 match options.pushScope with
@@ -564,7 +627,7 @@ module rec Rules =
             res |> List.tryPick fst, res |> List.map snd
 
         let rootId = StringResource.stringManager.InternIdentifierToken "root"
-        let applyNodeRuleRoot (typedef : TypeDefinition<_>) (rules : NewRule<_> array) (options : Options<_>) (node : Node) =
+        let applyNodeRuleRoot (typedef : TypeDefinition<_>) (rules : NewRule<_> list) (options : Options<_>) (node : Node) =
             let pushScope, subtypes = testSubtype (typedef.subtypes) node
             let startingScopeContext =
                 match Option.orElse pushScope options.pushScope with
@@ -632,7 +695,7 @@ module rec Rules =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
-                        |> List.map (fun (k, vs) -> k, vs |> List.map snd |> List.toArray)
+                        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
@@ -645,7 +708,7 @@ module rec Rules =
 
         let memoizeRulesInner memFunction =
             let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
-            fun (rules : NewRule<_> array) (subtypes : string list) ->
+            fun (rules : NewRule<_> list) (subtypes : string list) ->
                 lock monitor (fun () ->
                     match dict.TryGetValue(rules) with
                     | (true, v) ->
@@ -666,20 +729,20 @@ module rec Rules =
             let memFunction =
                 fun rules subtypes ->
                     let subtypedrules =
-                        rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else [||]) | x -> [||]))
+                        rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else []) | x -> []))
                     let expandedbaserules =
-                        rules |> Array.collect (
+                        rules |> List.collect (
                             function
-                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            |x -> [||])
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            |x -> [])
                     let expandedsubtypedrules =
-                        subtypedrules |> Array.collect (
+                        subtypedrules |> List.collect (
                             function
-                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                            |x -> [||])
-                    seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+                            | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                            |x -> [])
+                    expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
             memoizeRulesInner memFunction
 
         let rec singleFoldRules fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
@@ -735,32 +798,48 @@ module rec Rules =
                     // | Field.ClauseField rs -> rs
                     // | Field.LeftClauseField (_, ClauseField rs) -> rs
                     // | Field.LeftScopeField rs -> rs
-                    | _ -> [||]
+                    | _ -> []
                 let subtypedrules =
-                    rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [|(r, o)|]))
+                    rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [(r, o)]))
                 // let subtypedrules =
                 //     rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (_, _, ClauseField cfs) -> cfs | x -> [(s, o, x)]))
                 //     |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
                 let expandedrules =
-                    subtypedrules |> Array.collect (
+                    subtypedrules |> List.collect (
                         function
-                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                        |x -> [|x|])
+                        | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                        | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                        |x -> [x])
                 let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
                 let leafMatch = node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos)
                 let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
                 // log "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
                 // let ctx = { RuleContext.subtypes = []; scop es = defaultContext; warningOnly = false }
+                let p = {
+                    varMap = varMap
+                    enumsMap = enumsMap
+                    typesMap = typesMap
+                    effectMap = effectMap
+                    triggerMap = triggerMap
+                    varSet = varSet
+                    localisation = localisation
+                    files = files
+                    changeScope = changeScope
+                    anyScope = anyScope
+                    defaultLang = defaultLang
+                    ctx = ctx
+                    severity = Severity.Error
+                }
+
                 match childMatch, leafMatch, leafValueMatch with
                 |Some c, _, _ ->
-                    match expandedrules |> Array.tryPick (function |(NodeRule (l, rs), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l c.KeyId.lower c.Key -> Some (l, rs, o) |_ -> None) with
+                    match expandedrules |> List.tryPick (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (l, rs, o) |_ -> None) with
                     | None ->
                             // log "fallback match %s %A" (node.Key) expandedrules
                             Some (NodeC c, (field, options))
                     | Some (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))
                 |_, Some leaf, _ ->
-                    match expandedrules |> Array.tryPick (function |(LeafRule (l, r), o) when checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None) with
+                    match expandedrules |> List.tryPick (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None) with
                     |None ->
                         Some (LeafC leaf, (field, options))
                     |Some (l, rs, o) -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
@@ -855,7 +934,7 @@ module rec Rules =
                 let rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
-                    | _ -> [||]
+                    | _ -> []
                 // let subtypedrules =
                 //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
 
@@ -873,16 +952,32 @@ module rec Rules =
                 //         |x -> [||])
                 // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
                 let expandedrules = memoizeRules rules ctx.subtypes
+                let p = {
+                    varMap = varMap
+                    enumsMap = enumsMap
+                    typesMap = typesMap
+                    effectMap = effectMap
+                    triggerMap = triggerMap
+                    varSet = varSet
+                    localisation = localisation
+                    files = files
+                    changeScope = changeScope
+                    anyScope = anyScope
+                    defaultLang = defaultLang
+                    ctx = ctx
+                    severity = Severity.Error
+                }
+
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
-                        expandedrules |> Seq.filter (function |(NodeRule (l, rs), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l c.KeyId.lower c.Key |_ -> false)
+                        expandedrules |> Seq.filter (function |(NodeRule (l, rs), o) -> checkLeftField p l c.KeyId.lower c.Key |_ -> false)
                                       |> Seq.choose (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> Some (NodeC c, (field, options)))//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
                     |LeafC leaf ->
-                        expandedrules |> Seq.filter (function |(LeafRule (l, r), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId.lower leaf.Key |_ -> false)
+                        expandedrules |> Seq.filter (function |(LeafRule (l, r), o) -> checkLeftField p l leaf.KeyId.lower leaf.Key |_ -> false)
                                       |> Seq.choose (function |(LeafRule (l, r), o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
                     |LeafValueC leafvalue ->
-                        expandedrules |> Seq.filter (function |(LeafValueRule (lv), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx lv leafvalue.ValueId.lower leafvalue.Key |_ -> false)
+                        expandedrules |> Seq.filter (function |(LeafValueRule (lv), o) -> checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key |_ -> false)
                                       |> Seq.choose (function |(LeafValueRule (lv), o) -> Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
                     |CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
@@ -921,7 +1016,7 @@ module rec Rules =
                 let rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
-                    | _ -> [||]
+                    | _ -> []
                 // let subtypedrules =
                 //     rules |> Seq.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
 
@@ -939,16 +1034,32 @@ module rec Rules =
                 //         |x -> [||])
                 // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
                 let expandedrules = memoizeRules rules ctx.subtypes
+                let p = {
+                    varMap = varMap
+                    enumsMap = enumsMap
+                    typesMap = typesMap
+                    effectMap = effectMap
+                    triggerMap = triggerMap
+                    varSet = varSet
+                    localisation = localisation
+                    files = files
+                    changeScope = changeScope
+                    anyScope = anyScope
+                    defaultLang = defaultLang
+                    ctx = ctx
+                    severity = Severity.Error
+                }
+
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
-                        expandedrules |> Seq.filter (function |(NodeRule (l, rs), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l c.KeyId.lower c.Key |_ -> false)
+                        expandedrules |> Seq.filter (function |(NodeRule (l, rs), o) -> checkLeftField p l c.KeyId.lower c.Key |_ -> false)
                                       |> Seq.choose (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> Some (NodeC c, (field, options)))//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
                     |LeafC leaf ->
-                        expandedrules |> Seq.filter (function |(LeafRule (l, r), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx l leaf.KeyId.lower leaf.Key |_ -> false)
+                        expandedrules |> Seq.filter (function |(LeafRule (l, r), o) -> checkLeftField p l leaf.KeyId.lower leaf.Key |_ -> false)
                                       |> Seq.choose (function |(LeafRule (l, r), o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
                     |LeafValueC leafvalue ->
-                        expandedrules |> Seq.filter (function |(LeafValueRule (lv), o) -> checkLeftField varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang ctx lv leafvalue.ValueId.lower leafvalue.Key |_ -> false)
+                        expandedrules |> Seq.filter (function |(LeafValueRule (lv), o) -> checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key |_ -> false)
                                       |> Seq.choose (function |(LeafValueRule (lv), o) -> Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
                     |CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
@@ -1039,7 +1150,7 @@ module rec Rules =
             let fLeafValue (res) (leafvalue : LeafValue) (field, _) = res
             let fNode (res : Node list) (node : Node) ((field, option) : NewRule<_>) =
                 match field with
-                |NodeRule (_, rs) when rs |> Array.exists (function |LeafRule (AliasField "effect" , _), _-> true |_ -> false) ->
+                |NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "effect" , _), _-> true |_ -> false) ->
                     node::res, true
                 |_ -> res, false
             let fComment (res) _ _ = res
@@ -1051,7 +1162,7 @@ module rec Rules =
             let fLeafValue (res) (leafvalue : LeafValue) (field, _) = res
             let fNode (res : Node list) (node : Node) ((field, option) : NewRule<_>) =
                 match field with
-                |NodeRule (_, rs) when rs |> Array.exists (function |LeafRule (AliasField "trigger" , _), _-> true |_ -> false) ->
+                |NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "trigger" , _), _-> true |_ -> false) ->
                     node::res, true
                 |_ -> res, false
             let fComment (res) _ _ = res
@@ -1135,7 +1246,7 @@ module rec Rules =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
-                        |> List.map (fun (k, vs) -> k, vs |> List.map snd |> Array.ofList)
+                        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
@@ -1175,7 +1286,7 @@ module rec Rules =
                                                     |> List.map (fun s -> "event_target:" + s)
             evs @ gevs @ oneToOneScopes
 
-        let createSnippetForClause (rules : NewRule<_> array) (description : string option) (key : string) =
+        let createSnippetForClause (rules : NewRule<_> list) (description : string option) (key : string) =
             let filterToCompletion =
                 function
                 |LeafRule(ValueField(ValueType.Specific _), _) -> true
@@ -1195,8 +1306,7 @@ module rec Rules =
                     sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s) (i + 1) "{ }"
                 |_ -> ""
 
-            let requiredRules = rules |> List.ofArray
-                                      |> List.filter (fun (f, o) -> o.min >= 1 && filterToCompletion f)
+            let requiredRules = rules |> List.filter (fun (f, o) -> o.min >= 1 && filterToCompletion f)
                                       |> List.distinctBy (fun (f, _) -> ruleToDistinctKey f)
                                       |> List.mapi (fun i (f, _) -> rulePrint i f)
                                       |> String.concat ""
@@ -1212,7 +1322,7 @@ module rec Rules =
                 | Some l -> (l.Key, true)::stack
                 | None -> stack
 
-        and getCompletionFromPath (rules : NewRule<_> array) (stack : (string * bool) list) =
+        and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * bool) list) =
             // log (sprintf "%A" stack)
             let rec convRuleToCompletion (rule : NewRule<_>) =
                 let r, o = rule
@@ -1321,27 +1431,42 @@ module rec Rules =
                 //     |_ -> []
                 // |Field.ValueField (Enum e) -> if isLeaf then enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple else []
                 // |Field.ValueField v -> if isLeaf then getValidValues v |> Option.defaultValue [] |> List.map Simple else []
-            let rec findRule (rules : NewRule<'T> array) (stack) =
+            let p = {
+                varMap = varMap
+                enumsMap = enumsMap
+                typesMap = typesMap
+                effectMap = effectMap
+                triggerMap = triggerMap
+                varSet = varSet
+                localisation = localisation
+                files = files
+                changeScope = changeScope
+                anyScope = anyScope
+                defaultLang = defaultLang
+                ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
+                severity = Severity.Error
+            }
+
+            let rec findRule (rules : NewRule<'T> list) (stack) =
                 let subtypedRules =
-                    rules |> Array.collect (
+                    rules |> List.collect (
                         function
                         | SubtypeRule(_, _, cfs), _ -> cfs
-                        |x -> [|x|])
+                        |x -> [x])
                 let expandedRules =
-                    subtypedRules |> Array.collect (
+                    subtypedRules |> List.collect (
                         function
-                        | LeafRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [||])
-                        | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [||])
-                        |x -> [|x|])
-                        |> List.ofArray
+                        | LeafRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
+                        | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
+                        |x -> [x])
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion
                 |(key, false)::rest ->
-                    match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) |_ -> None) with
+                    match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest)
                 |(key, true)::rest ->
-                    match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey varMap enumsMap typesMap effectMap triggerMap varSet localisation files changeScope anyScope defaultLang { subtypes = []; scopes = defaultContext; warningOnly = false } l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) |_ -> None) with
+                    match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs ->
                         //log "%s %A" key fs
@@ -1398,7 +1523,7 @@ module rec Rules =
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
             let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * bool) list) =
-                let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None) |> Array.ofList
+                let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
                 match skipRootKeyStack, path with
                 |_, [] ->
                     getCompletionFromPath typerules []
