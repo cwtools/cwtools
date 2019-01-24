@@ -63,11 +63,11 @@ module rec Rules =
         |_ -> None
 
     let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
-        let file = leaf.Value.ToRawString().Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
+        let file = leaf.ValueText.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
 
     let checkIconExists (files :Collections.Set<string>) (folder : string) (leaf : Leaf) =
-        let value = folder + "/" + leaf.Value.ToRawString() + ".dds"
+        let value = folder + "/" + leaf.ValueText + ".dds"
         if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leaf]
 
 
@@ -83,7 +83,7 @@ module rec Rules =
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
-    let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) leafornode errors =
+    let checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) leafornode errors =
         if key |> firstCharEqualsAmp then errors else
                 match (vt) with
                     |ValueType.Scalar ->
@@ -111,7 +111,7 @@ module rec Rules =
                         let parts = key.Split([|'.'|])
                         let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
                         if ok then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode <&&&> errors
-    let inline checkValidValueNE (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) =
+    let checkValidValueNE (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
             |ValueType.Scalar ->
@@ -141,7 +141,7 @@ module rec Rules =
                 if ok then true else false)
         || firstCharEqualsAmp key
 
-    let inline checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
+    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
         match synced with
         |true ->
             let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -149,7 +149,7 @@ module rec Rules =
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
         |false ->
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
-    let inline checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) =
+    let checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) =
         match synced with
         |true ->
             let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -158,7 +158,7 @@ module rec Rules =
         |false ->
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNodeNE keys key
 
-    let inline checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode errors =
+    let checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode errors =
         let isComplex, fieldType =
             match typetype with
             |TypeType.Simple t -> false, t
@@ -176,7 +176,7 @@ module rec Rules =
             //let values = values typeKeyMap values
             if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
         |None -> inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode <&&&> errors
-    let inline checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) =
+    let checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) =
         let isComplex, fieldType =
             match typetype with
             |TypeType.Simple t -> false, t
@@ -195,14 +195,14 @@ module rec Rules =
             if values.Contains value then true else false
         |None -> false
 
-    let inline checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode errors =
+    let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode errors =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then errors else
             if values.Contains (value.Split(ampArray, 2).[0]) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
         |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode <&&&> errors
-    let inline checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) =
+    let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
@@ -210,21 +210,21 @@ module rec Rules =
             if values.Contains (value.Split(ampArray, 2).[0]) then true else false
         |None -> false
 
-    let inline checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) errors =
+    let checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) errors =
         let file = (trimQuote key).Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
-    let inline checkFilepathFieldNE (files : Collections.Set<string>) (key : string) =
+    let checkFilepathFieldNE (files : Collections.Set<string>) (key : string) =
         let file = (trimQuote key).Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then true else false
 
-    let inline checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) errors =
+    let checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) errors =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then errors else inv (ErrorCodes.MissingFile value) leafornode <&&&> errors
-    let inline checkIconFieldNE (files :Collections.Set<string>) (folder : string) (key : string) =
+    let checkIconFieldNE (files :Collections.Set<string>) (folder : string) (key : string) =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then true else false
 
-    let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
+    let checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
         // log "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope false true effectMap triggerMap varSet key scope with
@@ -235,7 +235,7 @@ module rec Rules =
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |_ -> errors
-    let inline checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key =
+    let checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key =
         // log "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope true true effectMap triggerMap varSet key scope with
@@ -246,7 +246,7 @@ module rec Rules =
         |VarNotFound s -> false
         |_ -> true
 
-    let inline checkVariableField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
+    let checkVariableField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
         let scope = ctx.scopes
 
         match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap varSet key scope with
@@ -259,7 +259,7 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let inline checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
+    let checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
         let scope = ctx.scopes
         match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap varSet key scope with
         |_, Some i, _ -> isInt && min <= float i && max >= float i
@@ -287,7 +287,7 @@ module rec Rules =
             severity : Severity
             ctx : RuleContext<'S>
         }
-    let checkField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) (leafornode) errors =
+    let checkField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) (leafornode : IKeyPos) errors =
             match field with
             |ValueField vt ->
                 checkValidValue p.enumsMap p.severity vt id key leafornode errors
@@ -511,7 +511,7 @@ module rec Rules =
             (applyToAll rules (checkCardinality startNode))
 
         and applyValueField severity (vt : CWTools.Parser.ConfigParser.ValueType) (leaf : Leaf) =
-            checkValidValue enumsMap severity vt (leaf.ValueId.lower) (leaf.Value.ToRawString()) leaf
+            checkValidValue enumsMap severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
 
         and applyLeafValueRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leafvalue : LeafValue) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
@@ -532,7 +532,7 @@ module rec Rules =
                 severity = severity
             }
 
-            checkField p rule (leafvalue.ValueId.lower) (leafvalue.Value.ToRawString()) leafvalue errors
+            checkField p rule (leafvalue.ValueId.lower) (leafvalue.ValueText) (leafvalue) errors
 
         and applyLeafRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leaf : Leaf) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
@@ -560,7 +560,7 @@ module rec Rules =
                 |x when x = anyScope -> OK
                 |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf])
             <&&>
-            checkField p rule (leaf.ValueId.lower) (leaf.Value.ToRawString()) leaf errors
+            checkField p rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let newCtx  =
@@ -935,22 +935,6 @@ module rec Rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
                     | _ -> []
-                // let subtypedrules =
-                //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
-
-                // let expandedbaserules =
-                //     rules |> Array.collect (
-                //         function
-                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         |x -> [||])
-                // let expandedsubtypedrules =
-                //     subtypedrules |> Array.collect (
-                //         function
-                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         |x -> [||])
-                // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
                 let expandedrules = memoizeRules rules ctx.subtypes
                 let p = {
                     varMap = varMap
@@ -971,14 +955,11 @@ module rec Rules =
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
-                        expandedrules |> Seq.filter (function |(NodeRule (l, rs), o) -> checkLeftField p l c.KeyId.lower c.Key |_ -> false)
-                                      |> Seq.choose (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> Some (NodeC c, (field, options)))//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
+                        expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
                     |LeafC leaf ->
-                        expandedrules |> Seq.filter (function |(LeafRule (l, r), o) -> checkLeftField p l leaf.KeyId.lower leaf.Key |_ -> false)
-                                      |> Seq.choose (function |(LeafRule (l, r), o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                        expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
                     |LeafValueC leafvalue ->
-                        expandedrules |> Seq.filter (function |(LeafValueRule (lv), o) -> checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key |_ -> false)
-                                      |> Seq.choose (function |(LeafValueRule (lv), o) -> Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
+                        expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
                     |CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
@@ -1053,14 +1034,11 @@ module rec Rules =
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
-                        expandedrules |> Seq.filter (function |(NodeRule (l, rs), o) -> checkLeftField p l c.KeyId.lower c.Key |_ -> false)
-                                      |> Seq.choose (function |(NodeRule (l, rs), o) -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> Some (NodeC c, (field, options)))//|> Seq.tryHead |> Option.map (fun (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))) |> Option.defaultValue (Some (NodeC c, (field, options)))
+                        expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
                     |LeafC leaf ->
-                        expandedrules |> Seq.filter (function |(LeafRule (l, r), o) -> checkLeftField p l leaf.KeyId.lower leaf.Key |_ -> false)
-                                      |> Seq.choose (function |(LeafRule (l, r), o) -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                        expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
                     |LeafValueC leafvalue ->
-                        expandedrules |> Seq.filter (function |(LeafValueRule (lv), o) -> checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key |_ -> false)
-                                      |> Seq.choose (function |(LeafValueRule (lv), o) -> Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
+                        expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
                     |CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
@@ -1098,7 +1076,7 @@ module rec Rules =
                 |LeafRule (_, TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    res |> (fun m -> m.Add(typename, (leaf.Value.ToRawString(), leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                    res |> (fun m -> m.Add(typename, (leaf.ValueText, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
                 |LeafRule (TypeField (TypeType.Simple t), _) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
@@ -1109,7 +1087,7 @@ module rec Rules =
                 |LeafValueRule (TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    res |> (fun m -> m.Add(t, (leafvalue.Value.ToRawString(), leafvalue.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                    res |> (fun m -> m.Add(t, (leafvalue.ValueText, leafvalue.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
                 |_ -> res
 
             let fComment (res) _ _ = res
@@ -1125,7 +1103,7 @@ module rec Rules =
                 match field with
                 |LeafRule (_, VariableSetField v) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (getVariableFromString v (leaf.Value.ToRawString()), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString v (leaf.ValueText), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |LeafRule (VariableSetField v, _) ->
                 // |Field.TypeField t ->
                     res |> (fun m -> m.Add(v, (getVariableFromString v leaf.Key, leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
@@ -1134,7 +1112,7 @@ module rec Rules =
                 match field with
                 |LeafValueRule (VariableSetField v) ->
                 // |Field.TypeField t ->
-                    res |> (fun m -> m.Add(v, (getVariableFromString v (leafvalue.Value.ToRawString()), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                    res |> (fun m -> m.Add(v, (getVariableFromString v (leafvalue.ValueText), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fNode (res : Collections.Map<string, (string * range) list>) (node : Node) ((field, option) : NewRule<_>) =
                 match field with
@@ -1176,7 +1154,7 @@ module rec Rules =
                 |LeafRule (_, TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    let value = leaf.Value.ToRawString()
+                    let value = leaf.ValueText
                     let sets =
                         typesMap
                         |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
@@ -1197,7 +1175,7 @@ module rec Rules =
                 |LeafValueRule (TypeField (TypeType.Simple t)) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
-                    let value = leafvalue.Value.ToRawString()
+                    let value = leafvalue.ValueText
                     let sets =
                         typesMap
                         |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
@@ -1621,10 +1599,10 @@ module rec Rules =
                 then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else
                 node.Children |> List.collect (inner head)
             |[] ->
-                if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() = "enum_name")
-                then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString().Trim([|'\"'|])) |> List.ofSeq
+                if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText = "enum_name")
+                then node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim([|'\"'|])) |> List.ofSeq
                 else
-                    match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() = "enum_name") with
+                    match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText = "enum_name") with
                     |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
                     |None ->
                         match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with

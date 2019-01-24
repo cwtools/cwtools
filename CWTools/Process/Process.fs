@@ -47,6 +47,7 @@ type Leaf =
     member this.Value
         with get () = this._value
         and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+    member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
     new(key : string, value : Value, pos : range) =
         {
@@ -71,6 +72,7 @@ and LeafValue(value : Value, ?pos : range) =
     member this.Value
         with get () = this._value
         and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+    member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
 
     member this.Key = StringResource.stringManager.GetStringForID(this.ValueId.normal)
     member val Position = defaultArg pos range.Zero

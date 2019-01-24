@@ -171,7 +171,7 @@ module ValidationCore =
         mergeErrorsInner
 
     // Parallelising something this small makes it slower!
-    let (<&!!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK
+    let (<&!!&>) es f = es |> PSeq.map f |> Seq.fold (<&&>) OK
     let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK
     let applyToAll es f e = es |> Seq.fold f e
 
