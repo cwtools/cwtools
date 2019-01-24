@@ -34,24 +34,7 @@ module Files =
                     let i = if path.IndexOf ("/"+part+"/" ) < 0 then path.IndexOf("\\"+part+"\\") else path.IndexOf ("/"+part+"/" )
                     i + 1
                 let matches =
-                    [
-                        if pathContains "common" then let i = pathIndex "common" in yield i, path.Substring(i) else ();
-                        if pathContains "interface" then let i = pathIndex "interface" in yield i, path.Substring(i) else ();
-                        if pathContains "gfx" then let i = pathIndex "gfx" in yield i, path.Substring(i) else ();
-                        if pathContains "events" then let i = pathIndex "events" in yield i, path.Substring(i) else ();
-                        if pathContains "localisation" then let i = pathIndex "localisation" in yield i, path.Substring(i) else ();
-                        if pathContains "localisation_synced" then let i = pathIndex "localisation_synced" in yield i, path.Substring(i) else ();
-                        if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
-                        if pathContains "music" then let i = pathIndex "music" in yield i, path.Substring(i) else ();
-                        if pathContains "fonts" then let i = pathIndex "fonts" in yield i, path.Substring(i) else ();
-                        if pathContains "sound" then let i = pathIndex "sound" in yield i, path.Substring(i) else ();
-                        if pathContains "flags" then let i = pathIndex "flags" in yield i, path.Substring(i) else ();
-                        if pathContains "prescripted_countries" then let i = pathIndex "prescripted_countries" in yield i, path.Substring(i) else ();
-                        if pathContains "decisions" then let i = pathIndex "decisions" in yield i, path.Substring(i) else ();
-                        if pathContains "missions" then let i = pathIndex "missions" in yield i, path.Substring(i) else ();
-                        if pathContains "customizable_localisation" then let i = pathIndex "customizable_localisation" in yield i, path.Substring(i) else ();
-                        if pathContains "history" then let i = pathIndex "history" in yield i, path.Substring(i) else ();
-                    ]
+                    [ for s in scriptFolders do if pathContains s then let i = pathIndex s in yield i, path.Substring(i) else () ]
                 if matches.IsEmpty then path else matches |> List.minBy fst |> snd
 
         let rec getAllFolders dirs =
