@@ -276,7 +276,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     //                     e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
     //                 |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
 
-    let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
+    let shipProcess = STLProcess.shipProcess.ProcessNode
     let parseEntity ((file, statements) : Resource * Statement list) =
         file,
                 match file with

@@ -21,6 +21,7 @@ open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationString
 open CWTools.Utilities.Utils
+open CWTools.Utilities
 open CWTools.Validation.Stellaris.Graphics
 open CWTools.Games
 open CWTools.Games.Stellaris
@@ -148,7 +149,7 @@ module STLGameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        game.Lookup.scriptedEffectsMap.TryFind(s)
+                        game.Lookup.scriptedEffectsMap.TryFind((StringResource.stringManager.GetStringForID s))
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
@@ -157,7 +158,7 @@ module STLGameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        game.Lookup.scriptedTriggersMap.TryFind(s)
+                        game.Lookup.scriptedTriggersMap.TryFind((StringResource.stringManager.GetStringForID s))
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x

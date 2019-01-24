@@ -35,18 +35,18 @@ module CK2Process =
 
     let maps =
         function
-        |("option", _, _) -> processNodeSimple<Option>, "option", id;
-        |(s, _, _) when s.EndsWith("event") -> processNodeSimple<Event>, "event", id;
-        |_ -> processNodeSimple<Node>, "", id;
+        |("option", _, _) -> processNodeSimple, "option", id;
+        |(s, _, _) when s.EndsWith("event") -> processNodeSimple, "event", id;
+        |_ -> processNodeSimple, "", id;
 
     let ck2Process = BaseProcess(maps)
-    let processCK2Node = ck2Process.ProcessNode<Node>()
+    let processCK2Node = ck2Process.ProcessNode()
 
     let processEventFile (ev : ParsedFile) =
         let (ParsedFile e) = ev
-        (ck2Process.ProcessNode<EventRoot>()) "" range.Zero e :?> EventRoot
+        (ck2Process.ProcessNode()) "" range.Zero e :?> EventRoot
 
-    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" range.Zero >> (fun n -> n :?> ArtifactFile)
+    let processArtifact = (ck2Process.ProcessNode()) "" range.Zero >> (fun n -> n :?> ArtifactFile)
 
 
     let getTriggeredEvents (event:Event) =

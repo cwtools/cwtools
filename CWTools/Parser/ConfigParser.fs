@@ -3,6 +3,7 @@ namespace CWTools.Parser
 
 open FParsec
 open CWTools.Utilities.Position
+open CWTools.Utilities
 open Types
 open CWTools.Common
 open CWTools.Common.STLConstants
@@ -20,7 +21,7 @@ module rec ConfigParser =
     type ValueType =
     | Scalar
     | Enum of enumc : string
-    | Specific of valuec : string
+    | Specific of valuec : StringToken
     | Float of minmax: (float*float)
     | Bool
     | Int of minmaxi: (int*int)
@@ -42,7 +43,7 @@ module rec ConfigParser =
     | VariableSetField of string
     | VariableGetField of string
     | VariableField of isInt : bool * minmax : (float * float)
-    let specificField x = ValueField(ValueType.Specific x)
+    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
     type Options<'a> = {
         min : int
         max : int
@@ -238,7 +239,7 @@ module rec ConfigParser =
                 match parsed with
                 |Failure(_) -> None
                 |Success(s,_,_) ->
-                    let n = (STLProcess.shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile "config") s)
+                    let n = (STLProcess.shipProcess.ProcessNode EntityType.Other "root" (mkZeroFile "config") s)
                     match n.Child "replace_scope" with
                     |Some c ->
                         let this = if c.Has "this" then c.TagText "this" |> parseScope |> Some else None
@@ -330,7 +331,7 @@ module rec ConfigParser =
             |Some target ->
                 ScopeField (parseScope target)
             |None -> ValueField ValueType.Scalar
-        |x -> ValueField (ValueType.Specific (x.Trim([|'\"'|])))
+        |x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
 
 
     let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
@@ -399,9 +400,9 @@ module rec ConfigParser =
                 // log "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
-                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
+                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
         |x ->
-            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
+            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
 
     let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
     let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
@@ -611,7 +612,7 @@ module rec ConfigParser =
         |Failure(e, _, _) -> log (sprintf "config file %s failed with %s" filename e); ([], [], [], [], [])
         |Success(s,_,_) ->
             //log "parsed %A" s
-            let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s |> List.rev)
             //log "processConfig"
             processConfig parseScope allScopes anyScope root
 

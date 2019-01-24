@@ -9,6 +9,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Localisation.HOI4Localisation
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
+open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 // open CWTools.Validation.Rules
@@ -75,8 +76,8 @@ module HOI4GameFunctions =
         let ruleToEffect(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> n
-                |NodeRule(ValueField(Specific n),_) -> n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Both, defaultDesc, "", true));
@@ -90,8 +91,8 @@ module HOI4GameFunctions =
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> n
-                |NodeRule(ValueField(Specific n),_) -> n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Both, defaultDesc, "", true));

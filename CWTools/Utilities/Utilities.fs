@@ -72,3 +72,28 @@ module TryParser =
     let (|Int|_|)    = parseInt
     let (|Single|_|) = parseSingle
     let (|Double|_|) = parseDouble
+
+type StringToken = int
+
+[<Sealed>]
+type StringResourceManager() =
+    let strings = new System.Collections.Generic.Dictionary<string, StringToken>(1024)
+    let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
+    let mutable i = 0
+    let monitor = new Object()
+    member x.InternIdentifierToken(s) =
+        let mutable res = Unchecked.defaultof<_>
+        let ok = strings.TryGetValue(s, &res)
+        if ok then res  else
+        lock monitor (fun () ->
+            i <- i + 1
+            let res = i
+            strings.[s] <- res;
+            ints.[res] <- s;
+            res
+        )
+    member x.GetStringForID(id) =
+        ints.[id]
+
+module StringResource =
+    let stringManager = StringResourceManager()

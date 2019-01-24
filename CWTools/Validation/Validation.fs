@@ -158,8 +158,8 @@ module ValidationCore =
     let mergeValidationErrors (errorcode : string) =
         let rec mergeErrorsInner es =
             match es with
-            | [] -> []
-            | [res] -> [res]
+            | [] -> es
+            | [res] -> es
             | head::head2::tail ->
                 let (e1c, e1s, e1r, e1l, e1m, e1d), (_, _, _, _, e2m, _) = head, head2
                 mergeErrorsInner ((e1c, e1s, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d)::tail)
@@ -188,9 +188,10 @@ module ValidationCore =
                       yield !latest
               else () }
 
-    let lazyErrorMerge es f defValue merge =
+    let inline lazyErrorMerge es f defValue merge =
         let t = es |> Seq.map f  |> takeWhileOne (fun e -> e |> function |OK -> false |Invalid er -> true) |> List.ofSeq
-        if List.isEmpty t then defValue() else List.reduce (<&?&>) t |> (fun f -> if merge then mergeValidationErrors "CW240" f else f )
+        t |> Seq.tryHead |> Option.map (fun s -> Seq.fold (<&?&>) s t |>  (fun f -> if merge then mergeValidationErrors "CW240" f else f )) |> Option.defaultValue (defValue())
+        // if t |> Seq.cache |> Seq.isEmpty then defValue() else Seq.reduce (<&?&>) t |> (fun f -> if merge then mergeValidationErrors "CW240" f else f )
 
 
     type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =

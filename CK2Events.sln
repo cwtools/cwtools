@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{E7569F
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CW Tools", "CWTools\CWTools.fsproj", "{20A27DD3-DC4B-43E7-B261-533CACCBC69A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CWToolsCSTests", "CWToolsCSTests\CWToolsCSTests.csproj", "{15555D10-55F5-44AD-9016-528A8C923097}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

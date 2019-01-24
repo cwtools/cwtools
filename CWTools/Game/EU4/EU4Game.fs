@@ -8,6 +8,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Localisation.EU4Localisation
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
+open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 // open CWTools.Validation.Rules
@@ -67,8 +68,8 @@ module EU4GameFunctions =
         let ruleToEffect(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> n
-                |NodeRule(ValueField(Specific n),_) -> n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
@@ -79,8 +80,8 @@ module EU4GameFunctions =
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> n
-                |NodeRule(ValueField(Specific n),_) -> n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))

@@ -6,6 +6,7 @@ open CWTools.Common.STLConstants
 open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
+open CWTools.Utilities
 
 
 module List =
@@ -25,16 +26,35 @@ module List =
     | Some ls -> ls
     | None -> add::xs
 
+
+
 type IKeyPos =
     abstract member Key : string
     abstract member Position : range
 [<Struct>]
 type Leaf =
-    val mutable Key : string
-    val mutable Value : Value
+    val mutable KeyId : StringToken
+    // val mutable Key : string
+    val mutable private _valueId : StringToken
+    val mutable private _value : Value
     val mutable Position : range
+
+    member this.Key
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId)
+        and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
+    member this.ValueId
+        with get () = this._valueId
+    member this.Value
+        with get () = this._value
+        and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
-    new(key : string, value : Value, pos : range) = { Key = key; Value = value; Position = pos }
+    new(key : string, value : Value, pos : range) =
+        {
+            KeyId = StringResource.stringManager.InternIdentifierToken(key);
+            _valueId = StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+            _value = value;
+            Position = pos
+            }
     //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
     new(keyvalueitem : KeyValueItem, ?pos : range) =
         let (KeyValueItem (Key(key), value)) = keyvalueitem
@@ -44,10 +64,17 @@ type Leaf =
         member this.Key = this.Key
         member this.Position = this.Position
 and LeafValue(value : Value, ?pos : range) =
-    member val Value = value with get, set
-    member this.Key = this.Value.ToRawString()
+
+    member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToRawString()) with get, set
+    member val private _value = value with get, set
+    // val mutable private _value : Value = value
+    member this.Value
+        with get () = this._value
+        and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+
+    member this.Key = StringResource.stringManager.GetStringForID(this.ValueId)
     member val Position = defaultArg pos range.Zero
-    member this.ToRaw = Value(this.Position, this.Value)
+    member this.ToRaw = Value(this.Position, this._value)
     static member Create value = LeafValue value
     interface IKeyPos with
         member this.Key = this.Key
@@ -65,7 +92,13 @@ and Node (key : string, pos : range) =
     do reset()
 
     new(key : string) = Node(key, range.Zero)
-    member val Key = key
+
+    member val KeyId = StringResource.stringManager.InternIdentifierToken(key) with get, set
+
+    member this.Key
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId)
+        and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
+
     member val Position = pos
     member val Scope : Scope = Scope.Any with get, set
     member __.AllChildren with get () = all |> ResizeArray<Child>
@@ -102,19 +135,20 @@ and Node (key : string, pos : range) =
 
 module ProcessCore =
 
-    let processNode< 'T when 'T :> Node > (postinit : 'T -> 'T) inner (key : string) (pos : range) (sl : Statement list) : Node =
+    let processNode (postinit : Node -> Node) inner (key : string) (pos : range) (sl : Statement list) : Node =
         // let node = match key with
         //             |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
         //             |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
         //let paramList : obj[] = [|key; pos|]
         //let bindingFlags = BindingFlags.CreateInstance ||| BindingFlags.Public ||| BindingFlags.Instance ||| BindingFlags.OptionalParamBinding
         //let node = Activator.CreateInstance(typeof<'T>, bindingFlags ,null, paramList, null) :?> Node
-        let node =  Activator.CreateInstance(typeof<'T>, key, pos) :?> 'T |> postinit :> Node//  |> postinit// :?> Node |> postinit
+        // let node =  Activator.CreateInstance(typeof<'T>, key, pos) :?> 'T |> postinit :> Node//  |> postinit// :?> Node |> postinit
+        let node =  Node(key, pos) |> postinit//  |> postinit// :?> Node |> postinit
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
 
     type LookupContext = { complete : bool; parents : string list; scope : string; previous : string; entityType : EntityType }
-    let processNodeSimple<'T when 'T :> Node> _ = processNode<'T> id
+    let processNodeSimple _ = processNode id
     type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Node -> Statement -> unit) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
 
     let fst3 (x, _, _) = x
@@ -142,10 +176,10 @@ module ProcessCore =
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentC c::node.All
             | Value(pos, v) -> node.All <- LeafValueC(LeafValue(v, pos))::node.All
-        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
-        member __.ProcessNode<'T when 'T :> Node >(entityType : EntityType) = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
+        member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
+        member __.ProcessNode(entityType : EntityType) = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
 
-    let baseMap = fun _ -> processNodeSimple<Node>, "", id;
+    let baseMap = fun _ -> processNodeSimple, "", id;
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()
 
     let rec foldNode fNode acc (node : Node) :'r =
