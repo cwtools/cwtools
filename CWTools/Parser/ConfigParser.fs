@@ -206,7 +206,7 @@ module rec ConfigParser =
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
                 try
                     match nums.[0], nums.[1] with
-                    |min, "inf" -> (int min), 1000
+                    |min, "inf" -> (int min), 10000
                     |min, max -> (int min), (int max)
                 with
                 |_ -> 1, 1
