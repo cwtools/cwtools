@@ -16,32 +16,6 @@ open CWTools.Utilities.Utils
 open System.IO
 open CWTools.Utilities.Utils
 
-type IGame =
-    abstract ParserErrors : unit -> (string * string * Position) list
-    abstract ValidationErrors : unit -> CWError list
-    abstract LocalisationErrors : bool * bool -> CWError list
-    abstract Folders : unit -> (string * string) list
-    abstract AllFiles : unit -> Resource list
-    abstract UpdateFile : bool -> string -> string option -> CWError list
-    abstract Complete : pos -> string -> string -> CompletionResponse list
-    abstract GoToType : pos -> string -> string -> range option
-    abstract FindAllRefs : pos -> string -> string -> range list option
-    abstract ReplaceConfigRules : (string * string) list -> unit
-    abstract RefreshCaches : unit -> unit
-    abstract ForceRecompute : unit -> unit
-    abstract Types : unit ->  Map<string,(string * range) list>
-
-type IGame<'S when 'S : comparison> =
-    inherit IGame
-    abstract ScriptedTriggers : unit -> Effect<'S> list
-    abstract ScriptedEffects : unit -> Effect<'S> list
-    abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
-    abstract ScopesAtPos : pos -> string -> string -> OutputScopeContext<'S> option
-
-type IGame<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier> =
-    inherit IGame<'S>
-    abstract AllEntities : unit -> struct (Entity * Lazy<'T>) list
-    abstract References : unit -> References<'T, 'S, 'M>
 
 type EmbeddedSettings<'S,'M when 'S : comparison> = {
     triggers : DocEffect<'S> list
@@ -202,6 +176,8 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.UpdateFile shallow file text = updateFile shallow file text
     member __.RefreshValidationManager() =
         validationManager <- ValidationManager(validationSettings, validationServices())
+
+    member this.InfoAtPos pos file text = LanguageFeatures.symbolInformationAtPos this.FileManager this.ResourceManager this.InfoService this.Lookup pos file text
     static member CreateGame settings afterInit =
         let game = GameObject(settings)
         afterInit game

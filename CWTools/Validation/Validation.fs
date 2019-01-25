@@ -107,7 +107,6 @@ module ValidationCore =
         static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
-    type CWError = (string * Severity * range * int * string * option<string>)
     type ValidationResult =
         | OK
         | Invalid of CWError list

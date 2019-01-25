@@ -77,3 +77,23 @@ module LanguageFeatures =
             |_ ->
                 None
         |_ -> None
+
+
+    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
+        let resource = makeEntityResourceInput fileManager filepath filetext
+        match resourceManager.ManualProcessResource resource, infoService with
+        |Some e, Some info ->
+            log (sprintf "symbolInfoAtPos %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            match (info.GetInfo)(pos, e) with
+            |Some (_, Some (t, tv)) ->
+                match lookup.typeDefs |> List.tryFind (fun td -> td.name = t) with
+                |Some td ->
+                    let locs = td.localisation |> List.map (fun l -> { key = l.name; value = (l.prefix + tv + l.suffix) })
+                    Some {
+                            name = tv
+                            typename = t
+                            localisation = locs
+                        }
+                |None -> None
+            |_ -> None
+        |_, _ -> None

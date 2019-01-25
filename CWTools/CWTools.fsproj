@@ -39,6 +39,7 @@
     <Compile Include="Game/CachedFileManager.fs" />
     <Compile Include="Game/Lookups.fs" />
     <Compile Include="Game/References.fs" />
+    <Compile Include="Game/GameTypes.fs" />
     <Compile Include="Game/Stellaris/STLLookup.fs" />
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Game/LocalisationManager.fs" />

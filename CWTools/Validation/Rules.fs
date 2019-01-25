@@ -71,10 +71,6 @@ module rec Rules =
         if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leaf]
 
 
-    type CompletionResponse =
-    |Simple of label : string
-    |Detailed of label : string * desc : string option
-    |Snippet of label : string * snippet : string * desc : string option
 
     // type ScopeContext = IScopeContext<Scope>
 

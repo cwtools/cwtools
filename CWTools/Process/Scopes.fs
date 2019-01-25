@@ -71,10 +71,20 @@ module Scopes =
         | VarFound
         | VarNotFound of var : string
     // type EffectMap<'T> = Map<string, Effect<'T>, InsensitiveStringComparer>
+    let simpleVarPrefixFun prefix =
+        let varStartsWith = (fun (k : string) -> k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+        let varSubstring = (fun (k : string) -> k.Substring(prefix.Length ))
+        (fun key -> if varStartsWith key then varSubstring key, true else key, false)
 
-    let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefix) =
-        let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
-        let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
+    let complexVarPrefixFun prefix1 prefix2 =
+        let varStartsWith1 = (fun (k : string) -> k.StartsWith(prefix1, StringComparison.OrdinalIgnoreCase))
+        let varStartsWith2 = (fun (k : string) -> k.StartsWith(prefix2, StringComparison.OrdinalIgnoreCase))
+        let varSubstring1 = (fun (k : string) -> k.Substring(prefix1.Length ))
+        let varSubstring2 = (fun (k : string) -> k.Substring(prefix2.Length ))
+        (fun key -> if varStartsWith1 key then varSubstring1 key, true else if varStartsWith2 key then varSubstring2 key, true else key, false)
+    let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
+        // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
+        // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
             if
@@ -83,7 +93,7 @@ module Scopes =
                 || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
             then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
-                let key, varOnly = if varStartsWith key then varSubstring key, true else key, false
+                let key, varOnly = varPrefixFun key
                 let ampersandSplit = key.Split([|'@'|], 2)
                 let keys = ampersandSplit.[0].Split('.')
                 let keylength = keys.Length - 1
