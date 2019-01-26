@@ -34,6 +34,8 @@ module rec ConfigParser =
     type NewField<'a> =
     | ValueField of ValueType
     | TypeField of TypeType
+    /// This is only used internally to match type definitions
+    | TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition<'a>
     | ScopeField of 'a
     | LocalisationField of synced : bool
     | FilepathField

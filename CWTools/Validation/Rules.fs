@@ -308,6 +308,7 @@ module rec Rules =
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap p.severity v key
             |VariableField (isInt, (min, max))-> checkVariableFieldNE p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
+            |TypeMarkerField (dummy, _) -> dummy = id
             |_ -> false
 
     let checkLeftField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
@@ -850,18 +851,19 @@ module rec Rules =
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
                 |[(n, (NodeRule (l, rs), o))] ->
-                    Some (singleFoldRules fNode fChild fLeaf fLeafValue fComment acc (NodeC c) ((NodeRule (ValueField (ValueType.Specific (c.KeyId.lower)), rs), o)))
+                    Some (singleFoldRules fNode fChild fLeaf fLeafValue fComment acc (NodeC c) ((NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o)))
                 |_ -> None
             |_, _ -> None
 
         let getInfoAtPos (pos : pos) (entity : Entity) =
             let fLeaf (ctx, res) (leaf : Leaf) ((field, _) : NewRule<_>) =
                 match field with
-                |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, Some (t, leaf.Value.ToString())
-                |_ -> ctx, res
-            let fLeafValue (ctx) (leafvalue : LeafValue) _ =
-                ctx
-            let fComment (ctx) _ _ = ctx
+                |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, Some (t, leaf.ValueText)
+                |LeafRule (TypeField (TypeType.Simple t), _) -> ctx, Some (t, leaf.Key)
+                |_ -> ctx, None
+            let fLeafValue (ctx, res) (leafvalue : LeafValue) _ =
+                ctx, None
+            let fComment (ctx, res) _ _ = ctx, None
             let fNode (ctx, res) (node : Node) ((field, options) : NewRule<_>) =
                 // let anyScope = ( ^a : (static member AnyScope : ^a) ())
                 // log "info fnode inner %s %A %A %A" (node.Key) options field ctx
@@ -904,6 +906,12 @@ module rec Rules =
                             {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
                         |_ -> newCtx
                     newCtx, res
+                | NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
+                    ctx, Some (typename, node.Key)
+                | NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
+                    let typevalue = node.TagText namefield
+                    ctx, Some (typename, typevalue)
+                | NodeRule (TypeField (TypeType.Simple t), _) -> ctx, Some (t, node.Key)
                 | NodeRule (_, f) -> newCtx, res
                 | _ -> newCtx, res
 
@@ -968,13 +976,13 @@ module rec Rules =
                 match skipRootKey with
                 |(SpecificKey key) -> n.Key == key
                 |(AnyKey) -> true
-            let foldRulesNode rs o =
+            let foldRulesNode typedef rs o =
                 (fun a c ->
-                    foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.KeyId.lower)), rs), o))
+                    foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
                 match skipRootKeyStack with
-                |[] -> if typekeyfilter t n then foldRulesNode rs o acc n else acc
+                |[] -> if typekeyfilter t n then foldRulesNode t rs o acc n else acc
                 |head::tail ->
                     if skiprootkey head n
                     then n.Children |> List.fold (foldRulesSkipRoot rs o t tail) acc
@@ -1047,13 +1055,13 @@ module rec Rules =
                 match skipRootKey with
                 |(SpecificKey key) -> n.Key == key
                 |(AnyKey) -> true
-            let foldRulesNode rs o =
+            let foldRulesNode typedef rs o =
                 (fun a c ->
-                    foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (ValueField (ValueType.Specific (c.KeyId.lower)), rs), o))
+                    foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
                 match skipRootKeyStack with
-                |[] -> if typekeyfilter t n then foldRulesNode rs o acc n else acc
+                |[] -> if typekeyfilter t n then foldRulesNode t rs o acc n else acc
                 |head::tail ->
                     if skiprootkey head n
                     then n.Children |> List.fold (foldRulesSkipRoot rs o t tail) acc

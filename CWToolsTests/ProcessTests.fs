@@ -1,12 +1,13 @@
 module ProcessTests
 
 open Expecto
-open CWTools.Games
 open FParsec
 open CWTools.Common
 open CWTools.Process
 open CWTools.Parser
 open CWTools.Parser.Types
+open CWTools.Parser.ConfigParser
+open CWTools.Games
 open CWTools.Process.ProcessCore
 open System.IO
 open System.Reflection
@@ -16,7 +17,6 @@ open CWTools.Common.STLConstants
 open System
 open CWTools.Process.STLProcess
 open CWTools.Utilities.Position
-open CWTools.Parser.ConfigParser
 open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
