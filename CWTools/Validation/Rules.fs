@@ -24,6 +24,7 @@ open CWTools.Process.Scopes
 open FParsec
 open System.Collections
 open System.Diagnostics
+open CWTools.Process.ProcessCore
 
 // type RuleApplicator<'S, 'T when 'T :> ComputedData and 'S : comparison> = {
 //     applyNodeRule : NewRule<'S> list * Node -> ValidationResult
@@ -1242,6 +1243,15 @@ module rec Rules =
         let effectMap = effects// |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
         let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
+
+        let getAllKeysInFile (root : Node) =
+            let fNode = (fun (x:Node) acc ->
+                            let withValues = x.Values |> List.fold (fun a leaf ->  leaf.Key::leaf.ValueText::a) acc
+                            let withBoth = x.LeafValues |> Seq.fold (fun a leafvalue -> leafvalue.ValueText::a) withValues
+                            x.Key :: withBoth
+                        )
+            foldNode7 fNode root
+
         let fieldToCompletionList (field : NewField<_>) =
             match field with
             |ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (fun s -> if s.IsEmpty then None else Some (s.MaximumElement)) |> Option.defaultValue "x"
@@ -1292,7 +1302,7 @@ module rec Rules =
                                       |> List.distinctBy (fun (f, _) -> ruleToDistinctKey f)
                                       |> List.mapi (fun i (f, _) -> rulePrint i f)
                                       |> String.concat ""
-            Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
+            CompletionResponse.CreateSnippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
 
 
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
@@ -1308,7 +1318,7 @@ module rec Rules =
             // log (sprintf "%A" stack)
             let rec convRuleToCompletion (rule : NewRule<_>) =
                 let r, o = rule
-                let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
+                let keyvalue (inner : string) = CompletionResponse.CreateSnippet (inner, (sprintf "%s = $0" inner), o.description)
                 match r with
                 |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
                     [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s)]
@@ -1354,11 +1364,11 @@ module rec Rules =
 
                 |LeafValueRule lv ->
                     match lv with
-                    |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
-                    |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |> Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map Simple
-                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
-                    |NewField.VariableGetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
-                    |NewField.VariableSetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
+                    |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |> Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |NewField.VariableGetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |NewField.VariableSetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                     |_ -> []
                 |SubtypeRule(_) -> []
                 |_ -> []
@@ -1390,19 +1400,19 @@ module rec Rules =
                 //log "%A" types
                 //log "%A" field
                 match field with
-                |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
-                |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
-                |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
-                |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |>  Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map Simple
+                |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |>  Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |NewField.LocalisationField s ->
                     match s with
-                    |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
-                    |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
-                |NewField.FilepathField -> files |> Set.toList |> List.map Simple
-                |NewField.ScopeField _ -> scopeCompletionList |> List.map (Simple)
-                |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
-                |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
-                |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map Simple
+                    |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.FilepathField -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
+                |NewField.ScopeField _ -> scopeCompletionList |> List.map (CompletionResponse.CreateSimple)
+                |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |_ -> []
                 //|Field.EffectField -> findRule rootRules rest
                 // |Field.ClauseField rs -> findRule rs rest
@@ -1517,7 +1527,16 @@ module rec Rules =
                     if skiprootkey head pathhead
                     then validateTypeSkipRoot t tail pathtail
                     else []
-            pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+            let items = pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+            let allUsedKeys = getAllKeysInFile entity.entity
+            let scoreForLabel (label : string) =
+                if allUsedKeys |> List.contains label then 10 else 1
+            items |> List.map
+                        (function
+                         |Simple (label, _) -> Simple (label, Some (scoreForLabel label))
+                         |Detailed (label, desc, _) -> Detailed (label, desc, Some (scoreForLabel label))
+                         |Snippet (label, snippet, desc, _) -> Snippet(label, snippet, desc, Some (scoreForLabel label))
+                         )
             // pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
             // let skipcomp =
             //     match typedefs |> List.filter (fun t -> checkPathDir t pathDir file && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with

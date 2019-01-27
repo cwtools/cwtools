@@ -18,9 +18,11 @@ type SymbolInformation =
 type CWError = (string * Severity * range * int * string * option<string>)
 
 type CompletionResponse =
-    |Simple of label : string
-    |Detailed of label : string * desc : string option
-    |Snippet of label : string * snippet : string * desc : string option
+    |Simple of label : string * score : int option
+    |Detailed of label : string * desc : string option * score : int option
+    |Snippet of label : string * snippet : string * desc : string option * score : int option
+    static member CreateSimple(label : string) = Simple(label, None)
+    static member CreateSnippet(label, snippet, desc) = Snippet(label, snippet, desc, None)
 
 type IGame =
     abstract ParserErrors : unit -> (string * string * FParsec.Position) list
