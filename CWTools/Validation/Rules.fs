@@ -1225,7 +1225,8 @@ module rec Rules =
 
     type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                         (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
-                         enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
+                         enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                         globalScriptVariables : string list, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
@@ -1305,16 +1306,21 @@ module rec Rules =
             CompletionResponse.CreateSnippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
 
 
-        let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
+        let rec getRulePath (pos : pos) (stack : (string * string option) list) (node : Node) =
            //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
            match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
-           | Some c -> getRulePath pos ((c.Key, false) :: stack) c
+           | Some c -> getRulePath pos ((c.Key, None) :: stack) c
            | None ->
+                /// This handles LHS vs RHS beacuse LHS gets an "x" inserted into it, so fails to match any rules
                 match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
-                | Some l -> (l.Key, true)::stack
+                | Some l ->
+                    // SHould be <, but for some reason it isn't
+                    match l.Position.StartColumn + l.Key.Length + 1 > pos.Column with
+                    |true -> (l.Key, Some l.Key)::stack
+                    |false -> (l.Key, Some l.ValueText)::stack
                 | None -> stack
 
-        and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * bool) list) =
+        and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * string option) list) =
             // log (sprintf "%A" stack)
             let rec convRuleToCompletion (rule : NewRule<_>) =
                 let r, o = rule
@@ -1439,7 +1445,7 @@ module rec Rules =
                 severity = Severity.Error
             }
 
-            let rec findRule (rules : NewRule<'T> list) (stack) =
+            let rec findRule (rules : NewRule<'T> list) (stack : (string * string option) list) =
                 let subtypedRules =
                     rules |> List.collect (
                         function
@@ -1453,11 +1459,11 @@ module rec Rules =
                         |x -> [x])
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion
-                |(key, false)::rest ->
+                |(key, None)::rest ->
                     match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest)
-                |(key, true)::rest ->
+                |(key, Some _)::rest ->
                     match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs ->
@@ -1498,6 +1504,7 @@ module rec Rules =
 
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
+            log (sprintf "%A" path)
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
             let file = Path.GetFileName entity.logicalpath
             // log "%A" typedefs
@@ -1514,7 +1521,7 @@ module rec Rules =
                 |(AnyKey) -> true
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
-            let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * bool) list) =
+            let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * string option) list) =
                 let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
                 match skipRootKeyStack, path with
                 |_, [] ->
@@ -1522,13 +1529,19 @@ module rec Rules =
                 |[], (head, _)::tail ->
                     if typekeyfilter t head
                     then
-                        getCompletionFromPath typerules ((t.name, false)::tail) else []
+                        getCompletionFromPath typerules ((t.name, None)::tail) else []
                 |head::tail, (pathhead, _)::pathtail ->
                     if skiprootkey head pathhead
                     then validateTypeSkipRoot t tail pathtail
                     else []
-            let items = pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
-            let allUsedKeys = getAllKeysInFile entity.entity
+            let items =
+                match path |> List.last with
+                |_, Some x when x.Length > 0 && x.StartsWith("@x") ->
+                    let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
+                    staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
+                |_ ->
+                    pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+            let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
             let scoreForLabel (label : string) =
                 if allUsedKeys |> List.contains label then 10 else 1
             items |> List.map

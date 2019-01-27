@@ -487,7 +487,10 @@ module STLValidation =
                             //|> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
+        let districts = es.GlobMatchChildren("**/common/districts/*.txt") |> List.filter (fun d -> not (d.TagText "is_capped_by_modifier" == "no"))
+        let districtModifiers = districts |> List.map (fun k -> {tag = k.Key+"_max"; categories = [ModifierCategory.Planet]; core = true})
         shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
+                    @ districtModifiers
 
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->

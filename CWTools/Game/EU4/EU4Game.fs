@@ -149,7 +149,7 @@ module EU4GameFunctions =
 
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, EU4 EU4Lang.Default))
+            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, [], changeScope, defaultContext, Scope.Any, oneToOneScopesNames, EU4 EU4Lang.Default))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, EU4 EU4Lang.Default))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

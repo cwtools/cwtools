@@ -175,7 +175,7 @@ module HOI4GameFunctions =
 
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, HOI4 HOI4Lang.Default))
+            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, [], changeScope, defaultContext, Scope.Any, oneToOneScopesNames, HOI4 HOI4Lang.Default))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, HOI4 HOI4Lang.Default))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

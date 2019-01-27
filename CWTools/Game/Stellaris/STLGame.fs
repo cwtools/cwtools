@@ -257,11 +257,12 @@ module STLGameFunctions =
 
             lookup.varDefInfo <- results
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
+            lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
             let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             log (sprintf "Refresh rule caches time: %i" timer.ElapsedMilliseconds); timer.Restart()
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, STL STLLang.Default))
+            game.completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, lookup.globalScriptedVariables, changeScope, defaultContext, Scope.Any, oneToOneScopesNames, STL STLLang.Default))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             game.RuleApplicator <- Some (RuleApplicator<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
