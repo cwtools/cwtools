@@ -282,6 +282,7 @@ module STLConstants =
 
     let scriptFolders = [
         "common";
+        "common/deposits";
         "events";
         "map/galaxy";
         "map/setup_scenarios";

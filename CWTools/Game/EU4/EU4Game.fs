@@ -35,7 +35,7 @@ module EU4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.enumDefs.TryFind "country_tags" |> Option.defaultValue [])
+            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
@@ -62,6 +62,15 @@ module EU4GameFunctions =
         game.Lookup.scriptedLoc <- rawLocs
     let updateModifiers (game : GameObject) =
             game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
+
+    let updateLegacyGovernments (game : GameObject) =
+        let es = game.Resources.AllEntities() |> EntitySet
+        let allReforms = es.GlobMatchChildren("**/government_reforms/*.txt")
+        let legacies = allReforms |> List.choose (fun n -> if n.TagText "legacy_government" == "yes" then Some n.Key else None) |> Set.ofList
+        let legacyRefs = allReforms |> List.choose (fun n -> if n.Has "legacy_equivalent" then Some (n.TagText "legacy_equivalent") else None) |> Set.ofList
+        let legacyOnly = Set.difference legacies legacyRefs |> Set.toList
+        game.Lookup.EU4TrueLegacyGovernments <- legacyOnly
+
     let updateScriptedEffects(rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
@@ -92,7 +101,7 @@ module EU4GameFunctions =
         let mutable tempTypes = []
         let mutable tempValues = Map.empty
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
-        let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
+        let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
         let mutable rulesDataGenerated = false
         (fun (game : GameObject) rulesSettings ->
             let lookup = game.Lookup
@@ -118,13 +127,13 @@ module EU4GameFunctions =
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.EU4ScriptedEffectKeys <- "scaled_skill" :: (game.Resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
                                                 |> List.ofSeq |> List.collect id)
-            let scriptedEffectParmas = "scripted_effect_params", (lookup.EU4ScriptedEffectKeys)
-            let scriptedEffectParmasD = "scripted_effect_params_dollar", (lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k))
-            let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD]
+            let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys }
+            let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
+            let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD] @ [{ key = "hardcoded_legacy_only_governments"; values = lookup.EU4TrueLegacyGovernments; description = "Legacy only government"}]
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            lookup.enumDefs <- allEnums |> Map.ofList
+            lookup.enumDefs <- allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = game.LocalisationManager.localisationKeys
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -165,6 +174,7 @@ module EU4GameFunctions =
         updateScriptedLoc(game)
         // updateDefinedVariables()
         updateModifiers(game)
+        updateLegacyGovernments(game)
         // updateTechnologies()
         game.LocalisationManager.UpdateAllLocalisation()
         updateTypeDef game game.Settings.rules

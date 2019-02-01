@@ -120,9 +120,14 @@ module rec ConfigParser =
         warningOnly : bool
         localisation : TypeLocalisation list
     }
-    type EnumDefinition = string * string list
+    type EnumDefinition = {
+            key : string
+            description : string
+            values : string list
+        }
     type ComplexEnumDef = {
         name : string
+        description : string
         path : string
         nameTree : Node
         start_from_root : bool
@@ -527,7 +532,7 @@ module rec ConfigParser =
 
     let processChildType (parseScope) allScopes (anyScope) ((child, comments) : Child * string list) =
         match child with
-        |NodeC n when n.Key == "types" ->
+        | NodeC n when n.Key == "types" ->
             let inner ((child2, comments2) : Child * string list) =
                 match child2 with
                 |NodeC n2 -> (processType parseScope allScopes anyScope n2 comments2)
@@ -537,35 +542,45 @@ module rec ConfigParser =
 
     let processEnum (node : Node) (comments : string list) =
         match node.Key with
-        |x when x.StartsWith("enum") ->
+        | x when x.StartsWith("enum") ->
             let enumname = getSettingFromString node.Key "enum"
             let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString().Trim([|'\"'|]))
             match enumname with
-            |Some en -> Some (en, values)
-            |None -> None
-        |_ -> None
+            | Some en ->
+                let description =
+                    match comments |> List.tryFind (fun s -> s.StartsWith "##") with
+                    | Some d -> (d.Trim('#'))
+                    | None -> en
+                Some ({key = en; values = values; description = description})
+            | None -> None
+        | _ -> None
 
     let processChildEnum ((child, comments) : Child * string list) =
         match child with
-        |NodeC n when n.Key == "enums" ->
+        | NodeC n when n.Key == "enums" ->
             let inner ((child2, comments2) : Child * string list) =
                 match child2 with
-                |NodeC n2 -> (processEnum n2 comments2)
-                |_ -> None
+                | NodeC n2 -> (processEnum n2 comments2)
+                | _ -> None
             Some (getNodeComments n |> List.choose inner)
-        |_ -> None
+        | _ -> None
 
     let processComplexEnum (node : Node) (comments : string list) =
         match node.Key with
-        |x when x.StartsWith("complex_enum") ->
+        | x when x.StartsWith("complex_enum") ->
             let enumname = getSettingFromString node.Key "complex_enum"
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let nametree = node.Child "name"
             let start_from_root = node.TagText "start_from_root" == "yes"
-            match enumname, nametree with
-            |Some en, Some nt -> Some {name = en; path = path; nameTree = nt; start_from_root = start_from_root}
-            |_ -> None
-        |_ -> None
+            match (enumname, nametree) with
+            | Some en, Some nt ->
+                let description =
+                    match comments |> List.tryFind (fun s -> s.StartsWith "##") with
+                    | Some d -> (d.Trim('#'))
+                    | None -> en
+                Some {name = en; path = path; nameTree = nt; start_from_root = start_from_root; description = description}
+            | _ -> None
+        | _ -> None
 
     let processComplexChildEnum ((child, comments) : Child * string list) =
         match child with
@@ -638,9 +653,9 @@ module rec ConfigParser =
         rule
     let createStarbaseAlias = AliasRule ("effect", createStarbase)
     let createStarbaseEnums =
-        [("size", ["medium"; "large"]);
-         ("module", ["trafficControl"]);
-         ("building", ["crew"])]
+        [("size", ("size", ["medium"; "large"]));
+         ("module", ("module", ["trafficControl"]));
+         ("building", ("building", ["crew"]))]
         |> Map.ofList
     let createStarbaseTypeDef =
         {

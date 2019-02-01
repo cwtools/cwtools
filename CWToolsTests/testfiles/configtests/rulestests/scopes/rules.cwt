@@ -56,6 +56,11 @@ alias[effect:country_only] = test
 ## scope = { ship country }
 alias[effect:ship_and_country] = test
 
+## scope = ship
+alias[effect:ship_only] = {
+    test = test
+}
+
 ## scope = country
 ## push_scope = ship
 ###Scopes to one random province the current scope owns.

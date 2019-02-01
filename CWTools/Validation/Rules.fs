@@ -80,35 +80,35 @@ module rec Rules =
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
-    let checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) leafornode errors =
+    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) leafornode errors =
         if key |> firstCharEqualsAmp then errors else
                 match (vt) with
-                    |ValueType.Scalar ->
-                        errors
-                    |ValueType.Bool ->
-                        if key == "yes" || key == "no" then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode <&&&> errors
-                    |ValueType.Int (min, max) ->
-                        match TryParser.parseInt key with
-                        |Some i ->  if i <= max && i >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leafornode <&&&> errors
-                        |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode <&&&> errors
-                    |ValueType.Float (min, max) ->
-                        match TryParser.parseDouble key with
-                        |Some f -> if f <= max && f >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode <&&&> errors
-                        |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode <&&&> errors
-                    |ValueType.Enum e ->
-                        match enumsMap.TryFind e with
-                        |Some es -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode <&&&> errors
-                        |None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
-                    |ValueType.Specific s ->
-                        // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
-                        if id = s then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s))) severity) leafornode <&&&> errors
-                    |ValueType.Percent ->
-                        if key.EndsWith("%") then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode <&&&> errors
-                    |ValueType.Date ->
-                        let parts = key.Split([|'.'|])
-                        let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
-                        if ok then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode <&&&> errors
-    let checkValidValueNE (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) =
+                |ValueType.Scalar ->
+                    errors
+                |ValueType.Bool ->
+                    if key == "yes" || key == "no" then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode <&&&> errors
+                |ValueType.Int (min, max) ->
+                    match TryParser.parseIntWithDecimal key with
+                    |Some i ->  if i <= max && i >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leafornode <&&&> errors
+                    |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode <&&&> errors
+                |ValueType.Float (min, max) ->
+                    match TryParser.parseDouble key with
+                    |Some f -> if f <= max && f >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode <&&&> errors
+                    |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode <&&&> errors
+                |ValueType.Enum e ->
+                    match enumsMap.TryFind e with
+                    |Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
+                    |None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
+                |ValueType.Specific s ->
+                    // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
+                    if id = s then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s))) severity) leafornode <&&&> errors
+                |ValueType.Percent ->
+                    if key.EndsWith("%") then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode <&&&> errors
+                |ValueType.Date ->
+                    let parts = key.Split([|'.'|])
+                    let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+                    if ok then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode <&&&> errors
+    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
             |ValueType.Scalar ->
@@ -116,7 +116,7 @@ module rec Rules =
             |ValueType.Bool ->
                 if key == "yes" || key == "no" then true else false
             |ValueType.Int (min, max) ->
-                match TryParser.parseInt key with
+                match TryParser.parseIntWithDecimal key with
                 |Some i ->  if i <= max && i >= min then true else false
                 |None -> false
             |ValueType.Float (min, max) ->
@@ -125,7 +125,7 @@ module rec Rules =
                 |None -> false
             |ValueType.Enum e ->
                 match enumsMap.TryFind e with
-                |Some es -> if es.Contains (trimQuote key) then true else false
+                |Some (_, es) -> if es.Contains (trimQuote key) then true else false
                 |None -> false
             |ValueType.Specific s ->
                 // if trimQuote key == s then true else false
@@ -271,7 +271,7 @@ module rec Rules =
     type checkFieldParams<'S when 'S :> IScope<'S> and 'S : comparison> =
         {
             varMap : Collections.Map<string, StringSet>
-            enumsMap : Collections.Map<string, StringSet>
+            enumsMap : Collections.Map<string, string * StringSet>
             typesMap : Collections.Map<string,StringSet>
             effectMap : Map<string,Effect<'S>,InsensitiveStringComparer>
             triggerMap : Map<string,Effect<'S>,InsensitiveStringComparer>
@@ -345,7 +345,7 @@ module rec Rules =
     // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
     type RuleApplicator<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                                     (rootRules : RootRule<'T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>,
-                                     enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                                     enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
                                      anyScope, changeScope, defaultContext : ScopeContext<_>, defaultLang) =
 
         let mutable errorList : ResizeArray<CWError> = new ResizeArray<CWError>()
@@ -687,7 +687,7 @@ module rec Rules =
     // type FoldRules(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, ruleApplicator : IRuleApplicator<_>, changeScope, defaultContext, anyScope) =
     type FoldRules<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                                         (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
-                                         enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, ruleApplicator : RuleApplicator<'T>, changeScope, defaultContext, anyScope, defaultLang) =
+                                         enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, ruleApplicator : RuleApplicator<'T>, changeScope, defaultContext, anyScope, defaultLang) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let aliases =
@@ -1225,7 +1225,7 @@ module rec Rules =
 
     type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                         (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
-                         enums : Collections.Map<string, StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                         enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
                          globalScriptVariables : string list, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -1255,7 +1255,7 @@ module rec Rules =
 
         let fieldToCompletionList (field : NewField<_>) =
             match field with
-            |ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (fun s -> if s.IsEmpty then None else Some (s.MaximumElement)) |> Option.defaultValue "x"
+            |ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (fun (_, s) -> if s.IsEmpty then None else Some (s.MaximumElement)) |> Option.defaultValue "x"
             |ValueField v -> getValidValues v |> Option.bind (List.tryHead) |> Option.defaultValue "x"
             |TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.bind (List.tryHead) |> Option.defaultValue "x"
             |TypeField (TypeType.Complex (p, t, s)) -> types.TryFind(t) |> Option.bind (List.tryHead) |> Option.map (fun n -> p + n + s) |> Option.defaultValue "x"
@@ -1329,7 +1329,7 @@ module rec Rules =
                 |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
                     [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s)]
                 |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
-                    enums.TryFind(e) |> Option.map (fun es -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
                 |NodeRule (ValueField(_), _) -> []
                 |NodeRule (AliasField(_), _) -> []
                 |NodeRule (FilepathField(_), _) -> []
@@ -1350,7 +1350,7 @@ module rec Rules =
                 |LeafRule (ValueField(ValueType.Specific s), _) ->
                     [keyvalue (StringResource.stringManager.GetStringForID s)]
                 |LeafRule (ValueField(ValueType.Enum e), _) ->
-                    enums.TryFind(e) |> Option.map (fun es -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
                 |LeafRule (ValueField(_), _) -> []
                 |LeafRule (AliasField(_), _) -> []
                 |LeafRule (FilepathField(_), _) -> []
@@ -1372,7 +1372,7 @@ module rec Rules =
                     match lv with
                     |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                     |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |> Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                     |NewField.VariableGetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                     |NewField.VariableSetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                     |_ -> []
@@ -1406,7 +1406,7 @@ module rec Rules =
                 //log "%A" types
                 //log "%A" field
                 match field with
-                |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |>  Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -1650,7 +1650,7 @@ module rec Rules =
             let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
                                   |> List.collect (fun e -> if complexenum.start_from_root then inner complexenum.nameTree e else  e.Children |> List.collect (inner complexenum.nameTree))
             // log "%A %A" complexenum.name values
-            complexenum.name, values
+            { key = complexenum.name; values = values; description = complexenum.description }
         complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq
 
     let getDefinedVariables (foldRules : FoldRules<_>) (es : Entity list) =

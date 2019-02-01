@@ -51,7 +51,7 @@ module EU4Constants =
             |"tradenode" -> Scope.TradeNode
             |"unit" -> Scope.Unit
             |"monarch" -> Scope.Monarch
-            |"hier" -> Scope.Heir
+            |"heir" -> Scope.Heir
             |"consort" -> Scope.Consort
             |"rebel_faction" -> Scope.RebelFaction
             |"religion" -> Scope.Religion

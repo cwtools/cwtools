@@ -63,6 +63,7 @@ module TryParser =
 
     let parseDate   = tryParseWith System.DateTime.TryParse
     let parseInt    = tryParseWith System.Int32.TryParse
+    let parseIntWithDecimal    =  tryParseWith (fun s -> System.Int32.TryParse(s, Globalization.NumberStyles.AllowDecimalPoint ||| Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture))
     let parseSingle = tryParseWith System.Single.TryParse
     let parseDouble = tryParseWith (fun s -> (System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
     // etc.

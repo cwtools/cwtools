@@ -35,7 +35,7 @@ module HOI4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.enumDefs.TryFind "country_tags" |> Option.defaultValue [])
+            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
@@ -115,7 +115,7 @@ module HOI4GameFunctions =
         let mutable tempTypes = []
         let mutable tempValues = Map.empty
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
-        let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
+        let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
         let mutable rulesDataGenerated = false
         (fun  (game : GameObject) rulesSettings ->
             let lookup = game.Lookup
@@ -137,11 +137,11 @@ module HOI4GameFunctions =
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let allEnums = simpleEnums @ complexEnumDefs @ ["provinces", lookup.HOI4provinces]
+            let allEnums = simpleEnums @ complexEnumDefs @ [{ key = "provinces"; description = "provinces"; values = lookup.HOI4provinces}]
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            lookup.enumDefs <- allEnums |> Map.ofList
+            lookup.enumDefs <- allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = game.LocalisationManager.localisationKeys
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -158,7 +158,7 @@ module HOI4GameFunctions =
                             |> Option.map (fun sl -> sl |> List.map fst)
                             |> Option.defaultValue []
             let countries = lookup.enumDefs.TryFind "country_tag"
-                            // |> Option.map (fun sl -> sl |> List.map fst)
+                            |> Option.map snd
                             |> Option.defaultValue []
             lookup.scriptedEffects <- updateScriptedEffects lookup.configRules states countries
             lookup.scriptedTriggers <- updateScriptedTriggers lookup.configRules states countries

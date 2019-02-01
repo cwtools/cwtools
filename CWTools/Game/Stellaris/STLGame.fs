@@ -203,7 +203,7 @@ module STLGameFunctions =
         let mutable tempTypes = []
         let mutable tempValues = Map.empty
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
-        let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
+        let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
         let mutable rulesDataGenerated = false
         (fun (game : GameObject) rulesSettings ->
             let lookup = game.Lookup
@@ -232,9 +232,9 @@ module STLGameFunctions =
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allEnums = simpleEnums @ complexEnumDefs
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            lookup.enumDefs <- allEnums |> Map.ofList
+            lookup.enumDefs <- allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+            tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let loc = game.LocalisationManager.localisationKeys
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

@@ -7,12 +7,19 @@ country_event = {
                 is_ship = yes
             }
             ship_only = test
+            ship_only = {
+                test = test
+            }
             #error
             country_only = test
         }
         ##Test subtype scopes
         #error
         ship_only = test
+        #error
+        ship_only = {
+            test = test
+        }
         country_only = test
 
 
