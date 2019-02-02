@@ -94,8 +94,8 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
                     |None -> OK
                     |Some st -> st.localisation |> List.filter (fun locdef -> locdef.required) <&!&> validateLoc values
             else OK
-        services.lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateType t l)
-        <&&>(services.lookup.typeDefInfo |> Map.toList <&!&> (fun (t, l) -> validateSubType t l))
+        services.lookup.typeDefInfoForValidation |> Map.toList <&!&> (fun (t, l) -> validateType t l)
+        <&&>(services.lookup.typeDefInfoForValidation |> Map.toList <&!&> (fun (t, l) -> validateSubType t l))
 
 
     member __.Validate((shallow : bool), (entities : struct (Entity * Lazy<'T>) list))  = validate shallow entities

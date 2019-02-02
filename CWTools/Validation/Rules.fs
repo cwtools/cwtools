@@ -1581,17 +1581,17 @@ module rec Rules =
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
     let getTypesFromDefinitions (ruleapplicator : RuleApplicator<_>) (types : TypeDefinition<_> list) (es : Entity list) =
-        let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath))
+        let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath), e.validate)
         let getTypeInfo (def : TypeDefinition<_>) =
-            entities |> List.choose (fun (path, e, file) -> if checkPathDir def path file then Some (e.entity, file) else None)
-                     |> List.collect (fun (e, f) ->
+            entities |> List.choose (fun (path, e, file, validate) -> if checkPathDir def path file then Some (e.entity, file, validate) else None)
+                     |> List.collect (fun (e, f, v) ->
                             let inner (n : Node) =
                                 let subtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
                                 let key =
                                     match def.nameField with
                                     |Some f -> n.TagText f
                                     |None -> n.Key
-                                let result = def.name::subtypes |> List.map (fun s -> s, (key, n.Position))
+                                let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position))
                                 match def.typeKeyFilter with
                                 |Some (values, negate) -> if ((values |> List.exists ((==) n.Key))) <> negate then result else []
                                 |None -> result
@@ -1613,7 +1613,7 @@ module rec Rules =
                                 match def.type_per_file, def.skipRootKey with
                                 |true, _ ->
                                     let subtypes = ruleapplicator.TestSubType(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
-                                    def.name::subtypes |> List.map (fun s -> s, (Path.GetFileNameWithoutExtension f, e.Position))
+                                    def.name::subtypes |> List.map (fun s -> s, (v, Path.GetFileNameWithoutExtension f, e.Position))
                                 |false, [] ->
                                     (e.Children |> List.collect inner)
                                 |false, srk ->
@@ -1621,7 +1621,7 @@ module rec Rules =
                                 // |false, _ ->
                             childres
                             @
-                            (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (lv.Value.ToString(), lv.Position))))
+                            (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (v ,lv.Value.ToString(), lv.Position))))
         let results = types |> Seq.ofList |> PSeq.collect getTypeInfo |> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
         types |> List.map (fun t -> t.name) |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m ) results
 

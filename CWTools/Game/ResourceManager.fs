@@ -110,6 +110,7 @@ type Entity =
         entityType : EntityType
         overwrite : Overwrite
     }
+    override x.ToString() = sprintf "%A %A %A" x.filepath x.logicalpath x.validate
 
 type CachedResourceData = {
     resources : (Resource * Entity) list

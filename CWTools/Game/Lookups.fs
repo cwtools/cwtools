@@ -52,5 +52,6 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val typeDefs : TypeDefinition<'S> list = [] with get, set
     member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
     member val typeDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
+    member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val globalScriptedVariables : string list = [] with get, set

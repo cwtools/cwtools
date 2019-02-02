@@ -151,7 +151,9 @@ module HOI4GameFunctions =
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            lookup.typeDefInfo <- CWTools.Validation.Rules.getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            let typeDefInfo = getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (v, t, r) -> if v then Some (t, r) else None))
+            lookup.typeDefInfo <- typeDefInfo |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
 
             let states = lookup.typeDefInfo.TryFind "state"
