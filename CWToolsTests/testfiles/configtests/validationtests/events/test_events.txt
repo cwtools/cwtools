@@ -35,7 +35,7 @@ country_event = {
         capital_scope = {
             if = {
                 limit = { text = test }
-                every_tile = {
+                every_planet_army = {
                     limit = {
                         text = test
                     }

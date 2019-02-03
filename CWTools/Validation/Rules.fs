@@ -1304,78 +1304,84 @@ module rec Rules =
             CompletionResponse.CreateSnippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
 
 
-        let rec getRulePath (pos : pos) (stack : (string * string option) list) (node : Node) =
+        let rec getRulePath (pos : pos) (stack : (string * int * string option) list) (node : Node) =
            //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
-           match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
-           | Some c -> getRulePath pos ((c.Key, None) :: stack) c
-           | None ->
-                /// This handles LHS vs RHS beacuse LHS gets an "x" inserted into it, so fails to match any rules
-                match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
-                | Some l ->
-                    // SHould be <, but for some reason it isn't
-                    match l.Position.StartColumn + l.Key.Length + 1 > pos.Column with
-                    |true -> (l.Key, Some l.Key)::stack
-                    |false -> (l.Key, Some l.ValueText)::stack
-                | None -> stack
+            let countChildren (n2 : Node) (key : string) =
+                n2.Childs key |> Seq.length
+            match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
+            | Some c -> getRulePath pos ((c.Key, countChildren node c.Key, None) :: stack) c
+            | None ->
+                    /// This handles LHS vs RHS beacuse LHS gets an "x" inserted into it, so fails to match any rules
+                    match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
+                    | Some l ->
+                        // SHould be <, but for some reason it isn't
+                        match l.Position.StartColumn + l.Key.Length + 1 > pos.Column with
+                        |true -> (l.Key, countChildren node l.Key, Some l.Key)::stack
+                        |false -> (l.Key, countChildren node l.Key, Some l.ValueText)::stack
+                    | None -> stack
 
-        and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * string option) list) =
+        and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * int * string option) list) =
             // log (sprintf "%A" stack)
-            let rec convRuleToCompletion (rule : NewRule<_>) =
+            let rec convRuleToCompletion (count : int) (rule : NewRule<_>) =
                 let r, o = rule
-                let keyvalue (inner : string) = CompletionResponse.CreateSnippet (inner, (sprintf "%s = $0" inner), o.description)
-                match r with
-                |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
-                    [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s)]
-                |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
-                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
-                |NodeRule (ValueField(_), _) -> []
-                |NodeRule (AliasField(_), _) -> []
-                |NodeRule (FilepathField(_), _) -> []
-                |NodeRule (IconField(folder), innerRules) ->
-                    checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
-                |NodeRule (LocalisationField(_), _) -> []
-                |NodeRule (ScopeField(_), innerRules) ->
-                    scopeCompletionList |> List.map (fun e -> createSnippetForClause innerRules o.description e)
-                //TODO: Scopes better
-                |NodeRule (SubtypeField(_), _) -> []
-                |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
-                |NodeRule (TypeField(TypeType.Complex (p,t,s)), innerRules) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description (p+e+s))) |> Option.defaultValue []
-                |NodeRule (VariableGetField v, innerRules) ->
-                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                let enough = o.max <= count
+                if enough
+                then []
+                else
+                    let keyvalue (inner : string) = CompletionResponse.CreateSnippet (inner, (sprintf "%s = $0" inner), o.description)
+                    match r with
+                    |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
+                        [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s)]
+                    |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
+                        enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    |NodeRule (ValueField(_), _) -> []
+                    |NodeRule (AliasField(_), _) -> []
+                    |NodeRule (FilepathField(_), _) -> []
+                    |NodeRule (IconField(folder), innerRules) ->
+                        checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                    |NodeRule (LocalisationField(_), _) -> []
+                    |NodeRule (ScopeField(_), innerRules) ->
+                        scopeCompletionList |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                    //TODO: Scopes better
+                    |NodeRule (SubtypeField(_), _) -> []
+                    |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
+                        types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    |NodeRule (TypeField(TypeType.Complex (p,t,s)), innerRules) ->
+                        types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description (p+e+s))) |> Option.defaultValue []
+                    |NodeRule (VariableGetField v, innerRules) ->
+                        varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
 
-                |LeafRule (ValueField(ValueType.Specific s), _) ->
-                    [keyvalue (StringResource.stringManager.GetStringForID s)]
-                |LeafRule (ValueField(ValueType.Enum e), _) ->
-                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
-                |LeafRule (ValueField(_), _) -> []
-                |LeafRule (AliasField(_), _) -> []
-                |LeafRule (FilepathField(_), _) -> []
-                |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
-                |LeafRule (LocalisationField(_), _) -> []
-                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map keyvalue
-                    //TODO: Scopes
-                |LeafRule (SubtypeField(_), _) -> []
-                |LeafRule (TypeField(TypeType.Simple t), _) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
-                |LeafRule (TypeField(TypeType.Complex (p,t,s)), _) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue (p + e + s))) |> Option.defaultValue []
-                |LeafRule (VariableGetField v, _) ->
-                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
-                |LeafRule (VariableSetField v, _) ->
-                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                    |LeafRule (ValueField(ValueType.Specific s), _) ->
+                        [keyvalue (StringResource.stringManager.GetStringForID s)]
+                    |LeafRule (ValueField(ValueType.Enum e), _) ->
+                        enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                    |LeafRule (ValueField(_), _) -> []
+                    |LeafRule (AliasField(_), _) -> []
+                    |LeafRule (FilepathField(_), _) -> []
+                    |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
+                    |LeafRule (LocalisationField(_), _) -> []
+                    |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map keyvalue
+                        //TODO: Scopes
+                    |LeafRule (SubtypeField(_), _) -> []
+                    |LeafRule (TypeField(TypeType.Simple t), _) ->
+                        types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                    |LeafRule (TypeField(TypeType.Complex (p,t,s)), _) ->
+                        types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue (p + e + s))) |> Option.defaultValue []
+                    |LeafRule (VariableGetField v, _) ->
+                        varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
+                    |LeafRule (VariableSetField v, _) ->
+                        varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
 
-                |LeafValueRule lv ->
-                    match lv with
-                    |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-                    |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |> Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-                    |NewField.VariableGetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-                    |NewField.VariableSetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                    |LeafValueRule lv ->
+                        match lv with
+                        |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                        |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |> Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                        |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                        |NewField.VariableGetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                        |NewField.VariableSetField v -> varMap.TryFind(v) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                        |_ -> []
+                    |SubtypeRule(_) -> []
                     |_ -> []
-                |SubtypeRule(_) -> []
-                |_ -> []
                 //TODO: Add leafvalue
                 //|_ -> []
                 // |LeafValueRule
@@ -1443,7 +1449,7 @@ module rec Rules =
                 severity = Severity.Error
             }
 
-            let rec findRule (rules : NewRule<'T> list) (stack : (string * string option) list) =
+            let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option) list) =
                 let subtypedRules =
                     rules |> List.collect (
                         function
@@ -1456,14 +1462,14 @@ module rec Rules =
                         | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
                         |x -> [x])
                 match stack with
-                |[] -> expandedRules |> List.collect convRuleToCompletion
-                |(key, None)::rest ->
+                |[] -> expandedRules |> List.collect (convRuleToCompletion 0)
+                |(key, count, None)::rest ->
                     match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) |_ -> None) with
-                    |[] -> expandedRules |> List.collect convRuleToCompletion
+                    |[] -> expandedRules |> List.collect (convRuleToCompletion count)
                     |fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest)
-                |(key, Some _)::rest ->
+                |(key, count, Some _)::rest ->
                     match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) |_ -> None) with
-                    |[] -> expandedRules |> List.collect convRuleToCompletion
+                    |[] -> expandedRules |> List.collect (convRuleToCompletion count)
                     |fs ->
                         //log "%s %A" key fs
                         let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
@@ -1519,22 +1525,22 @@ module rec Rules =
                 |(AnyKey) -> true
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
-            let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * string option) list) =
+            let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option) list) =
                 let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
                 match skipRootKeyStack, path with
                 |_, [] ->
                     getCompletionFromPath typerules []
-                |[], (head, _)::tail ->
+                |[], (head, c, _)::tail ->
                     if typekeyfilter t head
                     then
-                        getCompletionFromPath typerules ((t.name, None)::tail) else []
-                |head::tail, (pathhead, _)::pathtail ->
+                        getCompletionFromPath typerules ((t.name, c, None)::tail) else []
+                |head::tail, (pathhead, _, _)::pathtail ->
                     if skiprootkey head pathhead
                     then validateTypeSkipRoot t tail pathtail
                     else []
             let items =
                 match path |> List.last with
-                |_, Some x when x.Length > 0 && x.StartsWith("@x") ->
+                |_, count, Some x when x.Length > 0 && x.StartsWith("@x") ->
                     let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                     staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
                 |_ ->

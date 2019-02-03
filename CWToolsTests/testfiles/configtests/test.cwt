@@ -26,8 +26,8 @@ alias[effect:if] = {
 	alias_name[effect] = alias_match_left[effect]
 }
 
-## push_scope = tile
-alias[effect:every_tile] = {
+## push_scope = megastrcture
+alias[effect:every_planet_army] = {
 	##cardinality = 0..1
 	limit = { alias_name[trigger] = alias_match_left[trigger] }
 	alias_name[effect] = alias_match_left[effect]
