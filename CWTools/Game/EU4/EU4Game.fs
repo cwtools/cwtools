@@ -95,6 +95,10 @@ module EU4GameFunctions =
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
 
+    let addModifiersAsTypes (game : GameObject) (typesMap : Map<string,(string * range) list>) =
+        // let createType (modifier : Modifier) =
+        typesMap.Add("modifier", game.Lookup.coreModifiers |> List.map (fun m -> (m.tag, range.Zero)))
+
     let updateTypeDef  =
         let mutable simpleEnums = []
         let mutable complexEnums = []
@@ -147,6 +151,7 @@ module EU4GameFunctions =
             let typeDefInfo = getTypesFromDefinitions tempRuleApplicator tempTypes allentities
             lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (v, t, r) -> if v then Some (t, r) else None))
             lookup.typeDefInfo <- typeDefInfo |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
+            lookup.typeDefInfo <- addModifiersAsTypes game lookup.typeDefInfo
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
             game.InfoService <- Some tempFoldRules
