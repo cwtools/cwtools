@@ -226,8 +226,8 @@ module rec Rules =
         let scope = ctx.scopes
         match changeScope false true effectMap triggerMap varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode <&&&> errors
-        |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode <&&&> errors
+        |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
+        |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
         |WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode <&&&> errors
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
@@ -556,7 +556,7 @@ module rec Rules =
             |xs ->
                 match ctx.scopes.CurrentScope with
                 |x when x = anyScope -> OK
-                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf])
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf])
             <&&>
             checkField p rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) errors =
@@ -595,7 +595,7 @@ module rec Rules =
             |xs ->
                 match ctx.scopes.CurrentScope with
                 |x when x = anyScope  -> OK
-                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node])
             <&&>
             match rule with
             |ScopeField s ->

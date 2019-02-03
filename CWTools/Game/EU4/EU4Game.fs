@@ -129,7 +129,8 @@ module EU4GameFunctions =
                                                 |> List.ofSeq |> List.collect id)
             let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys }
             let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
-            let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD] @ [{ key = "hardcoded_legacy_only_governments"; values = lookup.EU4TrueLegacyGovernments; description = "Legacy only government"}]
+            let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
+            let allEnums = simpleEnums @ complexEnumDefs @ [scriptedEffectParmas] @ [scriptedEffectParmasD] @ [{ key = "hardcoded_legacy_only_governments"; values = lookup.EU4TrueLegacyGovernments; description = "Legacy only government"}] @ [modifierEnums]
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
