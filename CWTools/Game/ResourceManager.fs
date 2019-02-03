@@ -100,7 +100,7 @@ type FileWithContentResourceInput =
         logicalpath : string
         validate : bool
     }
-[<Struct>]
+// [<Struct>]
 type Entity =
     {
         filepath : string

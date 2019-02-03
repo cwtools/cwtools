@@ -9,6 +9,7 @@ open CWTools.Process
 open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Utilities.Position
+open CWTools.Utilities.TryParser
 
 type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     validators : (StructureValidator<'T> * string) list
@@ -34,6 +35,11 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         , services : ValidationManagerServices<'T, 'S, 'M>) =
     let resources = services.resources
     let validators = settings.validators
+    let errorCache = new System.Runtime.CompilerServices.ConditionalWeakTable<_,CWError list>()
+    let addToCache (entity : Entity) errors =
+        errorCache.Add(entity, errors)
+    let getErrorsForEntity (entity : Entity) =
+        tryParseWith (errorCache.TryGetValue) entity
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
         log (sprintf "Validating %i files" (entities.Length))
         let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
@@ -47,7 +53,19 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         // log "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
         // log "Validating rules"
-        let rres = (if settings.useRules && services.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [services.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
+        // let rres = (if settings.useRules && services.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [services.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
+        let ruleValidate =
+            (fun (e : Entity) ->
+                let res = services.ruleApplicator.Value.RuleValidateEntity e
+                let errors = res |> (function | Invalid es -> es | _ -> [])
+                addToCache e errors
+                res)
+        let rres =
+            if settings.useRules && services.ruleApplicator.IsSome
+            then
+                entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid es -> es | _ -> [])
+            else
+                []
         // log "Validating files"
         let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
         // log "Validating effects/triggers"
@@ -101,3 +119,4 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
     member __.Validate((shallow : bool), (entities : struct (Entity * Lazy<'T>) list))  = validate shallow entities
     member __.ValidateLocalisation(entities : struct (Entity * Lazy<'T>) list) = validateLocalisation entities
     member __.ValidateGlobalLocalisation() = globalTypeDefLoc()
+    member __.CachedRuleErrors(entities) = entities |> List.choose (tryParseWith errorCache.TryGetValue) |> List.collect id

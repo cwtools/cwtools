@@ -675,6 +675,7 @@ module rec Rules =
         member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific rootId.lower)) rule node OK
         member this.TestSubType(subtypes, node) = testSubtype subtypes node
         member this.RuleValidate() = (fun _ (es : EntitySet<_>) -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate)
+        member this.RuleValidateEntity = (fun e -> validate (e.logicalpath, e.entity))
         // {
         //     applyNodeRule = (fun (rule, node) -> applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node)
         //     testSubtype = (fun ((subtypes), (node)) -> testSubtype subtypes node)
