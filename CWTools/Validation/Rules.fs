@@ -587,9 +587,7 @@ module rec Rules =
                             {newctx with scopes = {newctx.scopes with Root = root}}
                         |None -> newctx
                     |None ->
-                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
-                        then {ctx with scopes = {ctx.scopes with Scopes = anyScope::ctx.scopes.Scopes}}
-                        else ctx
+                        ctx
             (match options.requiredScopes with
             |[] -> OK
             |xs ->

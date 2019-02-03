@@ -27,7 +27,7 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
 
     let mutable _scriptedEffectsMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
     let resetEffects() =
-        _scriptedEffectsMap <- lazy (_scriptedTriggers|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
+        _scriptedEffectsMap <- lazy (_scriptedEffects|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
     member __.scriptedTriggers
         with get () = _scriptedTriggers
         and set (value) = resetTriggers(); _scriptedTriggers <- value
