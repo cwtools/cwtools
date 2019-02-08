@@ -11,21 +11,12 @@ module Scopes =
     type EffectMap<'S when 'S : comparison> = Map<string, Effect<'S>, InsensitiveStringComparer>
     type StringSet = Set<string, InsensitiveStringComparer>
     type UsageScopeContext<'S> = 'S list
-    type ContextResult<'S> =
-    | Found of string * ('S list)
-    | LocNotFound of string
+    // type ContextResult<'S> =
+    // | Found of string * ('S list)
+    // | LocNotFound of string
 
 
     //| Failed
-    [<Struct>]
-    type LocEntry<'S> = {
-        key : string
-        value : char option
-        desc : string
-        position : range
-        scopes : ContextResult<'S> list
-        refs : string list
-    }
 
     // type IScopeContext<'S when 'S : comparison> =
     //     abstract CurrentScope : 'S
@@ -63,7 +54,23 @@ module Scopes =
         member this.GetFrom i =
              if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
 
+    type LocContextResult<'S when 'S :> IScope<'S>> =
+        | Start of startContext : ScopeContext<'S>
+        | NewScope of newScope : ScopeContext<'S>
+        | WrongScope of command : string * scope : 'S * expected : 'S list
+        //Not sure what this should be
+        | Found of endContext : ScopeContext<'S>
+        | LocNotFound of key : string
 
+    [<Struct>]
+    type LocEntry<'S when 'S :> IScope<'S>> = {
+        key : string
+        value : char option
+        desc : string
+        position : range
+        scopes : LocContextResult<'S> list
+        refs : string list
+    }
 
 
     type ScopeResult<'T when 'T :> IScope<'T>> =
@@ -161,69 +168,94 @@ module Scopes =
                 // x
                 res2)
 
-    type LocContextResult<'S> =
-        | NewScope of newScope : ScopeContext<'S>
-        | WrongScope of command : string * scope : 'S * expected : 'S list
 
 
-    let createLocalisationCommandContext<'T when 'T :> IScope<'T> and 'T : comparison > (locPrimaryScopes : (string * (ScopeContext<'T> * bool -> ScopeContext<'T> * bool)) list) (scopedLocEffectsMap : EffectMap<'T>) =
-        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (command : string) ->
+    let createLocalisationCommandValidator<'T when 'T :> IScope<'T> and 'T : comparison > (locPrimaryScopes : (string * (ScopeContext<'T> * bool -> ScopeContext<'T> * bool)) list) (scopedLocEffectsMap : EffectMap<'T>) =
+        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (source : ScopeContext<'T>) (command : string) ->
         let keys = command.Split('.') |> List.ofArray
-        let inner ((first : bool), (rootScope : string), (scopes : 'T list), (context : ScopeContext<'T>)) (nextKey : string) =
-            let onetoone = locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
+        let inner ((first : bool), (context : ScopeContext<'T>)) (nextKey : string) =
             let onetooneMatch() =
                 locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
-                |> Option.map (fun (_, f) -> (f (context, false), NewScope (f (context, false) |> fst, [])))
+                |> Option.map (fun (_, f) -> (LocContextResult.NewScope (f (context, false) |> fst)))
             let effectMatch() =
                 scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
                 |> Option.map (fun e ->
-                                    let possibleScopes = e.Scopes
+                                    let validScopes = e.Scopes
                                     let currentScope = context.CurrentScope :> IScope<_>
-                                    let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                                    let exact = validScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                                    match context.CurrentScope, validScopes, exact with
+                                        | x, _, _ when x = context.Root.AnyScope -> (LocContextResult.NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}))
+                                        // | _, [], _ -> (context, false), NotFound
+                                        | _, _, true -> (LocContextResult.NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}))
+                                        | current, ss, false -> LocContextResult.WrongScope (nextKey, current, ss)
                                 )
-            match onetoone with
-            | Some (_, f) -> (f (context, false), NewScope (f (context, false) |> fst, []))
-            | None ->
-                let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
-                match effectMatch with
-                | Some e -> Found (rootScope, e.Scopes), false
-                | None ->
-                    let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
-                    match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
-                    |Some _, _, _ -> Found (rootScope, scopes), false
-                    | _, _, true -> Found (rootScope, scopes), false
-                    |None, false, false ->
-                        match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
-                        | true -> Found (rootScope, scopes), false
-                        | false -> LocNotFound (nextKey), false
-                    |None, true, false ->
-                        match eventtargets |> List.exists (fun et -> et == nextKey) with
-                        | true -> Found (rootScope, scopes), false
-                        | false -> LocNotFound (nextKey), false
-        keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
+            let commandMatch() =
+                let matchedCommand = commands |> List.tryFind (fun c -> c == nextKey)
+                match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
+                |Some _, _, _ -> Found (context)
+                | _, _, true -> Found (context)
+                |None, false, false ->
+                    match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
+                    | true -> Found (context)
+                    | false -> LocNotFound (nextKey)
+                |None, true, false ->
+                    match eventtargets |> List.exists (fun et -> et == nextKey) with
+                    | true -> Found (context)
+                    | false -> LocNotFound (nextKey)
+            onetooneMatch() 
+            |> Option.orElseWith effectMatch
+            |> Option.defaultWith commandMatch
 
-    let createLocalisationScopeValidator<'T when 'T :> IScope<'T> and 'T : comparison > (locPrimaryScopes : (string * (ScopeContext<'T> * bool -> ScopeContext<'T> * bool)) list) (scopedLocEffectsMap : EffectMap<'T>) =
-        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (startingScopeContext : ScopeContext<'T>) (command : string) ->
-        let keys = command.Split('.') |> List.ofArray
-        let inner ((first : bool), (rootScope : string), (scopes : 'T list)) (nextKey : string) =
-            let onetoone = locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
-            match onetoone with
-            | Some (_) -> Found (nextKey, []), false
-            | None ->
-                let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
-                match effectMatch with
-                | Some e -> Found (rootScope, e.Scopes), false
-                | None ->
-                    let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
-                    match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
-                    |Some _, _, _ -> Found (rootScope, scopes), false
-                    | _, _, true -> Found (rootScope, scopes), false
-                    |None, false, false ->
-                        match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
-                        | true -> Found (rootScope, scopes), false
-                        | false -> LocNotFound (nextKey), false
-                    |None, true, false ->
-                        match eventtargets |> List.exists (fun et -> et == nextKey) with
-                        | true -> Found (rootScope, scopes), false
-                        | false -> LocNotFound (nextKey), false
-        keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
+            // match onetoone with
+            // | Some (_, f) -> (f (context, false), NewScope (f (context, false) |> fst))
+            // | None ->
+            //     let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
+            //     match effectMatch with
+            //     | Some e -> Found (rootScope, e.Scopes), false
+            //     | None ->
+            //         let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
+            //         match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
+            //         |Some _, _, _ -> Found (rootScope, scopes), false
+            //         | _, _, true -> Found (rootScope, scopes), false
+            //         |None, false, false ->
+            //             match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
+            //             | true -> Found (rootScope, scopes), false
+            //             | false -> LocNotFound (nextKey), false
+            //         |None, true, false ->
+            //             match eventtargets |> List.exists (fun et -> et == nextKey) with
+            //             | true -> Found (rootScope, scopes), false
+            //             | false -> LocNotFound (nextKey), false
+        let locKeyFolder (result : LocContextResult<_>) (nextKey : string) =
+            match result with
+            | Start startContext -> inner (true, startContext) nextKey
+            | LocContextResult.NewScope newContext -> inner (false, newContext) nextKey
+            | Found endContext -> inner (false, endContext) nextKey
+            | res -> res
+        keys |> List.fold locKeyFolder (Start source)
+        // keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
+
+    // let createLocalisationScopeValidator<'T when 'T :> IScope<'T> and 'T : comparison > (locPrimaryScopes : (string * (ScopeContext<'T> * bool -> ScopeContext<'T> * bool)) list) (scopedLocEffectsMap : EffectMap<'T>) =
+    //     fun (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (startingScopeContext : ScopeContext<'T>) (command : string) ->
+    //     let keys = command.Split('.') |> List.ofArray
+    //     let inner ((first : bool), (rootScope : string), (scopes : 'T list)) (nextKey : string) =
+    //         let onetoone = locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
+    //         match onetoone with
+    //         | Some (_) -> Found (nextKey, []), false
+    //         | None ->
+    //             let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
+    //             match effectMatch with
+    //             | Some e -> Found (rootScope, e.Scopes), false
+    //             | None ->
+    //                 let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
+    //                 match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
+    //                 |Some _, _, _ -> Found (rootScope, scopes), false
+    //                 | _, _, true -> Found (rootScope, scopes), false
+    //                 |None, false, false ->
+    //                     match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
+    //                     | true -> Found (rootScope, scopes), false
+    //                     | false -> LocNotFound (nextKey), false
+    //                 |None, true, false ->
+    //                     match eventtargets |> List.exists (fun et -> et == nextKey) with
+    //                     | true -> Found (rootScope, scopes), false
+    //                     | false -> LocNotFound (nextKey), false
+    //     keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst

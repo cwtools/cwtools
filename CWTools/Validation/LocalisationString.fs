@@ -34,7 +34,7 @@ module LocalisationString =
     let validateProcessedLocalisationBase (hardcodedLocalisation) (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry<_>>) list) =
         let validateContextResult (e : LocEntry<_>) cr =
             match cr with
-            | ContextResult.Found _ -> OK
+            | LocContextResult.Found _ -> OK
             | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
         let validateLocMap (lang, (m : Map<string, LocEntry<_>>)) =
             let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
@@ -47,7 +47,7 @@ module LocalisationString =
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
-    let processLocalisationBase<'S> localisationCommandContext (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry<'S>>=
+    let processLocalisationBase<'S when 'S :> IScope<'S>> localisationCommandValidator (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry<'S>>=
         // let lang = api |> fst
         // let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
         // let all = api |> snd
@@ -58,5 +58,5 @@ module LocalisationString =
             |Failure _ -> []
         let parseLoc (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Command s -> Some s |_ -> None)
         let parseLocRef (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
-        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandContext (scriptedLoc @ commands) eventTargets setvariables m s) }))
+        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator (scriptedLoc @ commands) eventTargets setvariables m s) }))
         result

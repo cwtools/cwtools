@@ -171,4 +171,4 @@ module EU4Scopes =
         "FromFromFromFrom", from >> from >> from >> from;
         ]
 
-    let localisationCommandContext = createLocalisationCommandContext locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator = createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap

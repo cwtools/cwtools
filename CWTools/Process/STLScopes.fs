@@ -502,4 +502,4 @@ module STLScopes =
         "Third_party", id;
         ]
 
-    let localisationCommandContext = createLocalisationCommandContext locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator = createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
