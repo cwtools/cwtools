@@ -89,7 +89,12 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
     let globalTypeDefLoc () =
-        let validateLoc (values : (string * range) list) (locdef : TypeLocalisation)  =
+        let validateLoc (values : (string * range) list) (locdef : TypeLocalisation<_>)  =
+            let res1 (value : string) =
+                let value = locdef.prefix + value + locdef.suffix
+                let validateLocEntry (locentry : LocEntry<_>) =
+                    locentry.
+                services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
             values
                 |> List.filter (fun (s, _) -> s.Contains(".") |> not)
                 <&!&> (fun (key, range) ->

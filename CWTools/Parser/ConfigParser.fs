@@ -96,15 +96,16 @@ module rec ConfigParser =
         rules : NewRule<'a> list
         typeKeyField : string option
         pushScope : 'a option
-        localisation : TypeLocalisation list
+        localisation : TypeLocalisation<'a> list
     }
     type SkipRootKey = |SpecificKey of string |AnyKey
-    type TypeLocalisation = {
+    type TypeLocalisation<'a> = {
         name : string
         prefix : string
         suffix: string
         required : bool
         optional : bool
+        replaceScopes : ReplaceScopes<'a> option
     }
     type TypeDefinition<'a> = {
         name : string
@@ -118,7 +119,7 @@ module rec ConfigParser =
         skipRootKey : SkipRootKey list
         type_per_file : bool
         warningOnly : bool
-        localisation : TypeLocalisation list
+        localisation : TypeLocalisation<'a> list
     }
     type EnumDefinition = {
             key : string
@@ -204,67 +205,67 @@ module rec ConfigParser =
             if split.Length < 2 then None else Some (split.[0], split.[1])
         |None -> None
 
+    let inline private replaceScopes parseScope (comments : string list) =
+        match comments |> List.tryFind (fun s -> s.Contains("replace_scope")) with
+        | Some s ->
+            let s = s.Trim('#')
+            let parsed = CKParser.parseString s "config"
+            match parsed with
+            | Failure(_) -> None
+            | Success(s,_,_) ->
+                let n = (STLProcess.shipProcess.ProcessNode EntityType.Other "root" (mkZeroFile "config") s)
+                match n.Child "replace_scope" with
+                | Some c ->
+                    let this = if c.Has "this" then c.TagText "this" |> parseScope |> Some else None
+                    let root = if c.Has "root" then c.TagText "root" |> parseScope |> Some else None
+                    let from = if c.Has "from" then c.TagText "from" |> parseScope |> Some else None
+                    let fromfrom = if c.Has "fromfrom" then c.TagText "fromfrom" |> parseScope |> Some else None
+                    let fromfromfrom = if c.Has "fromfromfrom" then c.TagText "fromfromfrom" |> parseScope |> Some else None
+                    let fromfromfromfrom = if c.Has "fromfromfromfrom" then c.TagText "fromfromfromfrom" |> parseScope |> Some else None
+                    let froms = [from;fromfrom;fromfromfrom;fromfromfromfrom] |> List.choose id
+                    let prev = if c.Has "prev" then c.TagText "prev" |> parseScope |> Some else None
+                    let prevprev = if c.Has "prevprev" then c.TagText "prevprev" |> parseScope |> Some else None
+                    let prevprevprev = if c.Has "prevprevprev" then c.TagText "prevprevprev" |> parseScope |> Some else None
+                    let prevprevprevprev = if c.Has "prevprevprevprev" then c.TagText "prevprevprevprev" |> parseScope |> Some else None
+                    let prevs = [prev;prevprev;prevprevprev;prevprevprevprev] |> List.choose id
+                    Some { root = root; this = this; froms = Some froms; prevs = Some prevs }
+                | None -> None
+        | None -> None
 
 
     let getOptionsFromComments (parseScope) (allScopes) (anyScope) (comments : string list) =
         let min, max =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
-            |Some c ->
+            | Some c ->
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
                 try
                     match nums.[0], nums.[1] with
-                    |min, "inf" -> (int min), 10000
-                    |min, max -> (int min), (int max)
+                    | min, "inf" -> (int min), 10000
+                    | min, max -> (int min), (int max)
                 with
-                |_ -> 1, 1
-            |None -> 1, 1
+                | _ -> 1, 1
+            | None -> 1, 1
         let description =
             match comments |> List.tryFind (fun s -> s.StartsWith "##") with
-            |Some d -> Some (d.Trim('#'))
-            |None -> None
+            | Some d -> Some (d.Trim('#'))
+            | None -> None
         let pushScope =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
-            |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
-            |None -> None
+            | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+            | None -> None
         let reqScope =
             match comments |> List.tryFind (fun s -> s.StartsWith("# scope =")) with
-            |Some s ->
+            | Some s ->
                 let rhs = s.Substring(s.IndexOf "=" + 1).Trim()
                 match rhs.StartsWith("{") && rhs.EndsWith("}") with
-                |true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.map parseScope |> List.ofArray
-                |false -> let scope = rhs |> parseScope in if scope = anyScope then allScopes else [scope]
-            |None -> []
+                | true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.map parseScope |> List.ofArray
+                | false -> let scope = rhs |> parseScope in if scope = anyScope then allScopes else [scope]
+            | None -> []
         let severity =
             match comments |> List.tryFind (fun s -> s.Contains("severity")) with
-            |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseSeverity |> Some
-            |None -> None
-        let replaceScopes =
-            match comments |> List.tryFind (fun s -> s.Contains("replace_scope")) with
-            |Some s ->
-                let s = s.Trim('#')
-                let parsed = CKParser.parseString s "config"
-                match parsed with
-                |Failure(_) -> None
-                |Success(s,_,_) ->
-                    let n = (STLProcess.shipProcess.ProcessNode EntityType.Other "root" (mkZeroFile "config") s)
-                    match n.Child "replace_scope" with
-                    |Some c ->
-                        let this = if c.Has "this" then c.TagText "this" |> parseScope |> Some else None
-                        let root = if c.Has "root" then c.TagText "root" |> parseScope |> Some else None
-                        let from = if c.Has "from" then c.TagText "from" |> parseScope |> Some else None
-                        let fromfrom = if c.Has "fromfrom" then c.TagText "fromfrom" |> parseScope |> Some else None
-                        let fromfromfrom = if c.Has "fromfromfrom" then c.TagText "fromfromfrom" |> parseScope |> Some else None
-                        let fromfromfromfrom = if c.Has "fromfromfromfrom" then c.TagText "fromfromfromfrom" |> parseScope |> Some else None
-                        let froms = [from;fromfrom;fromfromfrom;fromfromfromfrom] |> List.choose id
-                        let prev = if c.Has "prev" then c.TagText "prev" |> parseScope |> Some else None
-                        let prevprev = if c.Has "prevprev" then c.TagText "prevprev" |> parseScope |> Some else None
-                        let prevprevprev = if c.Has "prevprevprev" then c.TagText "prevprevprev" |> parseScope |> Some else None
-                        let prevprevprevprev = if c.Has "prevprevprevprev" then c.TagText "prevprevprevprev" |> parseScope |> Some else None
-                        let prevs = [prev;prevprev;prevprevprev;prevprevprevprev] |> List.choose id
-                        Some { root = root; this = this; froms = Some froms; prevs = Some prevs }
-                    |None -> None
-            |None -> None
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes; severity = severity; requiredScopes = reqScope }
+            | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseSeverity |> Some
+            | None -> None
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope }
 
     let processKey parseScope anyScope =
         function
@@ -454,7 +455,7 @@ module rec ConfigParser =
                 let dollarIndex = value.IndexOf "$"
                 let prefix = value.Substring(0, dollarIndex)
                 let suffix = value.Substring(dollarIndex + 1)
-                Some { name = key; prefix = prefix; suffix = suffix; required = required; optional = optional }
+                Some { name = key; prefix = prefix; suffix = suffix; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments }
             |_ -> None
         let parseSubTypeLocalisation (subtype : Node) =
             match subtype.Key.StartsWith("subtype[") with
@@ -623,7 +624,7 @@ module rec ConfigParser =
         let values = nodes |> List.choose processChildValue |> List.collect id
         rules, types, enums, complexenums, values
 
-    let parseConfig (parseScope) (allScopes) (anyScope) filename fileString =
+    let parseConfig (parseScope ) (allScopes) (anyScope) filename fileString =
         //log "parse"
         let parsed = CKParser.parseString fileString filename
         match parsed with
