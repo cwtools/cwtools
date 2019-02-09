@@ -310,12 +310,9 @@ type STLGame (settings : StellarisSettings) =
         lookupValidators = [validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
         useRules = settings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
-        localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
-                             valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
-                             valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
-                             valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
-                             valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers;
-                             valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers; valAnomalies]
+        localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valTraditionLocCats
+
+                                ; valPolicies; valEffectLocs; valTriggerLocs;]
 
     }
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
