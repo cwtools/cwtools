@@ -47,7 +47,7 @@ module LocalisationString =
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
-    let processLocalisationBase<'S when 'S :> IScope<'S>> localisationCommandValidator (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry<'S>>=
+    let processLocalisationBase<'S when 'S :> IScope<'S>> localisationCommandValidator (defaultContext : ScopeContext<'S>) (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry<'S>>=
         // let lang = api |> fst
         // let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
         // let all = api |> snd
@@ -58,5 +58,20 @@ module LocalisationString =
             |Failure _ -> []
         let parseLoc (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Command s -> Some s |_ -> None)
         let parseLocRef (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
-        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator (scriptedLoc @ commands) eventTargets setvariables m s) }))
+        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator (scriptedLoc @ commands) eventTargets setvariables defaultContext s) }))
         result
+
+    let validateLocalisationCommandsBase<'S when 'S :> IScope<'S>> localisationCommandValidator (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (locentry : LocEntry<'S>) (startContext : ScopeContext<'S>)  =
+        let allcommands = commands |> List.map fst
+        let extractResult =
+            function
+            | Success (v, _, _) -> v
+            | Failure _ -> []
+        let parseLoc (e : LocEntry<'S>) = parseLocString e.desc "" |> extractResult |> List.choose (function | Command s -> Some s | _ -> None)
+        let keycommands = parseLoc locentry
+        let validateCommand (c : string) =
+            match localisationCommandValidator (scriptedLoc @ allcommands) eventTargets setvariables startContext c with
+            | LocContextResult.WrongScope (c, actual, (expected : 'S list)) ->
+                Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None]
+            | _ -> OK
+        keycommands <&!&> validateCommand

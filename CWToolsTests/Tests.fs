@@ -95,6 +95,8 @@ let getLocTestInfo node =
     let comments = getNodeComments node |> List.filter(fun (p, c) -> not (List.isEmpty c)) |> List.collect (fun (f, c) -> c |> List.map (fun cc -> f, cc)) |> List.map fst
     req, noreq, comments
 
+let locErrorCodes = [ "CW225"; "CW226"; "CW254"; "CW255"; "CW256"; "CW257"; "CW258"; "CW259"; "CW260"]
+
 [<Tests>]
 let tests =
     testList "localisation" [
@@ -148,7 +150,6 @@ let tests =
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
                 // eprintfn "%A" (stl.LocalisationErrors(true))
-                let locErrorCodes = [ "CW225"; "CW226"; "CW254"; "CW255"; "CW256"; "CW257"; "CW258"; "CW259"]
                 let globalLocError = stl.LocalisationErrors(true, true) |> List.filter (fun (c, s, n, l, f, k) -> List.contains c locErrorCodes)
                 yield testCase "globalLoc" <| fun () ->
                     Expect.hasCountOf globalLocError 8u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)

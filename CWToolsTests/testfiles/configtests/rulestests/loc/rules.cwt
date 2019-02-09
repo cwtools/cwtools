@@ -3,6 +3,7 @@ types = {
         path = "game/common/ship_sizes"
         localisation = {
             name = "$"
+            ## replace_scopes = { root = planet this = planet }
             description = "$_desc"
             ## required
             required = "$_required"

@@ -66,4 +66,5 @@ module HOI4LocalisationString =
     let locCommands = commands |> List.map (fun c -> c, allScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = processLocalisationBase<Scope> localisationCommandContext
+    let processLocalisation = processLocalisationBase<Scope> localisationCommandValidator defaultContext
+    let validateLocalisationCommand = validateLocalisationCommandsBase localisationCommandValidator

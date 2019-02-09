@@ -67,7 +67,8 @@ module EU4LocalisationString =
     let locCommands = commands |> List.map (fun c -> c, allScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = processLocalisationBase<Scope> localisationCommandValidator
+    let processLocalisation = processLocalisationBase<Scope> localisationCommandValidator defaultContext
+    let validateLocalisationCommand = validateLocalisationCommandsBase localisationCommandValidator
 
     let checkFileEncoding (file : string) =
             use fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) in

@@ -43,6 +43,20 @@ module HOI4GameFunctions =
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         processLocalisation localisationCommands eventtargets lookup.scriptedLoc definedvars
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+        let eventtargets =
+            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
+        let definedvars =
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
+        validateLocalisationCommand localisationCommands eventtargets lookup.scriptedLoc definedvars
     let globalLocalisation (game : GameObject) =
         // let locfiles =  resources.GetResources()
         //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
@@ -220,6 +234,8 @@ type HOI4Game(settings : HOI4Settings) =
                 HOI4Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                  HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
+                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
+                 defaultContext,
                  Encoding.UTF8,
                  Encoding.GetEncoding(1252),
                  validationSettings,

@@ -171,7 +171,7 @@ module Scopes =
 
 
     let createLocalisationCommandValidator<'T when 'T :> IScope<'T> and 'T : comparison > (locPrimaryScopes : (string * (ScopeContext<'T> * bool -> ScopeContext<'T> * bool)) list) (scopedLocEffectsMap : EffectMap<'T>) =
-        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (source : ScopeContext<'T>) (command : string) ->
+        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (source : ScopeContext<'T>) (command : string) ->
         let keys = command.Split('.') |> List.ofArray
         let inner ((first : bool), (context : ScopeContext<'T>)) (nextKey : string) =
             let onetooneMatch() =
@@ -202,7 +202,7 @@ module Scopes =
                     match eventtargets |> List.exists (fun et -> et == nextKey) with
                     | true -> Found (context)
                     | false -> LocNotFound (nextKey)
-            onetooneMatch() 
+            onetooneMatch()
             |> Option.orElseWith effectMatch
             |> Option.defaultWith commandMatch
 

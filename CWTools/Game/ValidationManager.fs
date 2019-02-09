@@ -10,6 +10,7 @@ open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Utilities.Position
 open CWTools.Utilities.TryParser
+open CWTools.Process.Scopes
 
 type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     validators : (StructureValidator<'T> * string) list
@@ -32,7 +33,9 @@ type ValidationManagerServices<'T, 'S, 'M when 'T :> ComputedData and 'S :> ISco
 }
 type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>
         (settings : ValidationManagerSettings<'T, 'S, 'M>
-        , services : ValidationManagerServices<'T, 'S, 'M>) =
+        , services : ValidationManagerServices<'T, 'S, 'M>,
+         validateLocalisationCommand,
+         defaultContext : ScopeContext<'S>) =
     let resources = services.resources
     let validators = settings.validators
     let errorCache = new System.Runtime.CompilerServices.ConditionalWeakTable<_,CWError list>()
@@ -88,18 +91,48 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
+    let createScopeContextFromReplace (rep : ReplaceScopes<'S> option) =
+        match rep with
+        | None -> defaultContext
+        | Some rs ->
+            let ctx = defaultContext
+            let prevctx =
+                match rs.prevs with
+                | Some prevs -> {ctx with Scopes = prevs}
+                | None -> ctx
+            let newctx =
+                match (rs.this, rs.froms) with
+                | Some this, Some froms ->
+                    {prevctx with Scopes = this::(prevctx.PopScope); From = froms}
+                | Some this, None ->
+                    {prevctx with Scopes = this::(prevctx.PopScope)}
+                | None, Some froms ->
+                    {prevctx with From = froms}
+                | None, None ->
+                    prevctx
+            match rs.root with
+            | Some root ->
+                {newctx with Root = root}
+            | None -> newctx
+
     let globalTypeDefLoc () =
+        let valLocCommand = validateLocalisationCommand services.lookup
         let validateLoc (values : (string * range) list) (locdef : TypeLocalisation<_>)  =
             let res1 (value : string) =
-                let value = locdef.prefix + value + locdef.suffix
-                let validateLocEntry (locentry : LocEntry<_>) =
-                    locentry.
-                services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
+                let validate (locentry : LocEntry<_>) = valLocCommand locentry (createScopeContextFromReplace locdef.replaceScopes)
+                services.lookup.proccessedLoc |> List.fold (fun r (_, m) -> Map.tryFind value m |> function | Some le -> validate le <&&> r | None -> r) OK
+            //     let value = locdef.prefix + value + locdef.suffix
+            //     validateLocalisationCommand (createScopeContextFromReplace locdef.replaceScopes) value
+                // let validateLocEntry (locentry : LocEntry<_>) =
+                    // locentry.
+                // services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
             values
                 |> List.filter (fun (s, _) -> s.Contains(".") |> not)
                 <&!&> (fun (key, range) ->
                             let fakeLeaf = LeafValue(Value.Bool true, range)
                             let lockey = locdef.prefix + key + locdef.suffix
+                            res1 lockey
+                            <&&>
                             checkLocKeysLeafOrNode (services.localisationKeys()) lockey fakeLeaf)
         let validateType (typename : string) (values : (string * range) list) =
             match services.lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
