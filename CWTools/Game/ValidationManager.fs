@@ -69,6 +69,7 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
                 entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid es -> es | _ -> [])
             else
                 []
+        let rres = rres |> List.filter (fun (id, _, _, _, _, _) -> id <> "CW100")
         // log "Validating files"
         let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
         // log "Validating effects/triggers"
