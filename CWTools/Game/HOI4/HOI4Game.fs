@@ -236,6 +236,7 @@ type HOI4Game(settings : HOI4Settings) =
                  HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                  HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
                  defaultContext,
+                 noneContext,
                  Encoding.UTF8,
                  Encoding.GetEncoding(1252),
                  validationSettings,

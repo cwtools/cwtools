@@ -227,6 +227,7 @@ type EU4Game(settings : EU4Settings) =
                      EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
                      defaultContext,
+                     noneContext,
                      Encoding.UTF8,
                      Encoding.GetEncoding(1252),
                      validationSettings,

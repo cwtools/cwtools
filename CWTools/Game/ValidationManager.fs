@@ -35,7 +35,8 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         (settings : ValidationManagerSettings<'T, 'S, 'M>
         , services : ValidationManagerServices<'T, 'S, 'M>,
          validateLocalisationCommand,
-         defaultContext : ScopeContext<'S>) =
+         defaultContext : ScopeContext<'S>,
+         noneContext : ScopeContext<'S>) =
     let resources = services.resources
     let validators = settings.validators
     let errorCache = new System.Runtime.CompilerServices.ConditionalWeakTable<_,CWError list>()
@@ -94,7 +95,7 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
 
     let createScopeContextFromReplace (rep : ReplaceScopes<'S> option) =
         match rep with
-        | None -> defaultContext
+        | None -> noneContext
         | Some rs ->
             let ctx = defaultContext
             let prevctx =

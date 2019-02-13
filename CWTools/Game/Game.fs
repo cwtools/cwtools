@@ -47,7 +47,8 @@ type GameSettings<'M, 'S when 'S : comparison> = {
 }
 
 type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
-    (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService, processLocalisation, validateLocalisationCommand, defaultContext,
+    (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
+     processLocalisation, validateLocalisationCommand, defaultContext, noneContext,
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
      globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
@@ -73,7 +74,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             foldRules = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
-    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext)
+    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, noneContext)
 
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
@@ -175,7 +176,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.Settings = settings
     member __.UpdateFile shallow file text = updateFile shallow file text
     member __.RefreshValidationManager() =
-        validationManager <- ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext)
+        validationManager <- ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, noneContext)
 
     member this.InfoAtPos pos file text = LanguageFeatures.symbolInformationAtPos this.FileManager this.ResourceManager this.InfoService this.Lookup pos file text
     static member CreateGame settings afterInit =

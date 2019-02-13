@@ -30,6 +30,8 @@ module EU4Scopes =
 
     let defaultContext =
         { Root = Scope.Any; From = []; Scopes = [] }
+    let noneContext =
+        { Root = Scope.InvalidScope; From = []; Scopes = [Scope.InvalidScope] }
     let defaultDesc = "Scope (/context) switch"
 
 
