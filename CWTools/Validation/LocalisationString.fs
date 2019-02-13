@@ -36,6 +36,10 @@ module LocalisationString =
             match cr with
             | LocContextResult.Found _ -> OK
             | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
+            | LocContextResult.NewScope s -> Invalid [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %A" s) Severity.Error ) (e.position) e.key None ]
+            | LocContextResult.WrongScope (c, actual, (expected : 'S list)) ->
+                Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (e.position) e.key None]
+            | _ -> OK
         let validateLocMap (lang, (m : Map<string, LocEntry<_>>)) =
             let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
             m |> Map.map (fun _ e -> e.refs <&!&> checkRef hardcodedLocalisation lang keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
