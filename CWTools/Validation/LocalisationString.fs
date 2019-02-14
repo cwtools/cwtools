@@ -25,7 +25,7 @@ module LocalisationString =
 
     let checkRef (hardcodedLocalisation) (lang : Lang) (keys : LocKeySet) (entry : LocEntry<_>) (r : string) =
         match keys.Contains r with
-        | true -> if r == entry.key then Invalid[invManual (ErrorCodes.RecursiveLocRef) (entry.position) entry.key None ] else OK
+        | true -> if r == entry.key && not (List.contains r hardcodedLocalisation) then Invalid[invManual (ErrorCodes.RecursiveLocRef) (entry.position) entry.key None ] else OK
         | false ->
             match r |> seq |> Seq.exists (fun c -> Char.IsLower(c)) && not (List.contains r hardcodedLocalisation) with
             | true -> Invalid [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ]

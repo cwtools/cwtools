@@ -48,8 +48,12 @@ module Files =
             }
         do logNormal (sprintf "Workspace root is %s, exists: %b" rootDirectory (Directory.Exists rootDirectory))
         let allDirsBelowRoot = if Directory.Exists rootDirectory then getAllFoldersUnion [rootDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
-        let stellarisDirectory =
-            let dir = allDirsBelowRoot |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName || folder.ToLower() = "game") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
+        let isVanillaDirectory =
+            let dir =
+                allDirsBelowRoot
+                |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName || folder.ToLower() = "game" || folder.ToLower() = gameDirName.Replace(" ", "_"))
+                |> Option.map (fst)
+                |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
             |Some s -> logNormal (sprintf "Found %s directory at %s" gameDirName s)
             |None -> logNormal (sprintf "Couldn't find vanilla %s directory, falling back to embedded vanilla files" gameDirName)
@@ -86,7 +90,7 @@ module Files =
 
 
         let allFolders =
-            match stellarisDirectory, scope with
+            match isVanillaDirectory, scope with
             |None, _ ->
                 // if modFolders.Length > 0 then modFolders
                 // else
@@ -142,6 +146,6 @@ module Files =
         member __.AllFilesByPath() = allFilesByPath
         member __.AllFolders() = allFolders
         member __.LocalisationFiles() = locFolders
-        member __.ShouldUseEmbedded = stellarisDirectory.IsNone
+        member __.ShouldUseEmbedded = isVanillaDirectory.IsNone
         member __.ScopeDirectory = normalisedScopeDirectory
         member __.ConvertPathToLogicalPath(path : string) = convertPathToLogicalPath path

@@ -88,13 +88,13 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         timer.Start()
         let res =
             match filepath with
-            |x when x.EndsWith (".yml") ->
+            | x when x.EndsWith (".yml") ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                 let resourceInput = LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
                 let resource, _ = this.Resources.UpdateFile(resourceInput)
                 match resource with
-                |FileWithContentResource (_, r) -> this.LocalisationManager.UpdateLocalisationFile r
-                |_ -> logNormal (sprintf "Localisation file failed to parse %s" filepath)
+                | FileWithContentResource (_, r) -> this.LocalisationManager.UpdateLocalisationFile r
+                | _ -> logNormal (sprintf "Localisation file failed to parse %s" filepath)
                 let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities()))
                 let ges = globalLocalisation(this)
                 this.LocalisationManager.localisationErrors <- Some les
@@ -106,12 +106,12 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
                 let newEntities = [this.Resources.UpdateFile (resource)] |> List.choose snd
                 afterUpdateFile this filepath
                 match shallow with
-                |true ->
+                | true ->
                     let (shallowres, _) = (validationManager.Validate(shallow, newEntities))
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     let deep = errorCache |> Map.tryFind filepath |> Option.defaultValue []
                     shallowres @ deep
-                |false ->
+                | false ->
                     let (shallowres, deepres) = (validationManager.Validate(shallow, newEntities))
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     errorCache <- errorCache.Add(filepath, deepres)
