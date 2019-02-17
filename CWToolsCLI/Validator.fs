@@ -57,6 +57,7 @@ module Validator =
                 localisationCommands = []
             }
             scriptFolders = None
+            excludeGlobPatterns = None
         }
         let HOI4options : HOI4Settings = {
             rootDirectory = dir
@@ -77,6 +78,7 @@ module Validator =
                 localisationCommands = []
             }
             scriptFolders = None
+            excludeGlobPatterns = None
         }
         let game = STLGame(STLoptions) :> IGame<STLComputedData, STLConstants.Scope, STLConstants.Modifier>
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>

@@ -41,6 +41,7 @@ let emptyStellarisSettings (rootDirectory) = {
         localisationCommands = []
     }
     scriptFolders = None
+    excludeGlobPatterns = None
 }
 let rec getAllFolders dirs =
     if Seq.isEmpty dirs then Seq.empty else

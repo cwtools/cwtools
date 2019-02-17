@@ -7,6 +7,7 @@ open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 open FParsec
 open CWTools.Utilities.Utils
+open DotNet.Globbing
 
 module Files =
 
@@ -16,7 +17,12 @@ module Files =
         |Mods
         |Vanilla
 
-    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding) =
+    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding, ignoreGlobList : string list) =
+        let excludeGlobTest =
+            let globs = ignoreGlobList |> List.map Glob.Parse
+            (fun (path : string) ->
+                globs |> List.exists (fun g -> (g.IsMatch(path)))
+                )
         let normalisedScopeDirectory = rootDirectory.Replace("\\","/").TrimStart('.')
         do log (sprintf "normalised %s" normalisedScopeDirectory)
         let normalisedScopeDirectoryLength = normalisedScopeDirectory.Length
@@ -117,6 +123,7 @@ module Files =
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
                         |> List.distinct
+                        |> List.filter (fun (_, f) -> f |> excludeGlobTest |> not)
             let fileToResourceInput (scope, filepath : string) =
                 match Path.GetExtension(filepath) with
                 |".txt"

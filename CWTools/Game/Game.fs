@@ -42,6 +42,7 @@ type GameSettings<'M, 'S when 'S : comparison> = {
     validation : ValidationSettings
     rules : RulesSettings option
     scriptFolders : string list option
+    excludeGlobPatterns : string list option
     modFilter : string option
     scope : FilesScope
 }
@@ -54,8 +55,8 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
      globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
      afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
-
-    let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding)
+    let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
+    let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : FoldRules<_> option = None
