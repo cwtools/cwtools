@@ -236,7 +236,7 @@ let testsv =
 
                 let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, Scope.Any, [], STL STLLang.Default)
                 let pos = mkPos 3 8
-                let suggestions = comp.Complete(pos, entity) |> Seq.map (function |CompletionResponse.Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |CompletionResponse.Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -251,7 +251,7 @@ let testsv =
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, Scope.Any, [], STL STLLang.Default)
                 let pos = mkPos 3 3
-                let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -277,7 +277,7 @@ let testsv =
                 let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
                 let comp = CompletionService([TypeRule ("ship_size", ConfigParser.shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, Scope.Any, [], STL STLLang.Default)
-                let res = comp.Complete(pos, entity)
+                let res = comp.Complete(pos, entity, None)
                 eprintfn "res4 %A" res
                 let suggestions = res |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort

@@ -27,16 +27,21 @@ module LanguageFeatures =
         let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
         FileWithContentResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
 
-    let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
+    let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (infoService : FoldRules<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
         let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
-        match resourceManager.ManualProcessResource resource, completionService with
-        |Some e, Some completion ->
+        match (resourceManager.ManualProcessResource resource, completionService, infoService) with
+        | Some e, Some completion, Some info ->
             log (sprintf "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
-            //log "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-            completion.Complete(pos, e)
-        |_, _ -> []
+            match (info.GetInfo)(pos, e) with
+            | Some (ctx, _) ->
+                completion.Complete(pos, e, Some ctx)
+            | _ ->
+                []
+        | Some e, Some completion, None ->
+            completion.Complete(pos, e, None)
+        | _, _, _ -> []
 
 
     let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) =

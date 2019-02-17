@@ -515,7 +515,7 @@ type STLGame (settings : StellarisSettings) =
             member __.UpdateFile shallow file text = game.UpdateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
             member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
-            member __.Complete pos file text = completion fileManager game.completionService game.ResourceManager pos file text
+            member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text =
                 scopesAtPosSTL pos file text
                 |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})

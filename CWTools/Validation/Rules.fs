@@ -1278,7 +1278,7 @@ module rec Rules =
                                                     |> List.map (fun s -> "event_target:" + s)
             evs @ gevs @ oneToOneScopes
 
-        let createSnippetForClause (rules : NewRule<_> list) (description : string option) (key : string) =
+        let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
             let filterToCompletion =
                 function
                 |LeafRule(ValueField(ValueType.Specific _), _) -> true
@@ -1302,7 +1302,9 @@ module rec Rules =
                                       |> List.distinctBy (fun (f, _) -> ruleToDistinctKey f)
                                       |> List.mapi (fun i (f, _) -> rulePrint i f)
                                       |> String.concat ""
-            CompletionResponse.CreateSnippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
+
+            let score = scoreFunction key
+            CompletionResponse.Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description, Some score)
 
 
         let rec getRulePath (pos : pos) (stack : (string * int * string option) list) (node : Node) =
@@ -1321,15 +1323,17 @@ module rec Rules =
                         |false -> (l.Key, countChildren node l.Key, Some l.ValueText)::stack
                     | None -> stack
 
-        and getCompletionFromPath (rules : NewRule<_> list) (stack : (string * int * string option) list) =
+        and getCompletionFromPath (scoreFunction : 'T list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option) list) scopeContext =
             // log (sprintf "%A" stack)
-            let rec convRuleToCompletion (count : int) (rule : NewRule<_>) =
+            let rec convRuleToCompletion (count : int) (context : ScopeContext<_>) (rule : NewRule<_>) =
                 let r, o = rule
+                let scoreFunction = scoreFunction o.requiredScopes context
+                let createSnippetForClause = createSnippetForClause scoreFunction
                 let enough = o.max <= count
                 if enough
                 then []
                 else
-                    let keyvalue (inner : string) = CompletionResponse.CreateSnippet (inner, (sprintf "%s = $0" inner), o.description)
+                    let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunction inner))
                     match r with
                     |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
                         [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s)]
@@ -1450,7 +1454,7 @@ module rec Rules =
                 severity = Severity.Error
             }
 
-            let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option) list) =
+            let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option) list) (scopeContext) =
                 let subtypedRules =
                     rules |> List.collect (
                         function
@@ -1463,15 +1467,15 @@ module rec Rules =
                         | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
                         |x -> [x])
                 match stack with
-                |[] -> expandedRules |> List.collect (convRuleToCompletion 0)
-                |(key, count, None)::rest ->
-                    match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) |_ -> None) with
-                    |[] -> expandedRules |> List.collect (convRuleToCompletion count)
-                    |fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest)
-                |(key, count, Some _)::rest ->
-                    match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) |_ -> None) with
-                    |[] -> expandedRules |> List.collect (convRuleToCompletion count)
-                    |fs ->
+                | [] -> expandedRules |> List.collect (convRuleToCompletion 0 scopeContext)
+                | (key, count, None)::rest ->
+                    match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
+                    | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
+                    | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
+                | (key, count, Some _)::rest ->
+                    match expandedRules |> List.choose (function | (LeafRule (l, r), o) when checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) | _ -> None) with
+                    | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
+                    | fs ->
                         //log "%s %A" key fs
                         let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
                         //log "res %A" res
@@ -1503,11 +1507,26 @@ module rec Rules =
                     //     |None, None, None ->
                     //         expandedRules |> List.collect convRuleToCompletion
                     // |fs -> fs |> List.collect (fun (_, _, f) -> fieldToRules f)
-            let res = findRule rules stack |> List.distinct
+            let res = findRule rules stack scopeContext |> List.distinct
             //log "res2 %A" res
             res
+        let scoreFunction (allUsedKeys : string list) (requiredScopes : 'T list) (currentContext : ScopeContext<_>) (key : string) =
+            let validScope =
+                match requiredScopes with
+                | [] -> true
+                | xs ->
+                    match currentContext.CurrentScope with
+                    | x when x = anyScope -> true
+                    | s -> List.exists s.MatchesScope xs
+            let usedKey = List.contains key allUsedKeys
+            match validScope, usedKey with
+            | true, true -> 100
+            | true, false -> 50
+            | false, true -> 10
+            | false, false -> 1
 
-        let complete (pos : pos) (entity : Entity) =
+        let complete (pos : pos) (entity : Entity) (scopeContext : ScopeContext<_> option) =
+            let scopeContext = Option.defaultValue defaultContext scopeContext
             let path = getRulePath pos [] entity.entity |> List.rev
             log (sprintf "%A" path)
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
@@ -1526,15 +1545,17 @@ module rec Rules =
                 |(AnyKey) -> true
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
+            let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
+            let scoreFunction = scoreFunction allUsedKeys
             let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option) list) =
                 let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
                 match skipRootKeyStack, path with
                 |_, [] ->
-                    getCompletionFromPath typerules []
+                    getCompletionFromPath scoreFunction typerules [] scopeContext
                 |[], (head, c, _)::tail ->
                     if typekeyfilter t head
                     then
-                        getCompletionFromPath typerules ((t.name, c, None)::tail) else []
+                        getCompletionFromPath scoreFunction typerules ((t.name, c, None)::tail) scopeContext else []
                 |head::tail, (pathhead, _, _)::pathtail ->
                     if skiprootkey head pathhead
                     then validateTypeSkipRoot t tail pathtail
@@ -1546,14 +1567,14 @@ module rec Rules =
                     staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
                 |_ ->
                     pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
-            let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
             let scoreForLabel (label : string) =
                 if allUsedKeys |> List.contains label then 10 else 1
             items |> List.map
                         (function
-                         |Simple (label, _) -> Simple (label, Some (scoreForLabel label))
-                         |Detailed (label, desc, _) -> Detailed (label, desc, Some (scoreForLabel label))
-                         |Snippet (label, snippet, desc, _) -> Snippet(label, snippet, desc, Some (scoreForLabel label))
+                         | Simple (label, None) -> Simple (label, Some (scoreForLabel label))
+                         | Detailed (label, desc, None) -> Detailed (label, desc, Some (scoreForLabel label))
+                         | Snippet (label, snippet, desc, None) -> Snippet(label, snippet, desc, Some (scoreForLabel label))
+                         | x -> x
                          )
             // pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
             // let skipcomp =
@@ -1583,7 +1604,7 @@ module rec Rules =
             // //log "res3 %A" res
             // res
         //(fun (pos, entity) -> complete pos entity)
-        member __.Complete(pos : pos, entity : Entity) = complete pos entity
+        member __.Complete(pos : pos, entity : Entity, scopeContext) = complete pos entity scopeContext
 
     let getTypesFromDefinitions (ruleapplicator : RuleApplicator<_>) (types : TypeDefinition<_> list) (es : Entity list) =
         let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath), e.validate)
