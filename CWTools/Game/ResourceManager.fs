@@ -188,6 +188,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         |x when globCheckFilepath "**/common/component_templates/*.txt" x -> EntityType.ComponentTemplates
         |x when globCheckFilepath "**/common/country_customization/*.txt" x -> EntityType.CountryCustomization
         |x when globCheckFilepath "**/common/country_types/*.txt" x -> EntityType.CountryTypes
+        |x when globCheckFilepath "**/common/decisions/*.txt" x -> EntityType.Decisions
         |x when globCheckFilepath "**/common/deposits/*.txt" x -> EntityType.Deposits
         |x when globCheckFilepath "**/common/diplo_phrases/*.txt" x -> EntityType.DiploPhrases
         |x when globCheckFilepath "**/common/diplomatic_actions/*.txt" x -> EntityType.DiplomaticActions

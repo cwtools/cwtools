@@ -279,6 +279,7 @@ module STLConstants =
     |GfxGfx = 88
     |Other = 89
     |GfxAsset = 90
+    |Decisions = 91
 
     let scriptFolders = [
         "common";
