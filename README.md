@@ -2,6 +2,12 @@
 A library for parsing, editing, and validating Paradox Interactive script files.  
 Supports all modern Paradox Interactive games, and targets .net standard 2.0.
 
+## Projects that use CW Tools
+#### [Stellaris tech tree](http://www.draconas.co.uk/stellaristech): https://github.com/draconas1/stellaris-tech-tree
+An interactive tech tree visualiser that uses CW Tools to parse the vanilla tech files, and extract localisation.
+#### [SC Mod Manager](https://github.com/WojciechKrysiak/SCModManager): https://github.com/WojciechKrysiak/SCModManager/tree/feature/PortToAvalonia/PDXModLib/Utility
+A mod manager that uses CW Tools for parsing and manipulating mod files.
+
 ## Example usage (C#)
 This is a simple example of loading an event file, modifying it, and printing the updated events.
 ```csharp
