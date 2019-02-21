@@ -2,7 +2,7 @@ namespace CWTools.Common
 open CWTools.Utilities.Position
 
 type Game = |CK2 = 0 |HOI4 = 1 |EU4 = 2 |STL = 3
-type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4
+type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Default = 5
 type STLLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6  |Default = 7 |Chinese = 8
 type HOI4Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6 |Default = 7 //Default doesnt' exist!
 type EU4Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Default = 4
