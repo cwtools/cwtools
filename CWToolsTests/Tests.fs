@@ -104,7 +104,7 @@ let tests =
         testList "no loc" [
                 let configtext = ["./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt"]
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
-                let settings = { settings with rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false } }
+                let settings = { settings with rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false} }
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let parseErrors = stl.ParserErrors()
                 let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k) -> n)
@@ -137,7 +137,7 @@ let tests =
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles]; localisationCommands = locCommands };
                                             validation = {settings.validation with langs = [STL STLLang.English; STL STLLang.German] };
-                                            rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false } }
+                                            rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false} }
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let parseErrors = stl.ParserErrors()
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
@@ -192,7 +192,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly} else None}
+                                            rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
@@ -246,7 +246,7 @@ let testConfigFolder folder testsname config configfile (culture : string) =
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = false} else None}
+                                            rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = false; debugMode = false} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
@@ -410,7 +410,7 @@ let overwriteTests =
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };
-                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false}}
+                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)

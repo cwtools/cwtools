@@ -62,7 +62,7 @@ let perf(b) =
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
-                                    rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false}}
+                                    rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false; debugMode = false}}
     let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
@@ -82,7 +82,7 @@ let perf2(b) =
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest2/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
-                                    rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false}}
+                                    rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false; debugMode = false}}
     let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)

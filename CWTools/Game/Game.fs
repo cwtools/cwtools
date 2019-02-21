@@ -35,6 +35,7 @@ type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
     debugRulesOnly : bool
+    debugMode : bool
 }
 type GameSettings<'M, 'S when 'S : comparison> = {
     rootDirectory : string
@@ -67,6 +68,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = Lookup<'S, 'M>()
     let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation)
+    let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
     let validationServices() =
         {
             resources = resourceManager.Api
@@ -75,7 +77,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             foldRules = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
-    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, noneContext)
+    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, if debugMode then noneContext else defaultContext)
 
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
@@ -177,7 +179,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.Settings = settings
     member __.UpdateFile shallow file text = updateFile shallow file text
     member __.RefreshValidationManager() =
-        validationManager <- ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, noneContext)
+        validationManager <- ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext,if debugMode then noneContext else defaultContext)
 
     member this.InfoAtPos pos file text = LanguageFeatures.symbolInformationAtPos this.FileManager this.ResourceManager this.InfoService this.Lookup pos file text
     static member CreateGame settings afterInit =

@@ -372,7 +372,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false})
+        member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = refreshRuleCaches game None
         member __.ForceRecompute() = resources.ForceRecompute()
         member __.Types() = game.Lookup.typeDefInfo
