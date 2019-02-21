@@ -66,7 +66,6 @@ module EU4Scopes =
         // "PREVPREVPREVPREV", prev >> prev >> prev >> prev
         "AND", id;
         "OR", id;
-        "NOR", id;
         "NOT", id;
         "hidden_effect", id;
         "hidden_trigger", id;
