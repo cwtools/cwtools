@@ -25,7 +25,7 @@ module CK2Localisation =
             let retry file msg =
                 let rows = LocalisationEntryFallback.ParseRows file |> List.ofSeq
                 csvFallback <- rows @ csvFallback
-                (false, rows.Length, msg)
+                (false, rows.Length, msg, None)
             let file =
                 File.ReadAllLines(x, System.Text.Encoding.GetEncoding(1252))
                 |> Array.filter(fun l -> l.StartsWith("#CODE") || not(l.StartsWith("#")))
@@ -33,22 +33,22 @@ module CK2Localisation =
             try
                 let rows = LocalisationEntry.ParseRows file |> List.ofSeq
                 csv <- rows @ csv
-                (true, rows.Length, "")
+                (true, rows.Length, "", None)
             with
             | Failure msg ->
                 try
                     retry file msg
                 with
                 | Failure msg ->
-                    (false, 0, msg)
+                    (false, 0, msg, None)
             | exn ->
                 try
                     retry file exn.Message
                 with
                 | Failure msg ->
-                    (false, 0, msg)
+                    (false, 0, msg, None)
 
-        let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
+        let mutable results : Results = upcast new Dictionary<string, (bool * int * string * FParsec.Position option)>()
         let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
 
         let getForLang language (x : LocalisationEntry.Row) =

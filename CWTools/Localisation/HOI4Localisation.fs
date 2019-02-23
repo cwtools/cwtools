@@ -32,7 +32,7 @@ module HOI4Localisation =
             |"l_polish" -> Some HOI4Lang.Polish
             |"l_braz_por" -> Some HOI4Lang.Braz_Por
             |_ -> None
-        let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
+        let mutable results : Results = upcast new Dictionary<string, (bool * int * string * Position option)>()
         let mutable recordsL : struct (Entry * Lang) list = []
         let mutable records : struct (Entry * Lang) array = [||]
         let addFile f t =
@@ -42,11 +42,11 @@ module HOI4Localisation =
                 match keyToLanguage key with
                 |Some l ->
                     let es = entries |> List.map (fun e -> struct (e, HOI4 l))
-                    recordsL <- es@recordsL; (true, es.Length, "")
+                    recordsL <- es@recordsL; (true, es.Length, "", None)
                 |None ->
-                    (true, entries.Length, "")
-            | Failure(msg, _, _) ->
-                (false, 0, msg)
+                    (true, entries.Length, "", None)
+            | Failure(msg, p, _) ->
+                (false, 0, msg, Some p.Position)
         let addFiles (x : (string * string) list) = List.map (fun (f, t )-> (f, addFile f t)) x
 
         let recordsLang (lang : Lang) = records |> Array.choose (function |struct (r, l) when l = lang -> Some r |_ -> None) |> List.ofArray

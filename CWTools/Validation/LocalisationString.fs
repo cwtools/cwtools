@@ -6,6 +6,7 @@ open CWTools.Utilities.Utils
 open CWTools.Validation.ValidationCore
 open System
 open CWTools.Localisation
+open CWTools.Utilities.Position
 
 module LocalisationString =
     type LocElement =
@@ -79,3 +80,10 @@ module LocalisationString =
                 Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None]
             | _ -> OK
         keycommands <&!&> validateCommand
+
+    let private getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
+
+    let validateLocalisationSyntax (results : Results) =
+        results.Values |> List.ofSeq
+                       |> List.filter (fun (v, _, _, _) -> not v)
+                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid [("CW001", Severity.Error, (getRange pos.Value pos.Value), 0, error, None)] else OK)

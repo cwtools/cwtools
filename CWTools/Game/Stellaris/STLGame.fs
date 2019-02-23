@@ -42,6 +42,7 @@ open System.Text
 open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 open CWTools.Common
+open CWTools.Validation.LocalisationString
 
 // type EmbeddedSettings = {
 //     triggers : DocEffect list
@@ -136,8 +137,9 @@ module STLGameFunctions =
                         |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
                         |> List.map (fun f -> f.filepath)
         let locFileValidation = validateLocalisationFiles locfiles
+        let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc <&&> locParseErrors |> (function |Invalid es -> es |_ -> [])
 
     let updateModifiers(game : GameObject) =
         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
@@ -504,6 +506,7 @@ type STLGame (settings : StellarisSettings) =
             member __.Folders() = fileManager.AllFolders()
             member __.AllFiles() =
                 resources.GetResources()
+            member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
                 // |> List.map
                 //     (function
                 //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
@@ -524,6 +527,7 @@ type STLGame (settings : StellarisSettings) =
             member __.InfoAtPos pos file text = game.InfoAtPos pos file text
             member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
             member __.RefreshCaches() = refreshRuleCaches game None
+            member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
             member __.ForceRecompute() = resources.ForceRecompute()
             member __.Types() = game.Lookup.typeDefInfo
 

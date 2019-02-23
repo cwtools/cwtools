@@ -330,6 +330,7 @@ type CK2Game(settings : CK2Settings) =
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() =
             resources.GetResources()
+        member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
             // |> List.map
             //     (function
             //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
@@ -348,6 +349,7 @@ type CK2Game(settings : CK2Settings) =
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = refreshRuleCaches game None
+        member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()
         member __.Types() = game.Lookup.typeDefInfo
 

@@ -2,6 +2,7 @@ namespace CWTools.Localisation
 open System.Collections.Generic
 open CWTools.Common
 open CWTools.Utilities.Position
+open FParsec
 
 [<Struct>]
 type Entry = {
@@ -14,10 +15,10 @@ type Entry = {
 type GetDesc = string -> string
 type GetKeys = string list
 type Values = IDictionary<string, string>
-type Results = IDictionary<string, (bool * int * string)>
+type Results = IDictionary<string, (bool * int * string * Position option)>
 
 type ILocalisationAPI =
-    abstract Results : IDictionary<string, (bool * int * string)>
+    abstract Results : Results
     abstract ValueMap : Map<string, Entry>
     abstract Values : IDictionary<string, string>
     abstract GetKeys : string list

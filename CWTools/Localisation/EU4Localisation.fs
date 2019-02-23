@@ -30,7 +30,7 @@ module EU4Localisation =
             |"l_spanish" -> Some EU4Lang.Spanish
             |"l_german" -> Some EU4Lang.German
             |_ -> None
-        let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
+        let mutable results : Results = upcast new Dictionary<string, (bool * int * string * Position option)>()
         let mutable records : struct (Entry * Lang) array = [||]
         let mutable recordsL : struct (Entry * Lang) list = []
 
@@ -41,11 +41,11 @@ module EU4Localisation =
                 match keyToLanguage key with
                 |Some l ->
                     let es = entries |> List.map (fun e -> struct (e, EU4 l))
-                    recordsL <- es@recordsL; (true, es.Length, "")
+                    recordsL <- es@recordsL; (true, es.Length, "", None)
                 |None ->
-                    (true, entries.Length, "")
-            | Failure(msg, _, _) ->
-                (false, 0, msg)
+                    (true, entries.Length, "", None)
+            | Failure(msg, p, _) ->
+                (false, 0, msg, Some p.Position)
 
         // let addFile f =
         //     match parseLocFile f with
@@ -108,4 +108,3 @@ module EU4Localisation =
             }
         interface ILocalisationAPICreator with
             member this.Api l = this.Api l
-            

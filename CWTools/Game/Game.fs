@@ -98,11 +98,12 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
                 match resource with
                 | FileWithContentResource (_, r) -> this.LocalisationManager.UpdateLocalisationFile r
                 | _ -> logNormal (sprintf "Localisation file failed to parse %s" filepath)
-                let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities()))
+                // let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities()))
                 let ges = globalLocalisation(this)
-                this.LocalisationManager.localisationErrors <- Some les
+                // this.LocalisationManager.localisationErrors <- Some les
                 this.LocalisationManager.globalLocalisationErrors <- Some ges
-                les @ ges
+                []
+                // les @ ges
             | _ ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
                 let resource = LanguageFeatures.makeEntityResourceInput fileManager filepath file

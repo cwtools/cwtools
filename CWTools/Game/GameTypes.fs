@@ -30,12 +30,14 @@ type IGame =
     abstract LocalisationErrors : bool * bool -> CWError list
     abstract Folders : unit -> (string * string) list
     abstract AllFiles : unit -> Resource list
+    abstract AllLoadedLocalisation : unit -> string list
     abstract UpdateFile : bool -> string -> string option -> CWError list
     abstract Complete : pos -> string -> string -> CompletionResponse list
     abstract GoToType : pos -> string -> string -> range option
     abstract FindAllRefs : pos -> string -> string -> range list option
     abstract ReplaceConfigRules : (string * string) list -> unit
     abstract RefreshCaches : unit -> unit
+    abstract RefreshLocalisationCaches : unit -> unit
     abstract ForceRecompute : unit -> unit
     abstract Types : unit ->  Map<string,(string * range) list>
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option

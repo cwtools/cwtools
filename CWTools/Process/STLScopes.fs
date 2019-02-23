@@ -481,6 +481,7 @@ module STLScopes =
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("space_owner", [Scope.Ship; Scope.Fleet; Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true);
     ]
     let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
 
