@@ -24,7 +24,19 @@ module CK2Constants =
         override x.ToString() =
             match x with
             | Any -> "Any/Unknown"
-            | x -> sprintf "%A" x
+            | Character -> "Character"
+            | Title -> "Title"
+            | Province -> "Province"
+            | Offmap -> "Offmap"
+            | War -> "War"
+            | Siege -> "Siege"
+            | Unit -> "Unit"
+            | Religion -> "Religion"
+            | Culture -> "Culture"
+            | Society -> "Society"
+            | Artifact -> "Artifact"
+            | Bloodline -> "Bloodline"
+            | InvalidScope -> "InvalidScope"
 
         static member AnyScope = Scope.Any
 

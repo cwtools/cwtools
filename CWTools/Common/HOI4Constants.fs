@@ -17,8 +17,11 @@ module HOI4Constants =
         override x.ToString() =
             match x with
             |UnitLeader -> "Unit leader"
+            |State -> "State"
+            |Air -> "Air"
+            |InvalidScope -> "Invalid Scope"
+            |Country -> "Country"
             |Any -> "Any/Unknown"
-            |x -> sprintf "%A" x
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any

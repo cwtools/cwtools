@@ -81,7 +81,6 @@ module HOI4GameFunctions =
         |Some pf ->
             let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
-            log (sprintf "%A" provinces)
             game.Lookup.HOI4provinces <- provinces
 
     let updateScriptedEffects(rules :RootRule<Scope> list) (states : string list) (countries : string list) =

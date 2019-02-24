@@ -53,6 +53,7 @@ module Scopes =
         member this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
         member this.GetFrom i =
              if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
+        
 
     type LocContextResult<'S when 'S :> IScope<'S>> =
         | Start of startContext : ScopeContext<'S>

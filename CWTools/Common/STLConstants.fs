@@ -37,7 +37,25 @@ module STLConstants =
             |AmbientObject -> "Ambient object"
             |PopFaction -> "Pop faction"
             |Any -> "Any/Unknown"
-            |x -> sprintf "%A" x
+            |Country -> "Country"
+            |Leader -> "Leader"
+            |Planet -> "Planet"
+            |Ship -> "Ship"
+            |Fleet -> "Fleet"
+            |Pop -> "Pop"
+            |Army -> "Army"
+            |Tile -> "Tile"
+            |Species -> "Species"
+            |Sector -> "Sector"
+            |Alliance -> "Alliance"
+            |War -> "War"
+            |Megastructure -> "Megastructure"
+            |Any -> "Any"
+            |Design -> "Design"
+            |Starbase -> "Starbase"
+            |Star -> "Star"
+            |Deposit -> "Deposit"
+            |InvalidScope -> "Invalid Scope"
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any

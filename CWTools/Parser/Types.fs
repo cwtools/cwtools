@@ -23,8 +23,8 @@ module rec Types =
                 | QString s -> "\"" + s + "\""
                 | String s -> s
                 | Bool b -> if b then "yes" else "no"
-                | Float f -> sprintf "%A" f
-                | Int i -> sprintf "%A" i
+                | Float f -> sprintf "%f" f
+                | Int i -> sprintf "%i" i
         //memoize id inner
         inner
     [<Struct>]
@@ -46,8 +46,8 @@ module rec Types =
             | QString s -> s
             | String s -> s
             | Bool b -> if b then "yes" else "no"
-            | Float f -> sprintf "%A" f
-            | Int i -> sprintf "%A" i
+            | Float f -> sprintf "%f" f
+            | Int i -> sprintf "%i" i
     and [<CustomEquality; NoComparison; Struct>] PosKeyValue  =
         | PosKeyValue of range * KeyValueItem
         override x.Equals(y) =

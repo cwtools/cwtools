@@ -33,7 +33,7 @@ module LanguageFeatures =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match (resourceManager.ManualProcessResource resource, completionService, infoService) with
         | Some e, Some completion, Some info ->
-            log (sprintf "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            log (sprintf "completion %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             | Some (ctx, _) ->
                 completion.Complete(pos, e, Some ctx)
@@ -48,7 +48,7 @@ module LanguageFeatures =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
-            log (sprintf "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, Some (t, tv)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
@@ -59,7 +59,7 @@ module LanguageFeatures =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
-            log (sprintf "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            log (sprintf "findRefs %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, Some ((t : string), tv)) ->
                 //log "tv %A %A" t tv
@@ -88,7 +88,7 @@ module LanguageFeatures =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
-            log (sprintf "symbolInfoAtPos %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            log (sprintf "symbolInfoAtPos %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, Some (t, tv)) ->
                 match lookup.typeDefs |> List.tryFind (fun td -> td.name = t) with

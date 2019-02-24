@@ -23,8 +23,18 @@ module EU4Constants =
         override x.ToString() =
             match x with
             |TradeNode -> "Trade node"
+            |Country -> "Country"
+            |Province -> "Province"
+            |Unit -> "Unit"
+            |Monarch -> "Monarch"
+            |Heir -> "Heir"
+            |Consort -> "Consort"
+            |RebelFaction -> "Rebel Faction"
+            |Religion -> "Religion"
+            |Culture -> "Culture"
+            |Advisor -> "Advisor"
+            |InvalidScope -> "Invalid Scope"
             |Any -> "Any/Unknown"
-            |x -> sprintf "%A" x
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any

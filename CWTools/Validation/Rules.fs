@@ -97,7 +97,7 @@ module rec Rules =
                     | None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.Enum e ->
                     match enumsMap.TryFind e with
-                    | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
+                    | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %O" desc es) severity) leafornode <&&&> errors
                     | None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
                 | ValueType.Specific s ->
                     // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
@@ -241,7 +241,7 @@ module rec Rules =
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
-        |WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode <&&&> errors
+        |WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |_ -> errors
@@ -499,18 +499,18 @@ module rec Rules =
                 |LeafValueRule(AliasField(_)), _ -> innerErrors
                 |NodeRule(l, _), opts ->
                     let total = node.Children |> List.filter (fun child -> checkLeftField p l child.KeyId.lower child.Key) |> List.length
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %A, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
                 |LeafRule(l, r), opts ->
                     let total = node.Values |> List.filter (fun leaf -> checkLeftField p l leaf.KeyId.lower leaf.Key) |> List.length
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %A %A, expecting at most %i" l r opts.max) Severity.Warning) node <&&&> innerErrors
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
                 |LeafValueRule(l), opts ->
                     let total = node.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField p l leafvalue.ValueId.lower leafvalue.Key) |> List.length
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %A, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %O, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
                 |_ -> innerErrors
             (applyToAll startNode.Leaves valueFun errors)
@@ -1047,7 +1047,6 @@ module rec Rules =
                     ctx = ctx
                     severity = Severity.Error
                 }
-
                 let inner (child : Child) =
                     match child with
                     |NodeC c ->
@@ -1218,6 +1217,10 @@ module rec Rules =
             let ctx = OK
             let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             res
+
+
+
+
         let convertToOutput s =
             {
                 OutputScopeContext.From = s.From |> List.map (fun f -> f :> obj :?> 'T2)

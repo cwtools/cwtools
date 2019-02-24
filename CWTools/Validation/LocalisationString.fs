@@ -37,7 +37,7 @@ module LocalisationString =
             match cr with
             | LocContextResult.Found _ -> OK
             | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
-            | LocContextResult.NewScope s -> Invalid [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %A" s) Severity.Error ) (e.position) e.key None ]
+            | LocContextResult.NewScope s -> Invalid [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %O" s) Severity.Error ) (e.position) e.key None ]
             | LocContextResult.WrongScope (c, actual, (expected : 'S list)) ->
                 Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (e.position) e.key None]
             | _ -> OK
