@@ -27,6 +27,8 @@ module rec ConfigParser =
     | Int of minmaxi: (int*int)
     | Percent
     | Date
+    | CK2DNA
+    | CK2DNAProperty
 
     type TypeType =
     | Simple of string
@@ -269,77 +271,79 @@ module rec ConfigParser =
 
     let processKey parseScope anyScope =
         function
-        |"scalar" -> ValueField ValueType.Scalar
-        |"bool" -> ValueField ValueType.Bool
-        |"percentage_field" -> ValueField ValueType.Percent
-        |"localisation" -> LocalisationField false
-        |"localisation_synced" -> LocalisationField true
-        |"filepath" -> FilepathField
-        |"date_field" -> ValueField Date
-        |x when x.StartsWith "<" && x.EndsWith ">" ->
+        | "scalar" -> ValueField ValueType.Scalar
+        | "bool" -> ValueField ValueType.Bool
+        | "percentage_field" -> ValueField ValueType.Percent
+        | "localisation" -> LocalisationField false
+        | "localisation_synced" -> LocalisationField true
+        | "filepath" -> FilepathField
+        | "date_field" -> ValueField Date
+        | x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (TypeType.Simple (x.Trim([|'<'; '>'|])))
-        |x when x.Contains "<" && x.Contains ">" ->
+        | x when x.Contains "<" && x.Contains ">" ->
             let prefixI = x.IndexOf "<"
             let suffixI = x.IndexOf ">"
             TypeField (TypeType.Complex (x.Substring(0,prefixI), x.Substring(prefixI + 1, suffixI - prefixI - 1), x.Substring(suffixI + 1)))
-        |"int" -> defaultInt
-        |x when x.StartsWith "int[" ->
+        | "int" -> defaultInt
+        | x when x.StartsWith "int[" ->
             match getIntSettingFromString x with
-            |Some (min, max) -> ValueField (ValueType.Int (min, max))
-            |None -> (defaultInt)
-        |"float" -> defaultFloat
-        |x when x.StartsWith "float" ->
+            | Some (min, max) -> ValueField (ValueType.Int (min, max))
+            | None -> (defaultInt)
+        | "float" -> defaultFloat
+        | x when x.StartsWith "float" ->
             match getFloatSettingFromString x with
-            |Some (min, max) -> ValueField (ValueType.Float (min, max))
-            |None -> (defaultFloat)
-        |x when x.StartsWith "enum[" ->
+            | Some (min, max) -> ValueField (ValueType.Float (min, max))
+            | None -> (defaultFloat)
+        | x when x.StartsWith "enum[" ->
             match getSettingFromString x "enum" with
-            |Some (name) -> ValueField (ValueType.Enum name)
-            |None -> ValueField (ValueType.Enum "")
-        |x when x.StartsWith "icon[" ->
+            | Some (name) -> ValueField (ValueType.Enum name)
+            | None -> ValueField (ValueType.Enum "")
+        | x when x.StartsWith "icon[" ->
             match getSettingFromString x "icon" with
-            |Some (folder) -> IconField folder
-            |None -> ValueField (ValueType.Scalar)
-        |x when x.StartsWith "alias_match_left[" ->
+            | Some (folder) -> IconField folder
+            | None -> ValueField (ValueType.Scalar)
+        | x when x.StartsWith "alias_match_left[" ->
             match getSettingFromString x "alias_match_left" with
-            |Some alias -> AliasField alias
-            |None -> ValueField ValueType.Scalar
-        |x when x.StartsWith "alias_name[" ->
+            | Some alias -> AliasField alias
+            | None -> ValueField ValueType.Scalar
+        | x when x.StartsWith "alias_name[" ->
             match getSettingFromString x "alias_name" with
-            |Some alias -> AliasField alias
-            |None -> ValueField ValueType.Scalar
-        |"scope_field" -> ScopeField (anyScope)
-        |"variable_field" -> VariableField (false, (-1E+12, 1E+12))
-        |x when x.StartsWith "variable_field[" ->
+            | Some alias -> AliasField alias
+            | None -> ValueField ValueType.Scalar
+        | "scope_field" -> ScopeField (anyScope)
+        | "variable_field" -> VariableField (false, (-1E+12, 1E+12))
+        | x when x.StartsWith "variable_field[" ->
             match getFloatSettingFromString x with
-            |Some (min, max) -> VariableField (false,(min, max))
-            |None -> VariableField (false,(-1E+12, 1E+12))
-        |"int_variable_field" -> VariableField (true, (float Int32.MinValue, float Int32.MaxValue))
-        |x when x.StartsWith "int_variable_field[" ->
+            | Some (min, max) -> VariableField (false,(min, max))
+            | None -> VariableField (false,(-1E+12, 1E+12))
+        | "int_variable_field" -> VariableField (true, (float Int32.MinValue, float Int32.MaxValue))
+        | x when x.StartsWith "int_variable_field[" ->
             match getIntSettingFromString x with
-            |Some (min, max) -> VariableField (true,(float min,float max))
-            |None -> VariableField (true,(float Int32.MinValue, float Int32.MaxValue))
-        |x when x.StartsWith "value_set[" ->
+            | Some (min, max) -> VariableField (true,(float min,float max))
+            | None -> VariableField (true,(float Int32.MinValue, float Int32.MaxValue))
+        | x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
-            |Some variable ->
+            | Some variable ->
                 VariableSetField variable
-            |None -> ValueField ValueType.Scalar
-        |x when x.StartsWith "value[" ->
+            | None -> ValueField ValueType.Scalar
+        | x when x.StartsWith "value[" ->
             match getSettingFromString x "value" with
-            |Some variable ->
+            | Some variable ->
                 VariableGetField variable
-            |None -> ValueField ValueType.Scalar
-        |x when x.StartsWith "scope[" ->
+            | None -> ValueField ValueType.Scalar
+        | x when x.StartsWith "scope[" ->
             match getSettingFromString x "scope" with
-            |Some target ->
+            | Some target ->
                 ScopeField (parseScope target)
-            |None -> ValueField ValueType.Scalar
-        |x when x.StartsWith "event_target" ->
+            | None -> ValueField ValueType.Scalar
+        | x when x.StartsWith "event_target" ->
             match getSettingFromString x "event_target" with
-            |Some target ->
+            | Some target ->
                 ScopeField (parseScope target)
-            |None -> ValueField ValueType.Scalar
-        |x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|])).lower))
+            | None -> ValueField ValueType.Scalar
+        | "portait_dna_field" -> ValueField CK2DNA
+        | "portrait_properties_field" -> ValueField CK2DNAProperty
+        | x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|])).lower))
 
 
     let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =

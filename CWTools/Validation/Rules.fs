@@ -83,59 +83,72 @@ module rec Rules =
     let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) leafornode errors =
         if key |> firstCharEqualsAmp then errors else
                 match (vt) with
-                |ValueType.Scalar ->
+                | ValueType.Scalar ->
                     errors
-                |ValueType.Bool ->
+                | ValueType.Bool ->
                     if key == "yes" || key == "no" then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode <&&&> errors
-                |ValueType.Int (min, max) ->
+                | ValueType.Int (min, max) ->
                     match TryParser.parseIntWithDecimal key with
-                    |Some i ->  if i <= max && i >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leafornode <&&&> errors
-                    |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode <&&&> errors
-                |ValueType.Float (min, max) ->
+                    | Some i ->  if i <= max && i >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leafornode <&&&> errors
+                    | None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode <&&&> errors
+                | ValueType.Float (min, max) ->
                     match TryParser.parseDouble key with
-                    |Some f -> if f <= max && f >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode <&&&> errors
-                    |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode <&&&> errors
-                |ValueType.Enum e ->
+                    | Some f -> if f <= max && f >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode <&&&> errors
+                    | None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode <&&&> errors
+                | ValueType.Enum e ->
                     match enumsMap.TryFind e with
-                    |Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
-                    |None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
-                |ValueType.Specific s ->
+                    | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
+                    | None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
+                | ValueType.Specific s ->
                     // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
                     if id = s then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s))) severity) leafornode <&&&> errors
-                |ValueType.Percent ->
+                | ValueType.Percent ->
                     if key.EndsWith("%") then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode <&&&> errors
-                |ValueType.Date ->
+                | ValueType.Date ->
                     let parts = key.Split([|'.'|])
                     let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
                     if ok then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode <&&&> errors
+                | ValueType.CK2DNA ->
+                    if key.Length = 11 && key |> Seq.forall (Char.IsLetter)
+                    then errors
+                    else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a dna value, got %s" key) severity) leafornode <&&&> errors
+                | ValueType.CK2DNAProperty ->
+                    if key.Length <= 14 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
+                    then errors
+                    else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a portrait properties value, got %s" key) severity) leafornode <&&&> errors
+
     let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
-            |ValueType.Scalar ->
+            | ValueType.Scalar ->
                 true
-            |ValueType.Bool ->
-                if key == "yes" || key == "no" then true else false
-            |ValueType.Int (min, max) ->
+            | ValueType.Bool ->
+                key == "yes" || key == "no"
+            | ValueType.Int (min, max) ->
                 match TryParser.parseIntWithDecimal key with
-                |Some i ->  if i <= max && i >= min then true else false
-                |None -> false
-            |ValueType.Float (min, max) ->
+                | Some i ->  i <= max && i >= min
+                | None -> false
+            | ValueType.Float (min, max) ->
                 match TryParser.parseDouble key with
-                |Some f -> if f <= max && f >= min then true else false
-                |None -> false
-            |ValueType.Enum e ->
+                | Some f -> f <= max && f >= min
+                | None -> false
+            | ValueType.Enum e ->
                 match enumsMap.TryFind e with
-                |Some (_, es) -> if es.Contains (trimQuote key) then true else false
-                |None -> false
-            |ValueType.Specific s ->
+                | Some (_, es) -> es.Contains (trimQuote key)
+                | None -> false
+            | ValueType.Specific s ->
                 // if trimQuote key == s then true else false
-                if id = s then true else false
-            |ValueType.Percent ->
-                if key.EndsWith("%") then true else false
-            |ValueType.Date ->
+                id = s
+            | ValueType.Percent ->
+                key.EndsWith("%")
+            | ValueType.Date ->
                 let parts = key.Split([|'.'|])
-                let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
-                if ok then true else false)
+                (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+            | ValueType.CK2DNA ->
+                key.Length = 11 && key |> Seq.forall (Char.IsLetter)
+            | ValueType.CK2DNAProperty ->
+                key.Length <= 14 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
+        )
         || firstCharEqualsAmp key
 
     let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
