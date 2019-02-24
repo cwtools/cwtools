@@ -433,7 +433,16 @@ module rec Rules =
                             | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                             | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                             |x -> [])
-                    expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+                    let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+
+                    res
+                        |> Seq.fold (fun (na, la, lva) r ->
+                            match r with
+                            | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva
+                            | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva
+                            | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva
+                            | _ -> na, la, lva
+                            ) ([], [], [])
                     // seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
             memoizeRulesInner memFunction
 
@@ -441,7 +450,7 @@ module rec Rules =
         let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : Node) errors =
             let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             // TODO: Memoize expanded rules depending  on ctx.subtypes ad rules?
-            let expandedrules = memoizeRules rules ctx.subtypes
+            let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
             // let subtypedrules =
             //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else [||]) | x -> [||]))
             // let expandedbaserules =
@@ -474,15 +483,15 @@ module rec Rules =
             }
             let valueFun innerErrors (leaf : Leaf) =
                 let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
-                expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None)
+                leafrules |> Seq.filter (fun (l, r, o) -> checkLeftField p l leaf.KeyId.lower leaf.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
             let nodeFun innerErrors (node : Node) =
                 let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
-                expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l node.KeyId.lower node.Key -> Some (l, rs, o) |_ -> None)
+                noderules |> Seq.filter (fun (l, rs, o) -> checkLeftField p l node.KeyId.lower node.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
             let leafValueFun innerErrors (leafvalue : LeafValue) =
                 let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
-                expandedrules |> Seq.choose (function |(LeafValueRule (l), o) when checkLeftField p l leafvalue.ValueId.lower leafvalue.Key -> Some (l, o) |_ -> None)
+                leafvaluerules |> Seq.filter (fun (l, o) -> checkLeftField p l leafvalue.ValueId.lower leafvalue.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
             let checkCardinality (node : Node) innerErrors (rule : NewRule<_>) =
                 match rule with
@@ -752,7 +761,17 @@ module rec Rules =
                             | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                             | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                             |x -> [])
-                    expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+                    let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+
+                    res
+                        |> Seq.fold (fun (na, la, lva) r ->
+                            match r with
+                            | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva
+                            | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva
+                            | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva
+                            | _ -> na, la, lva
+                            ) ([], [], [])
+
             memoizeRulesInner memFunction
 
         let rec singleFoldRules fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
@@ -952,7 +971,7 @@ module rec Rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
                     | _ -> []
-                let expandedrules = memoizeRules rules ctx.subtypes
+                let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
                 let p = {
                     varMap = varMap
                     enumsMap = enumsMap
@@ -971,13 +990,16 @@ module rec Rules =
 
                 let inner (child : Child) =
                     match child with
-                    |NodeC c ->
-                        expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
-                    |LeafC leaf ->
-                        expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
-                    |LeafValueC leafvalue ->
-                        expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
-                    |CommentC _ -> Seq.empty
+                    | NodeC c ->
+                        // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
+                        noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+                    | LeafC leaf ->
+                        // expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                        leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
+                    | LeafValueC leafvalue ->
+                        // expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
+                        leafvaluerules |> Seq.choose (fun (lv, o) -> if checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
+                    | CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
@@ -1031,7 +1053,8 @@ module rec Rules =
                 //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
                 //         |x -> [||])
                 // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
-                let expandedrules = memoizeRules rules ctx.subtypes
+                let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
+                // let  =
                 let p = {
                     varMap = varMap
                     enumsMap = enumsMap
@@ -1049,13 +1072,16 @@ module rec Rules =
                 }
                 let inner (child : Child) =
                     match child with
-                    |NodeC c ->
-                        expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
-                    |LeafC leaf ->
-                        expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
-                    |LeafValueC leafvalue ->
-                        expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
-                    |CommentC _ -> Seq.empty
+                    | NodeC c ->
+                        // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
+                        noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+                    | LeafC leaf ->
+                        // expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+                        leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
+                    | LeafValueC leafvalue ->
+                        // expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
+                        leafvaluerules |> Seq.choose (fun (lv, o) -> if checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
+                    | CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
