@@ -212,7 +212,7 @@ module ValidationCore =
             rs |> Seq.fold (fun es r ->
             if foundOK
             then es
-            else (let x = f r es in if x = es then foundOK <- true; x else any <- true; x)) errors
+            else (let x = f r es in if x.Equals(es) then foundOK <- true; x else any <- true; x)) errors
         match foundOK, any, merge with
         |true, _, _ -> errors
         |_, false, _ -> defValue()

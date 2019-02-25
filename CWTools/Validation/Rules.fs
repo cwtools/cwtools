@@ -396,26 +396,35 @@ module rec Rules =
         //     |ValueType.Percent -> key.EndsWith("%")
         //     |_ -> true
         let monitor = new Object()
+        let mutable i = 0;
 
         let memoizeRulesInner memFunction =
             let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
             fun (rules : NewRule<_> list) (subtypes : string list) ->
-                lock monitor (fun () ->
                     match dict.TryGetValue(rules) with
                     | (true, v) ->
                         match v.TryGetValue(subtypes) with
                         |(true, v2) -> v2
                         |_ ->
                             let temp = memFunction rules subtypes
-                            v.Add(subtypes, temp)
+                            lock monitor (fun () ->
+                                if v.ContainsKey(subtypes) then () else v.Add(subtypes, temp)
+                            )
                             temp
                     | _ ->
                         let temp = memFunction rules subtypes
                         let innerDict = new System.Collections.Generic.Dictionary<_,_>()
-                        innerDict.Add(subtypes, temp)
-                        dict.Add(rules, innerDict)
+                        lock monitor (fun () ->
+                            innerDict.Add(subtypes, temp)
+                            match dict.TryGetValue(rules) with
+                            |(true, v2) -> ()
+                            |_ ->
+                                dict.Add(rules, innerDict)
+                        )
+                        // i <- i + 1
+                        // eprintfn "%i %i" i (((rules) :> Object).GetHashCode())
                         temp
-                )
+
         let memoizeRules =
             let memFunction =
                 fun rules subtypes ->
@@ -728,22 +737,27 @@ module rec Rules =
         let memoizeRulesInner memFunction =
             let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
             fun (rules : NewRule<_> list) (subtypes : string list) ->
-                lock monitor (fun () ->
                     match dict.TryGetValue(rules) with
                     | (true, v) ->
                         match v.TryGetValue(subtypes) with
                         |(true, v2) -> v2
                         |_ ->
                             let temp = memFunction rules subtypes
-                            v.Add(subtypes, temp)
+                            lock monitor (fun () ->
+                                if v.ContainsKey(subtypes) then () else v.Add(subtypes, temp)
+                            )
                             temp
                     | _ ->
                         let temp = memFunction rules subtypes
                         let innerDict = new System.Collections.Generic.Dictionary<_,_>()
-                        innerDict.Add(subtypes, temp)
-                        dict.Add(rules, innerDict)
+                        lock monitor (fun () ->
+                            innerDict.Add(subtypes, temp)
+                            match dict.TryGetValue(rules) with
+                            |(true, v2) -> ()
+                            |_ ->
+                                dict.Add(rules, innerDict)
+                        )
                         temp
-                )
         let memoizeRules =
             let memFunction =
                 fun rules subtypes ->
@@ -803,20 +817,20 @@ module rec Rules =
             |CommentC comment ->
                 fComment acc comment rule
 
-        let rec foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
-            let recurse = foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment
-            match child with
-            |NodeC node ->
-                let (finalAcc, fin) = fNode acc node rule
-                if fin
-                then finalAcc
-                else fChild node rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
-            |LeafC leaf ->
-                fLeaf acc leaf rule
-            |LeafValueC leafvalue ->
-                fLeafValue acc leafvalue rule
-            |CommentC comment ->
-                fComment acc comment rule
+        // let rec foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
+        //     let recurse = foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment
+        //     match child with
+        //     |NodeC node ->
+        //         let (finalAcc, fin) = fNode acc node rule
+        //         if fin
+        //         then finalAcc
+        //         else fChild node rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
+        //     |LeafC leaf ->
+        //         fLeaf acc leaf rule
+        //     |LeafValueC leafvalue ->
+        //         fLeafValue acc leafvalue rule
+        //     |CommentC comment ->
+        //         fComment acc comment rule
         let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
             let fChild (ctx, _) (node : Node) ((field, options) : NewRule<_>) =
                 // log "child acc %A %A" ctx field
@@ -991,16 +1005,14 @@ module rec Rules =
                 let inner (child : Child) =
                     match child with
                     | NodeC c ->
-                        // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
                         noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
                     | LeafC leaf ->
-                        // expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
                         leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
                     | LeafValueC leafvalue ->
-                        // expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
                         leafvaluerules |> Seq.choose (fun (lv, o) -> if checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
                     | CommentC _ -> Seq.empty
                 node.AllArray |> Seq.collect inner
+
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
             let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
@@ -1030,89 +1042,72 @@ module rec Rules =
                 |_ -> acc
             pathFilteredTypes |> List.fold (foldRulesBase node) acc
 
-        let foldCollectEarly fLeaf fLeafValue fComment fNode acc (node : Node) (path: string) =
-            let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
-            let fChild (node : Node) ((field, options) : NewRule<_>) =
-                let rules =
-                    match field with
-                    | (NodeRule (_, rs)) -> rs
-                    | _ -> []
-                // let subtypedrules =
-                //     rules |> Seq.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> [||]))
+        // let foldCollectEarly fLeaf fLeafValue fComment fNode acc (node : Node) (path: string) =
+        //     let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
+        //     let fChild (node : Node) ((field, options) : NewRule<_>) =
+        //         let rules =
+        //             match field with
+        //             | (NodeRule (_, rs)) -> rs
+        //             | _ -> []
+        //         let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
+        //         let p = {
+        //             varMap = varMap
+        //             enumsMap = enumsMap
+        //             typesMap = typesMap
+        //             effectMap = effectMap
+        //             triggerMap = triggerMap
+        //             varSet = varSet
+        //             localisation = localisation
+        //             files = files
+        //             changeScope = changeScope
+        //             anyScope = anyScope
+        //             defaultLang = defaultLang
+        //             ctx = ctx
+        //             severity = Severity.Error
+        //         }
+        //         let inner (child : Child) =
+        //             match child with
+        //             | NodeC c ->
+        //                 // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
+        //                 noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+        //             | LeafC leaf ->
+        //                 // expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
+        //                 leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
+        //             | LeafValueC leafvalue ->
+        //                 // expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
+        //                 leafvaluerules |> Seq.choose (fun (lv, o) -> if checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
+        //             | CommentC _ -> Seq.empty
+        //         node.AllArray |> Seq.collect inner
+        //     let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
+        //     let file = Path.GetFileName path
+        //     let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
+        //         match td.typeKeyFilter with
+        //         |Some (values, negate) -> ((values |> List.exists ((==) n.Key))) <> negate
+        //         |None -> true
+        //     let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
+        //         match skipRootKey with
+        //         |(SpecificKey key) -> n.Key == key
+        //         |(AnyKey) -> true
+        //     let foldRulesNode typedef rs o =
+        //         (fun a c ->
+        //             foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
+        //     let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
+        //     let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
+        //         match skipRootKeyStack with
+        //         |[] -> if typekeyfilter t n then foldRulesNode t rs o acc n else acc
+        //         |head::tail ->
+        //             if skiprootkey head n
+        //             then n.Children |> List.fold (foldRulesSkipRoot rs o t tail) acc
+        //             else acc
+        //     let foldRulesBase (n : Node) acc (t : TypeDefinition<_>) =
+        //         let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
+        //         match typerules with
+        //         |[(_, (NodeRule (_, rs), o))] ->
+        //             n.Children |> List.fold (foldRulesSkipRoot rs o t t.skipRootKey) acc
+        //         |_ -> acc
+        //     pathFilteredTypes |> List.fold (foldRulesBase node) acc
 
-                // let expandedbaserules =
-                //     rules |> Seq.collect (
-                //         function
-                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         |x -> [||])
-                // let expandedsubtypedrules =
-                //     subtypedrules |> Seq.collect (
-                //         function
-                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-                //         |x -> [||])
-                // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
-                let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
-                // let  =
-                let p = {
-                    varMap = varMap
-                    enumsMap = enumsMap
-                    typesMap = typesMap
-                    effectMap = effectMap
-                    triggerMap = triggerMap
-                    varSet = varSet
-                    localisation = localisation
-                    files = files
-                    changeScope = changeScope
-                    anyScope = anyScope
-                    defaultLang = defaultLang
-                    ctx = ctx
-                    severity = Severity.Error
-                }
-                let inner (child : Child) =
-                    match child with
-                    | NodeC c ->
-                        // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
-                        noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
-                    | LeafC leaf ->
-                        // expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
-                        leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
-                    | LeafValueC leafvalue ->
-                        // expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
-                        leafvaluerules |> Seq.choose (fun (lv, o) -> if checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
-                    | CommentC _ -> Seq.empty
-                node.AllArray |> Seq.collect inner
-            let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
-            let file = Path.GetFileName path
-            let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
-                match td.typeKeyFilter with
-                |Some (values, negate) -> ((values |> List.exists ((==) n.Key))) <> negate
-                |None -> true
-            let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
-                match skipRootKey with
-                |(SpecificKey key) -> n.Key == key
-                |(AnyKey) -> true
-            let foldRulesNode typedef rs o =
-                (fun a c ->
-                    foldRulesEarlyExit fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
-            let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
-            let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
-                match skipRootKeyStack with
-                |[] -> if typekeyfilter t n then foldRulesNode t rs o acc n else acc
-                |head::tail ->
-                    if skiprootkey head n
-                    then n.Children |> List.fold (foldRulesSkipRoot rs o t tail) acc
-                    else acc
-            let foldRulesBase (n : Node) acc (t : TypeDefinition<_>) =
-                let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
-                match typerules with
-                |[(_, (NodeRule (_, rs), o))] ->
-                    n.Children |> List.fold (foldRulesSkipRoot rs o t t.skipRootKey) acc
-                |_ -> acc
-            pathFilteredTypes |> List.fold (foldRulesBase node) acc
-
-        let getTypesInEntity (entity : Entity) =
+        let getTypesInEntity = // (entity : Entity) =
             let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
                 match field with
                 |LeafRule (_, TypeField (TypeType.Simple t)) ->
@@ -1137,23 +1132,22 @@ module rec Rules =
             let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
             let ctx = typedefs |> List.fold (fun (a : Collections.Map<string, (string * range) list>) t -> a.Add(t.name, [])) Collections.Map.empty
-            let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-            res
-        let getDefVarInEntity (ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
+            fLeaf, fLeafValue, fComment, fNode, ctx
+            // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            // res
+
+        let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
             let getVariableFromString (v : string) (s : string) = if v = "variable" then s.Split('@').[0].Split('.') |> Array.last else s.Split('@').[0]
             let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
                 match field with
                 |LeafRule (_, VariableSetField v) ->
-                // |Field.TypeField t ->
                     res |> (fun m -> m.Add(v, (getVariableFromString v (leaf.ValueText), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |LeafRule (VariableSetField v, _) ->
-                // |Field.TypeField t ->
                     res |> (fun m -> m.Add(v, (getVariableFromString v leaf.Key, leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (field, _) =
                 match field with
                 |LeafValueRule (VariableSetField v) ->
-                // |Field.TypeField t ->
                     res |> (fun m -> m.Add(v, (getVariableFromString v (leafvalue.ValueText), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fNode (res : Collections.Map<string, (string * range) list>) (node : Node) ((field, option) : NewRule<_>) =
@@ -1163,32 +1157,54 @@ module rec Rules =
                 |_ -> res
             let fComment (res) _ _ = res
 
-            let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-            res
-        let getEffectsInEntity (ctx : Node list) (entity : Entity) =
+            fLeaf, fLeafValue, fComment, fNode, Map.empty
+            //let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            //res
+
+        let mergeFolds (l1, lv1, c1, n1, ctx1) (l2, lv2, c2, n2, ctx2) =
+            let fLeaf = (fun (acc1, acc2) l r -> (l1 acc1 l r, l2 acc2 l r))
+            let fLeafValue = (fun (acc1, acc2) lv r -> (lv1 acc1 lv r, lv2 acc2 lv r))
+            let fNode = (fun (acc1, acc2) n r -> (n1 acc1 n r, n2 acc2 n r))
+            let fComment = (fun (acc1, acc2) c r -> (c1 acc1 c r, c2 acc2 c r))
+            fLeaf, fLeafValue, fComment, fNode, (ctx1, ctx2)
+
+
+        let getEffectsInEntity = //(ctx) (entity : Entity) =
             let fLeaf (res) (leaf : Leaf) ((field, _) : NewRule<_>) = res
             let fLeafValue (res) (leafvalue : LeafValue) (field, _) = res
-            let fNode (res : Node list) (node : Node) ((field, option) : NewRule<_>) =
-                match field with
-                |NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "effect" , _), _-> true |_ -> false) ->
+            let fNode (res : Node list, finished: bool) (node : Node) ((field, option) : NewRule<_>) =
+                match finished, field with
+                |false, NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "effect" , _), _-> true |_ -> false) ->
                     node::res, true
                 |_ -> res, false
             let fComment (res) _ _ = res
 
-            let res = foldCollectEarly fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-            res
-        let getTriggersInEntity (ctx : Node list) (entity : Entity) =
+            // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            // res
+            fLeaf, fLeafValue, fComment, fNode, ([], false)
+
+        let getTriggersInEntity = //(ctx) (entity : Entity) =
             let fLeaf (res) (leaf : Leaf) ((field, _) : NewRule<_>) = res
             let fLeafValue (res) (leafvalue : LeafValue) (field, _) = res
-            let fNode (res : Node list) (node : Node) ((field, option) : NewRule<_>) =
-                match field with
-                |NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "trigger" , _), _-> true |_ -> false) ->
+            let fNode (res : Node list, finished : bool) (node : Node) ((field, option) : NewRule<_>) =
+                match finished, field with
+                |false, NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "trigger" , _), _-> true |_ -> false) ->
                     node::res, true
                 |_ -> res, false
             let fComment (res) _ _ = res
 
-            let res = foldCollectEarly fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-            res
+            fLeaf, fLeafValue, fComment, fNode, ([], false)
+            // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            // res
+        let allFolds entity =
+            let fLeaf, fLeafValue, fComment, fNode, ctx =
+                mergeFolds getTriggersInEntity getEffectsInEntity
+                |> mergeFolds getDefVarInEntity
+                |> mergeFolds getTypesInEntity
+            let types, (defvars, (triggers, effects)) = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            (types, defvars, triggers, effects)
+        let singleFold (fLeaf, fLeafValue, fComment, fNode, ctx) entity =
+            foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
 
         let validateLocalisationFromTypes (entity : Entity) =
             let fLeaf (res : ValidationResult) (leaf : Leaf) ((field, _) : NewRule<_>) =
@@ -1257,10 +1273,11 @@ module rec Rules =
             (getInfoAtPos pos entity ) |> Option.map (fun (s, r) -> (convertToOutput s.scopes), r)
         //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
         member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
-        member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
-        member __.GetDefinedVariables(entity : Entity) = getDefVarInEntity (Map.empty) entity
+        member __.GetReferencedTypes(entity : Entity) = singleFold getTypesInEntity entity
+        member __.GetDefinedVariables(entity : Entity) = singleFold getDefVarInEntity entity
         member __.GetTypeLocalisationErrors(entity : Entity) = validateLocalisationFromTypes entity
-        member __.GetEffectBlocks(entity : Entity) = (getEffectsInEntity [] entity), (getTriggersInEntity [] entity)
+        member __.GetEffectBlocks(entity : Entity) = (singleFold getEffectsInEntity entity), (singleFold getTriggersInEntity entity)
+        member __.BatchFolds(entity : Entity) = allFolds entity
 
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 

@@ -11,6 +11,7 @@ open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Utilities.Position
 open CWTools.Utilities.TryParser
 open CWTools.Process.Scopes
+open FSharp.Collections.ParallelSeq
 
 type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     validators : (StructureValidator<'T> * string) list
@@ -82,15 +83,18 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
 
     let validateLocalisation (entities : struct (Entity * Lazy<'T>) list) =
         log (sprintf "Localisation check %i files" (entities.Length))
+        let timer = System.Diagnostics.Stopwatch()
+        timer.Start()
         let oldEntities = EntitySet (resources.AllEntities())
         let newEntities = EntitySet entities
         let vs = (settings.localisationValidators |> List.map (fun v -> v oldEntities (services.localisationKeys()) newEntities) |> List.fold (<&&>) OK)
         let typeVs =
             if settings.useRules && services.foldRules.IsSome
             then
-                (entities |> List.map (fun struct (e, _) -> e)) <&!&> services.foldRules.Value.GetTypeLocalisationErrors
+                (entities |> List.map (fun struct (e, _) -> e) |> PSeq.map (services.foldRules.Value.GetTypeLocalisationErrors)) |> Seq.fold (<&&>) OK
             else OK
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
+        log (sprintf "Localisation check took %ims" timer.ElapsedMilliseconds)
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
     let createScopeContextFromReplace (rep : ReplaceScopes<'S> option) =
