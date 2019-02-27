@@ -167,7 +167,21 @@ module CK2Constants =
         "events";
         "gfx";
         "history";
+        "history/characters";
+        "history/offmap_powers";
+        "history/provinces";
+        "history/technology";
+        "history/titles";
+        "history/wars";
         "interface";
+        "interface/coat_of_arms";
+        "interface/portrait_offsets";
+        "interface/portrait_properties";
+        "interface/portrait";
         "localisation";
-        "map"
+        "localisation/customizable_localisation";
+        "map";
+        "map/statics";
+        "music";
+        "tutorial"
     ]
