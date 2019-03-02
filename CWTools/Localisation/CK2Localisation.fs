@@ -67,11 +67,12 @@ module CK2Localisation =
             |CK2 CK2Lang.Spanish -> x.SPANISH
             |_ -> x.ENGLISH
 
-        let getKeys = csv |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
+        let getKeys() = csvFallback |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
         let valueMap lang =
             let one = csv |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
             let two = csvFallback |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback lang f))
-            Seq.concat [one; two] |> Seq.map (fun (k, v) -> k, {key = k; value = None; desc = v; position = range.Zero})
+            let range = mkRange (files |> List.tryHead |> Option.map fst |> Option.defaultValue "") (mkPos 0 0) (mkPos 0 0)
+            Seq.concat [one; two] |> Seq.map (fun (k, v) -> k, {key = k; value = None; desc = v; position = range })
                                   |> Map.ofSeq
         let values lang =
             let one = csv |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
@@ -87,7 +88,7 @@ module CK2Localisation =
             | _ -> x
 
         do
-            results <- addFiles (files |> List.map snd) |> dict
+            results <- addFiles (files |> List.map fst) |> dict
         // do
         //     match Directory.Exists(localisationFolder) with
         //     | true ->
@@ -117,7 +118,7 @@ module CK2Localisation =
             new ILocalisationAPI with
                 member __.Results = results
                 member __.Values = values lang
-                member __.GetKeys = getKeys
+                member __.GetKeys = getKeys()
                 member __.GetDesc x = getDesc lang x
                 member __.GetLang = lang
                 member __.ValueMap = valueMap lang

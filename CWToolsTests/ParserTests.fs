@@ -16,6 +16,7 @@ open CWTools.Common.STLConstants
 open System
 open CWTools.Process.STLProcess
 open CWTools.Localisation.STLLocalisation
+open CWTools.Localisation.CK2Localisation
 open CWTools.Localisation
 
 [<Tests>]
@@ -32,5 +33,12 @@ let tests =
             let expectedValues = dict [("required", "\"test_required\""); ("test_required_desc", "\"test_required\"")]
             Expect.equal (parsed.Values |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) (expectedValues |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) "Not equal"
             eprintfn "%A" parsed.Values
+            ()
+        ftestCase "localisation CK2" <| fun () ->
+            let files = ["testfiles/CK2/Localisation/SwordOfIslam.csv", File.ReadAllText "testfiles/CK2/Localisation/SwordOfIslam.csv"]
+            let parsed = CK2LocalisationService(files).Api (CK2 CK2Lang.English)
+            let x = parsed.GetKeys
+            let y = parsed.Values
+            Expect.equal (parsed.GetKeys) []
             ()
     ]

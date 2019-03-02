@@ -217,7 +217,8 @@ type CK2Game(settings : CK2Settings) =
                      Encoding.GetEncoding(1252),
                      validationSettings,
                      globalLocalisation,
-                     (fun _ _ -> ())))
+                     (fun _ _ -> ()),
+                     ".csv"))
                      afterInit
     let lookup = game.Lookup
     let resources = game.Resources

@@ -54,7 +54,8 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
      globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
-     afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit) as this =
+     afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit,
+     localisationExtension : string) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
     let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
@@ -67,7 +68,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = Lookup<'S, 'M>()
-    let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation)
+    let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
     let validationServices() =
         {
@@ -91,7 +92,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         timer.Start()
         let res =
             match filepath with
-            | x when x.EndsWith (".yml") ->
+            | x when x.EndsWith (localisationExtension) ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                 let resourceInput = LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
                 let resource, _ = this.Resources.UpdateFile(resourceInput)

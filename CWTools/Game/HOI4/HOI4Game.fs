@@ -240,8 +240,9 @@ type HOI4Game(settings : HOI4Settings) =
                  Encoding.GetEncoding(1252),
                  validationSettings,
                  globalLocalisation,
-                 (fun _ _ -> ()))
-                 afterInit
+                 (fun _ _ -> ()),
+                 ".yml")
+                afterInit
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager

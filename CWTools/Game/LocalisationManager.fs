@@ -9,12 +9,13 @@ open CWTools.Process.Scopes
 
 type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
     (resources : IResourceAPI<'T>, localisationService : _ -> ILocalisationAPICreator, langs : Lang list, lookup: Lookup<_,_>,
-     processLocalisation : (Lookup<'S,'M> -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry<_>>)) as this =
+     processLocalisation : (Lookup<'S,'M> -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry<_>>),
+     localisationExtension : string) as this =
     let mutable localisationAPIMap : Map<string * Lang, (bool * ILocalisationAPI)> = Map.empty
     let allLocalisation() = this.LocalisationAPIs() |> List.map snd
     let validatableLocalisation() = this.LocalisationAPIs() |> List.choose (fun (validate, api) -> if validate then Some api else None)
     let parseLocFile (locFile : FileWithContentResource) =
-        if locFile.overwrite <> Overwritten && locFile.extension = ".yml"
+        if locFile.overwrite <> Overwritten && locFile.extension = localisationExtension
         then
             let locService = [locFile.filepath, locFile.filetext] |> localisationService
             Some (langs |> List.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang))))

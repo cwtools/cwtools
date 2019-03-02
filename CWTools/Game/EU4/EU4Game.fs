@@ -232,7 +232,8 @@ type EU4Game(settings : EU4Settings) =
                      Encoding.GetEncoding(1252),
                      validationSettings,
                      globalLocalisation,
-                     (fun _ _ -> ())))
+                     (fun _ _ -> ()),
+                     ".yml"))
                      afterInit
     let lookup = game.Lookup
     let resources = game.Resources

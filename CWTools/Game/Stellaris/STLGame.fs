@@ -331,7 +331,8 @@ type STLGame (settings : StellarisSettings) =
                      Encoding.GetEncoding(1252),
                      validationSettings,
                      STLGameFunctions.globalLocalisation,
-                     STLGameFunctions.afterUpdateFile)
+                     STLGameFunctions.afterUpdateFile,
+                     ".yml")
                      afterInit
 
         let lookup = game.Lookup
