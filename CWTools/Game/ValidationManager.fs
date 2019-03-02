@@ -137,7 +137,7 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
                 <&!&> (fun (key, range) ->
                             let fakeLeaf = LeafValue(Value.Bool true, range)
                             let lockey = locdef.prefix + key + locdef.suffix
-                            res1 lockey
+                            if locdef.explicitField.IsNone then res1 lockey else OK
                             <&&>
                             checkLocKeysLeafOrNode (services.localisationKeys()) lockey fakeLeaf)
         let validateType (typename : string) (values : (string * range) list) =

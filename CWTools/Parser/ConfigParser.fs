@@ -107,6 +107,7 @@ module rec ConfigParser =
         suffix: string
         required : bool
         optional : bool
+        explicitField : string option
         replaceScopes : ReplaceScopes<'a> option
     }
     type TypeDefinition<'a> = {
@@ -456,10 +457,13 @@ module rec ConfigParser =
                 let optional = comments |> List.exists (fun s -> s.Contains "optional")
                 let key = loc.Key
                 let value = loc.Value.ToRawString()
-                let dollarIndex = value.IndexOf "$"
-                let prefix = value.Substring(0, dollarIndex)
-                let suffix = value.Substring(dollarIndex + 1)
-                Some { name = key; prefix = prefix; suffix = suffix; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments }
+                match value.IndexOf "$" with
+                | -1 ->
+                    Some { name = key; prefix = ""; suffix = ""; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments; explicitField = Some value }
+                | dollarIndex ->
+                    let prefix = value.Substring(0, dollarIndex)
+                    let suffix = value.Substring(dollarIndex + 1)
+                    Some { name = key; prefix = prefix; suffix = suffix; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments; explicitField = None }
             |_ -> None
         let parseSubTypeLocalisation (subtype : Node) =
             match subtype.Key.StartsWith("subtype[") with

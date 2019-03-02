@@ -6,6 +6,7 @@ open Files
 open CWTools.Validation.Rules
 open CWTools.Utilities.Utils
 open CWTools.Validation.Stellaris.ScopeValidation
+open CWTools.Process
 
 module LanguageFeatures =
     let makeEntityResourceInput (fileManager : FileManager) filepath filetext  =
@@ -50,7 +51,7 @@ module LanguageFeatures =
         |Some e, Some info ->
             log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
-            |Some (_, Some (t, tv)) ->
+            |Some (_, (Some (t, tv), _)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
             |_ -> None
         |_, _ -> None
@@ -61,7 +62,7 @@ module LanguageFeatures =
         |Some e, Some info ->
             log (sprintf "findRefs %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
-            |Some (_, Some ((t : string), tv)) ->
+            |Some (_,( Some ((t : string), tv), _)) ->
                 //log "tv %A %A" t tv
                 let t = t.Split('.').[0]
                 resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
@@ -90,10 +91,26 @@ module LanguageFeatures =
         |Some e, Some info ->
             log (sprintf "symbolInfoAtPos %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
-            |Some (_, Some (t, tv)) ->
+            |Some (_, (Some (t, tv), (None))) ->
                 match lookup.typeDefs |> List.tryFind (fun td -> td.name = t) with
                 |Some td ->
-                    let locs = td.localisation |> List.map (fun l -> { key = l.name; value = (l.prefix + tv + l.suffix) })
+                    let locs = td.localisation
+                            |> List.choose (fun l -> if l.explicitField.IsNone then Some { key = l.name; value = (l.prefix + tv + l.suffix) } else None)
+                    Some {
+                            name = tv
+                            typename = t
+                            localisation = locs
+                        }
+                |None -> None
+            |Some (_, (Some (t, tv), (Some (NodeC node)))) ->
+                match lookup.typeDefs |> List.tryFind (fun td -> td.name = t) with
+                |Some td ->
+                    let locs =
+                        td.localisation
+                            |> List.map (fun l ->
+                                match l.explicitField with
+                                | None -> { key = l.name; value = (l.prefix + tv + l.suffix) }
+                                | Some field -> { key = l.name; value = node.TagText field})
                     Some {
                             name = tv
                             typename = t
