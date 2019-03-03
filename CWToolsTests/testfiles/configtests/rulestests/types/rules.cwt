@@ -45,6 +45,21 @@ types = {
         path = "game/common/starbase_buildings"
     }
 
+    type[starts_with_c] = {
+        path = "game/common/deposits"
+        starts_with = c
+        ## starts_with = c2
+        subtype[starts_with_c2] =
+        {
+
+        }
+    }
+
+    type[starts_with_p] = {
+        path = "game/common/deposits"
+        starts_with = p
+    }
+
 }
 enums = {
 enum[test_enum] = {
@@ -117,4 +132,15 @@ multi_match = {
 
 multi_mismatch = {
 
+}
+
+starts_with_c = {
+    c = true
+    subtype[starts_with_c2] = {
+        c2 = true
+    }
+}
+
+starts_with_p = {
+    p = true
 }

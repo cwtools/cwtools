@@ -1,0 +1,20 @@
+c_test = {
+    c = true
+    #error
+    p = true
+    #error
+    c2 = true
+}
+
+c2_test = {
+    c = true
+    c2 = true
+    #error
+    p = true
+}
+
+p_test = {
+    p = true
+    #error
+    c = true
+}

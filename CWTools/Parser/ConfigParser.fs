@@ -97,6 +97,7 @@ module rec ConfigParser =
         name : string
         rules : NewRule<'a> list
         typeKeyField : string option
+        startsWith : string option
         pushScope : 'a option
         localisation : TypeLocalisation<'a> list
     }
@@ -120,6 +121,7 @@ module rec ConfigParser =
         subtypes : SubTypeDefinition<'a> list
         typeKeyFilter : (string list * bool) option
         skipRootKey : SkipRootKey list
+        startsWith : string option
         type_per_file : bool
         warningOnly : bool
         localisation : TypeLocalisation<'a> list
@@ -485,9 +487,13 @@ module rec ConfigParser =
                     match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
                     |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
                     |None -> None
+                let startsWith =
+                    match comments |> List.tryFind (fun s -> s.Contains "starts_with") with
+                    |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
+                    |None -> None
                 let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope))
                 match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = [] }
+                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = []; startsWith = startsWith }
                 |None -> None
             |_ -> None
         let getSkipRootKey (node : Node) =
@@ -507,6 +513,7 @@ module rec ConfigParser =
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let path_strict = node.TagText "path_strict" == "yes"
             let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
+            let startsWith = if node.Has "starts_with" then Some (node.TagText "starts_with") else None
             let skiprootkey = getSkipRootKey node
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
@@ -533,7 +540,7 @@ module rec ConfigParser =
                     else None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation}
+            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation; startsWith = startsWith}
             |None -> None
         |_ -> None
 
@@ -680,6 +687,7 @@ module rec ConfigParser =
             warningOnly = false
             type_per_file = false
             localisation = []
+            startsWith = None
         }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -787,6 +795,7 @@ module rec ConfigParser =
             path_file = None
             type_per_file = false
             localisation = []
+            startsWith = None
         }
     let shipSizeType =
         {
@@ -802,6 +811,7 @@ module rec ConfigParser =
             path_file = None
             type_per_file = false
             localisation = []
+            startsWith = None
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

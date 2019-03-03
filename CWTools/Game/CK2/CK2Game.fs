@@ -68,13 +68,13 @@ module CK2GameFunctions =
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
-    // let updateScriptedLoc (game : GameObject) =
-    //     let rawLocs =
-    //         game.Resources.AllEntities()
-    //         |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localization") -> Some (f.entity) |_ -> None)
-    //         |> List.collect (fun n -> n.Children)
-    //         |> List.map (fun l -> l.TagText "name")
-    //     game.Lookup.scriptedLoc <- rawLocs
+    let updateScriptedLoc (game : GameObject) =
+        let rawLocs =
+            game.Resources.AllEntities()
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some (f.entity) |_ -> None)
+            |> List.collect (fun n -> n.Children)
+            |> List.map (fun l -> l.TagText "name")
+        game.Lookup.scriptedLoc <- rawLocs
     // let updateModifiers (game : GameObject) =
     //         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
 

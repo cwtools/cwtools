@@ -354,6 +354,17 @@ module rec Rules =
             typedef.localisation <&!&> inner
             <&&> subtype
 
+
+    let typekeyfilter (td : TypeDefinition<_>) (n : string) =
+        match td.typeKeyFilter with
+        | Some (values, negate) -> ((values |> List.exists ((==) n))) <> negate
+        | None -> true
+        &&
+        match td.startsWith with
+        | Some prefix -> n.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+        | None -> true
+
+
     // let inline ruleApplicatorCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
     // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
     type RuleApplicator<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
@@ -649,6 +660,7 @@ module rec Rules =
         let testSubtype (subtypes : SubTypeDefinition<_> list) (node : Node) =
             let results =
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
+                         |> List.filter (fun st -> st.startsWith |> function | Some sw -> node.Key.StartsWith(sw, StringComparison.OrdinalIgnoreCase) | None -> true )
                         |> List.map (fun s -> s.name, s.pushScope, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node OK)
             let res = results |> List.choose (fun (s, ps, res) -> res |> function |Invalid _ -> None |OK -> Some (ps, s))
             res |> List.tryPick fst, res |> List.map snd
@@ -668,10 +680,6 @@ module rec Rules =
         let validate ((path, root) : string * Node) =
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
-            let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
-                match td.typeKeyFilter with
-                |Some (values, negate) -> ((values |> List.exists ((==) n.Key))) <> negate
-                |None -> true
             let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
                 match skipRootKey with
                 |(SpecificKey key) -> n.Key == key
@@ -686,15 +694,13 @@ module rec Rules =
                     //match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
                     match typerules |> List.tryHead with
                     |Some ((NodeRule ((ValueField (ValueType.Specific (x))), rs), o)) when (StringResource.stringManager.GetStringForID x) == typedef.name->
-                        match typedef.typeKeyFilter with
-                        |Some (values, negate) -> if ((values |> List.exists ((==) n.Key))) <> negate then applyNodeRuleRoot typedef rs o n else OK
-                        |None -> applyNodeRuleRoot typedef rs o n
+                        if typekeyfilter typedef n.Key then applyNodeRuleRoot typedef rs o n else OK
                     |_ ->
                         OK
                 let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
                 let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (n : Node) =
                     match skipRootKeyStack with
-                    |[] -> if typekeyfilter t n then validateType t n else OK
+                    |[] -> if typekeyfilter t n.Key then validateType t n else OK
                     |head::tail ->
                         if skiprootkey head n
                         then n.Children <&!&> validateTypeSkipRoot t tail
@@ -1015,10 +1021,6 @@ module rec Rules =
 
             let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let file = Path.GetFileName path
-            let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
-                match td.typeKeyFilter with
-                |Some (values, negate) -> ((values |> List.exists ((==) n.Key))) <> negate
-                |None -> true
             let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
                 match skipRootKey with
                 |(SpecificKey key) -> n.Key == key
@@ -1029,7 +1031,7 @@ module rec Rules =
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
                 match skipRootKeyStack with
-                |[] -> if typekeyfilter t n then foldRulesNode t rs o acc n else acc
+                |[] -> if typekeyfilter t n.Key then foldRulesNode t rs o acc n else acc
                 |head::tail ->
                     if skiprootkey head n
                     then n.Children |> List.fold (foldRulesSkipRoot rs o t tail) acc
@@ -1594,10 +1596,6 @@ module rec Rules =
             // log "%A" pos
             // log "%A" entity.logicalpath
             // log  (sprintf "tb %A" pathDir)
-            let typekeyfilter (td : TypeDefinition<_>) (n : string) =
-                match td.typeKeyFilter with
-                |Some (values, negate) -> ((values |> List.exists ((==) n))) <> negate
-                |None -> true
             let skiprootkey (skipRootKey : SkipRootKey) (s : string) =
                 match skipRootKey with
                 |(SpecificKey key) -> s == key
@@ -1677,9 +1675,7 @@ module rec Rules =
                                     |Some f -> n.TagText f
                                     |None -> n.Key
                                 let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position))
-                                match def.typeKeyFilter with
-                                |Some (values, negate) -> if ((values |> List.exists ((==) n.Key))) <> negate then result else []
-                                |None -> result
+                                if typekeyfilter def n.Key then result else []
                             let childres =
                                 let rec skiprootkey (srk : SkipRootKey list) (n : Node)=
                                     match srk with
