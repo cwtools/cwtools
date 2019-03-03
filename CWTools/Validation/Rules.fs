@@ -50,8 +50,8 @@ module rec Rules =
 
     let checkPathDir (t : TypeDefinition<_>) (pathDir : string) (file : string) =
         match t.path_strict with
-        |true -> pathDir == t.path.Replace("\\","/")
-        |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
+        |true -> t.path |> List.exists (fun tp -> pathDir == tp.Replace("\\","/"))
+        |false -> t.path |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\","/")))
         &&
         match t.path_file with
         |Some f -> file == f

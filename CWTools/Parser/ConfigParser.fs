@@ -114,7 +114,7 @@ module rec ConfigParser =
     type TypeDefinition<'a> = {
         name : string
         nameField : string option
-        path : string
+        path : string list
         path_strict : bool
         path_file : string option
         conditions : Node option
@@ -510,7 +510,7 @@ module rec ConfigParser =
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let type_per_file = node.TagText "type_per_file" == "yes"
-            let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            let path = (node.TagsText "path") |> List.ofSeq |> List.map (fun s -> s.Replace("game/","").Replace("game\\",""))
             let path_strict = node.TagText "path_strict" == "yes"
             let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
             let startsWith = if node.Has "starts_with" then Some (node.TagText "starts_with") else None
@@ -677,7 +677,7 @@ module rec ConfigParser =
         {
             name = "create_starbase"
             nameField = None
-            path = "events"
+            path = ["events"]
             path_strict = false
             path_file = None
             conditions = None
@@ -785,7 +785,7 @@ module rec ConfigParser =
         {
             name = "ship_behavior";
             nameField = Some "name";
-            path = "common/ship_behaviors";
+            path = ["common/ship_behaviors"];
             conditions = None;
             subtypes = [];
             typeKeyFilter = None
@@ -800,7 +800,7 @@ module rec ConfigParser =
     let shipSizeType =
         {
             name = "ship_size";
-            path = "common/ship_sizes";
+            path = ["common/ship_sizes"];
             nameField = None;
             conditions = None;
             subtypes = [];
