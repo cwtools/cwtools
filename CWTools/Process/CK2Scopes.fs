@@ -35,13 +35,13 @@ module CK2Scopes =
         "THIS", id;
         "ROOT", fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, true;
         "FROM", from 1;
-        // "FROMFROM", from 2;
-        // "FROMFROMFROM", from 3;
-        // "FROMFROMFROMFROM", from 4;
+        "FROMFROM", from 2;
+        "FROMFROMFROM", from 3;
+        "FROMFROMFROMFROM", from 4;
         "PREV", prev;
-        // "PREVPREV", prev >> prev;
-        // "PREVPREVPREV", prev >> prev >> prev;
-        // "PREVPREVPREVPREV", prev >> prev >> prev >> prev
+        "PREVPREV", prev >> prev;
+        "PREVPREVPREV", prev >> prev >> prev;
+        "PREVPREVPREVPREV", prev >> prev >> prev >> prev
         "AND", id;
         "OR", id;
         "NOR", id;
