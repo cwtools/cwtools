@@ -19,19 +19,24 @@ module CK2Localisation =
         //     match localisationSettings.language with
         //     | CK2 l -> l
         //     | _ -> failwith "Wrong language for localisation"
-        let mutable csv : LocalisationEntry.Row list = [] //upcast LocalisationEntry. "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x"
-        let mutable csvFallback : LocalisationEntryFallback.Row list = [] // upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x"
-        let addFile (x : string) =
+        let mutable csv : (range * LocalisationEntry.Row) list = [] //upcast LocalisationEntry. "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x"
+        let mutable csvFallback : (range * LocalisationEntryFallback.Row) list = [] // upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x"
+
+        let makeRangeForRow i fn =
+            mkRange fn (mkPos i 0) (mkPos i 0)
+        let addFile (filename, filetext : string) =
             let retry file msg =
                 let rows = LocalisationEntryFallback.ParseRows file |> List.ofSeq
+                let rows = rows |> List.mapi (fun i r -> makeRangeForRow i filename, r)
                 csvFallback <- rows @ csvFallback
                 (false, rows.Length, msg, None)
             let file =
-                File.ReadAllLines(x, System.Text.Encoding.GetEncoding(1252))
+                filetext.Split([|System.Environment.NewLine|], System.StringSplitOptions.RemoveEmptyEntries)
                 |> Array.filter(fun l -> l.StartsWith("#CODE") || not(l.StartsWith("#")))
                 |> String.concat "\n"
             try
                 let rows = LocalisationEntry.ParseRows file |> List.ofSeq
+                let rows = rows |> List.mapi (fun i r -> makeRangeForRow i filename, r)
                 csv <- rows @ csv
                 (true, rows.Length, "", None)
             with
@@ -49,7 +54,7 @@ module CK2Localisation =
                     (false, 0, msg, None)
 
         let mutable results : Results = upcast new Dictionary<string, (bool * int * string * FParsec.Position option)>()
-        let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
+        let addFiles (x : (string * string) list) = List.map (fun (fn, fs) -> (fn, addFile (fn, fs))) x
 
         let getForLang language (x : LocalisationEntry.Row) =
             match language with
@@ -67,28 +72,28 @@ module CK2Localisation =
             |CK2 CK2Lang.Spanish -> x.SPANISH
             |_ -> x.ENGLISH
 
-        let getKeys() = csvFallback |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
+        let getKeys() = csvFallback |> Seq.map (snd >> (fun f -> f.``#CODE``)) |> List.ofSeq
         let valueMap lang =
-            let one = csv |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
-            let two = csvFallback |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback lang f))
+            let one = csv |> Seq.map(fun (p, r)-> (p, r.``#CODE``, getForLang lang r))
+            let two = csvFallback |> Seq.map(fun (p, r) -> (p, r.``#CODE``, getForLangFallback lang r))
             let range = mkRange (files |> List.tryHead |> Option.map fst |> Option.defaultValue "") (mkPos 0 0) (mkPos 0 0)
-            Seq.concat [one; two] |> Seq.map (fun (k, v) -> k, {key = k; value = None; desc = v; position = range })
+            Seq.concat [one; two] |> Seq.map (fun (p, k, v) -> k, {key = k; value = None; desc = v; position = p })
                                   |> Map.ofSeq
         let values lang =
-            let one = csv |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
-            let two = csvFallback |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback lang f))
+            let one = csv |> Seq.map( snd >> (fun f -> (f.``#CODE``, getForLang lang f)))
+            let two = csvFallback |> Seq.map( snd >> (fun f -> (f.``#CODE``, getForLangFallback lang f)))
             Seq.concat [one; two] |> dict
 
         let getDesc lang x =
-            let one = csv |> Seq.tryFind (fun f -> f.``#CODE`` = x)
-            let two = csvFallback |> Seq.tryFind (fun f -> f.``#CODE`` = x)
+            let one = csv |> Seq.tryFind ( snd >> (fun f -> f.``#CODE`` = x)) |> Option.map snd
+            let two = csvFallback |> Seq.tryFind ( snd >> (fun f -> f.``#CODE`` = x)) |> Option.map snd
             match (one, two) with
             | (Some x, _) -> getForLang lang x
             | (None, Some x) -> getForLangFallback lang x
             | _ -> x
 
         do
-            results <- addFiles (files |> List.map fst) |> dict
+            results <- addFiles (files) |> dict
         // do
         //     match Directory.Exists(localisationFolder) with
         //     | true ->

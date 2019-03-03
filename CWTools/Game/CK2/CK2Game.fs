@@ -23,6 +23,7 @@ open System.Text
 open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.CK2.CK2LocalisationString
+open CWTools.Validation.LocalisationString
 
 module CK2GameFunctions =
     type GameObject = GameObject<Scope, Modifier, CK2ComputedData>
@@ -62,9 +63,10 @@ module CK2GameFunctions =
         //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
         //                 |> List.map (fun f -> f.filepath)
         // let locFileValidation = validateLocalisationFiles locfiles
+        let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
-        // locFileValidation <&&>
+        locParseErrors <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
     // let updateScriptedLoc (game : GameObject) =
     //     let rawLocs =

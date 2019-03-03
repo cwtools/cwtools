@@ -34,11 +34,11 @@ let tests =
             Expect.equal (parsed.Values |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) (expectedValues |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) "Not equal"
             eprintfn "%A" parsed.Values
             ()
-        ftestCase "localisation CK2" <| fun () ->
+        testCase "localisation CK2" <| fun () ->
             let files = ["testfiles/CK2/Localisation/SwordOfIslam.csv", File.ReadAllText "testfiles/CK2/Localisation/SwordOfIslam.csv"]
             let parsed = CK2LocalisationService(files).Api (CK2 CK2Lang.English)
-            let x = parsed.GetKeys
-            let y = parsed.Values
-            Expect.equal (parsed.GetKeys) []
+            match parsed.ValueMap.TryFind "opinion_hajj_saving_on_hajj" with
+            | Some value -> Expect.equal "Saved him from bandits" value.desc "Value had wrong value"
+            | None -> Expect.isTrue false "Didn't find key"
             ()
     ]
