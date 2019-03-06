@@ -165,6 +165,7 @@ module EU4GameFunctions =
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let typeDefInfo = getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            let landedTitles = game.Lookup.CK2LandedTitles 
             lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (v, t, r) -> if v then Some (t, r) else None))
             lookup.typeDefInfo <- typeDefInfo |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
             lookup.typeDefInfo <- addModifiersAsTypes game lookup.typeDefInfo

@@ -24,6 +24,8 @@ open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.CK2.CK2LocalisationString
 open CWTools.Validation.LocalisationString
+open CWTools.Process
+open CWTools.Process.ProcessCore
 
 module CK2GameFunctions =
     type GameObject = GameObject<Scope, Modifier, CK2ComputedData>
@@ -77,7 +79,35 @@ module CK2GameFunctions =
         game.Lookup.scriptedLoc <- rawLocs
     // let updateModifiers (game : GameObject) =
     //         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
-
+    let updateLandedTitles (game : GameObject) =
+        let fNode =
+            fun (t : Node) result ->
+                match t.Key with
+                | x when x.StartsWith "e_" -> (Empire, x)::result
+                | x when x.StartsWith "k_" -> (Kingdom, x)::result
+                | x when x.StartsWith "d_" -> (Duchy, x)::result
+                | x when x.StartsWith "c_" -> (County, x)::result
+                | x when x.StartsWith "b_" -> (Barony, x)::result
+                | _ -> result
+        let titleEntities = (EntitySet (game.Resources.AllEntities())).GlobMatchChildren("**/landed_titles/**/*.txt")
+        let titles = titleEntities |> List.collect (foldNode7 fNode)
+        let inner (es, ks, ds, cs, bs) (k : TitleType, value : string) =
+             match k with
+             | Empire -> (value::es, ks, ds, cs, bs)
+             | Kingdom -> (es, value::ks, ds, cs, bs)
+             | Duchy -> (es, ks, value::ds, cs, bs)
+             | County -> (es, ks, ds, value::cs, bs)
+             | Barony -> (es, ks, ds, cs, value::bs)
+        let (es, ks, ds, cs, bs) = titles |> List.fold inner ([], [], [], [], [])
+        game.Lookup.CK2LandedTitles <- (Empire, es)::(Kingdom, ks)::(Duchy, ds)::(County, cs)::[(Barony, bs)] |> Map.ofList
+    let createLandedTitleTypes(game : GameObject)(map : Map<_,_>) =
+        let es = game.Lookup.CK2LandedTitles.[Empire] |> List.map (fun e -> (false, e, range.Zero))
+        let ks = game.Lookup.CK2LandedTitles.[Kingdom] |> List.map (fun e -> (false, e, range.Zero))
+        let ds = game.Lookup.CK2LandedTitles.[Duchy] |> List.map (fun e -> (false, e, range.Zero))
+        let cs = game.Lookup.CK2LandedTitles.[County] |> List.map (fun e -> (false, e, range.Zero))
+        let bs = game.Lookup.CK2LandedTitles.[Barony] |> List.map (fun e -> (false, e, range.Zero))
+        map |> Map.add "title.empire" es |> Map.add "title.kingdom" ks |> Map.add "title.duchy" ds |> Map.add "title.county" cs
+            |> Map.add "title.barony" bs |> Map.add "title" (es@ks@ds@cs@bs)
 
     let updateScriptedEffects(rules :RootRule<Scope> list) =
         let effects =
@@ -152,6 +182,7 @@ module CK2GameFunctions =
             let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let typeDefInfo = getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+            let typeDefInfo = createLandedTitleTypes game typeDefInfo
             lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (v, t, r) -> if v then Some (t, r) else None))
             lookup.typeDefInfo <- typeDefInfo |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
             lookup.typeDefInfo <- addModifiersAsTypes game lookup.typeDefInfo
@@ -187,6 +218,7 @@ module CK2GameFunctions =
         // updateModifiers(game)
         // updateLegacyGovernments(game)
         // updateTechnologies()
+        updateLandedTitles(game)
         game.LocalisationManager.UpdateAllLocalisation()
         updateTypeDef game game.Settings.rules
         game.LocalisationManager.UpdateAllLocalisation()

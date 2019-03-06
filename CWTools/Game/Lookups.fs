@@ -44,6 +44,7 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val HOI4provinces : string list = [] with get, set
     member val EU4ScriptedEffectKeys : string list = [] with get, set
     member val EU4TrueLegacyGovernments : string list = [] with get, set
+    member val CK2LandedTitles : Collections.Map<TitleType, string list> = Map.empty with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<'S>>) list = [] with get, set
