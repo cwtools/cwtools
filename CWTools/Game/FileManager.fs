@@ -129,6 +129,7 @@ module Files =
                 |".txt"
                 |".gui"
                 |".gfx"
+                |".sfx"
                 |".asset" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
                     Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText(filepath, encoding); validate = true})
