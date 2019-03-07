@@ -92,9 +92,12 @@ module LanguageFeatures =
             log (sprintf "symbolInfoAtPos %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, (Some (t, tv), (None))) ->
-                match lookup.typeDefs |> List.tryFind (fun td -> td.name = t) with
+                let splitType = t.Split '.'
+                let typename = splitType.[0]
+                let subtype = if splitType.Length > 1 then splitType.[1] else ""
+                match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
                 |Some td ->
-                    let locs = td.localisation
+                    let locs = td.localisation @ (td.subtypes |> List.collect (fun st -> if st.name = subtype then st.localisation else []))
                             |> List.choose (fun l -> if l.explicitField.IsNone then Some { key = l.name; value = (l.prefix + tv + l.suffix) } else None)
                     Some {
                             name = tv
@@ -103,10 +106,12 @@ module LanguageFeatures =
                         }
                 |None -> None
             |Some (_, (Some (t, tv), (Some (NodeC node)))) ->
-                match lookup.typeDefs |> List.tryFind (fun td -> td.name = t) with
+                let splitType = t.Split '.'
+                let typename = splitType.[0]
+                let subtype = if splitType.Length > 1 then splitType.[1] else ""
+                match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
                 |Some td ->
-                    let locs =
-                        td.localisation
+                    let locs = td.localisation @ (td.subtypes |> List.collect (fun st -> if st.name = subtype then st.localisation else []))
                             |> List.map (fun l ->
                                 match l.explicitField with
                                 | None -> { key = l.name; value = (l.prefix + tv + l.suffix) }
