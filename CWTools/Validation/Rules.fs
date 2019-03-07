@@ -331,9 +331,15 @@ module rec Rules =
     let checkFieldByKey (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
         checkLeftField p field id key
 
-    let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (localisation) (typeKey : string) (key : string) (leafornode) =
+    let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (invertedTypeMap : Collections.Map<string, string list>) (localisation) (typeKey : string) (key : string) (leafornode) =
         let typenames = typeKey.Split('.')
         let typename = typenames.[0]
+        let actualSubtypes =
+            match invertedTypeMap |> Map.tryFind key with
+            | Some keytypes ->
+                keytypes |> List.filter (fun kt -> kt.StartsWith (typename+".", StringComparison.OrdinalIgnoreCase))
+                         |> List.map (fun kt -> kt.Split('.').[1])
+            | None -> []
         match typedefs |> List.tryFind (fun t -> t.name == typename) with
         |None -> OK
         |Some typedef ->
@@ -345,12 +351,13 @@ module rec Rules =
                 else
                     CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
             let subtype =
-                if typenames.Length > 1
-                then
-                    match typedef.subtypes |> List.tryFind (fun st -> st.name == typenames.[1]) with
+                let subtypes = (if typenames.Length > 1 then typenames.[1]::actualSubtypes else actualSubtypes) |> List.distinct
+                eprintfn "st %s %A" key subtypes
+                let inner2 (nextSt : string) =
+                    match typedef.subtypes |> List.tryFind (fun st -> st.name == nextSt) with
                     |None -> OK
                     |Some st -> st.localisation <&!&> inner
-                else OK
+                subtypes <&!&> inner2
             typedef.localisation <&!&> inner
             <&&> subtype
 
@@ -737,6 +744,10 @@ module rec Rules =
         let typesMap = types// |> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
         let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
         let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
+        let inner (map : Collections.Map<string,string list>) (subtype : string) (set : StringSet) =
+            set.ToList() |> List.fold (fun m v -> Map.tryFind v m |> function | Some ts -> Map.add v (subtype::ts) m | None -> Map.add v [subtype] m ) map
+        let invertedTypeMap =
+            typesMap |> Map.toList |> List.fold (fun m (t, set) -> inner m t set) Map.empty
 
         let monitor = new Object()
 
@@ -1215,20 +1226,26 @@ module rec Rules =
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
                     let value = leaf.ValueText
-                    let sets =
-                        typesMap
-                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                        |> Map.toSeq |> Seq.map fst
-                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value leaf) <&&> res
+                    // let sets =
+                    //     typesMap
+                    //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                    //     |> Map.toSeq |> Seq.map fst
+                    // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
+                    if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
+                    then (validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
+                    else res
                 |LeafRule (TypeField (TypeType.Simple t), _) ->
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
                     let value = leaf.Key
-                    let sets =
-                        typesMap
-                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                        |> Map.toSeq |> Seq.map fst
-                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value leaf) <&&> res
+                    // let sets =
+                    //     typesMap
+                    //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                    //     |> Map.toSeq |> Seq.map fst
+                    // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
+                    if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
+                    then (validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
+                    else res
                 |_ -> res
             let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
                 match field with
@@ -1236,11 +1253,14 @@ module rec Rules =
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
                     let value = leafvalue.ValueText
-                    let sets =
-                        typesMap
-                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                        |> Map.toSeq |> Seq.map fst
-                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value leafvalue) <&&> res
+                    // let sets =
+                    //     typesMap
+                    //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                    //     |> Map.toSeq |> Seq.map fst
+                    // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leafvalue) <&&> res
+                    if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
+                    then (validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue) <&&> res
+                    else res
                 |_ -> res
             let fNode (res : ValidationResult) (node : Node) (field, _) =
                 match field with
@@ -1248,11 +1268,14 @@ module rec Rules =
                 // |Field.TypeField t ->
                     let typename = t.Split('.').[0]
                     let value = node.Key
-                    let sets =
-                        typesMap
-                        |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                        |> Map.toSeq |> Seq.map fst
-                    sets <&!&> (fun s -> validateTypeLocalisation typedefs localisation s value node) <&&> res
+                    // let sets =
+                    //     typesMap
+                    //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
+                    //     |> Map.toSeq |> Seq.map fst
+                    // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value node) <&&> res
+                    if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
+                    then (validateTypeLocalisation typedefs invertedTypeMap localisation t value node) <&&> res
+                    else res
                 |_ -> res
 
             let fComment (res) _ _ = res
