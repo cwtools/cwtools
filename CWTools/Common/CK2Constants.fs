@@ -93,17 +93,8 @@ module CK2Constants =
     type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
         | Character
-        | Realm
-        | Intrigue
-        | Wealth
-        | AI_trait
-        | AI_construction
-        | Construction
-        | Opinion
-        | Warfare
-        | Technology
-        | Trade
-        | Population
+        | Province
+        | Unit
         | Any
 
     type Modifier =
@@ -118,17 +109,8 @@ module CK2Constants =
 
     let categoryScopeList = [
         ModifierCategory.Character, [Scope.Character];
-        ModifierCategory.Realm, [Scope.InvalidScope];
-        ModifierCategory.Intrigue, [InvalidScope];
-        ModifierCategory.Wealth, [InvalidScope];
-        ModifierCategory.AI_trait, [InvalidScope];
-        ModifierCategory.AI_construction, [InvalidScope];
-        ModifierCategory.Construction, [InvalidScope];
-        ModifierCategory.Opinion, [InvalidScope];
-        ModifierCategory.Warfare, [InvalidScope];
-        ModifierCategory.Technology, [InvalidScope];
-        ModifierCategory.Trade, [InvalidScope];
-        ModifierCategory.Population, [InvalidScope];
+        ModifierCategory.Province, [Scope.Province];
+        ModifierCategory.Unit, [Scope.Province; Scope.Unit];
         ModifierCategory.Any, [];
     ]
     let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList

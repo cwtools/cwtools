@@ -15,18 +15,8 @@ module CK2Parser =
     let private parseModifier =
         function
         | "character" -> ModifierCategory.Character
-        | "realm" -> ModifierCategory.Realm
-        | "intrigue" -> ModifierCategory.Intrigue
-        | "wealth" -> ModifierCategory.Wealth
-        | "ai_trait" -> ModifierCategory.AI_trait
-        | "ai_construction" -> ModifierCategory.AI_construction
-        | "construction" -> ModifierCategory.Construction
-        | "opinion" -> ModifierCategory.Opinion
-        | "warfare" -> ModifierCategory.Warfare
-        | "technology" -> ModifierCategory.Technology
-        | "trade" -> ModifierCategory.Trade
-        | "population" -> ModifierCategory.Population
-        // |"province" -> ModifierCategory.Any
+        | "province" -> ModifierCategory.Province
+        | "unit" -> ModifierCategory.Unit
         // |"country" -> ModifierCategory.Country
         |_ -> ModifierCategory.Any
 
