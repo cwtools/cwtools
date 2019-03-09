@@ -13,6 +13,8 @@ type SymbolInformation =
         typename : string
         name : string
         localisation : SymbolLocalisationInfo list
+        ruleDescription : string option
+        ruleRequiredScopes : string list
     }
 
 type CWError = (string * Severity * range * int * string * option<string>)

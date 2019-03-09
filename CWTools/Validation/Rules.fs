@@ -918,15 +918,15 @@ module rec Rules =
             |_, _ -> None
 
         let getInfoAtPos (pos : pos) (entity : Entity) =
-            let fLeaf (ctx, res) (leaf : Leaf) ((field, _) : NewRule<_>) =
+            let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule<_>) =
                 match field with
-                |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some (t, leaf.ValueText), Some (LeafC leaf))
-                |LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some (t, leaf.Key), Some (LeafC leaf))
-                |_ -> ctx, (None, Some (LeafC leaf))
-            let fLeafValue (ctx, (res, resc)) (leafvalue : LeafValue) _ =
-                ctx, (None, Some (LeafValueC leafvalue))
-            let fComment (ctx, (res, resc)) _ _ = ctx, (None, None)
-            let fNode (ctx, (res, resc)) (node : Node) ((field, options) : NewRule<_>) =
+                |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+                |LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+                |_ -> ctx, (Some o, None, Some (LeafC leaf))
+            let fLeafValue (ctx, _) (leafvalue : LeafValue) (_, o : Options<_>) =
+                ctx, (Some o, None, Some (LeafValueC leafvalue))
+            let fComment (ctx, _) _ _ = ctx, (None, None, None)
+            let fNode (ctx, (_, res, resc)) (node : Node) ((field, options) : NewRule<_>) =
                 // let anyScope = ( ^a : (static member AnyScope : ^a) ())
                 // log "info fnode inner %s %A %A %A" (node.Key) options field ctx
                 let newCtx =
@@ -967,15 +967,15 @@ module rec Rules =
                             // log "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
                         |_ -> newCtx
-                    newCtx, (res, Some (NodeC node))
+                    newCtx, (Some options, None, Some (NodeC node))
                 | NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
-                    ctx, (Some (typename, node.Key), Some (NodeC node))
+                    ctx, (Some options, Some (typename, node.Key), Some (NodeC node))
                 | NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
                     let typevalue = node.TagText namefield
-                    ctx, (Some (typename, typevalue), Some (NodeC node))
-                | NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some (t, node.Key), Some (NodeC node))
-                | NodeRule (_, f) -> newCtx, (res, Some (NodeC node))
-                | _ -> newCtx, (res, Some (NodeC node))
+                    ctx, (Some options, Some (typename, typevalue), Some (NodeC node))
+                | NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+                | NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
+                | _ -> newCtx, (Some options, None, Some (NodeC node))
 
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
             let file = Path.GetFileName entity.logicalpath
@@ -990,7 +990,7 @@ module rec Rules =
                     |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
                 |_, _ -> { subtypes = []; scopes = defaultContext; warningOnly = false }
 
-            let ctx = ctx, (None, None)
+            let ctx = ctx, (None, None, None)
             foldWithPos fLeaf fLeafValue fComment fNode ctx (pos) (entity.entity) (entity.logicalpath)
 
 
