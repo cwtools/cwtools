@@ -352,7 +352,6 @@ module rec Rules =
                     CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNode localisation lockey leafornode)
             let subtype =
                 let subtypes = (if typenames.Length > 1 then typenames.[1]::actualSubtypes else actualSubtypes) |> List.distinct
-                eprintfn "st %s %A" key subtypes
                 let inner2 (nextSt : string) =
                     match typedef.subtypes |> List.tryFind (fun st -> st.name == nextSt) with
                     |None -> OK

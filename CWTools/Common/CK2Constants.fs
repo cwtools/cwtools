@@ -92,12 +92,19 @@ module CK2Constants =
     type ScriptedEffect = ScriptedEffect<Scope>
     type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
-        // |State
-        // |Country
-        // |Unit
-        // |UnitLeader
-        // |Air
-        |Any
+        | Character
+        | Realm
+        | Intrigue
+        | Wealth
+        | AI_trait
+        | AI_construction
+        | Construction
+        | Opinion
+        | Warfare
+        | Technology
+        | Trade
+        | Population
+        | Any
 
     type Modifier =
         {
@@ -109,14 +116,22 @@ module CK2Constants =
         interface IModifier with
             member this.Tag = this.tag
 
-    // let categoryScopeList = [
-    //     ModifierCategory.Country, [Scope.Country]
-    //     ModifierCategory.UnitLeader, [Scope.UnitLeader; Scope.Country]
-    //     ModifierCategory.Unit, [Scope.UnitLeader; Scope.Country]
-    //     ModifierCategory.State, [Scope.Any]
-    //     ModifierCategory.Air, [Scope.Air; Scope.Country]
-    // ]
-    // let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
+    let categoryScopeList = [
+        ModifierCategory.Character, [Scope.Character];
+        ModifierCategory.Realm, [Scope.InvalidScope];
+        ModifierCategory.Intrigue, [InvalidScope];
+        ModifierCategory.Wealth, [InvalidScope];
+        ModifierCategory.AI_trait, [InvalidScope];
+        ModifierCategory.AI_construction, [InvalidScope];
+        ModifierCategory.Construction, [InvalidScope];
+        ModifierCategory.Opinion, [InvalidScope];
+        ModifierCategory.Warfare, [InvalidScope];
+        ModifierCategory.Technology, [InvalidScope];
+        ModifierCategory.Trade, [InvalidScope];
+        ModifierCategory.Population, [InvalidScope];
+        ModifierCategory.Any, [];
+    ]
+    let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
 
     let scriptFolders = [
         "common";

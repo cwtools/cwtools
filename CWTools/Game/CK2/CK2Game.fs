@@ -77,8 +77,20 @@ module CK2GameFunctions =
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.scriptedLoc <- rawLocs
-    // let updateModifiers (game : GameObject) =
-    //         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
+
+    let updateModifiers (game : GameObject) =
+        game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
+
+    let addModifiersWithScopes (game : GameObject) =
+        let modifierOptions (modifier : Modifier) =
+            let requiredScopes =
+                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
+                                    |> List.map Set.ofList
+                                    |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
+            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes}
+        game.Lookup.coreModifiers
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
+
     let updateLandedTitles (game : GameObject) =
         let fNode =
             fun (t : Node) result ->
@@ -156,7 +168,7 @@ module CK2GameFunctions =
                 lookup.scriptedEffects <- updateScriptedEffects rules
                 lookup.scriptedTriggers <- updateScriptedTriggers rules
                 lookup.typeDefs <- types
-                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []}))))
+                let rulesWithMod = rules @ addModifiersWithScopes(game)
                 lookup.configRules <- rulesWithMod
                 simpleEnums <- enums
                 complexEnums <- complexenums
@@ -215,7 +227,7 @@ module CK2GameFunctions =
         // updateStaticodifiers()
         // updateScriptedLoc(game)
         // updateDefinedVariables()
-        // updateModifiers(game)
+        updateModifiers(game)
         // updateLegacyGovernments(game)
         // updateTechnologies()
         updateLandedTitles(game)
