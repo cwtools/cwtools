@@ -26,6 +26,7 @@ open CWTools.Validation.CK2.CK2LocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.ProcessCore
+open System
 
 module CK2GameFunctions =
     type GameObject = GameObject<Scope, Modifier, CK2ComputedData>
@@ -121,6 +122,18 @@ module CK2GameFunctions =
         map |> Map.add "title.empire" es |> Map.add "title.kingdom" ks |> Map.add "title.duchy" ds |> Map.add "title.county" cs
             |> Map.add "title.barony" bs |> Map.add "title" (es@ks@ds@cs@bs)
 
+    let updateProvinces (game : GameObject) =
+        let provinceFile =
+            game.Resources.GetResources()
+            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+        match provinceFile with
+        |None -> ()
+        |Some pf ->
+            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
+            game.Lookup.CK2provinces <- provinces
+
     let updateScriptedEffects(rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
@@ -179,7 +192,7 @@ module CK2GameFunctions =
             |None -> ()
             let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
-            let allEnums = simpleEnums @ complexEnumDefs @ [modifierEnums]
+            let allEnums = simpleEnums @ complexEnumDefs @ [modifierEnums] @ [{ key = "provinces"; description = "provinces"; values = lookup.CK2provinces}]
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             lookup.enumDefs <- allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
             // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -231,6 +244,7 @@ module CK2GameFunctions =
         // updateLegacyGovernments(game)
         // updateTechnologies()
         updateLandedTitles(game)
+        updateProvinces(game)
         game.LocalisationManager.UpdateAllLocalisation()
         updateTypeDef game game.Settings.rules
         game.LocalisationManager.UpdateAllLocalisation()

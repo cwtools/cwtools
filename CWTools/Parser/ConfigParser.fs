@@ -344,7 +344,7 @@ module rec ConfigParser =
             | Some target ->
                 ScopeField (parseScope target)
             | None -> ValueField ValueType.Scalar
-        | "portait_dna_field" -> ValueField CK2DNA
+        | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
         | x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|])).lower))
 
