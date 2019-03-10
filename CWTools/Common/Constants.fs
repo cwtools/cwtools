@@ -103,4 +103,4 @@ type IScope<'T> =
 type IModifier =
     abstract member Tag : string
 
-type TitleType = |Empire |Kingdom |Duchy |County |Barony
+type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony
