@@ -176,7 +176,7 @@ module CK2GameFunctions =
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.CK2provinces <- provinces
 
-    let updateScriptedEffects(rules :RootRule<Scope> list) =
+    let updateScriptedEffects (game : GameObject) (rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
         let ruleToEffect(r,o) =
@@ -186,9 +186,9 @@ module CK2GameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (game.Settings.embedded.eventTargetLinks |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers(rules :RootRule<Scope> list) =
+    let updateScriptedTriggers (game : GameObject) (rules :RootRule<Scope> list) =
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
         let ruleToTrigger(r,o) =
@@ -198,7 +198,7 @@ module CK2GameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (game.Settings.embedded.eventTargetLinks |> List.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (game : GameObject) (typesMap : Map<string,(string * range) list>) =
         // let createType (modifier : Modifier) =
@@ -220,8 +220,8 @@ module CK2GameFunctions =
             match rulesSettings with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
-                lookup.scriptedEffects <- updateScriptedEffects rules
-                lookup.scriptedTriggers <- updateScriptedTriggers rules
+                lookup.scriptedEffects <- updateScriptedEffects game rules
+                lookup.scriptedTriggers <- updateScriptedTriggers game rules
                 lookup.typeDefs <- types
                 let rulesWithMod = rules @ addModifiersWithScopes(game)
                 lookup.configRules <- rulesWithMod
