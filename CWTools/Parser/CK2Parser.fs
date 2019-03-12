@@ -52,7 +52,7 @@ module CK2Parser =
         let inputScopes =
             match node.TagText "input_scopes", node.Child "input_scopes" with
             | x, _ when x <> "" -> [parseScope (node.TagText "input_scopes")]
-            | "", Some child -> child.Values |> List.map (fun lv -> lv.ValueText |> parseScope)
+            | "", Some child -> child.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.ValueText |> parseScope)
             | _ -> allScopes
         let outputScope = if node.Has "output_scope" then node.TagText "output_scope" |> parseScope else Scope.Any
         ScopedEffect(name, inputScopes, outputScope, EffectType.Both, desc, "", true)
