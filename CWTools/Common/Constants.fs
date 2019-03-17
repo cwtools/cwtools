@@ -104,3 +104,16 @@ type IModifier =
     abstract member Tag : string
 
 type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony
+
+type EventTargetDataLink<'S> = {
+    name : string
+    inputScopes : 'S list
+    outputScope : 'S
+    description : string
+    dataPrefix : string option
+    sourceRuleType : string
+}
+
+type EventTargetLink<'S when 'S : comparison> =
+| SimpleLink of ScopedEffect<'S>
+| DataLink of EventTargetDataLink<'S>

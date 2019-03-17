@@ -43,6 +43,7 @@ let emptyStellarisSettings (rootDirectory) = {
         embeddedFiles = []
         cachedResourceData = []
         localisationCommands = []
+        eventTargetLinks = []
     }
     scriptFolders = None
     excludeGlobPatterns = None
@@ -189,9 +190,14 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         // configtext |> Seq.iter (fun (fn, _) -> eprintfn "%s" fn)
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+        let eventTargetLinks =
+                    configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                            |> Option.map (fun (fn, ft) -> STLParser.loadEventTargetLinks fn ft)
+                            |> Option.defaultValue (STLScopes.scopedEffects |> List.map SimpleLink)
+
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let settings = emptyStellarisSettings folder
-        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; eventTargetLinks = eventTargetLinks };
                                             rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))

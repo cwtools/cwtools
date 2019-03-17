@@ -186,7 +186,8 @@ module CK2GameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (game.Settings.embedded.eventTargetLinks |> List.map (fun e -> e :> Effect))
+        let simpleEventTargetLinks = game.Settings.embedded.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
+        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (simpleEventTargetLinks)
 
     let updateScriptedTriggers (game : GameObject) (rules :RootRule<Scope> list) =
         let effects =
@@ -198,7 +199,8 @@ module CK2GameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (game.Settings.embedded.eventTargetLinks |> List.map (fun e -> e :> Effect))
+        let simpleEventTargetLinks = game.Settings.embedded.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
+        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (simpleEventTargetLinks)
 
     let addModifiersAsTypes (game : GameObject) (typesMap : Map<string,(string * range) list>) =
         // let createType (modifier : Modifier) =

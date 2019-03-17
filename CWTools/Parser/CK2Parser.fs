@@ -46,6 +46,7 @@ module CK2Parser =
                 |> Option.map getLocCommands
                 |> Option.defaultValue []
 
+
     let parseLink(node : Node) =
         let name = node.Key
         let desc = node.TagText "desc"
@@ -55,7 +56,18 @@ module CK2Parser =
             | "", Some child -> child.Values |> List.map (fun lv -> lv.ValueText |> parseScope)
             | _ -> allScopes
         let outputScope = if node.Has "output_scope" then node.TagText "output_scope" |> parseScope else Scope.Any
-        ScopedEffect(name, inputScopes, outputScope, EffectType.Both, desc, "", true)
+        match node.TagText "from_data" with
+        |"yes" -> 
+            DataLink {
+                EventTargetDataLink.name = name
+                inputScopes = inputScopes
+                outputScope = outputScope
+                description = desc
+                dataPrefix = node.TagText "prefix" |> (fun s -> if s = "" then None else Some s)
+                sourceRuleType = node.TagText "data_source"
+            }
+        |_ ->
+            SimpleLink (ScopedEffect(name, inputScopes, outputScope, EffectType.Both, desc, "", true))
 
     let loadEventTargetLinks filename fileString =
         let parsed = CKParser.parseString fileString filename
