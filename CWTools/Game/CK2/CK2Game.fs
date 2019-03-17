@@ -202,6 +202,16 @@ module CK2GameFunctions =
         let simpleEventTargetLinks = game.Settings.embedded.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (simpleEventTargetLinks)
 
+    let addDataEventTargetLinks (game : GameObject) =
+        let links = game.Settings.embedded.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
+        let convertLinkToEffects (link : EventTargetDataLink<_>) =
+            let typeDefinedKeys = game.Lookup.typeDefInfo.[link.sourceRuleType] |> List.map fst
+            let keyToEffect (key : string) =
+                let key = link.dataPrefix |> Option.map ((+) key) |> Option.defaultValue key
+                ScopedEffect(key, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)
+            typeDefinedKeys |> List.map keyToEffect
+        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect)
+
     let addModifiersAsTypes (game : GameObject) (typesMap : Map<string,(string * range) list>) =
         // let createType (modifier : Modifier) =
         typesMap.Add("modifier", game.Lookup.coreModifiers |> List.map (fun m -> (m.tag, range.Zero)))
@@ -214,6 +224,8 @@ module CK2GameFunctions =
         let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
         let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
         let mutable rulesDataGenerated = false
+        let mutable tempEffects = []
+        let mutable tempTriggers = []
         (fun (game : GameObject) rulesSettings ->
             let lookup = game.Lookup
             let resources = game.Resources
@@ -222,8 +234,10 @@ module CK2GameFunctions =
             match rulesSettings with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig parseScope allScopes Scope.Any fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
-                lookup.scriptedEffects <- updateScriptedEffects game rules
-                lookup.scriptedTriggers <- updateScriptedTriggers game rules
+                tempEffects <- updateScriptedEffects game rules
+                lookup.scriptedEffects <- tempEffects
+                tempTriggers <- updateScriptedTriggers game rules
+                lookup.scriptedTriggers <- tempTriggers
                 lookup.typeDefs <- types
                 let rulesWithMod = rules @ addModifiersWithScopes(game)
                 lookup.configRules <- rulesWithMod
@@ -255,6 +269,10 @@ module CK2GameFunctions =
             lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (v, t, r) -> if v then Some (t, r) else None))
             lookup.typeDefInfo <- typeDefInfo |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
             lookup.typeDefInfo <- addModifiersAsTypes game lookup.typeDefInfo
+
+            lookup.scriptedEffects <- tempEffects @ addDataEventTargetLinks game
+            lookup.scriptedTriggers <- tempTriggers @ addDataEventTargetLinks game
+
             tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
             let tempFoldRules = (FoldRules<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, tempRuleApplicator, changeScope, defaultContext, Scope.Any, STL STLLang.Default))
             game.InfoService <- Some tempFoldRules
