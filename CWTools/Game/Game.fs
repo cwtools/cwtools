@@ -24,7 +24,7 @@ type EmbeddedSettings<'S,'M when 'S : comparison> = {
     modifiers : 'M list
     cachedResourceData : (Resource * Entity) list
     localisationCommands : (string * ('S list)) list
-    eventTargetLinks : ScopedEffect<'S> list
+    eventTargetLinks : EventTargetLink<'S> list
 }
 
 type ValidationSettings = {
