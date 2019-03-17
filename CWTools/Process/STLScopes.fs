@@ -392,11 +392,6 @@ module STLScopes =
         "PREVPREV", prev >> prev;
         "PREVPREVPREV", prev >> prev >> prev;
         "PREVPREVPREVPREV", prev >> prev >> prev >> prev
-        "AND", id;
-        "OR", id;
-        "NOR", id;
-        "NOT", id;
-        "NAND", id;
         "hidden_effect", id;
         "hidden_trigger", id;
     ]

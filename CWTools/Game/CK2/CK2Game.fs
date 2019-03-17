@@ -182,8 +182,8 @@ module CK2GameFunctions =
         let ruleToEffect(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
         let simpleEventTargetLinks = game.Settings.embedded.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
@@ -195,8 +195,8 @@ module CK2GameFunctions =
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         let simpleEventTargetLinks = game.Settings.embedded.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)

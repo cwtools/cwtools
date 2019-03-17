@@ -166,20 +166,20 @@ module STLGameFunctions =
             let getAllScriptedTriggers =
                 game.Lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
                                                 |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
-            let addRequiredScopesE s (o : ConfigParser.Options<_>) =
+            let addRequiredScopesE (s : StringTokens) (o : ConfigParser.Options<_>) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        game.Lookup.scriptedEffectsMap.TryFind((StringResource.stringManager.GetStringForID s))
+                        game.Lookup.scriptedEffectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 { o with requiredScopes = newScopes}
-            let addRequiredScopesT s (o : ConfigParser.Options<_>) =
+            let addRequiredScopesT (s : StringTokens) (o : ConfigParser.Options<_>) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        game.Lookup.scriptedTriggersMap.TryFind((StringResource.stringManager.GetStringForID s))
+                        game.Lookup.scriptedTriggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x

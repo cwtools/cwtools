@@ -89,8 +89,8 @@ module HOI4GameFunctions =
         let ruleToEffect(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Both, defaultDesc, "", true));
@@ -104,8 +104,8 @@ module HOI4GameFunctions =
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n
+                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Both, defaultDesc, "", true));

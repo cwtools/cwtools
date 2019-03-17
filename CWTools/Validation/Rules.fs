@@ -101,7 +101,7 @@ module rec Rules =
                     | None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
                 | ValueType.Specific s ->
                     // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
-                    if id = s then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s))) severity) leafornode <&&&> errors
+                    if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
                 | ValueType.Percent ->
                     if key.EndsWith("%") then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.Date ->
@@ -138,7 +138,7 @@ module rec Rules =
                 | None -> false
             | ValueType.Specific s ->
                 // if trimQuote key == s then true else false
-                id = s
+                id = s.lower
             | ValueType.Percent ->
                 key.EndsWith("%")
             | ValueType.Date ->
@@ -582,11 +582,11 @@ module rec Rules =
                 match rule with
                 |NodeRule(ValueField (ValueType.Specific key), _), opts
                 |LeafRule(ValueField (ValueType.Specific key), _), opts ->
-                    let leafcount = node.Values |> List.filter (fun leaf -> leaf.KeyId.lower = key) |> List.length
-                    let childcount = node.Children |> List.filter (fun child -> child.KeyId.lower = key) |> List.length
+                    let leafcount = node.Values |> List.filter (fun leaf -> leaf.KeyId.lower = key.lower) |> List.length
+                    let childcount = node.Children |> List.filter (fun child -> child.KeyId.lower = key.lower) |> List.length
                     let total = leafcount + childcount
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key) opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" (StringResource.stringManager.GetStringForID key) opts.max) Severity.Warning) node <&&&> innerErrors
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" (StringResource.stringManager.GetStringForID key.normal) opts.max) Severity.Warning) node <&&&> innerErrors
                     else innerErrors
                 |NodeRule(AliasField(_), _), _
                 |LeafRule(AliasField(_), _), _
@@ -738,7 +738,7 @@ module rec Rules =
                 |Some ps -> { Root = ps; From = []; Scopes = [ps] }
                 |None -> defaultContext
             let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
-            applyNodeRule true context options (ValueField (ValueType.Specific rootId.lower)) rules node OK
+            applyNodeRule true context options (ValueField (ValueType.Specific rootId)) rules node OK
 
         let rootTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file)
         let normalTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file |> not )
@@ -758,7 +758,7 @@ module rec Rules =
                     //match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
                     //match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
                     match typerules |> List.tryHead with
-                    |Some ((NodeRule ((ValueField (ValueType.Specific (x))), rs), o)) when (StringResource.stringManager.GetStringForID x) == typedef.name->
+                    |Some ((NodeRule ((ValueField (ValueType.Specific (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
                         if typekeyfilter typedef n.Key then applyNodeRuleRoot typedef rs o n else OK
                     |_ ->
                         OK
@@ -774,7 +774,7 @@ module rec Rules =
             let res = (root.Children <&!&> inner normalTypeDefs)
             let rootres = (inner rootTypeDefs root)
             res <&&> rootres
-        member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific rootId.lower)) rule node OK
+        member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific rootId)) rule node OK
         member this.TestSubType(subtypes, node) = testSubtype subtypes node
         member this.RuleValidate() = (fun _ (es : EntitySet<_>) -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate)
         member this.RuleValidateEntity = (fun e -> validate (e.logicalpath, e.entity))
@@ -1418,7 +1418,8 @@ module rec Rules =
             let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                     |> Option.defaultValue []
                                                     |> List.map (fun s -> "event_target:" + s)
-            evs @ gevs @ oneToOneScopes
+            let scopedEffects = triggerMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect<'T> as x -> Some x.Name | _ -> None )
+            evs @ gevs @ scopedEffects
 
         let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
             let filterToCompletion =
@@ -1428,16 +1429,16 @@ module rec Rules =
                 |_ -> false
             let ruleToDistinctKey =
                 function
-                |LeafRule(ValueField(ValueType.Specific s), _) -> StringResource.stringManager.GetStringForID s
-                |NodeRule(ValueField(ValueType.Specific s), _) -> StringResource.stringManager.GetStringForID s
+                |LeafRule(ValueField(ValueType.Specific s), _) -> StringResource.stringManager.GetStringForID s.normal
+                |NodeRule(ValueField(ValueType.Specific s), _) -> StringResource.stringManager.GetStringForID s.normal
                 |_ -> ""
 
             let rulePrint (i : int) =
                 function
                 |LeafRule(ValueField(ValueType.Specific s), r) ->
-                    sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s) (i + 1) (fieldToCompletionList r)
+                    sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s.normal) (i + 1) (fieldToCompletionList r)
                 |NodeRule(ValueField(ValueType.Specific s), _) ->
-                    sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s) (i + 1) "{ }"
+                    sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s.normal) (i + 1) "{ }"
                 |_ -> ""
 
             let requiredRules = rules |> List.filter (fun (f, o) -> o.min >= 1 && filterToCompletion f)
@@ -1478,7 +1479,7 @@ module rec Rules =
                     let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunction inner))
                     match r with
                     |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
-                        [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s)]
+                        [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
                     |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
                         enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
                     |NodeRule (ValueField(_), _) -> []
@@ -1499,7 +1500,7 @@ module rec Rules =
                         varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
 
                     |LeafRule (ValueField(ValueType.Specific s), _) ->
-                        [keyvalue (StringResource.stringManager.GetStringForID s)]
+                        [keyvalue (StringResource.stringManager.GetStringForID s.normal)]
                     |LeafRule (ValueField(ValueType.Enum e), _) ->
                         enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []
                     |LeafRule (ValueField(_), _) -> []
