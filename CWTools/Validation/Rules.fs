@@ -181,10 +181,19 @@ module rec Rules =
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then errors else
-            let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            if
+                match isComplex with
+                | true ->
+                    values.ToList() |> List.map typeKeyMap |> List.exists ((==) value)
+                | false ->
+                    values.Contains value
+            then errors
+            else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
 
             //let values = values typeKeyMap values
-            if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
+            // if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
         |None -> inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode <&&&> errors
     let checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) =
         let isComplex, fieldType =
@@ -199,10 +208,15 @@ module rec Rules =
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then true else
-            let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            match isComplex with
+            | true ->
+                values.ToList() |> List.map typeKeyMap |> List.exists ((==) value)
+            | false ->
+                values.Contains value
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
 
             //let values = values typeKeyMap values
-            if values.Contains value then true else false
         |None -> false
 
     let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode errors =
