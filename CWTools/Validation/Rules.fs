@@ -167,7 +167,16 @@ module rec Rules =
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocNameNE defaultKeys (defaultLang) key
         |false ->
             CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNodeNE keys key
-
+    let memoize keyFunction memFunction =
+        let dict = new System.Collections.Generic.Dictionary<_,_>()
+        fun n ->
+            match dict.TryGetValue(keyFunction(n)) with
+            | (true, v) -> v
+            | _ ->
+                let temp = memFunction(n)
+                dict.Add(keyFunction(n), temp)
+                temp
+    // let memoizedComplexTypes (typetype : TypeType) (values : StringSet)
     let checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode errors =
         let isComplex, fieldType =
             match typetype with
@@ -181,10 +190,35 @@ module rec Rules =
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then errors else
-            let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            let found =
+                let newvalue =
+                    match typetype with
+                    | TypeType.Simple t -> Some value
+                    | Complex(p, _, s) ->
+                        // match value.IndexOf(p, StringComparison.OrdinalIgnoreCase), value.LastIndexOf(s, StringComparison.OrdinalIgnoreCase) with
+                        // | -1, -1 ->
+                        //     None
+                        // | fi, -1 ->
+                        //     Some (value.Substring(p.Length))
+                        // | -1, si ->
+                        //     Some (value.Substring(0, si))
+                        // | fi, si ->
+                        //     Some (value.Substring(p.Length, (si - p.Length)))
+                    match value.StartsWith(p, StringComparison.OrdinalIgnoreCase), value.EndsWith(s, StringComparison.OrdinalIgnoreCase) with
+                        | _, false -> None
+                        | false, _ -> None
+                        | true, true ->
+                            Some (value.Substring(p.Length, (value.Length - p.Length - s.Length)))
+                // eprintfn "ct %s %A %A" value newvalue typetype
+                newvalue |> Option.map (values.Contains) |> Option.defaultValue false
+            if found
+            then errors
+            else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
 
             //let values = values typeKeyMap values
-            if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
+            // if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
         |None -> inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode <&&&> errors
     let checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) =
         let isComplex, fieldType =
@@ -199,10 +233,35 @@ module rec Rules =
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then true else
-            let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            let value =
+                match typetype with
+                | TypeType.Simple t -> Some value
+                | Complex(p, _, s) ->
+                    // match value.IndexOf(p, StringComparison.OrdinalIgnoreCase), value.LastIndexOf(s, StringComparison.OrdinalIgnoreCase) with
+                    // | -1, -1 ->
+                    //     None
+                    // | fi, -1 ->
+                    //     Some (value.Substring(p.Length))
+                    // | -1, si ->
+                    //     Some (value.Substring(0, si))
+                    // | fi, si ->
+                    //     Some (value.Substring(p.Length, (si - p.Length)))
+                    match value.StartsWith(p, StringComparison.OrdinalIgnoreCase), value.EndsWith(s, StringComparison.OrdinalIgnoreCase) with
+                    | _, false -> None
+                    | false, _ -> None
+                    | true, true ->
+                        Some (value.Substring(p.Length, (value.Length - p.Length - s.Length)))
+
+            value |> Option.map (values.Contains) |> Option.defaultValue false
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
+            // match isComplex with
+            // | true ->
+            //     values.ToList() |> List.map typeKeyMap |> List.exists ((==) value)
+            // | false ->
+            //     values.Contains value
+            // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
 
             //let values = values typeKeyMap values
-            if values.Contains value then true else false
         |None -> false
 
     let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode errors =

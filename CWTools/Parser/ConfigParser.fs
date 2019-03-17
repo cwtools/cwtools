@@ -391,7 +391,6 @@ module rec ConfigParser =
         |_ -> None
 
     let configRootLeaf (parseScope) allScopes (anyScope) (leaf : Leaf) (comments : string list) =
-        let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
         match leaf.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
@@ -399,8 +398,10 @@ module rec ConfigParser =
                 let innerRule = configLeaf parseScope allScopes anyScope leaf comments rn
                 AliasRule (a, innerRule)
             |None ->
+                let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
                 TypeRule (x, rule)
         |x ->
+            let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
             TypeRule (x, rule)
 
     let configRootNode (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
