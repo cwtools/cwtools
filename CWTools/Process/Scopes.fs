@@ -53,7 +53,7 @@ module Scopes =
         member this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
         member this.GetFrom i =
              if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
-        
+
 
     type LocContextResult<'S when 'S :> IScope<'S>> =
         | Start of startContext : ScopeContext<'S>
@@ -95,7 +95,7 @@ module Scopes =
     let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
-        (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
+        (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (eventTargetLinks : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
             if
                 key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
@@ -115,11 +115,12 @@ module Scopes =
                     | None ->
                         let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect  -> Some e |_ -> None)
                         let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect -> Some e |_ -> None)
+                        let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect -> Some e |_ -> None)
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)
                         // if skipEffect then (context, false), NotFound else
-                        match Option.orElse effectMatch triggerMatch with
+                        match Option.orElse (Option.orElse effectMatch triggerMatch) eventTargetLinkMatch with
                         | None ->
                             if last && vars.Contains nextKey
                             then
@@ -260,3 +261,5 @@ module Scopes =
     //                     | true -> Found (rootScope, scopes), false
     //                     | false -> LocNotFound (nextKey), false
     //     keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
+
+    type ChangeScope<'S when 'S :> IScope<'S> and 'S : comparison> = bool -> bool -> EffectMap<'S> -> EffectMap<'S> -> EffectMap<'S> -> StringSet -> string -> ScopeContext<'S> -> ScopeResult<'S>

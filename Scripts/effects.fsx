@@ -135,7 +135,7 @@ open CWTools.Parser
 open FParsec
 
 // let triggers, effects = DocsParser.parseDocsFilesRes @"C:\Users\Thomas\git\cwtools\CWToolsTests\testfiles\validationtests\trigger_docs_2.1.0.txt"
-let triggers, effects = DocsParser.parseDocsFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/hoi5_trigger_docs.txt"
+let triggers, effects = DocsParser.parseDocsFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/hoi4_trigger_docs.txt"
 
 let tinner =
             """{

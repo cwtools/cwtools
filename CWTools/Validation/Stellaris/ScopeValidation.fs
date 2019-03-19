@@ -94,7 +94,7 @@ module ScopeValidation =
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
-                match changeScope false false effects triggers ((StringSet.Empty(InsensitiveStringComparer()))) x scopes with
+                match changeScope false false effects triggers (EffectMap.Empty(InsensitiveStringComparer())) ((StringSet.Empty(InsensitiveStringComparer()))) x scopes with
                 |NewScope (s, ignores) ->
                     valNodeTriggers root triggers effects modifiers s ignores node
                     <&&>
@@ -128,7 +128,7 @@ module ScopeValidation =
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
-                match changeScope false false effects triggers ((StringSet.Empty(InsensitiveStringComparer()))) x scopes with
+                match changeScope false false effects triggers (EffectMap.Empty(InsensitiveStringComparer())) ((StringSet.Empty(InsensitiveStringComparer()))) x scopes with
                 |NewScope (s, ignores) -> valNodeEffects node triggers effects modifiers s ignores node
                 |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
@@ -167,7 +167,7 @@ module ScopeValidation =
         |x when ["else"] |> List.exists (fun t -> t == x) -> false, scopes
         |x when x.Contains("parameter:") -> false, scopes
         |x ->
-            match changeScope false false effects triggers (StringSet.Empty(InsensitiveStringComparer())) x scopes with
+            match changeScope false false effects triggers (EffectMap.Empty(InsensitiveStringComparer())) (StringSet.Empty(InsensitiveStringComparer())) x scopes with
                 |NewScope (s, _) -> false, s
                 |WrongScope _ -> false, scopes
                 |NotFound -> false, scopes
@@ -267,8 +267,8 @@ module ScopeValidation =
 
     let valAllEffects : LookupValidator<STLComputedData, _, _> =
         (fun lu _ es ->
-            let triggers = lu.scriptedTriggers
-            let effects = lu.scriptedEffects
+            let triggers = lu.triggers
+            let effects = lu.effects
             let modifiers = lu.staticModifiers
             let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
             let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
@@ -305,8 +305,8 @@ module ScopeValidation =
 
     let valAllTriggers : LookupValidator<STLComputedData, _, _> =
         (fun lu _ es ->
-            let triggers = lu.scriptedTriggers
-            let effects = lu.scriptedEffects
+            let triggers = lu.triggers
+            let effects = lu.effects
             let modifiers = lu.staticModifiers
             let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
             let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
@@ -331,8 +331,8 @@ module ScopeValidation =
 
     let validateModifierBlocks : LookupValidator<STLComputedData, _, _> =
         (fun lu _ es ->
-            let triggers = lu.scriptedTriggers
-            let effects = lu.scriptedEffects
+            let triggers = lu.triggers
+            let effects = lu.effects
             let modifiers = lu.staticModifiers
             let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
             let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))

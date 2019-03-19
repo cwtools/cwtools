@@ -1,4 +1,3 @@
-
 == TRIGGER DOCUMENTATION ==
 state - check state id
 Supported scopes: state
@@ -7,7 +6,7 @@ Supported targets: none
 
 if - if_, CIfTrigger, A conditional trigger
 if = { limit = { <triggers> } <trigger> }
-Supported scopes: test
+Supported scopes: ???
 
 Supported targets:
 
@@ -21,11 +20,3997 @@ Supported scopes:
 
 Supported targets:
 
+phase - check if we are in this combat phase
+Supported scopes:
+
+Supported targets:
+
+and - all inside trigger must be true
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+or - at least one entry inside trigger must be true
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+not - negates content of trigger
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+exists - Check if the current country exist. The country of the scope you are in. Example: DEN = { exists = yes }
+Supported scopes: country
+
+Supported targets:
+
+difficulty - check if the difficulty is above or below specified value 0-2 (difficulty enum). Example: difficulty > 0 (above easy)
+Supported scopes: ???
+
+Supported targets:
+
+any_neighbor_country - check if any neighbor country meets the trigger
+Supported scopes: country
+
+Supported targets:
+
+has_country_flag - has country flag been set.Check flag val date set and days since set.
+Example: has_country_flag = test_flag
+has_country_flag = { 
+	flag = <name> (mandatory)
+	value < <int> (optional)
+	date > <date> (optional)
+	days > <int> (optional)
+}
+Supported scopes: country
+
+Supported targets: ???
+
+reserves - check amount of reserves
+Supported scopes:
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+tag - country tag trigger
+Supported scopes: country
+
+Supported targets: ???
+
+any_country - check if any country meets the trigger
+Supported scopes: ???
+
+Supported targets:
+
+check_variable - Compares a variable to a number
+Supported scopes: ???
+
+Supported targets: ???
+
+region - check state's strategic area id
+Supported scopes: state
+
+Supported targets: none
+
+is_subject - Checks if the country is subject of any other country
+Supported scopes: country
+
+Supported targets: ???
+
+area - check state's strategic area id
+Supported scopes: state
+
+Supported targets: none
+
+threat - check the global threat value. 0-1 value
+Supported scopes: ???
+
+Supported targets:
+
+always - always returns specified value
+Supported scopes: ???
+
+Supported targets: ???
+
+is_capital - Is scope state a capital. 169 = { is_capital = yes }
+Supported scopes: state
+
+Supported targets: none
+
+has_global_flag - has global flag been set.Check flag val date set and days since set.
+Example: has_global_flag = test_flag
+has_global_flag = { 
+	flag = <name> (mandatory)
+	value < <int> (optional)
+	date > <date> (optional)
+	days > <int> (optional)
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+is_attacker - check if attacker side in combat
+Supported scopes:
+
+Supported targets:
+
+has_dlc - Checks if player has a DLC.
+Example: has_dlc = "name of the dlc"
+Supported scopes: ???
+
+Supported targets:
+
+hidden_trigger - a hidden trigger, anything in it not shown in tooltips
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_idea - check if country has idea
+Supported scopes: country
+
+Supported targets:
+
+any_enemy_country - check if any enemy country meets the trigger
+Supported scopes: country
+
+Supported targets:
+
+is_neighbor_of - check if neighbor ( controlled territory ) with specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_opinion - check what opinion the country has towards a specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_opinion_modifier - check if a country has the opinion modifier
+Supported scopes: country
+
+Supported targets:
+
+is_subject_of - Checks if the country is subject of specified country
+Supported scopes: country
+
+Supported targets: ???
+
+all_neighbor_country - check if all neighbor countries meet the trigger
+Supported scopes: country
+
+Supported targets:
+
+all_country - check if all countries meets the trigger
+Supported scopes: ???
+
+Supported targets:
+
+all_enemy_country - check if all enemy countries meet the trigger
+Supported scopes: country
+
+Supported targets:
+
+night - check if combat is at night
+Supported scopes:
+
+Supported targets:
+
+dig_in - check if we have digin level (lowest)
+Supported scopes:
+
+Supported targets:
+
+temperature - check combat province temperature
+Supported scopes:
+
+Supported targets:
+
+armor - Check that average armor level of combatant is over a certain level
+Supported scopes:
+
+Supported targets:
+
+has_war - is country at war
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_controlled_by - check if state is controlled by
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_owned_by - check if state is owned by
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+skill_advantage - compare leader skill levels
+Supported scopes:
+
+Supported targets:
+
+owns_state - check owner for state(s)
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+controls_state - check controller for state(s)
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_government - does country government (ruling party) belong to ideology group
+Supported scopes: country
+
+Supported targets:
+
+has_state_flag - has state flag been setCheck flag val date set and days since set.
+Example: has_state_flag = test_flag
+has_state_flag = { 
+	flag = <name> (mandatory)
+	value < <int> (optional)
+	date > <date> (optional)
+	days > <int> (optional)
+}
+Supported scopes: state
+
+Supported targets: ??? none
+
+has_war_with - is countries at war
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+divisions_in_state - checks for amount of divisions in specified state owned by current country.
+Supported scopes: country
+
+Supported targets:
+
+country_exists - check if the specified country exist
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+ships_in_area - checks for amount of ships in specified area
+Supported scopes: country
+
+Supported targets:
+
+has_army_size - checks for amount of divisions, additionally of a specified type
+Supported scopes: country
+
+Supported targets:
+
+has_navy_size - Checks for amount of ships, additionally of a specified type, archetype, or sub unit definition.
+
+Examples:
+	has_navy_size = { size > 10 type = convoy } # Must have more than 10 convoys.
+	has_navy_size = { size < 1 archetype = ship_hull_light } # Must not have any ships with light hulls.
+	has_navy_size = { size > 39 unit = heavy_cruiser } # Must have 40 or more heavy cruisers.
+	has_navy_size = { size < 100 } # Must have fewer than 100 ships of any type.
+Supported scopes: country
+
+Supported targets:
+
+num_of_military_factories - check amount of military factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_civilian_factories - check amount of civilian factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_naval_factories - check amount of naval factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_nukes - check amount of nukes
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_manpower - check amount of manpower
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_political_power - check amount of political power
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_available_military_factories - check amount of available military factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_available_naval_factories - check amount of available naval factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_available_civilian_factories - check amount of available civilian factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_in_faction_with - check if member of same faction as specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_in_faction - check if member of any faction
+Supported scopes: country
+
+Supported targets:
+
+is_faction_leader - check if country leads a faction
+Supported scopes: country
+
+Supported targets:
+
+is_guaranteed_by - check if guaranteed by specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_guaranteed - check if country has guaranteed specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_military_access_to - check country has military access to specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+gives_military_access_to - check if country gives military access to specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+any_state - check if any state meets the trigger
+Supported scopes: ???
+
+Supported targets:
+
+any_owned_state - check if any owned state meets the trigger
+Supported scopes: country
+
+Supported targets:
+
+any_neighbor_state - check if any neighbor state meets the trigger
+Supported scopes: state
+
+Supported targets: none
+
+any_allied_country - Check if any allied country meets the trigger. Does not include the country itself
+Supported scopes: country
+
+Supported targets:
+
+all_state - check if all states meets the trigger
+Supported scopes: ???
+
+Supported targets:
+
+all_owned_state - check if all owned states meets the trigger
+Supported scopes: country
+
+Supported targets:
+
+all_neighbor_state - check if all neighbor states meets the trigger
+Supported scopes: state
+
+Supported targets: none
+
+all_allied_country - Check if all allied countries meet the trigger. Does not include the country itself
+Supported scopes: country
+
+Supported targets:
+
+surrender_progress - check if a country is close to surrendering
+Supported scopes: country
+
+Supported targets:
+
+political_power_daily - Checks if daily political power increase is more or less that specified value 
+ political_power_daily > 1.5
+Supported scopes: country
+
+Supported targets:
+
+ic_ratio - Compares the ratio of total industrial capacity between the scope country and the one set with 'tag'
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+any_war_score - compares the warscore of all wars in a country to see if any fullfills the comparison condition 0-100 - Example: any_war_score > 40
+Supported scopes: country
+
+Supported targets:
+
+has_idea_with_trait - check if country has idea with specified trait
+Supported scopes: country
+
+Supported targets:
+
+has_deployed_air_force_size - checks for amount of aircrafts, additionally of a specified type
+Supported scopes: country
+
+Supported targets:
+
+is_fighting_in_terrain - check what terrain is in combat
+Supported scopes:
+
+Supported targets:
+
+is_defender - check if defender side in combat
+Supported scopes:
+
+Supported targets:
+
+has_combat_modifier - check if combatant has modifier
+Supported scopes:
+
+Supported targets:
+
+is_winning - check if defender side in combat
+Supported scopes:
+
+Supported targets:
+
+fastest_unit - check if fastest unit of combatant is over this limit
+Supported scopes:
+
+Supported targets:
+
+recon_advantage - checks if side has an advantage in recon level
+Supported scopes:
+
+Supported targets:
+
+has_tech - check if country has technology
+Supported scopes: country
+
+Supported targets:
+
+land_doctrine_level - checks researched land doctrine level
+Supported scopes: country
+
+Supported targets:
+
+is_ironman - Check if current game is ironman.
+Supported scopes: ???
+
+Supported targets:
+
+has_start_date - Compare the initial start date of current game.
+Supported scopes: ???
+
+Supported targets:
+
+has_built - checks country has built a set number (at least) of a certain type of building since taking goal
+Supported scopes: country
+
+Supported targets:
+
+has_available_idea_with_traits - Checks if country has more than limit, default = 0.
+Supported scopes: country
+
+Supported targets:
+
+is_claimed_by - Checks if state is claimed by country
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_core_of - Checks if state is core of country
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_ai - Checks if country is AI controlled.
+Supported scopes: country
+
+Supported targets:
+
+has_trait - check if sides leader has trait
+Supported scopes:
+
+Supported targets:
+
+has_reserves - check if side has reserves waiting
+Supported scopes:
+
+Supported targets:
+
+frontage_full - check if sides front is full or can get more reinforcements
+Supported scopes:
+
+Supported targets:
+
+is_lend_leasing - is lend-leasing country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+free_building_slots - checks building for available construction levels
+Supported scopes: state
+
+Supported targets: none
+
+is_demilitarized_zone - checks if a state is a demilitarized zone
+Supported scopes: state
+
+Supported targets: ??? none
+
+is_border_conflict - checks if a state is in border conflict
+Supported scopes: state
+
+Supported targets: ??? none
+
+has_completed_focus - has country completed focus
+Supported scopes: country
+
+Supported targets:
+
+has_offensive_war_with - One country has offensive war against other country.
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_defensive_war_with - One country has defensive war against other country.
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_offensive_war - is country at offensive war
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_defensive_war - is country at defensive war
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_coastal - check if state is coastal
+Supported scopes: state
+
+Supported targets: none
+
+casualties - Check the amount of casualties a country has suffered in all of it's wars
+Supported scopes: country
+
+Supported targets:
+
+custom_trigger_tooltip - Works as an and-trigger with a custom tooltip
+Supported scopes: ???
+
+Supported targets:
+
+has_equipment - checks for amount of equipment stored
+Supported scopes: country
+
+Supported targets:
+
+num_of_factories - check amount of total factories
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+focus_progress -  = { focus = id progress = 0.5 }
+Supported scopes: country
+
+Supported targets:
+
+is_puppet - Checks if the country is puppet of any other country
+Supported scopes: country
+
+Supported targets: ???
+
+is_puppet_of - Checks if the country is puppet of specified country
+Supported scopes: country
+
+Supported targets: ???
+
+ships_in_state_ports - checks for amount of ships in specified state's ports
+Supported scopes: country
+
+Supported targets:
+
+is_major - check if country is a major
+Supported scopes: country
+
+Supported targets:
+
+is_on_continent - is state located on continent
+Supported scopes: state
+
+Supported targets: none
+
+is_amphibious_invasion - check if combat is at night
+Supported scopes:
+
+Supported targets:
+
+strength_ratio - Compares the estimated army strength between the scope country and the one set with 'tag'
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_max_planning - check if side has maximal planning bonus
+Supported scopes:
+
+Supported targets:
+
+has_civil_war - check if participant in civil war as revolter or target
+Supported scopes: country
+
+Supported targets:
+
+less_combat_width_than_opponent - check if side has more combat width than their opponent
+Supported scopes:
+
+Supported targets:
+
+is_fighting_air_units - check if side is fighting air units
+Supported scopes:
+
+Supported targets:
+
+has_carrier_airwings_on_mission - check if side has a career with air wings on a mission
+Supported scopes:
+
+Supported targets:
+
+has_flanked_opponent - check if side has flanked their opponent
+Supported scopes:
+
+Supported targets:
+
+any_claim - check if there is a claim between a country and all others
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_volunteers_amount_from - Compares number of volunteers from the country. Example: has_volunteers_amount_from = { tag = ITA count > 1 }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_of_controlled_states - check amount of controlled stats
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+original_tag - original tag is ( for civil wars checks )
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_added_tension_amount - Compare if the country has added above or below the specified ammount of tension
+Supported scopes: country
+
+Supported targets:
+
+has_manpower_for_recruit_change_to - check if manpower is enough to switch recruitment laws not to be negative
+Supported scopes: country
+
+Supported targets:
+
+ai_liberate_desire - check what liberation desire the country has towards a specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+distance_to - check distance between two states
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+can_research - check if country can research technology
+Supported scopes: country
+
+Supported targets:
+
+has_annex_war_goal - Checks a country has annex war goal on another country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+hardness - check lowest/highest hardness level on combatant
+Supported scopes:
+
+Supported targets:
+
+has_template_containing_unit - check if country has a division template that contains a specific unit
+Supported scopes: country
+
+Supported targets:
+
+is_in_home_area - Checks if the first province in the state is connected to the capital of its owner
+Supported scopes: state
+
+Supported targets: ??? none
+
+state_population - check the population in the state
+Supported scopes: state
+
+Supported targets: none
+
+ai_irrationality - check the ai irrationality value
+Supported scopes: country
+
+Supported targets:
+
+has_war_together_with - Are the countries fighting on the same side of a war
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_capitulated - checks if the country has capitulated
+Supported scopes: country
+
+Supported targets:
+
+has_army_manpower - checks for amount of manpower of selected type, additionally of a specified type
+Supported scopes: country
+
+Supported targets:
+
+is_owned_and_controlled_by - check if state is owned by
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_tutorial - check if the tutorial is active
+Supported scopes: ???
+
+Supported targets:
+
+is_historical_focus_on - check if the historical focus is active
+Supported scopes: ???
+
+Supported targets:
+
+original_research_slots - check number of research slots at start of game
+Supported scopes: country
+
+Supported targets:
+
+has_wargoal_against - Checks if country has a wargoal against the target. 
+Example: ENG = { has_wargoal_against = GER }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_justifying_wargoal_against - Checks if country is justifying a wargoal against the target. 
+Example: ENG = { is_justifying_wargoal_against = GER }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_owner_neighbor_of - check if neighbor ( owned territory ) with specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+ai_wants_divisions - Will compare towards the amount of divisions an ai wants to have.
+Supported scopes: country
+
+Supported targets:
+
+has_claimed_state_in_peace_conference - Checks if a state has been claimed by target country in an ongoing peace conference
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_owned_neighbour_states - Checks if a country owns the amount of states neighbouring the scoped state
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_claimed_peace_conference_neighbour_states - Checks if a country owns the amount of states neighbouring the scoped state.
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_island_state - always returns specified value
+Supported scopes: state
+
+Supported targets: ??? none
+
+has_elections - Checks the country's politics on allowing elections. has_elections = yes
+Supported scopes: country
+
+Supported targets: ???
+
+alliance_strength_ratio - Compares the estimated army strength between the scope country, his allies and his enemies.
+Supported scopes: country
+
+Supported targets:
+
+civilwar_target - civilwar target is ( for civil wars checks )
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_in_peace_conference - Checks if the country is currently in a peaceconference
+Supported scopes: country
+
+Supported targets:
+
+has_unit_leader - check if country has unit leader with specified ID. Don't localize this. Tooltip only for debug.
+Supported scopes: country
+
+Supported targets:
+
+any_home_area_neighbor_country - check if any neighbor country in the home area meets the trigger
+Supported scopes: country
+
+Supported targets:
+
+any_other_country - check if any other country meets the trigger. Excludes current country
+Supported scopes: ???
+
+Supported targets:
+
+all_other_country - check if all other countries meets the trigger. Excludes current country
+Supported scopes: ???
+
+Supported targets:
+
+has_non_aggression_pact_with - Check if country has non aggression pact with the specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_faction_members - Compares the number of members in the faction for the current country. 
+ Example: num_faction_members > 10
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+enemies_strength_ratio - Compares the estimated army strength between the scope country and all its enemies
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_custom_difficulty_setting - Returns true if the game has the specified custom difficulty on: 
+Example: has_custom_difficulty_setting = TheAxisIndustry
+Supported scopes: ???
+
+Supported targets: ???
+
+has_any_custom_difficulty_setting - Returns true if the game has any custom difficulty on
+Supported scopes: ???
+
+Supported targets: ???
+
+has_country_custom_difficulty_setting - Returns true if the game has any custom difficulty on the scope nation
+Supported scopes: country
+
+Supported targets: ???
+
+is_researching_technology - Checks if the country is currently researching a specific technology.
+Example: is_researching_technology = mechanised_infantry
+Supported scopes: country
+
+Supported targets:
+
+is_in_tech_sharing_group - Checks if country is member specified technology sharing group.
+Example: is_in_technology_sharing_group = commonwealth_research
+Supported scopes: country
+
+Supported targets:
+
+has_autonomy_state - check if country currently has an autonomy state, example:
+has_autonomy_state = puppet
+Supported scopes: country
+
+Supported targets:
+
+compare_autonomy_progress_ratio - check if autonomy progress ratio is higher than value, example:
+compare_autonomy_progress_ratio > 0.5
+Supported scopes: country
+
+Supported targets:
+
+compare_autonomy_state - check if autonomy state is higher than other one, example:
+compare_autonomy_state > puppet
+Supported scopes: country
+
+Supported targets:
+
+has_cosmetic_tag - Checks if country has specific cosmetic tag set.
+Example: INS = { has_cosmetic_tag = INS1 }
+Supported scopes: country
+
+Supported targets:
+
+num_subjects - check the number of subjects of nation
+Supported scopes: country
+
+Supported targets:
+
+num_tech_sharing_groups - checks how many groups a nation is a member of
+Supported scopes: country
+
+Supported targets:
+
+has_template - Check if country has a division template of specific name
+Supported scopes: country
+
+Supported targets:
+
+has_state_category - Check if state has a specific state category
+Supported scopes: state
+
+Supported targets: none
+
+has_cavalry_ratio - Check that ratio of cavalry brigades in the composition of a side of combating troops are over a certain level
+Supported scopes:
+
+Supported targets:
+
+num_occupied_states - check the number of states occupied by nation
+Supported scopes: country
+
+Supported targets:
+
+has_damaged_buildings - check for damaged buildings of nation
+Supported scopes: country
+
+Supported targets:
+
+has_resources_amount - checks for amount of resources in specified state
+Example:
+has_resources_amount = {
+	resource = chromium
+	amount > 10
+	state = 31 (optional - can be used in state scope instead)
+Supported scopes: state country
+
+Supported targets: none
+
+has_tech_bonus - checks if the country has a bonus for the specified technology or category
+Example:
+has_tech_bonus = {
+	technology =  <tech>
+	category = <tech cat>
+	}
+Supported scopes: country
+
+Supported targets: ???
+
+has_template_majority_unit - check if country has a division template that is majority of specific unit
+Supported scopes: country
+
+Supported targets:
+
+min_planning - check if side has maximal planning bonus
+Supported scopes:
+
+Supported targets:
+
+has_country_leader - check if country has leader with specified ID. Don't localize this. Tooltip only for debug.
+has_country_leader = {
+	id = <ID>
+	ruling_only = yes/no (default = yes)
+	name = <string>
+}
+Supported scopes: country
+
+Supported targets:
+
+has_army_experience - Compares current country's army experience with right side value.
+ has_army_experience < <value>
+Supported scopes: country
+
+Supported targets:
+
+has_air_experience - Compares current country's air experience with right side value.
+ has_air_experience < <value>
+Supported scopes: country
+
+Supported targets:
+
+has_navy_experience - Compares current country's navy experience with right side value.
+ has_navy_experience < <value>
+Supported scopes: country
+
+Supported targets:
+
+has_full_control_of_state - check controller for state(s)
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+num_divisions - Will compare towards the amount of divisions a country has control over, if strength matters use has_army_size.
+Supported scopes: country
+
+Supported targets:
+
+count_triggers - Returns true if the specified number of sub-triggers return true
+count_triggers = { amount = 2 <trigger> <trigger> <trigger> }
+Supported scopes: ???
+
+Supported targets:
+
+is_target_of_coup - is_target_of_coup = yes - Returns true if current country is being targeted by a coup from any country.
+Supported scopes: country
+
+Supported targets:
+
+is_staging_coup - is_staging_coup = yes - Returns true if current country is staging a coup in another any country.
+Supported scopes: country
+
+Supported targets:
+
+has_focus_tree - Does current country have the specified focus tree.
+Supported scopes: country
+
+Supported targets:
+
+has_template_ai_majority_unit - check if country has a division template that is majority of specific unit using AI's priorities rather than visual
+Supported scopes: country
+
+Supported targets:
+
+has_any_license - Country has any active licenses
+Example: has_any_license = yes
+Supported scopes: country
+
+Supported targets: ???
+
+has_license - Country has specific active license
+Example: has_license = {
+	from = TAG # has license from this country, optional
+	 #if archetype is specified equipment should not be specified
+	archetype = light_tank_equipment #any armor license
+	equipment = { # classical equipment reference
+		type = light_tank_equipment_2
+		version = 0
+	}
+}
+Supported scopes: country
+
+Supported targets: ???
+
+is_licensing_any_to - Current country is licensing something to target country
+Example: is_licensing_any_to = ENG
+Supported scopes: country
+
+Supported targets: ???
+
+is_licensing_to - Country is licensing specific equipment to target. License is active
+Example: is_licensing_to = {
+	target = TAG # licensing to this country
+	 #if archetype is specified equipment should not be specified
+	archetype = light_tank_equipment #any armor license
+	equipment = { # classical equipment reference
+		type = light_tank_equipment_2
+		version = 0
+	}
+}
+Supported scopes: country
+
+Supported targets: ???
+
+ai_has_role_template - check if the ai controlled country has any template for a specific role
+Supported scopes: country
+
+Supported targets:
+
+ai_has_role_division - check if the ai controlled country has any fielded divisions for a specific role
+Supported scopes: country
+
+Supported targets:
+
+has_relation_modifier - Country has specified relation modifier when dealing with _target_ county
+Example: has_relation_modifier = {
+	target = TAG # has license from this country, optional
+	modifier = static_modifier_here
+	}
+}
+Supported scopes: country
+
+Supported targets: ???
+
+any_province_building_level - In the current state, checks if any province within the specified limit has a building of the specified level.
+Supported scopes: state
+
+Supported targets: ??? none
+
+estimated_intel_max_armor - Compares estimated max armor based on intel. Example: estimated_intel_max_armor = { tag = ITA value > 1 }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+estimated_intel_max_piercing - Compares estimated max armor based on intel. Example: estimated_intel_max_piercing = { tag = ITA value > 1 }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+amount_research_slots - check number of research current research slots 
+ amount_research_slots > 2
+Supported scopes: country
+
+Supported targets:
+
+manpower_per_military_factory - Number of available manpower per factory the country has. Excluding dockyards.
+manpower_per_military_factory < 1000
+Supported scopes: country
+
+Supported targets:
+
+amount_taken_ideas - has current country picked specified amount of ideas. Category and slot is optional.
+Excludes national_spirit, hidden, law = yes
+amount_taken_ideas = {
+	amount < <int> (mandatory)
+	category = { military_staff } (optional)
+	slot = { army_chief political_advisor } (optional)
+}
+Supported scopes: country
+
+Supported targets:
+
+has_carrier_airwings_in_own_combat - Check if carrier has airplanes that are part of the current combat
+Supported scopes:
+
+Supported targets:
+
+naval_strength_ratio - Compares the estimated navy strength between the scope country and the one set with 'tag'
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+enemies_naval_strength_ratio - Compares the estimated navy strength between the scope country and all its enemies
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+alliance_naval_strength_ratio - Compares the estimated naval strength between the scope country, his allies and his enemies.
+Supported scopes: country
+
+Supported targets:
+
+has_stability - check value of stability 0-1: Example has_stability < 0.6
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_war_support - check value of war_support 0-1: Example has_war_support < 0.6
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+all_unit_leader - check if all unit leaders meets the trigger.
+Supported scopes: country
+
+Supported targets:
+
+any_unit_leader - check if any unit leader meets the trigger.
+Supported scopes: country
+
+Supported targets:
+
+all_army_leader - check if all unit leaders meets the trigger.
+Supported scopes: country
+
+Supported targets:
+
+any_army_leader - check if any unit leader meets the trigger.
+Supported scopes: country
+
+Supported targets:
+
+all_navy_leader - check if all unit leaders meets the trigger.
+Supported scopes: country
+
+Supported targets:
+
+any_navy_leader - check if any unit leader meets the trigger.
+Supported scopes: country
+
+Supported targets:
+
+is_assigned - is_assigned = yes/no - Checks if the current unit leader is assigned to command an army/navy
+Supported scopes:
+
+Supported targets:
+
+num_units - Check number of units commanded by the unit leader 
+ num_units > 2
+Supported scopes:
+
+Supported targets:
+
+is_field_marshal - is_field_marshal = yes/no - Checks if the current unit leader is a field marshall
+Supported scopes:
+
+Supported targets:
+
+has_unit_leader_flag - has unit leader flag been setCheck flag val date set and days since set.
+Example: has_unit_leader_flag = test_flag
+has_unit_leader_flag = { 
+	flag = <name> (mandatory)
+	value < <int> (optional)
+	date > <date> (optional)
+	days > <int> (optional)
+}
+Supported scopes:
+
+Supported targets: ???
+
+has_decision - check if country has active selected decision
+Supported scopes: country
+
+Supported targets:
+
+command_power - Checks if available command power is more or less that specified value 
+ command_power > 1.5
+Supported scopes: country
+
+Supported targets:
+
+command_power_daily - Checks if daily command power increase is more or less that specified value 
+ command_power_daily > 1.5
+Supported scopes: country
+
+Supported targets:
+
+is_fully_controlled_by - Checks if state is fully controlled by specified tag
+Supported scopes: state
+
+Supported targets: ??? none
+
+has_ability - does unit leader have the abilityCheck if a unit leader has the ability.
+Example: has_ability = force_attack
+Supported scopes:
+
+Supported targets: ???
+
+has_variable - Checks if a variable exists in a scope
+Supported scopes: ???
+
+Supported targets: ???
+
+has_id - check unit leader has specified ID. Don't localize this. Tooltip only for debug.
+Supported scopes:
+
+Supported targets:
+
+can_select_trait - check if leader can select a trait
+Supported scopes:
+
+Supported targets:
+
+add_to_temp_variable - Adds a value or a variable to a temporary variable
+Example: add_to_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values. _NOT is added to end for negative trigger
+}
+Supported scopes: ???
+
+Supported targets:
+
+subtract_from_temp_variable - Subtracts a value or a variable to a temporary variable
+Example: subtract_from_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values. _NOT is added to end for negative trigger
+}
+Supported scopes: ???
+
+Supported targets:
+
+multiply_temp_variable - Multiplies a temporary variable by a value or another variable
+Example: set_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values. _NOT is added to end for negative trigger
+}
+Supported scopes: ???
+
+Supported targets:
+
+divide_temp_variable - Divies a temporary variable by a value or another variable
+Example: divide_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values. _NOT is added to end for negative trigger
+}
+Supported scopes: ???
+
+Supported targets:
+
+set_temp_variable - Sets a temporary variable to a value or another variable
+Example: set_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values. _NOT is added to end for negative trigger
+}
+Supported scopes: ???
+
+Supported targets:
+
+clamp_temp_variable - clamps a temp variable between two values/variables
+Supported scopes: ???
+
+Supported targets:
+
+num_of_civilian_factories_available_for_projects - check amount of civilian factories available for a new project to use
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_event_target - checks if current scope or global scope has the specified event target saved
+Supported scopes: ???
+
+Supported targets: ???
+
+political_power_growth - Check the value of political power daily growth.Exacmple: political_power_growth > 0
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_border_war - Checks if a there is any border wars for country/state
+Supported scopes: state country
+
+Supported targets: ??? none
+
+is_border_war - Checks if a the combatant or leader has a border war
+Supported scopes:
+
+Supported targets: ???
+
+has_border_war_between - Checks if a there is a border war between two states
+Supported scopes: ???
+
+Supported targets: ???
+
+has_border_war_with - Checks if a there is a border against a state/country
+Supported scopes: state country
+
+Supported targets: ??? none
+
+average_stats - Compares the average stats for a unit leader.
+Example: average_stats > 10
+Supported scopes:
+
+Supported targets:
+
+attack_skill_level - Compares attack skill level of a unit leader.
+Example: attack_skill_level > 5
+Supported scopes:
+
+Supported targets:
+
+defense_skill_level - Compares defense skill level of a unit leader.
+Example: defense_skill_level > 5
+Supported scopes:
+
+Supported targets:
+
+logistics_skill_level - Compares logistics skill level of a unit leader.
+Example: logistics_skill_level > 5
+Supported scopes:
+
+Supported targets:
+
+planning_skill_level - Compares planning skill level of a unit leader.
+Example: planning_skill_level > 5
+Supported scopes:
+
+Supported targets:
+
+is_leading_army_group - is_leading_army_group = yes/no - Checks if the current unit leader is leading an army group (not single army)
+Supported scopes:
+
+Supported targets:
+
+is_leading_army - is_leading_army = yes/no - Checks if the current unit leader is leading a single army (not army group)
+Supported scopes:
+
+Supported targets:
+
+print_variables - prints all variables in scope and temp variables to a file
+Example: print_variables = {
+file = log_file
+text = header_text
+append = yes
+print_global = yes
+var_list = { a b c } #optional
+}
+Supported scopes: ???
+
+Supported targets:
+
+has_active_mission - check if country has an active mission with specified ID. has_active_mission = my_test_mission
+Supported scopes: country
+
+Supported targets:
+
+has_attache - Has attaché from any other country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_attache_from - Has attaché from specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+amount_manpower_in_deployment_queue - Checks for amount manpower currently in deploymentview. amount_manpower_in_training > 10
+Supported scopes: country
+
+Supported targets:
+
+army_manpower_in_state - Checks for amount manpower currently the target state with option to specify a type.
+Example:
+army_manpower_in_state = {
+	state = <id> (variables supported)
+	amount < <int> (variables supported)
+	type > <equipment_type> (armor, infantry, etc.)
+Supported scopes: country
+
+Supported targets:
+
+is_exiled_leader - Checks if scope leader is from an exiled government. is_exiled_leader = yes
+Supported scopes:
+
+Supported targets:
+
+is_exiled_in - Checks if scope country is a government in exile in target tag. is_exiled_in = ENG
+Supported scopes: country
+
+Supported targets: ???
+
+is_hosting_exile - Checks if scope country is hosting target tag as an exile. is_hosting_exile = FRA
+Supported scopes: country
+
+Supported targets: ???
+
+is_exiled_leader_from - Checks if scope leader is from specified exiled government. is_exiled_leader_from = FRA
+Supported scopes:
+
+Supported targets:
+
+is_exile_host - Checks if scope country is hosting an exile. is_exile_host = yes
+Supported scopes: country
+
+Supported targets: ???
+
+is_government_in_exile - Checks if scope country an exiled government. is_government_in_exile = yes
+Supported scopes: country
+
+Supported targets: ???
+
+divisions_in_border_state - checks for amount of divisions in specified state owned by current country.
+Supported scopes: country
+
+Supported targets:
+
+stockpile_ratio - Compares the ratio of equipment archetype in stockpile vs used. a value of 2 means we have double in stockpile of what is fielded or in training.
+Supported scopes: country
+
+Supported targets:
+
+state_strategic_value - Checks for state strategic value
+Supported scopes: state
+
+Supported targets: none
+
+state_and_terrain_strategic_value - Checks for state strategic value
+Supported scopes: state
+
+Supported targets: none
+
+round_temp_variable - Rounds a temporary variable
+Example: round_temp_variable = num_dogs
+Supported scopes: ???
+
+Supported targets:
+
+has_subject - Checks if the country has for subject the given country
+Supported scopes: country
+
+Supported targets: ???
+
+has_game_rule - Checks if a game rule is set to a particular option.
+Example:
+has_game_rule = {
+	rule = GER_can_remilitarize_rhineland
+	option = yes
+}
+Supported scopes: ???
+
+Supported targets:
+
+game_rules_allow_achievements - Returns true if all of the active game rule options allow achievements.
+Supported scopes: ???
+
+Supported targets:
+
+is_in_array - Checks if an element is in array
+Example: is_in_array = {
+	array = array_name
+	value = 42
+}
+#shorter usage: is_in_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+add_to_temp_array - Adds an element to a temporary array
+Example: add_to_temp_array = {
+	array = array_name
+	value = 42 #optional, if not defined adds scope
+	index = 3 #optional, default is end. otherwise elements are shifted
+}
+#shorter usage: add_to_temp_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+remove_from_temp_array - Removes an element from a temporary array using value or index
+Example: remove_from_temp_array = {
+	array = array_name
+	value = 42 #optional, use index or this. if neither it removes last element
+	index = 3 #optional, use value or this. if neither it removes last element
+}
+#shorter usage: remove_from_temp_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+clear_temp_array - Clears the contents of a temporary array
+Example: clear_temp_array = array_name
+Supported scopes: ???
+
+Supported targets:
+
+resize_temp_array - Resizes a temp array
+Example: resize_temp_array = {
+	array = array_name
+	value = 42 #optional, if not specified and array grows the new elements are set to this (default 0)
+	size = 3 #if higher than old size, new elements are added to end. otherwise last elements are removed to match to new size
+}
+#shorter usage: resize_temp_array = { array_name = 3 }
+Supported scopes: ???
+
+Supported targets:
+
+any_of - Runs a loop on an array and check a trigger for each value, if any true returns true. otherwise returns false
+Example: any_of = {
+	array = array_name
+	value = value_name #optional (default 'value') current value in array will be stored in this temp variable
+	index = index_name #optional (default 'index') current index in array will be stored in this temp variable
+ #trigger 1
+ #trigger 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+all_of - Runs a loop on an array and check a trigger for each value, if any false returns false. otherwise returns true
+Example: all_of = {
+	array = array_name
+	value = value_name #optional (default 'v') current value in array will be stored in this temp variable
+	index = index_name #optional (default 'i') current index in array will be stored in this temp variable
+ #trigger 1
+ #trigger 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+has_fuel - check amount of fuel
+example:
+has_fuel > 500
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+any_of_scopes - Runs a loop on an array and check a trigger for each scope in it, if any true returns true. otherwise returns false
+Example: any_of_scopes = {
+	array = array_name
+ #trigger 1
+ #trigger 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+all_of_scopes - Runs a loop on an array and check a trigger for each scope in it, if any false returns false. otherwise returns true
+Example: all_of_scopes = {
+	array = array_name
+ #trigger 1
+ #trigger 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+has_country_leader_with_trait - check if current country has specified trait.
+has_country_leader_with_trait = big_fat_idiot
+Supported scopes: country
+
+Supported targets:
+
+has_legitimacy - Check scope country legitimacy 0-100: Example has_legitimacy < 60
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_rule - Checks if a rule set for a country.
+Example: has_rule = can_puppet
+Supported scopes: ???
+
+Supported targets:
+
+state_population_k - check the population in the state in thousands (use to avoid variable overflows)
+Supported scopes: state
+
+Supported targets: none
+
+casualties_k - Check the amount of casualties in thousands a country has suffered in all of it's wars
+Supported scopes: country
+
+Supported targets:
+
+meta_trigger - meta triggers can be used for building triggers from strings and running them. following example will test if Germany has 42 pp:
+meta_trigger = {
+    text = {
+        [COUNTRY] = {
+            political_power > [POW]
+        }
+    }
+    COUNTRY = "GER"
+    POW = 42
+    debug = no #set to yes if you want to see what game actually executes
+}
+
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_dynamic_modifier - Checks if scope has a dynamic modifier.
+has_dynamic_modifier = {
+    modifier = dynamic_modifier_name
+    scope = GER #optional, if the original modifier has been targeted
+}
+
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+find_lowest_in_array - Runs a loop on for each element of an array, finds the lowest value and stores result in temp variables
+Example: find_lowest_in_array = {
+	array = array_name
+	value = value_name #optional (default 'v') lowest value in array will be stored in this temp variable
+	index = index_name #optional (default 'i') index of lowest value in array will be stored in this temp variable
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+find_highest_in_array - Runs a loop on for each element of an array, finds the highest value and stores result in temp variables
+Example: find_highest_in_array = {
+	array = array_name
+	value = value_name #optional (default 'v') highest value in array will be stored in this temp variable
+	index = index_name #optional (default 'i') index of highest value in array will be stored in this temp variable
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+has_mines - Checks if a region has amount of mines.
+has_mines = {
+    region = region_id
+    amount = amount_of_mines
+}
+
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+naval_strength_comparison - Compares navies of two sides.
+naval_strength_comparison = {
+	other = GER # by default compares to the from scope
+  tooltip = 'key' #tooltip is 'navy strength' by default, the key can be overridden if wanted 
+	ratio > 1.5   # default is 1
+	sub_unit_def_weights = { # if not specified, it will weigh all ships as 1. otherwise only specified sub unit types will be counted
+		carrier = 1
+		battleship = 2
+	}
+}
+
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+fuel_ratio - Compares the fuel ratio to a variable.
+Example: fuel_ratio > 0.5
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+days_since_last_strategic_bombing - Checks the days since last strategic bombing.
+days_since_last_strategic_bombing < 10
+
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+mine_threat - A trigger to check how dangerous enemy mines are for a country. Controlled by NAVAL_MINE_DANGER defines. Returns a value between 0 and 1. Example mine_threat > 0.5 
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+convoy_threat - A trigger to check convoy threat for a country. Controlled by NAVAL_CONVOY_DANGER defines. Returns a value between 0 and 1. Example convoy_threat > 0.5 
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+casualties_inflicted_by - Checks the casualties infliced by the speficied country to the scopped country.
+E.g. true if Germany has been inflicted more than 200k casualties by Poland:
+GER = {
+  casualties_inflicted_by = {
+    opponent = POL
+    thousands > 200
+  }
+}
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+has_mined - Checks the mines planted by the country of the parent scope on the coastline of the target countryE.g. true if Germany has more than 1000 mines around Poland coast:
+GER = {
+  has_mined = {
+    target = POL
+    value > 1000
+  }
+}
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+received_expeditionary_forces - Checks that the country in scope has received the specified amount of expeditionary forces from the specified country
+E.g. true if Germany is commaning more than 100 expeditionary forces from Poland:
+GER = {
+  received_expeditionary_forces = {
+    sender = POL
+    value > 100
+  }
+}
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+is_fighting_in_weather - Checks the weather on a combat
+Example:
+# true if weather is artic water
+is_fighting_in_weather = artic_water
+# true if weather is either artic_water or snow
+is_fighting_in_weather = { artic_water snow }
+
+Supported scopes:
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+
 =================
-[20:25:40][ConsoleCmdImpl.cpp:5502]:
+
 == EFFECT DOCUMENTATION ==
+add_legitimacy - add_legitimacy = 10. Adds legitimacy to scope country. Value has to be 0-100.
+Supported scopes: country
+
+Supported targets:
+
 add_stability - Adds the stability to the country in scope. Example: add_stability = 5
 Supported scopes: country
 
 Supported targets:
+
+add_manpower - Adds manpower to the country in scope or locally on a state if in state scope
+Supported scopes: state country
+
+Supported targets: none
+
+custom_effect_tooltip - Shows just a custom tooltip
+Supported scopes: ???
+
+Supported targets:
+
+set_capital - move capital to state
+Supported scopes: country
+
+Supported targets:
+
+add_state_core - add core on state
+Supported scopes: country
+
+Supported targets:
+
+remove_state_core - remove core on state
+Supported scopes: country
+
+Supported targets:
+
+change_tag_from - Changes player to other country
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_province_modifier - Adds static modifiers to specified province.
+add_province_modifier = {
+	static_modifiers = { mod_1 mod_2 }
+Select 1 province:
+	province = 500
+Or use:
+	province = {
+		id = 500 id = 501 id = 502 (evaluate for specified provinces)
+		all_provinces (includes all in current state)
+		limit_to_coastal (only coastal provinces)
+		limit_to_border (only provinces bordering different country)
+		limit_to_naval_base (only provinces with a naval base)
+		limit_to_victory_point (only provinces with a VP)
+	}
+}
+Supported scopes: state
+
+Supported targets: none
+
+set_country_flag - set country flag
+Supported scopes: country
+
+Supported targets:
+
+clr_country_flag - clear country flag
+Supported scopes: country
+
+Supported targets:
+
+set_global_flag - set global flag
+Supported scopes: ???
+
+Supported targets:
+
+clr_global_flag - clear global flag
+Supported scopes: ???
+
+Supported targets:
+
+remove_building - Removes specified building in specified state or province
+Supported scopes: state country
+
+Supported targets: none
+
+release - releases specified country as a puppet
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+every_country - Executes children effects on every country that fulfills the "limit" trigger.
+Supported scopes: ???
+
+Supported targets:
+
+random_country - Executes children effects on random country that fulfills the "limit" trigger.
+Supported scopes: ???
+
+Supported targets:
+
+every_neighbor_country - Executes children effects on every neighbor country that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+random_neighbor_country - Executes children effects on random neighbor country that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+every_enemy_country - Executes children effects on random enemy country that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+random_enemy_country - Executes children effects on random enemy country that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+country_event - fires a country event
+Supported scopes: country
+
+Supported targets:
+
+state_event - fires a state event
+Supported scopes: state country
+
+Supported targets: none
+
+remove_province_modifier - Removes a static modifiers to specified province
+remove_province_modifier = {
+	static_modifiers = { mod_1 mod_2 }
+Select 1 province:
+	province = 500
+Or use:
+	province = {
+		id = 500 id = 501 id = 502 (evaluate for specified provinces)
+		all_provinces (includes all in current state)
+		limit_to_coastal (only coastal provinces)
+		limit_to_border (only provinces bordering different country)
+		limit_to_naval_base (only provinces with a naval base)
+		limit_to_victory_point (only provinces with a VP)
+	}
+}
+Supported scopes: state
+
+Supported targets: none
+
+set_variable - Sets a variable to a value or another variable
+Example: set_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+add_ai_strategy - Adds strategy entry to country AI
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+random - a random effect
+Supported scopes: ???
+
+Supported targets:
+
+random_list - a random effect
+Supported scopes: ???
+
+Supported targets:
+
+white_peace - white peaces the two countries if at war
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+hidden_effect - Effect not shown in tooltips
+Supported scopes: state country
+
+Supported targets: none
+
+if - a conditional effect
+Supported scopes: ???
+
+Supported targets:
+
+add_state_claim - add claim on state
+Supported scopes: country
+
+Supported targets:
+
+remove_state_claim - remove claim on state
+Supported scopes: country
+
+Supported targets:
+
+add_opinion_modifier - Add opinion modifier(s) to target(s)
+Supported scopes: country
+
+Supported targets: ???
+
+remove_opinion_modifier - Remove opinion modifier from target
+Supported scopes: country
+
+Supported targets: ???
+
+create_country_leader - creates a leader and adds it to proper party in country
+Supported scopes: country
+
+Supported targets:
+
+log - Print message to game.log - Can be localized
+Supported scopes: ???
+
+Supported targets:
+
+create_unit - Create unit effect, just like in OOB,  from effect with specified parameters: owner, prioritize_location.
+Example:
+AST = {
+285 = {
+create_unit = {
+division = " name = \"The Rats of Tobruk\" division_template = \"Infantry Division\" start_experience_factor = 0.3"
+owner = AST
+prioritize_location = 12406
+}
+}
+}
+Supported scopes: ???
+
+Supported targets:
+
+sound_effect - Plays sound effect
+Supported scopes: ???
+
+Supported targets:
+
+promote_leader - promotes general to field marshal
+Supported scopes:
+
+Supported targets:
+
+randomize_weather - Randomize weather effect
+Supported scopes: ???
+
+Supported targets: ???
+
+division_template - add a division template to country
+Supported scopes: country
+
+Supported targets:
+
+set_country_leader_ideology - change the ideology of active leader
+Supported scopes: country
+
+Supported targets:
+
+add_country_leader_trait - add trait to active country leader
+Supported scopes: country
+
+Supported targets:
+
+remove_country_leader_trait - remove trait from active country leader
+Supported scopes: country
+
+Supported targets:
+
+set_political_party - set properties of a political party
+Supported scopes: country
+
+Supported targets:
+
+set_politics - set country political status
+Supported scopes: country
+
+Supported targets:
+
+add_ideas - add idea(s) to country
+Supported scopes: country
+
+Supported targets:
+
+remove_ideas - remove idea(s) from country
+Supported scopes: country
+
+Supported targets:
+
+add_political_power - add political power to country
+Supported scopes: country
+
+Supported targets:
+
+set_political_power - set political power for country
+Supported scopes: country
+
+Supported targets:
+
+set_technology - sets technology level(s) on country
+Supported scopes: country
+
+Supported targets:
+
+create_navy_leader - create navy leader for country
+Supported scopes: country
+
+Supported targets:
+
+remove_unit_leader_trait - remove trait from unit leader
+Supported scopes:
+
+Supported targets:
+
+add_unit_leader_trait - add trait to unit leader
+Supported scopes:
+
+Supported targets:
+
+add_namespace - adds new namespace
+Supported scopes: ???
+
+Supported targets:
+
+set_state_owner - set owner for state
+Supported scopes: country
+
+Supported targets:
+
+puppet - puppets specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+set_state_controller - set controller for state
+Supported scopes: country
+
+Supported targets:
+
+transfer_state - set owner and controller for state
+Supported scopes: country
+
+Supported targets:
+
+set_state_flag - set state flag
+Supported scopes: state
+
+Supported targets: none
+
+clr_state_flag - clear state flag
+Supported scopes: state
+
+Supported targets: none
+
+create_faction - create faction of specified name
+Supported scopes: country
+
+Supported targets:
+
+add_nuclear_bombs - add nukes to country
+Supported scopes: country
+
+Supported targets:
+
+annex_country - 
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_building_construction - Starts building construction for amount of levels in specified state or province
+Supported scopes: state
+
+Supported targets: none
+
+dismantle_faction - dismantle faction led by the current country
+Supported scopes: country
+
+Supported targets:
+
+add_to_faction - adds specified country to faction
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+remove_from_faction - removes specified country from faction
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+give_guarantee - guarantees specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+give_military_access - gives military access to the specified country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+random_state - Executes children effects on random state that fulfills the "limit" trigger.
+Supported scopes: ???
+
+Supported targets:
+
+random_owned_state - Executes children effects on random owned state that fulfills the "limit" trigger. 
+prioritize = { <stateID> <stateID> } to pick those states first if they fulfull the limit
+Supported scopes: country
+
+Supported targets:
+
+random_neighbor_state - Executes children effects on random neighbor state that fulfills the "limit" trigger.
+Supported scopes: state
+
+Supported targets: none
+
+every_state - Executes children effects on every state that fulfills the "limit" trigger.
+Supported scopes: ???
+
+Supported targets:
+
+every_owned_state - Executes children effects on every owned state that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+every_neighbor_state - Executes children effects on every neighbor state that fulfills the "limit" trigger.
+Supported scopes: state
+
+Supported targets: none
+
+news_event - fires a news event
+Supported scopes: country
+
+Supported targets:
+
+declare_war_on - declares war on specified country
+Supported scopes: country
+
+Supported targets:
+
+add_scaled_political_power - add political power to country scaled by the difference in IC between the receiver and another country
+Supported scopes: country
+
+Supported targets:
+
+hold_election - Immediately holds an election in the target country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_popularity - add popularity to an ideology in a country
+Supported scopes: country
+
+Supported targets:
+
+remove_ideas_with_trait - Remove all ideas with specified trait from country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+start_civil_war - Given ideology starts a civil war in the country.
+start_civil_war = {
+	ideology = revolting ideology
+	ruling party = ruling party for country
+	size = 0-1 Size modifier of the revolt. Affects stockpile, army, air and navy as well
+	army_ratio = 0-1 Overrides size modifier for army
+	navy_ratio = 0-1 Overrides size modifier for navy
+	air_ratio = 0-1 Overrides size modifier for air
+	keep_unit_leaders specify ID of unit leaders that remain with the original country
+	keep_unit_leaders_trigger Trigger for unit leaders to remain with the original country
+	states States that go to the revolter. Use "all" to include all states.
+	states_filter States that go to the revolter. Filtering trigger on the states scripted to go to the revolter.
+}
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+retire_country_leader - retires a country leader and removes him as leader of his party, making the next in line the new party and country leader
+Supported scopes: country
+
+Supported targets:
+
+kill_country_leader - kills a country leader and removes him completely, making the next in line the new party and country leader
+Supported scopes: country
+
+Supported targets:
+
+release_puppet - releases specified country as puppet
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+create_wargoal - creates wargoal for country in scope
+Supported scopes: country
+
+Supported targets:
+
+add_claim_by - Add state claim by country.
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+remove_claim_by - Removes state claim by country.
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_core_of - Add state as core of country
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+remove_core_of - Removes state as core of country
+Supported scopes: state
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+army_experience - add army experience for country
+Supported scopes: country
+
+Supported targets:
+
+navy_experience - add naval experience for country
+Supported scopes: country
+
+Supported targets:
+
+air_experience - add air experience for country
+Supported scopes: country
+
+Supported targets:
+
+save_event_target_as - save an event target
+Supported scopes: ???
+
+Supported targets:
+
+save_global_event_target_as - save a global event target
+Supported scopes: ???
+
+Supported targets:
+
+clear_global_event_target - clear a global event target
+Supported scopes: ???
+
+Supported targets:
+
+clear_global_event_targets - clear all global event targets
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+break - break execution of effects
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+unlock_national_focus - unlocks a focus for a country
+Supported scopes: country
+
+Supported targets:
+
+add_tech_bonus - adds a limited use tech bonus
+Supported scopes: country
+
+Supported targets:
+
+set_demilitarized_zone - adds a limited use tech bonus
+Supported scopes: state
+
+Supported targets: none
+
+add_research_slot - Adds a research slot (negative values subtracts)
+Supported scopes: country
+
+Supported targets:
+
+set_research_slots - Sets the number of research slots
+Supported scopes: country
+
+Supported targets:
+
+set_border_war - starts a border war in a state with neighbouring state that also has border war
+Supported scopes: state
+
+Supported targets: none
+
+set_equipment_fraction - Modify allequipments by factor
+Supported scopes: country
+
+Supported targets:
+
+add_threat - Adds country threat
+Supported scopes: country
+
+Supported targets:
+
+send_equipment - Sends to target scope specified amount of equipment.
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+set_rule - Adds rule to country
+Supported scopes: country
+
+Supported targets:
+
+diplomatic_relation - Set up a diplomatic relation between two nations
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+effect_tooltip - Shows just tooltip of effects
+Supported scopes: state country
+
+Supported targets: ??? none
+
+add_resource - Adds resource production to state
+Supported scopes: state country
+
+Supported targets: none
+
+remove_unit_leader - remove a unit leader ( remove_unit_leader=ID )
+Supported scopes: country
+
+Supported targets:
+
+add_timed_idea - add time limited idea to country idea, add_timed_idea = { idea = id days = number_of_days }
+Supported scopes: country
+
+Supported targets:
+
+end_puppet - Stops specefied country being a puppet of current country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+load_oob - Immediately loads an Order of Battle (OOB) file.
+
+Example:
+load_oob = "ENG_1936"
+Supported scopes: country
+
+Supported targets:
+
+create_import - Creates trade between two countries
+Supported scopes: country
+
+Supported targets:
+
+add_named_threat - Adds country threat
+Supported scopes: country
+
+Supported targets:
+
+set_province_controller - set controller for province
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+set_major - sets mandatory major country flag
+Supported scopes: country
+
+Supported targets:
+
+create_field_marshal - create field marshal for country
+Supported scopes: country
+
+Supported targets:
+
+create_corps_commander - create corps commander for country
+Supported scopes: country
+
+Supported targets:
+
+goto_province - Goes to stated province.
+Supported scopes: country
+
+Supported targets:
+
+goto_state - Goes to stated state.
+Supported scopes: ???
+
+Supported targets:
+
+leave_faction - Country leaves the faction
+Supported scopes: country
+
+Supported targets:
+
+complete_national_focus - unlocks a focus for a country
+Supported scopes: country
+
+Supported targets:
+
+set_party_name - change partyname for an ideology in a country
+Supported scopes: country
+
+Supported targets:
+
+add_extra_state_shared_building_slots - add extra shared building slot to state
+Supported scopes: state
+
+Supported targets: none
+
+reverse_add_opinion_modifier - Add opinion modifier(s) to target(s)
+Supported scopes: country
+
+Supported targets: ???
+
+add_to_war - adds country to the specified war
+Supported scopes: country
+
+Supported targets:
+
+show_ideas_tooltip - show what idea does
+Supported scopes: country
+
+Supported targets:
+
+create_equipment_variant - Creates a new equipment variant.
+Example:
+create_equipment_variant = {
+	name = "Yorktown Class"
+	type = ship_hull_carrier_2
+	parent_version = 1  #default = 0
+	obsolete = yes      #default = no
+	name_group = ship_name_group_name      #default = empty/none
+	role_icon_index = 3      #default just inherits from parent or remains unset
+	role_icon_index = 0      #alternative, explicitly unset
+	role_icon_index = auto   #uses AI design logic to pick
+	upgrades = {        #optional, inherits from parent
+		ship_deckspace_upgrade = 1
+		carrier_armor_upgrade = 2
+	}
+	modules = {         #optional, inherits from parent
+		fixed_ship_deck_slot_1 = ship_deck_space
+		front_1_custom_slot = ship_armor_carrier_deck
+		fixed_ship_deck_slot_2 = empty #overrides parent
+	}
+}
+Supported scopes: country
+
+Supported targets:
+
+add_equipment_production - Adds an equipment production
+Supported scopes: country
+
+Supported targets:
+
+add_ace - adds an air ace
+Supported scopes: country
+
+Supported targets:
+
+random_owned_controlled_state - Executes children effects on random owned state that fulfills the "limit" trigger.
+prioritize = { <stateID> <stateID> } to pick those states first if they fulfull the limit
+Supported scopes: country
+
+Supported targets:
+
+ai_message - ai message... ?
+Supported scopes: country
+
+Supported targets:
+
+every_other_country - Executes children effects on every other country that fulfills the "limit" trigger. Excludes current country
+Supported scopes: ???
+
+Supported targets:
+
+random_other_country - Executes children effects on random country that fulfills the "limit" trigger. Excludes current country
+Supported scopes: ???
+
+Supported targets:
+
+add_equipment_to_stockpile - Adds equipment to the countries stockpiles.
+Example: add_equipment_to_stockpile = { type = strat_bomber_equipment_2 amount = 100 producer = USA }
+Supported scopes: country
+
+Supported targets: ???
+
+swap_ideas - swap 2 ideas. 
+ Syntax: swap_idea = { remove_idea = <idea> add_idea = <idea> }
+Supported scopes: country
+
+Supported targets:
+
+damage_building - Damages buildings in the current state.
+Example: damage_building = { type = industrial_complex damage = 2.4 }
+Also has the variable province = x when targeting provincial buildings.
+Supported scopes: state
+
+Supported targets: ??? none
+
+release_autonomy - releases specified country with specified level of autonomy.
+Example:
+ENG = {
+release_autonomy = {
+target=RAJ
+autonomy_state=autonomy_puppet
+freedom_level=0.5
+}
+}
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+set_autonomy - makes autonomy of specified level and country.
+Example:
+set_autonomy = {
+target=ENG
+autonomy_state = nautonomy_puppet
+freedom_level=0.5
+}
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_to_tech_sharing_group - Adds country to technology sharing group of specified name.
+Example: add_to_tech_sharing_group = commonwealth_research
+Supported scopes: country
+
+Supported targets:
+
+remove_from_tech_sharing_group - Removes country from technology sharing group of specified name.
+Example: remove_from_tech_sharing_group = commonwealth_research
+Supported scopes: country
+
+Supported targets:
+
+add_autonomy_score - Adds exact freedom score to the autonomy.
+Example:
+add_autonomy_score={
+value=50
+localization="LOC_KEY"
+}
+Supported scopes: country
+
+Supported targets:
+
+modify_tech_sharing_bonus - Modify country bonus for specified technology sharing group.
+Example: modify_tech_sharing_bonus  = { id = commonwealth_research bonus = 0.2 }
+Supported scopes: country
+
+Supported targets:
+
+add_autonomy_ratio - Adds % freedom score to the autonomy.
+Example:
+add_autonomy_ratio={
+value=0.005
+localization="LOC_KEY"
+}
+Supported scopes: country
+
+Supported targets:
+
+set_cosmetic_tag - Sets country cosmetic tag.
+Example: INS = { set_cosmetic_tag = IN1 }
+Supported scopes: country
+
+Supported targets:
+
+drop_cosmetic_tag - Drops country cosmetic tag.
+Example: INS = { drop_cosmetic_tag }
+Supported scopes: country
+
+Supported targets:
+
+transfer_ship - Transfers ship from scope country to target country.
+Example:
+ENG={
+  transfer_ship={
+    prefer_name = "HMS Achilles"
+    type = light_cruiser
+    target = NZL
+  }
+}
+Supported scopes: country
+
+Supported targets:
+
+set_state_category - Sets the category of a state
+Example: set_state_category = large_town
+Supported scopes: state
+
+Supported targets: none
+
+modify_global_flag - modify global flag. Only modifies if flag already exists.
+Example: modify_global_flag = { flag = <name> value = <number> }
+Supported scopes: ???
+
+Supported targets:
+
+modify_country_flag - modify country flag. Only modifies if flag already exists.
+Example: modify_country_flag = { flag = <name> value = <number> }
+Supported scopes: country
+
+Supported targets:
+
+modify_state_flag - modify state flag. Only modifies if flag already exists.
+Example: modify_state_flag = { flag = <name> value = <number> }
+Supported scopes: state
+
+Supported targets: none
+
+add_state_modifier - Adds a modifier to the state
+Example: add_state_modifier = { modifier = { local_non_core_manpower = 0.2 } }
+Supported scopes: state
+
+Supported targets: none
+
+set_province_name - set_province_name = { id = <province id> name = <string> } - Set name for a province
+Supported scopes: ???
+
+Supported targets:
+
+set_state_name - set_state_name = <string> - Set the current states name
+Supported scopes: state
+
+Supported targets: none
+
+reset_province_name - reset name of a province back to localization one.
+Supported scopes: ???
+
+Supported targets:
+
+reset_state_name - reset_state_name = yes - Resets the current states name to the original one
+Supported scopes: state
+
+Supported targets: none
+
+create_production_license - Creates production license
+Example: create_production_license = {
+	target = TAG # target for licensing
+	cost_factor = 1.0 # cost factor for the deal
+	equipment = { # classical equipment reference
+		type = light_tank_equipment_2
+		version = 0
+	}
+}
+Supported scopes: country
+
+Supported targets:
+
+add_relation_modifier - Adds a static modifier between current scope and target
+Example: add_relation_modifier = {
+	target = TAG # target of the relation
+	modifier = static_modifier_name_here #Name of the modifier added
+	}
+}
+Supported scopes: country
+
+Supported targets: THIS
+
+remove_relation_modifier - Removes a static modifier between current scope and target
+Example: add_relation_modifier = {
+	target = TAG # target of the relation
+	modifier = static_modifier_name_here #Name of the modifier added
+	}
+}
+Supported scopes: country
+
+Supported targets: THIS
+
+set_building_level - Sets specific level of a building construction for amount of levels in specified state or province
+Supported scopes: state
+
+Supported targets: none
+
+set_stability - Sets the stability to the country in scope. Example: set_stability = 80
+Supported scopes: country
+
+Supported targets:
+
+add_war_support - Adds the war support to the country in scope. Example: add_war_support = 5
+Supported scopes: country
+
+Supported targets:
+
+set_war_support - Sets the war support to the country in scope. Example: set_war_support = 80
+Supported scopes: country
+
+Supported targets:
+
+random_unit_leader - Executes children effects on random unit leader that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+every_unit_leader - Executes children effects on unit leaders that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+random_army_leader - Executes children effects on random army leader that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+every_army_leader - Executes children effects on army leaders that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+random_navy_leader - Executes children effects on random navy leader that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+every_navy_leader - Executes children effects on navy leaders that fulfills the "limit" trigger.
+Supported scopes: country
+
+Supported targets:
+
+transfer_navy - Transfers the entire navy from scope country to target country. Does not support carriers!
+Example:
+ENG={
+	target = NZL
+	is_government_in_exile = yes #optional, default is no; the navy will be tagged as exile if this is yes so that it will return to owner if they return from exile.
+}
+Supported scopes: country
+
+Supported targets:
+
+destroy_ships - Destroys ships of specified country and amount
+Example: 
+ENG={ 
+	destroy_ships = {
+		type=light_cruiser
+		count=all #or number
+	}
+}
+Supported scopes: country
+
+Supported targets:
+
+set_unit_leader_flag - set unit leader flag
+Supported scopes:
+
+Supported targets:
+
+modify_unit_leader_flag - modify unit leader flag. Only modifies if flag already exists.
+Example: _modify_unit_leader_flag_ = { flag = <name> value = <number> }
+Supported scopes:
+
+Supported targets:
+
+clr_unit_leader_flag - clear unit leader flag
+Supported scopes:
+
+Supported targets:
+
+set_nationality - Sets the country that owns current scope general
+Supported scopes:
+
+Supported targets:
+
+demote_leader - Demotes field marshal to general
+Supported scopes:
+
+Supported targets:
+
+retire - Retires scope unit leader
+Supported scopes:
+
+Supported targets:
+
+add_command_power - add command power to country
+Supported scopes: country
+
+Supported targets:
+
+unlock_decision_tooltip - show what decision does
+Example: unlock_decision_tooltip = some_decision_here
+Example:
+unlock_decision_tooltip = {
+    decision = <some_decision>
+    show_effect_tooltip = yes # default is no
+    show_modifiers = yes # default is no
+}
+
+Supported scopes: country
+
+Supported targets:
+
+add_temporary_buff_to_units - Add buffs to units that are belongs to the army group/navy of this unit leader
+Supported scopes:
+
+Supported targets:
+
+boost_planning - Boost planning of units that are belongs to the army group/navy of this unit leader
+Supported scopes:
+
+Supported targets:
+
+add_region_efficiency - add efficiency factor to strategic region for from country
+Supported scopes:
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+modify_building_resources - Modifies resource output of specific building for this country only
+Example: modify_building_resources = {
+	building = radar_station
+	resource = oil
+	amount = 2
+}
+Supported scopes: country
+
+Supported targets:
+
+global_every_army_leader - Executes children effects on army leaders for every country in the world that fulfills the "limit" trigger. Better to use every_army_leader if you know the country
+Supported scopes: country
+
+Supported targets:
+
+add_to_variable - Adds a value or a variable to another one
+Example: add_to_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+subtract_from_variable - Subtracts a value or a variable to another one
+Example: subtract_from_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+multiply_variable - Multiplies a variable to a value or another variable
+Example: set_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+divide_variable - Divies a variable to a value or another variable
+Example: divide_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+clear_variable - Clears a variable
+Example: clear_variable = num_dogs
+Supported scopes: ???
+
+Supported targets:
+
+add_attack - Adds attack skill to a unit leader
+Example: add_attack = 1
+Supported scopes:
+
+Supported targets:
+
+add_defense - Adds defense skill to a unit leader
+Example: add_defense = 1
+Supported scopes:
+
+Supported targets:
+
+add_planning - Adds planning skill to a unit leader
+Example: add_planning = 1
+Supported scopes:
+
+Supported targets:
+
+unlock_decision_category_tooltip - localizes name of category and displays tooltip that shows it will be unlocked
+Supported scopes: country
+
+Supported targets:
+
+activate_mission_tooltip - shows mission will activate and name. Activation needs to be handled manually, effect is just an easier way to display name of mission.
+Example: unlock_mission_tooltip = some_mission_here
+Supported scopes: country
+
+Supported targets:
+
+load_focus_tree - Sets what focus tree a country uses, retains finished shared focuses.
+Supported scopes: country
+
+Supported targets:
+
+add_logistics - Adds logistics skill to a unit leader
+Example: add_logistics = 1
+Supported scopes:
+
+Supported targets:
+
+add_offsite_building - Add an offsite building to a country
+Supported scopes: country
+
+Supported targets:
+
+replace_unit_leader_trait - add trait to unit leader
+Supported scopes:
+
+Supported targets:
+
+add_max_trait - Adds a max assignable trait slot for a general
+Example: add_max_trait = 1
+Supported scopes:
+
+Supported targets:
+
+add_skill_level - Adds a skill level to a unit leader
+Example: add_skill_level = 1
+Supported scopes:
+
+Supported targets:
+
+add_to_temp_variable - Adds a value or a variable to a temp variable
+Example: add_to_temp_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+subtract_from_temp_variable - Subtracts a value or a variable to a temp variable
+Example: subtract_from_temp_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+multiply_temp_variable - Multiplies a temp variable to a value or another variable
+Example: set_temp_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+divide_temp_variable - Divies a temp variable to a value or another variable
+Example: divide_temp_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+set_temp_variable - Sets a temp variable to a value or another variable
+Example: set_temp_variable = {
+var = num_dogs
+	value = 42
+	tooltip = loc_str_id_with_LEFT_and_RIGHT  #localized text with LEFT and RIGHT tokens in it, tokens will replaced by values
+}
+Supported scopes: ???
+
+Supported targets:
+
+add_timed_unit_leader_trait - add a timed trait to unit leader
+Supported scopes:
+
+Supported targets:
+
+clamp_variable - Clamps a variable between two values or variables.
+Note that either min or max can be omitted.
+The order in which the operations are applied is Max( Min( var, max ), min ).
+An error will be logged if max < min as the result will be more often than not undesired (requires the game to run in debug mode).
+Example: clamp_variable = {
+    var = num_dogs
+    min = 0
+    max = num_cats
+}
+
+Supported scopes: ???
+
+Supported targets:
+
+clamp_temp_variable - Clamps a temp variable a variable bet ween two a values or another variables
+Example: clamp_temp_variable = {
+var = num_dogs
+min = 0
+max = num_cats
+}
+Supported scopes: ???
+
+Supported targets:
+
+start_border_war - start a border war between two states. Example:
+start_border_war = {
+	change_state_after_war = no #overrides the transfer of state at the end of war
+	combat_width = 80 #combat width for border war
+	minimum_duration_in_days = 14 #minimum duration for combat
+	attacker = {
+		state = 527 # state to start border war
+		num_provinces = 4 #number of provinces we want border war to be
+		on_win = japan_border_conflict.2 #effect to call if wins
+		on_lose = japan_border_conflict.3 #effect to call if loses
+		on_cancel = japan_border_conflict.4 #effect to call if cancels
+		leader_score = { #score for selecting a leader
+			base = 1
+			modifier = {
+				check_variable = { likes_border_wars = 1 }
+				add = 2
+			}
+		}
+		modifier = 0.5 #combat modifier
+		dig_in_factor = 0.5 #dig in modifier factor
+		terrain_factor = 0.5 #terrain modifier factor
+	}
+	
+	defender = {
+		state = 408 # state to start border war
+		num_provinces = 4 #number of provinces we want border war to be
+		on_win = japan_border_conflict.2 #effect to call if wins
+		on_lose = japan_border_conflict.3 #effect to call if loses
+		on_cancel = japan_border_conflict.4 #effect to call if cancels
+	}
+}
+
+Supported scopes: ???
+
+Supported targets:
+
+set_border_war_data - update border war properties
+Supported scopes: ???
+
+Supported targets:
+
+cancel_border_war - cancel border war between two states
+Supported scopes: ???
+
+Supported targets:
+
+set_division_template_lock - Set lock status for a division template
+Example: set_division_template_lock = { division_template = <name> is_locked = <bool (default:true)> }
+Supported scopes: country
+
+Supported targets:
+
+delete_unit_template_and_units - Delete a template and its units
+Example: delete_unit_template_and_units = { division_template = <name> }
+Supported scopes: country
+
+Supported targets:
+
+print_variables - prints all variables in scope and temp variables to a file
+Example: print_variables = {
+file = log_file
+text = header_text
+append = yes
+print_global = yes
+var_list = { a b c } #optional
+}
+Supported scopes: state country
+
+Supported targets: none
+
+activate_mission - Activates mission, ignoring its normal trigger conditions. Cannot activate a mission that is already active. 
+Example: activate_mission = some_mission_here
+Supported scopes: country
+
+Supported targets:
+
+remove_mission - Removes mission without running complete or timeout effects. 
+Example: remove_mission = some_mission_here
+Supported scopes: country
+
+Supported targets:
+
+recall_attache - Scope country recalls attache from target country. Example: GER = { recall_attache = CHI } means Germany recalls attache from China.
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+activate_targeted_decision - Activates targeted decisions or mission, ignoring its normal trigger conditions, cooldown and fire only once. Cannot activate if active in interface. 
+Example: activate_targeted_decision = { target = TAG decision = decision_id_here
+Supported scopes: country
+
+Supported targets:
+
+remove_targeted_decision - Removes targeted decisions or mission. 
+Example: remove_targeted_decision = { target = TAG decision = decision_id_here
+Supported scopes: country
+
+Supported targets:
+
+modify_timed_idea - Modify amount of days of a timed idea.
+ Example: modify_timed_idea = { idea = my_idea_id days = 5 } Adds 5 more days to the idea my_idea_id.
+Supported scopes: country
+
+Supported targets:
+
+activate_decision - Activates specified decision for scope country
+Supported scopes: country
+
+Supported targets:
+
+set_truce - Sets a truce between scope country and target for days duration. 
+Example set_truce = { target = GER days = 90 }
+Supported scopes: country
+
+Supported targets:
+
+round_variable - Rounds a variable
+Example: round_variable = num_dogs
+Supported scopes: ???
+
+Supported targets:
+
+unit_leader_event - fires a unit leader event for owner country
+Supported scopes:
+
+Supported targets:
+
+finalize_border_war - finalizes border war between two states, wins or cancels it
+Supported scopes: ???
+
+Supported targets:
+
+remove_decision - Remove specified active decision for scope country - Does not run the remove_effect or put the decision on cooldown. Ignores fire_only_once
+Supported scopes: country
+
+Supported targets:
+
+swap_ruler_traits - swap 2 traits on current ruler. 
+ Syntax: swap_ruler_traits = { remove = <trait> add = <trait> }
+Supported scopes: country
+
+Supported targets:
+
+add_random_trait - add random trait from specified list to unit leader. add_random_trait = { old_guard brilliant_strategist inflexible_strategist }
+Supported scopes:
+
+Supported targets:
+
+remove_exile_tag - remove exile tag from scope unit leader. remove_exile_tag = yes
+Supported scopes:
+
+Supported targets:
+
+set_legitimacy - set_legitimacy = 10. Sets legitimacy on scope country to specified value. Value has to be 0-100.
+Supported scopes: country
+
+Supported targets:
+
+become_exiled_in - Become exile in target nation. become_exiled_in = { target = TAG legitimacy = 0-100 (optional) }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+set_faction_name - set_faction_name = NEW_LOC_KEY. Sets the faction name to whatever the new key localises to.
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_maneuver - Adds maneuver skill to a unit leader
+Example: add_maneuver = 1
+Supported scopes:
+
+Supported targets:
+
+add_coordination - Adds maneuver skill to a unit leader
+Example: add_coordination = 1
+Supported scopes:
+
+Supported targets:
+
+give_resource_rights - Gives rights to take resources from specified state. give_resource_rights = { receiver = <TAG> state = <id> }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+remove_resource_rights - Remove resource right to state for scope country. remove_resource_rights = ID
+Supported scopes: country
+
+Supported targets:
+
+inherit_technology - Copies over technology state from target
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+round_temp_variable - Rounds a temporary variable
+Example: round_temp_variable = num_dogs
+Supported scopes: ???
+
+Supported targets:
+
+supply_units - Give supply to units being controlled by this leader. 
+Example supply_units = 24
+Supported scopes:
+
+Supported targets:
+
+set_faction_leader - set current country as leader of its faction
+Supported scopes: country
+
+Supported targets:
+
+set_keyed_oob - Registers an Order of Battle (OOB) file to be loaded for a country at game start, replacing any previously registered OOB (with the given key) on that country.
+Only intended to be used within history files.
+
+Example:
+set_keyed_oob = {
+	key = naval
+	name = "ENG_1936_Naval"
+}
+Supported scopes: country
+
+Supported targets:
+
+set_oob - Registers an Order of Battle (OOB) file to be loaded for a country at game start, replacing any previously registered OOB (with no key) on that country.
+Only intended to be used within history files.
+
+Example:
+set_oob = "ENG_1936"
+Supported scopes: country
+
+Supported targets:
+
+set_naval_oob - Registers an Order of Battle (OOB) file to be loaded for a country at game start, replacing any previously registered OOB (with key "naval") on that country.
+Only intended to be used within history files.
+
+Example:
+set_naval_oob = "ENG_1936_Naval"
+Supported scopes: country
+
+Supported targets:
+
+add_to_array - Adds an element to an array
+Example: add_to_array = {
+	array = array_name
+	value = 42 #optional, if not defined adds scope
+	index = 3 #optional, default is end. otherwise elements are shifted
+}
+#shorter usage: add_to_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+remove_from_array - Removes an element from an array using value or index
+Example: remove_from_array = {
+	array = array_name
+	value = 42 #optional, use index or this. if neither it removes last element
+	index = 3 #optional, use value or this. if neither it removes last element
+}
+#shorter usage: remove_from_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+clear_array - Clears the contents of array
+Example: clear_array = array_name
+Supported scopes: ???
+
+Supported targets:
+
+resize_array - Resizes array
+Example: resize_array = {
+	array = array_name
+	value = 42 #optional, if not specified and array grows the new elements are set to this (default 0)
+	size = 3 #if higher than old size, new elements are added to end. otherwise last elements are removed to match to new size
+}
+#shorter usage: resize_array = { array_name = 3 }
+Supported scopes: ???
+
+Supported targets:
+
+add_to_temp_array - Adds an element to a temporary array
+Example: add_to_temp_array = {
+	array = array_name
+	value = 42 #optional, if not defined adds scope
+	index = 3 #optional, default is end. otherwise elements are shifted
+}
+#shorter usage: add_to_temp_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+remove_from_temp_array - Removes an element from a temporary array using value or index
+Example: remove_from_temp_array = {
+	array = array_name
+	value = 42 #optional, use index or this. if neither it removes last element
+	index = 3 #optional, use value or this. if neither it removes last element
+}
+#shorter usage: remove_from_temp_array = { array_name = 42 }
+Supported scopes: ???
+
+Supported targets:
+
+clear_temp_array - Clears the contents of a temporary array
+Example: clear_temp_array = array_name
+Supported scopes: ???
+
+Supported targets:
+
+resize_temp_array - Resizes a temp array
+Example: resize_temp_array = {
+	array = array_name
+	value = 42 #optional, if not specified and array grows the new elements are set to this (default 0)
+	size = 3 #if higher than old size, new elements are added to end. otherwise last elements are removed to match to new size
+}
+#shorter usage: resize_temp_array = { array_name = 3 }
+Supported scopes: ???
+
+Supported targets:
+
+for_each_loop - Runs a loop on for each element of an array
+Example: for_each_loop = {
+	array = array_name
+	value = value_name #optional (default 'v') current value in array will be stored in this temp variable
+	index = index_name #optional (default 'i') current index in array will be stored in this temp variable
+	break = break_name #optional (default 'break') set this temp variable to non zero to break the loop
+ #effect 1
+ #effect 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+add_fuel - add fuel to the country
+Supported scopes: country
+
+Supported targets:
+
+set_fuel - set fuel for country
+Supported scopes: country
+
+Supported targets:
+
+for_each_scope_loop - Runs a loop on for each element of an array and changes scope to current element in each iteration
+Example: for_each_scope_loop = {
+	array = array_name
+	break = break_name #optional (default 'break') set this temp variable to non zero to break the loop
+ #effect 1
+ #effect 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+random_scope_in_array - Runs the effect for a random element in array
+Example: random_scope_in_array = {
+	array = array_name
+	limit = { ... trigger ... } a trigger to limit scopes
+	break = break_name #optional (default 'break') set this temp variable to non zero to break the loop
+ #effect 1
+ #effect 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+force_update_dynamic_modifier - updates the modifiers in current scope (use if you don't want to wait for daily update to update them):
+force_update_dynamic_modifier = yes
+
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+remove_dynamic_modifier - removes a dynamic modifier from country/state/unit leader:
+remove_dynamic_modifier = {
+    modifier = dynamic_modifier_name
+    scope = GER #optional, specify if it is specified while adding the modifier
+}
+
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+add_dynamic_modifier - adds a dynamic modifier to country/state/unit leader:
+add_dynamic_modifier = {
+    modifier = dynamic_modifier_name
+    scope = GER #optional, state or country tag or a variable contains that. if specified the dynamic variable will target that scope
+}
+
+Supported scopes: state country
+
+Supported targets: none THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+for_loop_effect - Runs a same effects through a loop. example will run the effects for value_name = -3, 0, 3, 6, 9 and then terminate
+Example: for_loop = {
+	start = -3 (default 0) start value of loop
+	end = 10 (default 0) end value of loop
+	compare_type = less_than_or_equals (default less_than) comparison type between start and end val
+	add = 3 (default 1) value to add to current value after each iteration
+	value = value_name #optional (default 'v') current value of iteration will be stored in this temp variable
+	break = break_name #optional (default 'break') set this temp variable to non zero to break the loop
+ #effect 1
+ #effect 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+while_loop_effect - Runs the effect as long as a trigger is true
+Example: while_effect = {
+	limit = { ... trigger ... } a trigger to test before each iteration
+	break = break_name #optional (default 'break') set this temp variable to non zero to break the loop
+ #effect 1
+ #effect 2 ...
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+meta_effect - meta effects can be used for building effects from strings and running them. following example will give Germany 42 pp:
+meta_effect = {
+    text = {
+        [COUNTRY] = {
+            add_political_power = [POW]
+        }
+    }
+    COUNTRY = "GER"
+    POW = 42
+    debug = no #set to yes if you want to see what game actually executes
+}
+
+Supported scopes: ???
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+launch_nuke - launch nuke at a state. usage : 
+launch_nuke = { 
+   provinve = 42 #will nuke this province if specified
+   state = 42 #use either province or state. if state is used it will prefer enemies first while picking a province to nuke. otherwise it will pick one of the neutrals
+   controller = GER #if state and controller is specified, the effect will pick a province that is controlled by this tag
+   use_nuke = yes #will consume nuke if specified
+} 
+
+Supported scopes: country
+
+Supported targets:
+
+scoped_sound_effect - Plays sound effect only on in current scope's player
+Supported scopes: country
+
+Supported targets:
+
+find_lowest_in_array - Runs a loop on for each element of an array, finds the lowest value and stores result in temp variables
+Example: find_lowest_in_array = {
+	array = array_name
+	value = value_name #optional (default 'v') lowest value in array will be stored in this temp variable
+	index = index_name #optional (default 'i') index of lowest value in array will be stored in this temp variable
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+find_highest_in_array - Runs a loop on for each element of an array, finds the highest value and stores result in temp variables
+Example: find_highest_in_array = {
+	array = array_name
+	value = value_name #optional (default 'v') highest value in array will be stored in this temp variable
+	index = index_name #optional (default 'i') index of highest value in array will be stored in this temp variable
+}
+Supported scopes: ???
+
+Supported targets: ???
+
+add_mines - Add mines to a strategic region for scoped country.
+ add_mines = { region = 42 mines = 100 }
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+set_fuel_ratio - Set country's current fuel ratio relative to its capacity
+Supported scopes: country
+
+Supported targets:
+
+end_exile - Ends the exile of of the current scope's country
+Supported scopes: country
+
+Supported targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL
+
+
+=================
+
+== DYNAMIC VARIABLE DOCUMENTATION ==
+ 
+== Global Dynamic Variables ==
+date : get date value that can be comparable to other date values
+
+year : current year
+
+(Trigger) difficulty : check if the difficulty is above or below specified value 0-2 (difficulty enum). Example: difficulty > 0 (above easy)
+
+(Trigger) threat : check the global threat value. 0-1 value
+
+
+=================
+
+== Country Dynamic Variables ==
+ai_attitude_allied_weight : weight for an ai attitude attitude_alliedagainst country. Example: GER.ai_attitude_allied_weight@ENG
+
+ai_attitude_friendly_weight : weight for an ai attitude attitude_friendlyagainst country. Example: GER.ai_attitude_friendly_weight@ENG
+
+ai_attitude_hostile_weight : weight for an ai attitude attitude_hostileagainst country. Example: GER.ai_attitude_hostile_weight@ENG
+
+ai_attitude_is_threatened : returns 1 if ai is threatened
+
+ai_attitude_neutral_weight : weight for an ai attitude attitude_neutralagainst country. Example: GER.ai_attitude_neutral_weight@ENG
+
+ai_attitude_outraged_weight : weight for an ai attitude attitude_outragedagainst country. Example: GER.ai_attitude_outraged_weight@ENG
+
+ai_attitude_protective_weight : weight for an ai attitude attitude_protectiveagainst country. Example: GER.ai_attitude_protective_weight@ENG
+
+ai_attitude_threatened_weight : weight for an ai attitude attitude_threatenedagainst country. Example: GER.ai_attitude_threatened_weight@ENG
+
+ai_attitude_wants_ally : returns 1 if ai wants ally
+
+ai_attitude_wants_antagonize : returns 1 if ai wants antagonize
+
+ai_attitude_wants_ignore : returns 1 if ai wants ignore
+
+ai_attitude_wants_protect : returns 1 if ai wants protect
+
+ai_attitude_wants_weaken : returns 1 if ai wants weaken
+
+ai_strategy_alliance : ai strategy value allianceagainst country. Example: GER.ai_strategy_alliance@ENG
+
+ai_strategy_antagonize : ai strategy value antagonizeagainst country. Example: GER.ai_strategy_antagonize@ENG
+
+ai_strategy_befriend : ai strategy value befriendagainst country. Example: GER.ai_strategy_befriend@ENG
+
+ai_strategy_conquer : ai strategy value conqueragainst country. Example: GER.ai_strategy_conquer@ENG
+
+ai_strategy_consider_weak : ai strategy value consider_weakagainst country. Example: GER.ai_strategy_consider_weak@ENG
+
+ai_strategy_contain : ai strategy value containagainst country. Example: GER.ai_strategy_contain@ENG
+
+ai_strategy_declare_war : ai strategy value declare_waragainst country. Example: GER.ai_strategy_declare_war@ENG
+
+ai_strategy_dont_defend_ally_borders : ai strategy value dont_defend_ally_bordersagainst country. Example: GER.ai_strategy_dont_defend_ally_borders@ENG
+
+ai_strategy_force_defend_ally_borders : ai strategy value force_defend_ally_bordersagainst country. Example: GER.ai_strategy_force_defend_ally_borders@ENG
+
+ai_strategy_ignore : ai strategy value ignoreagainst country. Example: GER.ai_strategy_ignore@ENG
+
+ai_strategy_ignore_claim : ai strategy value ignore_claimagainst country. Example: GER.ai_strategy_ignore_claim@ENG
+
+ai_strategy_influence : ai strategy value influenceagainst country. Example: GER.ai_strategy_influence@ENG
+
+ai_strategy_invade : ai strategy value invadeagainst country. Example: GER.ai_strategy_invade@ENG
+
+ai_strategy_occupation_policy : ai strategy value occupation_policyagainst country. Example: GER.ai_strategy_occupation_policy@ENG
+
+ai_strategy_prepare_for_war : ai strategy value prepare_for_waragainst country. Example: GER.ai_strategy_prepare_for_war@ENG
+
+ai_strategy_protect : ai strategy value protectagainst country. Example: GER.ai_strategy_protect@ENG
+
+ai_strategy_send_volunteers_desire : ai strategy value send_volunteers_desireagainst country. Example: GER.ai_strategy_send_volunteers_desire@ENG
+
+ai_strategy_support : ai strategy value supportagainst country. Example: GER.ai_strategy_support@ENG
+
+allies : array of allies (faction members)
+
+autonomy_ratio : autonomy of scope country. -1 if not a subject
+
+command_power : total command power of country
+
+controlled_states : array of controlled states
+
+core_states : array of core states
+
+days_mission_timeout : timeout in days for a specific timed mission, mission type token is defined in target. example: days_mission_timeout@GER_mefo_bills_mission
+
+enemies : array of enemies at war with
+
+faction_leader : faction leader of this country's faction
+
+faction_members : array of faction members
+
+legitimacy : legitimacy of scope country. -1 if not an exile
+
+manpower : DEPRECATED, MAY OVERFLOW. total manpower of country
+
+manpower_k : total manpower of country in thousands
+
+max_available_manpower : DEPRECATED, MAY OVERFLOW. total available manpower of country
+
+max_available_manpower_k : total available manpower of country in thousands
+
+max_manpower : DEPRECATED, MAY OVERFLOW. maximum manpower of country
+
+max_manpower_k : maximum manpower of country in thousands
+
+modifier : a modifier stored in country scope
+
+num_armies : number of armies
+
+num_armies_in_state : number of armies in state, state is in target. example num_armies_in_state@123
+
+num_armies_with_type : number of armies with dominant type, dominant type is defined in target. example: num_armies_with_type@light_armor
+
+num_battalions : number of battalions
+
+num_battalions_with_type : number of battalions with sub unit type, sub unit type is defined in target. example: num_of_battalions_with_type@light_armor
+
+num_controlled_states : number of controlled states
+
+num_core_states : number of core states
+
+num_equipment : number of equipment in country. example num_equipment@infantry_equipment
+
+num_equipment_in_armies : number of equipment in armies of the country, equipment type token is defined in target. example num_equipment_in_armies@infantry_equipment
+
+num_equipment_in_armies_k : number of equipment in armies of the country in thousands, equipment type token is defined in target. example num_equipment_in_armies_k@infantry_equipment
+
+num_owned_controlled_states : number of owned and core states
+
+num_owned_states : number of owned states
+
+num_ships : number of ships
+
+num_ships_with_type : number of ships controlled in country, ship type is defined in target. example num_ships_with_type@carrier
+
+num_target_equipment_in_armies : number of equipment required in armies of the country, equipment type token is defined in target. example num_target_equipment_in_armies@infantry_equipment
+
+num_target_equipment_in_armies_k : number of equipment required in armies of the country in thousands, equipment type token is defined in target. example num_target_equipment_in_armies_k@infantry_equipment
+
+opinion : opinion of a country targeted on another one. example GER.opinion@ENG
+
+overlord : master of this subject
+
+owned_controlled_states : array owned and core states
+
+owned_states : array of owned states
+
+party_popularity : popularity of targeted party. example party_popularity@democratic. mat also target ruling_party
+
+political_power : total political power of country
+
+resource : number of surplus resources in country, resource type is defined in target resource@steel
+
+resource_consumed : number of resources consumed by country, resource type is defined in target resource_consumed@steel
+
+resource_exported : number of resources exported by country, resource type is defined in target resource_exported@steel
+
+resource_imported : number of resources imported by country, resource type is defined in target resource_imported@steel
+
+resource_produced : number of resources produced by country, resource type is defined in target. example resource_produced@steel
+
+stability : stability of a country
+
+subjects : array of subjects
+
+(Trigger) ai_irrationality : check the ai irrationality value
+
+(Trigger) ai_wants_divisions : Will compare towards the amount of divisions an ai wants to have.
+
+(Trigger) alliance_naval_strength_ratio : Compares the estimated naval strength between the scope country, his allies and his enemies.
+
+(Trigger) alliance_strength_ratio : Compares the estimated army strength between the scope country, his allies and his enemies.
+
+(Trigger) amount_manpower_in_deployment_queue : Checks for amount manpower currently in deploymentview. amount_manpower_in_training > 10
+
+(Trigger) amount_research_slots : check number of research current research slots 
+ amount_research_slots > 2
+
+(Trigger) any_war_score : compares the warscore of all wars in a country to see if any fullfills the comparison condition 0-100 - Example: any_war_score > 40
+
+(Trigger) casualties : Check the amount of casualties a country has suffered in all of it's wars
+
+(Trigger) casualties_k : Check the amount of casualties in thousands a country has suffered in all of it's wars
+
+(Trigger) command_power_daily : Checks if daily command power increase is more or less that specified value 
+ command_power_daily > 1.5
+
+(Trigger) compare_autonomy_progress_ratio : check if autonomy progress ratio is higher than value, example:
+compare_autonomy_progress_ratio > 0.5
+
+(Trigger) convoy_threat : A trigger to check convoy threat for a country. Controlled by NAVAL_CONVOY_DANGER defines. Returns a value between 0 and 1. Example convoy_threat > 0.5 
+
+(Trigger) enemies_naval_strength_ratio : Compares the estimated navy strength between the scope country and all its enemies
+
+(Trigger) enemies_strength_ratio : Compares the estimated army strength between the scope country and all its enemies
+
+(Trigger) fuel_ratio : Compares the fuel ratio to a variable.
+Example: fuel_ratio > 0.5
+
+(Trigger) has_added_tension_amount : Compare if the country has added above or below the specified ammount of tension
+
+(Trigger) has_legitimacy : Check scope country legitimacy 0-100: Example has_legitimacy < 60
+
+(Trigger) has_manpower : check amount of manpower
+
+(Trigger) has_political_power : check amount of political power
+
+(Trigger) has_stability : check value of stability 0-1: Example has_stability < 0.6
+
+(Trigger) has_war_support : check value of war_support 0-1: Example has_war_support < 0.6
+
+(Trigger) land_doctrine_level : checks researched land doctrine level
+
+(Trigger) manpower_per_military_factory : Number of available manpower per factory the country has. Excluding dockyards.
+manpower_per_military_factory < 1000
+
+(Trigger) mine_threat : A trigger to check how dangerous enemy mines are for a country. Controlled by NAVAL_MINE_DANGER defines. Returns a value between 0 and 1. Example mine_threat > 0.5 
+
+(Trigger) num_divisions : Will compare towards the amount of divisions a country has control over, if strength matters use has_army_size.
+
+(Trigger) num_faction_members : Compares the number of members in the faction for the current country. 
+ Example: num_faction_members > 10
+
+(Trigger) num_occupied_states : check the number of states occupied by nation
+
+(Trigger) num_of_available_civilian_factories : check amount of available civilian factories
+
+(Trigger) num_of_available_military_factories : check amount of available military factories
+
+(Trigger) num_of_available_naval_factories : check amount of available naval factories
+
+(Trigger) num_of_civilian_factories : check amount of civilian factories
+
+(Trigger) num_of_civilian_factories_available_for_projects : check amount of civilian factories available for a new project to use
+
+(Trigger) num_of_controlled_states : check amount of controlled stats
+
+(Trigger) num_of_factories : check amount of total factories
+
+(Trigger) num_of_military_factories : check amount of military factories
+
+(Trigger) num_of_naval_factories : check amount of naval factories
+
+(Trigger) num_of_nukes : check amount of nukes
+
+(Trigger) num_subjects : check the number of subjects of nation
+
+(Trigger) num_tech_sharing_groups : checks how many groups a nation is a member of
+
+(Trigger) original_research_slots : check number of research slots at start of game
+
+(Trigger) political_power_daily : Checks if daily political power increase is more or less that specified value 
+ political_power_daily > 1.5
+
+(Trigger) political_power_growth : Check the value of political power daily growth.Exacmple: political_power_growth > 0
+
+(Trigger) surrender_progress : check if a country is close to surrendering
+
+
+=================
+
+== State Dynamic Variables ==
+arms_factory_level : military factory level in the state
+
+building_level : building level of a building with type, uses target as building type. example building_level@arms_factory
+
+distance_to : distance to another state, uses target as another state. example: 123.distance_to@124
+
+industrial_complex_level : civilian factor level in the state
+
+infrastructure_level : infrastructure level in the state
+
+modifier : value of modifier stored in this state, uses target as modifier token, example: 123.modifier@local_manpower
+
+resistance : resistance strength in a state
+
+(Trigger) days_since_last_strategic_bombing : Checks the days since last strategic bombing.
+days_since_last_strategic_bombing < 10
+
+
+(Trigger) state_and_terrain_strategic_value : Checks for state strategic value
+
+(Trigger) state_population : check the population in the state
+
+(Trigger) state_population_k : check the population in the state in thousands (use to avoid variable overflows)
+
+(Trigger) state_strategic_value : Checks for state strategic value
+
+
+=================
+
+== Unit Leader Dynamic Variables ==
+army_attack_level : attack level of the leader
+
+army_defense_level : defense level of the leader
+
+average_stats : average stats of unit leader
+
+avg_combat_status : average progress of all combats
+
+avg_defensive_combat_status : average progress of defensive combats
+
+avg_offensive_combat_status : average progress of offensive combats
+
+avg_unit_planning_ratio : average planning ratio of all units
+
+avg_units_acclimation : average unit acclimatization for a specific climate, acclimatization type is defined in target. example avg_units_acclimation@cold_climate
+
+coordination_level : coordination level of the leader
+
+has_orders_group : 1 if leader has orders group, zero otherwise
+
+leader_modifier : value of a modifier stored in leader modifier, modifier token is defined in target. example leader_modifier@navy_max_range
+
+logistics_level : logistics level of the leader
+
+maneuvering_level : maneuvering level of the leader
+
+num_armored : number of units with armored dominant type
+
+num_artillery : number of units with artillery dominant type
+
+num_assigned_traits : number of assigned traits the leader has
+
+num_basic_traits : number of basic traits a leader has
+
+num_battalions : number of battalions
+
+num_battalions_with_type : number of battalions with sub unit type, sub unit type is defined in target. example: num_battalions_with_type@light_armor
+
+num_battle_plans : number of battle plans of unit leader
+
+num_cavalry : number of units with cavalry dominant type
+
+num_equipment : number of equipment in army of a leader, equipment type token is defined in target. example num_equipment@infantry_equipment
+
+num_infantry : number of units with infantry dominant type
+
+num_max_traits : number of maximum assignable traits a leader can have
+
+num_mechanized : number of units with mechanized dominant type
+
+num_motorized : number of units with motorized dominant type
+
+num_personality_traits : number of personality traits a leader has
+
+num_rocket : number of units with rocket dominant type
+
+num_ships : number of ships controlled by leader
+
+num_ships_with_type : number of ships controlled by leader, ship type is defined in target. example num_ships_with_type@carrier
+
+num_special : number of units with special dominant type
+
+num_status_traits : number of status traits a leader has
+
+num_target_equipment : number of equipment required in army of a leader, equipment type token is defined in target. example num_target_equipment@infantry_equipment
+
+num_terrain_traits : number of terrain traits a leader has
+
+num_traits : number of traits a leader has
+
+num_units : number of units controlled by leader
+
+num_units_crossing_river : number of units currently passing through a river
+
+num_units_defensive_combats : number of units in defensive combats
+
+num_units_defensive_combats_on : number of units that are defensively fighting on a terrain, terrain type is defined as target. example: num_units_defensive_combats_on@plains
+
+num_units_in_combat : number of units current fighting
+
+num_units_in_state : number of units controlled by leader in state, state is in target. example num_units_in_state@123
+
+num_units_offensive_combats : number of units in offensive combats
+
+num_units_offensive_combats_against : number of units that are offensively fighting against a terrain, terrain type is defined as target. example: num_units_offensive_combats_against@plains
+
+num_units_on_climate : number of units that are on an acclimatization required location, acclimatization type is defined in target. example num_units_on_climate@hot_climate
+
+num_units_with_type : number of units with dominant type controlled by leader, dominant type is defined in target. example: num_units_with_type@light_armor
+
+planning_level : planning level of the leader
+
+skill_level : skill level of the leader
+
+sum_unit_terrain_modifier : sum of terrain modifiers of each army's location, terrain type is defined in target. example: sum_unit_terrain_modifier@sickness_chance 
+
+unit_modifier : value of a modifier stored in unit modifier, modifier token is defined in target. example unit_modifier@army_attack_factor
+
+unit_ratio_ready_for_plan : ratio of units that are ready for plan
+
+(Trigger) attack_skill_level : Compares attack skill level of a unit leader.
+Example: attack_skill_level > 5
+
+(Trigger) defense_skill_level : Compares defense skill level of a unit leader.
+Example: defense_skill_level > 5
+
+(Trigger) logistics_skill_level : Compares logistics skill level of a unit leader.
+Example: logistics_skill_level > 5
+
+(Trigger) planning_skill_level : Compares planning skill level of a unit leader.
+Example: planning_skill_level > 5
+
+(Trigger) skill : compare leader skill levels
 

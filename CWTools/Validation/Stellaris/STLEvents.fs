@@ -245,7 +245,7 @@ module STLEventValidation =
 
     let getEventChains : LookupValidator<_, _, _> =
         fun lu os es ->
-            let reffects = lu.scriptedEffects
+            let reffects = lu.effects
             let events = es.GlobMatchChildren("**/events/*.txt")
             let eids = events |> List.map (fun e -> e.TagText "id", e) |> Map.ofList
             let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")

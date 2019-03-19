@@ -56,6 +56,7 @@
     <Compile Include="Validation/Stellaris/Graphics.fs" />
     <Compile Include="Validation/Rules.fs" />
     <Compile Include="Validation/Stellaris/STLRules.fs" />
+    <Compile Include="Game/RulesManager.fs" />
     <Compile Include="Game/LanguageFeatures.fs" />
     <Compile Include="Validation/EU4/EU4Rules.fs" />
     <Compile Include="Validation/EU4/EU4LocalisationString.fs" />

@@ -17,27 +17,13 @@ open System.IO
 open CWTools.Utilities.Utils
 
 
-type EmbeddedSettings<'S,'M when 'S : comparison> = {
-    triggers : DocEffect<'S> list
-    effects : DocEffect<'S> list
-    embeddedFiles : (string * string) list
-    modifiers : 'M list
-    cachedResourceData : (Resource * Entity) list
-    localisationCommands : (string * ('S list)) list
-    eventTargetLinks : EventTargetLink<'S> list
-}
 
 type ValidationSettings = {
     langs : Lang list
     validateVanilla : bool
     experimental : bool
 }
-type RulesSettings = {
-    ruleFiles : (string * string) list
-    validateRules : bool
-    debugRulesOnly : bool
-    debugMode : bool
-}
+
 type GameSettings<'M, 'S when 'S : comparison> = {
     rootDirectory : string
     embedded : EmbeddedSettings<'S, 'M>
@@ -56,7 +42,8 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
      validationSettings,
      globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
      afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit,
-     localisationExtension : string) as this =
+     localisationExtension : string,
+     ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T>) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
     let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
@@ -81,6 +68,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         }
     let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, if debugMode then noneContext else defaultContext)
 
+    let rulesManager = RulesManager<'T, 'S, 'M>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []
@@ -159,9 +147,23 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
             let embedded = embeddedFiles @ cached
             if fileManager.ShouldUseEmbedded then resourceManager.Api.UpdateFiles(embedded) |> ignore else ()
+    let updateRulesCache() =
+        let rules, info, completion = rulesManager.RefreshConfig()
+        this.RuleApplicator <- Some rules
+        this.InfoService <- Some info
+        this.completionService <- Some completion
+        this.RefreshValidationManager()
 
 
-    do initialLoad()
+    let initialConfigRules() =
+        localisationManager.UpdateAllLocalisation()
+        if settings.rules.IsSome then rulesManager.LoadBaseConfig(settings.rules.Value) else ()
+        updateRulesCache()
+        localisationManager.UpdateAllLocalisation()
+
+
+    do
+        initialLoad()
 
     member __.RuleApplicator with get() = ruleApplicator
     member __.RuleApplicator with set(value) = ruleApplicator <- value
@@ -185,7 +187,13 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         validationManager <- ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext,if debugMode then noneContext else defaultContext)
 
     member this.InfoAtPos pos file text = LanguageFeatures.symbolInformationAtPos this.FileManager this.ResourceManager this.InfoService this.Lookup pos file text
+    member __.ReplaceConfigRules rules =
+        rulesManager.LoadBaseConfig rules
+    member __.RefreshCaches() =
+        updateRulesCache()
+    member __.InitialConfigRules() = initialConfigRules()
     static member CreateGame settings afterInit =
         let game = GameObject(settings)
         afterInit game
+        game.InitialConfigRules()
         game

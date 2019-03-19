@@ -20,8 +20,8 @@ type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         |> List.choose (function | :? Event as e -> Some e |_ -> None)
     let eventIDs() = events() |> List.map (fun e -> e.ID)
     let modifiers() = lookup.staticModifiers |> List.map(fun m -> m.Tag)
-    let triggers() = lookup.scriptedTriggers |> List.map(fun t -> t.Name)
-    let effects() = lookup.scriptedEffects |> List.map(fun e -> e.Name)
+    let triggers() = lookup.triggers |> List.map(fun t -> t.Name)
+    let effects() = lookup.effects |> List.map(fun e -> e.Name)
     let localisation() =
         localisation |> List.filter (fun l -> l.GetLang = ((STL STLLang.English)) || l.GetLang = ((HOI4 HOI4Lang.English)) || l.GetLang = (EU4 EU4Lang.English) || l.GetLang = (CK2 CK2Lang.English))
                      |> List.collect (fun l -> l.ValueMap |> Map.toList)

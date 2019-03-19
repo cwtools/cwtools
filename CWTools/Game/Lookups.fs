@@ -17,25 +17,34 @@ open Microsoft.FSharp.Collections.Tagged
 
 
 type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier>() =
-    let mutable _scriptedTriggers : Effect<'S> list = []
+    let mutable _triggers : Effect<'S> list = []
 
-    let mutable _scriptedTriggersMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
+    let mutable _triggersMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
     let resetTriggers() =
-        _scriptedTriggersMap <- lazy (_scriptedTriggers|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
+        _triggersMap <- lazy (_triggers|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
 
-    let mutable _scriptedEffects : Effect<'S> list = []
+    let mutable _effects : Effect<'S> list = []
 
-    let mutable _scriptedEffectsMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
+    let mutable _effectsMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
     let resetEffects() =
-        _scriptedEffectsMap <- lazy (_scriptedEffects|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
-    member __.scriptedTriggers
-        with get () = _scriptedTriggers
-        and set (value) = resetTriggers(); _scriptedTriggers <- value
-    member this.scriptedTriggersMap with get() = _scriptedTriggersMap.Force()
-    member __.scriptedEffects
-        with get () = _scriptedEffects
-        and set (value) = resetEffects(); _scriptedEffects <- value
-    member this.scriptedEffectsMap with get() = _scriptedEffectsMap.Force()
+        _effectsMap <- lazy (_effects|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
+    let mutable _eventTargetLinks : Effect<'S> list = []
+
+    let mutable _eventTargetLinksMap : Lazy<Map<string,Effect<'S>,InsensitiveStringComparer>> = lazy ( Map<string,Effect<'S>,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
+    let resetEventTargetLinks() =
+        _eventTargetLinksMap <- lazy (_eventTargetLinks|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap<'S>.FromList(InsensitiveStringComparer(), l)))
+    member __.triggers
+        with get () = _triggers
+        and set (value) = resetTriggers(); _triggers <- value
+    member this.triggersMap with get() = _triggersMap.Force()
+    member __.effects
+        with get () = _effects
+        and set (value) = resetEffects(); _effects <- value
+    member this.effectsMap with get() = _effectsMap.Force()
+    member __.eventTargetLinks
+        with get () = _eventTargetLinks
+        and set (value) = resetEventTargetLinks(); _eventTargetLinks <- value
+    member this.eventTargetLinksMap with get() = _eventTargetLinksMap.Force()
     member val onlyScriptedEffects : Effect<'S> list = [] with get, set
     member val onlyScriptedTriggers : Effect<'S> list = [] with get, set
 
@@ -53,7 +62,9 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val configRules : RootRule<'S> list = [] with get, set
     member val typeDefs : TypeDefinition<'S> list = [] with get, set
     member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
-    member val typeDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
+    member val typeDefInfoRaw : Collections.Map<string, (bool * string * range) list> = Map.empty with get, set
+    member this.typeDefInfo
+        with get () : Collections.Map<string, (string * range) list> = this.typeDefInfoRaw |> Collections.Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
     member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val globalScriptedVariables : string list = [] with get, set

@@ -293,10 +293,10 @@ module rec Rules =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then true else false
 
-    let checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
+    let checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (linkMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
         // log "scope %s %A"key ctx
         let scope = ctx.scopes
-        match changeScope false true effectMap triggerMap varSet key scope with
+        match changeScope false true effectMap triggerMap linkMap varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
@@ -304,10 +304,10 @@ module rec Rules =
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |_ -> errors
-    let checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key =
+    let checkScopeFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (linkMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key =
         // log "scope %s %A"key ctx
         let scope = ctx.scopes
-        match changeScope true true effectMap triggerMap varSet key scope with
+        match changeScope true true effectMap triggerMap linkMap varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then true else false
         |NotFound _ -> false
@@ -315,10 +315,10 @@ module rec Rules =
         |VarNotFound s -> false
         |_ -> true
 
-    let checkVariableField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
+    let checkVariableField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (linkMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
         let scope = ctx.scopes
 
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap varSet key scope with
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap linkMap varSet key scope with
         |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
@@ -328,9 +328,9 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
+    let checkVariableFieldNE (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (linkMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap varSet key scope with
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true effectMap triggerMap linkMap varSet key scope with
         |_, Some i, _ -> isInt && min <= float i && max >= float i
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
@@ -347,10 +347,11 @@ module rec Rules =
             typesMap : Collections.Map<string,StringSet>
             effectMap : Map<string,Effect<'S>,InsensitiveStringComparer>
             triggerMap : Map<string,Effect<'S>,InsensitiveStringComparer>
+            linkMap : Map<string,Effect<'S>,InsensitiveStringComparer>
             varSet : StringSet
             localisation : (Lang * Collections.Set<string>) list
             files : Collections.Set<string>
-            changeScope : bool -> bool -> EffectMap<'S> -> EffectMap<'S> -> StringSet -> string -> ScopeContext<'S> -> ScopeResult<'S>
+            changeScope : ChangeScope<'S>
             anyScope : 'S
             defaultLang : Lang
             severity : Severity
@@ -361,26 +362,26 @@ module rec Rules =
             |ValueField vt ->
                 checkValidValue p.enumsMap p.severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap p.severity t key leafornode errors
-            |ScopeField s -> checkScopeField p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx s key leafornode errors
+            |ScopeField s -> checkScopeField p.effectMap p.triggerMap p.linkMap p.varSet p.changeScope p.anyScope p.ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLang synced key leafornode errors
             |FilepathField -> checkFilepathField p.files key leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap p.severity v key leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
+            |VariableField (isInt, (min, max)) -> checkVariableField p.effectMap p.triggerMap p.linkMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |_ -> errors
     let checkFieldNE (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
                 checkValidValueNE p.enumsMap p.severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap p.severity t key
-            |ScopeField s -> checkScopeFieldNE p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx s key
+            |ScopeField s -> checkScopeFieldNE p.effectMap p.triggerMap p.linkMap p.varSet p.changeScope p.anyScope p.ctx s key
             |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLang synced key
             |FilepathField -> checkFilepathFieldNE p.files key
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap p.severity v key
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.effectMap p.triggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.effectMap p.triggerMap p.linkMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
             |_ -> false
 
@@ -434,13 +435,16 @@ module rec Rules =
     // let inline ruleApplicatorCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
     type RuleApplicator<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                                     (rootRules : RootRule<'T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>,
-                                     enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                                     anyScope, changeScope, defaultContext : ScopeContext<_>, defaultLang) =
+                                     enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
+                                     localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
+                                     triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                                     links : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                                     anyScope, changeScope : ChangeScope<'T>, defaultContext : ScopeContext<_>, defaultLang) =
 
         let mutable errorList : ResizeArray<CWError> = new ResizeArray<CWError>()
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-
+        let linkMap = links
 
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -557,6 +561,7 @@ module rec Rules =
                 typesMap = typesMap
                 effectMap = effectMap
                 triggerMap = triggerMap
+                linkMap = linkMap
                 varSet = varSet
                 localisation = localisation
                 files = files
@@ -627,6 +632,7 @@ module rec Rules =
                 typesMap = typesMap
                 effectMap = effectMap
                 triggerMap = triggerMap
+                linkMap = linkMap
                 varSet = varSet
                 localisation = localisation
                 files = files
@@ -647,6 +653,7 @@ module rec Rules =
                 typesMap = typesMap
                 effectMap = effectMap
                 triggerMap = triggerMap
+                linkMap = linkMap
                 varSet = varSet
                 localisation = localisation
                 files = files
@@ -706,7 +713,7 @@ module rec Rules =
             |ScopeField s ->
                 let scope = newCtx.scopes
                 let key = node.Key
-                match changeScope false true effectMap triggerMap varSet key scope with
+                match changeScope false true effectMap triggerMap linkMap varSet key scope with
                 |NewScope (newScopes ,_) ->
                     let newCtx = {newCtx with scopes = newScopes}
                     applyClauseField enforceCardinality options.severity newCtx rules node errors
@@ -788,9 +795,14 @@ module rec Rules =
     // type FoldRules(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, ruleApplicator : IRuleApplicator<_>, changeScope, defaultContext, anyScope) =
     type FoldRules<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                                         (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
-                                         enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>, ruleApplicator : RuleApplicator<'T>, changeScope, defaultContext, anyScope, defaultLang) =
+                                         enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
+                                         localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
+                                         triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                                         links : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                                         ruleApplicator : RuleApplicator<'T>, changeScope, defaultContext, anyScope, defaultLang) =
         let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let linkMap = links
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
@@ -939,6 +951,7 @@ module rec Rules =
                     typesMap = typesMap
                     effectMap = effectMap
                     triggerMap = triggerMap
+                    linkMap = linkMap
                     varSet = varSet
                     localisation = localisation
                     files = files
@@ -1018,7 +1031,7 @@ module rec Rules =
                     let scope = newCtx.scopes
                     let key = node.Key
                     let newCtx =
-                        match changeScope false true effectMap triggerMap varSet key scope with
+                        match changeScope false true effectMap triggerMap linkMap varSet key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
                             // log "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
@@ -1067,6 +1080,7 @@ module rec Rules =
                     typesMap = typesMap
                     effectMap = effectMap
                     triggerMap = triggerMap
+                    linkMap = linkMap
                     varSet = varSet
                     localisation = localisation
                     files = files
@@ -1366,7 +1380,10 @@ module rec Rules =
 
     type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                         (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
-                         enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                         enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
+                         localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
+                         triggers : Map<string,Effect<'T>,InsensitiveStringComparer>, effects : Map<string,Effect<'T>,InsensitiveStringComparer>,
+                         links : Map<string,Effect<'T>,InsensitiveStringComparer>,
                          globalScriptVariables : string list, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -1383,6 +1400,7 @@ module rec Rules =
 
         let triggerMap = triggers// |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects// |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let linkMap = links
 
         let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
 
@@ -1587,6 +1605,7 @@ module rec Rules =
                 typesMap = typesMap
                 effectMap = effectMap
                 triggerMap = triggerMap
+                linkMap = linkMap
                 varSet = varSet
                 localisation = localisation
                 files = files
