@@ -294,7 +294,6 @@ module rec Rules =
         if files.Contains value then true else false
 
     let checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (linkMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
-        // log "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope false true effectMap triggerMap linkMap varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]

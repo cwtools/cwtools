@@ -41,6 +41,8 @@ module EU4Constants =
             member this.MatchesScope target =
                 match this, target with
                 |TradeNode, Province -> true
+                | _, Scope.Any
+                | Scope.Any, _ -> true
                 |this, target -> this = target
 
     let allScopes = [

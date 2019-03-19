@@ -25,7 +25,11 @@ module HOI4Constants =
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
             member this.AnyScope = Scope.Any
-            member this.MatchesScope target = this = target
+            member this.MatchesScope target =
+                match this, target with
+                | Scope.Any, _
+                | _, Scope.Any -> true
+                | _, _ -> this = target
 
     let allScopes = [
         Scope.State;

@@ -1,0 +1,10 @@
+links = {
+    simple = {
+        output_scope = ship
+    }
+    complex = {
+        from_data = yes
+        data_source = ship_size
+        output_scope = ship
+    }
+}

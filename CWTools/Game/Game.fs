@@ -154,15 +154,14 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         this.completionService <- Some completion
         this.RefreshValidationManager()
 
-
     let initialConfigRules() =
         localisationManager.UpdateAllLocalisation()
         if settings.rules.IsSome then rulesManager.LoadBaseConfig(settings.rules.Value) else ()
         updateRulesCache()
         localisationManager.UpdateAllLocalisation()
 
-
     do
+        lookup.rootFolder <- settings.rootDirectory
         initialLoad()
 
     member __.RuleApplicator with get() = ruleApplicator

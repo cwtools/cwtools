@@ -43,11 +43,12 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member this.effectsMap with get() = _effectsMap.Force()
     member __.eventTargetLinks
         with get () = _eventTargetLinks
-        and set (value) = resetEventTargetLinks(); _eventTargetLinks <- value
+        and set (value) =  _eventTargetLinks <- value; resetEventTargetLinks();
     member this.eventTargetLinksMap with get() = _eventTargetLinksMap.Force()
     member val onlyScriptedEffects : Effect<'S> list = [] with get, set
     member val onlyScriptedTriggers : Effect<'S> list = [] with get, set
 
+    member val rootFolder : string = "" with get, set
     member val staticModifiers : 'M list = [] with get, set
     member val coreModifiers : 'M list = [] with get, set
     member val HOI4provinces : string list = [] with get, set

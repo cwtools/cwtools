@@ -192,7 +192,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let eventTargetLinks =
                     configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
-                            |> Option.map (fun (fn, ft) -> STLParser.loadEventTargetLinks fn ft)
+                            |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks Scope.Any parseScope allScopes fn ft)
                             |> Option.defaultValue (STLScopes.scopedEffects |> List.map SimpleLink)
 
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
@@ -222,7 +222,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
 let testSubdirectories dir =
     let dirs = Directory.EnumerateDirectories dir
-    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d + "/rules.cwt") true true "en-GB")
+    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d) true true "en-GB")
 [<Tests>]
 let folderTests =
     testList "validation" [
