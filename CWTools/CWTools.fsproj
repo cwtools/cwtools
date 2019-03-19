@@ -12,6 +12,7 @@
     <Compile Include="Common/EU4Constants.fs" />
     <Compile Include="Common/HOI4Constants.fs" />
     <Compile Include="Common/CK2Constants.fs" />
+    <Compile Include="Common/IRConstants.fs" />
     <Compile Include="Parser/Types.fs" />
     <Compile Include="Parser/SharedParsers.fs" />
     <Compile Include="Parser/CKParser.fs" />
@@ -24,6 +25,7 @@
     <Compile Include="Localisation/EU4Localisation.fs" />
     <Compile Include="Localisation/HOI4Localisation.fs" />
     <Compile Include="Localisation/STLLocalisation.fs" />
+    <Compile Include="Localisation/IRLocalisation.fs" />
     <Compile Include="Process/Process.fs" />
     <Compile Include="Process/CK2Process.fs" />
     <Compile Include="Process/Scopes.fs" />
@@ -32,11 +34,13 @@
     <Compile Include="Process/EU4Scopes.fs" />
     <Compile Include="Process/HOI4Scopes.fs" />
     <Compile Include="Process/CK2Scopes.fs" />
+    <Compile Include="Process/IRScopes.fs" />
     <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Parser/EU4Parser.fs" />
     <Compile Include="Parser/HOI4Parser.fs" />
     <Compile Include="Parser/STLParser.fs" />
     <Compile Include="Parser/CK2Parser.fs" />
+    <Compile Include="Parser/IRParser.fs" />
     <Compile Include="Parser/UtilityParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />
@@ -68,6 +72,8 @@
     <Compile Include="Validation/Stellaris/STLCompute.fs" />
     <Compile Include="Validation/CK2/CK2LocalisationValidation.fs" />
     <Compile Include="Validation/CK2/CK2Compute.fs" />
+    <Compile Include="Validation/IR/IRLocalisationValidation.fs" />
+    <Compile Include="Validation/IR/IRCompute.fs" />
     <Compile Include="Validation/HOI4/HOI4LocalisationValidation.fs" />
     <Compile Include="Validation/HOI4/HOI4Validation.fs" />
     <Compile Include="Game/ValidationManager.fs" />
@@ -76,6 +82,7 @@
     <Compile Include="Game/HOI4/HOI4Game.fs" />
     <Compile Include="Game/EU4/EU4Game.fs" />
     <Compile Include="Game/CK2/CK2Game.fs" />
+    <Compile Include="Game/IR/IRGame.fs" />
     <Compile Include="CSharp/Extensions.fs" />
     <Compile Include="ExtensionPoints/StatementVisitor.fs" />
   </ItemGroup>

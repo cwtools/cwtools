@@ -6,12 +6,14 @@ type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |D
 type STLLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6  |Default = 7 |Chinese = 8
 type HOI4Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6 |Default = 7 //Default doesnt' exist!
 type EU4Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Default = 4
+type IRLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Chinese = 4 |Russian = 5
 type Lang =
     |CK2 of CK2Lang
     |STL of STLLang
     |HOI4 of HOI4Lang
     |EU4 of EU4Lang
-    override x.ToString() = x |> function |CK2 c -> c.ToString() | STL s -> s.ToString() |HOI4 s -> s.ToString() |EU4 s -> s.ToString()
+    |IR of IRLang
+    override x.ToString() = x |> function |CK2 c -> c.ToString() | STL s -> s.ToString() |HOI4 s -> s.ToString() |EU4 s -> s.ToString() |IR s -> s.ToString()
 
 type RawEffect =
     {

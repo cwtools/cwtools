@@ -27,6 +27,8 @@ type HOI4ComputedData(referencedtypes, definedvariable, withRulesData, effectBlo
     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 type CK2ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+type IRComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
+    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
 
 type PassFileResult = {
