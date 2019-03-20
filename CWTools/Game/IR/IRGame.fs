@@ -120,6 +120,18 @@ module IRGameFunctions =
         // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> (false, m.tag, range.Zero)))
 
+    let updateProvinces (game : GameObject) =
+        let provinceFile =
+            game.Resources.GetResources()
+            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+        match provinceFile with
+        |None -> ()
+        |Some pf ->
+            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let provinces = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
+            game.Lookup.IRprovinces <- provinces
+
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
         lookup.triggers <- updateScriptedTriggers lookup rules embedded
@@ -129,8 +141,10 @@ module IRGameFunctions =
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
         let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
+        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.CK2provinces}
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
+                            |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.typeDefInfoRaw <-
@@ -144,6 +158,7 @@ module IRGameFunctions =
         // updateStaticodifiers()
         // updateScriptedLoc(game)
         // updateDefinedVariables()
+        updateProvinces(game)
         updateModifiers(game)
         // updateLegacyGovernments(game)
         // updateTechnologies()

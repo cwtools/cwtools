@@ -137,4 +137,5 @@ module IRConstants =
     let scriptFolders = [
         "common";
         "events";
+        "map_data";
     ]
