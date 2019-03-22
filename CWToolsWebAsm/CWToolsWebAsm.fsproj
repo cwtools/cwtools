@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+    <Tailcalls>false</Tailcalls>
     <OutputType>Exe</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilation>true</TieredCompilation>
     <MonoRuntimeDebuggerEnabled>false</MonoRuntimeDebuggerEnabled>
+    <MonoWasmSDKUri>https://jenkins.mono-project.com/job/test-mono-mainline-wasm/2402/label=ubuntu-1804-amd64/Azure/processDownloadRequest/2402/ubuntu-1804-amd64/sdks/wasm/mono-wasm-a766d2e802c.zip</MonoWasmSDKUri>
+    <MonoWasmAOTSDKUri>https://jenkins.mono-project.com/job/test-mono-mainline-wasm/2402/label=ubuntu-1804-amd64/Azure/processDownloadRequest/2402/ubuntu-1804-amd64/wasm-release-Linux-a766d2e802c5a6a8dc6caa50156dffb0cba58d2e.zip</MonoWasmAOTSDKUri>
+
+
+
+
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>
-    <DotNetCliToolReference Include="Uno.Wasm.Bootstrap.Cli" Version="1.0.0-dev.224" />
+    <PackageReference Include="Uno.Wasm.Bootstrap" Version="1.0.0-dev.196" />
+    <DotNetCliToolReference Include="Uno.Wasm.Bootstrap.Cli" Version="1.0.0-dev.196" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.fs" />
     <None Include="App.config" />
+    <WasmShellMonoEnvironment Include="MONO_ENV_OPTIONS" Value="--debug=casts" />
+      <WasmShellMonoEnvironment Include="MONO_LOG_LEVEL" Value="debug" />
   </ItemGroup>
+
+
+	<ItemGroup>
+		<LinkerDescriptor Include="LinkerConfig.xml" />
+	</ItemGroup>
+
+
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

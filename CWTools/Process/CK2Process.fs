@@ -44,7 +44,7 @@ module CK2Process =
 
     let processEventFile (ev : ParsedFile) =
         let (ParsedFile e) = ev
-        (ck2Process.ProcessNode()) "" range.Zero e :?> EventRoot
+        (ck2Process.ProcessNode()) "" range.Zero e// :?> EventRoot
 
     let processArtifact = (ck2Process.ProcessNode()) "" range.Zero >> (fun n -> n :?> ArtifactFile)
 

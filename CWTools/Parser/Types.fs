@@ -13,24 +13,24 @@ module rec Types =
     [<Struct>]
     type Key =
         | Key of string
-        override x.ToString() = let (Key v) = x in sprintf "%s" v;
+        override x.ToString() = let (Key v) = x in v;
 
     let valueToString =
         let inner =
                 fun x ->
                 match x with
-                | Clause b -> "{ " + sprintf "%O" b + " }"
+                | Clause b -> "{ " + b.ToString() + " }"
                 | QString s -> "\"" + s + "\""
                 | String s -> s
                 | Bool b -> if b then "yes" else "no"
-                | Float f -> sprintf "%f" f
-                | Int i -> sprintf "%i" i
+                | Float f -> f.ToString()//sprintf "%f" f
+                | Int i -> i.ToString()//sprintf "%i" i
         //memoize id inner
         inner
     [<Struct>]
     type KeyValueItem =
         | KeyValueItem of Key * Value
-        override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
+        override x.ToString() = let (KeyValueItem (id, v)) = x in id.ToString() + " = " + v.ToString()
     and Value =
         | String of string
         | QString of string
