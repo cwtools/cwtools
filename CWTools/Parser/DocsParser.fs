@@ -33,3 +33,26 @@ module DocsParser =
     let parseDocsFile filepath = runParserOnFile twoDocs () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseDocsFilesRes filepath = parseDocsFile filepath |> (function |Success(p, _, _) -> p |_ -> [], [])
     let parseDocsStream file = runParserOnStream twoDocs () "docFile" file (System.Text.Encoding.GetEncoding(1252))
+
+module JominiParser =
+    let private idChar = letter <|> digit <|> anyOf ['_']
+    let private isvaluechar = SharedParsers.isvaluechar
+    let private header = skipCharsTillString "Event Target Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
+    let private spacer = skipString "--------------------" .>> SharedParsers.ws
+    let private name = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>>. restOfLine false .>> SharedParsers.ws <?> "name"
+    let private reqData = pstring "Requires Data: yes" .>> SharedParsers.ws <?> "requires data"
+    let private wildCard = pstring "Wild Card: yes" .>> SharedParsers.ws <?> "wildcard"
+    let private inscopes = pstring "Input Scopes: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
+    let private outscopes = pstring "Output Scopes: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
+    let private link = pipe5 name (opt reqData) (opt wildCard) (opt inscopes) (opt outscopes) (fun (n, d) r w i o -> n,d,r,w,i,o)
+    let private footer = pstring "Event Targets Saved from Code:" .>> many1Chars anyChar .>> eof
+    let private linkFile = SharedParsers.ws >>. header >>. spacer >>. many (attempt (link .>> spacer)) .>> footer
+
+    let parseLinksFile filepath = runParserOnFile linkFile () filepath (System.Text.Encoding.GetEncoding(1252))
+    let parseLinksFilesRes filepath = parseLinksFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
+
+    let private triggerheader = skipCharsTillString "Trigger Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
+    let private supportedscopes = pstring "Supported Scopes:" >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
+    let private supportedtargets = pstring "Supported Targets:" >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
+
+    let private triggerFile = SharedParsers.ws >>. triggerheader >>. spacer >>. many (attempt (link .>> spacer)) .>> footer

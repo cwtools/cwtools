@@ -1,0 +1,495 @@
+Event Target Documentation:
+
+--------------------
+
+color - eventtarget_link_desc_color
+Input Scopes: country, religion, culture group
+Output Scopes: color
+
+--------------------
+
+state - eventtarget_link_desc_state
+Input Scopes: province
+Output Scopes: state
+
+--------------------
+
+value - eventtarget_link_desc_value
+Wild Card: yes
+Output Scopes: value
+
+--------------------
+
+yes - eventtarget_link_desc_yes
+Output Scopes: bool
+
+--------------------
+
+no - eventtarget_link_desc_no
+Output Scopes: bool
+
+--------------------
+
+compare_value - eventtarget_link_desc_compare_value
+Wild Card: yes
+Output Scopes: value
+
+--------------------
+
+named_script_value - eventtarget_link_desc_named_script_value
+Wild Card: yes
+Output Scopes: value
+
+--------------------
+
+from - eventtarget_link_desc_from
+
+--------------------
+
+color1 - eventtarget_link_desc_color1
+Input Scopes: country
+Output Scopes: color
+
+--------------------
+
+color2 - eventtarget_link_desc_color2
+Input Scopes: country
+Output Scopes: color
+
+--------------------
+
+color3 - eventtarget_link_desc_color3
+Input Scopes: country
+Output Scopes: color
+
+--------------------
+
+character - eventtarget_link_desc_character
+Input Scopes: job
+Output Scopes: character
+
+--------------------
+
+root - eventtarget_link_desc_root
+
+--------------------
+
+prev - eventtarget_link_desc_prev
+
+--------------------
+
+this - eventtarget_link_desc_this
+
+--------------------
+
+culture - eventtarget_link_desc_culture
+Input Scopes: country, character, province, pop
+Output Scopes: culture
+
+--------------------
+
+location - eventtarget_link_desc_location
+Input Scopes: character, pop
+Output Scopes: province
+
+--------------------
+
+unit - eventtarget_link_desc_unit
+Input Scopes: character
+Output Scopes: unit
+
+--------------------
+
+religion - eventtarget_link_desc_religion
+Input Scopes: country, character, province, pop
+Output Scopes: religion
+
+--------------------
+
+employer - eventtarget_link_desc_employer
+Input Scopes: character
+Output Scopes: country
+
+--------------------
+
+father - eventtarget_link_desc_father
+Input Scopes: character
+Output Scopes: character
+
+--------------------
+
+mother - eventtarget_link_desc_mother
+Input Scopes: character
+Output Scopes: character
+
+--------------------
+
+spouse - eventtarget_link_desc_spouse
+Input Scopes: character
+Output Scopes: character
+
+--------------------
+
+owner - eventtarget_link_desc_owner
+Input Scopes: province, state, governorship
+Output Scopes: country
+
+--------------------
+
+commander - eventtarget_link_desc_commander
+Input Scopes: unit
+Output Scopes: character
+
+--------------------
+
+controller - eventtarget_link_desc_controller
+Input Scopes: province
+Output Scopes: country
+
+--------------------
+
+country - eventtarget_link_desc_country
+Input Scopes: character, pop, job
+Output Scopes: country
+
+--------------------
+
+culture_group - eventtarget_link_desc_culture_group
+Input Scopes: country, character, province, pop, culture
+Output Scopes: culture group
+
+--------------------
+
+capital_scope - eventtarget_link_desc_capital_scope
+Input Scopes: country, state, governorship
+Output Scopes: province
+
+--------------------
+
+ruler - eventtarget_link_desc_ruler
+Input Scopes: character
+Output Scopes: character
+
+--------------------
+
+family - eventtarget_link_desc_family
+Input Scopes: character
+Output Scopes: family
+
+--------------------
+
+governor - eventtarget_link_desc_governor
+Input Scopes: province, state, governorship
+Output Scopes: character
+
+--------------------
+
+job - eventtarget_link_desc_job
+Input Scopes: character
+Output Scopes: job
+
+--------------------
+
+current_heir - eventtarget_link_desc_current_heir
+Input Scopes: country
+Output Scopes: character
+
+--------------------
+
+preferred_heir - eventtarget_link_desc_preferred_heir
+Input Scopes: character
+Output Scopes: character
+
+--------------------
+
+current_ruler - eventtarget_link_desc_current_ruler
+Input Scopes: country
+Output Scopes: character
+
+--------------------
+
+unit_owner - eventtarget_link_desc_unit_owner
+Input Scopes: unit
+Output Scopes: country
+
+--------------------
+
+unit_location - eventtarget_link_desc_unit_location
+Input Scopes: unit
+Output Scopes: province
+
+--------------------
+
+area - eventtarget_link_desc_area
+Input Scopes: province, state
+Output Scopes: area
+
+--------------------
+
+region - eventtarget_link_desc_region
+Input Scopes: province, area, state
+Output Scopes: region
+
+--------------------
+
+governorship - eventtarget_link_desc_governorship
+Input Scopes: province, state
+Output Scopes: governorship
+
+--------------------
+
+red - eventtarget_link_desc_red
+Input Scopes: color
+Output Scopes: value
+
+--------------------
+
+green - eventtarget_link_desc_green
+Input Scopes: color
+Output Scopes: value
+
+--------------------
+
+blue - eventtarget_link_desc_blue
+Input Scopes: color
+Output Scopes: value
+
+--------------------
+
+hue - eventtarget_link_desc_hue
+Input Scopes: color
+Output Scopes: value
+
+--------------------
+
+saturation - eventtarget_link_desc_saturation
+Input Scopes: color
+Output Scopes: value
+
+--------------------
+
+brightness - eventtarget_link_desc_brightness
+Input Scopes: color
+Output Scopes: value
+
+--------------------
+
+unit_destination - eventtarget_link_desc_unit_destination
+Input Scopes: unit
+Output Scopes: province
+
+--------------------
+
+unit_next_location - eventtarget_link_desc_unit_next_location
+Input Scopes: unit
+Output Scopes: province
+
+--------------------
+
+unit_objective_destination - eventtarget_link_desc_unit_objective_destination
+Input Scopes: unit
+Output Scopes: province
+
+--------------------
+
+dominant_province_culture - eventtarget_link_desc_dominant_province_culture
+Input Scopes: province
+Output Scopes: culture
+
+--------------------
+
+dominant_province_culture_group - eventtarget_link_desc_dominant_province_culture_group
+Input Scopes: province
+Output Scopes: culture group
+
+--------------------
+
+dominant_province_religion - eventtarget_link_desc_dominant_province_religion
+Input Scopes: province
+Output Scopes: religion
+
+--------------------
+
+overlord - eventtarget_link_desc_overlord
+Input Scopes: country
+Output Scopes: country
+
+--------------------
+
+party_country - eventtarget_link_desc_party_country
+Input Scopes: party
+Output Scopes: country
+
+--------------------
+
+family_country - eventtarget_link_desc_family_country
+Input Scopes: family
+Output Scopes: country
+
+--------------------
+
+party_leader - eventtarget_link_desc_party_leader
+Input Scopes: party
+Output Scopes: character
+
+--------------------
+
+governor_or_ruler - eventtarget_link_desc_governor_or_ruler
+Input Scopes: province, state, governorship
+Output Scopes: character
+
+--------------------
+
+personal_loyalty - eventtarget_link_desc_personal_loyalty
+Input Scopes: subunit
+Output Scopes: character
+
+--------------------
+
+owning_unit - eventtarget_link_desc_owning_unit
+Input Scopes: subunit
+Output Scopes: unit
+
+--------------------
+
+character_party - eventtarget_link_desc_character_party
+Input Scopes: character
+Output Scopes: party
+
+--------------------
+
+next_in_family - eventtarget_link_desc_next_in_family
+Input Scopes: character
+Output Scopes: character
+
+--------------------
+
+head_of_family - eventtarget_link_desc_head_of_family
+Input Scopes: family
+Output Scopes: character
+
+--------------------
+
+flag - eventtarget_link_desc_flag
+Requires Data: yes
+Output Scopes: flag
+
+--------------------
+
+custom - eventtarget_link_desc_custom
+Requires Data: yes
+
+--------------------
+
+scope - eventtarget_link_desc_scope
+Requires Data: yes
+
+--------------------
+
+var - eventtarget_link_desc_var
+Requires Data: yes
+
+--------------------
+
+local_var - eventtarget_link_desc_local_var
+Requires Data: yes
+
+--------------------
+
+global_var - eventtarget_link_desc_global_var
+Requires Data: yes
+
+--------------------
+
+culture - eventtarget_link_desc_culture
+Requires Data: yes
+Output Scopes: culture
+
+--------------------
+
+religion - eventtarget_link_desc_religion
+Requires Data: yes
+Output Scopes: religion
+
+--------------------
+
+culture_group - eventtarget_link_desc_culture_group
+Requires Data: yes
+Output Scopes: culture group
+
+--------------------
+
+char - eventtarget_link_desc_char
+Requires Data: yes
+Output Scopes: character
+
+--------------------
+
+job - eventtarget_link_desc_job
+Requires Data: yes
+Input Scopes: country, province, state, governorship
+Output Scopes: job
+
+--------------------
+
+party - eventtarget_link_desc_party
+Requires Data: yes
+Input Scopes: country
+Output Scopes: party
+
+--------------------
+
+fam - eventtarget_link_desc_fam
+Requires Data: yes
+Input Scopes: country
+Output Scopes: family
+
+--------------------
+
+area - eventtarget_link_desc_area
+Requires Data: yes
+Output Scopes: area
+
+--------------------
+
+region - eventtarget_link_desc_region
+Requires Data: yes
+Output Scopes: region
+
+--------------------
+
+p - eventtarget_link_desc_p
+Requires Data: yes
+Output Scopes: province
+
+--------------------
+
+c - eventtarget_link_desc_c
+Requires Data: yes
+Output Scopes: country
+
+--------------------
+
+job_holder - eventtarget_link_desc_job_holder
+Requires Data: yes
+Input Scopes: country, province, state, governorship
+Output Scopes: character
+
+--------------------
+
+Event Targets Saved from Code:
+
+context
+actor
+recipient
+former_ruler
+target
+newborn
+owner
+attacker
+defender
+province
+victory
+former_overlord
+future_overlord
+old_country
