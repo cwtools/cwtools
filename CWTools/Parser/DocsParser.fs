@@ -52,7 +52,19 @@ module JominiParser =
     let parseLinksFilesRes filepath = parseLinksFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
 
     let private triggerheader = skipCharsTillString "Trigger Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
-    let private supportedscopes = pstring "Supported Scopes:" >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
-    let private supportedtargets = pstring "Supported Targets:" >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
+    let private effectheader = skipCharsTillString "Effect Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
+    let private supportedscopes = pstring "Supported Scopes: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws <?> "scopes"
+    let private supportedtargets = pstring "Supported Targets: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws <?> "targets"
+    let private traits = pstring "Traits: " >>. restOfLine false .>> SharedParsers.ws <?> "traits"
+    let private tname = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>> SharedParsers.ws <?> "name"
+    let private endOfDesc = newline >>. (pstring "Supported Scopes:" <|> pstring "Supported Targets:" <|> pstring "Traits:")
+    let private desc = (many1CharsTill anyChar (followedBy endOfDesc)) .>> SharedParsers.ws <?> "desc"
+    let private trigger = pipe5 tname desc (opt traits) (opt supportedscopes) (opt supportedtargets) (fun n d _ s t -> {name = n; desc = d; usage = ""; scopes = s |> Option.defaultValue []; targets = t |> Option.defaultValue []})
 
-    let private triggerFile = SharedParsers.ws >>. triggerheader >>. spacer >>. many (attempt (link .>> spacer)) .>> footer
+    let private triggerFile = SharedParsers.ws >>. triggerheader >>. many1 (attempt (spacer >>. trigger)) .>> eof
+    let private effectFile = SharedParsers.ws >>. effectheader >>. many1 (attempt (spacer >>. trigger)) .>> eof
+
+    let parseTriggerFile filepath = runParserOnFile triggerFile () filepath (System.Text.Encoding.GetEncoding(1252))
+    let parseTriggerFilesRes filepath = parseTriggerFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
+    let parseEffectFile filepath = runParserOnFile effectFile () filepath (System.Text.Encoding.GetEncoding(1252))
+    let parseEffectFilesRes filepath = parseEffectFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
