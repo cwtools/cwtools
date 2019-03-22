@@ -1,0 +1,6 @@
+Expecto
+FParsec
+System.Text.Encoding.CodePages
+FSharp.Core
+FsPickler
+Uno.Wasm.Bootstrap

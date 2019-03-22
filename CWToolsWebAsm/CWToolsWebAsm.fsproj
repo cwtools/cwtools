@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TieredCompilation>true</TieredCompilation>
+    <MonoRuntimeDebuggerEnabled>false</MonoRuntimeDebuggerEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CWTools\CWTools.fsproj">
+      <Name>CWTools.fsproj</Name>
+    </ProjectReference>
+    <DotNetCliToolReference Include="Uno.Wasm.Bootstrap.Cli" Version="1.0.0-dev.224" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.fs" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>
