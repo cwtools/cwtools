@@ -4,7 +4,17 @@ links = {
     }
     complex = {
         from_data = yes
-        data_source = ship_size
+        data_source = <ship_size>
+        output_scope = ship
+    }
+    from_enum = {
+        from_data = yes
+        data_source = enum[link_test_enum]
+        output_scope = ship
+    }
+    from_value = {
+        from_data = yes
+        data_source = value[link_test_value]
         output_scope = ship
     }
 }

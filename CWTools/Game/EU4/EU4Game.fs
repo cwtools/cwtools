@@ -26,6 +26,7 @@ open CWTools.Validation.EU4.EU4LocalisationValidation
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
 open CWTools.Validation.EU4.EU4LocalisationString
+open CWTools.Games.Helpers
 
 module EU4GameFunctions =
     type GameObject = GameObject<Scope, Modifier, EU4ComputedData>
@@ -121,23 +122,6 @@ module EU4GameFunctions =
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
-    let updateEventTargetLinks (embeddedSettings : EmbeddedSettings<_,_>) =
-        let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        simpleEventTargetLinks
-    let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
-        let convertLinkToEffects (link : EventTargetDataLink<_>) =
-            let typeDefinedKeys =
-                match lookup.typeDefInfo |> Map.tryFind (link.sourceRuleType) with
-                | Some x -> x |> List.map fst
-                | None ->
-                    log (sprintf "Link %s refers to undefined type %s" link.name link.sourceRuleType)
-                    []
-            let keyToEffect (key : string) =
-                let key = link.dataPrefix |> Option.map ((+) key) |> Option.defaultValue key
-                ScopedEffect(key, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)
-            typeDefinedKeys |> List.map keyToEffect
-        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect)
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =
         // let createType (modifier : Modifier) =
@@ -166,6 +150,9 @@ module EU4GameFunctions =
         lookup.typeDefInfoRaw <-
             (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
+        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let afterInit (game : GameObject) =
@@ -201,6 +188,7 @@ type EU4Game(settings : EU4Settings) =
         loadConfigRulesHook = loadConfigRulesHook
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
+        refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
 
     let game = GameObject<Scope, Modifier, EU4ComputedData>.CreateGame

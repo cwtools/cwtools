@@ -11,4 +11,19 @@ event = {
 
     }
     test_ship = simple
+
+    ## Test value links
+    set_test_value = test_value
+
+    test_value = {
+
+    }
+    test_ship = test_value
+
+    ## Test enum links
+    enum_one = {
+
+    }
+    test_ship = enum_two
+
 }

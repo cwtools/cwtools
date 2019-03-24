@@ -43,6 +43,7 @@ open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 open CWTools.Common
 open CWTools.Validation.LocalisationString
+open CWTools.Games.Helpers
 
 module STLGameFunctions =
     type GameObject = GameObject<Scope, Modifier, STLComputedData>
@@ -120,24 +121,6 @@ module STLGameFunctions =
     let updateTechnologies(game : GameObject) =
         game.Lookup.technologies <- getTechnologies (EntitySet (game.Resources.AllEntities()))
 
-    let updateEventTargetLinks (embeddedSettings : EmbeddedSettings<_,_>) =
-        let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        simpleEventTargetLinks
-    let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
-        let convertLinkToEffects (link : EventTargetDataLink<_>) =
-            let typeDefinedKeys =
-                match lookup.typeDefInfo |> Map.tryFind (link.sourceRuleType) with
-                | Some x -> x |> List.map fst
-                | None ->
-                    log (sprintf "Link %s refers to undefined type %s" link.name link.sourceRuleType)
-                    []
-            let keyToEffect (key : string) =
-                let key = link.dataPrefix |> Option.map ((+) key) |> Option.defaultValue key
-                ScopedEffect(key, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)
-            typeDefinedKeys |> List.map keyToEffect
-        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect)
-
     let addModifiersWithScopes (lookup : Lookup<_,_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
@@ -209,6 +192,8 @@ module STLGameFunctions =
         lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
         lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
     let afterInit (game : GameObject) =
             updateScriptedTriggers(game)
             updateScriptedEffects(game)
@@ -257,6 +242,7 @@ type STLGame (settings : StellarisSettings) =
             loadConfigRulesHook = loadConfigRulesHook
             refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
             refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
+            refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
         }
 
         let game = GameObject<Scope, Modifier, STLComputedData>.CreateGame

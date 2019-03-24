@@ -63,6 +63,7 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val technologies : (string * (string list)) list =  [] with get, set
     member val configRules : RootRule<'S> list = [] with get, set
     member val typeDefs : TypeDefinition<'S> list = [] with get, set
+    /// Map<enum key, (description * values list)
     member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
     member val typeDefInfoRaw : Collections.Map<string, (bool * string * range) list> = Map.empty with get, set
     member this.typeDefInfo

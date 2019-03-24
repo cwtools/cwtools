@@ -37,6 +37,7 @@ type RuleManagerSettings<'S, 'M, 'T when 'S :> IScope<'S> and 'S : comparison an
     loadConfigRulesHook : RootRule<'S> list -> Lookup<'S,'M> -> EmbeddedSettings<'S, 'M> -> RootRule<'S> list
     refreshConfigBeforeFirstTypesHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
     refreshConfigAfterFirstTypesHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    refreshConfigAfterVarDefHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
 }
 
 type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>
@@ -117,6 +118,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
         lookup.varDefInfo <- results
+        settings.refreshConfigAfterVarDefHook lookup resources embeddedSettings
 
         let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

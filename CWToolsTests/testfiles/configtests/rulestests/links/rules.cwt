@@ -28,4 +28,14 @@ event = {
     scope_field = {
 
     }
+
+    ## cardinality = 0..inf
+    set_test_value = value_set[link_test_value]
+}
+
+enums = {
+    enum[link_test_enum] = {
+        enum_one
+        enum_two
+    }
 }

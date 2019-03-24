@@ -27,6 +27,7 @@ open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open System
+open CWTools.Games.Helpers
 
 module IRGameFunctions =
     type GameObject = GameObject<Scope, Modifier, IRComputedData>
@@ -103,23 +104,6 @@ module IRGameFunctions =
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
-    let updateEventTargetLinks (embeddedSettings : EmbeddedSettings<_,_>) =
-        let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        simpleEventTargetLinks
-    let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
-        let convertLinkToEffects (link : EventTargetDataLink<_>) =
-            let typeDefinedKeys =
-                match lookup.typeDefInfo |> Map.tryFind (link.sourceRuleType) with
-                | Some x -> x |> List.map fst
-                | None ->
-                    log (sprintf "Link %s refers to undefined type %s" link.name link.sourceRuleType)
-                    []
-            let keyToEffect (key : string) =
-                let key = link.dataPrefix |> Option.map ((+) key) |> Option.defaultValue key
-                ScopedEffect(key, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)
-            typeDefinedKeys |> List.map keyToEffect
-        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect)
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =
         // let createType (modifier : Modifier) =
@@ -155,6 +139,9 @@ module IRGameFunctions =
         lookup.typeDefInfoRaw <-
             (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
+        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let afterInit (game : GameObject) =
@@ -199,6 +186,7 @@ type IRGame(settings : IRSettings) =
         loadConfigRulesHook = loadConfigRulesHook
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
+        refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
     let game = GameObject<Scope, Modifier, IRComputedData>.CreateGame
                 ((settings, "imperator", scriptFolders, IRCompute.computeIRData,
