@@ -15,11 +15,7 @@ types = {
     }
 }
 
-single_alias[single_alias_int] = int
-single_alias[single_alias_clause] = {
-    ## cardinality = 1..inf
-    something = blah
-}
+
 
 event = {
     ## cardinality = 0..inf

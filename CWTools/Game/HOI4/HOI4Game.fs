@@ -128,7 +128,12 @@ module HOI4GameFunctions =
     let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) =
         let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
         let convertLinkToEffects (link : EventTargetDataLink<_>) =
-            let typeDefinedKeys = lookup.typeDefInfo.[link.sourceRuleType] |> List.map fst
+            let typeDefinedKeys =
+                match lookup.typeDefInfo |> Map.tryFind (link.sourceRuleType) with
+                | Some x -> x |> List.map fst
+                | None ->
+                    log (sprintf "Link %s refers to undefined type %s" link.name link.sourceRuleType)
+                    []
             let keyToEffect (key : string) =
                 let key = link.dataPrefix |> Option.map ((+) key) |> Option.defaultValue key
                 ScopedEffect(key, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)

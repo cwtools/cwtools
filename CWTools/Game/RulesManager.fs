@@ -56,7 +56,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
     let mutable rulesDataGenerated = false
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
-        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig settings.parseScope settings.allScopes settings.anyScope fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
+        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> parseConfigs settings.parseScope settings.allScopes settings.anyScope
         // tempEffects <- updateScriptedEffects game rules
         // effects <- tempEffects
         // tempTriggers <- updateScriptedTriggers game rules

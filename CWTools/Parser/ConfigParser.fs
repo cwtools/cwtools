@@ -669,10 +669,14 @@ module rec ConfigParser =
             | (LeafRule (l, SingleAliasField name), o) ->
                 match singlealiases |> Map.tryFind name with
                 | Some (LeafRule (al, ar), ao) ->
+                    log (sprintf "Replaced single alias leaf %A %s with leaf %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
                     LeafRule (l, ar), o
                 | Some (NodeRule (al, ar), ao) ->
+                    log (sprintf "Replaced single alias leaf %A %s with node %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
                     NodeRule (l, ar), o
-                | _ -> rule
+                | x ->
+                    log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
+                    rule
             | _ -> rule
         let rulesMapper =
             function
@@ -691,7 +695,7 @@ module rec ConfigParser =
         let values = nodes |> List.choose processChildValue |> List.collect id
         rules, types, enums, complexenums, values
 
-    let parseConfig (parseScope ) (allScopes) (anyScope) filename fileString =
+    let parseConfig (parseScope) (allScopes) (anyScope) filename fileString =
         //log "parse"
         let parsed = CKParser.parseString fileString filename
         match parsed with
@@ -701,8 +705,15 @@ module rec ConfigParser =
             let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
             //log "processConfig"
             processConfig parseScope allScopes anyScope root
+    let parseConfigs (parseScope) (allScopes) (anyScope) (files : (string * string) list)  =
+        let rules, types, enums, complexenums, values =
+            files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope filename fileString)
+              |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
+        let rules = replaceSingleAliases rules
+        rules, types, enums, complexenums, values
 
 
+//(files : (string * string) list)
 
 // create_starbase = {
 // 	owner = <target>
