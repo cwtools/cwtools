@@ -33,7 +33,7 @@ type Severity =
 
 
 
-type EffectType = |Effect |Trigger |Both
+type EffectType = |Effect |Trigger |Link |Value
 type Effect<'T when 'T : comparison> internal (name, scopes, effectType) =
     member val Name : string = name
     member val Scopes : 'T list = scopes
@@ -84,18 +84,22 @@ type DocEffect<'T when 'T : comparison>(name, scopes, effectType, desc, usage) =
         let scopes = rawEffect.scopes |> List.collect parseScopes
         DocEffect<'T>(rawEffect.name, scopes, effectType, rawEffect.desc, rawEffect.usage)
 
-type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren, scopeonlynoteffect) =
+type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
     inherit DocEffect<'T>(name, scopes, effectType, desc, usage)
     member val InnerScope : 'T -> 'T = inner
     member val IsScopeChange : bool = isScopeChange
     member val IgnoreChildren : string list = ignoreChildren
     member val ScopeOnlyNotEffect : bool = scopeonlynoteffect
-    new(de : DocEffect<'T>, inner : 'T -> 'T, isScopeChange, ignoreChildren, scopeonlynoteffect) =
-        ScopedEffect<'T>(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren, scopeonlynoteffect)
+    /// If this scoped effect is a value scope
+    member val IsValueScope : bool = isValue
+    new(de : DocEffect<'T>, inner : 'T -> 'T, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
+        ScopedEffect<'T>(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue)
     new(de : DocEffect<'T>, inner : 'T) =
-        ScopedEffect<'T>(de.Name, de.Scopes, (fun _ -> inner), de.Type, de.Desc, de.Usage, true, [], false)
+        ScopedEffect<'T>(de.Name, de.Scopes, (fun _ -> inner), de.Type, de.Desc, de.Usage, true, [], false, false)
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue) =
+        ScopedEffect<'T>(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect, isValue)
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect<'T>(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect)
+        ScopedEffect<'T>(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect, false)
 
 type IScope<'T> =
     abstract member AnyScope : 'T

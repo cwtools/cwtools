@@ -362,11 +362,11 @@ module STLScopes =
         let withSimple =
              des |> List.map (fun de ->
                 match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (fun _ -> t) |_ -> None) with
-                | Some t -> ScopedEffect(de, t, true, [], false) :> DocEffect
+                | Some t -> ScopedEffect(de, t, true, [], false, false) :> DocEffect
                 | None -> de)
         withSimple |> List.map (fun de ->
                 match effectInnerScopeFunctions |> List.tryPick (function | (n, t, s) when n = de.Name -> Some (t, s) |_ -> None) with
-                | Some (t, s) -> ScopedEffect(de, t, false, s, false) :> DocEffect
+                | Some (t, s) -> ScopedEffect(de, t, false, s, false, false) :> DocEffect
                 | None -> de)
 
 

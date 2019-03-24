@@ -80,6 +80,7 @@ module Scopes =
         | NotFound
         | VarFound
         | VarNotFound of var : string
+        | ValueFound
     // type EffectMap<'T> = Map<string, Effect<'T>, InsensitiveStringComparer>
     let simpleVarPrefixFun prefix =
         let varStartsWith = (fun (k : string) -> k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
@@ -113,15 +114,29 @@ module Scopes =
                     match onetoone with
                     | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])
                     | None ->
-                        let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect  -> Some e |_ -> None)
-                        let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect -> Some e |_ -> None)
-                        let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect -> Some e |_ -> None)
+                        let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
+                        let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
+                        let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
+                        let valueScopeMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when e.IsValueScope -> Some e |_ -> None)
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)
                         // if skipEffect then (context, false), NotFound else
-                        match Option.orElse (Option.orElse effectMatch triggerMatch) eventTargetLinkMatch with
-                        | None ->
+                        match Option.orElse (Option.orElse effectMatch triggerMatch) eventTargetLinkMatch, valueScopeMatch with
+                        | _, Some e ->
+                            if last
+                            then
+                                let possibleScopes = e.Scopes
+                                let currentScope = context.CurrentScope :> IScope<_>
+                                let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                                match context.CurrentScope, possibleScopes, exact with
+                                | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound
+                                | _, [], _ -> (context, false), NotFound
+                                | _, _, true -> (context, false), ValueFound
+                                | current, ss, false -> (context, false), WrongScope (nextKey, current, ss)
+                            else
+                                (context, false), NotFound
+                        | None, _ ->
                             if last && vars.Contains nextKey
                             then
                                 (context, false), VarFound
@@ -131,7 +146,7 @@ module Scopes =
                                     (context, false), VarNotFound nextKey
                                 else
                                     (context, false), NotFound
-                        | Some e ->
+                        | Some e, _ ->
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope :> IScope<_>
                             let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)

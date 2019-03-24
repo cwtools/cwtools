@@ -48,6 +48,28 @@ let emptyStellarisSettings (rootDirectory) = {
     scriptFolders = None
     excludeGlobPatterns = None
 }
+let emptyImperatorSettings (rootDirectory) = {
+    rootDirectory = rootDirectory
+    scope = FilesScope.All
+    modFilter = None
+    validation = {
+        validateVanilla = false
+        experimental = true
+        langs = [IR IRLang.English]
+    }
+    rules = None
+    embedded = {
+        triggers = []
+        effects = []
+        modifiers = []
+        embeddedFiles = []
+        cachedResourceData = []
+        localisationCommands = []
+        eventTargetLinks = []
+    }
+    scriptFolders = None
+    excludeGlobPatterns = None
+}
 
 let getAllTestLocs node =
     let fNode = (fun (x:Node) (req, notreq) ->
@@ -182,26 +204,42 @@ let configFilesFromDir folder =
     configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
                 |> List.map (fun f -> f, File.ReadAllText f)
 
-let testFolder folder testsname config configValidate configfile configOnly configLoc (culture : string) =
+let testFolder folder testsname config configValidate configfile configOnly configLoc stl (culture : string) =
     testList (testsname + culture) [
         Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
         Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
         let configtext = if config then configFilesFromDir configfile else []
         // configtext |> Seq.iter (fun (fn, _) -> eprintfn "%s" fn)
-        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
-        let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-        let eventTargetLinks =
-                    configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
-                            |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks Scope.Any parseScope allScopes fn ft)
-                            |> Option.defaultValue (STLScopes.scopedEffects |> List.map SimpleLink)
 
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
-        let settings = emptyStellarisSettings folder
-        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; eventTargetLinks = eventTargetLinks };
-                                            rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
-        let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
-        let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-        let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
+        let errors, testVals =
+            if stl
+            then
+                let eventTargetLinks =
+                            configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks Scope.Any parseScope allScopes fn ft)
+                                    |> Option.defaultValue (STLScopes.scopedEffects |> List.map SimpleLink)
+                let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
+                let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+                let settings = emptyStellarisSettings folder
+                let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; eventTargetLinks = eventTargetLinks };
+                                                    rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
+                let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+                let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
+                errors, testVals
+            else
+                let eventTargetLinks =
+                            configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks IRConstants.Scope.Any IRConstants.parseScope IRConstants.allScopes fn ft)
+                                    |> Option.defaultValue (IRScopes.scopedEffects |> List.map SimpleLink)
+                let settings = emptyImperatorSettings folder
+                let settings = { settings with embedded = { settings.embedded with triggers = []; effects = []; modifiers = []; eventTargetLinks = eventTargetLinks };
+                                                    rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
+                let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, IRConstants.Scope, IRConstants.Modifier>
+                let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let testVals = ir.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
+                errors, testVals
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
         //eprintfn "%A" testVals
@@ -220,27 +258,33 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
 
-let testSubdirectories dir =
+let testSubdirectories stl dir =
     let dirs = Directory.EnumerateDirectories dir
-    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d) true true "en-GB")
+    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d) true true stl "en-GB")
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false false "" false false "en-GB"
-        testFolder "./testfiles/validationtests/gfxtests" "gfx" false false "" false false "en-GB"
+        testFolder "./testfiles/validationtests/interfacetests" "interface" false false "" false false true "en-GB"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx" false false "" false false true "en-GB"
         // testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false false "en-GB"
         // testFolder "./testfiles/validationtests/variabletests" "variables" true false "./testfiles/stellarisconfig" false false "en-GB"
         // testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false false "en-GB"
-        testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false "en-GB"
+        testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false true "en-GB"
         // testFolder "./testfiles/validationtests/weighttests" "weights" false "" false false "en-GB"
-        testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false "ru-RU"
+        testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false true "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false true "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false true "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]
 [<Tests>]
-let subfolderTests = testList "validation" (testSubdirectories "./testfiles/configtests/rulestests" |> List.ofSeq)
+let stlAllSubfolderTests = testList "validation all stl" (testSubdirectories true "./testfiles/configtests/rulestests/All" |> List.ofSeq)
+[<Tests>]
+let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false "./testfiles/configtests/rulestests/All" |> List.ofSeq)
+[<Tests>]
+let stlSubfolderTests = testList "validation stl" (testSubdirectories true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
+[<Tests>]
+let irSubfolderTests = testList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
 
 let testConfigFolder folder testsname config configfile (culture : string) =
     testList (testsname + culture) [

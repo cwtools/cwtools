@@ -63,7 +63,7 @@ module IRScopes =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = createChangeScope<Scope> oneToOneScopes (complexVarPrefixFun "variable:from:" "variable:")
+    let changeScope = createJominiChangeScope<Scope> oneToOneScopes (complexVarPrefixFun "variable:from:" "variable:")
 
 
     let scopedLocEffects = [

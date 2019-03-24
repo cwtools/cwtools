@@ -101,8 +101,9 @@ module IRGameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+        let test = ScopedEffect("test_value_trigger", allScopes, Scope.NoneScope, EffectType.Trigger, "", "", false, true) :> Effect
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
+        test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =
