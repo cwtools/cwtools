@@ -43,6 +43,7 @@ module rec ConfigParser =
     | FilepathField
     | IconField of string
     | AliasField of string
+    | SingleAliasField of string
     | SubtypeField of string * bool * NewRule<'a> list
     | VariableSetField of string
     | VariableGetField of string
@@ -85,6 +86,7 @@ module rec ConfigParser =
 
     type RootRule<'a> =
     | AliasRule of string * NewRule<'a>
+    | SingleAliasRule of string * NewRule<'a>
     | TypeRule of string * NewRule<'a>
     // type EffectRule = Rule // Add scopes
     type ReplaceScopes<'a> = {
@@ -209,6 +211,13 @@ module rec ConfigParser =
             let split = s.Split([|":"|], 2, StringSplitOptions.None)
             if split.Length < 2 then None else Some (split.[0], split.[1])
         |None -> None
+    let getSingleAliasSettingsFromString (full : string) =
+        match getSettingFromString full "single_alias" with
+        |Some s ->
+            let split = s.Split([|":"|], 2, StringSplitOptions.None)
+            if split.Length < 2 then None else Some (split.[0], split.[1])
+        |None -> None
+
 
     let inline private replaceScopes parseScope (comments : string list) =
         match comments |> List.tryFind (fun s -> s.Contains("replace_scope")) with
@@ -344,6 +353,11 @@ module rec ConfigParser =
             | Some target ->
                 ScopeField (parseScope target)
             | None -> ValueField ValueType.Scalar
+        | x when x.StartsWith "single_alias_right" ->
+            match getSettingFromString x "single_alias_right" with
+            | Some alias ->
+                SingleAliasField alias
+            | None -> ValueField ValueType.Scalar
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
         | x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
@@ -400,6 +414,14 @@ module rec ConfigParser =
             |None ->
                 let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
                 TypeRule (x, rule)
+        |x when x.StartsWith "single_alias[" ->
+            match getSettingFromString x "single_alias" with
+            |Some (a) ->
+                let innerRule = configLeaf parseScope allScopes anyScope leaf comments x
+                SingleAliasRule (a, innerRule)
+            |None ->
+                let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
+                TypeRule (x, rule)
         |x ->
             let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
             TypeRule (x, rule)
@@ -415,6 +437,13 @@ module rec ConfigParser =
                 let innerRule = configNode parseScope allScopes anyScope node comments rn
                 // log "%s %A" a innerRule
                 AliasRule (a, innerRule)
+            |None ->
+                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+        |x when x.StartsWith "single_alias[" ->
+            match getSettingFromString x "single_alias" with
+            |Some (a) ->
+                let innerRule = configNode parseScope allScopes anyScope node comments x
+                SingleAliasRule (a, innerRule)
             |None ->
                 TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
         |x ->
@@ -631,9 +660,31 @@ module rec ConfigParser =
         |_ -> None
 
 
+
+    let replaceSingleAliases (rules : RootRule<_> list) =
+        let singlealiases = rules |> List.choose (function |SingleAliasRule (name, inner) -> Some (name, inner) |_ -> None) |> Map.ofList
+        let rec cataRule rule : NewRule<_> =
+            match rule with
+            | (NodeRule (l, r), o) -> (NodeRule (l, r |> List.map cataRule), o)
+            | (LeafRule (l, SingleAliasField name), o) ->
+                match singlealiases |> Map.tryFind name with
+                | Some (LeafRule (al, ar), ao) ->
+                    LeafRule (l, ar), o
+                | Some (NodeRule (al, ar), ao) ->
+                    NodeRule (l, ar), o
+                | _ -> rule
+            | _ -> rule
+        let rulesMapper =
+            function
+            | TypeRule (name, rule) -> TypeRule (name, cataRule rule)
+            | AliasRule (name, rule) -> AliasRule (name, cataRule rule)
+            | SingleAliasRule (name, rule) -> SingleAliasRule(name, cataRule rule)
+        rules |> List.map rulesMapper
+
     let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
+        let rules = replaceSingleAliases rules
         let types = nodes |> List.choose (processChildType parseScope allScopes anyScope) |> List.collect id
         let enums = nodes |> List.choose processChildEnum |> List.collect id
         let complexenums = nodes |> List.choose processComplexChildEnum |> List.collect id

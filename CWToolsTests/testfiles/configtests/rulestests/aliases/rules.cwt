@@ -1,0 +1,29 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+}
+
+single_alias[single_alias_int] = int
+single_alias[single_alias_clause] = {
+    ## cardinality = 1..inf
+    something = blah
+}
+
+event = {
+    ## cardinality = 0..inf
+    single_alias_int = single_alias_right[single_alias_int]
+    ## cardinality = 0..inf
+    single_alias_clause = single_alias_right[single_alias_clause]
+}
