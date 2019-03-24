@@ -93,7 +93,7 @@ module Scopes =
         let varSubstring1 = (fun (k : string) -> k.Substring(prefix1.Length ))
         let varSubstring2 = (fun (k : string) -> k.Substring(prefix2.Length ))
         (fun key -> if varStartsWith1 key then varSubstring1 key, true else if varStartsWith2 key then varSubstring2 key, true else key, false)
-    let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
+    let createJominiChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (eventTargetLinks : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
@@ -185,7 +185,7 @@ module Scopes =
                 // x
                 res2)
 
-    let createJominiChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
+    let createChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun (varLHS : bool) (skipEffect : bool) (effects : EffectMap<_>) (triggers : EffectMap<_>) (eventTargetLinks : EffectMap<_>) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
@@ -206,9 +206,9 @@ module Scopes =
                     match onetoone with
                     | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])
                     | None ->
-                        let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect  -> Some e |_ -> None)
-                        let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect -> Some e |_ -> None)
-                        let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when (not skipEffect) || e.ScopeOnlyNotEffect -> Some e |_ -> None)
+                        let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope  -> Some e |_ -> None)
+                        let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
+                        let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)

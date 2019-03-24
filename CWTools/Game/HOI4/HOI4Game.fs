@@ -124,7 +124,7 @@ module HOI4GameFunctions =
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
-        lookup.eventTargetLinks <- updateEventTargetLinks embedded
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
         rules @ addModifiersWithScopes lookup
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
@@ -139,13 +139,13 @@ module HOI4GameFunctions =
         let countries = lookup.enumDefs.TryFind "country_tag"
                             |> Option.map snd
                             |> Option.defaultValue []
-        lookup.effects <- updateScriptedEffects lookup.configRules states countries
-        lookup.triggers <- updateScriptedTriggers lookup.configRules states countries
-
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        let ts = updateScriptedTriggers lookup.configRules states countries
+        let es = updateScriptedEffects lookup.configRules states countries
+        let ls = updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- ts @ es @ ls
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let afterInit (game : GameObject) =
         updateModifiers(game)

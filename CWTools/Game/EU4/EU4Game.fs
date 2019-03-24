@@ -128,9 +128,10 @@ module EU4GameFunctions =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> (false, m.tag, range.Zero)))
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
-        lookup.triggers <- updateScriptedTriggers rules
-        lookup.effects <- updateScriptedEffects rules
-        lookup.eventTargetLinks <- updateEventTargetLinks embedded
+        let ts = updateScriptedTriggers rules
+        let es = updateScriptedEffects rules
+        let ls = updateEventTargetLinks embedded
+        lookup.allCoreLinks <- ts @ es @ ls
         rules @ addModifiersWithScopes lookup
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) (resources : IResourceAPI<EU4ComputedData>) _ =
@@ -150,10 +151,10 @@ module EU4GameFunctions =
         lookup.typeDefInfoRaw <-
             (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let afterInit (game : GameObject) =
         updateScriptedLoc(game)

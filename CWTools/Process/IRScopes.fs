@@ -74,7 +74,7 @@ module IRScopes =
         // ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);

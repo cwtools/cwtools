@@ -37,11 +37,11 @@ module EU4Scopes =
 
     let scopedEffects =
         [
-            ScopedEffect("owner", [Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true, false);
-            ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true, false);
-            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true, false);
+            ScopedEffect("owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true, false);
+            ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true, false);
+            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true, false);
             // Should be rhs only!
-            ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Both, defaultDesc, "", true, false);
+            ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Link, defaultDesc, "", true, false);
         ]
 
 
@@ -116,24 +116,24 @@ module EU4Scopes =
     //         res2
 
     let scopedLocEffects = [
-        ScopedEffect("Capital", [Scope.Country], Scope.Province, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Owner", [Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Dip_Advisor", [Scope.Country], Scope.Advisor, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Adm_Advisor", [Scope.Country], Scope.Advisor, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Mil_Advisor", [Scope.Country], Scope.Advisor, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Country", [Scope.Country; Scope.RebelFaction], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Consort", [Scope.Country;], Scope.Consort, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("Capital", [Scope.Country], Scope.Province, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Dip_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Adm_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Mil_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Country", [Scope.Country; Scope.RebelFaction], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Consort", [Scope.Country;], Scope.Consort, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("GetCult", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);

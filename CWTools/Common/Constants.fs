@@ -33,7 +33,7 @@ type Severity =
 
 
 
-type EffectType = |Effect |Trigger |Link |Value
+type EffectType = |Effect |Trigger |Link |ValueTrigger
 type Effect<'T when 'T : comparison> internal (name, scopes, effectType) =
     member val Name : string = name
     member val Scopes : 'T list = scopes

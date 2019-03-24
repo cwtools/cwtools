@@ -37,10 +37,10 @@ module HOI4Scopes =
 
     let scopedEffects =
         [
-            ScopedEffect("owner", [Scope.UnitLeader; Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
-            ScopedEffect("controller", [Scope.State], Scope.Country, EffectType.Both, defaultDesc, "", true);
-            ScopedEffect("capital", [Scope.State], Scope.State, EffectType.Both, defaultDesc, "", true);
-            ScopedEffect("global", allScopes, Scope.InvalidScope, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("owner", [Scope.UnitLeader; Scope.State], Scope.Country, EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("controller", [Scope.State], Scope.Country, EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("capital", [Scope.State], Scope.State, EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("global", allScopes, Scope.InvalidScope, EffectType.Link, defaultDesc, "", true);
             // ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
         ]
 
@@ -135,7 +135,7 @@ module HOI4Scopes =
         // ScopedEffect("Consort", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetCult", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Link, defaultDesc, "", true);
     ]
     let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
 

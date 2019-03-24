@@ -20,19 +20,19 @@ module CK2Scopes =
     let scopedEffects =
         [
             // To title
-            ScopedEffect("primary_title", [Scope.Character], Scope.Title, EffectType.Both, defaultDesc, "", true)
+            ScopedEffect("primary_title", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true)
             // To character
-            ScopedEffect("mother", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("mother_even_if_dead", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("father", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("father_even_if_dead", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("killer", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("liege", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("liege_before_war", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("top_liege", [Scope.Character], Scope.Character, EffectType.Both, defaultDesc, "", true)
+            ScopedEffect("mother", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("mother_even_if_dead", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("father", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("father_even_if_dead", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("killer", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("liege", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("liege_before_war", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("top_liege", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true)
             // To province
-            ScopedEffect("capital_scope", [Scope.Character; Scope.Title], Scope.Province, EffectType.Both, defaultDesc, "", true)
-            ScopedEffect("owner", [Scope.Province], Scope.Character, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("capital_scope", [Scope.Character; Scope.Title], Scope.Province, EffectType.Link, defaultDesc, "", true)
+            ScopedEffect("owner", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
         ]
 
 
@@ -80,7 +80,7 @@ module CK2Scopes =
         // ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);

@@ -124,9 +124,10 @@ module IRGameFunctions =
 
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
-        lookup.triggers <- updateScriptedTriggers lookup rules embedded
-        lookup.effects <- updateScriptedEffects lookup rules embedded
-        lookup.eventTargetLinks <- updateEventTargetLinks embedded
+        let ts = updateScriptedTriggers lookup rules embedded
+        let es = updateScriptedEffects lookup rules embedded
+        let ls = updateEventTargetLinks embedded
+        lookup.allCoreLinks <- ts @ es @ ls
         rules @ addModifiersWithScopes lookup
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
@@ -140,10 +141,10 @@ module IRGameFunctions =
         lookup.typeDefInfoRaw <-
             (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let afterInit (game : GameObject) =
         // updateScriptedTriggers()

@@ -98,59 +98,59 @@ module STLScopes =
 // parameter:
     let defaultDesc = "Scope (/context) switch"
     let scopedEffects = [
-        ScopedEffect("space_owner", [Scope.Ship; Scope.Fleet; Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("owner", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", "", true); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
-        ScopedEffect("controller", [Scope.Planet; Scope.Starbase], Scope.Country, EffectType.Both, "", "", true); //Removed controller of country
-        ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector; Scope.Army], Scope.Leader, EffectType.Both, "", "", true); // Army not in PDX list
-        ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Both, "", "", true);
-        ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet; Scope.GalacticObject; Scope.Army; Scope.Megastructure], Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("capital_scope", [Scope.Country; Scope.Sector], Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship; Scope.Megastructure; Scope.Army], Scope.Planet, EffectType.Both, defaultDesc, "", true); // Megastructure not in PDX list
-        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Pop; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "", true); // Planet not in PDX list
-        ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Both, defaultDesc, "", true);
-        //ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "", true); Removed in 2.0
-        ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase; Scope.Leader; Scope.Army], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("pop", [Scope.Pop; Scope.Tile], Scope.Pop, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_created_pop", allScopes, Scope.Pop, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_created_ambient_object", allScopes, Scope.AmbientObject, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_created_army", allScopes, Scope.Army, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("tile", [Scope.Pop; Scope.Tile], Scope.Tile, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "", true);
-        //ScopedEffect("owner_species", [Scope.Species ;Scope.Pop; Scope.Leader; Scope.Country], Scope.Species, EffectType.Both, "", "", true); //PDX list
-        ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, "", "", true); //Copied owner
-        ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop; Scope.Army], Scope.Species, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Both, defaultDesc, "", true); //Leader from vanilla
-        ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("default_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject; Scope.Leader], Scope.Sector, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("core_sector", [Scope.Country], Scope.Sector, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("ruler", [Scope.Country; Scope.Planet; Scope.Tile], Scope.Leader, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("heir", [Scope.Country; Scope.Planet; Scope.Tile], Scope.Leader, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("alliance", [Scope.Country], Scope.Alliance, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.GalacticObject;], Scope.Planet, EffectType.Both, defaultDesc, "", true); //PDX List
-        //ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.AmbientObject; Scope.Megastructure; Scope.GalacticObject; Scope.Starbase], Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("last_created_design", allScopes, Scope.Design, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet; Scope.Star; Scope.Ship; Scope.Fleet], Scope.Starbase, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("capital_star", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("no_scope", allScopes, Scope.Any, EffectType.Both, defaultDesc, "", true)
-        ScopedEffect("megastructure", allScopes, Scope.Megastructure, EffectType.Both, defaultDesc, "", true)
-        ScopedEffect("owner_main_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, defaultDesc, "", true) //Copied owner
-        ScopedEffect("system_star", [Scope.GalacticObject], Scope.Planet, EffectType.Both, defaultDesc, "", true); // Not in PDX
-        ScopedEffect("observation_outpost_owner", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true); // Not in PDX
-        ScopedEffect("branch_office_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true); // New with 2.2
+        ScopedEffect("space_owner", [Scope.Ship; Scope.Fleet; Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("owner", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Link, "", "", true); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
+        ScopedEffect("controller", [Scope.Planet; Scope.Starbase], Scope.Country, EffectType.Link, "", "", true); //Removed controller of country
+        ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector; Scope.Army], Scope.Leader, EffectType.Link, "", "", true); // Army not in PDX list
+        ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Link, "", "", true);
+        ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet; Scope.GalacticObject; Scope.Army; Scope.Megastructure], Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("capital_scope", [Scope.Country; Scope.Sector], Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship; Scope.Megastructure; Scope.Army], Scope.Planet, EffectType.Link, defaultDesc, "", true); // Megastructure not in PDX list
+        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Pop; Scope.Planet], Scope.Planet, EffectType.Link, defaultDesc, "", true); // Planet not in PDX list
+        ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Link, defaultDesc, "", true);
+        //ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Link, defaultDesc, "", true); Removed in 2.0
+        ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase; Scope.Leader; Scope.Army], Scope.Fleet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("pop", [Scope.Pop; Scope.Tile], Scope.Pop, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_created_pop", allScopes, Scope.Pop, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_created_ambient_object", allScopes, Scope.AmbientObject, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_created_army", allScopes, Scope.Army, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("tile", [Scope.Pop; Scope.Tile], Scope.Tile, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Link, defaultDesc, "", true);
+        //ScopedEffect("owner_species", [Scope.Species ;Scope.Pop; Scope.Leader; Scope.Country], Scope.Species, EffectType.Link, "", "", true); //PDX list
+        ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Link, "", "", true); //Copied owner
+        ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop; Scope.Army], Scope.Species, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Link, defaultDesc, "", true); //Leader from vanilla
+        ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("default_pop_faction", allScopes, Scope.PopFaction, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject; Scope.Leader], Scope.Sector, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("core_sector", [Scope.Country], Scope.Sector, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ruler", [Scope.Country; Scope.Planet; Scope.Tile], Scope.Leader, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("heir", [Scope.Country; Scope.Planet; Scope.Tile], Scope.Leader, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("alliance", [Scope.Country], Scope.Alliance, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.GalacticObject;], Scope.Planet, EffectType.Link, defaultDesc, "", true); //PDX List
+        //ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.AmbientObject; Scope.Megastructure; Scope.GalacticObject; Scope.Starbase], Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("last_created_design", allScopes, Scope.Design, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet; Scope.Star; Scope.Ship; Scope.Fleet], Scope.Starbase, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("capital_star", [Scope.Country], Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("no_scope", allScopes, Scope.Any, EffectType.Link, defaultDesc, "", true)
+        ScopedEffect("megastructure", allScopes, Scope.Megastructure, EffectType.Link, defaultDesc, "", true)
+        ScopedEffect("owner_main_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Link, defaultDesc, "", true) //Copied owner
+        ScopedEffect("system_star", [Scope.GalacticObject], Scope.Planet, EffectType.Link, defaultDesc, "", true); // Not in PDX
+        ScopedEffect("observation_outpost_owner", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true); // Not in PDX
+        ScopedEffect("branch_office_owner", [Scope.Planet], Scope.Country, EffectType.Link, defaultDesc, "", true); // New with 2.2
 
 
     ]
@@ -461,22 +461,22 @@ module STLScopes =
 
 
     let scopedLocEffects = [
-        ScopedEffect("capital", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("capital_scope", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", "", true);
-        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector], Scope.Leader, EffectType.Both, "", "", true);
-        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase], Scope.Fleet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("ship", [Scope.Leader], Scope.Ship, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject], Scope.Sector, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("space_owner", [Scope.Ship; Scope.Fleet; Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("capital", allScopes, Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("capital_scope", allScopes, Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("system", allScopes, Scope.GalacticObject, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Link, "", "", true);
+        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector], Scope.Leader, EffectType.Link, "", "", true);
+        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase], Scope.Fleet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ship", [Scope.Leader], Scope.Ship, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject], Scope.Sector, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("space_owner", [Scope.Ship; Scope.Fleet; Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Link, defaultDesc, "", true);
     ]
     let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
 

@@ -64,9 +64,9 @@ module STLGameFunctions =
             let vt = game.Settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
         let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
-        game.Lookup.triggers <- sts @ ts
+        // game.Lookup.triggers <- sts @ ts
         game.Lookup.onlyScriptedTriggers <- sts
-
+        sts @ ts
 
     let updateScriptedEffects (game : GameObject) =
         let vanillaEffects =
@@ -74,8 +74,9 @@ module STLGameFunctions =
             let ve = game.Settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ ve
         let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
-        game.Lookup.effects <- ses @ es
+        // game.Lookup.effects <- ses @ es
         game.Lookup.onlyScriptedEffects <- ses
+        ses @ es
 
     let updateStaticodifiers (game : GameObject) =
         let rawModifiers =
@@ -98,8 +99,8 @@ module STLGameFunctions =
 
     let afterUpdateFile (game : GameObject<Scope, Modifier,STLComputedData>) (filepath : string) =
         match filepath with
-        |x when x.Contains("scripted_triggers") -> updateScriptedTriggers(game)
-        |x when x.Contains("scripted_effects") -> updateScriptedEffects(game)
+        |x when x.Contains("scripted_triggers") -> updateScriptedTriggers(game) |> ignore
+        |x when x.Contains("scripted_effects") -> updateScriptedEffects(game) |> ignore
         |x when x.Contains("scripted_loc") -> updateScriptedLoc(game)
         |x when x.Contains("static_modifiers") -> updateStaticodifiers(game)
         |_ -> ()
@@ -180,7 +181,7 @@ module STLGameFunctions =
 
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
-        lookup.eventTargetLinks <- updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         let rulesWithMod = rules @ addModifiersWithScopes(lookup)
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
@@ -190,13 +191,15 @@ module STLGameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.eventTargetLinks <- updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings)
     let afterInit (game : GameObject) =
-            updateScriptedTriggers(game)
-            updateScriptedEffects(game)
+            let ts = updateScriptedTriggers(game)
+            game.Lookup.allCoreLinks <- ts @ game.Lookup.effects @ game.Lookup.eventTargetLinks
+            let es = updateScriptedEffects(game)
+            game.Lookup.allCoreLinks <- game.Lookup.triggers @ es @ game.Lookup.eventTargetLinks
             updateStaticodifiers(game)
             updateScriptedLoc(game)
             updateDefinedVariables(game)

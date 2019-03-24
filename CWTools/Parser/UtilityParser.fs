@@ -25,7 +25,7 @@ module UtilityParser =
                 sourceRuleType = node.TagText "data_source"
             }
         |_ ->
-            SimpleLink (ScopedEffect(name, inputScopes, outputScope, EffectType.Both, desc, "", true))
+            SimpleLink (ScopedEffect(name, inputScopes, outputScope, EffectType.Link, desc, "", true))
 
     let loadEventTargetLinks anyScope parseScope allScopes filename fileString =
         let parsed = CKParser.parseString fileString filename
