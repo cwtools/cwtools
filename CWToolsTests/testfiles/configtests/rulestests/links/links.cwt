@@ -17,4 +17,10 @@ links = {
         data_source = value[link_test_value]
         output_scope = ship
     }
+    prefixed_link = {
+        from_data = yes
+        data_source = value[link_test_value]
+        output_scope = ship
+        prefix = test:
+    }
 }

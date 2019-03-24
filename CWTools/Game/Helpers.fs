@@ -47,7 +47,7 @@ module Helpers =
         let convertLinkToEffects (link : EventTargetDataLink<_>) =
             let typeDefinedKeys = convertSourceRuleType lookup link
             let keyToEffect (key : string) =
-                let key = link.dataPrefix |> Option.map ((+) key) |> Option.defaultValue key
-                ScopedEffect(key, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)
+                let prefkey = link.dataPrefix |> Option.map (fun pref -> pref + key ) |> Option.defaultValue key
+                ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.Both, link.description, "", true)
             typeDefinedKeys |> List.map keyToEffect
         links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect<_>)

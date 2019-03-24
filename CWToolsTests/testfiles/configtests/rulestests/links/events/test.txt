@@ -20,6 +20,12 @@ event = {
     }
     test_ship = test_value
 
+    ## Test prefixed value link
+    test:test_value = {
+
+    }
+    test_ship = test:test_value
+
     ## Test enum links
     enum_one = {
 
