@@ -1,0 +1,19 @@
+namespace = test
+
+country_event = {
+    single_alias_int = 5
+    #error
+    single_alias_int = test
+
+    #error
+    single_alias_clause = 5
+    single_alias_clause = {
+        something = blah
+        #error
+        something = blahh
+    }
+    #error
+    single_alias_clause = {
+
+    }
+}
