@@ -48,6 +48,7 @@ module rec ConfigParser =
     | VariableSetField of string
     | VariableGetField of string
     | VariableField of isInt : bool * minmax : (float * float)
+    | ValueScopeField of isInt : bool * minmax : (float * float)
     let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
     type Options<'a> = {
         min : int
@@ -333,6 +334,16 @@ module rec ConfigParser =
             match getIntSettingFromString x with
             | Some (min, max) -> VariableField (true,(float min,float max))
             | None -> VariableField (true,(float Int32.MinValue, float Int32.MaxValue))
+        | "value_field" -> ValueScopeField (false, (-1E+12, 1E+12))
+        | x when x.StartsWith "value_field[" ->
+            match getFloatSettingFromString x with
+            | Some (min, max) -> ValueScopeField (false,(min, max))
+            | None -> ValueScopeField (false,(-1E+12, 1E+12))
+        | "int_value_field" -> ValueScopeField (true, (float Int32.MinValue, float Int32.MaxValue))
+        | x when x.StartsWith "int_value_field[" ->
+            match getIntSettingFromString x with
+            | Some (min, max) -> ValueScopeField (true,(float min,float max))
+            | None -> ValueScopeField (true,(float Int32.MinValue, float Int32.MaxValue))
         | x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             | Some variable ->

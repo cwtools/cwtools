@@ -1,0 +1,1934 @@
+Effect Documentation:
+
+--------------------
+
+set_local_variable - Sets a variable
+set_variable = { name = X value = Y days = Z }
+Where X is the name of the variable used to then access it
+Where Y is any event target, bool, value, script value or flag (flag:W)
+An optional days where Z is the number of days or script value
+This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+Supported Scopes: none
+
+--------------------
+
+create_pop - Creates a specific poptype in a province
+Supported Scopes: province
+
+--------------------
+
+clear_variable_list - Empties the list
+clear_variable_list = variable_name
+Supported Scopes: none
+
+--------------------
+
+ordered_friend - Iterate through all friends
+ordered_friend = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+clamp_local_variable - Clamps a variable the specified max and min
+clamp_variable = { name = X max = Y min = Z }
+Where X is the name of the variable
+Where Y and Z are script values
+Supported Scopes: none
+
+--------------------
+
+remove_friend - Removes a friend from the character
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+remove_opinion - Removes an opinion modifier, remove_opinion = { modifier = X  target = Z  }
+X is a scripted modifier name. 
+Supported Scopes: country
+
+--------------------
+
+random_family_member - Iterate through all members of a family
+random_family_member = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: family
+Supported Targets: character
+
+--------------------
+
+unlock_unit - Unlocks a locked Unit
+Supported Scopes: unit
+
+--------------------
+
+remove_triggered_character_modifier - Removes a triggered modifier from a Character
+Supported Scopes: character
+
+--------------------
+
+set_trade_goods - Sets the trade goods in a province
+Supported Scopes: province
+
+--------------------
+
+banish - Banishes a character to another country
+Supported Scopes: character
+Supported Targets: country
+
+--------------------
+
+change_variable - Changes the value or a numeric variable
+change_variable = { name = X operation = Y }
+Where X is the name of the numeric variable to modify
+Where the valid operations are add, subtract, multiply, divide and modulo
+Where Y is a fixed point value, script value or event target of a value type
+Supported Scopes: none
+
+--------------------
+
+destroy_unit - Destroys the unit from the current scope
+Supported Scopes: unit
+
+--------------------
+
+ordered_rival - Iterate through all Rivals
+ordered_rival = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+add_building_level - adds one level of the specified Building
+Supported Scopes: province
+
+--------------------
+
+marry_character - Marries two characters
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+random_allied_country - Iterate through all allied countries
+random_allied_country = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+set_culture - Set the culture for this character
+Supported Scopes: character
+Supported Targets: culture
+
+--------------------
+
+clear_ambition - Clear the ambition for this character
+Supported Scopes: character
+
+--------------------
+
+add_new_family - adds a new family with the specified name (must be valid from culture files)
+Supported Scopes: country
+
+--------------------
+
+random_subject - Iterate through all subject countries
+random_subject = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+random_successor - Iterate through all successors in a country
+random_successor = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+death - kills a character, death = { killer = X death_reason = Y }, where X is a character and Y is one of the death reason keys
+Supported Scopes: character
+
+--------------------
+
+every_neighbor_province - Iterate through all neighbors of a province
+every_neighbor_province = { limit = { <triggers> } <effects> }
+Supported Scopes: province
+Supported Targets: province
+
+--------------------
+
+add_tyranny - gives (or takes) Tyranny to a country
+Supported Scopes: country
+
+--------------------
+
+random_region - Iterate through all existing regions
+random_region = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+Supported Targets: region
+
+--------------------
+
+set_conquered_by - makes the currrent province owned and controlled by the target country
+Supported Scopes: province
+Supported Targets: country
+
+--------------------
+
+every_child - Iterate through all children
+every_child = { limit = { <triggers> } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+remove_local_variable - Removes a variable
+remove_variable = variable_name
+Supported Scopes: none
+
+--------------------
+
+break_if - conditionally break execution of effects, break_if = { X }, where X is a trigger
+Supported Scopes: none
+
+--------------------
+
+random_character - Iterate through all characters in a country
+random_character = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+add_civic_power - Adds CIVIC Power
+Supported Scopes: none
+
+--------------------
+
+ordered_character - Iterate through all characters in a country
+ordered_character = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+change_unit_owner - Destroys the unit from the current scope
+Supported Scopes: unit
+Supported Targets: country
+
+--------------------
+
+custom_label - just a tooltip, the scope as object (for grouping, localization)
+Supported Scopes: none
+
+--------------------
+
+set_character_religion - Set the religion for this character
+Supported Scopes: character
+Supported Targets: religion
+
+--------------------
+
+ordered_country - Iterate through all existing countries
+ordered_country = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+Supported Targets: country
+
+--------------------
+
+move_family - Moves a family to another country
+Supported Scopes: family
+Supported Targets: country
+
+--------------------
+
+add_truce - adds a truce for a country towards another country
+Supported Scopes: country
+
+--------------------
+
+ordered_in_list - Iterate through all items in list. list = name or variable = name
+ordered_in_list = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+
+--------------------
+
+set_unit_size - Sets the number of people in each Cohort in the Unit to the given percentage of maximum
+Supported Scopes: unit
+
+--------------------
+
+remove_country_modifier - Removes a modifier from a country
+Supported Scopes: country
+
+--------------------
+
+set_owned_by - makes the currrent province owned and controlled by the target country, without incurring any penalties
+Supported Scopes: province
+Supported Targets: country
+
+--------------------
+
+add_loyal_subunit - Adds a subunit to a Unit
+Supported Scopes: unit
+
+--------------------
+
+every_governor_state - Iterate through all states a governor is governor of
+every_governor_state = { limit = { <triggers> } <effects> }
+Supported Scopes: character
+Supported Targets: state
+
+--------------------
+
+change_country_adjective - changes the adjective of a country
+Supported Scopes: country
+
+--------------------
+
+set_as_governor - sets the governor of a province to the specified character
+Supported Scopes: province
+Supported Targets: character
+
+--------------------
+
+random_child - Iterate through all children
+random_child = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+random_neighbour_country - Iterate through all neighbour countries
+random_neighbour_country = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+ordered_country_state - Iterate through all states in a country
+ordered_country_state = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: state
+
+--------------------
+
+switch - Switch on a trigger for the evaluation of another trigger with an optional fallback trigger.
+switch = {
+	trigger = simple_assign_trigger
+	case_1 = { <effects> }
+	case_2 = { <effects> }
+	case_n = { <effects> }
+	fallback = { <effects> }
+Supported Scopes: none
+
+--------------------
+
+ordered_region - Iterate through all existing regions
+ordered_region = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+Supported Targets: region
+
+--------------------
+
+change_country_tag - changes the historical tag of a country
+Supported Scopes: country
+
+--------------------
+
+random_navy - Iterate through all navies in a country
+random_navy = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+every_area - Iterate through all existing areas
+every_area = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+Supported Targets: area
+
+--------------------
+
+add_morale - gives (or takes) morale to a unit
+Supported Scopes: unit
+
+--------------------
+
+lock_unit - Locks a Unit for the specified number of days
+Supported Scopes: unit
+
+--------------------
+
+remove_as_researcher - Character stops being a researcher
+Supported Scopes: character
+
+--------------------
+
+set_variable - Sets a variable
+set_variable = { name = X value = Y days = Z }
+Where X is the name of the variable used to then access it
+Where Y is any event target, bool, value, script value or flag (flag:W)
+An optional days where Z is the number of days or script value
+This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+Supported Scopes: none
+
+--------------------
+
+random_neighbor_province - Iterate through all neighbors of a province
+random_neighbor_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: province
+Supported Targets: province
+
+--------------------
+
+ordered_family - Iterate through all families in a country
+ordered_family = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: family
+
+--------------------
+
+every_army - Iterate through all armies in a country
+every_army = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+every_support_as_heir - Iterate through all supportasHeir
+every_support_as_heir = { limit = { <triggers> } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+add_friend - Adds a friend to the character
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+random_ownable_province - Iterate through all ownable provinces in the world
+random_ownable_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+Supported Targets: province
+
+--------------------
+
+every_owned_province - Iterate through all owned provinces in a country
+every_owned_province = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: province
+
+--------------------
+
+random_country_state - Iterate through all states in a country
+random_country_state = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: state
+
+--------------------
+
+damage_unit_morale_percent - Applies the given morale damage to each Cohort in the unit as a percentage of their current morale
+Supported Scopes: unit
+
+--------------------
+
+random_region_state - Iterate through all states in a region
+random_region_state = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: region
+Supported Targets: state
+
+--------------------
+
+force_add_trait - Adds a trait to a character (will show tooltip even if already having the trait)
+Supported Scopes: character
+
+--------------------
+
+every_countries_at_war_with - Iterate through all countries at war with
+every_countries_at_war_with = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+add_charisma - Adds charisma skill
+Supported Scopes: none
+
+--------------------
+
+adopt - Makes the currently scoped character adopt another character
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+ordered_sub_unit - Iterate through all subunits in a unit
+ordered_sub_unit = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: unit
+Supported Targets: subunit
+
+--------------------
+
+move_country_with_message - Moves a character to another country (with message popups)
+Supported Scopes: character
+Supported Targets: country
+
+--------------------
+
+set_pop_culture - Set the culture for this pop
+Supported Scopes: pop
+Supported Targets: culture
+
+--------------------
+
+remove_list_local_variable - Removes the target from a variable list
+remove_list_variable = { name = X target = Y }
+Where X is the name of the variable
+Where Y is an event target
+Supported Scopes: none
+
+--------------------
+
+add_rival - Adds a rival to the character
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+remove_trait - Removes a trait from a character
+Supported Scopes: character
+
+--------------------
+
+create_country - creates a country in the given province
+Supported Scopes: none
+Supported Targets: province
+
+--------------------
+
+set_pop_type - Set the pop_type for this pop
+Supported Scopes: pop
+
+--------------------
+
+random_rival - Iterate through all Rivals
+random_rival = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+ordered_child - Iterate through all children
+ordered_child = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+ordered_neighbor_province - Iterate through all neighbors of a province
+ordered_neighbor_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: province
+Supported Targets: province
+
+--------------------
+
+ordered_region_area - Iterate through all areas in a region
+ordered_region_area = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: region
+Supported Targets: area
+
+--------------------
+
+set_as_ruler - sets the ruler of a country to the specified character
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+add_to_local_variable_list - Adds the event target to a variable list
+add_to_variable_list = { name = X target = Y }
+Where X is the name of the variable
+Where Y is an event target
+Supported Scopes: none
+
+--------------------
+
+ordered_governor_state - Iterate through all states a governor is governor of
+ordered_governor_state = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: character
+Supported Targets: state
+
+--------------------
+
+break - break execution of effects, break = yes/no/boolean event target
+Supported Scopes: none
+
+--------------------
+
+random_commander - Iterate through all commanders in a country
+random_commander = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+add_finesse - Adds finesse skill
+Supported Scopes: none
+
+--------------------
+
+end_pregnancy - end a pregnancy
+Supported Scopes: character
+
+--------------------
+
+random_area - Iterate through all existing areas
+random_area = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+Supported Targets: area
+
+--------------------
+
+change_country_color - changes the color of a country
+Supported Scopes: country
+
+--------------------
+
+remove_variable - Removes a variable
+remove_variable = variable_name
+Supported Scopes: none
+
+--------------------
+
+clear_local_variable_list - Empties the list
+clear_variable_list = variable_name
+Supported Scopes: none
+
+--------------------
+
+add_corruption - gives (or takes) Corruption to a character
+Supported Scopes: character
+
+--------------------
+
+destroy_subunit - Destroys the unit from the current scope
+Supported Scopes: subunit
+
+--------------------
+
+random_region_area - Iterate through all areas in a region
+random_region_area = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: region
+Supported Targets: area
+
+--------------------
+
+remove_province_modifier - Removes a modifier from a Province
+Supported Scopes: province
+
+--------------------
+
+add_gold - gives (or takes) gold to a character
+Supported Scopes: character
+
+--------------------
+
+change_law - Changes a law in a country
+Supported Scopes: country
+
+--------------------
+
+every_family_member - Iterate through all members of a family
+every_family_member = { limit = { <triggers> } <effects> }
+Supported Scopes: family
+Supported Targets: character
+
+--------------------
+
+every_in_list - Iterate through all items in list. list = name or variable = name
+every_in_list = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+
+--------------------
+
+random_friend - Iterate through all friends
+random_friend = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+add_military_power - Adds MILITARY Power
+Supported Scopes: none
+
+--------------------
+
+declare_war_with_wargoal - Declares a war between this country and the target country
+Supported Scopes: country
+
+--------------------
+
+random_pops_in_province - Iterate through all pops in a province
+random_pops_in_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: province
+Supported Targets: pop
+
+--------------------
+
+random_army - Iterate through all armies in a country
+random_army = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+reset_scoring - Moves a family to another country
+Supported Scopes: none
+Supported Targets: country
+
+--------------------
+
+ordered_area_province - Iterate through all provinces in a area
+ordered_area_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: area
+Supported Targets: province
+
+--------------------
+
+random_country - Iterate through all existing countries
+random_country = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+Supported Targets: country
+
+--------------------
+
+give_office - Gives a Office to a character
+Supported Scopes: character
+
+--------------------
+
+clear_saved_scope - Clears a saved scope from the top scope
+save_scope_as = cool_scope -> clear_saved_scope = cool_scope
+Supported Scopes: none
+
+--------------------
+
+round_local_variable - Rounds a variable to the nearest specified value
+clamp_variable = { name = X nearest = Y }
+Where X is the name of the variable
+Where Y is a script value
+Supported Scopes: none
+
+--------------------
+
+add_religious_power - Adds RELIGIOUS Power
+Supported Scopes: none
+
+--------------------
+
+every_region_area - Iterate through all areas in a region
+every_region_area = { limit = { <triggers> } <effects> }
+Supported Scopes: region
+Supported Targets: area
+
+--------------------
+
+add_state_loyalty - adds state loyalty to a province
+Supported Scopes: province
+
+--------------------
+
+round_variable - Rounds a variable to the nearest specified value
+clamp_variable = { name = X nearest = Y }
+Where X is the name of the variable
+Where Y is a script value
+Supported Scopes: none
+
+--------------------
+
+set_ambition - Set the ambition for this character
+Supported Scopes: character
+
+--------------------
+
+kill_pop - Kill the pop in the current scope
+Supported Scopes: pop
+
+--------------------
+
+random_sub_unit - Iterate through all subunits in a unit
+random_sub_unit = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: unit
+Supported Targets: subunit
+
+--------------------
+
+ordered_country_sub_unit - Iterate through all subunits in all units in a country
+ordered_country_sub_unit = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: subunit
+
+--------------------
+
+random - a random effect, random = { chance = X modifier = Y effects... }
+where X is a chance of the enclosed effects being fired and can be modified by optional value modifier list (AKA MTTH) Y
+Supported Scopes: none
+
+--------------------
+
+create_character - creates a character in a country
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+show_as_tooltip - Effect only shown in tooltips (but not executed)
+Supported Scopes: none
+
+--------------------
+
+random_area_province - Iterate through all provinces in a area
+random_area_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: area
+Supported Targets: province
+
+--------------------
+
+ordered_allied_country - Iterate through all allied countries
+ordered_allied_country = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+random_region_province - Iterate through all provinces in a region
+random_region_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: region
+Supported Targets: province
+
+--------------------
+
+remove_subunit_loyalty - Removes the personal loyalty of a specific subunit
+Supported Scopes: subunit
+
+--------------------
+
+reverse_add_opinion - Adds an reverse opinion modifier, reverse_add_opinion = { modifier = X target = Z }
+X is a scripted modifier name.
+Supported Scopes: country
+
+--------------------
+
+remove_global_variable - Removes a variable
+remove_variable = variable_name
+Supported Scopes: none
+
+--------------------
+
+damage_unit_percent - Applies the given damage to each Cohort in the unit as a percentage of their current strength
+Supported Scopes: unit
+
+--------------------
+
+add_permanent_province_modifier - adds a permanent modifier from a Province
+Supported Scopes: province
+
+--------------------
+
+save_scope_as - Saves the current scope as an arbitrarily-named target to be referenced later in the (unbroken) event chain
+save_event_target_as = <string>
+Supported Scopes: none
+
+--------------------
+
+random_sibling - Iterate through all siblings
+random_sibling = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+ordered_area_state - Iterate through all states in a area
+ordered_area_state = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: area
+Supported Targets: state
+
+--------------------
+
+every_character - Iterate through all characters in a country
+every_character = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+assert_read - Conditionally cause an assert during read time
+assert_read = X, where X is yes or the string to be printed in the assert
+Supported Scopes: none
+
+--------------------
+
+random_parent - Executes on a random parent
+Supported Scopes: character
+
+--------------------
+
+add_to_temporary_list - Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the same effect
+add_to_temporary_list = <string> NOTE, if adding a temporary target to a permanent list, the list will stay permanent
+Supported Scopes: none
+
+--------------------
+
+remove_office - Removes a Office from a character
+Supported Scopes: character
+
+--------------------
+
+ordered_family_member - Iterate through all members of a family
+ordered_family_member = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: family
+Supported Targets: character
+
+--------------------
+
+round_global_variable - Rounds a variable to the nearest specified value
+clamp_variable = { name = X nearest = Y }
+Where X is the name of the variable
+Where Y is a script value
+Supported Scopes: none
+
+--------------------
+
+remove_unit_loyalty - Removes the personal loyalty of all cohorts in a unit
+Supported Scopes: unit
+
+--------------------
+
+every_province - Executes on every province
+Supported Scopes: none
+
+--------------------
+
+ordered_subject - Iterate through all subject countries
+ordered_subject = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+ordered_navy - Iterate through all navies in a country
+ordered_navy = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+imprison - Imprisons the target character as this character's prisoner, imprison = { target = X  }, where X is a character
+Supported Scopes: country
+
+--------------------
+
+change_country_name - changes the name of a country
+Supported Scopes: country
+
+--------------------
+
+ordered_sibling - Iterate through all siblings
+ordered_sibling = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+pay_price - Pays a Price from a country
+Supported Scopes: country
+
+--------------------
+
+ordered_in_local_list - Iterate through all items in local list. list = name or variable = name
+ordered_in_local_list = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+
+--------------------
+
+if - Executes enclosed effects if limit criteria are met
+if = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+
+--------------------
+
+set_global_variable - Sets a variable
+set_variable = { name = X value = Y days = Z }
+Where X is the name of the variable used to then access it
+Where Y is any event target, bool, value, script value or flag (flag:W)
+An optional days where Z is the number of days or script value
+This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+Supported Scopes: none
+
+--------------------
+
+change_government - Removes a modifier from a country
+Supported Scopes: country
+
+--------------------
+
+clamp_global_variable - Clamps a variable the specified max and min
+clamp_variable = { name = X max = Y min = Z }
+Where X is the name of the variable
+Where Y and Z are script values
+Supported Scopes: none
+
+--------------------
+
+random_support_as_heir - Iterate through all supportasHeir
+random_support_as_heir = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+every_navy - Iterate through all navies in a country
+every_navy = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+every_successor - Iterate through all successors in a country
+every_successor = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+random_country_sub_unit - Iterate through all subunits in all units in a country
+random_country_sub_unit = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: subunit
+
+--------------------
+
+every_sub_unit - Iterate through all subunits in a unit
+every_sub_unit = { limit = { <triggers> } <effects> }
+Supported Scopes: unit
+Supported Targets: subunit
+
+--------------------
+
+remove_party_leadership - remove the leader from a party in a country
+Supported Scopes: country
+
+--------------------
+
+random_province - Executes on a random province
+Supported Scopes: none
+
+--------------------
+
+remove_claim - removes the targetcountry's claim on the province.
+Supported Scopes: province
+Supported Targets: country
+
+--------------------
+
+add_stability - gives (or takes) Stability to a country
+Supported Scopes: country
+
+--------------------
+
+ordered_neighbour_country - Iterate through all neighbour countries
+ordered_neighbour_country = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+change_local_variable - Changes the value or a numeric variable
+change_variable = { name = X operation = Y }
+Where X is the name of the numeric variable to modify
+Where the valid operations are add, subtract, multiply, divide and modulo
+Where Y is a fixed point value, script value or event target of a value type
+Supported Scopes: none
+
+--------------------
+
+every_unit_in_province - Iterate through all units in a province
+every_unit_in_province = { limit = { <triggers> } <effects> }
+Supported Scopes: province
+Supported Targets: unit
+
+--------------------
+
+ordered_countries_at_war_with - Iterate through all countries at war with
+ordered_countries_at_war_with = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+every_unit - Iterate through all units in a country
+every_unit = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+add_province_modifier - adds a modifier from a Province
+Supported Scopes: province
+
+--------------------
+
+every_parent - Executes on every parent
+Supported Scopes: character
+
+--------------------
+
+remove_state_modifier - Removes a modifier from a State
+Supported Scopes: state
+
+--------------------
+
+add_ruler_conviction - Adds ruler conviction
+Supported Scopes: character
+
+--------------------
+
+set_personal_loyalty - Sets the personal loyalty of a specific subunit to the target character
+Supported Scopes: subunit
+Supported Targets: character
+
+--------------------
+
+else_if - Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met, and its own limit is met
+if = { limit = { <triggers> } <effects> }
+else_if = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+
+--------------------
+
+random_countries_at_war_with - Iterate through all countries at war with
+random_countries_at_war_with = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+make_subject - makes the target a subject of the current scope
+Supported Scopes: country
+
+--------------------
+
+ordered_unit - Iterate through all units in a country
+ordered_unit = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+remove_from_list - Removes the current scope from a named list remove_from_list = <string>
+Supported Scopes: none
+
+--------------------
+
+ordered_commander - Iterate through all commanders in a country
+ordered_commander = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+every_country_state - Iterate through all states in a country
+every_country_state = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: state
+
+--------------------
+
+every_commander - Iterate through all commanders in a country
+every_commander = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+add_martial - Adds martial skill
+Supported Scopes: none
+
+--------------------
+
+make_pregnant - makes a character pregnant
+Supported Scopes: none
+
+--------------------
+
+add_loyalty - gives (or takes) Loyalty to a character
+Supported Scopes: character
+
+--------------------
+
+random_living_character - Executes on a random living character
+Supported Scopes: none
+
+--------------------
+
+add_aggressive_expansion - adds or removes aggressive expansion for a country
+Supported Scopes: country
+
+--------------------
+
+change_country_flag - changes the flag of a country
+Supported Scopes: country
+
+--------------------
+
+remove_as_governor - Character stops being a governor
+Supported Scopes: character
+
+--------------------
+
+set_pop_culture_same_as - sets the culture of the pop to be the same as the culture of the target
+Supported Scopes: pop
+Supported Targets: pop
+
+--------------------
+
+ordered_in_global_list - Iterate through all items in global list. list = name or variable = name
+ordered_in_global_list = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+
+--------------------
+
+add_prestige - gives (or takes) Prestige to a family
+Supported Scopes: family
+
+--------------------
+
+hidden_effect - Effect not shown in tooltips
+Supported Scopes: none
+
+--------------------
+
+change_mercenary_employer - Changes a characters employer, if they are mecenary
+Supported Scopes: character
+Supported Targets: country
+
+--------------------
+
+set_culture_same_as - sets the culture of the character to be the same as the culture of the target
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+set_as_commander - sets the commander of a unit to the specified character
+Supported Scopes: unit
+Supported Targets: character
+
+--------------------
+
+ordered_support_as_heir - Iterate through all supportasHeir
+ordered_support_as_heir = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+create_state_pop - Creates a specific poptype with the countrys religion/culture in a province
+Supported Scopes: province
+
+--------------------
+
+assert_if - Conditionally cause an assert during run time
+assert_if = { limit = { X } text = Y }, where X is a trigger and Y is an optional string
+Supported Scopes: none
+
+--------------------
+
+random_in_global_list - Iterate through all items in global list. list = name or variable = name
+random_in_global_list = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+
+--------------------
+
+remove_list_global_variable - Removes the target from a variable list
+remove_list_variable = { name = X target = Y }
+Where X is the name of the variable
+Where Y is an event target
+Supported Scopes: none
+
+--------------------
+
+pay_gold - the scope character pays gold to the target character, pay_gold = { target = X gold = Y }
+Supported Scopes: character
+
+--------------------
+
+add_to_list - Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the (unbroken) event chain
+add_to_list = <string> NOTE, if adding a permanent target to a temporary list, the whole list becomes permanent
+Supported Scopes: none
+
+--------------------
+
+every_governorship_state - Iterate through all states in a governorship
+every_governorship_state = { limit = { <triggers> } <effects> }
+Supported Scopes: governorship
+Supported Targets: state
+
+--------------------
+
+random_governorship_state - Iterate through all states in a governorship
+random_governorship_state = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: governorship
+Supported Targets: state
+
+--------------------
+
+release_prisoner - Release the target character if imprisoned, release_prisoner = { target = X  }, where X is a character
+Supported Scopes: country
+
+--------------------
+
+add_civilization_value - adds civilisation to a province
+Supported Scopes: province
+
+--------------------
+
+random_state_province - Iterate through all provinces in a state
+random_state_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: state
+Supported Targets: province
+
+--------------------
+
+set_gender_equality - sets gender equality for a country
+Supported Scopes: country
+
+--------------------
+
+clear_global_variable_list - Empties the list
+clear_variable_list = variable_name
+Supported Scopes: none
+
+--------------------
+
+ordered_state_province - Iterate through all provinces in a state
+ordered_state_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: state
+Supported Targets: province
+
+--------------------
+
+ordered_region_state - Iterate through all states in a region
+ordered_region_state = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: region
+Supported Targets: state
+
+--------------------
+
+add_subunit_morale - gives (or takes) morale to a subunit
+Supported Scopes: subunit
+
+--------------------
+
+every_sibling - Iterate through all siblings
+every_sibling = { limit = { <triggers> } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+random_in_list - Iterate through all items in list. list = name or variable = name
+random_in_list = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+
+--------------------
+
+every_country_sub_unit - Iterate through all subunits in all units in a country
+every_country_sub_unit = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: subunit
+
+--------------------
+
+add_character_modifier - adds a modifier to a Character
+Supported Scopes: character
+
+--------------------
+
+while - Repeats enclosed effects while limit criteria are met or until set iteration count is reached
+while = { limit = { <triggers> } <effects> }
+ while = { count = 3 <effects> }
+Default max of 1000.
+Supported Scopes: none
+
+--------------------
+
+random_in_local_list - Iterate through all items in local list. list = name or variable = name
+random_in_local_list = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: none
+
+--------------------
+
+change_global_variable - Changes the value or a numeric variable
+change_variable = { name = X operation = Y }
+Where X is the name of the numeric variable to modify
+Where the valid operations are add, subtract, multiply, divide and modulo
+Where Y is a fixed point value, script value or event target of a value type
+Supported Scopes: none
+
+--------------------
+
+ordered_army - Iterate through all armies in a country
+ordered_army = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+add_opinion - Adds an opinion modifier, add_opinion = { modifier = X  target = Z  }
+X is a scripted modifier name. 
+Supported Scopes: country
+
+--------------------
+
+move_country - Moves a character to another country (without message_popups)
+Supported Scopes: character
+Supported Targets: country
+
+--------------------
+
+every_in_global_list - Iterate through all items in global list. list = name or variable = name
+every_in_global_list = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+
+--------------------
+
+every_rival - Iterate through all Rivals
+every_rival = { limit = { <triggers> } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+remove_rival - Removes a rival from the character
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+set_pop_religion_same_as - sets the Religion of the pop to be the same as the Religion of the target
+Supported Scopes: pop
+Supported Targets: pop
+
+--------------------
+
+every_region_state - Iterate through all states in a region
+every_region_state = { limit = { <triggers> } <effects> }
+Supported Scopes: region
+Supported Targets: state
+
+--------------------
+
+add_manpower - gives (or takes) Manpower to a country
+Supported Scopes: country
+
+--------------------
+
+set_graphical_culture - sets the graphical culture of a country
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+random_area_state - Iterate through all states in a area
+random_area_state = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: area
+Supported Targets: state
+
+--------------------
+
+create_unit - Creates a Unit with a single cohort for a Country given by the current scope.
+ The cohort will be of the first defined type in the unit type db.
+ Optional properties:
+  name [string, defaults to generated name]
+  navy [bool, defaults to no]
+  mercenary [bool, defaults to no]
+  location [Province, defaults to capital of country scope]
+  commander [Character, defaults to none]
+  attachto [Unit, will not attach by default]
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+set_primary_culture - Sets primary culture for a country
+Supported Scopes: country
+Supported Targets: culture
+
+--------------------
+
+add_oratory_power - Adds ORATORY Power
+Supported Scopes: none
+
+--------------------
+
+every_state_province - Iterate through all provinces in a state
+every_state_province = { limit = { <triggers> } <effects> }
+Supported Scopes: state
+Supported Targets: province
+
+--------------------
+
+ordered_unit_in_province - Iterate through all units in a province
+ordered_unit_in_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: province
+Supported Targets: unit
+
+--------------------
+
+every_area_province - Iterate through all provinces in a area
+every_area_province = { limit = { <triggers> } <effects> }
+Supported Scopes: area
+Supported Targets: province
+
+--------------------
+
+every_friend - Iterate through all friends
+every_friend = { limit = { <triggers> } <effects> }
+Supported Scopes: character
+Supported Targets: character
+
+--------------------
+
+remove_all_offices - Removes all Offices from a character
+Supported Scopes: character
+
+--------------------
+
+ordered_area - Iterate through all existing areas
+ordered_area = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+Supported Targets: area
+
+--------------------
+
+every_allied_country - Iterate through all allied countries
+every_allied_country = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+else - Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met
+if = { limit = { <triggers> } <effects> }
+else = { <effects> }
+Supported Scopes: none
+
+--------------------
+
+random_owned_province - Iterate through all owned provinces in a country
+random_owned_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: province
+
+--------------------
+
+every_country - Iterate through all existing countries
+every_country = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+Supported Targets: country
+
+--------------------
+
+add_trait - Adds a trait to a character
+Supported Scopes: character
+
+--------------------
+
+add_subunit - Adds a subunit to a Unit
+Supported Scopes: unit
+
+--------------------
+
+add_state_modifier - adds a modifier from a State
+Supported Scopes: state
+
+--------------------
+
+add_party_support - adds party support for a country
+Supported Scopes: country
+
+--------------------
+
+ordered_ownable_province - Iterate through all ownable provinces in the world
+ordered_ownable_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: none
+Supported Targets: province
+
+--------------------
+
+random_list - a random list effect
+random_list = { X1 = { trigger = { enables/disable this effect} modifier/compare_modifier/opinion_modifier = Y1 effect1 } X2 = { trigger = { enables/disable this effect} modifier/compare_modifier/opinion_modifier = Y2 effect2 } ... }
+Selects one effect from the list and fires it. The effects are weighted by numbers X1, X2... (the higher the number, the higher the chance of the effect being picked).
+The chances can be modified by optional value modifier lists Y1, Y2... (AKA MTTH)
+Supported Scopes: none
+
+--------------------
+
+every_area_state - Iterate through all states in a area
+every_area_state = { limit = { <triggers> } <effects> }
+Supported Scopes: area
+Supported Targets: state
+
+--------------------
+
+add_prominence - gives (or takes) Prominence to a character
+Supported Scopes: character
+
+--------------------
+
+add_to_variable_list - Adds the event target to a variable list
+add_to_variable_list = { name = X target = Y }
+Where X is the name of the variable
+Where Y is an event target
+Supported Scopes: none
+
+--------------------
+
+add_treasury - gives (or takes) Treasury to a country
+Supported Scopes: country
+
+--------------------
+
+clamp_variable - Clamps a variable the specified max and min
+clamp_variable = { name = X max = Y min = Z }
+Where X is the name of the variable
+Where Y and Z are script values
+Supported Scopes: none
+
+--------------------
+
+add_triggered_character_modifier - adds a cancellable modifier to a Character
+Supported Scopes: character
+
+--------------------
+
+refund_price - Refunds a Price from a country
+Supported Scopes: country
+
+--------------------
+
+add_nickname - gives a nickname to a character
+Supported Scopes: character
+
+--------------------
+
+break_alliance - country in scope breaks any applicable alliance with the target
+Supported Scopes: none
+Supported Targets: country
+
+--------------------
+
+add_popularity - gives (or takes) Popularity to a character
+Supported Scopes: character
+
+--------------------
+
+add_party_conviction - adds party conviction for a character
+Supported Scopes: character
+
+--------------------
+
+every_living_character - Executes on every living character
+Supported Scopes: none
+
+--------------------
+
+debug_log_scopes - Log the current scope to the game log when this effect executes yes = full scope info, no=only current scope
+Supported Scopes: none
+
+--------------------
+
+ordered_governorship_state - Iterate through all states in a governorship
+ordered_governorship_state = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: governorship
+Supported Targets: state
+
+--------------------
+
+add_subunit_strength - gives (or takes) Strength to a subunit
+Supported Scopes: subunit
+
+--------------------
+
+every_region - Iterate through all existing regions
+every_region = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+Supported Targets: region
+
+--------------------
+
+add_claim - gives the targetcountry a claim on the province.
+Supported Scopes: province
+Supported Targets: country
+
+--------------------
+
+random_family - Iterate through all families in a country
+random_family = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: family
+
+--------------------
+
+set_pop_religion - Set the Religion for this pop
+Supported Scopes: pop
+Supported Targets: religion
+
+--------------------
+
+ordered_owned_province - Iterate through all owned provinces in a country
+ordered_owned_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: province
+
+--------------------
+
+set_capital - Changes the capital of a country
+Supported Scopes: country
+Supported Targets: province
+
+--------------------
+
+random_unit - Iterate through all units in a country
+random_unit = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: country
+Supported Targets: unit
+
+--------------------
+
+every_region_province - Iterate through all provinces in a region
+every_region_province = { limit = { <triggers> } <effects> }
+Supported Scopes: region
+Supported Targets: province
+
+--------------------
+
+random_governor_state - Iterate through all states a governor is governor of
+random_governor_state = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: character
+Supported Targets: state
+
+--------------------
+
+ordered_successor - Iterate through all successors in a country
+ordered_successor = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: country
+Supported Targets: character
+
+--------------------
+
+remove_as_mercenary - Character stops being a Mercenary
+Supported Scopes: character
+
+--------------------
+
+remove_command - Removes command from a character
+Supported Scopes: character
+
+--------------------
+
+every_pops_in_province - Iterate through all pops in a province
+every_pops_in_province = { limit = { <triggers> } <effects> }
+Supported Scopes: province
+Supported Targets: pop
+
+--------------------
+
+set_controller - makes the currrent province controlled by the target country, if province owner and target are at war
+Supported Scopes: province
+Supported Targets: country
+
+--------------------
+
+add_country_modifier - adds a modifier from a country
+Supported Scopes: country
+
+--------------------
+
+move_pop - moves the pop to target province.
+Supported Scopes: pop
+Supported Targets: province
+
+--------------------
+
+every_in_local_list - Iterate through all items in local list. list = name or variable = name
+every_in_local_list = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+
+--------------------
+
+remove_unit_modifier - Removes a modifier from a Unit
+Supported Scopes: unit
+
+--------------------
+
+add_research - adds research for a country { technology = table value = percent(0-100) }
+Supported Scopes: country
+
+--------------------
+
+every_family - Iterate through all families in a country
+every_family = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: family
+
+--------------------
+
+add_centralization - gives (or takes) centralization to a country
+Supported Scopes: country
+
+--------------------
+
+add_legitimacy - gives (or takes) Legitimacy to a country
+Supported Scopes: country
+
+--------------------
+
+every_subject - Iterate through all subject countries
+every_subject = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+trigger_event - triggers an event or on_action
+trigger_event = { id = X days/months/years = Y } (for events)
+or
+trigger_event = { on_action = X days/months/years = Y } (for on_actions)
+Days/months/years are optional and equal to 0 if not specified. If specified, Y can be a value or an inclusive interval "{ A B }" from which the duration will be picked randomly.
+Supported Scopes: none
+
+--------------------
+
+add_health - adds or subtracts health from a character
+Supported Scopes: character
+
+--------------------
+
+debug_log - Log a string to the debug log when this effect executes, debug_log = message, the message can be a localization string with ROOT, SCOPE and PREV available
+Supported Scopes: none
+
+--------------------
+
+set_country_religion - Sets religion for a country
+Supported Scopes: country
+
+--------------------
+
+every_neighbour_country - Iterate through all neighbour countries
+every_neighbour_country = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: country
+
+--------------------
+
+add_war_exhaustion - gives (or takes) war exhaustion to a country
+Supported Scopes: country
+
+--------------------
+
+custom_tooltip - just a tooltip, the scope as subject (for grouping, localization)
+Supported Scopes: none
+
+--------------------
+
+add_road_towards - adds a road towards the target
+Supported Scopes: province
+Supported Targets: province
+
+--------------------
+
+set_family - Sets the Family of the character
+Supported Scopes: character
+
+--------------------
+
+remove_list_variable - Removes the target from a variable list
+remove_list_variable = { name = X target = Y }
+Where X is the name of the variable
+Where Y is an event target
+Supported Scopes: none
+
+--------------------
+
+ordered_pops_in_province - Iterate through all pops in a province
+ordered_pops_in_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: province
+Supported Targets: pop
+
+--------------------
+
+ordered_region_province - Iterate through all provinces in a region
+ordered_region_province = { limit = { <triggers> } order_by = script_value position = int/min = int max = script_value <effects> }
+Supported Scopes: region
+Supported Targets: province
+
+--------------------
+
+random_unit_in_province - Iterate through all units in a province
+random_unit_in_province = { limit = { <triggers> } (optional) weight = { mtth } <effects> }
+Supported Scopes: province
+Supported Targets: unit
+
+--------------------
+
+save_temporary_scope_as - Saves the current scope as an arbitrarily-named temporary target to be referenced later in the same effect
+save_temporary_event_target_as = <string>
+Supported Scopes: none
+
+--------------------
+
+remove_character_modifier - Removes a modifier from a Character
+Supported Scopes: character
+
+--------------------
+
+add_to_global_variable_list - Adds the event target to a variable list
+add_to_variable_list = { name = X target = Y }
+Where X is the name of the variable
+Where Y is an event target
+Supported Scopes: none
+
+--------------------
+
+add_unit_modifier - adds a modifier from a Unit
+Supported Scopes: unit
+
+--------------------
+
+define_pop - sets up a pop culture/religion/type possible to set.
+Supported Scopes: province
+
+--------------------
+
+add_zeal - Adds zeal skill
+Supported Scopes: none
+
+--------------------
+
+every_ownable_province - Iterate through all ownable provinces in the world
+every_ownable_province = { limit = { <triggers> } <effects> }
+Supported Scopes: none
+Supported Targets: province
+
+--------------------
+
+create_family - creates a family for the target character
+Supported Scopes: country
+Supported Targets: character

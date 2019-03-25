@@ -21,7 +21,7 @@ module DocsParser =
     let private scopesC = manyTill scope (skipString "Supported Targets:" .>> skipManySatisfy (fun c -> c = ' ')) <?> "scopes"
     let private target = many1Satisfy isvaluechar .>> many (skipChar ' ') <?> "target"
     let private targets = manyTill target newline .>> SharedParsers.ws <?> "targets"
-    let private doc =  pipe4 name (attempt usage <|> usageC)  (attempt scopes <|> scopesC)  targets (fun (n, d) u s t  -> {name = n; desc = d; usage = u; scopes = s; targets = t}) <?> "doc"
+    let private doc =  pipe4 name (attempt usage <|> usageC)  (attempt scopes <|> scopesC)  targets (fun (n, d) u s t  -> {name = n; desc = d; traits = None; usage = u; scopes = s; targets = t}) <?> "doc"
     let private footer = skipString "=================" .>> SharedParsers.ws
     let private docFile = SharedParsers.ws >>. header >>. many doc //.>> footer
 
@@ -59,12 +59,21 @@ module JominiParser =
     let private tname = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>> SharedParsers.ws <?> "name"
     let private endOfDesc = newline >>. (pstring "Supported Scopes:" <|> pstring "Supported Targets:" <|> pstring "Traits:")
     let private desc = (many1CharsTill anyChar (followedBy endOfDesc)) .>> SharedParsers.ws <?> "desc"
-    let private trigger = pipe5 tname desc (opt traits) (opt supportedscopes) (opt supportedtargets) (fun n d _ s t -> {name = n; desc = d; usage = ""; scopes = s |> Option.defaultValue []; targets = t |> Option.defaultValue []})
+    let private trigger = pipe5 tname desc (opt traits) (opt supportedscopes) (opt supportedtargets) (fun n d tr s t -> {name = n; desc = d; traits = tr; usage = ""; scopes = s |> Option.defaultValue []; targets = t |> Option.defaultValue []})
 
     let private triggerFile = SharedParsers.ws >>. triggerheader >>. many1 (attempt (spacer >>. trigger)) .>> eof
     let private effectFile = SharedParsers.ws >>. effectheader >>. many1 (attempt (spacer >>. trigger)) .>> eof
 
     let parseTriggerFile filepath = runParserOnFile triggerFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseTriggerFilesRes filepath = parseTriggerFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
+    let parseTriggerStream file = runParserOnStream triggerFile () "triggerFile" file (System.Text.Encoding.GetEncoding(1252))
+
     let parseEffectFile filepath = runParserOnFile effectFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseEffectFilesRes filepath = parseEffectFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
+    let parseEffectStream file = runParserOnStream effectFile () "effectFile" file (System.Text.Encoding.GetEncoding(1252))
+
+    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect<'a>(x, effectType, parseScopes)
+
+    let processEffects parseScopes e = e |> List.map (toDocEffect EffectType.Effect parseScopes)
+    let processTriggers parseScopes (t : RawEffect list) =
+        t |> List.map (fun t -> if t.traits.IsSome && t.traits.Value.Contains "<, <=, =, !=, >, >=" then toDocEffect EffectType.ValueTrigger parseScopes t else toDocEffect EffectType.Trigger parseScopes t)

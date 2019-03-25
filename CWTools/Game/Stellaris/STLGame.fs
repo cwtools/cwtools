@@ -221,7 +221,7 @@ type STLGame (settings : StellarisSettings) =
         heavyExperimentalValidators = [getEventChains, "event chains"]
         experimental = settings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-        lookupValidators = [validateModifierBlocks, "mod blocks"; valAllModifiers, "mods"]
+        lookupValidators = [valAllModifiers, "mods"]
         useRules = settings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
         localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valTraditionLocCats
@@ -280,18 +280,18 @@ type STLGame (settings : StellarisSettings) =
             let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/"))
             tech
 
-        let scopesAtPosSTL pos file text =
-            let resource = makeEntityResourceInput fileManager file text
-            match game.ResourceManager.ManualProcessResource resource, game.InfoService with
-            |Some e, Some info ->
-                // match info.GetInfo(pos, e) with
-                match (info.GetInfo)(pos, e) with
-                |Some (ctx, _) when ctx <> { Root = Scope.Any; From = []; Scopes = [] } ->
-                    Some (ctx)
-                |_ ->
-                    getScopeContextAtPos pos lookup.triggers lookup.effects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
-            |Some e, _ -> getScopeContextAtPos pos lookup.triggers lookup.effects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
-            |_ -> None
+        // let scopesAtPosSTL pos file text =
+        //     let resource = makeEntityResourceInput fileManager file text
+        //     match game.ResourceManager.ManualProcessResource resource, game.InfoService with
+        //     |Some e, Some info ->
+        //         // match info.GetInfo(pos, e) with
+        //         match (info.GetInfo)(pos, e) with
+        //         |Some (ctx, _) when ctx <> { Root = Scope.Any; From = []; Scopes = [] } ->
+        //             Some (ctx)
+        //         |_ ->
+        //             getScopeContextAtPos pos lookup.triggers lookup.effects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
+        //     |Some e, _ -> getScopeContextAtPos pos lookup.triggers lookup.effects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
+        //     |_ -> None
 
 
         interface IGame<STLComputedData, Scope, Modifier> with
@@ -332,9 +332,9 @@ type STLGame (settings : StellarisSettings) =
             member __.AllEntities() = resources.AllEntities()
             member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
-            member __.ScopesAtPos pos file text =
-                scopesAtPosSTL pos file text
-                |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
+            member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
+                // scopesAtPosSTL pos file text
+                // |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
             member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
             member __.InfoAtPos pos file text = game.InfoAtPos pos file text

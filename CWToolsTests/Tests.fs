@@ -229,12 +229,15 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
                 errors, testVals
             else
+                let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
+                let effects = JominiParser.parseEffectFilesRes "./testfiles/configtests/rulestests/IR/effects.log" |> CWTools.Parser.JominiParser.processEffects IRConstants.parseScopes
+                eprintfn "testtest %A" triggers
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks IRConstants.Scope.Any IRConstants.parseScope IRConstants.allScopes fn ft)
                                     |> Option.defaultValue (IRScopes.scopedEffects |> List.map SimpleLink)
                 let settings = emptyImperatorSettings folder
-                let settings = { settings with embedded = { settings.embedded with triggers = []; effects = []; modifiers = []; eventTargetLinks = eventTargetLinks };
+                let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = []; eventTargetLinks = eventTargetLinks };
                                                     rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, IRConstants.Scope, IRConstants.Modifier>
                 let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
@@ -284,7 +287,7 @@ let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false
 [<Tests>]
 let stlSubfolderTests = testList "validation stl" (testSubdirectories true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
 [<Tests>]
-let irSubfolderTests = testList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
+let irSubfolderTests = ftestList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
 
 let testConfigFolder folder testsname config configfile (culture : string) =
     testList (testsname + culture) [
