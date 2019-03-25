@@ -22,6 +22,7 @@ type RawEffect =
         usage : string
         scopes : string list
         targets : string list
+        traits : string option
     }
 
 type Severity =

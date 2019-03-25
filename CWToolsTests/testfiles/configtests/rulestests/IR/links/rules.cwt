@@ -1,0 +1,41 @@
+types = {
+    type[ship_size] = {
+        path = "game/common/ship_sizes"
+        subtype[sb_one] = {
+            ## cardinality = 0..1
+            blessing = no
+        }
+        subtype[sb_two] = {
+            blessing = yes
+        }
+    }
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    ## cardinality = 0..inf
+    subtype_one = <ship_size.sb_one>
+    ## cardinality = 0..inf
+    subtype_two = <ship_size.sb_two>
+    ## cardinality = 0..inf
+    subtype_both = <ship_size>
+
+    ## cardinality = 0..inf
+    test_ship = scope[ship]
+    ## cardinality = 0..inf
+    scope_field = {
+
+    }
+
+    ## cardinality = 0..inf
+    set_test_value = value_set[link_test_value]
+}
+
+enums = {
+    enum[link_test_enum] = {
+        enum_one
+        enum_two
+    }
+}

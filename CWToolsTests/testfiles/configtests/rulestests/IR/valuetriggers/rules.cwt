@@ -1,0 +1,13 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+##replace_scopes = { THIS = province ROOT = province }
+event = {
+    ## cardinality = 1..inf
+    test_value_trigger = value_field
+}
+
+alias[trigger:citizen_happiness] = int

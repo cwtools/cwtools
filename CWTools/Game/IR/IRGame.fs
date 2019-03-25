@@ -77,33 +77,53 @@ module IRGameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
+    let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+        let vanillaTriggers =
+            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
+            se @ vt
+        // let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
+        // game.Lookup.triggers <- sts @ ts
+        // game.Lookup.onlyScriptedTriggers <- sts
+        vanillaTriggers
 
     let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
-        let effects =
-            rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
-        let ruleToEffect(r,o) =
-            let name =
-                match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
+        let vanillaEffects =
+            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
+            se @ ve
+        // let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
+        // game.Lookup.effects <- ses @ es
+        // game.Lookup.onlyScriptedEffects <- ses
+        vanillaEffects
 
-    let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
-        let effects =
-            rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
-        let ruleToTrigger(r,o) =
-            let name =
-                match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        let test = ScopedEffect("test_value_trigger", allScopes, Scope.NoneScope, EffectType.Trigger, "", "", false, true) :> Effect
-        // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
+
+    // let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    //     let effects =
+    //         rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
+    //     let ruleToEffect(r,o) =
+    //         let name =
+    //             match r with
+    //             |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+    //             |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+    //             |_ -> ""
+    //         DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
+    //     // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
+    //     (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
+
+    // let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    //     let effects =
+    //         rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
+    //     let ruleToTrigger(r,o) =
+    //         let name =
+    //             match r with
+    //             |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+    //             |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+    //             |_ -> ""
+    //         DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+    //     let test = ScopedEffect("test_value_trigger", allScopes, Scope.NoneScope, EffectType.Trigger, "", "", false, true) :> Effect
+    //     // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
+    //     test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =
@@ -128,6 +148,7 @@ module IRGameFunctions =
         let es = updateScriptedEffects lookup rules embedded
         let ls = updateEventTargetLinks embedded
         lookup.allCoreLinks <- ts @ es @ ls
+        // eprintfn "crh %A" ts
         rules @ addModifiersWithScopes lookup
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
