@@ -37,6 +37,7 @@ module IRConstants =
             | CultureGroup -> "Culture group"
             | InvalidScope -> "InvalidScope"
             | NoneScope -> "None"
+            | _ -> sprintf "%A" x
 
         static member AnyScope = Scope.Any
 

@@ -131,10 +131,10 @@ open System
 open System.IO
 open System.Security.Cryptography
 
+open CWTools.Common
 open CWTools.Parser
 open FParsec
 
-// let triggers, effects = DocsParser.parseDocsFilesRes @"C:\Users\Thomas\git\cwtools\CWToolsTests\testfiles\validationtests\trigger_docs_2.1.0.txt"
 let triggers = JominiParser.parseTriggerFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/triggers.log"
 let effects = JominiParser.parseEffectFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/effects.log"
 
@@ -192,8 +192,9 @@ let tinner =
 	alias_name[trigger] = alias_match_left[trigger]
 }
 """
-let tout =
-    triggers |> List.map (fun t ->
+let anytriggers = triggers |> List.filter (fun (t : RawEffect) -> t.name.StartsWith("any_"))
+let othertriggers = triggers |> List.filter (fun (t : RawEffect) -> t.name.StartsWith("any_") |> not)
+let tout =  (fun (t : RawEffect) ->
                         let scopes =
                             match t.scopes with
                             | [] -> ""
@@ -205,29 +206,39 @@ let tout =
                         let any = t.name.StartsWith("any_")
                         let rhs = if any then anytemplate else "replace_me"
                         let desc = t.desc.Replace("\n", " ")
-                        sprintf "###%s\n%salias[trigger:%s] = %s\n\r" desc scopes t.name rhs)
-                |> String.concat("")
+                        // sprintf "###%s\n%salias[trigger:%s] = %s\n\r" desc scopes t.name rhs)
+                        sprintf "###%s\nalias[trigger:%s] = %s\n\r" desc t.name rhs)
+let atout = anytriggers |> List.map tout |> String.concat("")
+let otout = othertriggers |> List.map tout |> String.concat("")
+                // |> String.concat("")
 
+let filterfun (s : string) = if s.StartsWith "every_" || s.StartsWith "random_" || s.StartsWith "ordered_" then true else false
 
-let eout =
-    effects |> List.map (fun t ->
-                        let scopes =
-                            match t.scopes with
-                            | [] -> ""
-                            | [x] -> "## scopes = " + x + "\n"
-                            | xs ->
-                                let scopes = xs |> List.map (fun s -> s.ToString()) |> String.concat " "
-                                "## scopes = { " + scopes + " }\n"
-                        let scopes = if tscope then scopes else ""
-                        let rhs =
-                            match t.name with
-                            | x when x.StartsWith "every_" -> everytemplate
-                            | x when x.StartsWith "random_" -> randomtemplate
-                            | x when x.StartsWith "ordered_" -> orderedtemplate
-                            | _ -> "replace_me"
-                        let desc = t.desc.Replace("\n", " ")
-                        sprintf "###%s\n%salias[effect:%s] = %s\n\r" desc scopes t.name rhs)
-                |> String.concat("")
+let itereffects = effects |> List.filter (fun (e : RawEffect) -> filterfun e.name)
+let othereffects = effects |> List.filter (fun (e : RawEffect) -> filterfun e.name |> not)
+let efun = (fun (t : RawEffect) ->
+        let scopes =
+            match t.scopes with
+            | [] -> ""
+            | [x] -> "## scopes = " + x + "\n"
+            | xs ->
+                let scopes = xs |> List.map (fun s -> s.ToString()) |> String.concat " "
+                "## scopes = { " + scopes + " }\n"
+        let scopes = if tscope then scopes else ""
+        let rhs =
+            match t.name with
+            | x when x.StartsWith "every_" -> everytemplate
+            | x when x.StartsWith "random_" -> randomtemplate
+            | x when x.StartsWith "ordered_" -> orderedtemplate
+            | _ -> "replace_me"
+        let desc = t.desc.Replace("\n", " ")
+        // sprintf "###%s\n%salias[effect:%s] = %s\n\r" desc scopes t.name rhs)
+        sprintf "###%s\nalias[effect:%s] = %s\n\r" desc t.name rhs)
+                // |> String.concat("")
+let ieout = itereffects |> List.map efun |> String.concat("")
+let oeout = othereffects |> List.map efun |> String.concat("")
 
-File.WriteAllText("triggers.cwt", tout)
-File.WriteAllText("effects.cwt", eout)
+File.WriteAllText("triggers.cwt", otout)
+File.WriteAllText("list_triggers.cwt", atout)
+File.WriteAllText("effects.cwt", oeout)
+File.WriteAllText("list_effects.cwt", ieout)
