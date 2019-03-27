@@ -18,6 +18,5 @@
     <None Include="App.config" />
     <EmbeddedResource Include="../CWTools/files/**" />
   </ItemGroup>
-  <Import Project="fsc.props" />
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

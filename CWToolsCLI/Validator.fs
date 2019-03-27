@@ -47,7 +47,7 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false }
+            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
             embedded = {
                 triggers = triggers
                 effects = effects
@@ -55,6 +55,7 @@ module Validator =
                 embeddedFiles = []
                 cachedResourceData = []
                 localisationCommands = []
+                eventTargetLinks = []
             }
             scriptFolders = None
             excludeGlobPatterns = None
@@ -68,7 +69,7 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false }
+            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
             embedded = {
                 modifiers = []
                 embeddedFiles = []
@@ -76,6 +77,7 @@ module Validator =
                 triggers = []
                 effects = []
                 localisationCommands = []
+                eventTargetLinks = []
             }
             scriptFolders = None
             excludeGlobPatterns = None
@@ -86,7 +88,9 @@ module Validator =
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
         member __.validationErrorList() = game.ValidationErrors() |> List.map (fun (s,c,n,l,e, _) -> {category = s.GetType().Name ; error = e; position = n.ToString(); severity = c})
-        member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
+        member __.allFileList =
+            game.AllFiles()
+                |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
         member val scriptedTriggerList = game.ScriptedTriggers
         member val scriptedEffectList = game.ScriptedEffects
         member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun (s,c,n,l,e,_) -> {category = s.GetType().Name ; error = e; position = n.ToString(); severity = c})
@@ -105,7 +109,7 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false }
+            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
             embedded = {
                 triggers = triggers
                 effects = effects
@@ -113,8 +117,10 @@ module Validator =
                 embeddedFiles = cachedFiles
                 cachedResourceData = cached
                 localisationCommands = []
+                eventTargetLinks = []
             }
             scriptFolders = None
+            excludeGlobPatterns = None
         }
         let HOI4options : HOI4Settings = {
             rootDirectory = dir
@@ -125,7 +131,7 @@ module Validator =
                 experimental = true
                 langs = langs
             }
-            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false }
+            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
             embedded = {
                 modifiers = []
                 embeddedFiles = cachedFiles
@@ -133,8 +139,11 @@ module Validator =
                 triggers = []
                 effects = []
                 localisationCommands = []
+                eventTargetLinks = []
             }
             scriptFolders = Some HOI4Constants.scriptFolders
+            excludeGlobPatterns = None
+
         }
         let game =
             match game with
