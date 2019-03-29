@@ -10,6 +10,22 @@ module rec Types =
         static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
         static member Conv(pos : FParsec.Position) = Position (pos)
         static member UnConv(pos : Position) = let (Position p) = pos in p
+    type Operator =
+    | Equals = 0uy
+    | GreaterThan = 1uy
+    | LessThan = 2uy
+    | GreaterThanOrEqual = 3uy
+    | LessThanOrEqual = 4uy
+    | NotEqual = 5uy
+    let operatorToString =
+            function
+            | Operator.Equals -> "="
+            | Operator.GreaterThan -> ">"
+            | Operator.LessThan -> "<"
+            | Operator.GreaterThanOrEqual -> ">="
+            | Operator.LessThanOrEqual -> "<="
+            | Operator.NotEqual -> "!="
+            | x -> failwith (sprintf "Unknown enum value %A" x)
     [<Struct>]
     type Key =
         | Key of string
@@ -29,8 +45,8 @@ module rec Types =
         inner
     [<Struct>]
     type KeyValueItem =
-        | KeyValueItem of Key * Value
-        override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
+        | KeyValueItem of Key * Value * Operator
+        override x.ToString() = let (KeyValueItem (id, v, op)) = x in sprintf "%O %s %O" id (operatorToString op) v
     and Value =
         | String of string
         | QString of string

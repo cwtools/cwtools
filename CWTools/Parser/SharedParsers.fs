@@ -71,7 +71,17 @@ module internal SharedParsers =
 
     // Base types
     // =======
-    let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
+    let oppLTE = skipString "<=" |>> (fun _ -> Operator.LessThanOrEqual)
+    let oppGTE = skipString ">=" |>> (fun _ -> Operator.GreaterThanOrEqual)
+    let oppNE = skipString "!=" |>> (fun _ -> Operator.NotEqual)
+    let oppLT = skipChar '<' |>> (fun _ -> Operator.LessThan)
+    let oppGT = skipChar '>' |>> (fun _ -> Operator.GreaterThan)
+    let oppE = skipChar '=' |>> (fun _ -> Operator.Equals)
+
+    let operator = choiceL [oppLTE; oppGTE; oppNE; oppLT; oppGT; oppE] "operator"
+
+    // let opp = new OperatorPrecedenceParser<float,unit,unit>()
+    // let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
     let operatorLookahead = choice [chSkip '='; chSkip '>'; chSkip '<'] <?> "operator 1"
     let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
 
@@ -158,7 +168,7 @@ module internal SharedParsers =
 
 
     valueimpl := valueCustom <?> "value"
-    keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
+    keyvalueimpl := pipe5 (getPosition) (keyQ <|> key) (operator) (value) (getPosition .>> ws) (fun start id op value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> ( ParsedFile f ))
     let valuelist = many1 ((comment |>> Comment) <|> (leafValue |>> (fun (a,b) -> Value(a, b)))) .>> eof
     let statementlist = (many statement) .>> eof

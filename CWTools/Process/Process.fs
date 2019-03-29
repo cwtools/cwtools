@@ -38,6 +38,7 @@ type Leaf =
     val mutable private _valueId : StringTokens
     val mutable private _value : Value
     val mutable Position : range
+    val mutable Operator : Operator
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal)
@@ -48,18 +49,20 @@ type Leaf =
         with get () = this._value
         and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
     member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
-    member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
-    new(key : string, value : Value, pos : range) =
+    member this.ToRaw = KeyValueItem(Key(this.Key), this.Value, this.Operator)
+    new(key : string, value : Value, pos : range, op : Operator) =
         {
             KeyId = StringResource.stringManager.InternIdentifierToken(key);
             _valueId = StringResource.stringManager.InternIdentifierToken(value.ToRawString())
             _value = value;
-            Position = pos
+            Position = pos;
+            Operator = op
             }
     //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
     new(keyvalueitem : KeyValueItem, ?pos : range) =
-        let (KeyValueItem (Key(key), value)) = keyvalueitem
-        Leaf(key, value, pos |> Option.defaultValue range.Zero)
+        let (KeyValueItem (Key(key), value, op)) = keyvalueitem
+        Leaf(key, value, pos |> Option.defaultValue range.Zero, op)
+
     static member Create key value = LeafC(Leaf(key, value))
     interface IKeyPos with
         member this.Key = this.Key
@@ -127,7 +130,7 @@ and Node (key : string, pos : range) =
 
     member this.ToRaw : Statement list = this.All |>
                                          List.map (function
-                                           |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw)))
+                                           |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))
                                            |LeafValueC lv -> lv.ToRaw
                                            |LeafC l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
                                            |CommentC c -> (Comment c))
@@ -177,7 +180,7 @@ module ProcessCore =
         and processNodeInner (c : LookupContext) (node : Node) statement =
             //log "%A" node.Key
             match statement with
-            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> lookup k pos c sl
+            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl), _))) -> lookup k pos c sl
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
             | Comment(c) -> CommentC c
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
