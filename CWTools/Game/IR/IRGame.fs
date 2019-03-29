@@ -73,7 +73,7 @@ module IRGameFunctions =
                 modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
                                     |> List.map Set.ofList
                                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes}
+            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
@@ -142,6 +142,14 @@ module IRGameFunctions =
             let provinces = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.IRprovinces <- provinces
 
+    let addScriptFormulaLinks (lookup : Lookup<'S,'M>) =
+        match lookup.typeDefInfo |> Map.tryFind "script_value" with
+        | Some vs ->
+            let values = vs |> List.map fst
+            values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
+        | None -> []
+
+
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
         let ts = updateScriptedTriggers lookup rules embedded
@@ -162,7 +170,7 @@ module IRGameFunctions =
         lookup.typeDefInfoRaw <-
             (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ addScriptFormulaLinks lookup @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings

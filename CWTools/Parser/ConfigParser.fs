@@ -48,6 +48,7 @@ module rec ConfigParser =
     | VariableSetField of string
     | VariableGetField of string
     | VariableField of isInt : bool * minmax : (float * float)
+    | ValueScopeMarkerField of isInt : bool * minmax : (float * float)
     | ValueScopeField of isInt : bool * minmax : (float * float)
     let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
     type Options<'a> = {
@@ -59,6 +60,7 @@ module rec ConfigParser =
         replaceScopes : ReplaceScopes<'a> option
         severity : Severity option
         requiredScopes : 'a list
+        comparison : bool
     }
     type RuleType<'a> =
     |NodeRule of left : NewField<'a> * rules : NewRule<'a> list
@@ -149,7 +151,7 @@ module rec ConfigParser =
         |"information" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
     let requiredMany<'a> = { defaultOptions with min = 1; max = 100 }
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
@@ -248,7 +250,7 @@ module rec ConfigParser =
         | None -> None
 
 
-    let getOptionsFromComments (parseScope) (allScopes) (anyScope) (comments : string list) =
+    let getOptionsFromComments (parseScope) (allScopes) (anyScope) (operator : Operator) (comments : string list) =
         let min, max =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             | Some c ->
@@ -280,7 +282,8 @@ module rec ConfigParser =
             match comments |> List.tryFind (fun s -> s.Contains("severity")) with
             | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseSeverity |> Some
             | None -> None
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope }
+        let comparison = operator = Operator.EqualEqual
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison }
 
     let processKey parseScope anyScope =
         function
@@ -334,16 +337,16 @@ module rec ConfigParser =
             match getIntSettingFromString x with
             | Some (min, max) -> VariableField (true,(float min,float max))
             | None -> VariableField (true,(float Int32.MinValue, float Int32.MaxValue))
-        | "value_field" -> ValueScopeField (false, (-1E+12, 1E+12))
+        | "value_field" -> ValueScopeMarkerField (false, (-1E+12, 1E+12))
         | x when x.StartsWith "value_field[" ->
             match getFloatSettingFromString x with
-            | Some (min, max) -> ValueScopeField (false,(min, max))
-            | None -> ValueScopeField (false,(-1E+12, 1E+12))
-        | "int_value_field" -> ValueScopeField (true, (float Int32.MinValue, float Int32.MaxValue))
+            | Some (min, max) -> ValueScopeMarkerField (false,(min, max))
+            | None -> ValueScopeMarkerField (false,(-1E+12, 1E+12))
+        | "int_value_field" -> ValueScopeMarkerField (true, (float Int32.MinValue, float Int32.MaxValue))
         | x when x.StartsWith "int_value_field[" ->
             match getIntSettingFromString x with
-            | Some (min, max) -> ValueScopeField (true,(float min,float max))
-            | None -> ValueScopeField (true,(float Int32.MinValue, float Int32.MaxValue))
+            | Some (min, max) -> ValueScopeMarkerField (true,(float min,float max))
+            | None -> ValueScopeMarkerField (true,(float Int32.MinValue, float Int32.MaxValue))
         | x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             | Some variable ->
@@ -383,7 +386,7 @@ module rec ConfigParser =
 
     let configNode (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope comments
+        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         let rule =
             match key with
@@ -439,7 +442,7 @@ module rec ConfigParser =
 
     let configRootNode (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope comments
+        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         match node.Key with
         |x when x.StartsWith "alias[" ->
@@ -460,12 +463,12 @@ module rec ConfigParser =
         |x ->
             TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = [] }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
 
     let configLeaf (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
-        let options = getOptionsFromComments parseScope allScopes anyScope comments
+        let options = getOptionsFromComments parseScope allScopes anyScope (leaf.Operator) comments
         let rightkey = leaf.Value.ToString()
         match rightkey with
         |x when x.StartsWith("colour[") ->
@@ -487,7 +490,7 @@ module rec ConfigParser =
             // |x when x.StartsWith "<" && x.EndsWith ">" ->
             //     TypeField (x.Trim([|'<'; '>'|]))
             // |x -> ValueField (ValueType.Enum x)
-        let options = { getOptionsFromComments parseScope allScopes anyScope comments with leafvalue = true }
+        let options = { getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments with leafvalue = true }
         NewRule(LeafValueRule(field), options)
 
     // Types
@@ -677,6 +680,7 @@ module rec ConfigParser =
         let rec cataRule rule : NewRule<_> =
             match rule with
             | (NodeRule (l, r), o) -> (NodeRule (l, r |> List.map cataRule), o)
+            | (SubtypeRule (a, b, i), o) -> (SubtypeRule(a, b, (i |> List.map cataRule)), o)
             | (LeafRule (l, SingleAliasField name), o) ->
                 match singlealiases |> Map.tryFind name with
                 | Some (LeafRule (al, ar), ao) ->
@@ -696,10 +700,42 @@ module rec ConfigParser =
             | SingleAliasRule (name, rule) -> SingleAliasRule(name, cataRule rule)
         rules |> List.map rulesMapper
 
+    let replaceValueMarkerFields (rules : RootRule<_> list) =
+        let rec cataRule rule : NewRule<_> list =
+            match rule with
+            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when not o.comparison ->
+                [
+                    LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
+                    LeafRule(ValueScopeField(i, m), SingleAliasField("formula")), o
+                    LeafRule(ValueScopeField(i, m), SingleAliasField("range")), o
+                ]
+            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when o.comparison ->
+                [
+                    LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
+                ]
+            | LeafRule (l, ValueScopeMarkerField (i2,m2)), o when not o.comparison ->
+                [
+                    LeafRule(l, ValueScopeField(i2, m2)), o
+                    LeafRule(l, SingleAliasField("formula")), o
+                    LeafRule(l, SingleAliasField("range")), o
+                ]
+            | LeafRule (ValueScopeMarkerField (i,m), r), o ->
+                [LeafRule(ValueScopeField(i, m), r), o]
+            | NodeRule (ValueScopeMarkerField (i,m), r), o ->
+                [NodeRule(ValueScopeField(i, m), r |> List.collect cataRule), o]
+            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | _ -> [rule]
+        let rulesMapper =
+            function
+            | TypeRule (name, rule) -> cataRule rule |> List.map (fun x -> TypeRule (name, x))
+            | AliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  AliasRule (name, x))
+            | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
+        rules |> List.collect rulesMapper
+
     let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
-        let rules = replaceSingleAliases rules
+        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases
         let types = nodes |> List.choose (processChildType parseScope allScopes anyScope) |> List.collect id
         let enums = nodes |> List.choose processChildEnum |> List.collect id
         let complexenums = nodes |> List.choose processComplexChildEnum |> List.collect id

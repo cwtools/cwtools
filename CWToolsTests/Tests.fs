@@ -287,7 +287,7 @@ let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false
 [<Tests>]
 let stlSubfolderTests = testList "validation stl" (testSubdirectories true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
 [<Tests>]
-let irSubfolderTests = ftestList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
+let irSubfolderTests = testList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
 
 let testConfigFolder folder testsname config configfile (culture : string) =
     testList (testsname + culture) [
