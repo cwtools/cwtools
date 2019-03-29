@@ -133,11 +133,17 @@ module rec Rules =
             | ValueType.Int (min, max) ->
                 match TryParser.parseIntWithDecimal key with
                 | Some i ->  i <= max && i >= min
-                | None -> false
+                | None ->
+                        match enumsMap.TryFind "static_values" with
+                        | Some (_, es) -> es.Contains (trimQuote key)
+                        | None -> false
             | ValueType.Float (min, max) ->
                 match TryParser.parseDouble key with
                 | Some f -> f <= max && f >= min
-                | None -> false
+                | None ->
+                        match enumsMap.TryFind "static_values" with
+                        | Some (_, es) -> es.Contains (trimQuote key)
+                        | None -> false
             | ValueType.Enum e ->
                 match enumsMap.TryFind e with
                 | Some (_, es) -> es.Contains (trimQuote key)
@@ -347,9 +353,9 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
 
-    let checkValueScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
+    let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
         let scope = ctx.scopes
-        let res = changeScope false true linkMap valueTriggerMap varSet key scope
+        // let res = changeScope false true linkMap valueTriggerMap varSet key scope
         // eprintfn "cvsf %A %A %A" res key valueTriggerMap
         match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
         |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
@@ -360,9 +366,12 @@ module rec Rules =
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
-        |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
+        |_, _, NotFound _ ->
+                match enumsMap.TryFind "static_values" with
+                | Some (_, es) -> if es.Contains (trimQuote key) then errors else inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
+                | None -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkValueScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
+    let checkValueScopeFieldNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
         let scope = ctx.scopes
         match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
         |_, Some i, _ -> isInt && min <= float i && max >= float i
@@ -370,6 +379,11 @@ module rec Rules =
         |_, _, VarFound -> true
         |_, _, VarNotFound s -> false
         |_, _, ValueFound -> true
+        |_, _, NotFound ->
+                match enumsMap.TryFind "static_values" with
+                | Some (_, es) -> es.Contains (trimQuote key)
+                | None -> false
+
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
@@ -402,7 +416,7 @@ module rec Rules =
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap p.severity v key leafornode errors
             |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
-            |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
+            |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |_ -> errors
     let checkFieldNE (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
             match field with
@@ -416,7 +430,7 @@ module rec Rules =
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap p.severity v key
             |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
-            |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
+            |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
             |_ -> false
 
