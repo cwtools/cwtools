@@ -138,6 +138,47 @@ open FParsec
 let triggers = JominiParser.parseTriggerFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/triggers.log"
 let effects = JominiParser.parseEffectFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/effects.log"
 
+type Trait =
+| Comparison
+| Bool
+| Date
+| Omen
+| CharacterScope
+| Province
+| Country
+| Religion
+| Culture
+| Diplo
+| Subject
+
+let traitParse (x : string) =
+    match x with
+        | "<, <=, =, !=, >, >="-> Comparison
+        | "yes/no"-> Bool
+        | "<, =, > valid date"-> Date
+        | "class COmenDataBase key"-> Omen
+        | "character scope"-> CharacterScope
+        | "province id/province scope"-> Province
+        | "country tag/country scope"-> Country
+        | "class CReligionDatabase key/religion scope"-> Religion
+        | "culture db key/culture scope"-> Culture
+        | "class CDiplomaticStanceDatabase key"-> Diplo
+        | "class CSubjectTypeDatabase key"-> Subject
+
+let traitToRHS (x : Trait) =
+    match x with
+        | Comparison -> "==", ["replace_me_comparison"]
+        | Bool -> "=", ["replace_me_bool"]
+        | Date -> "==", ["replace_me_date"]
+        | Omen -> "=", ["replace_me_omen"]
+        | CharacterScope -> "=", ["replace_me_character"]
+        | Province -> "=", ["replace_me_province_id"; "replace_me_province_scope"]
+        | Country -> "=", ["replace_me_country_tag"; "replace_me_country_scope"]
+        | Religion -> "=", ["replace_me_religion_tag"; "replace_me_religion_scope"]
+        | Culture -> "=", ["replace_me_culture_tag"; "replace_me_culture_scope"]
+        | Diplo -> "=", ["replace_me_diplo"]
+        | Subject -> "=", ["replace_me_subject_type"]
+
 let tscope = true
 
 let anytemplate =
@@ -204,12 +245,16 @@ let tout =  (fun (t : RawEffect) ->
                                 "## scopes = { " + scopes + " }\n"
                         let scopes = if tscope then scopes else ""
                         let any = t.name.StartsWith("any_")
-                        let rhs = if any then anytemplate else "replace_me"
+                        let traitEq, traitRHSs =  t.traits |> Option.map (traitParse >> traitToRHS) |> Option.defaultValue ("=", ["replace_me"])
+                        let rhs =
+                            if any
+                            then [anytemplate]
+                            else traitRHSs
                         let desc = t.desc.Replace("\n", " ")
                         // sprintf "###%s\n%salias[trigger:%s] = %s\n\r" desc scopes t.name rhs)
-                        sprintf "###%s\nalias[trigger:%s] = %s\n\r" desc t.name rhs)
-let atout = anytriggers |> List.map tout |> String.concat("")
-let otout = othertriggers |> List.map tout |> String.concat("")
+                        rhs |> List.map (fun rhs -> sprintf "###%s\nalias[trigger:%s] %s %s\n\r" desc t.name traitEq rhs))
+let atout = anytriggers |> List.collect tout |> String.concat("")
+let otout = othertriggers |> List.collect tout |> String.concat("")
                 // |> String.concat("")
 
 let filterfun (s : string) = if s.StartsWith "every_" || s.StartsWith "random_" || s.StartsWith "ordered_" then true else false
@@ -242,3 +287,5 @@ File.WriteAllText("triggers.cwt", otout)
 File.WriteAllText("list_triggers.cwt", atout)
 File.WriteAllText("effects.cwt", oeout)
 File.WriteAllText("list_effects.cwt", ieout)
+
+// File.WriteAllText("test.test", triggers |> List.choose (fun t -> t.traits) |> List.distinct |> String.concat("\n"))

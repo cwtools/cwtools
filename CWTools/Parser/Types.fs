@@ -17,6 +17,7 @@ module rec Types =
     | GreaterThanOrEqual = 3uy
     | LessThanOrEqual = 4uy
     | NotEqual = 5uy
+    | EqualEqual = 6uy
     let operatorToString =
             function
             | Operator.Equals -> "="
@@ -25,6 +26,7 @@ module rec Types =
             | Operator.GreaterThanOrEqual -> ">="
             | Operator.LessThanOrEqual -> "<="
             | Operator.NotEqual -> "!="
+            | Operator.EqualEqual -> "=="
             | x -> failwith (sprintf "Unknown enum value %A" x)
     [<Struct>]
     type Key =

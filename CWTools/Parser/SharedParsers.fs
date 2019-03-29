@@ -74,11 +74,12 @@ module internal SharedParsers =
     let oppLTE = skipString "<=" |>> (fun _ -> Operator.LessThanOrEqual)
     let oppGTE = skipString ">=" |>> (fun _ -> Operator.GreaterThanOrEqual)
     let oppNE = skipString "!=" |>> (fun _ -> Operator.NotEqual)
+    let oppEE = skipString "==" |>> (fun _ -> Operator.EqualEqual)
     let oppLT = skipChar '<' |>> (fun _ -> Operator.LessThan)
     let oppGT = skipChar '>' |>> (fun _ -> Operator.GreaterThan)
     let oppE = skipChar '=' |>> (fun _ -> Operator.Equals)
 
-    let operator = choiceL [oppLTE; oppGTE; oppNE; oppLT; oppGT; oppE] "operator"
+    let operator = choiceL [oppLTE; oppGTE; oppNE; oppEE; oppLT; oppGT; oppE] "operator" .>> ws
 
     // let opp = new OperatorPrecedenceParser<float,unit,unit>()
     // let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
