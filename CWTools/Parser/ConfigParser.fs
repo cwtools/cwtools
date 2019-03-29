@@ -719,10 +719,16 @@ module rec ConfigParser =
                     LeafRule(l, SingleAliasField("formula")), o
                     LeafRule(l, SingleAliasField("range")), o
                 ]
+            | LeafRule (l, ValueScopeMarkerField (i2,m2)), o when o.comparison ->
+                [
+                    LeafRule(l, ValueScopeField(i2, m2)), o
+                ]
             | LeafRule (ValueScopeMarkerField (i,m), r), o ->
                 [LeafRule(ValueScopeField(i, m), r), o]
             | NodeRule (ValueScopeMarkerField (i,m), r), o ->
                 [NodeRule(ValueScopeField(i, m), r |> List.collect cataRule), o]
+            | NodeRule (l, r), o ->
+                [NodeRule(l, r |> List.collect cataRule), o]
             | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
             | _ -> [rule]
         let rulesMapper =

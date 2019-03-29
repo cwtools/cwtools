@@ -1,0 +1,25 @@
+types = {
+    type[script_value] = {
+        path = "game/common/script_values"
+        path_strict = yes
+    }
+}
+
+enums = {
+    complex_enum[static_values] = {
+        path = "game/common/script_values"
+        start_from_root = yes
+        name = {
+            enum_name = float
+        }
+    }
+}
+
+single_alias[range] = {
+    ## cardinality = 2..2
+    float
+}
+
+single_alias[formula] = {
+
+}

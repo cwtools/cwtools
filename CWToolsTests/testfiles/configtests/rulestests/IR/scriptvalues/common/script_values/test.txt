@@ -1,0 +1,5 @@
+my_static_value = 5
+
+my_script_value = {
+
+}
