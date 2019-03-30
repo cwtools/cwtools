@@ -172,13 +172,13 @@ module IRGameFunctions =
             |> addModifiersAsTypes lookup
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
-        let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded
+        let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
         lookup.allCoreLinks <- ts @ es @ ls
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_,_>) =
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
-        let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded
+        let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
         lookup.allCoreLinks <- ts @ es @ ls
 
     let afterInit (game : GameObject) =

@@ -42,7 +42,13 @@ module Helpers =
             log (sprintf "Link %s refers to invalid source %s" link.name x)
             []
 
-    let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let private getWildCard (link : EventTargetDataLink<_>) =
+        match link.sourceRuleType.Trim(), link.dataPrefix with
+        | x, Some prefix when x.StartsWith "value[" ->
+            Some (ScopedEffect(prefix, link.inputScopes, (fun _ -> link.outputScope), EffectType.Link, link.description, "", true, [], true, false, true))
+        | _ -> None
+
+    let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) (addWildCardLinks : bool) =
         let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
         let convertLinkToEffects (link : EventTargetDataLink<_>) =
             let typeDefinedKeys = convertSourceRuleType lookup link
@@ -58,5 +64,12 @@ module Helpers =
                         ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.Link, link.description, "", true, false)
                         ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.ValueTrigger, link.description, "", true, false)
                     ]
-            typeDefinedKeys |> List.collect keyToEffect
+            let all = typeDefinedKeys |> List.collect keyToEffect
+            let extra =
+                if addWildCardLinks
+                then getWildCard link
+                else None
+            match extra with
+            | Some e -> e::all
+            | None -> all
         links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect<_>)

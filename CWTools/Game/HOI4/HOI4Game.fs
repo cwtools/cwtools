@@ -141,11 +141,11 @@ module HOI4GameFunctions =
                             |> Option.defaultValue []
         let ts = updateScriptedTriggers lookup.configRules states countries
         let es = updateScriptedEffects lookup.configRules states countries
-        let ls = updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        let ls = updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
         lookup.allCoreLinks <- ts @ es @ ls
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
     let afterInit (game : GameObject) =
         updateModifiers(game)

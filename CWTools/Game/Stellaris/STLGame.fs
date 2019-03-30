@@ -191,10 +191,10 @@ module STLGameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings)
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings)
+        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
     let afterInit (game : GameObject) =
             let ts = updateScriptedTriggers(game)
             game.Lookup.allCoreLinks <- ts @ game.Lookup.effects @ game.Lookup.eventTargetLinks

@@ -119,12 +119,14 @@ module Scopes =
                         // let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
                         let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
                         let valueScopeMatch = valueTriggers.TryFind nextKey |> Option.bind (function | :? Effect<'T> as e -> Some e |_ -> None)
+                        let wildcards = eventTargetLinks.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
+                        let wildcardScopeMatch = wildcards |> List.tryFind (fun l -> nextKey.StartsWith(l.Name, StringComparison.OrdinalIgnoreCase))
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)
                         // if skipEffect then (context, false), NotFound else
                         // eprintfn "vsm %A" valueScopeMatch
-                        match eventTargetLinkMatch, valueScopeMatch with
+                        match eventTargetLinkMatch |> Option.orElse wildcardScopeMatch, valueScopeMatch with
                         | _, Some e ->
                             if last
                             then
