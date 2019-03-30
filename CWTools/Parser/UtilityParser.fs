@@ -14,6 +14,12 @@ module UtilityParser =
             | "", Some child -> child.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.ValueText |> parseScope)
             | _ -> allScopes
         let outputScope = if node.Has "output_scope" then node.TagText "output_scope" |> parseScope else anyScope
+        let dataLinkType =
+            match node.TagText "type" with
+            | "scope" -> DataLinkType.Scope
+            | "value" -> DataLinkType.Value
+            | "both" -> DataLinkType.Both
+            | _ -> DataLinkType.Scope
         match node.TagText "from_data" with
         |"yes" ->
             DataLink {
@@ -23,6 +29,7 @@ module UtilityParser =
                 description = desc
                 dataPrefix = node.TagText "prefix" |> (fun s -> if s = "" then None else Some s)
                 sourceRuleType = node.TagText "data_source"
+                dataLinkType = dataLinkType
             }
         |_ ->
             SimpleLink (ScopedEffect(name, inputScopes, outputScope, EffectType.Link, desc, "", true))

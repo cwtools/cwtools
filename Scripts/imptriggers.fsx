@@ -219,9 +219,16 @@ let randomtemplate =
 let orderedtemplate =
         """{
     ## cardinality = 0..1
-    order_by = value_only
+    limit = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
     ## cardinality = 0..1
-    max = int_field
+    # TODO: Work out what exactly this is restricted to
+    order_by = value_field
+    ## cardinality = 0..1
+    max = int_value_field
+    ## cardinality = 0..1
+    max = int_value_field
     ## cardinality = 0..1
     position = int
     ## cardinality = 0..1

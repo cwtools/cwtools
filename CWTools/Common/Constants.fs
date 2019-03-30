@@ -112,6 +112,7 @@ type IModifier =
 
 type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony
 
+type DataLinkType = |Scope |Value |Both
 type EventTargetDataLink<'S> = {
     name : string
     inputScopes : 'S list
@@ -119,6 +120,7 @@ type EventTargetDataLink<'S> = {
     description : string
     dataPrefix : string option
     sourceRuleType : string
+    dataLinkType : DataLinkType
 }
 
 type EventTargetLink<'S when 'S : comparison> =

@@ -166,14 +166,20 @@ module IRGameFunctions =
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embedded : EmbeddedSettings<_,_>) =
         lookup.typeDefInfoRaw <-
             (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
-        lookup.allCoreLinks <- lookup.triggers @ addScriptFormulaLinks lookup @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+        let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
+        let es = updateScriptedEffects lookup lookup.configRules embedded
+        let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded
+        lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_,_>) =
+        let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
+        let es = updateScriptedEffects lookup lookup.configRules embedded
+        let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded
+        lookup.allCoreLinks <- ts @ es @ ls
 
     let afterInit (game : GameObject) =
         // updateScriptedTriggers()
