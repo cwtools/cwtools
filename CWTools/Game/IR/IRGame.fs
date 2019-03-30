@@ -161,7 +161,7 @@ module IRGameFunctions =
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
         let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
-        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.CK2provinces}
+        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.IRprovinces}
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
