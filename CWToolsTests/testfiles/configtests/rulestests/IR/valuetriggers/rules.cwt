@@ -6,8 +6,9 @@ types = {
 
 ##replace_scopes = { THIS = province ROOT = province }
 event = {
-    ## cardinality = 1..inf
+    ## cardinality = 1..5
     test_value_trigger = value_field
 }
 
+## cardinality = 1..5
 alias[trigger:citizen_happiness] = int

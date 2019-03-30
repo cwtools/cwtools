@@ -29,6 +29,18 @@ module rec ConfigParser =
     | Date
     | CK2DNA
     | CK2DNAProperty
+        override x.ToString() =
+            match x with
+            | Scalar -> "Scalar"
+            | Enum enumc -> sprintf "Enum %s" enumc
+            | Specific valuec -> sprintf "Specific %s" (StringResource.stringManager.GetStringForIDs valuec)
+            | Float (min, max) -> sprintf "Float with min %f and max %f" min max
+            | Bool -> "Bool"
+            | Int (min, max) -> sprintf "Int with min %i and max %i" min max
+            | Percent -> "Percent"
+            | Date -> "Date"
+            | CK2DNA -> "CK2DNA"
+            | CK2DNAProperty -> "CK2DNAProperty"
 
     type TypeType =
     | Simple of string
@@ -50,6 +62,10 @@ module rec ConfigParser =
     | VariableField of isInt : bool * minmax : (float * float)
     | ValueScopeMarkerField of isInt : bool * minmax : (float * float)
     | ValueScopeField of isInt : bool * minmax : (float * float)
+        override x.ToString() =
+            match x with
+            | ValueField vt -> sprintf "NewField %O" vt
+            | _ -> sprintf "NewField %A" x
     let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
     type Options<'a> = {
         min : int
@@ -67,7 +83,14 @@ module rec ConfigParser =
     |LeafRule of left : NewField<'a> * right : NewField<'a>
     |LeafValueRule of right : NewField<'a>
     |SubtypeRule of string * bool * NewRule<'a> list
+        override x.ToString() =
+            match x with
+            | NodeRule (l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
+            | LeafRule (l, r) -> sprintf "LeafRule with Left (%O) and right (%O)" l r
+            | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
+            | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
     type NewRule<'a> = RuleType<'a> * Options<'a>
+        // override x.ToString() = sprintf "Rule (%O) with options (%A)" (x |> fst) (x |> snd)
     // type ObjectType =
     // | Tech
     // | ShipSize
@@ -91,6 +114,11 @@ module rec ConfigParser =
     | AliasRule of string * NewRule<'a>
     | SingleAliasRule of string * NewRule<'a>
     | TypeRule of string * NewRule<'a>
+        override x.ToString() =
+            match x with
+            | AliasRule (n, r) -> sprintf "Alias definition %s (%O)" n r
+            | SingleAliasRule (n, r) -> sprintf "Single alias definition %s (%O)" n r
+            | TypeRule (n, r) -> sprintf "Type rule %s (%O)" n r
     // type EffectRule = Rule // Add scopes
     type ReplaceScopes<'a> = {
         root : 'a option
@@ -374,7 +402,9 @@ module rec ConfigParser =
             | None -> ValueField ValueType.Scalar
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
-        | x -> ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
+        | x ->
+            // eprintfn "ps %s" x
+            ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
 
 
     let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
@@ -741,7 +771,6 @@ module rec ConfigParser =
     let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
-        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases
         let types = nodes |> List.choose (processChildType parseScope allScopes anyScope) |> List.collect id
         let enums = nodes |> List.choose processChildEnum |> List.collect id
         let complexenums = nodes |> List.choose processComplexChildEnum |> List.collect id
@@ -762,7 +791,8 @@ module rec ConfigParser =
         let rules, types, enums, complexenums, values =
             files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope filename fileString)
               |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
-        let rules = replaceSingleAliases rules
+        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases
+        // File.AppendAllText ("test.test", sprintf "%O" rules)
         rules, types, enums, complexenums, values
 
 

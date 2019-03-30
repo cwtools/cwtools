@@ -26,7 +26,8 @@ event = {
     test_ship = scope[ship]
     ## cardinality = 0..inf
     scope_field = {
-
+        ## cardinality = 0..inf
+        set_test_value = value_set[link_test_value]
     }
 
     ## cardinality = 0..inf

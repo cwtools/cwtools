@@ -356,7 +356,6 @@ module rec Rules =
     let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
         let scope = ctx.scopes
         // let res = changeScope false true linkMap valueTriggerMap varSet key scope
-        // eprintfn "cvsf %A %A %A" res key valueTriggerMap
         match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
         |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
@@ -368,7 +367,8 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_, _, NotFound _ ->
                 match enumsMap.TryFind "static_values" with
-                | Some (_, es) -> if es.Contains (trimQuote key) then errors else inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
+                | Some (_, es) ->
+                    if es.Contains (trimQuote key) then errors else inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
                 | None -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
     let checkValueScopeFieldNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
@@ -417,7 +417,7 @@ module rec Rules =
             |VariableGetField v -> checkVariableGetField p.varMap p.severity v key leafornode errors
             |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
-            |_ -> errors
+            |_ -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
     let checkFieldNE (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->

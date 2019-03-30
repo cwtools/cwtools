@@ -32,4 +32,16 @@ event = {
     }
     test_ship = enum_two
 
+
+    ## Test nested value set
+    test:test_value = {
+        set_test_value = nested_value
+    }
+
+    test:nested_value = {
+        set_test_value = nested_value_2
+    }
+
+    test_ship = test:nested_value
+    test_ship = test:nested_value_2
 }

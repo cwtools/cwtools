@@ -1,7 +1,7 @@
 province_event = {
     test_value_trigger = THIS.province_tax_income
     #error
-    test_value_trigger = blah
+    test_value_trigger = blahh
     #error
     THIS.PREV.province_tax_income = {
 
