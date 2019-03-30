@@ -305,9 +305,9 @@ module rec Rules =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then true else false
 
-    let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
+    let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
         let scope = ctx.scopes
-        match changeScope false true linkMap valueTriggerMap varSet key scope with
+        match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
@@ -316,10 +316,10 @@ module rec Rules =
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |ValueFound -> inv (ErrorCodes.CustomError "This is a value, but should be a scope" Severity.Error) leafornode <&&&> errors
         |_ -> errors
-    let checkScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key =
+    let checkScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key =
         // log "scope %s %A"key ctx
         let scope = ctx.scopes
-        match changeScope true true linkMap valueTriggerMap varSet key scope with
+        match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then true else false
         |NotFound _ -> false
@@ -328,10 +328,10 @@ module rec Rules =
         |ValueFound -> false
         |_ -> true
 
-    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
+    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
         let scope = ctx.scopes
 
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
@@ -341,9 +341,9 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
+    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ -> isInt && min <= float i && max >= float i
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
@@ -353,10 +353,10 @@ module rec Rules =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
 
-    let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
+    let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key leafornode errors =
         let scope = ctx.scopes
         // let res = changeScope false true linkMap valueTriggerMap varSet key scope
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
@@ -371,9 +371,9 @@ module rec Rules =
                     if es.Contains (trimQuote key) then errors else inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
                 | None -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkValueScopeFieldNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
+    let checkValueScopeFieldNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) isInt min max key =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap varSet key scope with
+        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ -> isInt && min <= float i && max >= float i
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
@@ -394,6 +394,7 @@ module rec Rules =
             enumsMap : Collections.Map<string, string * StringSet>
             typesMap : Collections.Map<string,StringSet>
             linkMap : Map<string,Effect<'S>,InsensitiveStringComparer>
+            wildcardLinks : ScopedEffect<'S> list
             valueTriggerMap : Map<string,Effect<'S>,InsensitiveStringComparer>
             varSet : StringSet
             localisation : (Lang * Collections.Set<string>) list
@@ -409,28 +410,28 @@ module rec Rules =
             |ValueField vt ->
                 checkValidValue p.enumsMap p.severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap p.severity t key leafornode errors
-            |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx s key leafornode errors
+            |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLang synced key leafornode errors
             |FilepathField -> checkFilepathField p.files key leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap p.severity v key leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
-            |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
+            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
+            |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |_ -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
     let checkFieldNE (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
                 checkValidValueNE p.enumsMap p.severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap p.severity t key
-            |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx s key
+            |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx s key
             |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLang synced key
             |FilepathField -> checkFilepathFieldNE p.files key
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap p.severity v key
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
-            |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.varSet p.changeScope p.anyScope p.ctx isInt min max key
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key
+            |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
             |_ -> false
 
@@ -504,6 +505,7 @@ module rec Rules =
         let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
         //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
         let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
+        let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
 
         // let isValidValue (value : Value) =
         //     let key = value.ToString().Trim([|'"'|])
@@ -616,6 +618,7 @@ module rec Rules =
                 defaultLang = defaultLang
                 ctx = ctx
                 severity = Severity.Error
+                wildcardLinks = wildCardLinks
             }
             let valueFun innerErrors (leaf : Leaf) =
                 let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
@@ -686,6 +689,7 @@ module rec Rules =
                 defaultLang = defaultLang
                 ctx = ctx
                 severity = severity
+                wildcardLinks = wildCardLinks
             }
 
             checkField p rule (leafvalue.ValueId.lower) (leafvalue.ValueText) (leafvalue) errors
@@ -706,6 +710,7 @@ module rec Rules =
                 defaultLang = defaultLang
                 ctx = ctx
                 severity = severity
+                wildcardLinks = wildCardLinks
             }
 
             // let errors = OK
@@ -757,7 +762,7 @@ module rec Rules =
             |ScopeField s ->
                 let scope = newCtx.scopes
                 let key = node.Key
-                match changeScope false true linkMap valueTriggerMap varSet key scope with
+                match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
                 |NewScope (newScopes ,_) ->
                     let newCtx = {newCtx with scopes = newScopes}
                     applyClauseField enforceCardinality options.severity newCtx rules node errors
@@ -847,6 +852,7 @@ module rec Rules =
                                          valueTriggers : Map<string,Effect<'T>,InsensitiveStringComparer>,
                                          ruleApplicator : RuleApplicator<'T>, changeScope, defaultContext, anyScope, defaultLang) =
         let linkMap = links
+        let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
         let valueTriggerMap = valueTriggers
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -1004,6 +1010,7 @@ module rec Rules =
                     defaultLang = defaultLang
                     ctx = ctx
                     severity = Severity.Error
+                    wildcardLinks = wildCardLinks
                 }
 
                 match childMatch, leafMatch, leafValueMatch with
@@ -1075,7 +1082,7 @@ module rec Rules =
                     let scope = newCtx.scopes
                     let key = node.Key
                     let newCtx =
-                        match changeScope false true linkMap valueTriggerMap varSet key scope with
+                        match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
                             // log "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
@@ -1132,6 +1139,7 @@ module rec Rules =
                     defaultLang = defaultLang
                     ctx = ctx
                     severity = Severity.Error
+                    wildcardLinks = wildCardLinks
                 }
 
                 let inner (child : Child) =
@@ -1443,6 +1451,7 @@ module rec Rules =
 
 
         let linkMap = links
+        let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
         let valueTriggerMap = valueTriggers
         let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
 
@@ -1655,6 +1664,7 @@ module rec Rules =
                 defaultLang = defaultLang
                 ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
                 severity = Severity.Error
+                wildcardLinks = wildCardLinks
             }
 
             let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option) list) (scopeContext) =

@@ -44,4 +44,9 @@ event = {
 
     test_ship = test:nested_value
     test_ship = test:nested_value_2
+
+    #error
+    test: = {
+
+    }
 }
