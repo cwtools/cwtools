@@ -75,6 +75,7 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val CK2LandedTitles : Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
     member val CK2provinces : string list = [] with get, set
     member val IRprovinces : string list = [] with get, set
+    member val IRcharacters : string list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<'S>>) list = [] with get, set

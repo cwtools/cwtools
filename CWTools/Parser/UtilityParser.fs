@@ -33,7 +33,7 @@ module UtilityParser =
             }
         |_ ->
             let effectType = if dataLinkType = DataLinkType.Value then EffectType.ValueTrigger else EffectType.Link
-            SimpleLink (ScopedEffect(name, inputScopes, outputScope, effectType, desc, "", true))
+            SimpleLink (ScopedEffect(name, inputScopes, Some outputScope, effectType, desc, "", true))
 
     let loadEventTargetLinks anyScope parseScope allScopes filename fileString =
         let parsed = CKParser.parseString fileString filename

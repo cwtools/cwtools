@@ -351,18 +351,18 @@ module STLScopes =
 
         ]
     let effectInnerScopeFunctions = [
-        "if", id, []
-        "while", id, []
-        "any_neighbor_system", (fun _ -> Scope.GalacticObject), ["ignore_hyperlanes"];
-        "every_neighbor_system", (fun _ -> Scope.GalacticObject), ["ignore_hyperlanes"];
-        "random_neighbor_system", (fun _ -> Scope.GalacticObject), ["ignore_hyperlanes"];
+        "if", None, []
+        "while", None, []
+        "any_neighbor_system", (Some Scope.GalacticObject), ["ignore_hyperlanes"];
+        "every_neighbor_system", (Some  Scope.GalacticObject), ["ignore_hyperlanes"];
+        "random_neighbor_system", (Some Scope.GalacticObject), ["ignore_hyperlanes"];
     ]
 
     let addInnerScope (des : DocEffect list) =
         let withSimple =
              des |> List.map (fun de ->
-                match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (fun _ -> t) |_ -> None) with
-                | Some t -> ScopedEffect(de, t, true, [], false, false) :> DocEffect
+                match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (t) |_ -> None) with
+                | Some t -> ScopedEffect(de, Some t, true, [], false, false) :> DocEffect
                 | None -> de)
         withSimple |> List.map (fun de ->
                 match effectInnerScopeFunctions |> List.tryPick (function | (n, t, s) when n = de.Name -> Some (t, s) |_ -> None) with

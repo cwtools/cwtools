@@ -82,6 +82,6 @@ module STLLookup =
             vanillaEffects
             |> List.map (function | :? DocEffect as ve when manualEffectScopeOverrides.ContainsKey ve.Name ->
                                     let newScopes = manualEffectScopeOverrides.[ve.Name]
-                                    (DocEffect(ve.Name, newScopes, ve.Type, ve.Desc, ve.Usage)) :> Effect
+                                    (DocEffect(ve.Name, newScopes, ve.Target, ve.Type, ve.Desc, ve.Usage)) :> Effect
                                   | x -> x)
         final, adjustedEffects

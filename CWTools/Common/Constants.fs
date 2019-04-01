@@ -68,10 +68,11 @@ type ScriptedEffect<'T when 'T : comparison>(name, scopes, effectType, comments,
             | :? Effect<'T> as y -> x.Name.CompareTo(y.Name)
             | _ -> invalidArg "yobj" "cannot compare values of different types"
 
-type DocEffect<'T when 'T : comparison>(name, scopes, effectType, desc, usage) =
+type DocEffect<'T when 'T : comparison>(name, scopes, target, effectType, desc, usage) =
     inherit Effect<'T>(name, scopes, effectType)
     member val Desc : string = desc
     member val Usage : string = usage
+    member val Target : 'T option = target
     override x.Equals(y) =
         match y with
         | :? DocEffect<'T> as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type && x.Desc = y.Desc && x.Usage = y.Usage
@@ -83,11 +84,11 @@ type DocEffect<'T when 'T : comparison>(name, scopes, effectType, desc, usage) =
             | _ -> invalidArg "yobj" "cannot compare values of different types"
     new(rawEffect : RawEffect, effectType : EffectType, parseScopes) =
         let scopes = rawEffect.scopes |> List.collect parseScopes
-        DocEffect<'T>(rawEffect.name, scopes, effectType, rawEffect.desc, rawEffect.usage)
+        let target = rawEffect.targets |> List.collect parseScopes |> List.tryHead
+        DocEffect<'T>(rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
 
 type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue, isWildCard) =
-    inherit DocEffect<'T>(name, scopes, effectType, desc, usage)
-    member val InnerScope : 'T -> 'T = inner
+    inherit DocEffect<'T>(name, scopes, inner, effectType, desc, usage)
     member val IsScopeChange : bool = isScopeChange
     member val IgnoreChildren : string list = ignoreChildren
     member val ScopeOnlyNotEffect : bool = scopeonlynoteffect
@@ -95,14 +96,16 @@ type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc
     member val IsValueScope : bool = isValue
     /// If this scoped effect is a prefix that should accept anything afterwards
     member val IsWildCard : bool = isWildCard
-    new(de : DocEffect<'T>, inner : 'T -> 'T, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
+    new(de : DocEffect<'T>, inner : 'T option, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
         ScopedEffect<'T>(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue, false)
-    new(de : DocEffect<'T>, inner : 'T) =
-        ScopedEffect<'T>(de.Name, de.Scopes, (fun _ -> inner), de.Type, de.Desc, de.Usage, true, [], false, false, false)
+    new(de : DocEffect<'T>, inner : 'T option) =
+        ScopedEffect<'T>(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, true, [], false, false, false)
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue) =
-        ScopedEffect<'T>(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false)
+        ScopedEffect<'T>(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false)
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect<'T>(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
+        ScopedEffect<'T>(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+        ScopedEffect<'T>(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
 
 type IScope<'T> =
     abstract member AnyScope : 'T

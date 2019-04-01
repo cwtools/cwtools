@@ -82,10 +82,23 @@ module IRGameFunctions =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
             se @ vt
+        let vanillaTriggerNames = vanillaTriggers |> List.map (fun vt -> StringResource.stringManager.InternIdentifierToken vt.Name)
+        let effects =
+            rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
+        let ruleToTrigger(r,o) =
+            let name =
+                match r with
+                |LeafRule(ValueField(Specific n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
+                |NodeRule(ValueField(Specific n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
+                |_ -> None
+            let effectType = if o.comparison then EffectType.ValueTrigger else EffectType.Trigger
+            name |> Option.map (fun name -> DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
+        // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
+        let extraFromRules = (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect))
         // let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
         // game.Lookup.triggers <- sts @ ts
         // game.Lookup.onlyScriptedTriggers <- sts
-        vanillaTriggers
+        vanillaTriggers @ extraFromRules
 
     let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
         let vanillaEffects =
@@ -142,12 +155,86 @@ module IRGameFunctions =
             let provinces = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.IRprovinces <- provinces
 
+    let updateCharacters (game : GameObject) =
+        let characterFile =
+            game.Resources.GetResources()
+            |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
+            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "character_setup.csv")
+        match characterFile with
+        |None -> ()
+        |Some pf ->
+            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let chars = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|','|], 3, StringSplitOptions.RemoveEmptyEntries) |> (fun a -> if a.Length > 1 then a |> Array.skip 1 |> Array.tryHead else None)) |> List.ofArray
+            game.Lookup.IRcharacters <- chars
+
     let addScriptFormulaLinks (lookup : Lookup<'S,'M>) =
         match lookup.typeDefInfo |> Map.tryFind "script_value" with
         | Some vs ->
             let values = vs |> List.map fst
             values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
         | None -> []
+
+    let addTriggerDocsScopes (lookup : Lookup<_,_>) (rules : RootRule<_> list) =
+            // let scriptedOptions (effect : ScriptedEffect) =
+            //     {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false}
+            // let getAllScriptedEffects =
+            //     lookup.onlyScriptedEffects |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
+            //                                     |> List.map (fun se -> AliasRule("effect", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
+            // let getAllScriptedTriggers =
+            //     lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
+            //                                     |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
+            let addRequiredScopesE (s : StringTokens) (o : Options<_>) =
+                let newScopes =
+                    match o.requiredScopes with
+                    |[] ->
+                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                            |> Option.map(fun se -> se.Scopes)
+                            |> Option.defaultValue []
+                    |x -> x
+                let innerScope =
+                    match o.pushScope with
+                    | None ->
+                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                            |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
+                            |> Option.bind(fun se -> se.Target)
+                    | x -> x
+                { o with requiredScopes = newScopes; pushScope = innerScope}
+            let addRequiredScopesT (s : StringTokens) (o : Options<_>) =
+                let newScopes =
+                    match o.requiredScopes with
+                    |[] ->
+                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                            |> Option.map(fun se -> se.Scopes)
+                            |> Option.defaultValue []
+                    |x -> x
+                let innerScope =
+                    match o.pushScope with
+                    | None ->
+                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                            |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
+                            |> Option.bind(fun se -> se.Target)
+                    | x -> x
+
+                { o with requiredScopes = newScopes; pushScope = innerScope }
+            rules |> List.collect (
+                    function
+                    |AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
+                        [AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
+                        [AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
+                        [AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
+                        [AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
+                        [AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
+                        [AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))]
+                    // |AliasRule ("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
+                    //     getAllScriptedEffects
+                    // |AliasRule ("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
+                    //     getAllScriptedTriggers
+                    |x -> [x])
 
 
 
@@ -157,14 +244,16 @@ module IRGameFunctions =
         let ls = updateEventTargetLinks embedded
         lookup.allCoreLinks <- ts @ es @ ls
         // eprintfn "crh %A" ts
-        rules @ addModifiersWithScopes lookup
+        addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
         let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
         let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.IRprovinces}
+        let charEnums = { key = "character_ids"; description = "character_ids"; values = lookup.IRcharacters}
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
+                            |> Map.add charEnums.key (charEnums.description, charEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embedded : EmbeddedSettings<_,_>) =
         lookup.typeDefInfoRaw <-
@@ -188,7 +277,9 @@ module IRGameFunctions =
         // updateScriptedLoc(game)
         // updateDefinedVariables()
         updateProvinces(game)
+        updateCharacters(game)
         updateModifiers(game)
+
         // updateLegacyGovernments(game)
         // updateTechnologies()
         // game.LocalisationManager.UpdateAllLocalisation()

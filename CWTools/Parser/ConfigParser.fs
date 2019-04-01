@@ -64,8 +64,8 @@ module rec ConfigParser =
     | ValueScopeField of isInt : bool * minmax : (float * float)
         override x.ToString() =
             match x with
-            | ValueField vt -> sprintf "NewField %O" vt
-            | _ -> sprintf "NewField %A" x
+            | ValueField vt -> sprintf "Field of %O" vt
+            | _ -> sprintf "Field of %A" x
     let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
     type Options<'a> = {
         min : int

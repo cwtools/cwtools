@@ -74,7 +74,7 @@ module IRConstants =
         x.ToLower()
         |>
             function
-                | "none" -> Scope.NoneScope
+                | "none" -> Scope.Any
                 | "value" -> Scope.Value
                 | "bool" -> Scope.Bool
                 | "flag" -> Scope.Flag
@@ -129,7 +129,7 @@ module IRConstants =
 
     let categoryScopeList = [
         ModifierCategory.Character, [Scope.Character];
-        ModifierCategory.Province, [Scope.Province];
+        ModifierCategory.Province, [Scope.Province; Scope.Country];
         ModifierCategory.Country, [Scope.Country];
         ModifierCategory.Any, [];
     ]

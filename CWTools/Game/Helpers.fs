@@ -45,7 +45,7 @@ module Helpers =
     let private getWildCard (link : EventTargetDataLink<_>) =
         match link.sourceRuleType.Trim(), link.dataPrefix with
         | x, Some prefix when x.StartsWith "value[" ->
-            Some (ScopedEffect(prefix, link.inputScopes, (fun _ -> link.outputScope), EffectType.Link, link.description, "", true, [], true, false, true))
+            Some (ScopedEffect(prefix, link.inputScopes, Some link.outputScope, EffectType.Link, link.description, "", true, [], true, false, true))
         | _ -> None
 
     let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) (addWildCardLinks : bool) =
@@ -56,13 +56,13 @@ module Helpers =
                 let prefkey = link.dataPrefix |> Option.map (fun pref -> pref + key ) |> Option.defaultValue key
                 match link.dataLinkType with
                 | DataLinkType.Scope ->
-                    [ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.Link, link.description, "", true, false)]
+                    [ScopedEffect(prefkey, link.inputScopes, Some link.outputScope, EffectType.Link, link.description, "", true, false)]
                 | DataLinkType.Value ->
-                    [ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.ValueTrigger, link.description, "", true, false)]
+                    [ScopedEffect(prefkey, link.inputScopes, Some link.outputScope, EffectType.ValueTrigger, link.description, "", true, false)]
                 | DataLinkType.Both ->
                     [
-                        ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.Link, link.description, "", true, false)
-                        ScopedEffect(prefkey, link.inputScopes, link.outputScope, EffectType.ValueTrigger, link.description, "", true, false)
+                        ScopedEffect(prefkey, link.inputScopes, Some link.outputScope, EffectType.Link, link.description, "", true, false)
+                        ScopedEffect(prefkey, link.inputScopes, Some link.outputScope, EffectType.ValueTrigger, link.description, "", true, false)
                     ]
             let all = typeDefinedKeys |> List.collect keyToEffect
             let extra =

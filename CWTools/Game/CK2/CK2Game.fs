@@ -170,7 +170,7 @@ module CK2GameFunctions =
                 |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
+            DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
 
@@ -183,7 +183,7 @@ module CK2GameFunctions =
                 |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+            DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 

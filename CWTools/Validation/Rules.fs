@@ -103,7 +103,7 @@ module rec Rules =
                         | None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.Enum e ->
                     match enumsMap.TryFind e with
-                    | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %O" desc es) severity) leafornode <&&&> errors
+                    | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
                     | None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
                 | ValueType.Specific s ->
                     // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]

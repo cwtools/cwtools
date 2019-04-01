@@ -21,7 +21,7 @@ module DocsParser =
     let private scopesC = manyTill scope (skipString "Supported Targets:" .>> skipManySatisfy (fun c -> c = ' ')) <?> "scopes"
     let private target = many1Satisfy isvaluechar .>> many (skipChar ' ') <?> "target"
     let private targets = manyTill target newline .>> SharedParsers.ws <?> "targets"
-    let private doc =  pipe4 name (attempt usage <|> usageC)  (attempt scopes <|> scopesC)  targets (fun (n, d) u s t  -> {name = n; desc = d; traits = None; usage = u; scopes = s; targets = t}) <?> "doc"
+    let private doc =  pipe4 name (attempt usage <|> usageC)  (attempt scopes <|> scopesC)  targets (fun (n, d) u s t  -> {name = n; desc = d; traits = None; usage = u; scopes = s; targets = []}) <?> "doc"
     let private footer = skipString "=================" .>> SharedParsers.ws
     let private docFile = SharedParsers.ws >>. header >>. many doc //.>> footer
 

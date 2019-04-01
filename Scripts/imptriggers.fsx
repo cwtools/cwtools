@@ -186,7 +186,9 @@ let anytemplate =
     ## cardinality = 0..1
     percent = value_float[0.0..1.0]
     ## cardinality = 0..1
-    count = int_field
+    count = int_value_field
+    ## cardinality = 0..1
+    count = all
     alias_name[trigger] = alias_match_left[trigger]
 }"""
 
@@ -213,6 +215,8 @@ let randomtemplate =
     alternative_limit = {
         alias_name[trigger] = alias_match_left[trigger]
     }
+    ## cardinality = 0..1
+    weight = single_alias_right[weight_block]
     alias_name[effect] = alias_match_left[effect]
 }"""
 
@@ -259,7 +263,7 @@ let tout =  (fun (t : RawEffect) ->
                             else traitRHSs
                         let desc = t.desc.Replace("\n", " ")
                         // sprintf "###%s\n%salias[trigger:%s] = %s\n\r" desc scopes t.name rhs)
-                        rhs |> List.map (fun rhs -> sprintf "###%s\nalias[trigger:%s] %s %s\n\r" desc t.name traitEq rhs))
+                        rhs |> List.map (fun rhs -> sprintf "### %s\nalias[trigger:%s] %s %s\n\r" desc t.name traitEq rhs))
 let atout = anytriggers |> List.collect tout |> String.concat("")
 let otout = othertriggers |> List.collect tout |> String.concat("")
                 // |> String.concat("")
@@ -285,7 +289,7 @@ let efun = (fun (t : RawEffect) ->
             | _ -> "replace_me"
         let desc = t.desc.Replace("\n", " ")
         // sprintf "###%s\n%salias[effect:%s] = %s\n\r" desc scopes t.name rhs)
-        sprintf "###%s\nalias[effect:%s] = %s\n\r" desc t.name rhs)
+        sprintf "### %s\nalias[effect:%s] = %s\n\r" desc t.name rhs)
                 // |> String.concat("")
 let ieout = itereffects |> List.map efun |> String.concat("")
 let oeout = othereffects |> List.map efun |> String.concat("")

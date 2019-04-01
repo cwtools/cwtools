@@ -37,11 +37,11 @@ module EU4Scopes =
 
     let scopedEffects =
         [
-            ScopedEffect("owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true, false);
-            ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true, false);
-            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true, false);
+            ScopedEffect("owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true);
             // Should be rhs only!
-            ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Link, defaultDesc, "", true, false);
+            ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Link, defaultDesc, "", true);
         ]
 
 

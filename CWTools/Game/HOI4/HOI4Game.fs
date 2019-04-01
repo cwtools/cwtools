@@ -93,9 +93,9 @@ module HOI4GameFunctions =
                 |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Link, defaultDesc, "", true));
-        let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true));
+            DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
+        let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Some Scope.State, EffectType.Link, defaultDesc, "", true));
+        let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Some Scope.Country, EffectType.Link, defaultDesc, "", true));
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
@@ -108,9 +108,9 @@ module HOI4GameFunctions =
                 |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.State, EffectType.Link, defaultDesc, "", true));
-        let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true));
+            DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+        let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, allScopes, Some Scope.State, EffectType.Link, defaultDesc, "", true));
+        let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, allScopes, Some Scope.Country, EffectType.Link, defaultDesc, "", true));
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
     let addModifiersWithScopes (lookup : Lookup<_,_>) =

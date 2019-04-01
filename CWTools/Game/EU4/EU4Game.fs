@@ -108,7 +108,7 @@ module EU4GameFunctions =
                 |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
+            DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
 
     let updateScriptedTriggers(rules :RootRule<Scope> list) =
@@ -120,7 +120,7 @@ module EU4GameFunctions =
                 |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
-            DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
+            DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =

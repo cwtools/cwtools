@@ -93,6 +93,11 @@ module Scopes =
         let varSubstring1 = (fun (k : string) -> k.Substring(prefix1.Length ))
         let varSubstring2 = (fun (k : string) -> k.Substring(prefix2.Length ))
         (fun key -> if varStartsWith1 key then varSubstring1 key, true else if varStartsWith2 key then varSubstring2 key, true else key, false)
+
+    let private applyTargetScope (scope : _ option) (context : _ list) =
+        match scope with
+        | None -> context
+        | Some ps -> ps::context
     let createJominiChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
@@ -154,10 +159,10 @@ module Scopes =
                             let currentScope = context.CurrentScope :> IScope<_>
                             let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren)
                             | _, [], _, _ -> (context, false), NotFound
-                            | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                            | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
                             | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
                 let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
@@ -232,10 +237,10 @@ module Scopes =
                             let currentScope = context.CurrentScope :> IScope<_>
                             let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren)
                             | _, [], _, _ -> (context, false), NotFound
-                            | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                            | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
                             | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
                 let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
@@ -281,9 +286,9 @@ module Scopes =
                                     let currentScope = context.CurrentScope :> IScope<_>
                                     let exact = validScopes |> List.exists (fun x -> currentScope.MatchesScope x)
                                     match context.CurrentScope, validScopes, exact with
-                                        | x, _, _ when x = context.Root.AnyScope -> (LocContextResult.NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}))
+                                        | x, _, _ when x = context.Root.AnyScope -> (LocContextResult.NewScope ({source with Scopes =applyTargetScope e.Target context.Scopes}))
                                         // | _, [], _ -> (context, false), NotFound
-                                        | _, _, true -> (LocContextResult.NewScope ({source with Scopes = e.InnerScope context.CurrentScope::context.Scopes}))
+                                        | _, _, true -> (LocContextResult.NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}))
                                         | current, ss, false -> LocContextResult.WrongScope (nextKey, current, ss)
                                 )
             let commandMatch() =
