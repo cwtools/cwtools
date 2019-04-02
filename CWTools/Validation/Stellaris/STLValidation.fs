@@ -540,7 +540,7 @@ module STLValidation =
             // let getPrereqsPar lists = lists |> PSeq.collect (fun ns -> List.collect getPrereqs ns) |> List.ofSeq
             let getPrereqGen (e : Entity) : obj list =
                 if List.contains e.entityType [EntityType.Buildings; EntityType.ShipSizes; EntityType.SectionTemplates; EntityType.ComponentTemplates;
-                                                EntityType.StrategicResources; EntityType.Armies; EntityType.Edicts; EntityType.TileBlockers; EntityType.Deposits; EntityType.Decisions]
+                                                EntityType.StrategicResources; EntityType.Armies; EntityType.Edicts; EntityType.TileBlockers; EntityType.Deposits; EntityType.Decisions; EntityType.Traits]
                 then List.collect getPrereqs (e.entity.Children)
                 else []
 
