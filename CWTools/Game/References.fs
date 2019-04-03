@@ -34,3 +34,4 @@ type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.Technologies = lookup.technologies
     member __.Localisation = localisation()
     member __.TypeMapInfo = lookup.typeDefInfo
+    member __.ConfigRules = lookup.configRules
