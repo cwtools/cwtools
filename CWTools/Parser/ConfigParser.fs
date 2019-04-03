@@ -706,13 +706,15 @@ module rec ConfigParser =
 
 
     let replaceSingleAliases (rules : RootRule<_> list) =
-        let singlealiases = rules |> List.choose (function |SingleAliasRule (name, inner) -> Some (name, inner) |_ -> None) |> Map.ofList
+        let mutable singlealiases = rules |> List.choose (function |SingleAliasRule (name, inner) -> Some (SingleAliasRule (name, inner)) |_ -> None) //|> Map.ofList
+        let singlealiasesmap() = singlealiases |> List.choose (function |SingleAliasRule (name, inner) -> Some (name, inner) |_ -> None) |> Map.ofList
+
         let rec cataRule rule : NewRule<_> =
             match rule with
             | (NodeRule (l, r), o) -> (NodeRule (l, r |> List.map cataRule), o)
             | (SubtypeRule (a, b, i), o) -> (SubtypeRule(a, b, (i |> List.map cataRule)), o)
             | (LeafRule (l, SingleAliasField name), o) ->
-                match singlealiases |> Map.tryFind name with
+                match singlealiasesmap() |> Map.tryFind name with
                 | Some (LeafRule (al, ar), ao) ->
                     log (sprintf "Replaced single alias leaf %A %s with leaf %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
                     LeafRule (l, ar), o
@@ -723,6 +725,22 @@ module rec ConfigParser =
                     log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
                     rule
             | _ -> rule
+        let singlealiasesmapper =
+            function
+            | SingleAliasRule (name, rule) -> SingleAliasRule(name, cataRule rule)
+            | x -> x
+        let mutable final = singlealiases
+        let mutable i = 0
+        let mutable first = true
+        let ff() =
+            i <- i + 1
+            let before = final
+            final <- final |> List.map singlealiasesmapper
+            singlealiases <- final
+            first <- false
+            before = final || i > 10
+        while (not (ff())) do ()
+
         let rulesMapper =
             function
             | TypeRule (name, rule) -> TypeRule (name, cataRule rule)
