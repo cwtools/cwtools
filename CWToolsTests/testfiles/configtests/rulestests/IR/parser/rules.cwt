@@ -1,0 +1,11 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    {
+        test
+    }
+}
