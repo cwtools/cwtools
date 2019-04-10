@@ -288,7 +288,7 @@ module rec Rules =
         |Some values ->
             let value = trimQuote key
             if value |> firstCharEqualsAmp then true else
-            if values.Contains (value.Split(ampArray, 2).[0]) then true else false
+            values.Contains (value.Split(ampArray, 2).[0])
         |None -> false
 
     let checkFilepathField (files : Collections.Set<string>) (key : string) (leafornode) errors =
@@ -296,14 +296,14 @@ module rec Rules =
         if files.Contains file then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
     let checkFilepathFieldNE (files : Collections.Set<string>) (key : string) =
         let file = (trimQuote key).Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
-        if files.Contains file then true else false
+        files.Contains file
 
     let checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) errors =
         let value = folder + "/" + key + ".dds"
         if files.Contains value then errors else inv (ErrorCodes.MissingFile value) leafornode <&&&> errors
     let checkIconFieldNE (files :Collections.Set<string>) (folder : string) (key : string) =
         let value = folder + "/" + key + ".dds"
-        if files.Contains value then true else false
+        files.Contains value
 
     let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect<_> list) varSet changeScope anyScope (ctx : RuleContext<_>) (s)  key leafornode errors =
         let scope = ctx.scopes
@@ -321,7 +321,7 @@ module rec Rules =
         let scope = ctx.scopes
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then true else false
+        |NewScope ({Scopes = current::_} ,_) -> current = s || s = anyScope || current = anyScope
         |NotFound _ -> false
         |WrongScope (command, prevscope, expected) -> false
         |VarNotFound s -> false
@@ -574,21 +574,22 @@ module rec Rules =
                     let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
 
                     res
-                        |> Seq.fold (fun (na, la, lva) r ->
+                        |> Seq.fold (fun (na, la, lva, vca) r ->
                             match r with
-                            | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva
-                            | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva
-                            | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva
-                            | _ -> na, la, lva
-                            ) ([], [], [])
+                            | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva, vca
+                            | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva, vca
+                            | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva, vca
+                            | (ValueClauseRule (rs), o) -> na, la, lva, (rs, o)::vca
+                            | _ -> na, la, lva, vca
+                            ) ([], [], [], [])
                     // seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
             memoizeRulesInner memFunction
 
 
-        let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : Node) errors =
+        let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : IClause) errors =
             let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             // TODO: Memoize expanded rules depending  on ctx.subtypes ad rules?
-            let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
+            let noderules, leafrules, leafvaluerules, valueclauserules = memoizeRules rules ctx.subtypes
             // let subtypedrules =
             //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else [||]) | x -> [||]))
             // let expandedbaserules =
@@ -621,51 +622,61 @@ module rec Rules =
                 wildcardLinks = wildCardLinks
             }
             let valueFun innerErrors (leaf : Leaf) =
-                let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
+                let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
                 leafrules |> Seq.filter (fun (l, r, o) -> checkLeftField p l leaf.KeyId.lower leaf.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
             let nodeFun innerErrors (node : Node) =
-                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
+                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for leaf %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
                 noderules |> Seq.filter (fun (l, rs, o) -> checkLeftField p l node.KeyId.lower node.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
             let leafValueFun innerErrors (leafvalue : LeafValue) =
-                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
+                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for value %s in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
                 leafvaluerules |> Seq.filter (fun (l, o) -> checkLeftField p l leafvalue.ValueId.lower leafvalue.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
-            let checkCardinality (node : Node) innerErrors (rule : NewRule<_>) =
+            let valueClauseFun innerErrors (valueclause : ValueClause) =
+                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected clause in %s" startNode.Key) severity) valueclause <&&&> innerErrors else innerErrors
+                valueclauserules |> (fun rs -> lazyErrorMerge rs (fun (r, o) e -> applyValueClauseRule enforceCardinality ctx o r valueclause e) createDefault innerErrors true)
+            let checkCardinality (clause : IClause) innerErrors (rule : NewRule<_>) =
                 match rule with
                 |NodeRule(ValueField (ValueType.Specific key), _), opts
                 |LeafRule(ValueField (ValueType.Specific key), _), opts ->
-                    let leafcount = node.Values |> List.filter (fun leaf -> leaf.KeyId.lower = key.lower) |> List.length
-                    let childcount = node.Children |> List.filter (fun child -> child.KeyId.lower = key.lower) |> List.length
+                    let leafcount = clause.Leaves |> Seq.filter (fun leaf -> leaf.KeyId.lower = key.lower) |> Seq.length
+                    let childcount = clause.Nodes |> Seq.filter (fun child -> child.KeyId.lower = key.lower) |> Seq.length
                     let total = leafcount + childcount
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" (StringResource.stringManager.GetStringForID key.normal) opts.max) Severity.Warning) node <&&&> innerErrors
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" (StringResource.stringManager.GetStringForID key.normal) opts.max) Severity.Warning) clause <&&&> innerErrors
                     else innerErrors
                 |NodeRule(AliasField(_), _), _
                 |LeafRule(AliasField(_), _), _
                 |LeafValueRule(AliasField(_)), _ -> innerErrors
                 |NodeRule(l, _), opts ->
-                    let total = node.Children |> List.filter (fun child -> checkLeftField p l child.KeyId.lower child.Key) |> List.length
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
+                    let total = clause.Nodes |> Seq.filter (fun child -> checkLeftField p l child.KeyId.lower child.Key) |> Seq.length
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                     else innerErrors
                 |LeafRule(l, r), opts ->
-                    let total = node.Values |> List.filter (fun leaf -> checkLeftField p l leaf.KeyId.lower leaf.Key) |> List.length
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) node <&&&> innerErrors
+                    let total = clause.Leaves |> Seq.filter (fun leaf -> checkLeftField p l leaf.KeyId.lower leaf.Key) |> Seq.length
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) clause <&&&> innerErrors
                     else innerErrors
                 |LeafValueRule(l), opts ->
-                    let total = node.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField p l leafvalue.ValueId.lower leafvalue.Key) |> List.length
-                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) node <&&&> innerErrors
-                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %O, expecting at most %i" l opts.max) Severity.Warning) node <&&&> innerErrors
+                    let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField p l leafvalue.ValueId.lower leafvalue.Key) |> List.length
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
+                    else innerErrors
+                |ValueClauseRule(_), opts ->
+                    let total = clause.ValueClauses |> Seq.length
+                    if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing clause, expecting at least %i" opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                    else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many clauses, expecting at most %i" opts.max) Severity.Warning) clause <&&&> innerErrors
                     else innerErrors
                 |_ -> innerErrors
             (applyToAll startNode.Leaves valueFun errors)
             |>
-            (applyToAll startNode.Children nodeFun)
+            (applyToAll (startNode.Nodes |> List.ofSeq) nodeFun)
             |>
             (applyToAll startNode.LeafValues leafValueFun)
+            |>
+            (applyToAll startNode.ValueClauses valueClauseFun)
             |>
             (applyToAll rules (checkCardinality startNode))
 
@@ -777,6 +788,44 @@ module rec Rules =
                     inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node <&&&> errors
                 |_ -> inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node <&&&> errors
             |_ -> applyClauseField enforceCardinality options.severity newCtx rules node errors
+        
+        and applyValueClauseRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rules : NewRule<_> list) (valueclause : ValueClause) errors =
+            let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
+            let newCtx  =
+                match options.pushScope with
+                |Some ps ->
+                    {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                |None ->
+                    match options.replaceScopes with
+                    |Some rs ->
+                        let prevctx =
+                            match rs.prevs with
+                            |Some prevs -> {ctx with scopes = {ctx.scopes with Scopes = prevs}}
+                            |None -> ctx
+                        let newctx =
+                            match rs.this, rs.froms with
+                            |Some this, Some froms ->
+                                {prevctx with scopes = {prevctx.scopes with Scopes = this::(prevctx.scopes.PopScope); From = froms}}
+                            |Some this, None ->
+                                {prevctx with scopes = {prevctx.scopes with Scopes = this::(prevctx.scopes.PopScope)}}
+                            |None, Some froms ->
+                                {prevctx with scopes = {prevctx.scopes with From = froms}}
+                            |None, None ->
+                                prevctx
+                        match rs.root with
+                        |Some root ->
+                            {newctx with scopes = {newctx.scopes with Root = root}}
+                        |None -> newctx
+                    |None ->
+                        ctx
+            (match options.requiredScopes with
+            |[] -> OK
+            |xs ->
+                match ctx.scopes.CurrentScope with
+                |x when x = anyScope  -> OK
+                |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") ("")) valueclause])
+            <&&>
+            applyClauseField enforceCardinality options.severity newCtx rules valueclause errors
 
         let testSubtype (subtypes : SubTypeDefinition<_> list) (node : Node) =
             let results =
@@ -916,25 +965,32 @@ module rec Rules =
                     let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
 
                     res
-                        |> Seq.fold (fun (na, la, lva) r ->
+                        |> Seq.fold (fun (na, la, lva, vca) r ->
                             match r with
-                            | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva
-                            | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva
-                            | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva
-                            | _ -> na, la, lva
-                            ) ([], [], [])
+                            | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva, vca
+                            | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva, vca
+                            | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva, vca
+                            | (ValueClauseRule (rs), o) -> na, la, lva, (rs, o)::vca
+                            | _ -> na, la, lva, vca
+                            ) ([], [], [], [])
 
             memoizeRulesInner memFunction
 
-        let rec singleFoldRules fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
-            let recurse = singleFoldRules fNode fChild fLeaf fLeafValue fComment
+        let rec singleFoldRules fNode fChild fLeaf fLeafValue fValueClause fComment acc child rule :'r =
+            let recurse = singleFoldRules fNode fChild fLeaf fLeafValue fValueClause fComment
             match child with
             |NodeC node ->
                 let finalAcc = fNode acc node rule
-                match fChild finalAcc node rule with
+                match fChild finalAcc (node :> IClause) rule with
                 |Some (child, newRule) ->
                     recurse finalAcc child newRule
                 |None -> finalAcc
+            |ValueClauseC valueClause ->
+                let finalAcc = fValueClause acc valueClause rule
+                match fChild finalAcc (valueClause :> IClause) rule with
+                | Some (child, newRule) -> 
+                    recurse finalAcc child newRule
+                | None -> finalAcc
             |LeafC leaf ->
                 fLeaf acc leaf rule
             |LeafValueC leafvalue ->
@@ -942,12 +998,15 @@ module rec Rules =
             |CommentC comment ->
                 fComment acc comment rule
 
-        let rec foldRules fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
-            let recurse = foldRules fNode fChild fLeaf fLeafValue fComment
+        let rec foldRules fNode fChild fLeaf fLeafValue fValueClause fComment acc child rule :'r =
+            let recurse = foldRules fNode fChild fLeaf fLeafValue fValueClause fComment
             match child with
             |NodeC node ->
                 let finalAcc = fNode acc node rule
-                fChild node rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
+                fChild (node :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
+            |ValueClauseC valueClause ->
+                let finalAcc = fValueClause acc valueClause rule
+                fChild (valueClause :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
             |LeafC leaf ->
                 fLeaf acc leaf rule
             |LeafValueC leafvalue ->
@@ -969,8 +1028,8 @@ module rec Rules =
         //         fLeafValue acc leafvalue rule
         //     |CommentC comment ->
         //         fComment acc comment rule
-        let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
-            let fChild (ctx, _) (node : Node) ((field, options) : NewRule<_>) =
+        let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos : pos) (node : Node) (logicalpath : string) =
+            let fChild (ctx, _) (node : IClause) ((field, options) : NewRule<_>) =
                 // log "child acc %A %A" ctx field
                 let rules =
                     match field with
@@ -991,7 +1050,7 @@ module rec Rules =
                         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         |x -> [x])
-                let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+                let childMatch = node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
                 let leafMatch = node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos)
                 let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
                 // log "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
@@ -1036,7 +1095,7 @@ module rec Rules =
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
                 |[(n, (NodeRule (l, rs), o))] ->
-                    Some (singleFoldRules fNode fChild fLeaf fLeafValue fComment acc (NodeC c) ((NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o)))
+                    Some (singleFoldRules fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC c) ((NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o)))
                 |_ -> None
             |_, _ -> None
 
@@ -1049,6 +1108,8 @@ module rec Rules =
             let fLeafValue (ctx, _) (leafvalue : LeafValue) (_, o : Options<_>) =
                 ctx, (Some o, None, Some (LeafValueC leafvalue))
             let fComment (ctx, _) _ _ = ctx, (None, None, None)
+            //TODO: Actually implement value clause
+            let fValueClause (ctx, _) _ _ = ctx, (None, None, None)
             let fNode (ctx, (_, res, resc)) (node : Node) ((field, options) : NewRule<_>) =
                 // let anyScope = ( ^a : (static member AnyScope : ^a) ())
                 // log "info fnode inner %s %A %A %A" (node.Key) options field ctx
@@ -1114,17 +1175,17 @@ module rec Rules =
                 |_, _ -> { subtypes = []; scopes = defaultContext; warningOnly = false }
 
             let ctx = ctx, (None, None, None)
-            foldWithPos fLeaf fLeafValue fComment fNode ctx (pos) (entity.entity) (entity.logicalpath)
+            foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx (pos) (entity.entity) (entity.logicalpath)
 
 
-        let foldCollect fLeaf fLeafValue fComment fNode acc (node : Node) (path: string) =
+        let foldCollect fLeaf fLeafValue fComment fNode fValueClause acc (node : Node) (path: string) =
             let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
-            let fChild (node : Node) ((field, options) : NewRule<_>) =
+            let fChild (node : IClause) ((field, options) : NewRule<_>) =
                 let rules =
                     match field with
                     | (NodeRule (_, rs)) -> rs
                     | _ -> []
-                let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
+                let noderules, leafrules, leafvaluerules, valueclauserules = memoizeRules rules ctx.subtypes
                 let p = {
                     varMap = varMap
                     enumsMap = enumsMap
@@ -1146,6 +1207,8 @@ module rec Rules =
                     match child with
                     | NodeC c ->
                         noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+                    | ValueClauseC vc ->
+                        valueclauserules |> Seq.map (fun (rs, o) -> ValueClauseC vc, ((ValueClauseRule (rs)), o))
                     | LeafC leaf ->
                         leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
                     | LeafValueC leafvalue ->
@@ -1161,7 +1224,7 @@ module rec Rules =
                 |(AnyKey) -> true
             let foldRulesNode typedef rs o =
                 (fun a c ->
-                    foldRules fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
+                    foldRules fNode fChild fLeaf fLeafValue fValueClause fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
             let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
             let rec foldRulesSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
                 match skipRootKeyStack with
@@ -1265,10 +1328,11 @@ module rec Rules =
 
             let fComment (res) _ _ = res
             let fNode (res) (node : Node) ((field, option) : NewRule<_>) = res
+            let fValueClause (res) _ _ = res
             let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
             let ctx = typedefs |> List.fold (fun (a : Collections.Map<string, (string * range) list>) t -> a.Add(t.name, [])) Collections.Map.empty
-            fLeaf, fLeafValue, fComment, fNode, ctx
+            fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx
             // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             // res
 
@@ -1292,17 +1356,19 @@ module rec Rules =
                     res |> (fun m -> m.Add(v, (getVariableFromString v node.Key, node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
                 |_ -> res
             let fComment (res) _ _ = res
+            let fValueClause (res) _ _ = res
 
-            fLeaf, fLeafValue, fComment, fNode, Map.empty
+            fLeaf, fLeafValue, fComment, fNode, fValueClause, Map.empty
             //let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             //res
 
-        let mergeFolds (l1, lv1, c1, n1, ctx1) (l2, lv2, c2, n2, ctx2) =
+        let mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
             let fLeaf = (fun (acc1, acc2) l r -> (l1 acc1 l r, l2 acc2 l r))
             let fLeafValue = (fun (acc1, acc2) lv r -> (lv1 acc1 lv r, lv2 acc2 lv r))
             let fNode = (fun (acc1, acc2) n r -> (n1 acc1 n r, n2 acc2 n r))
             let fComment = (fun (acc1, acc2) c r -> (c1 acc1 c r, c2 acc2 c r))
-            fLeaf, fLeafValue, fComment, fNode, (ctx1, ctx2)
+            let fValueClause = (fun (acc1, acc2) vc r -> (vc1 acc1 vc r, vc2 acc2 vc r))
+            fLeaf, fLeafValue, fComment, fNode, fValueClause, (ctx1, ctx2)
 
 
         let getEffectsInEntity = //(ctx) (entity : Entity) =
@@ -1314,10 +1380,11 @@ module rec Rules =
                     node::res, true
                 |_ -> res, false
             let fComment (res) _ _ = res
+            let fValueClause (res) (valueclause : ValueClause) ((field, option) : NewRule<_>) = res
 
             // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             // res
-            fLeaf, fLeafValue, fComment, fNode, ([], false)
+            fLeaf, fLeafValue, fComment, fNode, fValueClause, ([], false)
 
         let getTriggersInEntity = //(ctx) (entity : Entity) =
             let fLeaf (res) (leaf : Leaf) ((field, _) : NewRule<_>) = res
@@ -1327,20 +1394,21 @@ module rec Rules =
                 |false, NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "trigger" , _), _-> true |_ -> false) ->
                     node::res, true
                 |_ -> res, false
+            let fValueClause (res) (valueclause : ValueClause) ((field, option) : NewRule<_>) = res
             let fComment (res) _ _ = res
 
-            fLeaf, fLeafValue, fComment, fNode, ([], false)
+            fLeaf, fLeafValue, fComment, fNode, fValueClause, ([], false)
             // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
             // res
         let allFolds entity =
-            let fLeaf, fLeafValue, fComment, fNode, ctx =
+            let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx =
                 mergeFolds getTriggersInEntity getEffectsInEntity
                 |> mergeFolds getDefVarInEntity
                 |> mergeFolds getTypesInEntity
-            let types, (defvars, (triggers, effects)) = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            let types, (defvars, (triggers, effects)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
             (types, defvars, triggers, effects)
-        let singleFold (fLeaf, fLeafValue, fComment, fNode, ctx) entity =
-            foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+        let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
+            foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
 
         let validateLocalisationFromTypes (entity : Entity) =
             let fLeaf (res : ValidationResult) (leaf : Leaf) ((field, _) : NewRule<_>) =
@@ -1402,10 +1470,11 @@ module rec Rules =
                 |_ -> res
 
             let fComment (res) _ _ = res
+            let fValueClause (res) _ _ = res
             let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
             let ctx = OK
-            let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
+            let res = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
             res
 
 

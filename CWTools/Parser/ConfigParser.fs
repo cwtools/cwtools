@@ -82,12 +82,14 @@ module rec ConfigParser =
     |NodeRule of left : NewField<'a> * rules : NewRule<'a> list
     |LeafRule of left : NewField<'a> * right : NewField<'a>
     |LeafValueRule of right : NewField<'a>
+    |ValueClauseRule of rules : NewRule<'a> list
     |SubtypeRule of string * bool * NewRule<'a> list
         override x.ToString() =
             match x with
             | NodeRule (l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
             | LeafRule (l, r) -> sprintf "LeafRule with Left (%O) and right (%O)" l r
             | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
+            | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
             | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
     type NewRule<'a> = RuleType<'a> * Options<'a>
         // override x.ToString() = sprintf "Rule (%O) with options (%A)" (x |> fst) (x |> snd)
@@ -188,7 +190,7 @@ module rec ConfigParser =
     let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
     let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
 
-    let getNodeComments (node : Node) =
+    let getNodeComments (clause : IClause) =
         let findComments t s (a : Child) =
                 match (s, a) with
                 | ((b, c), _) when b -> (b, c)
@@ -197,15 +199,18 @@ module rec ConfigParser =
                 | ((_, c), NodeC n) when n.Position = t -> (true, c)
                 | ((_, c), LeafC v) when v.Position = t -> (true, c)
                 | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
+                | ((_, c), ValueClauseC vc) when vc.Position = t -> (true, c)
+                | _ -> (false, [])
                 // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
-                | ((_, _), _) -> (false, [])
+                // | ((_, _), _) -> (false, [])
         //let fNode = (fun (node:Node) (children) ->
-        let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
+        let one = clause.Leaves |> Seq.map (fun e -> LeafC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd) |> List.ofSeq
         //log "%s %A" node.Key (node.All |> List.rev)
         //log "%A" one
-        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l)))
-        let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
-        let new2 = one @ two @ three
+        let two = clause.Nodes |> Seq.map (fun e -> NodeC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l))) |> List.ofSeq
+        let three = clause.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let four = clause.ValueClauses |> Seq.toList |> List.map (fun e -> ValueClauseC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let new2 = one @ two @ three @ four
         new2
 
     let getSettingFromString (full : string) (key : string) =
@@ -410,6 +415,7 @@ module rec ConfigParser =
     let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
         match child with
         |NodeC n -> Some (configNode parseScope allScopes anyScope n comments (n.Key))
+        |ValueClauseC vc -> Some (configValueClause parseScope allScopes anyScope vc comments)
         |LeafC l -> Some (configLeaf parseScope allScopes anyScope l comments (l.Key))
         |LeafValueC lv -> Some (configLeafValue parseScope allScopes anyScope lv comments)
         |_ -> None
@@ -439,13 +445,20 @@ module rec ConfigParser =
             //     NodeRule(TypeField(x.Trim([|'<'; '>'|])), innerRules)
             // |x -> NodeRule(ValueField(ValueType.Specific x), innerRules)
         NewRule(rule, options)
+    
+    let configValueClause (parseScope) (allScopes) (anyScope) (valueclause : ValueClause) (comments : string list) =
+        let children = getNodeComments valueclause
+        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
+        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
+        let rule = ValueClauseRule innerRules
+        NewRule(rule, options)
 
     let processChildConfigRoot (parseScope) (allScopes) (anyScope) ((child, comments) : Child * string list) =
         match child with
         |NodeC n when n.Key == "types" -> None
         |NodeC n -> Some (configRootNode parseScope allScopes anyScope n comments)
         |LeafC l -> Some (configRootLeaf parseScope allScopes anyScope l comments)
-        //|LeafValueC lv -> Some (configLeafValue lv comments)
+        // |LeafValueC lv -> Some (configLeafValue lv comments)
         |_ -> None
 
     let configRootLeaf (parseScope) allScopes (anyScope) (leaf : Leaf) (comments : string list) =
@@ -507,7 +520,6 @@ module rec ConfigParser =
                 |Some "rgb" -> [rgbRule]
                 |Some "hsv" -> [hsvRule]
                 |_ -> [rgbRule; hsvRule]
-            let colourRules = colourRules
             NewRule(NodeRule(leftfield, colourRules), options)
         |x ->
             let rightfield = processKey parseScope anyScope rightkey
@@ -712,6 +724,7 @@ module rec ConfigParser =
         let rec cataRule rule : NewRule<_> =
             match rule with
             | (NodeRule (l, r), o) -> (NodeRule (l, r |> List.map cataRule), o)
+            | (ValueClauseRule (r), o) -> (ValueClauseRule (r |> List.map cataRule), o)
             | (SubtypeRule (a, b, i), o) -> (SubtypeRule(a, b, (i |> List.map cataRule)), o)
             | (LeafRule (l, SingleAliasField name), o) ->
                 match singlealiasesmap() |> Map.tryFind name with
@@ -777,6 +790,7 @@ module rec ConfigParser =
                 [NodeRule(ValueScopeField(i, m), r |> List.collect cataRule), o]
             | NodeRule (l, r), o ->
                 [NodeRule(l, r |> List.collect cataRule), o]
+            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
             | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
             | _ -> [rule]
         let rulesMapper =
@@ -814,15 +828,6 @@ module rec ConfigParser =
         rules, types, enums, complexenums, values
 
 
-//(files : (string * string) list)
-
-// create_starbase = {
-// 	owner = <target>
-// 	size = <ship_size>
-// 	module = <starbase_module>
-// 	building = <starbase_building>
-// 	effect = { ... }
-// }
     let createStarbase =
         let owner = NewRule (LeafRule(specificField "owner", ScopeField Scope.Any), requiredSingle)
         let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)

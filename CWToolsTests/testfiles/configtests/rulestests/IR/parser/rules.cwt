@@ -5,7 +5,21 @@ types = {
 }
 
 event = {
+    ## cardinality = 0..inf
     {
         test
+    }
+    ## cardinality = 0..inf
+    skin_hsv_shift_curve = {
+        { 
+            ## cardinality = 0..1
+            float[0.0..1.0]
+            ## cardinality = 0..1
+            {
+                ## cardinality = 3..3
+                float
+            }
+            
+        }
     }
 }

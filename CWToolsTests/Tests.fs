@@ -79,7 +79,7 @@ let getAllTestLocs node =
     let fCombine = (fun (r,n) (r2, n2) -> (r@r2, n@n2))
     node |> (foldNode2 fNode fCombine ([],[]))
 
-let getNodeComments (node : Node) =
+let getNodeComments (clause : IClause) =
     let findComments t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
@@ -87,19 +87,23 @@ let getNodeComments (node : Node) =
             | ((_, c), CommentC nc) -> (false, nc::c)
             | ((_, c), NodeC n) when n.Position = t -> (true, c)
             | ((_, c), LeafC v) when v.Position = t -> (true, c)
+            | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
+            | ((_, c), ValueClauseC vc) when vc.Position = t -> (true, c)
+            | _ -> (false, [])
             // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
-            | ((_, _), _) -> (false, [])
-    let fNode = (fun (node:Node) (children) ->
-            let one = node.Values |> List.map (fun e -> e.Position, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
-            //eprintfn "%s %A" node.Key (node.All |> List.rev)
-            //eprintfn "%A" one
-            let two = node.Children |> List.map (fun e -> e.Position, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
-            let three = node.LeafValues |> Seq.toList |> List.map (fun e -> e.Position, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
-            let new2 = one @ two @ three |> List.filter (fun (p, c) -> not (List.isEmpty c))
-            new2 @ children
-                )
+            // | ((_, _), _) -> (false, [])
+    let fNode = (fun (clause : IClause) (children) ->
+        let one = clause.Leaves |> Seq.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd) |> List.ofSeq
+        //log "%s %A" node.Key (node.All |> List.rev)
+        //log "%A" one
+        let two = clause.Nodes |> Seq.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l))) |> List.ofSeq
+        let three = clause.LeafValues |> Seq.toList |> List.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let four = clause.ValueClauses |> Seq.toList |> List.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let new2 = one @ two @ three @ four |> List.filter (fun (p, c) -> not (List.isEmpty c))
+        new2 @ children
+            )
     let fCombine = (@)
-    node |> (foldNode2 fNode fCombine [])
+    clause |> (foldClause2 fNode fCombine [])
 
 let rec remove_first f lst item =
     match lst with
