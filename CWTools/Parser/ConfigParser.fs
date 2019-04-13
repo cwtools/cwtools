@@ -62,6 +62,7 @@ module rec ConfigParser =
     | VariableField of isInt : bool * minmax : (float * float)
     | ValueScopeMarkerField of isInt : bool * minmax : (float * float)
     | ValueScopeField of isInt : bool * minmax : (float * float)
+    | ColourField
         override x.ToString() =
             match x with
             | ValueField vt -> sprintf "Field of %O" vt
@@ -330,6 +331,7 @@ module rec ConfigParser =
         | x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (TypeType.Simple (x.Trim([|'<'; '>'|])))
         | x when x.Contains "<" && x.Contains ">" ->
+            let x = x.Trim('"')
             let prefixI = x.IndexOf "<"
             let suffixI = x.IndexOf ">"
             TypeField (TypeType.Complex (x.Substring(0,prefixI), x.Substring(prefixI + 1, suffixI - prefixI - 1), x.Substring(suffixI + 1)))
@@ -407,6 +409,7 @@ module rec ConfigParser =
             | None -> ValueField ValueType.Scalar
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
+        | "colour_field" -> ColourField
         | x ->
             // eprintfn "ps %s" x
             ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
@@ -445,7 +448,7 @@ module rec ConfigParser =
             //     NodeRule(TypeField(x.Trim([|'<'; '>'|])), innerRules)
             // |x -> NodeRule(ValueField(ValueType.Specific x), innerRules)
         NewRule(rule, options)
-    
+
     let configValueClause (parseScope) (allScopes) (anyScope) (valueclause : ValueClause) (comments : string list) =
         let children = getNodeComments valueclause
         let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
@@ -761,6 +764,27 @@ module rec ConfigParser =
             | SingleAliasRule (name, rule) -> SingleAliasRule(name, cataRule rule)
         rules |> List.map rulesMapper
 
+
+    let replaceColourField (rules : RootRule<_> list) =
+
+        let rec cataRule rule : NewRule<_> list =
+            match rule with
+            | LeafRule (l, ColourField), o  ->
+                [
+                    NodeRule((l), [LeafValueRule(ValueField(ValueType.Float(-256.0, 256.0))), { defaultOptions with min = 3; max = 3 } ]), o
+                ]
+            | NodeRule (l, r), o ->
+                [NodeRule(l, r |> List.collect cataRule), o]
+            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
+            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | _ -> [rule]
+        let rulesMapper =
+            function
+            | TypeRule (name, rule) -> cataRule rule |> List.map (fun x -> TypeRule (name, x))
+            | AliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  AliasRule (name, x))
+            | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
+        rules |> List.collect rulesMapper
+
     let replaceValueMarkerFields (rules : RootRule<_> list) =
         let rec cataRule rule : NewRule<_> list =
             match rule with
@@ -823,7 +847,7 @@ module rec ConfigParser =
         let rules, types, enums, complexenums, values =
             files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope filename fileString)
               |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
-        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases
+        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases |> replaceColourField
         // File.AppendAllText ("test.test", sprintf "%O" rules)
         rules, types, enums, complexenums, values
 
