@@ -146,12 +146,12 @@ module internal SharedParsers =
         let bnP = attempt valueBNo <|> valueS
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
-            | '{' -> // vcP stream
-                let vc = (vcP stream)
-                if vc.Status = Ok then vc else
-                    let vb = (vbP stream)
-                   //vb
-                    if vb.Status <> Ok then valueClause stream else vb
+            | '{' ->  vcP stream
+                // let vc = (vcP stream)
+                // if vc.Status = Ok then vc else
+                //     let vb = (vbP stream)
+                //    //vb
+                //     if vb.Status <> Ok then valueClause stream else vb
                 // let vb = (attempt valueBlock stream)
                 // if vb.Status = Ok then vb else valueClause stream
             | '"' -> valueQ stream
