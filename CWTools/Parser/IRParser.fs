@@ -17,6 +17,7 @@ module IRParser =
         | "character" -> ModifierCategory.Character
         | "province" -> ModifierCategory.Province
         | "country" -> ModifierCategory.Country
+        | "unit" -> ModifierCategory.Unit
         // |"country" -> ModifierCategory.Country
         |_ -> ModifierCategory.Any
 

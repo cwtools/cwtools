@@ -788,7 +788,7 @@ module rec Rules =
                     inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node <&&&> errors
                 |_ -> inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node <&&&> errors
             |_ -> applyClauseField enforceCardinality options.severity newCtx rules node errors
-        
+
         and applyValueClauseRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rules : NewRule<_> list) (valueclause : ValueClause) errors =
             let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
             let newCtx  =
@@ -988,7 +988,7 @@ module rec Rules =
             |ValueClauseC valueClause ->
                 let finalAcc = fValueClause acc valueClause rule
                 match fChild finalAcc (valueClause :> IClause) rule with
-                | Some (child, newRule) -> 
+                | Some (child, newRule) ->
                     recurse finalAcc child newRule
                 | None -> finalAcc
             |LeafC leaf ->
@@ -1709,6 +1709,7 @@ module rec Rules =
                 |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
+                |NewField.ValueScopeField _ -> enums.TryFind("static_values") |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |_ -> []
                 //|Field.EffectField -> findRule rootRules rest
                 // |Field.ClauseField rs -> findRule rs rest

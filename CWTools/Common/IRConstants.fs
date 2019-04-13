@@ -115,6 +115,7 @@ module IRConstants =
         | Character
         | Province
         | Country
+        | Unit
         | Any
 
     type Modifier =
@@ -129,6 +130,7 @@ module IRConstants =
 
     let categoryScopeList = [
         ModifierCategory.Character, [Scope.Character];
+        ModifierCategory.Unit, [Scope.Unit; Scope.Country];
         ModifierCategory.Province, [Scope.Province; Scope.Country];
         ModifierCategory.Country, [Scope.Country];
         ModifierCategory.Any, [];
