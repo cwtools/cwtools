@@ -45,6 +45,10 @@ module rec ConfigParser =
     type TypeType =
     | Simple of string
     | Complex of prefix : string * name : string * suffix : string
+
+    type Marker =
+    | ColourField
+    | IRCountryTag
     type NewField<'a> =
     | ValueField of ValueType
     | TypeField of TypeType
@@ -62,7 +66,7 @@ module rec ConfigParser =
     | VariableField of isInt : bool * minmax : (float * float)
     | ValueScopeMarkerField of isInt : bool * minmax : (float * float)
     | ValueScopeField of isInt : bool * minmax : (float * float)
-    | ColourField
+    | MarkerField of Marker
         override x.ToString() =
             match x with
             | ValueField vt -> sprintf "Field of %O" vt
@@ -409,7 +413,8 @@ module rec ConfigParser =
             | None -> ValueField ValueType.Scalar
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
-        | "colour_field" -> ColourField
+        | "colour_field" -> MarkerField Marker.ColourField
+        | "ir_country_tag_field" -> MarkerField Marker.IRCountryTag
         | x ->
             // eprintfn "ps %s" x
             ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
@@ -769,9 +774,24 @@ module rec ConfigParser =
 
         let rec cataRule rule : NewRule<_> list =
             match rule with
-            | LeafRule (l, ColourField), o  ->
+            | LeafRule (l, MarkerField (ColourField)), o  ->
                 [
                     NodeRule((l), [LeafValueRule(ValueField(ValueType.Float(-256.0, 256.0))), { defaultOptions with min = 3; max = 3 } ]), o
+                ]
+            | LeafRule (l, MarkerField (IRCountryTag)), o  ->
+                [
+                    LeafRule(l, ValueField(ValueType.Enum "country_tags")), o
+                    LeafRule(l, VariableGetField "dynamic_country_tag"), o
+                ]
+            | LeafRule (MarkerField (IRCountryTag), r), o  ->
+                [
+                    LeafRule(ValueField(ValueType.Enum "country_tags"), r), o
+                    LeafRule(VariableGetField "dynamic_country_tag", r), o
+                ]
+            | NodeRule (MarkerField (IRCountryTag), r), o ->
+                [
+                    NodeRule(ValueField(ValueType.Enum "country_tags"), r |> List.collect cataRule), o
+                    NodeRule(VariableGetField "dynamic_country_tag", r |> List.collect cataRule), o
                 ]
             | NodeRule (l, r), o ->
                 [NodeRule(l, r |> List.collect cataRule), o]
