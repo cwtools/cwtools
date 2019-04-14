@@ -1,6 +1,5 @@
 namespace CWTools.Games
 open CWTools.Utilities.Position
-open CWTools.Parser.Types
 open CWTools.Common
 open CWTools.Process.Scopes
 

@@ -2,20 +2,11 @@ namespace CWTools.Validation.CK2
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.ProcessCore
-open CWTools.Parser.Types
 open CWTools.Process.CK2Scopes
 open CWTools.Common
 open CWTools.Common.CK2Constants
-open DotNet.Globbing
-open System.Xml.Linq
-open System.Threading
-open CWTools.Localisation
-open FParsec
-open System
+
 open CWTools.Utilities.Utils
-open System.IO
-open CWTools.Utilities.Position
 open CWTools.Process.Scopes
 
 module CK2LocalisationString =

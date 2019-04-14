@@ -1,10 +1,8 @@
 namespace CWTools.Process
 
 open System
-open CWTools.Localisation
 open CWTools.Utilities.Position
 open CWTools.Common
-open Microsoft.FSharp.Reflection
 module Scopes =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged

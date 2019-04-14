@@ -4,19 +4,12 @@ open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
-open DotNet.Globbing
 open CWTools.Games
 open CWTools.Utilities.Utils
 open System
-open Microsoft.FSharp.Collections.Tagged
-open System.Collections
 open CWTools.Games.Stellaris.STLLookup
-open System.Threading.Tasks
-open FSharp.Collections.ParallelSeq
-open System.Globalization
 open CWTools.Process.Scopes
 open FSharpx.Collections
 

@@ -6,7 +6,6 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 open FParsec
-open CWTools.Utilities.Utils
 open DotNet.Globbing
 
 module Files =

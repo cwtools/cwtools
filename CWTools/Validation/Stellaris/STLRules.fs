@@ -2,32 +2,15 @@ namespace CWTools.Validation.Stellaris
 
 open CWTools.Parser.ConfigParser
 open CWTools.Process
-open CWTools.Utilities.Utils
-open CWTools.Validation.ValidationCore
 open CWTools.Common.STLConstants
-open CWTools.Utilities.Position
-open CWTools.Games
-open CWTools.Validation.Stellaris.STLValidation
-open FParsec
-open CWTools.Parser.Types
-open CWTools.Utilities
 open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Validation.Stellaris.STLLocalisationValidation
-open CWTools.Validation.Stellaris.ScopeValidation
-open Microsoft.FSharp.Collections.Tagged
-open System.IO
-open FSharp.Data.Runtime
 open QuickGraph
 open System
-open FSharp.Collections.ParallelSeq
-open System
-open CWTools.Process.Scopes
-open CWTools.Validation.Rules
-open CWTools.Validation
 
 
-module rec STLRules =
+module STLRules =
     type NewField = NewField<Scope>
     type NewRule = NewRule<Scope>
     type Options = Options<Scope>

@@ -4,7 +4,6 @@ open FSharp.Data
 open System.IO
 open System.Collections.Generic
 open CWTools.Common
-open FSharp.Data.Runtime
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 

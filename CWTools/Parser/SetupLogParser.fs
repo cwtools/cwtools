@@ -2,7 +2,6 @@ namespace CWTools.Parser
 
 
 open FParsec
-open System.IO
 open CWTools.Common
 open CWTools.Common.STLConstants
 

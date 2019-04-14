@@ -2,30 +2,21 @@ namespace CWTools.Games.HOI4
 open CWTools.Common.HOI4Constants
 open CWTools.Localisation
 open CWTools.Validation.ValidationCore
-open CWTools.Games.Files
 open CWTools.Games
 open CWTools.Common
-open FSharp.Collections.ParallelSeq
 open CWTools.Localisation.HOI4Localisation
-open CWTools.Utilities.Utils
-open CWTools.Utilities.Position
 open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 // open CWTools.Validation.Rules
 open CWTools.Parser.ConfigParser
-open CWTools.Common.HOI4Constants
-//open CWTools.Validation.HOI4.HOI4Rules
-open CWTools.Validation.Rules
 open CWTools.Process.HOI4Scopes
-open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.HOI4
 open System.Text
 open CWTools.Games.LanguageFeatures
 open System
 open CWTools.Validation.HOI4.HOI4LocalisationString
-open CWTools.Games
 open CWTools.Games.Helpers
 
 module HOI4GameFunctions =

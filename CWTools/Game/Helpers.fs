@@ -1,13 +1,8 @@
 namespace CWTools.Games
 open CWTools.Parser.ConfigParser
 open CWTools.Common
-open CWTools.Utilities
-open CWTools.Utilities.Position
-open FSharp.Collections.ParallelSeq
-open CWTools.Process.Scopes
 open CWTools.Process
 open CWTools.Utilities.Utils
-open CWTools.Validation.Rules
 
 module Helpers =
     let updateEventTargetLinks (embeddedSettings : EmbeddedSettings<_,_>) =

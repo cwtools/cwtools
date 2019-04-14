@@ -7,16 +7,31 @@ open CWTools.Utilities
 open Types
 open CWTools.Common
 open CWTools.Common.STLConstants
-open System.IO
 open CWTools.Process.STLProcess
 open CWTools.Process
-open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils
 open System
-open System.Globalization
 
 
-module rec ConfigParser =
+module ConfigParser =
+    type ReplaceScopes<'a> = {
+        root : 'a option
+        this : 'a option
+        froms : 'a list option
+        prevs : 'a list option
+    }
+    type Options<'a> = {
+        min : int
+        max : int
+        leafvalue : bool
+        description : string option
+        pushScope : 'a option
+        replaceScopes : ReplaceScopes<'a> option
+        severity : Severity option
+        requiredScopes : 'a list
+        comparison : bool
+    }
+
     [<Struct>]
     type ValueType =
     | Scalar
@@ -49,7 +64,43 @@ module rec ConfigParser =
     type Marker =
     | ColourField
     | IRCountryTag
-    type NewField<'a> =
+
+    type TypeLocalisation<'a> = {
+        name : string
+        prefix : string
+        suffix: string
+        required : bool
+        optional : bool
+        explicitField : string option
+        replaceScopes : ReplaceScopes<'a> option
+    }
+
+    type SkipRootKey = |SpecificKey of string |AnyKey
+    type SubTypeDefinition<'a> = {
+        name : string
+        rules : NewRule<'a> list
+        typeKeyField : string option
+        startsWith : string option
+        pushScope : 'a option
+        localisation : TypeLocalisation<'a> list
+    }
+    and TypeDefinition<'a> = {
+        name : string
+        nameField : string option
+        path : string list
+        path_strict : bool
+        path_file : string option
+        conditions : Node option
+        subtypes : SubTypeDefinition<'a> list
+        typeKeyFilter : (string list * bool) option
+        skipRootKey : SkipRootKey list
+        startsWith : string option
+        type_per_file : bool
+        warningOnly : bool
+        localisation : TypeLocalisation<'a> list
+    }
+
+    and NewField<'a> =
     | ValueField of ValueType
     | TypeField of TypeType
     /// This is only used internally to match type definitions
@@ -71,19 +122,7 @@ module rec ConfigParser =
             match x with
             | ValueField vt -> sprintf "Field of %O" vt
             | _ -> sprintf "Field of %A" x
-    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
-    type Options<'a> = {
-        min : int
-        max : int
-        leafvalue : bool
-        description : string option
-        pushScope : 'a option
-        replaceScopes : ReplaceScopes<'a> option
-        severity : Severity option
-        requiredScopes : 'a list
-        comparison : bool
-    }
-    type RuleType<'a> =
+    and RuleType<'a> =
     |NodeRule of left : NewField<'a> * rules : NewRule<'a> list
     |LeafRule of left : NewField<'a> * right : NewField<'a>
     |LeafValueRule of right : NewField<'a>
@@ -96,7 +135,8 @@ module rec ConfigParser =
             | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
             | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
             | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
-    type NewRule<'a> = RuleType<'a> * Options<'a>
+    and NewRule<'a> = RuleType<'a> * Options<'a>
+    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
         // override x.ToString() = sprintf "Rule (%O) with options (%A)" (x |> fst) (x |> snd)
     // type ObjectType =
     // | Tech
@@ -127,45 +167,7 @@ module rec ConfigParser =
             | SingleAliasRule (n, r) -> sprintf "Single alias definition %s (%O)" n r
             | TypeRule (n, r) -> sprintf "Type rule %s (%O)" n r
     // type EffectRule = Rule // Add scopes
-    type ReplaceScopes<'a> = {
-        root : 'a option
-        this : 'a option
-        froms : 'a list option
-        prevs : 'a list option
-    }
-    type SubTypeDefinition<'a> = {
-        name : string
-        rules : NewRule<'a> list
-        typeKeyField : string option
-        startsWith : string option
-        pushScope : 'a option
-        localisation : TypeLocalisation<'a> list
-    }
-    type SkipRootKey = |SpecificKey of string |AnyKey
-    type TypeLocalisation<'a> = {
-        name : string
-        prefix : string
-        suffix: string
-        required : bool
-        optional : bool
-        explicitField : string option
-        replaceScopes : ReplaceScopes<'a> option
-    }
-    type TypeDefinition<'a> = {
-        name : string
-        nameField : string option
-        path : string list
-        path_strict : bool
-        path_file : string option
-        conditions : Node option
-        subtypes : SubTypeDefinition<'a> list
-        typeKeyFilter : (string list * bool) option
-        skipRootKey : SkipRootKey list
-        startsWith : string option
-        type_per_file : bool
-        warningOnly : bool
-        localisation : TypeLocalisation<'a> list
-    }
+
     type EnumDefinition = {
             key : string
             description : string
@@ -420,15 +422,8 @@ module rec ConfigParser =
             ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
 
 
-    let processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
-        match child with
-        |NodeC n -> Some (configNode parseScope allScopes anyScope n comments (n.Key))
-        |ValueClauseC vc -> Some (configValueClause parseScope allScopes anyScope vc comments)
-        |LeafC l -> Some (configLeaf parseScope allScopes anyScope l comments (l.Key))
-        |LeafValueC lv -> Some (configLeafValue parseScope allScopes anyScope lv comments)
-        |_ -> None
 
-    let configNode (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) (key : string) =
+    let configNode (processChildConfig) (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
         let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
@@ -454,70 +449,20 @@ module rec ConfigParser =
             // |x -> NodeRule(ValueField(ValueType.Specific x), innerRules)
         NewRule(rule, options)
 
-    let configValueClause (parseScope) (allScopes) (anyScope) (valueclause : ValueClause) (comments : string list) =
+    let configValueClause processChildConfig (parseScope) (allScopes) (anyScope) (valueclause : ValueClause) (comments : string list) =
         let children = getNodeComments valueclause
         let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         let rule = ValueClauseRule innerRules
         NewRule(rule, options)
 
-    let processChildConfigRoot (parseScope) (allScopes) (anyScope) ((child, comments) : Child * string list) =
-        match child with
-        |NodeC n when n.Key == "types" -> None
-        |NodeC n -> Some (configRootNode parseScope allScopes anyScope n comments)
-        |LeafC l -> Some (configRootLeaf parseScope allScopes anyScope l comments)
-        // |LeafValueC lv -> Some (configLeafValue lv comments)
-        |_ -> None
 
-    let configRootLeaf (parseScope) allScopes (anyScope) (leaf : Leaf) (comments : string list) =
-        match leaf.Key with
-        |x when x.StartsWith "alias[" ->
-            match getAliasSettingsFromString x with
-            |Some (a, rn) ->
-                let innerRule = configLeaf parseScope allScopes anyScope leaf comments rn
-                AliasRule (a, innerRule)
-            |None ->
-                let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
-                TypeRule (x, rule)
-        |x when x.StartsWith "single_alias[" ->
-            match getSettingFromString x "single_alias" with
-            |Some (a) ->
-                let innerRule = configLeaf parseScope allScopes anyScope leaf comments x
-                SingleAliasRule (a, innerRule)
-            |None ->
-                let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
-                TypeRule (x, rule)
-        |x ->
-            let rule = configLeaf parseScope allScopes anyScope leaf comments leaf.Key
-            TypeRule (x, rule)
 
-    let configRootNode (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
-        let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
-        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
-        match node.Key with
-        |x when x.StartsWith "alias[" ->
-            match getAliasSettingsFromString x with
-            |Some (a, rn) ->
-                let innerRule = configNode parseScope allScopes anyScope node comments rn
-                // log "%s %A" a innerRule
-                AliasRule (a, innerRule)
-            |None ->
-                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
-        |x when x.StartsWith "single_alias[" ->
-            match getSettingFromString x "single_alias" with
-            |Some (a) ->
-                let innerRule = configNode parseScope allScopes anyScope node comments x
-                SingleAliasRule (a, innerRule)
-            |None ->
-                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
-        |x ->
-            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
 
     let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
     let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
 
-    let configLeaf (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
+    let configLeaf processChildConfig (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
         let options = getOptionsFromComments parseScope allScopes anyScope (leaf.Operator) comments
         let rightkey = leaf.Value.ToString()
@@ -534,7 +479,7 @@ module rec ConfigParser =
             let leafRule = LeafRule(leftfield, rightfield)
             NewRule(leafRule, options)
 
-    let configLeafValue (parseScope) allScopes (anyScope) (leafvalue : LeafValue) (comments : string list) =
+    let configLeafValue processChildConfig (parseScope) allScopes (anyScope) (leafvalue : LeafValue) (comments : string list) =
         let field = processKey parseScope anyScope (leafvalue.Value.ToRawString())
             // match leafvalue.Value.ToRawString() with
             // |x when x.StartsWith "<" && x.EndsWith ">" ->
@@ -542,6 +487,67 @@ module rec ConfigParser =
             // |x -> ValueField (ValueType.Enum x)
         let options = { getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments with leafvalue = true }
         NewRule(LeafValueRule(field), options)
+
+    let configRootLeaf processChildConfig (parseScope) allScopes (anyScope) (leaf : Leaf) (comments : string list) =
+        match leaf.Key with
+        |x when x.StartsWith "alias[" ->
+            match getAliasSettingsFromString x with
+            |Some (a, rn) ->
+                let innerRule = configLeaf processChildConfig parseScope allScopes anyScope leaf comments rn
+                AliasRule (a, innerRule)
+            |None ->
+                let rule = configLeaf processChildConfig parseScope allScopes anyScope leaf comments leaf.Key
+                TypeRule (x, rule)
+        |x when x.StartsWith "single_alias[" ->
+            match getSettingFromString x "single_alias" with
+            |Some (a) ->
+                let innerRule = configLeaf processChildConfig parseScope allScopes anyScope leaf comments x
+                SingleAliasRule (a, innerRule)
+            |None ->
+                let rule = configLeaf processChildConfig parseScope allScopes anyScope leaf comments leaf.Key
+                TypeRule (x, rule)
+        |x ->
+            let rule = configLeaf processChildConfig parseScope allScopes anyScope leaf comments leaf.Key
+            TypeRule (x, rule)
+
+    let configRootNode processChildConfig (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
+        let children = getNodeComments node
+        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
+        let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
+        match node.Key with
+        |x when x.StartsWith "alias[" ->
+            match getAliasSettingsFromString x with
+            |Some (a, rn) ->
+                let innerRule = configNode processChildConfig parseScope allScopes anyScope node comments rn
+                // log "%s %A" a innerRule
+                AliasRule (a, innerRule)
+            |None ->
+                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+        |x when x.StartsWith "single_alias[" ->
+            match getSettingFromString x "single_alias" with
+            |Some (a) ->
+                let innerRule = configNode processChildConfig parseScope allScopes anyScope node comments x
+                SingleAliasRule (a, innerRule)
+            |None ->
+                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+        |x ->
+            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+
+    let rec processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
+        match child with
+        |NodeC n -> Some (configNode processChildConfig parseScope allScopes anyScope n comments (n.Key))
+        |ValueClauseC vc -> Some (configValueClause processChildConfig parseScope allScopes anyScope vc comments)
+        |LeafC l -> Some (configLeaf processChildConfig parseScope allScopes anyScope l comments (l.Key))
+        |LeafValueC lv -> Some (configLeafValue processChildConfig parseScope allScopes anyScope lv comments)
+        |_ -> None
+
+    let processChildConfigRoot (parseScope) (allScopes) (anyScope) ((child, comments) : Child * string list) =
+        match child with
+        |NodeC n when n.Key == "types" -> None
+        |NodeC n -> Some (configRootNode processChildConfig parseScope allScopes anyScope n comments)
+        |LeafC l -> Some (configRootLeaf processChildConfig parseScope allScopes anyScope l comments)
+        // |LeafValueC lv -> Some (configLeafValue lv comments)
+        |_ -> None
 
     // Types
 

@@ -2,30 +2,13 @@ namespace CWTools.Validation.EU4
 
 open CWTools.Parser.ConfigParser
 open CWTools.Process
-open CWTools.Utilities.Utils
-open CWTools.Validation.ValidationCore
-open CWTools.Utilities.Position
-open CWTools.Games
-open FParsec
-open CWTools.Parser.Types
-open CWTools.Utilities
 open CWTools.Common
-// open CWTools.Validation.Stellaris.STLLocalisationValidation
-open CWTools.Validation.Stellaris.ScopeValidation
-open Microsoft.FSharp.Collections.Tagged
-open System.IO
-open FSharp.Data.Runtime
 open QuickGraph
 open System
-open FSharp.Collections.ParallelSeq
-open System
-open CWTools.Process.Scopes
 open CWTools.Process.EU4Scopes
 open CWTools.Common.EU4Constants
-open CWTools.Validation.Rules
-open CWTools.Validation
 
-module rec EU4Rules =
+module EU4Rules =
     type NewField = NewField<Scope>
     type NewRule = NewRule<Scope>
     type Options = Options<Scope>

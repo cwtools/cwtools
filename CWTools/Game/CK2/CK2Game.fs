@@ -1,10 +1,8 @@
 namespace CWTools.Games.CK2
 open CWTools.Localisation
 open CWTools.Validation.ValidationCore
-open CWTools.Games.Files
 open CWTools.Games
 open CWTools.Common
-open FSharp.Collections.ParallelSeq
 open CWTools.Localisation.CK2Localisation
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
@@ -14,13 +12,10 @@ open CWTools.Validation.Common.CommonValidation
 // open CWTools.Validation.Rules
 open CWTools.Parser.ConfigParser
 open CWTools.Common.CK2Constants
-open CWTools.Validation.Rules
 open CWTools.Process.CK2Scopes
-open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.CK2
 open System.Text
-open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.CK2.CK2LocalisationString
 open CWTools.Validation.LocalisationString

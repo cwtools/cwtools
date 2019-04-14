@@ -1,16 +1,6 @@
 namespace CWTools.Validation.EU4
 open CWTools.Validation.ValidationCore
-open CWTools.Process.STLProcess
-open CWTools.Process
-open CWTools.Process.ProcessCore
-open CWTools.Parser.Types
-open CWTools.Process.STLScopes
 open CWTools.Common
-open CWTools.Common.STLConstants
-open DotNet.Globbing
-open System.Xml.Linq
-open System.Threading
-open CWTools.Utilities.Utils
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Games
 

@@ -2,19 +2,10 @@ namespace CWTools.Games
 open CWTools.Common
 // open CWTools.Process.STLScopes
 open CWTools.Validation.Rules
-open CWTools.Validation.ValidationCore
-open CWTools.Games.Stellaris.STLLookup
-open FParsec
-open CWTools.Utilities.Position
-open CWTools.Common
-open CWTools.Process.Scopes
 open Files
 open System.Text
-open CWTools.Localisation
-open System.Resources
 open CWTools.Utilities.Utils
 open System.IO
-open CWTools.Utilities.Utils
 
 
 

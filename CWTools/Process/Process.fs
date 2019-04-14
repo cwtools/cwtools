@@ -1,6 +1,5 @@
 namespace CWTools.Process
 
-open CWTools.Parser
 open System
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
@@ -32,7 +31,7 @@ type IKeyPos =
     abstract member Key : string
     abstract member Position : range
 
-type IClause = 
+type IClause =
     inherit IKeyPos
     abstract member Nodes : Node seq
     abstract member LeafValues : LeafValue seq
@@ -97,7 +96,7 @@ and LeafValue(value : Value, ?pos : range) =
 
 
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of leafvalue : LeafValue |ValueClauseC of valueclause : ValueClause
-and ValueClause(pos : range) = 
+and ValueClause(pos : range) =
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty
     let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
@@ -156,7 +155,7 @@ and ValueClause(pos : range) =
         member this.AllArray = this.AllArray
         member this.Clauses = this.Clauses
 
-    
+
 and Node (key : string, pos : range) =
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty

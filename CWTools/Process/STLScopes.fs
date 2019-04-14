@@ -1,8 +1,6 @@
 namespace CWTools.Process
 
 open System
-open CWTools.Localisation
-open CWTools.Utilities.Position
 open CWTools.Common
 open CWTools.Process.Scopes
 module STLScopes =

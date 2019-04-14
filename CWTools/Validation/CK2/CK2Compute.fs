@@ -1,8 +1,6 @@
 namespace CWTools.Validation.CK2
-open CWTools.Common
 open CWTools.Games
 open CWTools.Validation.Rules
-open CWTools.Games
 
 module CK2Compute =
 

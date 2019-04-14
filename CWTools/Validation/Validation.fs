@@ -1,7 +1,6 @@
 namespace CWTools.Validation
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
-open CWTools.Parser
 open CWTools.Common
 open CWTools.Utilities.Position
 open DotNet.Globbing

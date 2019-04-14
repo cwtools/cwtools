@@ -1,8 +1,6 @@
 namespace CWTools.Validation.HOI4
-open CWTools.Common
 open CWTools.Games
 open CWTools.Validation.Rules
-open CWTools.Games
 
 module HOI4Compute =
 

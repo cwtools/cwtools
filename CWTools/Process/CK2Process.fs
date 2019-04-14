@@ -3,9 +3,7 @@ open CWTools.Parser.Types
 open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
-open System.Text
 open CWTools.Utilities.Position
-open FParsec
 
 module CK2Process =
     type Option(key, pos) =

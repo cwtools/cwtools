@@ -7,23 +7,13 @@ open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Position
 open CWTools.Utilities
 open CWTools.Games
-open Stellaris.STLValidation
-open FParsec
-open CWTools.Parser.Types
-open CWTools.Utilities
 open CWTools.Common
-open CWTools.Validation.Stellaris.ScopeValidation
 open Microsoft.FSharp.Collections.Tagged
 open System.IO
-open FSharp.Data.Runtime
 open QuickGraph
 open System
 open FSharp.Collections.ParallelSeq
-open System
 open CWTools.Process.Scopes
-open FParsec
-open System.Collections
-open System.Diagnostics
 open CWTools.Process.ProcessCore
 
 // type RuleApplicator<'S, 'T when 'T :> ComputedData and 'S : comparison> = {
@@ -41,7 +31,7 @@ type RuleContext<'T when 'T :> IScope<'T>> =
             scopes : ScopeContext<'T>
             warningOnly : bool
         }
-module rec Rules =
+module Rules =
 
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b

@@ -1,17 +1,9 @@
 namespace CWTools.Validation.Stellaris
 open CWTools.Validation.ValidationCore
-open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Process.STLScopes
 open CWTools.Common
-open CWTools.Common.STLConstants
-open DotNet.Globbing
-open STLValidation
-open System.Xml.Linq
-open System.Threading
-open CWTools.Utilities.Utils
 open CWTools.Games.Stellaris.STLLookup
 
 module STLLocalisationValidation =

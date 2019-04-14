@@ -7,7 +7,6 @@ open CWTools.Validation.Rules
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils
-open CWTools.Games
 module STLCompute =
 
     let getAllTechPrereqs (e : Entity) =

@@ -3,7 +3,6 @@ open CWTools.Common
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
-open CWTools.Validation
 open CWTools.Parser.ConfigParser
 open CWTools.Process
 open CWTools.Parser.Types

@@ -1,7 +1,6 @@
 namespace CWTools.Games.EU4
 open CWTools.Localisation
 open CWTools.Validation.ValidationCore
-open CWTools.Games.Files
 open CWTools.Games
 open CWTools.Common
 open FSharp.Collections.ParallelSeq
@@ -9,20 +8,15 @@ open CWTools.Localisation.EU4Localisation
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
 open CWTools.Utilities
-open System.IO
 open CWTools.Validation.Common.CommonValidation
 // open CWTools.Validation.Rules
 open CWTools.Parser.ConfigParser
 open CWTools.Common.EU4Constants
 open CWTools.Validation.EU4.EU4Rules
-open CWTools.Validation.Rules
 open CWTools.Process.EU4Scopes
-open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.EU4
 open System.Text
-open CWTools.Validation.Rules
-open CWTools.Validation.EU4.EU4LocalisationValidation
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
 open CWTools.Validation.EU4.EU4LocalisationString

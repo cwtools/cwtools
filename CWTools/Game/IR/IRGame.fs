@@ -1,12 +1,9 @@
 namespace CWTools.Games.IR
 open CWTools.Localisation
 open CWTools.Validation.ValidationCore
-open CWTools.Games.Files
 open CWTools.Games
 open CWTools.Common
-open FSharp.Collections.ParallelSeq
 open CWTools.Localisation.IRLocalisation
-open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
 open CWTools.Utilities
 open System.IO
@@ -14,18 +11,14 @@ open CWTools.Validation.Common.CommonValidation
 // open CWTools.Validation.Rules
 open CWTools.Parser.ConfigParser
 open CWTools.Common.IRConstants
-open CWTools.Validation.Rules
 open CWTools.Process.IRScopes
-open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Validation.IR
 open System.Text
-open CWTools.Validation.Rules
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.IR.IRLocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.ProcessCore
 open System
 open CWTools.Games.Helpers
 

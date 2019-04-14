@@ -2,10 +2,7 @@ namespace CWTools.Parser
 
 
 open FParsec
-open System.IO
-open CWTools.Common
 open CWTools.Common.CK2Constants
-open FSharp.Data
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils

@@ -1,11 +1,5 @@
 namespace CWTools.Games
 open CWTools.Process
-open FSharp.Collections.ParallelSeq
-open FParsec
-open System.IO
-open CWTools.Parser
-open CWTools.Process.STLProcess
-open CWTools.Common.STLConstants
 open CWTools.Common
 // open CWTools.Process.STLScopes
 open CWTools.Parser.ConfigParser

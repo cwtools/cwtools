@@ -10,7 +10,6 @@ open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
-open CWTools.Common
 
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
     member val Cache : Map<string, obj list> = Map.empty with get, set

@@ -1,19 +1,12 @@
 namespace CWTools.Validation.Stellaris
 open CWTools.Validation.ValidationCore
-open CWTools.Process.STLProcess
 open CWTools.Process
-open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
-open DotNet.Globbing
 open CWTools.Games
 open CWTools.Utilities.Utils
 open System
-open Microsoft.FSharp.Collections.Tagged
-open System.Collections
-open STLValidation
 open FSharpx.Collections
 
 

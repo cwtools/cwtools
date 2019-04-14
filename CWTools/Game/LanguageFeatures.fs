@@ -1,11 +1,9 @@
 namespace CWTools.Games
-open CWTools.Common
 open CWTools.Utilities.Position
 open System.IO
 open Files
 open CWTools.Validation.Rules
 open CWTools.Utilities.Utils
-open CWTools.Validation.Stellaris.ScopeValidation
 open CWTools.Process
 
 module LanguageFeatures =
