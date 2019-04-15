@@ -680,7 +680,7 @@ module STLValidation =
 
     let validateIfElse210 : STLStructureValidator =
         fun _ es ->
-            let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let codeBlocks = (es.AllEffects)// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "limit" || x.Key == "modifier" then OK else
@@ -693,7 +693,7 @@ module STLValidation =
 
     let validateIfElse : STLStructureValidator =
         fun _ es ->
-            let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let codeBlocks = (es.AllEffects)
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "if" && x.Has "else" && not(x.Has "if") then
@@ -718,8 +718,8 @@ module STLValidation =
     type BoolState = | AND | OR
     let validateRedundantAND : STLStructureValidator =
         fun _ es ->
-            let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
-            let triggers = (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let effects = (es.AllEffects)
+            let triggers = (es.AllTriggers)
             let fNode =
                 fun (last : BoolState) (x : Node) ->
                     match last, x.Key with
@@ -731,7 +731,7 @@ module STLValidation =
 
     let validateDeprecatedSetName : STLStructureValidator =
         fun _ es ->
-            let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let effects = (es.AllEffects)
             let fNode =
                 fun (x : Node) children ->
                     if x.Key == "set_empire_name" || x.Key == "set_planet_name" then

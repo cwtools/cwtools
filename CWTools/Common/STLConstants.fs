@@ -50,7 +50,6 @@ module STLConstants =
             |Alliance -> "Alliance"
             |War -> "War"
             |Megastructure -> "Megastructure"
-            |Any -> "Any"
             |Design -> "Design"
             |Starbase -> "Starbase"
             |Star -> "Star"

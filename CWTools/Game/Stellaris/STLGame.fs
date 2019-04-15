@@ -18,7 +18,6 @@ open CWTools.Validation.Stellaris.Graphics
 open CWTools.Games
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
-open CWTools.Validation.Stellaris.STLRules
 open CWTools.Rules
 open CWTools.Validation.Stellaris
 open CWTools.Validation.Common.CommonValidation

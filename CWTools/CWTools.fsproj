@@ -63,10 +63,8 @@
     <Compile Include="Rules/FieldValidators.fs" />
     <Compile Include="Rules/Rules.fs" />
     <Compile Include="Rules/RulesHelpers.fs" />
-    <Compile Include="Validation/Stellaris/STLRules.fs" />
     <Compile Include="Game/RulesManager.fs" />
     <Compile Include="Game/LanguageFeatures.fs" />
-    <Compile Include="Validation/EU4/EU4Rules.fs" />
     <Compile Include="Validation/EU4/EU4LocalisationString.fs" />
     <Compile Include="Validation/EU4/EU4LocalisationValidation.fs" />
     <Compile Include="Validation/EU4/EU4Validation.fs" />
