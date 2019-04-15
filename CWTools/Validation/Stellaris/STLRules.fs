@@ -1,6 +1,6 @@
 namespace CWTools.Validation.Stellaris
 
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Process
 open CWTools.Common.STLConstants
 open CWTools.Process.STLScopes

@@ -1,6 +1,6 @@
 namespace CWTools.Validation
 
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Validation.ValidationCore
@@ -70,7 +70,7 @@ module Rules =
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
-    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) leafornode errors =
+    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
         if key |> firstCharEqualsAmp then errors else
                 match (vt) with
                 | ValueType.Scalar ->
@@ -113,7 +113,7 @@ module Rules =
                     then errors
                     else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a portrait properties value, got %s" key) severity) leafornode <&&&> errors
 
-    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (id : StringToken) (key : string) =
+    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
             | ValueType.Scalar ->
@@ -670,7 +670,7 @@ module Rules =
             |>
             (applyToAll rules (checkCardinality startNode))
 
-        and applyValueField severity (vt : CWTools.Parser.ConfigParser.ValueType) (leaf : Leaf) =
+        and applyValueField severity (vt : CWTools.Rules.ValueType) (leaf : Leaf) =
             checkValidValue enumsMap severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
 
         and applyLeafValueRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leafvalue : LeafValue) errors =
@@ -871,7 +871,7 @@ module Rules =
             res <&&> rootres
 
 
-        member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific rootId)) rule node OK
+        member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } CWTools.Rules.ConfigParser.defaultOptions (ValueField (ValueType.Specific rootId)) rule node OK
         member this.TestSubType(subtypes, node) = testSubtype subtypes node
         member this.RuleValidate() = (fun _ (es : EntitySet<_>) -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate)
         member this.RuleValidateEntity = (fun e -> validate (e.logicalpath, e.entity))

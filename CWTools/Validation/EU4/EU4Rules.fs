@@ -1,6 +1,6 @@
 namespace CWTools.Validation.EU4
 
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Process
 open CWTools.Common
 open QuickGraph

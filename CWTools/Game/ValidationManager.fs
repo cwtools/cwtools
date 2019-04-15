@@ -3,7 +3,7 @@ open CWTools.Common
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Validation.Rules
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Process
 open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationValidation

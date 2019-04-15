@@ -18,7 +18,7 @@ open CWTools.Games
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Validation.Stellaris.STLRules
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Validation.Stellaris
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Process.Scopes
@@ -112,18 +112,18 @@ module STLGameFunctions =
                                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false}
         lookup.coreModifiers
-            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.ConfigParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
     let addTriggerDocsScopes (lookup : Lookup<_,_>) (rules : RootRule<_> list) =
             let scriptedOptions (effect : ScriptedEffect) =
                 {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false}
             let getAllScriptedEffects =
                 lookup.onlyScriptedEffects |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
-                                                |> List.map (fun se -> AliasRule("effect", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
+                                                |> List.map (fun se -> AliasRule("effect", NewRule(LeafRule(CWTools.Rules.ConfigParser.specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
             let getAllScriptedTriggers =
                 lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
-                                                |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
-            let addRequiredScopesE (s : StringTokens) (o : ConfigParser.Options<_>) =
+                                                |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(CWTools.Rules.ConfigParser.specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
+            let addRequiredScopesE (s : StringTokens) (o : Options<_>) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -132,7 +132,7 @@ module STLGameFunctions =
                             |> Option.defaultValue []
                     |x -> x
                 { o with requiredScopes = newScopes}
-            let addRequiredScopesT (s : StringTokens) (o : ConfigParser.Options<_>) =
+            let addRequiredScopesT (s : StringTokens) (o : Options<_>) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->

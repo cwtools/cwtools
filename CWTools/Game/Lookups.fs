@@ -2,7 +2,7 @@ namespace CWTools.Games
 open CWTools.Process
 open CWTools.Common
 // open CWTools.Process.STLScopes
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Process.Scopes
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils

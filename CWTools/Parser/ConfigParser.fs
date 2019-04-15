@@ -1,185 +1,169 @@
-namespace CWTools.Parser
+namespace CWTools.Rules
 
 
 open FParsec
 open CWTools.Utilities.Position
 open CWTools.Utilities
-open Types
+open CWTools.Parser.Types
 open CWTools.Common
 open CWTools.Common.STLConstants
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils
 open System
+open CWTools.Parser
 
 
-module ConfigParser =
-    type ReplaceScopes<'a> = {
-        root : 'a option
-        this : 'a option
-        froms : 'a list option
-        prevs : 'a list option
-    }
-    type Options<'a> = {
-        min : int
-        max : int
-        leafvalue : bool
-        description : string option
-        pushScope : 'a option
-        replaceScopes : ReplaceScopes<'a> option
-        severity : Severity option
-        requiredScopes : 'a list
-        comparison : bool
-    }
+type ReplaceScopes<'a> = {
+    root : 'a option
+    this : 'a option
+    froms : 'a list option
+    prevs : 'a list option
+}
+type Options<'a> = {
+    min : int
+    max : int
+    leafvalue : bool
+    description : string option
+    pushScope : 'a option
+    replaceScopes : ReplaceScopes<'a> option
+    severity : Severity option
+    requiredScopes : 'a list
+    comparison : bool
+}
 
-    [<Struct>]
-    type ValueType =
-    | Scalar
-    | Enum of enumc : string
-    | Specific of valuec : StringTokens
-    | Float of minmax: (float*float)
-    | Bool
-    | Int of minmaxi: (int*int)
-    | Percent
-    | Date
-    | CK2DNA
-    | CK2DNAProperty
-        override x.ToString() =
-            match x with
-            | Scalar -> "Scalar"
-            | Enum enumc -> sprintf "Enum %s" enumc
-            | Specific valuec -> sprintf "Specific %s" (StringResource.stringManager.GetStringForIDs valuec)
-            | Float (min, max) -> sprintf "Float with min %f and max %f" min max
-            | Bool -> "Bool"
-            | Int (min, max) -> sprintf "Int with min %i and max %i" min max
-            | Percent -> "Percent"
-            | Date -> "Date"
-            | CK2DNA -> "CK2DNA"
-            | CK2DNAProperty -> "CK2DNAProperty"
+[<Struct>]
+type ValueType =
+| Scalar
+| Enum of enumc : string
+| Specific of valuec : StringTokens
+| Float of minmax: (float*float)
+| Bool
+| Int of minmaxi: (int*int)
+| Percent
+| Date
+| CK2DNA
+| CK2DNAProperty
+    override x.ToString() =
+        match x with
+        | Scalar -> "Scalar"
+        | Enum enumc -> sprintf "Enum %s" enumc
+        | Specific valuec -> sprintf "Specific %s" (StringResource.stringManager.GetStringForIDs valuec)
+        | Float (min, max) -> sprintf "Float with min %f and max %f" min max
+        | Bool -> "Bool"
+        | Int (min, max) -> sprintf "Int with min %i and max %i" min max
+        | Percent -> "Percent"
+        | Date -> "Date"
+        | CK2DNA -> "CK2DNA"
+        | CK2DNAProperty -> "CK2DNAProperty"
 
-    type TypeType =
-    | Simple of string
-    | Complex of prefix : string * name : string * suffix : string
+type TypeType =
+| Simple of string
+| Complex of prefix : string * name : string * suffix : string
 
-    type Marker =
-    | ColourField
-    | IRCountryTag
+type Marker =
+| ColourField
+| IRCountryTag
 
-    type TypeLocalisation<'a> = {
-        name : string
-        prefix : string
-        suffix: string
-        required : bool
-        optional : bool
-        explicitField : string option
-        replaceScopes : ReplaceScopes<'a> option
-    }
+type TypeLocalisation<'a> = {
+    name : string
+    prefix : string
+    suffix: string
+    required : bool
+    optional : bool
+    explicitField : string option
+    replaceScopes : ReplaceScopes<'a> option
+}
 
-    type SkipRootKey = |SpecificKey of string |AnyKey
-    type SubTypeDefinition<'a> = {
-        name : string
-        rules : NewRule<'a> list
-        typeKeyField : string option
-        startsWith : string option
-        pushScope : 'a option
-        localisation : TypeLocalisation<'a> list
-    }
-    and TypeDefinition<'a> = {
-        name : string
-        nameField : string option
-        path : string list
-        path_strict : bool
-        path_file : string option
-        conditions : Node option
-        subtypes : SubTypeDefinition<'a> list
-        typeKeyFilter : (string list * bool) option
-        skipRootKey : SkipRootKey list
-        startsWith : string option
-        type_per_file : bool
-        warningOnly : bool
-        localisation : TypeLocalisation<'a> list
-    }
+type SkipRootKey = |SpecificKey of string |AnyKey
+type SubTypeDefinition<'a> = {
+    name : string
+    rules : NewRule<'a> list
+    typeKeyField : string option
+    startsWith : string option
+    pushScope : 'a option
+    localisation : TypeLocalisation<'a> list
+}
+and TypeDefinition<'a> = {
+    name : string
+    nameField : string option
+    path : string list
+    path_strict : bool
+    path_file : string option
+    conditions : Node option
+    subtypes : SubTypeDefinition<'a> list
+    typeKeyFilter : (string list * bool) option
+    skipRootKey : SkipRootKey list
+    startsWith : string option
+    type_per_file : bool
+    warningOnly : bool
+    localisation : TypeLocalisation<'a> list
+}
 
-    and NewField<'a> =
-    | ValueField of ValueType
-    | TypeField of TypeType
-    /// This is only used internally to match type definitions
-    | TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition<'a>
-    | ScopeField of 'a
-    | LocalisationField of synced : bool
-    | FilepathField
-    | IconField of string
-    | AliasField of string
-    | SingleAliasField of string
-    | SubtypeField of string * bool * NewRule<'a> list
-    | VariableSetField of string
-    | VariableGetField of string
-    | VariableField of isInt : bool * minmax : (float * float)
-    | ValueScopeMarkerField of isInt : bool * minmax : (float * float)
-    | ValueScopeField of isInt : bool * minmax : (float * float)
-    | MarkerField of Marker
-        override x.ToString() =
-            match x with
-            | ValueField vt -> sprintf "Field of %O" vt
-            | _ -> sprintf "Field of %A" x
-    and RuleType<'a> =
-    |NodeRule of left : NewField<'a> * rules : NewRule<'a> list
-    |LeafRule of left : NewField<'a> * right : NewField<'a>
-    |LeafValueRule of right : NewField<'a>
-    |ValueClauseRule of rules : NewRule<'a> list
-    |SubtypeRule of string * bool * NewRule<'a> list
-        override x.ToString() =
-            match x with
-            | NodeRule (l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
-            | LeafRule (l, r) -> sprintf "LeafRule with Left (%O) and right (%O)" l r
-            | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
-            | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
-            | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
-    and NewRule<'a> = RuleType<'a> * Options<'a>
-    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
-        // override x.ToString() = sprintf "Rule (%O) with options (%A)" (x |> fst) (x |> snd)
-    // type ObjectType =
-    // | Tech
-    // | ShipSize
-    // | StarbaseModule
-    // type Rule = string * Options * Field
-    // type Field =
-    // | ValueField of ValueType
-    // | ObjectField of EntityType
-    // | TypeField of string
-    // | LeftTypeField of string * Field
-    // | ClauseField of Rule list
-    // | LeftClauseField of ValueType * Field
-    // | ScopeField of Scope
-    // | LeftScopeField of Rule list
-    // | LocalisationField of synced : bool
-    // | FilepathField
-    // | AliasField of string
-    // | SubtypeField of string * bool * Field
+and NewField<'a> =
+| ValueField of ValueType
+| TypeField of TypeType
+/// This is only used internally to match type definitions
+| TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition<'a>
+| ScopeField of 'a
+| LocalisationField of synced : bool
+| FilepathField
+| IconField of string
+| AliasField of string
+| SingleAliasField of string
+| SubtypeField of string * bool * NewRule<'a> list
+| VariableSetField of string
+| VariableGetField of string
+| VariableField of isInt : bool * minmax : (float * float)
+| ValueScopeMarkerField of isInt : bool * minmax : (float * float)
+| ValueScopeField of isInt : bool * minmax : (float * float)
+| MarkerField of Marker
+    override x.ToString() =
+        match x with
+        | ValueField vt -> sprintf "Field of %O" vt
+        | _ -> sprintf "Field of %A" x
+and RuleType<'a> =
+|NodeRule of left : NewField<'a> * rules : NewRule<'a> list
+|LeafRule of left : NewField<'a> * right : NewField<'a>
+|LeafValueRule of right : NewField<'a>
+|ValueClauseRule of rules : NewRule<'a> list
+|SubtypeRule of string * bool * NewRule<'a> list
+    override x.ToString() =
+        match x with
+        | NodeRule (l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
+        | LeafRule (l, r) -> sprintf "LeafRule with Left (%O) and right (%O)" l r
+        | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
+        | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
+        | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
+and NewRule<'a> = RuleType<'a> * Options<'a>
 
-    type RootRule<'a> =
-    | AliasRule of string * NewRule<'a>
-    | SingleAliasRule of string * NewRule<'a>
-    | TypeRule of string * NewRule<'a>
-        override x.ToString() =
-            match x with
-            | AliasRule (n, r) -> sprintf "Alias definition %s (%O)" n r
-            | SingleAliasRule (n, r) -> sprintf "Single alias definition %s (%O)" n r
-            | TypeRule (n, r) -> sprintf "Type rule %s (%O)" n r
-    // type EffectRule = Rule // Add scopes
+type RootRule<'a> =
+| AliasRule of string * NewRule<'a>
+| SingleAliasRule of string * NewRule<'a>
+| TypeRule of string * NewRule<'a>
+    override x.ToString() =
+        match x with
+        | AliasRule (n, r) -> sprintf "Alias definition %s (%O)" n r
+        | SingleAliasRule (n, r) -> sprintf "Single alias definition %s (%O)" n r
+        | TypeRule (n, r) -> sprintf "Type rule %s (%O)" n r
+// type EffectRule = Rule // Add scopes
 
-    type EnumDefinition = {
-            key : string
-            description : string
-            values : string list
-        }
-    type ComplexEnumDef = {
-        name : string
+type EnumDefinition = {
+        key : string
         description : string
-        path : string
-        nameTree : Node
-        start_from_root : bool
+        values : string list
     }
+type ComplexEnumDef = {
+    name : string
+    description : string
+    path : string
+    nameTree : Node
+    start_from_root : bool
+}
+
+[<RequireQualifiedAccess>]
+module ConfigParser =
+    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
     let parseSeverity =
         function
         |"error" -> Severity.Error

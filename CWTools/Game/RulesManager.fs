@@ -1,5 +1,5 @@
 namespace CWTools.Games
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Common
 open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
@@ -56,7 +56,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
     let mutable rulesDataGenerated = false
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
-        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> parseConfigs settings.parseScope settings.allScopes settings.anyScope
+        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> CWTools.Rules.ConfigParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
         // tempEffects <- updateScriptedEffects game rules
         // effects <- tempEffects
         // tempTriggers <- updateScriptedTriggers game rules
