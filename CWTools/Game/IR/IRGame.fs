@@ -311,8 +311,8 @@ type IRGame(settings : IRSettings) =
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
     let game = GameObject<Scope, Modifier, IRComputedData>.CreateGame
-                ((settings, "imperator", scriptFolders, IRCompute.computeIRData,
-                    IRCompute.computeIRDataUpdate,
+                ((settings, "imperator", scriptFolders, Compute.computeIRData,
+                    Compute.computeIRDataUpdate,
                      (IRLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),

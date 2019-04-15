@@ -1,13 +1,92 @@
-namespace CWTools.Validation.Stellaris
-open CWTools.Games
-open CWTools.Common.STLConstants
-open CWTools.Process.STLProcess
-open CWTools.Games.Stellaris.STLLookup
+module CWTools.Games.Compute
+
 open CWTools.Rules.Rules
-open CWTools.Process
-open CWTools.Process.ProcessCore
-open CWTools.Utilities.Utils
-module STLCompute =
+open CWTools.Games
+open System
+
+let computeData (foldRules : unit -> FoldRules<_> option) (e : Entity) =
+    let withRulesData = foldRules().IsSome
+    let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+    let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
+        match res with
+        | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
+        | None -> (None, None, None, None)
+    // let hastechs = getAllTechPrereqs e
+    ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+
+let computeDataUpdate (foldRules : unit -> FoldRules<_> option) (e : Entity) (data : ComputedData) =
+    let withRulesData = foldRules().IsSome
+    let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+    let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
+        match res with
+        | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
+        | None -> (None, None, None, None)
+
+    data.Referencedtypes <- referencedtypes
+    data.Definedvariables <- definedvariable
+    data.EffectBlocks <- effectBlocks
+    data.TriggerBlocks <- triggersBlocks
+    data.WithRulesData <- withRulesData
+
+let computeCK2Data = computeData
+let computeCK2DataUpdate = computeDataUpdate
+let computeIRData = computeData
+let computeIRDataUpdate = computeDataUpdate
+let computeHOI4Data = computeData
+let computeHOI4DataUpdate = computeDataUpdate
+
+module EU4 = 
+    open CWTools.Process
+    open CWTools.Process.ProcessCore
+
+    let getScriptedEffectParams (node : Node) =
+        let getDollarText (s : string) (acc) =
+            let split = s.Split([|'$'|],3)
+            if split.Length = 3 then split.[1]::acc else acc
+        let fNode = (fun (x:Node) acc ->
+                        let nodeRes = getDollarText x.Key acc
+                        x.Values |> List.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes
+                        )
+        node |> (foldNode7 fNode) |> List.ofSeq
+
+    let getScriptedEffectParamsEntity (e : Entity) =
+        if (e.logicalpath.StartsWith("common/scripted_effects", StringComparison.OrdinalIgnoreCase)
+                    || e.logicalpath.StartsWith("common/scripted_triggers", StringComparison.OrdinalIgnoreCase))
+                then getScriptedEffectParams (e.entity) else []
+    
+    let computeEU4Data (foldRules : unit -> FoldRules<_> option) (e : Entity) =
+        let withRulesData = foldRules().IsSome
+        let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+        let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
+            match res with
+            | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
+            | None -> (None, None, None, None)
+        // let hastechs = getAllTechPrereqs e
+        let scriptedeffectparams = Some (getScriptedEffectParamsEntity e)
+
+        EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks)
+    let computeEU4DataUpdate (foldRules : unit -> FoldRules<_> option) (e : Entity) (data : EU4ComputedData) =
+        let withRulesData = foldRules().IsSome
+        let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+        let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
+            match res with
+            | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
+            | None -> (None, None, None, None)
+
+        data.Referencedtypes <- referencedtypes
+        data.Definedvariables <- definedvariable
+        data.EffectBlocks <- effectBlocks
+        data.TriggerBlocks <- triggersBlocks
+        data.WithRulesData <- withRulesData
+
+module STL =
+    open CWTools.Process
+    open CWTools.Process.ProcessCore
+    open CWTools.Process.STLProcess
+    open CWTools.Games.Stellaris.STLLookup
+    open CWTools.Utilities.Utils
+    open CWTools.Common.STLConstants
+    open CWTools.Validation.Stellaris
 
     let getAllTechPrereqs (e : Entity) =
         let fNode = (fun (x : Node) acc ->

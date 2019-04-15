@@ -22,12 +22,14 @@ type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks,
 type EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks) =
     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
     member __.ScriptedEffectParams : string list option = scriptedeffectparams
-type HOI4ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
-    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
-type CK2ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
-    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
-type IRComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
-    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+type HOI4ComputedData = ComputedData
+type CK2ComputedData = ComputedData
+type IRComputedData = ComputedData
+//     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+// type CK2ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
+//     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+// type IRComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
+//     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
 
 type PassFileResult = {

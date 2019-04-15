@@ -26,7 +26,7 @@ open CWTools.Games.Helpers
 open CWTools.Rules
 
 module CK2GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, CK2ComputedData>
+    type GameObject = GameObject<Scope, Modifier, ComputedData>
     let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
@@ -258,8 +258,8 @@ type CK2Game(settings : CK2Settings) =
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
     let game = GameObject<Scope, Modifier, CK2ComputedData>.CreateGame
-                ((settings, "crusader kings ii", scriptFolders, CK2Compute.computeCK2Data,
-                    CK2Compute.computeCK2DataUpdate,
+                ((settings, "crusader kings ii", scriptFolders, Compute.computeCK2Data,
+                    Compute.computeCK2DataUpdate,
                      (CK2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),

@@ -7,7 +7,6 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Position
 open CWTools.Utilities
-open CWTools.Games
 open CWTools.Common
 open Microsoft.FSharp.Collections.Tagged
 open System.IO
@@ -16,6 +15,7 @@ open System
 open FSharp.Collections.ParallelSeq
 open CWTools.Process.Scopes
 open CWTools.Process.ProcessCore
+open CWTools.Games
 
 module Rules =
 

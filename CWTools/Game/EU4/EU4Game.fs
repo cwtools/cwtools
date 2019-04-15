@@ -22,6 +22,7 @@ open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
 open CWTools.Validation.EU4.EU4LocalisationString
 open CWTools.Games.Helpers
+open CWTools.Games.Compute.EU4
 
 module EU4GameFunctions =
     type GameObject = GameObject<Scope, Modifier, EU4ComputedData>
@@ -188,8 +189,8 @@ type EU4Game(settings : EU4Settings) =
     }
 
     let game = GameObject<Scope, Modifier, EU4ComputedData>.CreateGame
-                ((settings, "europa universalis iv", scriptFolders, EU4Compute.computeEU4Data,
-                    EU4Compute.computeEU4DataUpdate,
+                ((settings, "europa universalis iv", scriptFolders, Compute.EU4.computeEU4Data,
+                    Compute.EU4.computeEU4DataUpdate,
                      (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),

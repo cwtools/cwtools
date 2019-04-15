@@ -231,8 +231,8 @@ type STLGame (settings : StellarisSettings) =
         }
 
         let game = GameObject<Scope, Modifier, STLComputedData>.CreateGame
-                    (settings, "stellaris", scriptFolders, STLCompute.computeSTLData,
-                    STLCompute.computeSTLDataUpdate,
+                    (settings, "stellaris", scriptFolders, Compute.STL.computeSTLData,
+                    Compute.STL.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),

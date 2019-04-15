@@ -174,8 +174,8 @@ type HOI4Game(settings : HOI4Settings) =
     }
 
     let game = GameObject<Scope, Modifier, HOI4ComputedData>.CreateGame
-                (settings, "hearts of iron iv", scriptFolders, HOI4Compute.computeHOI4Data,
-                HOI4Compute.computeHOI4DataUpdate,
+                (settings, "hearts of iron iv", scriptFolders, Compute.computeHOI4Data,
+                Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                  HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                  HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
@@ -200,7 +200,7 @@ type HOI4Game(settings : HOI4Settings) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<HOI4ComputedData, Scope, Modifier> with
+    interface IGame<ComputedData, Scope, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
