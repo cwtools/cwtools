@@ -10,7 +10,7 @@ open System.IO
 open CWTools.Validation.Common.CommonValidation
 // open CWTools.Rules.Rules
 open CWTools.Rules
-open CWTools.Process.HOI4Scopes
+open CWTools.Process.Scopes.HOI4
 open CWTools.Process.Scopes
 open CWTools.Validation.HOI4
 open System.Text

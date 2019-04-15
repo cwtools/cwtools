@@ -2,7 +2,7 @@ namespace CWTools.Validation.CK2
 open CWTools.Validation
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.CK2Scopes
+open CWTools.Process.Scopes.CK2
 open CWTools.Common
 open CWTools.Common.CK2Constants
 

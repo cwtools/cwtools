@@ -1,7 +1,7 @@
 namespace CWTools.Games
 open CWTools.Process
 open CWTools.Process.STLProcess
-open CWTools.Process.STLScopes
+open CWTools.Process.Scopes.STL
 open CWTools.Localisation
 open CWTools.Common
 

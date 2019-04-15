@@ -1,83 +1,54 @@
-namespace CWTools.Process
+namespace CWTools.Process.Scopes
 
 open System
 open CWTools.Utilities.Position
 open CWTools.Common
-module Scopes =
-    open CWTools.Utilities.Utils
-    open Microsoft.FSharp.Collections.Tagged
-    type EffectMap<'S when 'S : comparison> = Map<string, Effect<'S>, InsensitiveStringComparer>
-    type UsageScopeContext<'S> = 'S list
-    // type ContextResult<'S> =
-    // | Found of string * ('S list)
-    // | LocNotFound of string
-
-
-    //| Failed
-
-    // type IScopeContext<'S when 'S : comparison> =
-    //     abstract CurrentScope : 'S
-    //     abstract PopScope : 'S list
-    //     abstract GetFrom : int -> 'S
-    //     abstract Root : 'S
-    //     abstract From :'S list
-    //     abstract Scopes :'S list
-    // type RuleContext<'T when 'T : comparison> =
-    //     {
-    //         subtypes : string list
-    //         scopes : IScopeContext<'T>
-    //         warningOnly : bool
-    //     }
-
-    // type OutputScopeContext<'T> =
-    //     {
-    //         Root : 'T
-    //         From : 'T list
-    //         Scopes : 'T list
-    //     }
-    //     member inline this.CurrentScope = match this.Scopes with |[] -> None | x::_ -> Some x
-    //     member inline this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
-    //     member inline this.GetFrom i =
-    //         if this.From.Length >= i then Some (this.From.Item (i - 1)) else None
-
-    type ScopeContext< 'T when 'T :> IScope<'T> > =
-        {
-            Root : 'T
-            From : 'T list
-            Scopes : 'T list
-        }
-        member this.CurrentScope = match this.Scopes with |[] -> this.Root.AnyScope | x::_ -> x
-        member this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
-        member this.GetFrom i =
-             if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
-
-
-    type LocContextResult<'S when 'S :> IScope<'S>> =
-        | Start of startContext : ScopeContext<'S>
-        | NewScope of newScope : ScopeContext<'S>
-        | WrongScope of command : string * scope : 'S * expected : 'S list
-        //Not sure what this should be
-        | Found of endContext : ScopeContext<'S>
-        | LocNotFound of key : string
-
-    [<Struct>]
-    type LocEntry<'S when 'S :> IScope<'S>> = {
-        key : string
-        value : char option
-        desc : string
-        position : range
-        scopes : LocContextResult<'S> list
-        refs : string list
+open CWTools.Utilities.Utils
+open Microsoft.FSharp.Collections.Tagged
+type EffectMap<'S when 'S : comparison> = Map<string, Effect<'S>, InsensitiveStringComparer>
+type UsageScopeContext<'S> = 'S list
+type ScopeContext< 'T when 'T :> IScope<'T> > =
+    {
+        Root : 'T
+        From : 'T list
+        Scopes : 'T list
     }
+    member this.CurrentScope = match this.Scopes with |[] -> this.Root.AnyScope | x::_ -> x
+    member this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
+    member this.GetFrom i =
+         if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
 
 
-    type ScopeResult<'T when 'T :> IScope<'T>> =
-        | NewScope of newScope : ScopeContext<'T> * ignoreKeys : string list
-        | WrongScope of command : string * scope : 'T * expected : 'T list
-        | NotFound
-        | VarFound
-        | VarNotFound of var : string
-        | ValueFound
+type LocContextResult<'S when 'S :> IScope<'S>> =
+    | Start of startContext : ScopeContext<'S>
+    | NewScope of newScope : ScopeContext<'S>
+    | WrongScope of command : string * scope : 'S * expected : 'S list
+    //Not sure what this should be
+    | Found of endContext : ScopeContext<'S>
+    | LocNotFound of key : string
+
+[<Struct>]
+type LocEntry<'S when 'S :> IScope<'S>> = {
+    key : string
+    value : char option
+    desc : string
+    position : range
+    scopes : LocContextResult<'S> list
+    refs : string list
+}
+
+
+type ScopeResult<'T when 'T :> IScope<'T>> =
+    | NewScope of newScope : ScopeContext<'T> * ignoreKeys : string list
+    | WrongScope of command : string * scope : 'T * expected : 'T list
+    | NotFound
+    | VarFound
+    | VarNotFound of var : string
+    | ValueFound
+
+type ChangeScope<'S when 'S :> IScope<'S> and 'S : comparison> = bool -> bool -> EffectMap<'S> -> EffectMap<'S> -> ScopedEffect<'S> list -> StringSet -> string -> ScopeContext<'S> -> ScopeResult<'S>
+
+module Scopes =
     // type EffectMap<'T> = Map<string, Effect<'T>, InsensitiveStringComparer>
     let simpleVarPrefixFun prefix =
         let varStartsWith = (fun (k : string) -> k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
@@ -359,4 +330,3 @@ module Scopes =
     //                     | false -> LocNotFound (nextKey), false
     //     keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
 
-    type ChangeScope<'S when 'S :> IScope<'S> and 'S : comparison> = bool -> bool -> EffectMap<'S> -> EffectMap<'S> -> ScopedEffect<'S> list -> StringSet -> string -> ScopeContext<'S> -> ScopeResult<'S>

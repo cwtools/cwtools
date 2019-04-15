@@ -12,7 +12,7 @@ open CWTools.Validation.Common.CommonValidation
 // open CWTools.Rules.Rules
 open CWTools.Rules
 open CWTools.Common.IRConstants
-open CWTools.Process.IRScopes
+open CWTools.Process.Scopes.IR
 open CWTools.Process.Scopes
 open CWTools.Validation.IR
 open System.Text

@@ -2,7 +2,7 @@ namespace CWTools.Validation.IR
 open CWTools.Validation
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.IRScopes
+open CWTools.Process.Scopes.IR
 open CWTools.Common
 open CWTools.Common.IRConstants
 open CWTools.Utilities.Utils

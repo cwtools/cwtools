@@ -1,9 +1,9 @@
-namespace CWTools.Process
+namespace CWTools.Process.Scopes
 
 open System
 open CWTools.Common
 open CWTools.Process.Scopes
-module STLScopes =
+module STL =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
@@ -395,7 +395,7 @@ module STLScopes =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = createChangeScope<Scope> oneToOneScopes (simpleVarPrefixFun "var:")
+    let changeScope = Scopes.createChangeScope<Scope> oneToOneScopes (Scopes.simpleVarPrefixFun "var:")
 
     // let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =
     //     let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
@@ -498,4 +498,4 @@ module STLScopes =
         "Third_party", id;
         ]
 
-    let localisationCommandValidator = createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator = Scopes.createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap

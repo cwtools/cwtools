@@ -3,7 +3,7 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.STLScopes
+open CWTools.Process.Scopes.STL
 open CWTools.Common
 open CWTools.Common.STLConstants
 open System

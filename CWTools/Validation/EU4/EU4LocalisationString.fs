@@ -3,7 +3,7 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.EU4Scopes
+open CWTools.Process.Scopes.EU4
 open CWTools.Common
 open CWTools.Common.EU4Constants
 open System

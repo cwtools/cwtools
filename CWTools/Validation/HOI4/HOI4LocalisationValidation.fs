@@ -2,7 +2,7 @@ namespace CWTools.Validation.HOI4
 open CWTools.Validation
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.HOI4Scopes
+open CWTools.Process.Scopes.HOI4
 open CWTools.Common
 open CWTools.Common.HOI4Constants
 open CWTools.Utilities.Utils

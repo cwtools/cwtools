@@ -12,7 +12,7 @@ open System.IO
 open CWTools.Validation.Common.CommonValidation
 // open CWTools.Rules.Rules
 open CWTools.Common.CK2Constants
-open CWTools.Process.CK2Scopes
+open CWTools.Process.Scopes.CK2
 open CWTools.Process.Scopes
 open CWTools.Validation.CK2
 open System.Text

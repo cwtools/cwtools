@@ -9,7 +9,7 @@ open CWTools.Localisation
 open CWTools.Localisation.STLLocalisation
 open CWTools.Common
 open CWTools.Common.STLConstants
-open CWTools.Process.STLScopes
+open CWTools.Process.Scopes.STL
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Validation.Stellaris.STLEventValidation
 open CWTools.Validation.Stellaris.STLLocalisationString

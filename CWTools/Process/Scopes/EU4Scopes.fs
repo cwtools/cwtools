@@ -1,9 +1,9 @@
-namespace CWTools.Process
+namespace CWTools.Process.Scopes
 
 open CWTools.Common.EU4Constants
 open CWTools.Common
 open CWTools.Process.Scopes
-module EU4Scopes =
+module EU4 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
@@ -70,7 +70,7 @@ module EU4Scopes =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = createChangeScope<Scope> oneToOneScopes (complexVarPrefixFun "variable:from:" "variable:")
+    let changeScope = Scopes.createChangeScope<Scope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
     // let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =
     //     let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
@@ -170,4 +170,4 @@ module EU4Scopes =
         "FromFromFromFrom", from >> from >> from >> from;
         ]
 
-    let localisationCommandValidator = createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator = Scopes.createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap

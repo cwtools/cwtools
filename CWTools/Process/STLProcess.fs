@@ -41,7 +41,7 @@ module STLProcess =
                                 scriptedTriggerScope strict effects triggers root x
                             | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict triggers triggers root x
-                            | x -> STLScopes.sourceScope effects x.Key |> Set.ofList
+                            | x -> Scopes.STL.sourceScope effects x.Key |> Set.ofList
                                 // match STLScopes.sourceScope x.Key with
                                 // | Some v -> v
                                 // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
