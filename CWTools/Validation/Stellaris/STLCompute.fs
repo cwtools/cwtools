@@ -3,7 +3,7 @@ open CWTools.Games
 open CWTools.Common.STLConstants
 open CWTools.Process.STLProcess
 open CWTools.Games.Stellaris.STLLookup
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils

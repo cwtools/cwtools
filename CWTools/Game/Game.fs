@@ -1,7 +1,7 @@
 namespace CWTools.Games
 open CWTools.Common
 // open CWTools.Process.STLScopes
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
 open Files
 open System.Text
 open CWTools.Utilities.Utils

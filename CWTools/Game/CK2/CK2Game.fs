@@ -1,5 +1,6 @@
 namespace CWTools.Games.CK2
 open CWTools.Localisation
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
@@ -9,7 +10,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-// open CWTools.Validation.Rules
+// open CWTools.Rules.Rules
 open CWTools.Common.CK2Constants
 open CWTools.Process.CK2Scopes
 open CWTools.Process.Scopes
@@ -70,7 +71,7 @@ module CK2GameFunctions =
                                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false}
         lookup.coreModifiers
-            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.ConfigParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
     let updateLandedTitles (game : GameObject) =
         let fNode =

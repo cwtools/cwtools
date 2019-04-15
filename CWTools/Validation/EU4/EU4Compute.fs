@@ -1,6 +1,6 @@
 namespace CWTools.Validation.EU4
 open CWTools.Games
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
 
 
 module EU4Compute =

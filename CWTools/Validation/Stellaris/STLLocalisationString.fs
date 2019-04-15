@@ -1,4 +1,5 @@
 namespace CWTools.Validation.Stellaris
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
 open CWTools.Process

@@ -1,4 +1,5 @@
 namespace CWTools.Validation.EU4
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
 open CWTools.Process

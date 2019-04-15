@@ -1,6 +1,7 @@
 
 namespace CWTools.Validation.Common
 open CWTools.Process
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils

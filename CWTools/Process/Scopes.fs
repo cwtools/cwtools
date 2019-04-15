@@ -7,7 +7,6 @@ module Scopes =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
     type EffectMap<'S when 'S : comparison> = Map<string, Effect<'S>, InsensitiveStringComparer>
-    type StringSet = Set<string, InsensitiveStringComparer>
     type UsageScopeContext<'S> = 'S list
     // type ContextResult<'S> =
     // | Found of string * ('S list)

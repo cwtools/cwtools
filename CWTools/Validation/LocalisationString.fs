@@ -3,6 +3,7 @@ open FParsec
 open CWTools.Process.Scopes
 open CWTools.Common
 open CWTools.Utilities.Utils
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open System
 open CWTools.Localisation

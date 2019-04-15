@@ -1,5 +1,5 @@
 namespace CWTools.Validation.HOI4
-open CWTools.Validation.ValidationCore
+open CWTools.Validation
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.HOI4Scopes

@@ -239,10 +239,6 @@ module ProcessCore =
     let processNodeSimple _ = processNode id
     type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Statement -> Child) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
 
-    let fst3 (x, _, _) = x
-    let snd3 (_, x, _) = x
-    let tri3 (_, _, x) = x
-
     let updateContext f n key context =
         match n with
         |"" -> f { context with previous = key }

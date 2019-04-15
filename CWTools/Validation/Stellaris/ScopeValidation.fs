@@ -1,5 +1,5 @@
 namespace CWTools.Validation.Stellaris
-open CWTools.Validation.ValidationCore
+open CWTools.Validation
 open CWTools.Process
 open CWTools.Common.STLConstants
 open CWTools.Validation.Stellaris.STLValidation

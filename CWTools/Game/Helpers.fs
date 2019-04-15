@@ -20,14 +20,14 @@ module Helpers =
                     log (sprintf "Link %s refers to undefined type %s" link.name sourceType)
                     []
         | x when x.StartsWith "enum[" ->
-            let enum = CWTools.Rules.ConfigParser.getSettingFromString x "enum"
+            let enum = CWTools.Rules.RulesParser.getSettingFromString x "enum"
             match enum |> Option.bind (fun x -> Map.tryFind x lookup.enumDefs) with
             | Some (_, vs) -> vs
             | None ->
                 log (sprintf "Link %s refers to undefined enum %A" link.name enum)
                 []
         | x when x.StartsWith "value[" ->
-            let valuename = CWTools.Rules.ConfigParser.getSettingFromString x "value"
+            let valuename = CWTools.Rules.RulesParser.getSettingFromString x "value"
             match valuename |> Option.bind (fun x -> Map.tryFind x lookup.varDefInfo) with
             | Some vs -> vs |> List.map fst
             | None ->

@@ -125,7 +125,7 @@ module EU4Rules =
     //         <&&>
     //         (rules <&!&> checkCardinality startNode)
 
-    //     and applyValueField severity (vt : CWTools.Parser.ConfigParser.ValueType) (leaf : Leaf) =
+    //     and applyValueField severity (vt : CWTools.Parser.RulesParser.ValueType) (leaf : Leaf) =
     //         checkValidValue enumsMap severity vt (leaf.Value.ToRawString()) leaf
 
     //     and applyLeafValueRule (ctx : RuleContext<_>) (options : Options) (rule : NewField) (leafvalue : LeafValue) =

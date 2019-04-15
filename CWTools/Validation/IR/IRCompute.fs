@@ -1,6 +1,6 @@
 namespace CWTools.Validation.IR
 open CWTools.Games
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
 
 module IRCompute =
 

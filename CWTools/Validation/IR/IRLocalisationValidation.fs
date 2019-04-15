@@ -1,5 +1,5 @@
 namespace CWTools.Validation.IR
-open CWTools.Validation.ValidationCore
+open CWTools.Validation
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.IRScopes

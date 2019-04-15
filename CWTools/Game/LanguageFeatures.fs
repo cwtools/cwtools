@@ -2,7 +2,7 @@ namespace CWTools.Games
 open CWTools.Utilities.Position
 open System.IO
 open Files
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
 open CWTools.Utilities.Utils
 open CWTools.Process
 

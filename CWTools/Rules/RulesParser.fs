@@ -162,9 +162,9 @@ type ComplexEnumDef = {
 }
 
 [<RequireQualifiedAccess>]
-module ConfigParser =
+module RulesParser =
     let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
-    let parseSeverity =
+    let private parseSeverity =
         function
         |"error" -> Severity.Error
         |"warning" -> Severity.Warning
@@ -181,7 +181,7 @@ module ConfigParser =
     let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
     let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
 
-    let getNodeComments (clause : IClause) =
+    let private getNodeComments (clause : IClause) =
         let findComments t s (a : Child) =
                 match (s, a) with
                 | ((b, c), _) when b -> (b, c)

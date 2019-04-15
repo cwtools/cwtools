@@ -1,8 +1,9 @@
 namespace CWTools.Games
 open CWTools.Common
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
 open CWTools.Rules
 open CWTools.Process
 open CWTools.Parser.Types

@@ -5,7 +5,8 @@ open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
-open CWTools.Validation.Rules
+open CWTools.Rules.Rules
+open CWTools.Rules.RulesHelpers
 type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
@@ -56,7 +57,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
     let mutable rulesDataGenerated = false
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
-        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> CWTools.Rules.ConfigParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
+        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> CWTools.Rules.RulesParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
         // tempEffects <- updateScriptedEffects game rules
         // effects <- tempEffects
         // tempTriggers <- updateScriptedTriggers game rules
@@ -75,7 +76,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
 
     let refreshConfig() =
         /// Enums
-        let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+        let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
         // let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
         let allEnums = simpleEnums @ complexEnumDefs// @ [modifierEnums] @ [{ key = "provinces"; description = "provinces"; values = lookup.CK2provinces}]
 

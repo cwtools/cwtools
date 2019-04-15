@@ -54,6 +54,7 @@ module Utils =
     let log = logVerbose
 
     let mkZeroFile file = mkRange file (mkPos 0 0) (mkPos 10000 0)
+    type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
 
 module TryParser =
     // convenient, functional TryParse wrappers returning option<'a>
@@ -73,6 +74,7 @@ module TryParser =
     let (|Int|_|)    = parseInt
     let (|Single|_|) = parseSingle
     let (|Double|_|) = parseDouble
+
 
 type StringToken = int
 type StringLowerToken = int
