@@ -12,7 +12,7 @@ type RuleContext<'T when 'T :> IScope<'T>> =
             warningOnly : bool
         }
 
-type checkFieldParams<'S when 'S :> IScope<'S> and 'S : comparison> =
+type CheckFieldParams<'S when 'S :> IScope<'S> and 'S : comparison> =
     {
         varMap : Collections.Map<string, StringSet>
         enumsMap : Collections.Map<string, string * StringSet>
@@ -162,17 +162,17 @@ module internal FieldValidators =
         |true ->
             let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
+            CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
         |false ->
-            CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
+            CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
     let checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) =
         match synced with
         |true ->
             let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocNameNE defaultKeys (defaultLang) key
+            CWTools.Validation.LocalisationValidation.checkLocNameNE defaultKeys (defaultLang) key
         |false ->
-            CWTools.Validation.Stellaris.STLLocalisationValidation.checkLocKeysLeafOrNodeNE keys key
+            CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys key
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -382,7 +382,7 @@ module internal FieldValidators =
         // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
-    let checkField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) (leafornode : IKeyPos) errors =
+    let checkField (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) (leafornode : IKeyPos) errors =
             match field with
             |ValueField vt ->
                 checkValidValue p.enumsMap p.severity vt id key leafornode errors
@@ -396,7 +396,7 @@ module internal FieldValidators =
             |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
             |_ -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
-    let checkFieldNE (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
+    let checkFieldNE (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
                 checkValidValueNE p.enumsMap p.severity vt id key
@@ -412,10 +412,10 @@ module internal FieldValidators =
             |TypeMarkerField (dummy, _) -> dummy = id
             |_ -> false
 
-    let checkLeftField (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
+    let checkLeftField (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) =
         checkFieldNE p field id key
 
-    let checkFieldByKey (p : checkFieldParams<_>) (field : NewField<_>) id (key : string) =
+    let checkFieldByKey (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) =
         checkLeftField p field id key
 
     let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (invertedTypeMap : Collections.Map<string, string list>) (localisation) (typeKey : string) (key : string) (leafornode) =

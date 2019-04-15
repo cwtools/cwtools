@@ -2,6 +2,7 @@ namespace CWTools.Parser
 open CWTools.Utilities.Position
 open FParsec
 
+[<AutoOpen>]
 module Types =
     [<Struct>]
     type Position = Position of FParsec.Position with

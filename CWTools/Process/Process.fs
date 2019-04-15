@@ -246,13 +246,17 @@ module ProcessCore =
 
     type BaseProcess (maps : NodeTypeMap ) =
         let rec lookupN =
-            (fun (key : string) (pos : range) (context : LookupContext) ->
-                match maps (key, pos, context) with
-                |(t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
-                // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
+            (fun (key : string) (pos : range) (context : LookupContext) (sl : Statement list) ->
+                let n = Node(key, pos)
+                let children = sl |> List.map (fun e -> (processNodeInner context e))
+                n.All <- children
+                NodeC n
+                // match maps (key, pos, context) with
+                // |(t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
+                // // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
                 // |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
                 // |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
-                ) >> (fun f a b c -> NodeC (f a b c |> (fun n -> n)))
+                )
         and lookupVC =
             (fun (pos : range) (context : LookupContext) (sl : Statement list) ->
                 let vc = ValueClause(pos)

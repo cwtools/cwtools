@@ -16,18 +16,6 @@ module STLLocalisationValidation =
         | true, _ -> OK
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
-    let inline checkLocKeyN (leaf : ^a) (keys : Set<string>) (lang : Lang) errors key  =
-        if lang = STL STLLang.Default then errors else
-        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
-        | true, _ -> errors
-        | _, true -> errors
-        | _, false -> invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key) <&&&> errors
-    let inline checkLocKeyNE (keys : Set<string>) (lang : Lang) key =
-        if lang = STL STLLang.Default then true else
-        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
-        | true, _ -> true
-        | _, true -> true
-        | _, false -> false
 
     let inline checkLocName (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string)  =
         match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
@@ -35,25 +23,9 @@ module STLLocalisationValidation =
         | _, true, _ -> OK
         | _, _, true -> OK
         | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
-    let inline checkLocNameN (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string) (errors) =
-        match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
-        | false, _, _ -> errors
-        | _, true, _ -> errors
-        | _, _, true -> errors
-        | _, _, false -> invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key) <&&&> errors
-    let inline checkLocNameNE (keys : Set<string>) (lang : Lang) (key : string)  =
-        match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
-        | false, _, _ -> true
-        | _, true, _ -> true
-        | _, _, true -> true
-        | _, _, false -> false
 
     let inline checkLocKeysLeafOrNode (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leafornode keys l key) OK
-    let inline checkLocKeysLeafOrNodeN (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) (errors) =
-        keys |> List.fold (fun state (l, keys)  -> checkLocKeyN leafornode keys l state key) errors
-    let inline checkLocKeysLeafOrNodeNE (keys : (Lang * Set<string>) list) (key : string) =
-        keys |> List.fold (fun state (l, keys)  -> state && checkLocKeyNE keys l key) true
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
@@ -286,8 +258,8 @@ module STLLocalisationValidation =
         (start, finish, traditions)
 
     let valTraditionLocCats : LocalisationValidator =
-        fun STLEntitySet keys nes ->
-            let cats = STLEntitySet.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
+        fun es keys nes ->
+            let cats = es.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
             let newcats = nes.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
             let starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun ( ss, fs, ts) (s, f, t) -> s::ss,  f::fs, ts @ t) ([], [], [])
             let traditions = nes.GlobMatch("**/traditions/*.txt")  |> List.collect (fun e -> e.Children)

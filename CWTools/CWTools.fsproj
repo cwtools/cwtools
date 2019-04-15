@@ -5,6 +5,7 @@
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Utilities/Position.fs" />
     <Compile Include="Utilities/Utilities.fs" />
     <Compile Include="Common/Constants.fs" />
@@ -55,9 +56,9 @@
     <Compile Include="Validation/LocalisationString.fs" />
     <Compile Include="Validation/Common/CommonValidation.fs" />
     <Compile Include="Validation/Stellaris/STLValidation.fs" />
-    <Compile Include="Validation/Stellaris/ScopeValidation.fs" />
     <Compile Include="Validation/Stellaris/STLLocalisationString.fs" />
     <Compile Include="Validation/Stellaris/STLLocalisationValidation.fs" />
+    <Compile Include="Validation/LocalisationValidation.fs" />
     <Compile Include="Validation/Stellaris/STLEvents.fs" />
     <Compile Include="Validation/Stellaris/Graphics.fs" />
     <Compile Include="Rules/FieldValidators.fs" />

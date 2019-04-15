@@ -29,16 +29,16 @@ module Scopes =
     //         warningOnly : bool
     //     }
 
-    type OutputScopeContext<'T> =
-        {
-            Root : 'T
-            From : 'T list
-            Scopes : 'T list
-        }
-        member inline this.CurrentScope = match this.Scopes with |[] -> None | x::_ -> Some x
-        member inline this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
-        member inline this.GetFrom i =
-            if this.From.Length >= i then Some (this.From.Item (i - 1)) else None
+    // type OutputScopeContext<'T> =
+    //     {
+    //         Root : 'T
+    //         From : 'T list
+    //         Scopes : 'T list
+    //     }
+    //     member inline this.CurrentScope = match this.Scopes with |[] -> None | x::_ -> Some x
+    //     member inline this.PopScope : 'T list = match this.Scopes with |[] -> [] |_::xs -> xs
+    //     member inline this.GetFrom i =
+    //         if this.From.Length >= i then Some (this.From.Item (i - 1)) else None
 
     type ScopeContext< 'T when 'T :> IScope<'T> > =
         {

@@ -1026,15 +1026,6 @@ module Rules =
 
 
 
-
-        let convertToOutput s =
-            {
-                OutputScopeContext.From = s.From |> List.map (fun f -> f :> obj :?> 'T2)
-                Scopes = s.Scopes |> List.map (fun f -> f :> obj :?> 'T2)
-                Root = s.Root :> obj :?> 'T2
-            }
-        let test pos entity = //{OutputScopeContext.From = []; Scopes = []; Root = [] :> obj}
-            (getInfoAtPos pos entity ) |> Option.map (fun (s, r) -> (convertToOutput s.scopes), r)
         //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
         member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
         member __.GetReferencedTypes(entity : Entity) = singleFold getTypesInEntity entity
