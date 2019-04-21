@@ -25,7 +25,7 @@ open CWTools.Games.Helpers
 open CWTools.Games.Compute.EU4
 
 module EU4GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, EU4ComputedData>
+    type GameObject = GameObject<Scope, Modifier, EU4ComputedData, EU4Lookup>
     let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
@@ -130,7 +130,7 @@ module EU4GameFunctions =
         lookup.allCoreLinks <- ts @ es @ ls
         rules @ addModifiersWithScopes lookup
 
-    let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) (resources : IResourceAPI<EU4ComputedData>) _ =
+    let refreshConfigBeforeFirstTypesHook (lookup : EU4Lookup) (resources : IResourceAPI<EU4ComputedData>) _ =
         lookup.EU4ScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
                                             |> List.ofSeq |> List.collect id)
         let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys }
@@ -156,7 +156,7 @@ module EU4GameFunctions =
         updateScriptedLoc(game)
         updateModifiers(game)
         updateLegacyGovernments(game)
-type EU4Settings = GameSettings<Modifier, Scope>
+type EU4Settings = GameSettings<Modifier, Scope, EU4Lookup>
 open EU4GameFunctions
 type EU4Game(settings : EU4Settings) =
     let validationSettings = {
@@ -171,7 +171,10 @@ type EU4Game(settings : EU4Settings) =
         localisationValidators = []
     }
 
-    let settings = { settings with embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
+    let settings = { settings with 
+                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                        initialLookup = EU4Lookup()
+                        }
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -188,7 +191,7 @@ type EU4Game(settings : EU4Settings) =
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
 
-    let game = GameObject<Scope, Modifier, EU4ComputedData>.CreateGame
+    let game = GameObject.CreateGame
                 ((settings, "europa universalis iv", scriptFolders, Compute.EU4.computeEU4Data,
                     Compute.EU4.computeEU4DataUpdate,
                      (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),

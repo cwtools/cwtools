@@ -24,7 +24,7 @@ type EmbeddedSettings<'S,'M when 'S : comparison> = {
     eventTargetLinks : EventTargetLink<'S> list
 }
 
-type RuleManagerSettings<'S, 'M, 'T when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData> = {
+type RuleManagerSettings<'S, 'M, 'T, 'L when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData and 'L :> Lookup<'S, 'M>> = {
     rulesSettings : RulesSettings option
     parseScope : string -> 'S
     allScopes : 'S list
@@ -33,15 +33,15 @@ type RuleManagerSettings<'S, 'M, 'T when 'S :> IScope<'S> and 'S : comparison an
     defaultContext : ScopeContext<'S>
     defaultLang : Lang
     oneToOneScopesNames : string list
-    loadConfigRulesHook : RootRule<'S> list -> Lookup<'S,'M> -> EmbeddedSettings<'S, 'M> -> RootRule<'S> list
-    refreshConfigBeforeFirstTypesHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
-    refreshConfigAfterFirstTypesHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
-    refreshConfigAfterVarDefHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    loadConfigRulesHook : RootRule<'S> list -> 'L -> EmbeddedSettings<'S, 'M> -> RootRule<'S> list
+    refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
 }
 
-type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>
-    (resources : IResourceAPI<'T>, lookup : Lookup<_,_>,
-     settings : RuleManagerSettings<'S, 'M, 'T>,
+type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'L :> Lookup<'S,'M>>
+    (resources : IResourceAPI<'T>, lookup : 'L,
+     settings : RuleManagerSettings<'S, 'M, 'T, 'L>,
      localisation : LocalisationManager<'S, 'T, 'M>,
      embeddedSettings : EmbeddedSettings<'S, 'M>) =
 

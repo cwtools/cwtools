@@ -26,7 +26,7 @@ open CWTools.Games.Helpers
 open CWTools.Rules
 
 module CK2GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, ComputedData>
+    type GameObject = GameObject<Scope, Modifier, ComputedData, CK2Lookup>
     let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
@@ -121,7 +121,7 @@ module CK2GameFunctions =
                 ::((Duchy_Hired, true), dhlls)::((Duchy_Hired, false), dhs)
                 ::((County, true), clls)::((County, false), cs)
                 ::((Barony, true), blls)::[((Barony, false), bs)] |> Map.ofList
-    let createLandedTitleTypes(lookup : Lookup<_,_>)(map : Map<_,_>) =
+    let createLandedTitleTypes(lookup : CK2Lookup)(map : Map<_,_>) =
         let ells = lookup.CK2LandedTitles.[Empire, true] |> List.map (fun e -> (false, e, range.Zero))
         let es = lookup.CK2LandedTitles.[Empire, false] |> List.map (fun e -> (false, e, range.Zero))
         let klls = lookup.CK2LandedTitles.[Kingdom, true] |> List.map (fun e -> (false, e, range.Zero))
@@ -195,14 +195,14 @@ module CK2GameFunctions =
         lookup.allCoreLinks <- ts @ es @ ls
         rules @ addModifiersWithScopes lookup
 
-    let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
-        let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
+    let refreshConfigBeforeFirstTypesHook (lookup : CK2Lookup) _ _ =
+        let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
         let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.CK2provinces}
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : CK2Lookup) _ (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.typeDefInfoRaw <-
             createLandedTitleTypes lookup (lookup.typeDefInfoRaw)
             |> addModifiersAsTypes lookup
@@ -226,7 +226,7 @@ module CK2GameFunctions =
         // game.LocalisationManager.UpdateAllLocalisation()
         // updateTypeDef game game.Settings.rules
         // game.LocalisationManager.UpdateAllLocalisation()
-type CK2Settings = GameSettings<Modifier, Scope>
+type CK2Settings = GameSettings<Modifier, Scope, CK2Lookup>
 open CK2GameFunctions
 type CK2Game(settings : CK2Settings) =
     let validationSettings = {
@@ -241,7 +241,10 @@ type CK2Game(settings : CK2Settings) =
         localisationValidators = []
     }
 
-    let settings = { settings with embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
+    let settings = { settings with 
+                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                        initialLookup = CK2Lookup()
+                        }
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -257,7 +260,7 @@ type CK2Game(settings : CK2Settings) =
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
-    let game = GameObject<Scope, Modifier, CK2ComputedData>.CreateGame
+    let game = GameObject.CreateGame
                 ((settings, "crusader kings ii", scriptFolders, Compute.computeCK2Data,
                     Compute.computeCK2DataUpdate,
                      (CK2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),

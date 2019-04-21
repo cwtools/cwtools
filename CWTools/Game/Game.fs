@@ -15,7 +15,7 @@ type ValidationSettings = {
     experimental : bool
 }
 
-type GameSettings<'M, 'S when 'S : comparison> = {
+type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
     rootDirectory : string
     embedded : EmbeddedSettings<'S, 'M>
     validation : ValidationSettings
@@ -24,17 +24,19 @@ type GameSettings<'M, 'S when 'S : comparison> = {
     excludeGlobPatterns : string list option
     modFilter : string option
     scope : FilesScope
+    initialLookup : 'L
 }
 
-type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
-    (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
+type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier
+                    and 'L :> Lookup<'S, 'M>>
+    (settings : GameSettings<'M, 'S, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
      processLocalisation, validateLocalisationCommand, defaultContext, noneContext,
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
-     globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
-     afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit,
+     globalLocalisation : GameObject<'S, 'M, 'T, 'L> -> CWError list,
+     afterUpdateFile : GameObject<'S, 'M, 'T, 'L> -> string -> unit,
      localisationExtension : string,
-     ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T>) as this =
+     ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T, 'L>) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
     let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
@@ -46,7 +48,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     let mutable infoService : InfoService<'S> option = None
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
-    let lookup = Lookup<'S, 'M>()
+    let lookup = settings.initialLookup
     let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
     let validationServices() =
@@ -59,7 +61,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         }
     let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, if debugMode then noneContext else defaultContext)
 
-    let rulesManager = RulesManager<'T, 'S, 'M>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded)
+    let rulesManager = RulesManager<'T, 'S, 'M, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []
@@ -165,7 +167,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
 
     member __.Resources : IResourceAPI<'T> = resourceManager.Api;
     member __.ResourceManager = resourceManager
-    member __.Lookup : Lookup<'S, 'M> = lookup
+    member __.Lookup : 'L = lookup
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
     member __.FileManager = (fun () -> fileManager)()

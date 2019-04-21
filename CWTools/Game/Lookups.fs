@@ -63,13 +63,6 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val rootFolder : string = "" with get, set
     member val staticModifiers : 'M list = [] with get, set
     member val coreModifiers : 'M list = [] with get, set
-    member val HOI4provinces : string list = [] with get, set
-    member val EU4ScriptedEffectKeys : string list = [] with get, set
-    member val EU4TrueLegacyGovernments : string list = [] with get, set
-    member val CK2LandedTitles : Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
-    member val CK2provinces : string list = [] with get, set
-    member val IRprovinces : string list = [] with get, set
-    member val IRcharacters : string list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<'S>>) list = [] with get, set
@@ -84,3 +77,25 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val globalScriptedVariables : string list = [] with get, set
+
+type CK2Lookup() = 
+    inherit Lookup<CK2Constants.Scope, CK2Constants.Modifier>()
+    member val CK2LandedTitles : Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
+    member val CK2provinces : string list = [] with get, set
+
+type EU4Lookup() =
+    inherit Lookup<EU4Constants.Scope, EU4Constants.Modifier>()
+    member val EU4ScriptedEffectKeys : string list = [] with get, set
+    member val EU4TrueLegacyGovernments : string list = [] with get, set
+
+type HOI4Lookup() = 
+    inherit Lookup<HOI4Constants.Scope, HOI4Constants.Modifier>()
+    member val HOI4provinces : string list = [] with get, set
+
+type STLLookup() = 
+    inherit Lookup<STLConstants.Scope, STLConstants.Modifier>()
+
+type IRLookup() =
+    inherit Lookup<IRConstants.Scope, IRConstants.Modifier>()
+    member val IRprovinces : string list = [] with get, set
+    member val IRcharacters : string list = [] with get, set

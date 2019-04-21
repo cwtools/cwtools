@@ -47,6 +47,7 @@ let emptyStellarisSettings (rootDirectory) = {
     }
     scriptFolders = None
     excludeGlobPatterns = None
+    initialLookup = STLLookup()
 }
 let emptyImperatorSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -69,6 +70,7 @@ let emptyImperatorSettings (rootDirectory) = {
     }
     scriptFolders = None
     excludeGlobPatterns = None
+    initialLookup = IRLookup()
 }
 
 let getAllTestLocs node =

@@ -20,7 +20,7 @@ open CWTools.Validation.HOI4.HOI4LocalisationString
 open CWTools.Games.Helpers
 
 module HOI4GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, HOI4ComputedData>
+    type GameObject = GameObject<Scope, Modifier, HOI4ComputedData, HOI4Lookup>
     let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
@@ -118,7 +118,7 @@ module HOI4GameFunctions =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
         rules @ addModifiersWithScopes lookup
 
-    let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ _ =
+    let refreshConfigBeforeFirstTypesHook (lookup : HOI4Lookup) _ _ =
         let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.HOI4provinces}
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
@@ -142,7 +142,7 @@ module HOI4GameFunctions =
         updateModifiers(game)
         updateProvinces(game)
 
-type HOI4Settings = GameSettings<Modifier, Scope>
+type HOI4Settings = GameSettings<Modifier, Scope, HOI4Lookup>
 open HOI4GameFunctions
 type HOI4Game(settings : HOI4Settings) =
     let validationSettings = {
@@ -156,7 +156,9 @@ type HOI4Game(settings : HOI4Settings) =
         debugRulesOnly = false
         localisationValidators = []
     }
-    let settings = { settings with embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
+    let settings = { settings with 
+                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                        initialLookup = HOI4Lookup()}
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -173,7 +175,7 @@ type HOI4Game(settings : HOI4Settings) =
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
 
-    let game = GameObject<Scope, Modifier, HOI4ComputedData>.CreateGame
+    let game = GameObject.CreateGame
                 (settings, "hearts of iron iv", scriptFolders, Compute.computeHOI4Data,
                 Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),

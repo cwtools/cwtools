@@ -28,7 +28,7 @@ open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 
 module STLGameFunctions =
-    type GameObject = GameObject<Scope, Modifier, STLComputedData>
+    type GameObject = GameObject<Scope, Modifier, STLComputedData, STLLookup>
 
     let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
@@ -79,7 +79,7 @@ module STLGameFunctions =
     let updateDefinedVariables(game : GameObject) =
         game.Lookup.definedScriptVariables <- (game.Resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().Setvariables)
 
-    let afterUpdateFile (game : GameObject<Scope, Modifier,STLComputedData>) (filepath : string) =
+    let afterUpdateFile (game : GameObject<Scope, Modifier,STLComputedData,STLLookup>) (filepath : string) =
         match filepath with
         |x when x.Contains("scripted_triggers") -> updateScriptedTriggers(game) |> ignore
         |x when x.Contains("scripted_effects") -> updateScriptedEffects(game) |> ignore
@@ -190,7 +190,7 @@ module STLGameFunctions =
 
 
 
-type StellarisSettings = GameSettings<Modifier, Scope>
+type StellarisSettings = GameSettings<Modifier, Scope, STLLookup>
 
 open STLGameFunctions
 type STLGame (settings : StellarisSettings) =
@@ -212,7 +212,8 @@ type STLGame (settings : StellarisSettings) =
 
     }
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
-                                       embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}}
+                                       embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                                       initialLookup = STLLookup()}
 
 
         let rulesManagerSettings = {
@@ -230,7 +231,7 @@ type STLGame (settings : StellarisSettings) =
             refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
         }
 
-        let game = GameObject<Scope, Modifier, STLComputedData>.CreateGame
+        let game = GameObject<Scope, Modifier, STLComputedData, STLLookup>.CreateGame
                     (settings, "stellaris", scriptFolders, Compute.STL.computeSTLData,
                     Compute.STL.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),

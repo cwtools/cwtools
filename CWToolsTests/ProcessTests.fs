@@ -53,6 +53,7 @@ let emptyStellarisSettings (rootDirectory) = {
     }
     scriptFolders = None
     excludeGlobPatterns = None
+    initialLookup = STLLookup()
 }
 
 let effectMap = Microsoft.FSharp.Collections.Tagged.Map<string,Effect,InsensitiveStringComparer>.Create(InsensitiveStringComparer(), [])
