@@ -29,7 +29,7 @@ open CWTools.Validation
 
 open CWTools.Rules.Rules
 open CWTools.Validation.Stellaris
-open CWTools.Process.STLScopes
+open CWTools.Process.Scopes.STL
 open CWTools.Process.Scopes
 
 

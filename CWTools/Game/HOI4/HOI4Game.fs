@@ -4,7 +4,7 @@ open CWTools.Localisation
 open CWTools.Validation
 open CWTools.Games
 open CWTools.Common
-open CWTools.Localisation.HOI4Localisation
+open CWTools.Localisation.HOI4
 open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation

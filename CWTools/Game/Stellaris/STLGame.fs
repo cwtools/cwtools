@@ -6,7 +6,7 @@ open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Localisation
-open CWTools.Localisation.STLLocalisation
+open CWTools.Localisation.STL
 open CWTools.Common
 open CWTools.Common.STLConstants
 open CWTools.Process.Scopes.STL

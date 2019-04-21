@@ -4,7 +4,7 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
-open CWTools.Localisation.IRLocalisation
+open CWTools.Localisation.IR
 open CWTools.Utilities.Position
 open CWTools.Utilities
 open System.IO

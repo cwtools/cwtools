@@ -100,7 +100,7 @@ module CK2Localisation =
         //                 results <- addFiles files |> dict
         //     | false -> ()
         //new (settings : CK2Settings) = CKLocalisationService(settings.CK2Directory.localisationDirectory, settings.ck2Language)
-        new(localisationSettings : LocalisationSettings) =
+        new(localisationSettings : LocalisationSettings<CK2Lang>) =
             log (sprintf "Loading CK2 localisation in %s" localisationSettings.folder)
             match Directory.Exists(localisationSettings.folder) with
             | true ->

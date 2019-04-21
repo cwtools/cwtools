@@ -5,7 +5,7 @@ open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open FSharp.Collections.ParallelSeq
-open CWTools.Localisation.EU4Localisation
+open CWTools.Localisation.EU4
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
 open CWTools.Utilities

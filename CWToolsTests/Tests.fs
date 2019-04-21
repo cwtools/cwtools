@@ -222,7 +222,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks Scope.Any parseScope allScopes fn ft)
-                                    |> Option.defaultValue (STLScopes.scopedEffects |> List.map SimpleLink)
+                                    |> Option.defaultValue (Scopes.STL.scopedEffects |> List.map SimpleLink)
                 let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
                 let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
                 let settings = emptyStellarisSettings folder
@@ -239,7 +239,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks IRConstants.Scope.Any IRConstants.parseScope IRConstants.allScopes fn ft)
-                                    |> Option.defaultValue (IRScopes.scopedEffects |> List.map SimpleLink)
+                                    |> Option.defaultValue (Scopes.IR.scopedEffects |> List.map SimpleLink)
                 let settings = emptyImperatorSettings folder
                 let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = []; eventTargetLinks = eventTargetLinks };
                                                     rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}

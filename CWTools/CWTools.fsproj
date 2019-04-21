@@ -23,10 +23,6 @@
     <Compile Include="Localisation/LocalisationDomain.fs" />
     <Compile Include="Localisation/YAMLLocalisationParser.fs" />
     <Compile Include="Localisation/CK2Localisation.fs" />
-    <Compile Include="Localisation/EU4Localisation.fs" />
-    <Compile Include="Localisation/HOI4Localisation.fs" />
-    <Compile Include="Localisation/STLLocalisation.fs" />
-    <Compile Include="Localisation/IRLocalisation.fs" />
     <Compile Include="Process/Process.fs" />
     <Compile Include="Process/CK2Process.fs" />
     <Compile Include="Process/Scopes/Scopes.fs" />
