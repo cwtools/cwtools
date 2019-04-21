@@ -1,11 +1,11 @@
 namespace CWTools.Games
 open CWTools.Common
 // open CWTools.Process.STLScopes
-open CWTools.Rules.Rules
 open Files
 open System.Text
 open CWTools.Utilities.Utils
 open System.IO
+open CWTools.Rules
 
 
 
@@ -40,10 +40,10 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
-    // let mutable infoService : FoldRules<_> option = None
+    // let mutable infoService : InfoService<_> option = None
     // let mutable completionService : CompletionService<_> option = None
-    let mutable ruleApplicator : RuleApplicator<'S> option = None
-    let mutable infoService : FoldRules<'S> option = None
+    let mutable ruleValidationService : RuleValidationService<'S> option = None
+    let mutable infoService : InfoService<'S> option = None
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = Lookup<'S, 'M>()
@@ -53,8 +53,8 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         {
             resources = resourceManager.Api
             lookup = lookup
-            ruleApplicator = ruleApplicator
-            foldRules = infoService
+            ruleValidationService = ruleValidationService
+            infoService = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
     let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, if debugMode then noneContext else defaultContext)
@@ -140,7 +140,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             if fileManager.ShouldUseEmbedded then resourceManager.Api.UpdateFiles(embedded) |> ignore else ()
     let updateRulesCache() =
         let rules, info, completion = rulesManager.RefreshConfig()
-        this.RuleApplicator <- Some rules
+        this.RuleValidationService <- Some rules
         this.InfoService <- Some info
         this.completionService <- Some completion
         this.RefreshValidationManager()
@@ -155,12 +155,12 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         lookup.rootFolder <- settings.rootDirectory
         initialLoad()
 
-    member __.RuleApplicator with get() = ruleApplicator
-    member __.RuleApplicator with set(value) = ruleApplicator <- value
-    // member val ruleApplicator : RuleApplicator<'S> option = None with get, set
+    member __.RuleValidationService with get() = ruleValidationService
+    member __.RuleValidationService with set(value) = ruleValidationService <- value
+    // member val ruleValidationService : RuleValidationService<'S> option = None with get, set
     member __.InfoService with get() = infoService
     member __.InfoService with set(value) = infoService <- value
-    // member val infoService : FoldRules<'S> option = None with get, set
+    // member val infoService : InfoService<'S> option = None with get, set
     member val completionService : CompletionService<'S> option = None with get, set
 
     member __.Resources : IResourceAPI<'T> = resourceManager.Api;

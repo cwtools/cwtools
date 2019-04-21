@@ -3395,7 +3395,7 @@ namespace CWTools.Validation
               key:string ->
                 leafornode:Process.IKeyPos -> ValidationCore.ValidationResult
     val typekeyfilter : td:Rules.TypeDefinition<'a> -> n:string -> bool
-    type RuleApplicator<'T when 'T :> Common.IScope<'T> and 'T : comparison> =
+    type RuleValidationService<'T when 'T :> Common.IScope<'T> and 'T : comparison> =
       class
         new : rootRules:Rules.RootRule<'T> list *
               typedefs:Rules.TypeDefinition<'T> list *
@@ -3409,7 +3409,7 @@ namespace CWTools.Validation
                                        Utilities.Utils.InsensitiveStringComparer> *
               anyScope:'T * changeScope:Process.Scopes.ChangeScope<'T> *
               defaultContext:Process.Scopes.ScopeContext<'T> *
-              defaultLang:Common.Lang -> RuleApplicator<'T>
+              defaultLang:Common.Lang -> RuleValidationService<'T>
         member
           ApplyNodeRule : rule:Rules.NewRule<'T> list * node:Process.Node ->
                             ValidationCore.ValidationResult
@@ -3424,7 +3424,7 @@ namespace CWTools.Validation
         member
           RuleValidateEntity : (Games.Entity -> ValidationCore.ValidationResult)
       end
-    type FoldRules<'T when 'T :> Common.IScope<'T> and 'T : comparison> =
+    type InfoService<'T when 'T :> Common.IScope<'T> and 'T : comparison> =
       class
         new : rootRules:Rules.RootRule<'T> list *
               typedefs:Rules.TypeDefinition<'T> list *
@@ -3436,10 +3436,10 @@ namespace CWTools.Validation
                                Utilities.Utils.InsensitiveStringComparer> *
               valueTriggers:Tagged.Map<string,Common.Effect<'T>,
                                        Utilities.Utils.InsensitiveStringComparer> *
-              ruleApplicator:RuleApplicator<'T> *
+              ruleValidationService:RuleValidationService<'T> *
               changeScope:Process.Scopes.ChangeScope<'T> *
               defaultContext:Process.Scopes.ScopeContext<'T> * anyScope:'T *
-              defaultLang:Common.Lang -> FoldRules<'T>
+              defaultLang:Common.Lang -> InfoService<'T>
         member
           BatchFolds : entity:Games.Entity ->
                          Map<string,(string * Utilities.Position.range) list> *
@@ -3489,7 +3489,7 @@ namespace CWTools.Validation
                        Games.CompletionResponse list
       end
     val getTypesFromDefinitions :
-      ruleapplicator:RuleApplicator<'a> ->
+      ruleapplicator:RuleValidationService<'a> ->
         types:Rules.TypeDefinition<'a> list ->
           es:Games.Entity list ->
             Map<string,(bool * string * Utilities.Position.range) list>
@@ -3498,7 +3498,7 @@ namespace CWTools.Validation
       complexenums:Rules.ComplexEnumDef list ->
         es:Games.Entity list -> Rules.EnumDefinition list
     val getDefinedVariables :
-      foldRules:FoldRules<'a> ->
+      infoService:InfoService<'a> ->
         es:Games.Entity list ->
           Map<string,(string * Utilities.Position.range) list>
         when 'a :> Common.IScope<'a> and 'a : comparison
@@ -3565,8 +3565,8 @@ namespace CWTools.Games
       member LoadBaseConfig : rulesSettings:RulesSettings -> unit
       member
         RefreshConfig : unit ->
-                          Validation.Rules.RuleApplicator<'S> *
-                          Validation.Rules.FoldRules<'S> *
+                          Validation.Rules.RuleValidationService<'S> *
+                          Validation.Rules.InfoService<'S> *
                           Validation.Rules.CompletionService<'S>
     end
 
@@ -3581,7 +3581,7 @@ namespace CWTools.Games
     val completion :
       fileManager:Files.FileManager ->
         completionService:Validation.Rules.CompletionService<'a> option ->
-          infoService:Validation.Rules.FoldRules<'a> option ->
+          infoService:Validation.Rules.InfoService<'a> option ->
             resourceManager:ResourceManager<#ComputedData> ->
               pos:Utilities.Position.pos ->
                 filepath:string -> filetext:string -> CompletionResponse list
@@ -3589,7 +3589,7 @@ namespace CWTools.Games
     val getInfoAtPos :
       fileManager:Files.FileManager ->
         resourceManager:ResourceManager<#ComputedData> ->
-          infoService:Validation.Rules.FoldRules<'b> option ->
+          infoService:Validation.Rules.InfoService<'b> option ->
             lookup:Lookup<'c,#Common.IModifier> ->
               pos:Utilities.Position.pos ->
                 filepath:string ->
@@ -3599,7 +3599,7 @@ namespace CWTools.Games
     val findAllRefsFromPos :
       fileManager:Files.FileManager ->
         resourceManager:ResourceManager<#ComputedData> ->
-          infoService:Validation.Rules.FoldRules<'b> option ->
+          infoService:Validation.Rules.InfoService<'b> option ->
             pos:Utilities.Position.pos ->
               filepath:string ->
                 filetext:string -> Utilities.Position.range list option
@@ -3607,7 +3607,7 @@ namespace CWTools.Games
     val scopesAtPos :
       fileManager:Files.FileManager ->
         resourceManager:ResourceManager<#ComputedData> ->
-          infoService:Validation.Rules.FoldRules<'a0> option ->
+          infoService:Validation.Rules.InfoService<'a0> option ->
             anyScope:'a0 ->
               pos:Utilities.Position.pos ->
                 filepath:string ->
@@ -3616,7 +3616,7 @@ namespace CWTools.Games
     val symbolInformationAtPos :
       fileManager:Files.FileManager ->
         resourceManager:ResourceManager<#ComputedData> ->
-          infoService:Validation.Rules.FoldRules<'b> option ->
+          infoService:Validation.Rules.InfoService<'b> option ->
             lookup:Lookup<'c,#Common.IModifier> ->
               pos:Utilities.Position.pos ->
                 filepath:string -> filetext:string -> SymbolInformation option
@@ -3770,11 +3770,11 @@ namespace CWTools.Validation.EU4
 namespace CWTools.Validation.EU4
   module EU4Compute = begin
     val computeEU4Data :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> Games.EU4ComputedData
         when 'a :> Common.IScope<'a> and 'a : comparison
     val computeEU4DataUpdate :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> data:Games.EU4ComputedData -> unit
         when 'a :> Common.IScope<'a> and 'a : comparison
   end
@@ -3782,11 +3782,11 @@ namespace CWTools.Validation.EU4
 namespace CWTools.Validation.HOI4
   module HOI4Compute = begin
     val computeHOI4Data :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> Games.HOI4ComputedData
         when 'a :> Common.IScope<'a> and 'a : comparison
     val computeHOI4DataUpdate :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> data:Games.HOI4ComputedData -> unit
         when 'a :> Common.IScope<'a> and 'a : comparison
   end
@@ -3801,10 +3801,10 @@ namespace CWTools.Validation.Stellaris
     val findAllSetFlags :
       e:Games.Entity -> (Games.Stellaris.STLLookup.FlagType * string) list
     val computeSTLData :
-      foldRules:(unit -> Rules.FoldRules<Common.STLConstants.Scope> option) ->
+      infoService:(unit -> Rules.InfoService<Common.STLConstants.Scope> option) ->
         e:Games.Entity -> Games.Stellaris.STLLookup.STLComputedData
     val computeSTLDataUpdate :
-      foldRules:(unit -> Rules.FoldRules<Common.STLConstants.Scope> option) ->
+      infoService:(unit -> Rules.InfoService<Common.STLConstants.Scope> option) ->
         e:Games.Entity -> data:Games.Stellaris.STLLookup.STLComputedData -> unit
   end
 
@@ -3835,11 +3835,11 @@ namespace CWTools.Validation.CK2
 namespace CWTools.Validation.CK2
   module CK2Compute = begin
     val computeCK2Data :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> Games.CK2ComputedData
         when 'a :> Common.IScope<'a> and 'a : comparison
     val computeCK2DataUpdate :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> data:Games.CK2ComputedData -> unit
         when 'a :> Common.IScope<'a> and 'a : comparison
   end
@@ -3871,11 +3871,11 @@ namespace CWTools.Validation.IR
 namespace CWTools.Validation.IR
   module IRCompute = begin
     val computeIRData :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> Games.IRComputedData
         when 'a :> Common.IScope<'a> and 'a : comparison
     val computeIRDataUpdate :
-      foldRules:(unit -> Rules.FoldRules<'a> option) ->
+      infoService:(unit -> Rules.InfoService<'a> option) ->
         e:Games.Entity -> data:Games.IRComputedData -> unit
         when 'a :> Common.IScope<'a> and 'a : comparison
   end
@@ -3936,8 +3936,8 @@ namespace CWTools.Games
                                         'M :> Common.IModifier> =
     {resources: IResourceAPI<'T>;
      lookup: Lookup<'S,'M>;
-     ruleApplicator: Validation.Rules.RuleApplicator<'S> option;
-     foldRules: Validation.Rules.FoldRules<'S> option;
+     ruleValidationService: Validation.Rules.RuleValidationService<'S> option;
+     infoService: Validation.Rules.InfoService<'S> option;
      localisationKeys: unit -> (Common.Lang * Set<string>) list;}
   type ValidationManager<'T,'S,'M
                            when 'T :> ComputedData and 'S :> Common.IScope<'S> and
@@ -4003,10 +4003,10 @@ namespace CWTools.Games
     class
       new : settings:GameSettings<'M,'S> * game:string *
             scriptFolders:string list *
-            computeFunction:((unit -> Validation.Rules.FoldRules<'S> option) ->
+            computeFunction:((unit -> Validation.Rules.InfoService<'S> option) ->
                                Entity -> 'T) *
             computeUpdateFunction:((unit ->
-                                      Validation.Rules.FoldRules<'S> option) ->
+                                      Validation.Rules.InfoService<'S> option) ->
                                      Entity -> 'T -> unit) *
             localisationService:((string * string) list ->
                                    Localisation.ILocalisationAPICreator) *
@@ -4039,26 +4039,26 @@ namespace CWTools.Games
         UpdateFile : shallow:bool ->
                        file:string -> text:string option -> CWError list
       member FileManager : Files.FileManager
-      member InfoService : Validation.Rules.FoldRules<'S> option
+      member InfoService : Validation.Rules.InfoService<'S> option
       member LocalisationManager : LocalisationManager<'S,'T,'M>
       member Lookup : Lookup<'S,'M>
       member ResourceManager : ResourceManager<'T>
       member Resources : IResourceAPI<'T>
-      member RuleApplicator : Validation.Rules.RuleApplicator<'S> option
+      member RuleValidationService : Validation.Rules.RuleValidationService<'S> option
       member Settings : GameSettings<'M,'S>
       member ValidationManager : ValidationManager<'T,'S,'M>
       member completionService : Validation.Rules.CompletionService<'S> option
-      member InfoService : Validation.Rules.FoldRules<'S> option with set
+      member InfoService : Validation.Rules.InfoService<'S> option with set
       member
-        RuleApplicator : Validation.Rules.RuleApplicator<'S> option with set
+        RuleValidationService : Validation.Rules.RuleValidationService<'S> option with set
       member
         completionService : Validation.Rules.CompletionService<'S> option
                               with set
       static member
         CreateGame : settings:(GameSettings<'M,'S> * string * string list *
-                               ((unit -> Validation.Rules.FoldRules<'S> option) ->
+                               ((unit -> Validation.Rules.InfoService<'S> option) ->
                                   Entity -> 'T) *
-                               ((unit -> Validation.Rules.FoldRules<'S> option) ->
+                               ((unit -> Validation.Rules.InfoService<'S> option) ->
                                   Entity -> 'T -> unit) *
                                ((string * string) list ->
                                   Localisation.ILocalisationAPICreator) *

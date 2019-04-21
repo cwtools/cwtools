@@ -1,12 +1,12 @@
 module CWTools.Games.Compute
 
-open CWTools.Rules.Rules
 open CWTools.Games
 open System
+open CWTools.Rules
 
-let computeData (foldRules : unit -> FoldRules<_> option) (e : Entity) =
-    let withRulesData = foldRules().IsSome
-    let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+let computeData (infoService : unit -> InfoService<_> option) (e : Entity) =
+    let withRulesData = infoService().IsSome
+    let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
     let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
         match res with
         | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
@@ -14,9 +14,9 @@ let computeData (foldRules : unit -> FoldRules<_> option) (e : Entity) =
     // let hastechs = getAllTechPrereqs e
     ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
-let computeDataUpdate (foldRules : unit -> FoldRules<_> option) (e : Entity) (data : ComputedData) =
-    let withRulesData = foldRules().IsSome
-    let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+let computeDataUpdate (infoService : unit -> InfoService<_> option) (e : Entity) (data : ComputedData) =
+    let withRulesData = infoService().IsSome
+    let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
     let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
         match res with
         | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
@@ -54,9 +54,9 @@ module EU4 =
                     || e.logicalpath.StartsWith("common/scripted_triggers", StringComparison.OrdinalIgnoreCase))
                 then getScriptedEffectParams (e.entity) else []
     
-    let computeEU4Data (foldRules : unit -> FoldRules<_> option) (e : Entity) =
-        let withRulesData = foldRules().IsSome
-        let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+    let computeEU4Data (infoService : unit -> InfoService<_> option) (e : Entity) =
+        let withRulesData = infoService().IsSome
+        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
             match res with
             | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
@@ -65,9 +65,9 @@ module EU4 =
         let scriptedeffectparams = Some (getScriptedEffectParamsEntity e)
 
         EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks)
-    let computeEU4DataUpdate (foldRules : unit -> FoldRules<_> option) (e : Entity) (data : EU4ComputedData) =
-        let withRulesData = foldRules().IsSome
-        let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+    let computeEU4DataUpdate (infoService : unit -> InfoService<_> option) (e : Entity) (data : EU4ComputedData) =
+        let withRulesData = infoService().IsSome
+        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
             match res with
             | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
@@ -156,27 +156,27 @@ module STL =
 
         //foldNode7 fNode node |> List.ofSeq |> Map.ofList
 
-    let computeSTLData (foldRules : unit -> FoldRules<Scope> option) (e : Entity) =
-        let withRulesData = foldRules().IsSome
+    let computeSTLData (infoService : unit -> InfoService<Scope> option) (e : Entity) =
+        let withRulesData = infoService().IsSome
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (fun ee -> if ee.Has "id" then Some (ee.TagText "id") else None) else []
         // let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         let setvariables = STLValidation.getEntitySetVariables e
         let setflags = findAllSetFlags e
         let savedeventtargets = STLValidation.findAllSavedEventTargetsInEntity e
-        let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
             match res with
             | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
             | None -> (None, None, None, None)
-        // let referencedtypes = (if foldRules().IsSome then Some ((foldRules().Value.GetReferencedTypes )(e)) else None)
-        // let definedvariable = (if foldRules().IsSome then Some ((foldRules().Value.GetDefinedVariables )(e)) else None)
-        // let effectBlocks, triggersBlocks = (if foldRules().IsSome then let (e, t) = ((foldRules().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
+        // let referencedtypes = (if infoService().IsSome then Some ((infoService().Value.GetReferencedTypes )(e)) else None)
+        // let definedvariable = (if infoService().IsSome then Some ((infoService().Value.GetDefinedVariables )(e)) else None)
+        // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         let hastechs = getAllTechPrereqs e
         STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
-    let computeSTLDataUpdate (foldRules : unit -> FoldRules<Scope> option) (e : Entity) (data : STLComputedData) =
-        let withRulesData = foldRules().IsSome
-        let res = (if foldRules().IsSome then Some ((foldRules().Value.BatchFolds)(e)) else None)
+    let computeSTLDataUpdate (infoService : unit -> InfoService<Scope> option) (e : Entity) (data : STLComputedData) =
+        let withRulesData = infoService().IsSome
+        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks =
             match res with
             | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
@@ -184,7 +184,7 @@ module STL =
 
         data.Referencedtypes <- referencedtypes
         data.Definedvariables <- definedvariable
-        // let effectBlocks, triggersBlocks = (if foldRules().IsSome then let (e, t) = ((foldRules().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
+        // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         data.EffectBlocks <- effectBlocks
         data.TriggerBlocks <- triggersBlocks
         data.WithRulesData <- withRulesData

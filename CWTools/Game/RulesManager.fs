@@ -5,7 +5,6 @@ open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
-open CWTools.Rules.Rules
 open CWTools.Rules.RulesHelpers
 type RulesSettings = {
     ruleFiles : (string * string) list
@@ -91,11 +90,11 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let files = resources.GetFileNames() |> Set.ofList
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let tempRuleApplicator = RuleApplicator<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
+        let tempRuleValidationService = RuleValidationService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let typeDefInfo = getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+        let typeDefInfo = getTypesFromDefinitions tempRuleValidationService tempTypes allentities
 
 
         // let typeDefInfo = createLandedTitleTypes game typeDefInfo
@@ -108,13 +107,13 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
         // lookup.scriptedEffects <- tempEffects @ addDataEventTargetLinks game
         // lookup.scriptedTriggers <- tempTriggers @ addDataEventTargetLinks game
         tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-        let tempFoldRules = (FoldRules<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleApplicator, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
+        let tempInfoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
 
-        let infoService = tempFoldRules
-        // game.InfoService <- Some tempFoldRules
+        let infoService = tempInfoService
+        // game.InfoService <- Some tempInfoService
         if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
 
-        let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
+        let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempInfoService.GetDefinedVariables e))))
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
         lookup.varDefInfo <- results
@@ -125,12 +124,12 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let ruleApplicator =  (RuleApplicator<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
+        let ruleValidationService =  (RuleValidationService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let infoService = (FoldRules<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleApplicator, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
+        let infoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
-        ruleApplicator, infoService, completionService
+        ruleValidationService, infoService, completionService
 
     member __.LoadBaseConfig(rulesSettings) = loadBaseConfig rulesSettings
     member __.RefreshConfig() = refreshConfig()

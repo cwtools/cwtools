@@ -446,3 +446,12 @@ module internal FieldValidators =
                 subtypes <&!&> inner2
             typedef.localisation <&!&> inner
             <&&> subtype
+            
+    let typekeyfilter (td : TypeDefinition<_>) (n : string) =
+        match td.typeKeyFilter with
+        | Some (values, negate) -> ((values |> List.exists ((==) n))) <> negate
+        | None -> true
+        &&
+        match td.startsWith with
+        | Some prefix -> n.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+        | None -> true

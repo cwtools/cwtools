@@ -58,7 +58,9 @@
     <Compile Include="Validation/Stellaris/STLEvents.fs" />
     <Compile Include="Validation/Stellaris/Graphics.fs" />
     <Compile Include="Rules/FieldValidators.fs" />
-    <Compile Include="Rules/Rules.fs" />
+    <Compile Include="Rules/RuleValidationService.fs" />
+    <Compile Include="Rules/InfoService.fs" />
+    <Compile Include="Rules/CompletionService.fs" />
     <Compile Include="Rules/RulesHelpers.fs" />
     <Compile Include="Game/Compute.fs" />
     <Compile Include="Game/RulesManager.fs" />
