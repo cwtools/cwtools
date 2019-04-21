@@ -86,6 +86,7 @@ let getNodeComments (clause : IClause) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
             | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, c)
+            | ((_, c), CommentC nc) when nc.StartsWith("@") -> (false, c)
             | ((_, c), CommentC nc) -> (false, nc::c)
             | ((_, c), NodeC n) when n.Position = t -> (true, c)
             | ((_, c), LeafC v) when v.Position = t -> (true, c)
@@ -106,6 +107,39 @@ let getNodeComments (clause : IClause) =
             )
     let fCombine = (@)
     clause |> (foldClause2 fNode fCombine [])
+
+let getCompletionTests (clause : IClause) =
+    let findComments t s (a : Child) =
+            match (s, a) with
+            | ((b, c), _) when b -> (b, c)
+            | ((_, c), CommentC nc) when nc.StartsWith("@") -> (false, nc::c)
+            | ((_, c), CommentC _) -> (false, c)
+            | ((_, c), NodeC n) when n.Position = t -> (true, c)
+            | ((_, c), LeafC v) when v.Position = t -> (true, c)
+            | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
+            | ((_, c), ValueClauseC vc) when vc.Position = t -> (true, c)
+            | _ -> (false, [])
+            // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
+            // | ((_, _), _) -> (false, [])
+    let fNode = (fun (clause : IClause) (children) ->
+        let one = clause.Leaves |> Seq.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd) |> List.ofSeq
+        //log "%s %A" node.Key (node.All |> List.rev)
+        //log "%A" one
+        let two = clause.Nodes |> Seq.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l))) |> List.ofSeq
+        let three = clause.LeafValues |> Seq.toList |> List.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let four = clause.ValueClauses |> Seq.toList |> List.map (fun e -> e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let new2 = one @ two @ three @ four |> List.filter (fun (p, c) -> not (List.isEmpty c))
+        new2 @ children
+            )
+    let fCombine = (@)
+    let res = clause |> (foldClause2 fNode fCombine []) |> List.collect (fun (r, sl) -> sl |> List.map (fun s -> r, s))
+    let convertResToCompletionTest ((pos : range), (comment : string)) =
+        let [| option; column; text; |] = comment.Split(' ', 3)
+        let negate = option = "@!"
+        let lowscore = option = "@?"
+        let pos = mkPos pos.Start.Line (pos.Start.Column + (int column) - 1)
+        pos, text, negate, lowscore
+    res |> List.map convertResToCompletionTest
 
 let rec remove_first f lst item =
     match lst with
@@ -216,9 +250,29 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
         let configtext = if config then configFilesFromDir configfile else []
         // configtext |> Seq.iter (fun (fn, _) -> eprintfn "%s" fn)
-
+        let completionTest (game : IGame) filename filetext (pos : pos, text : string, negate : bool, lowscore : bool) =
+            let getLabel = 
+                function
+                | Simple(label, score)
+                | Detailed(label, _, score )
+                | Snippet(label, _, _, score) -> label, score
+            let compRes = game.Complete pos filename filetext |> List.map getLabel
+            let labels = compRes |> List.map fst
+            let lowscorelables = compRes |> List.choose (fun (label, score) -> score |> Option.bind (fun s -> if s <= 10 then Some label else None))
+            match negate, lowscore with
+            | true, _ ->
+                Expect.hasCountOf (labels) 0u ((=) text) (sprintf "Completion shouldn't contain value %s at %A in %s" text pos filename)
+            | false, true ->
+                Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s" pos filename)
+            | false, false ->
+                Expect.contains labels text (sprintf "Incorrect completion values at %A in %s" pos filename)
+                Expect.isNonEmpty labels (sprintf "No completion results, expected %s" text)
+                
+        let completionTestPerFile (game : IGame) (filename : string, tests) =
+            let filetext = File.ReadAllText filename
+            tests |> List.iter (completionTest game filename filetext)
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
-        let errors, testVals =
+        let (game : IGame), errors, testVals, completionVals =
             if stl
             then
                 let eventTargetLinks =
@@ -233,7 +287,13 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
-                errors, testVals
+                let completionTests = 
+                                stl.AllEntities() 
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
+                                    getCompletionTests e.entity
+                                    )                
+                (stl :> IGame), errors, testVals, completionTests
             else
                 let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
                 let effects = JominiParser.parseEffectFilesRes "./testfiles/configtests/rulestests/IR/effects.log" |> CWTools.Parser.JominiParser.processEffects IRConstants.parseScopes
@@ -247,8 +307,18 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                                     rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, IRConstants.Scope, IRConstants.Modifier>
                 let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-                let testVals = ir.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
-                errors, testVals
+                let testVals = ir.AllEntities() 
+                                |> List.map (fun struct (e, _) -> 
+                                    e.filepath, 
+                                    getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r))
+                                    )
+                let completionTests = 
+                                ir.AllEntities() 
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
+                                    getCompletionTests e.entity
+                                    )                
+                (ir :> IGame), errors, testVals, completionTests
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
         //eprintfn "%A" testVals
@@ -265,6 +335,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+        yield! completionVals |> List.map (fun (f, t) -> testCase ("Completion " + f.ToString()) <| fun() -> completionTestPerFile game (f, t))
     ]
 
 let testSubdirectories stl dir =
@@ -294,38 +365,6 @@ let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false
 let stlSubfolderTests = testList "validation stl" (testSubdirectories true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
 [<Tests>]
 let irSubfolderTests = testList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
-
-let testConfigFolder folder testsname config configfile (culture : string) =
-    testList (testsname + culture) [
-        Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
-        Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
-        let configtext = if config then [configfile, File.ReadAllText configfile] else []
-        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
-        let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-        // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
-        let settings = emptyStellarisSettings folder
-        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = if config then Some { ruleFiles = configtext; validateRules = config; debugRulesOnly = false; debugMode = false} else None}
-        let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-        let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
-        // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
-        //printfn "%A" (testVals)
-        //eprintfn "%A" testVals
-        // eprintfn "%A" (stl.AllFiles())
-        //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
-        let inner (file, ((nodekeys : range list)) )=
-            let expected = nodekeys |> List.map (fun nk -> "", nk)
-             //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
-            let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file )
-            let fileErrorPositions = fileErrors //|> List.map snd
-            let missing = remove_all_by expected fileErrorPositions snd
-            let extras = remove_all_by fileErrorPositions expected snd
-            //eprintfn "%A" nodekeys
-            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
-            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
-        yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
-    ]
 
 [<Tests>]
 let specialtests =
