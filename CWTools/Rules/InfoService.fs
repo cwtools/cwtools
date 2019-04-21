@@ -146,6 +146,20 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     //         fLeafValue acc leafvalue rule
     //     |CommentC comment ->
     //         fComment acc comment rule
+    let p = {
+            varMap = varMap
+            enumsMap = enumsMap
+            typesMap = typesMap
+            linkMap = linkMap
+            valueTriggerMap = valueTriggerMap
+            varSet = varSet
+            localisation = localisation
+            files = files
+            changeScope = changeScope
+            anyScope = anyScope
+            defaultLang = defaultLang
+            wildcardLinks = wildCardLinks
+        }
     let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos : pos) (node : Node) (logicalpath : string) =
         let fChild (ctx, _) (node : IClause) ((field, options) : NewRule<_>) =
             // log "child acc %A %A" ctx field
@@ -173,32 +187,16 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
             // log "child rs %A %A %A %A" (node.Key) childMatch leafMatch leafValueMatch
             // let ctx = { RuleContext.subtypes = []; scop es = defaultContext; warningOnly = false }
-            let p = {
-                varMap = varMap
-                enumsMap = enumsMap
-                typesMap = typesMap
-                linkMap = linkMap
-                valueTriggerMap = valueTriggerMap
-                varSet = varSet
-                localisation = localisation
-                files = files
-                changeScope = changeScope
-                anyScope = anyScope
-                defaultLang = defaultLang
-                ctx = ctx
-                severity = Severity.Error
-                wildcardLinks = wildCardLinks
-            }
 
             match childMatch, leafMatch, leafValueMatch with
             |Some c, _, _ ->
-                match expandedrules |> List.tryPick (function |(NodeRule (l, rs), o) when FieldValidators.checkLeftField p l c.KeyId.lower c.Key -> Some (l, rs, o) |_ -> None) with
+                match expandedrules |> List.tryPick (function |(NodeRule (l, rs), o) when FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId.lower c.Key -> Some (l, rs, o) |_ -> None) with
                 | None ->
                         // log "fallback match %s %A" (node.Key) expandedrules
                         Some (NodeC c, (field, options))
                 | Some (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))
             |_, Some leaf, _ ->
-                match expandedrules |> List.tryPick (function |(LeafRule (l, r), o) when FieldValidators.checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None) with
+                match expandedrules |> List.tryPick (function |(LeafRule (l, r), o) when FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None) with
                 |None ->
                     Some (LeafC leaf, (field, options))
                 |Some (l, rs, o) -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
@@ -304,33 +302,17 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 | (NodeRule (_, rs)) -> rs
                 | _ -> []
             let noderules, leafrules, leafvaluerules, valueclauserules = memoizeRules rules ctx.subtypes
-            let p = {
-                varMap = varMap
-                enumsMap = enumsMap
-                typesMap = typesMap
-                linkMap = linkMap
-                valueTriggerMap = valueTriggerMap
-                varSet = varSet
-                localisation = localisation
-                files = files
-                changeScope = changeScope
-                anyScope = anyScope
-                defaultLang = defaultLang
-                ctx = ctx
-                severity = Severity.Error
-                wildcardLinks = wildCardLinks
-            }
 
             let inner (child : Child) =
                 match child with
                 | NodeC c ->
-                    noderules |> Seq.choose (fun (l, rs, o) -> if FieldValidators.checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+                    noderules |> Seq.choose (fun (l, rs, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
                 | ValueClauseC vc ->
                     valueclauserules |> Seq.map (fun (rs, o) -> ValueClauseC vc, ((ValueClauseRule (rs)), o))
                 | LeafC leaf ->
-                    leafrules |> Seq.choose (fun (l, r, o) -> if FieldValidators.checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
+                    leafrules |> Seq.choose (fun (l, r, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
                 | LeafValueC leafvalue ->
-                    leafvaluerules |> Seq.choose (fun (lv, o) -> if FieldValidators.checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
+                    leafvaluerules |> Seq.choose (fun (lv, o) -> if FieldValidators.checkLeftField p Severity.Error ctx lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
                 | CommentC _ -> Seq.empty
             node.AllArray |> Seq.collect inner
 

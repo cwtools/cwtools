@@ -360,11 +360,9 @@ module ProcessCore =
         loop [node] id //|> List.collect
 
     let foldNode7 fNode (node : Node) =
-        let rec loop acc nodes  =
-            match nodes with
-            | (x : Node) ->
-                let resNode = fNode x acc
-                x.Children |> List.fold loop resNode
+        let rec loop acc (node : Node)  =
+            let resNode = fNode node acc
+            node.Children |> List.fold loop resNode
             //| [] -> acc
         loop [] node
 

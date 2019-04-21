@@ -118,6 +118,20 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
                         ) ([], [], [], [])
                 // seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
         memoizeRulesInner memFunction
+    let p = {
+        varMap = varMap
+        enumsMap = enumsMap
+        typesMap = typesMap
+        linkMap = linkMap
+        valueTriggerMap = valueTriggerMap
+        varSet = varSet
+        localisation = localisation
+        files = files
+        changeScope = changeScope
+        anyScope = anyScope
+        defaultLang = defaultLang
+        wildcardLinks = wildCardLinks
+    }
 
 
     let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : IClause) errors =
@@ -139,33 +153,17 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
         //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
         //         |x -> [||])
         // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
-        let p = {
-            varMap = varMap
-            enumsMap = enumsMap
-            typesMap = typesMap
-            linkMap = linkMap
-            valueTriggerMap = valueTriggerMap
-            varSet = varSet
-            localisation = localisation
-            files = files
-            changeScope = changeScope
-            anyScope = anyScope
-            defaultLang = defaultLang
-            ctx = ctx
-            severity = Severity.Error
-            wildcardLinks = wildCardLinks
-        }
         let valueFun innerErrors (leaf : Leaf) =
             let createDefault() = if enforceCardinality && ((leaf.Key.[0] <> '@')) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for leaf %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
-            leafrules |> Seq.filter (fun (l, r, o) -> FieldValidators.checkLeftField p l leaf.KeyId.lower leaf.Key)
+            leafrules |> Seq.filter (fun (l, r, o) -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key)
                           |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
         let nodeFun innerErrors (node : Node) =
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for node %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
-            noderules |> Seq.filter (fun (l, rs, o) -> FieldValidators.checkLeftField p l node.KeyId.lower node.Key)
+            noderules |> Seq.filter (fun (l, rs, o) -> FieldValidators.checkLeftField p Severity.Error ctx l node.KeyId.lower node.Key)
                           |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
         let leafValueFun innerErrors (leafvalue : LeafValue) =
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for value %s in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
-            leafvaluerules |> Seq.filter (fun (l, o) -> FieldValidators.checkLeftField p l leafvalue.ValueId.lower leafvalue.Key)
+            leafvaluerules |> Seq.filter (fun (l, o) -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key)
                           |> (fun rs -> lazyErrorMerge rs (fun (l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
         let valueClauseFun innerErrors (valueclause : ValueClause) =
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected clause in %s" startNode.Key) severity) valueclause <&&&> innerErrors else innerErrors
@@ -184,17 +182,17 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
             |LeafRule(AliasField(_), _), _
             |LeafValueRule(AliasField(_)), _ -> innerErrors
             |NodeRule(l, _), opts ->
-                let total = clause.Nodes |> Seq.filter (fun child -> FieldValidators.checkLeftField p l child.KeyId.lower child.Key) |> Seq.length
+                let total = clause.Nodes |> Seq.filter (fun child -> FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId.lower child.Key) |> Seq.length
                 if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafRule(l, r), opts ->
-                let total = clause.Leaves |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p l leaf.KeyId.lower leaf.Key) |> Seq.length
+                let total = clause.Leaves |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key) |> Seq.length
                 if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafValueRule(l), opts ->
-                let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> FieldValidators.checkLeftField p l leafvalue.ValueId.lower leafvalue.Key) |> List.length
+                let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key) |> List.length
                 if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
@@ -220,43 +218,10 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
     and applyLeafValueRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leafvalue : LeafValue) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         // let errors = OK
-        let p = {
-            varMap = varMap
-            enumsMap = enumsMap
-            typesMap = typesMap
-            linkMap = linkMap
-            valueTriggerMap = valueTriggerMap
-            varSet = varSet
-            localisation = localisation
-            files = files
-            changeScope = changeScope
-            anyScope = anyScope
-            defaultLang = defaultLang
-            ctx = ctx
-            severity = severity
-            wildcardLinks = wildCardLinks
-        }
-
-        FieldValidators.checkField p rule (leafvalue.ValueId.lower) (leafvalue.ValueText) (leafvalue) errors
+        FieldValidators.checkField p severity ctx rule (leafvalue.ValueId.lower) (leafvalue.ValueText) (leafvalue) errors
 
     and applyLeafRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leaf : Leaf) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
-        let p = {
-            varMap = varMap
-            enumsMap = enumsMap
-            typesMap = typesMap
-            linkMap = linkMap
-            valueTriggerMap = valueTriggerMap
-            varSet = varSet
-            localisation = localisation
-            files = files
-            changeScope = changeScope
-            anyScope = anyScope
-            defaultLang = defaultLang
-            ctx = ctx
-            severity = severity
-            wildcardLinks = wildCardLinks
-        }
 
         // let errors = OK
         (match options.requiredScopes with
@@ -266,7 +231,7 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
             |x when x = anyScope -> OK
             |s -> if List.exists (fun x -> s.MatchesScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf])
         <&&>
-        FieldValidators.checkField p rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
+        FieldValidators.checkField p severity ctx rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
     and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =

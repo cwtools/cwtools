@@ -26,8 +26,6 @@ type CheckFieldParams<'S when 'S :> IScope<'S> and 'S : comparison> =
         changeScope : ChangeScope<'S>
         anyScope : 'S
         defaultLang : Lang
-        severity : Severity
-        ctx : RuleContext<'S>
     }
 
 [<RequireQualifiedAccess>]
@@ -382,41 +380,41 @@ module internal FieldValidators =
         // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
-    let checkField (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) (leafornode : IKeyPos) errors =
+    let checkField (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) (leafornode : IKeyPos) errors =
             match field with
             |ValueField vt ->
-                checkValidValue p.enumsMap p.severity vt id key leafornode errors
-            |TypeField t -> checkTypeField p.typesMap p.severity t key leafornode errors
-            |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx s key leafornode errors
+                checkValidValue p.enumsMap severity vt id key leafornode errors
+            |TypeField t -> checkTypeField p.typesMap severity t key leafornode errors
+            |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLang synced key leafornode errors
             |FilepathField -> checkFilepathField p.files key leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
-            |VariableGetField v -> checkVariableGetField p.varMap p.severity v key leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
-            |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key leafornode errors
+            |VariableGetField v -> checkVariableGetField p.varMap severity v key leafornode errors
+            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
+            |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
             |_ -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
-    let checkFieldNE (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) =
+    let checkFieldNE (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
-                checkValidValueNE p.enumsMap p.severity vt id key
-            |TypeField t -> checkTypeFieldNE p.typesMap p.severity t key
-            |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx s key
+                checkValidValueNE p.enumsMap severity vt id key
+            |TypeField t -> checkTypeFieldNE p.typesMap severity t key
+            |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
             |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLang synced key
             |FilepathField -> checkFilepathFieldNE p.files key
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
-            |VariableGetField v -> checkVariableGetFieldNE p.varMap p.severity v key
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key
-            |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope p.ctx isInt min max key
+            |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v key
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
+            |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
             |_ -> false
 
-    let checkLeftField (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) =
-        checkFieldNE p field id key
+    let checkLeftField (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
+        checkFieldNE p severity ctx field id key
 
-    let checkFieldByKey (p : CheckFieldParams<_>) (field : NewField<_>) id (key : string) =
-        checkLeftField p field id key
+    let checkFieldByKey (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
+        checkLeftField p severity ctx field id key
 
     let inline validateTypeLocalisation (typedefs : TypeDefinition<_> list) (invertedTypeMap : Collections.Map<string, string list>) (localisation) (typeKey : string) (key : string) (leafornode) =
         let typenames = typeKey.Split('.')
@@ -446,7 +444,7 @@ module internal FieldValidators =
                 subtypes <&!&> inner2
             typedef.localisation <&!&> inner
             <&&> subtype
-            
+
     let typekeyfilter (td : TypeDefinition<_>) (n : string) =
         match td.typeKeyFilter with
         | Some (values, negate) -> ((values |> List.exists ((==) n))) <> negate

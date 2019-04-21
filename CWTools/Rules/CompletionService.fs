@@ -213,10 +213,10 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             changeScope = changeScope
             anyScope = anyScope
             defaultLang = defaultLang
-            ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
-            severity = Severity.Error
             wildcardLinks = wildCardLinks
         }
+        let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
+        let severity = Severity.Error
 
         let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option) list) (scopeContext) =
             let subtypedRules =
@@ -233,11 +233,11 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             match stack with
             | [] -> expandedRules |> List.collect (convRuleToCompletion 0 scopeContext)
             | (key, count, None)::rest ->
-                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
+                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
                 | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
                 | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
             | (key, count, Some _)::rest ->
-                match expandedRules |> List.choose (function | (LeafRule (l, r), o) when FieldValidators.checkFieldByKey p l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) | _ -> None) with
+                match expandedRules |> List.choose (function | (LeafRule (l, r), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) | _ -> None) with
                 | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
                 | fs ->
                     //log "%s %A" key fs
