@@ -26,7 +26,10 @@ event = {
     test_ship = scope[ship]
     ## cardinality = 0..inf
     scope_field = {
-
+	## cardinality = 0..inf
+	scope_field = {
+	
+	}
     }
 
     ## cardinality = 0..inf

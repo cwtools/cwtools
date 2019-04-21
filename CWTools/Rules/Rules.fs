@@ -169,11 +169,11 @@ module Rules =
                 wildcardLinks = wildCardLinks
             }
             let valueFun innerErrors (leaf : Leaf) =
-                let createDefault() = if enforceCardinality && ((leaf.Key.[0] = '@') |> not) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for node %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
+                let createDefault() = if enforceCardinality && ((leaf.Key.[0] <> '@')) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for leaf %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
                 leafrules |> Seq.filter (fun (l, r, o) -> FieldValidators.checkLeftField p l leaf.KeyId.lower leaf.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
             let nodeFun innerErrors (node : Node) =
-                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for leaf %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
+                let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for node %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
                 noderules |> Seq.filter (fun (l, rs, o) -> FieldValidators.checkLeftField p l node.KeyId.lower node.Key)
                               |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
             let leafValueFun innerErrors (leafvalue : LeafValue) =
@@ -219,7 +219,7 @@ module Rules =
                 |_ -> innerErrors
             (applyToAll startNode.Leaves valueFun errors)
             |>
-            (applyToAll (startNode.Nodes |> List.ofSeq) nodeFun)
+            (applyToAll startNode.Nodes nodeFun)
             |>
             (applyToAll startNode.LeafValues leafValueFun)
             |>

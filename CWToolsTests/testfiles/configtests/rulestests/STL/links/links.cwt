@@ -1,5 +1,9 @@
 links = {
-    simple = {
+    simple_no_scope = {
+        output_scope = ship
+    }
+    simple_with_scope = {
+        input_scopes = system
         output_scope = ship
     }
     complex = {
@@ -22,5 +26,12 @@ links = {
         data_source = value[link_test_value]
         output_scope = ship
         prefix = test:
+    }
+    prefixed_with_scope = {
+        from_data = yes
+        data_source = value[link_test_value]
+        input_scopes = system
+        output_scope = ship
+        prefix = scope:
     }
 }

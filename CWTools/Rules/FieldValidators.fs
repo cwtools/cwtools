@@ -317,7 +317,7 @@ module internal FieldValidators =
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NewScope ({Scopes = current::_} ,_) -> current = s || s = anyScope || current = anyScope
         |NotFound _ -> false
-        |WrongScope (command, prevscope, expected) -> false
+        |WrongScope (command, prevscope, expected) -> true
         |VarNotFound s -> false
         |ValueFound -> false
         |_ -> true

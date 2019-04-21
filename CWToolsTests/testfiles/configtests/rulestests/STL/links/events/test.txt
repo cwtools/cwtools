@@ -7,10 +7,10 @@ event = {
     blessing_yes = {
 
     }
-    simple = {
+    simple_no_scope = {
 
     }
-    test_ship = simple
+    test_ship = simple_no_scope
 
     ## Test value links
     set_test_value = test_value
@@ -31,5 +31,19 @@ event = {
 
     }
     test_ship = enum_two
+
+    ## Test scope errors
+    simple_with_scope = {
+        #error
+        simple_with_scope = {
+        }
+    }
+
+    simple_no_scope = {
+        #error
+        scope:test_value = {
+
+        }
+    }
 
 }
