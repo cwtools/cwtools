@@ -36,6 +36,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         set.ToList() |> List.fold (fun m v -> Map.tryFind v m |> function | Some ts -> Map.add v (subtype::ts) m | None -> Map.add v [subtype] m ) map
     let invertedTypeMap =
         typesMap |> Map.toList |> List.fold (fun m (t, set) -> inner m t set) Map.empty
+    let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+    let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
 
     let monitor = new Object()
 
@@ -153,7 +155,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             linkMap = linkMap
             valueTriggerMap = valueTriggerMap
             varSet = varSet
-            localisation = localisation
+            localisation = localisationKeys
+            defaultLocalisation = defaultKeys
             files = files
             changeScope = changeScope
             anyScope = anyScope

@@ -40,6 +40,8 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
     let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
+    let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+    let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
 
     // let isValidValue (value : Value) =
     //     let key = value.ToString().Trim([|'"'|])
@@ -125,7 +127,8 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
         linkMap = linkMap
         valueTriggerMap = valueTriggerMap
         varSet = varSet
-        localisation = localisation
+        localisation = localisationKeys
+        defaultLocalisation = defaultKeys
         files = files
         changeScope = changeScope
         anyScope = anyScope

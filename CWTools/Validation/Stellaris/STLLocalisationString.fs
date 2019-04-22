@@ -78,6 +78,7 @@ module STLLocalisationString =
             "GetCountry";
             "GetPlanetMoonCap";
             "GetNamePluralInsult";
+            "GetClassName"; // Discord reported
         ]
     let locCommands = commands |> List.map (fun c -> c, allScopes)
 

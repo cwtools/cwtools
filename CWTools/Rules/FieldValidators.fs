@@ -22,6 +22,7 @@ type CheckFieldParams<'S when 'S :> IScope<'S> and 'S : comparison> =
         valueTriggerMap : Map<string,Effect<'S>,InsensitiveStringComparer>
         varSet : StringSet
         localisation : (Lang * Collections.Set<string>) list
+        defaultLocalisation : Collections.Set<string>
         files : Collections.Set<string>
         changeScope : ChangeScope<'S>
         anyScope : 'S
@@ -155,18 +156,18 @@ module internal FieldValidators =
         )
         || firstCharEqualsAmp key
 
-    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
+    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
         match synced with
         |true ->
-            let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+            // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
             CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
         |false ->
             CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
-    let checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) defaultLang (synced : bool) (key : string) =
+    let checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) =
         match synced with
         |true ->
-            let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+            // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
             CWTools.Validation.LocalisationValidation.checkLocNameNE defaultKeys (defaultLang) key
         |false ->
@@ -386,7 +387,7 @@ module internal FieldValidators =
                 checkValidValue p.enumsMap severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap severity t key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
-            |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLang synced key leafornode errors
+            |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
             |FilepathField -> checkFilepathField p.files key leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
@@ -400,7 +401,7 @@ module internal FieldValidators =
                 checkValidValueNE p.enumsMap severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap severity t key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
-            |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLang synced key
+            |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLocalisation p.defaultLang synced key
             |FilepathField -> checkFilepathFieldNE p.files key
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true

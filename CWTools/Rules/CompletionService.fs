@@ -30,6 +30,8 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
     //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
     let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     let types = types |> Map.map (fun _ s -> s.ToList())
+    let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+    let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
 
 
     let linkMap = links
@@ -208,7 +210,8 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             linkMap = linkMap
             valueTriggerMap = valueTriggerMap
             varSet = varSet
-            localisation = localisation
+            localisation = localisationKeys
+            defaultLocalisation = defaultKeys
             files = files
             changeScope = changeScope
             anyScope = anyScope
