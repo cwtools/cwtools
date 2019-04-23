@@ -73,8 +73,8 @@
     <Compile Include="Validation/HOI4/HOI4LocalisationValidation.fs" />
     <Compile Include="Validation/HOI4/HOI4Validation.fs" />
     <Compile Include="Game/ValidationManager.fs" />
-    <Compile Include="Game/Helpers.fs" />
     <Compile Include="Game/Game.fs" />
+    <Compile Include="Game/Helpers.fs" />
     <Compile Include="Game/Stellaris/STLGame.fs" />
     <Compile Include="Game/HOI4/HOI4Game.fs" />
     <Compile Include="Game/EU4/EU4Game.fs" />

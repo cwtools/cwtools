@@ -483,8 +483,12 @@ module STLValidation =
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
         let districts = es.GlobMatchChildren("**/common/districts/*.txt") |> List.filter (fun d -> not (d.TagText "is_capped_by_modifier" == "no"))
         let districtModifiers = districts |> List.map (fun k -> {tag = k.Key+"_max"; categories = [ModifierCategory.Planet]; core = true})
+        let popEthicKeys = es.GlobMatchChildren("**/common/ethics/*.txt") |> List.map (fun s -> s.Key)
+        let popEthicModifiers = popEthicKeys |> List.map (fun k -> { tag = "pop_" + k + "_attraction_mult"; categories = [ModifierCategory.Pop]; core = true})
+        let techCategoryKeys = es.GlobMatchChildren("**/common/technology/category/*.txt") |> List.map (fun s -> s.Key)
+        let techCatModifiers = techCategoryKeys |> List.map (fun k -> { tag = "category_"+  k + "_research_speed_mult"; categories = [ModifierCategory.Country]; core = true})
         shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
-                    @ districtModifiers
+                    @ districtModifiers @ popEthicModifiers @ techCatModifiers
 
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->

@@ -241,7 +241,7 @@ type CK2Game(settings : CK2Settings) =
         localisationValidators = []
     }
 
-    let settings = { settings with 
+    let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
                         initialLookup = CK2Lookup()
                         }
@@ -291,19 +291,7 @@ type CK2Game(settings : CK2Settings) =
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
-            let genGlobal() =
-                let ges = (globalLocalisation(game))
-                game.LocalisationManager.globalLocalisationErrors <- Some ges
-                ges
-            let genAll() =
-                let les = (game.ValidationManager.ValidateLocalisation (resources.ValidatableEntities()))
-                game.LocalisationManager.localisationErrors <- Some les
-                les
-            match game.LocalisationManager.localisationErrors, game.LocalisationManager.globalLocalisationErrors with
-            |Some les, Some ges -> (if force then genAll() else les) @ (if forceGlobal then genGlobal() else ges)
-            |None, Some ges -> (genAll()) @ (if forceGlobal then genGlobal() else ges)
-            |Some les, None -> (if force then genAll() else les) @ (genGlobal())
-            |None, None -> (genAll()) @ (genGlobal())
+            getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
         //member __.ValidationWarnings = warningsAll
         member __.Folders() = fileManager.AllFolders()

@@ -68,3 +68,22 @@ module Helpers =
             | Some e -> e::all
             | None -> all
         links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect<_>)
+
+    let getLocalisationErrors (game : GameObject<_,_,_,_>) globalLocalisation =
+        fun (force : bool, forceGlobal : bool) ->
+            let resources = game.Resources
+            let rulesLocErrors = game.ValidationManager.CachedRuleErrors(resources.ValidatableEntities() |> List.map (fun struct (e, _) -> e)) |> List.filter (fun (id, _, _, _, _, _) -> id = "CW100")
+            let genGlobal() =
+                let ges = (globalLocalisation(game))
+                game.LocalisationManager.globalLocalisationErrors <- Some ges
+                ges
+            let genAll() =
+                let les = (game.ValidationManager.ValidateLocalisation (resources.ValidatableEntities()))
+                game.LocalisationManager.localisationErrors <- Some les
+                les
+            rulesLocErrors @
+            match game.LocalisationManager.localisationErrors, game.LocalisationManager.globalLocalisationErrors with
+            |Some les, Some ges -> (if force then genAll() else les) @ (if forceGlobal then genGlobal() else ges)
+            |None, Some ges -> (genAll()) @ (if forceGlobal then genGlobal() else ges)
+            |Some les, None -> (if force then genAll() else les) @ (genGlobal())
+            |None, None -> (genAll()) @ (genGlobal())
