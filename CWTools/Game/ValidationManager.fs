@@ -162,4 +162,13 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
     member __.Validate((shallow : bool), (entities : struct (Entity * Lazy<'T>) list))  = validate shallow entities
     member __.ValidateLocalisation(entities : struct (Entity * Lazy<'T>) list) = validateLocalisation entities
     member __.ValidateGlobalLocalisation() = globalTypeDefLoc()
-    member __.CachedRuleErrors(entities) = entities |> List.choose (tryParseWith errorCache.TryGetValue) |> List.collect id
+    member __.CachedRuleErrors(entities : struct (Entity * Lazy<'T>) list) =
+        let res = entities |> List.map (fun struct (e, l) -> (struct (e, l)), tryParseWith errorCache.TryGetValue e)
+        res |> List.filter (fun (e, errors) -> errors.IsNone)
+                    |> List.map fst
+                    |> (validate true)
+                    |> ignore
+        let forced = res |> List.filter (fun (e, errors) -> errors.IsNone)
+                    |> List.choose (fun (struct (e, _), _) -> tryParseWith errorCache.TryGetValue e)
+                    |> List.collect id
+        (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced
