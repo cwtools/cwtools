@@ -1,22 +1,16 @@
 namespace CWTools.Validation.Stellaris
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
-open DotNet.Globbing
 open CWTools.Games
 open CWTools.Utilities.Utils
 open System
-open Microsoft.FSharp.Collections.Tagged
-open System.Collections
 open CWTools.Games.Stellaris.STLLookup
-open System.Threading.Tasks
-open FSharp.Collections.ParallelSeq
-open System.Globalization
 open CWTools.Process.Scopes
 open FSharpx.Collections
 
@@ -489,8 +483,12 @@ module STLValidation =
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
         let districts = es.GlobMatchChildren("**/common/districts/*.txt") |> List.filter (fun d -> not (d.TagText "is_capped_by_modifier" == "no"))
         let districtModifiers = districts |> List.map (fun k -> {tag = k.Key+"_max"; categories = [ModifierCategory.Planet]; core = true})
+        let popEthicKeys = es.GlobMatchChildren("**/common/ethics/*.txt") |> List.map (fun s -> s.Key)
+        let popEthicModifiers = popEthicKeys |> List.map (fun k -> { tag = "pop_" + k + "_attraction_mult"; categories = [ModifierCategory.Pop]; core = true})
+        let techCategoryKeys = es.GlobMatchChildren("**/common/technology/category/*.txt") |> List.map (fun s -> s.Key)
+        let techCatModifiers = techCategoryKeys |> List.map (fun k -> { tag = "category_"+  k + "_research_speed_mult"; categories = [ModifierCategory.Country]; core = true})
         shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
-                    @ districtModifiers
+                    @ districtModifiers @ popEthicModifiers @ techCatModifiers
 
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
@@ -686,7 +684,7 @@ module STLValidation =
 
     let validateIfElse210 : STLStructureValidator =
         fun _ es ->
-            let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let codeBlocks = (es.AllEffects)// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "limit" || x.Key == "modifier" then OK else
@@ -699,7 +697,7 @@ module STLValidation =
 
     let validateIfElse : STLStructureValidator =
         fun _ es ->
-            let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let codeBlocks = (es.AllEffects)
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "if" && x.Has "else" && not(x.Has "if") then
@@ -724,8 +722,8 @@ module STLValidation =
     type BoolState = | AND | OR
     let validateRedundantAND : STLStructureValidator =
         fun _ es ->
-            let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
-            let triggers = (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let effects = (es.AllEffects)
+            let triggers = (es.AllTriggers)
             let fNode =
                 fun (last : BoolState) (x : Node) ->
                     match last, x.Key with
@@ -737,7 +735,7 @@ module STLValidation =
 
     let validateDeprecatedSetName : STLStructureValidator =
         fun _ es ->
-            let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let effects = (es.AllEffects)
             let fNode =
                 fun (x : Node) children ->
                     if x.Key == "set_empire_name" || x.Key == "set_planet_name" then

@@ -3,7 +3,6 @@ open CWTools.Parser.Types
 open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
-open System.Text
 open CWTools.Utilities.Position
 
 module CK2Process =
@@ -91,13 +90,13 @@ module CK2Process =
         let fNode = (fun (x:Node) _ ->
                         match x with
                         | :? Event as e when e.Tag "desc" |> Option.isSome
-                            -> e.SetTag "desc" (LeafC (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
+                            -> e.SetTag "desc" (LeafC (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc), Operator.Equals))))
                         | :? Event as e when e.Child "desc" |> Option.isSome
                             -> e.Child "desc" |>
                                 function
-                                |Some n -> n.SetTag "text" (LeafC (Leaf (KeyValueItem(Key("text"), Value.String (getDesc (n.TagText "text"))))))
+                                |Some n -> n.SetTag "text" (LeafC (Leaf (KeyValueItem(Key("text"), Value.String (getDesc (n.TagText "text")), Operator.Equals))))
                                 |None -> ()
-                        | :? Option as o -> o.SetTag "name" (LeafC (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name)))))
+                        | :? Option as o -> o.SetTag "name" (LeafC (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name), Operator.Equals))))
                         | _ -> ()
                         )
         let fCombine = (fun _ _ -> ())

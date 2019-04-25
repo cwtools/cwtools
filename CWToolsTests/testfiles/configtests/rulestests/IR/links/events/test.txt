@@ -1,0 +1,53 @@
+event = {
+    subtype_one = blessing_no
+    subtype_one = blessing_none
+    #@ 24 blessing_yes
+    subtype_two = blessing_yes
+
+    test_ship = blessing_yes
+    blessing_yes = {
+
+    }
+    simple = {
+
+    }
+    test_ship = simple
+
+    ## Test value links
+    set_test_value = test_value
+
+    test_value = {
+
+    }
+    test_ship = test_value
+
+    ## Test prefixed value link
+    test:test_value = {
+
+    }
+    test_ship = test:test_value
+
+    ## Test enum links
+    enum_one = {
+
+    }
+    test_ship = enum_two
+
+
+    ## Test nested value set
+    test:test_value = {
+        set_test_value = nested_value
+    }
+
+    test:nested_value = {
+        set_test_value = nested_value_2
+    }
+
+    test_ship = test:nested_value
+    test_ship = test:nested_value_2
+
+    #error
+    test: = {
+
+    }
+}

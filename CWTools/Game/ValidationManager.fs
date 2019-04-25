@@ -1,10 +1,9 @@
 namespace CWTools.Games
 open CWTools.Common
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
-open CWTools.Validation.Rules
-open CWTools.Validation
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Process
 open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationValidation
@@ -28,8 +27,8 @@ type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> ISco
 type ValidationManagerServices<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     resources : IResourceAPI<'T>
     lookup : Lookup<'S, 'M>
-    ruleApplicator : RuleApplicator<'S> option
-    foldRules : FoldRules<'S> option
+    ruleValidationService : RuleValidationService<'S> option
+    infoService : InfoService<'S> option
     localisationKeys : unit -> (Lang * Set<string>) list
 }
 type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>
@@ -58,15 +57,15 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         // log "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
         // log "Validating rules"
-        // let rres = (if settings.useRules && services.ruleApplicator.IsSome then (runValidators (fun f -> f oldEntities newEntities) [services.ruleApplicator.Value.RuleValidate(), "rules"]) else [])
+        // let rres = (if settings.useRules && services.ruleValidationService.IsSome then (runValidators (fun f -> f oldEntities newEntities) [services.ruleValidationService.Value.RuleValidate(), "rules"]) else [])
         let ruleValidate =
             (fun (e : Entity) ->
-                let res = services.ruleApplicator.Value.RuleValidateEntity e
+                let res = services.ruleValidationService.Value.RuleValidateEntity e
                 let errors = res |> (function | Invalid es -> es | _ -> [])
                 addToCache e errors
                 res)
         let rres =
-            if settings.useRules && services.ruleApplicator.IsSome
+            if settings.useRules && services.ruleValidationService.IsSome
             then
                 entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid es -> es | _ -> [])
             else
@@ -89,9 +88,9 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         let newEntities = EntitySet entities
         let vs = (settings.localisationValidators |> List.map (fun v -> v oldEntities (services.localisationKeys()) newEntities) |> List.fold (<&&>) OK)
         let typeVs =
-            if settings.useRules && services.foldRules.IsSome
+            if settings.useRules && services.infoService.IsSome
             then
-                (entities |> List.map (fun struct (e, _) -> e) |> PSeq.map (services.foldRules.Value.GetTypeLocalisationErrors)) |> Seq.fold (<&&>) OK
+                (entities |> List.map (fun struct (e, _) -> e) |> PSeq.map (services.infoService.Value.GetTypeLocalisationErrors)) |> Seq.fold (<&&>) OK
             else OK
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
         log (sprintf "Localisation check took %ims" timer.ElapsedMilliseconds)
@@ -163,4 +162,14 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
     member __.Validate((shallow : bool), (entities : struct (Entity * Lazy<'T>) list))  = validate shallow entities
     member __.ValidateLocalisation(entities : struct (Entity * Lazy<'T>) list) = validateLocalisation entities
     member __.ValidateGlobalLocalisation() = globalTypeDefLoc()
-    member __.CachedRuleErrors(entities) = entities |> List.choose (tryParseWith errorCache.TryGetValue) |> List.collect id
+    member __.CachedRuleErrors(entities : struct (Entity * Lazy<'T>) list) =
+        let res = entities |> List.map (fun struct (e, l) -> (struct (e, l)), tryParseWith errorCache.TryGetValue e)
+        // TODO: This is too performance slow
+        // res |> List.filter (fun (e, errors) -> errors.IsNone)
+        //             |> List.map fst
+        //             |> (validate true)
+        //             |> ignore
+        let forced = res |> List.filter (fun (e, errors) -> errors.IsNone)
+                    |> List.choose (fun (struct (e, _), _) -> tryParseWith errorCache.TryGetValue e)
+                    |> List.collect id
+        (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced

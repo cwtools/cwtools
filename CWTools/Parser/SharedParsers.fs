@@ -13,10 +13,10 @@ module internal SharedParsers =
             reply
 
     let betweenL (popen: Parser<_,_>) (pclose: Parser<_,_>) (p: Parser<_,_>) label =
-        let expectedLabel = expected label
         let notClosedError (pos: FParsec.Position) =
             messageError (sprintf "The %s opened at %s was not closed."
                                 label (pos.ToString()))
+        let expectedLabel = expected label
         fun (stream: CharStream<_>) ->
         // The following code might look a bit complicated, but that's mainly
         // because we manually apply three parsers in sequence and have to merge
@@ -50,9 +50,11 @@ module internal SharedParsers =
     let whitespaceTextChars = " \t\r\n"
     let norseChars =[|'ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö'|]
     let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'|]
-    let isidchar = fun c -> isLetter c || isDigit c || isAnyOf idCharArray c
-    let valueCharArray = ([|'_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'|])
-    let isvaluechar = fun c -> isLetter c || isDigit c || isAnyOf valueCharArray c
+    let isAnyofidCharArray = isAnyOf idCharArray
+    let isidchar = fun c -> isLetter c || isDigit c || isAnyofidCharArray c
+    let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'|])
+    let isAnyValueChar = isAnyOf valueCharArray
+    let isvaluechar = fun c -> isLetter c || isDigit c || isAnyValueChar c
 
 
     // Utility parsers
@@ -62,6 +64,7 @@ module internal SharedParsers =
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
+    // let clause inner = between (chSkip '{') (skipChar '}') inner
     let clause inner = betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
     let escapedChar = (pstring "\\\"" <|> pstring "\\") |>> string
@@ -71,15 +74,27 @@ module internal SharedParsers =
 
     // Base types
     // =======
-    let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
+    let oppLTE = skipString "<=" |>> (fun _ -> Operator.LessThanOrEqual)
+    let oppGTE = skipString ">=" |>> (fun _ -> Operator.GreaterThanOrEqual)
+    let oppNE = skipString "!=" |>> (fun _ -> Operator.NotEqual)
+    let oppEE = skipString "==" |>> (fun _ -> Operator.EqualEqual)
+    let oppLT = skipChar '<' |>> (fun _ -> Operator.LessThan)
+    let oppGT = skipChar '>' |>> (fun _ -> Operator.GreaterThan)
+    let oppE = skipChar '=' |>> (fun _ -> Operator.Equals)
+
+    let operator = choiceL [oppLTE; oppGTE; oppNE; oppEE; oppLT; oppGT; oppE] "operator" .>> ws
+
+    // let opp = new OperatorPrecedenceParser<float,unit,unit>()
+    // let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
     let operatorLookahead = choice [chSkip '='; chSkip '>'; chSkip '<'] <?> "operator 1"
     let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
 
-    let key = (many1SatisfyL isidchar "id character") .>> ws |>> (fun s -> System.String.Intern(s)) |>> Key <?> "id"
+    let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"
     let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> (fun s -> "\""+s+"\"") |>> Key <?> "quoted key"
 
-    let valueS = (many1SatisfyL isvaluechar "value character") |>> string |>> (fun s -> System.String.Intern(s)) |>> String <?> "string"
+    let valueS = (many1SatisfyL isvaluechar "value character") |>> string  |>> String <?> "string"
 
+    // let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
     let valueQ = betweenL (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string" |>> QString <?> "quoted string"
 
     // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
@@ -120,7 +135,7 @@ module internal SharedParsers =
     let statement = comment |>> Comment <|> (attempt (((leafValue)) .>> notFollowedBy operatorLookahead |>> Value)) <|> (keyvalue) <?> "statement"
     let valueBlock = clause (many1 ((leafValue |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
 
-    let valueClause = clause (many statement) |>> Clause <?> "statement clause"
+    let valueClause = clause (many statement) |>> Clause //<?> "statement clause"
 
     let valueCustom : Parser<Value, unit> =
         let vcP = attempt valueClause
@@ -131,11 +146,12 @@ module internal SharedParsers =
         let bnP = attempt valueBNo <|> valueS
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
-            | '{' ->
-                let vc = (vcP stream)
-                if vc.Status = Ok then vc else
-                    let vb = (vbP stream)
-                    if vb.Status <> Ok then valueClause stream else vb
+            | '{' ->  vcP stream
+                // let vc = (vcP stream)
+                // if vc.Status = Ok then vc else
+                //     let vb = (vbP stream)
+                //    //vb
+                //     if vb.Status <> Ok then valueClause stream else vb
                 // let vb = (attempt valueBlock stream)
                 // if vb.Status = Ok then vb else valueClause stream
             | '"' -> valueQ stream
@@ -158,7 +174,7 @@ module internal SharedParsers =
 
 
     valueimpl := valueCustom <?> "value"
-    keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
+    keyvalueimpl := pipe5 (getPosition) (keyQ <|> key) (operator) (value) (getPosition .>> ws) (fun start id op value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> ( ParsedFile f ))
     let valuelist = many1 ((comment |>> Comment) <|> (leafValue |>> (fun (a,b) -> Value(a, b)))) .>> eof
     let statementlist = (many statement) .>> eof

@@ -1,12 +1,10 @@
 namespace CWTools.Games
-open CWTools.Common
 open CWTools.Utilities.Position
 open System.IO
 open Files
-open CWTools.Validation.Rules
 open CWTools.Utilities.Utils
-open CWTools.Validation.Stellaris.ScopeValidation
 open CWTools.Process
+open CWTools.Rules
 
 module LanguageFeatures =
     let makeEntityResourceInput (fileManager : FileManager) filepath filetext  =
@@ -28,7 +26,7 @@ module LanguageFeatures =
         let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
         FileWithContentResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
 
-    let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (infoService : FoldRules<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
+    let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (infoService : InfoService<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
         let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
@@ -45,7 +43,7 @@ module LanguageFeatures =
         | _, _, _ -> []
 
 
-    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) =
+    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -56,7 +54,7 @@ module LanguageFeatures =
             |_ -> None
         |_, _ -> None
 
-    let findAllRefsFromPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (pos : pos) (filepath : string) (filetext : string) =
+    let findAllRefsFromPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -72,7 +70,7 @@ module LanguageFeatures =
             |_ -> None
         |_, _ -> None
 
-    let scopesAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (anyScope : 'a) (pos : pos) (filepath : string) (filetext : string) =
+    let scopesAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (anyScope : 'a) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -85,7 +83,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : FoldRules<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
+    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -165,3 +163,4 @@ module LanguageFeatures =
             //     }
             // |_ -> None
         |_, _ -> None
+

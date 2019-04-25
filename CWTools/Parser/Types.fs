@@ -2,7 +2,8 @@ namespace CWTools.Parser
 open CWTools.Utilities.Position
 open FParsec
 
-module rec Types =
+[<AutoOpen>]
+module Types =
     [<Struct>]
     type Position = Position of FParsec.Position with
         override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
@@ -10,27 +11,45 @@ module rec Types =
         static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
         static member Conv(pos : FParsec.Position) = Position (pos)
         static member UnConv(pos : Position) = let (Position p) = pos in p
+    type Operator =
+    | Equals = 0uy
+    | GreaterThan = 1uy
+    | LessThan = 2uy
+    | GreaterThanOrEqual = 3uy
+    | LessThanOrEqual = 4uy
+    | NotEqual = 5uy
+    | EqualEqual = 6uy
+    let operatorToString =
+            function
+            | Operator.Equals -> "="
+            | Operator.GreaterThan -> ">"
+            | Operator.LessThan -> "<"
+            | Operator.GreaterThanOrEqual -> ">="
+            | Operator.LessThanOrEqual -> "<="
+            | Operator.NotEqual -> "!="
+            | Operator.EqualEqual -> "=="
+            | x -> failwith (sprintf "Unknown enum value %A" x)
     [<Struct>]
     type Key =
         | Key of string
         override x.ToString() = let (Key v) = x in sprintf "%s" v;
 
-    let valueToString =
-        let inner =
-                fun x ->
-                match x with
-                | Clause b -> "{ " + sprintf "%O" b + " }"
-                | QString s -> "\"" + s + "\""
-                | String s -> s
-                | Bool b -> if b then "yes" else "no"
-                | Float f -> sprintf "%f" f
-                | Int i -> sprintf "%i" i
-        //memoize id inner
-        inner
+    // let valueToString =
+    //     let inner =
+    //             fun x ->
+    //             match x with
+    //             | Clause b -> "{ " + sprintf "%O" b + " }"
+    //             | QString s -> "\"" + s + "\""
+    //             | String s -> s
+    //             | Bool b -> if b then "yes" else "no"
+    //             | Float f -> sprintf "%f" f
+    //             | Int i -> sprintf "%i" i
+    //     //memoize id inner
+    //     inner
     [<Struct>]
     type KeyValueItem =
-        | KeyValueItem of Key * Value
-        override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
+        | KeyValueItem of Key * Value * Operator
+        override x.ToString() = let (KeyValueItem (id, v, op)) = x in sprintf "%O %s %O" id (operatorToString op) v
     and Value =
         | String of string
         | QString of string
@@ -38,7 +57,15 @@ module rec Types =
         | Int of int
         | Bool of bool
         | Clause of Statement list
-        override x.ToString() = valueToString x
+        override x.ToString() =
+                match x with
+                | Clause b -> "{ " + sprintf "%O" b + " }"
+                | QString s -> "\"" + s + "\""
+                | String s -> s
+                | Bool b -> if b then "yes" else "no"
+                | Float f -> sprintf "%f" f
+                | Int i -> sprintf "%i" i
+
 
         member x.ToRawString() =
             match x with

@@ -1,0 +1,22 @@
+event = {
+    {
+        test
+    }
+}
+
+event = {
+    skin_hsv_shift_curve = { 
+        { 0.55  { 0.0 0.0 0.0 } }
+    }
+}
+
+event = {
+    skin_hsv_shift_curve = {
+        #error 
+        { 
+            5.0
+            { 0.0 0.0 0.0 } 
+            { 0.0 0.0 0.0 }
+        }
+    }
+}

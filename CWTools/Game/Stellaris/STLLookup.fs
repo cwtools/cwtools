@@ -1,16 +1,7 @@
 namespace CWTools.Games.Stellaris
-open CWTools.Process.ProcessCore
-open CWTools.Parser.Types
-open CWTools.Localisation
-open CWTools.Process.ProcessCore
 open CWTools.Process
-open CWTools.Process.STLScopes
 open CWTools.Common.STLConstants
-open DotNet.Globbing
-open System
-open CWTools.Utilities.Utils
 open CWTools.Games
-open CWTools.Utilities.Position
 open CWTools.Common
 
 module STLLookup =
@@ -82,6 +73,6 @@ module STLLookup =
             vanillaEffects
             |> List.map (function | :? DocEffect as ve when manualEffectScopeOverrides.ContainsKey ve.Name ->
                                     let newScopes = manualEffectScopeOverrides.[ve.Name]
-                                    (DocEffect(ve.Name, newScopes, ve.Type, ve.Desc, ve.Usage)) :> Effect
+                                    (DocEffect(ve.Name, newScopes, ve.Target, ve.Type, ve.Desc, ve.Usage)) :> Effect
                                   | x -> x)
         final, adjustedEffects

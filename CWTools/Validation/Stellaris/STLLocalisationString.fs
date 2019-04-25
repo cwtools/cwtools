@@ -1,19 +1,11 @@
 namespace CWTools.Validation.Stellaris
+open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Validation.LocalisationString
-open CWTools.Process.STLProcess
 open CWTools.Process
-open CWTools.Process.ProcessCore
-open CWTools.Parser.Types
-open CWTools.Process.STLScopes
+open CWTools.Process.Scopes.STL
 open CWTools.Common
 open CWTools.Common.STLConstants
-open DotNet.Globbing
-open STLValidation
-open System.Xml.Linq
-open System.Threading
-open CWTools.Localisation
-open FParsec
 open System
 open CWTools.Utilities.Utils
 open System.IO
@@ -86,6 +78,7 @@ module STLLocalisationString =
             "GetCountry";
             "GetPlanetMoonCap";
             "GetNamePluralInsult";
+            "GetClassName"; // Discord reported
         ]
     let locCommands = commands |> List.map (fun c -> c, allScopes)
 

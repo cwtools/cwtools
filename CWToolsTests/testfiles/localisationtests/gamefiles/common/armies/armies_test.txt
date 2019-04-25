@@ -1,7 +1,0 @@
-#key
-#key_plural
-#key_desc
-test_army =
-{
-
-}

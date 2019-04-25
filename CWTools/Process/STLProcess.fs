@@ -1,17 +1,13 @@
 namespace CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Localisation
-open CWTools.Process.ProcessCore
 open CWTools.Process
-open CWTools.Process.STLScopes
 open CWTools.Common.STLConstants
-open DotNet.Globbing
 open System
 open CWTools.Utilities.Utils
 open CWTools.Common
 
-module rec STLProcess =
+module STLProcess =
     let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
     let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
                         "CAPITAL_SCOPE"]//Added used in STH]
@@ -45,7 +41,7 @@ module rec STLProcess =
                                 scriptedTriggerScope strict effects triggers root x
                             | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict triggers triggers root x
-                            | x -> STLScopes.sourceScope effects x.Key |> Set.ofList
+                            | x -> Scopes.STL.sourceScope effects x.Key |> Set.ofList
                                 // match STLScopes.sourceScope x.Key with
                                 // | Some v -> v
                                 // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
@@ -154,7 +150,7 @@ module rec STLProcess =
     let optionEffects = ["tooltip";]
     let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
     let optionExcludeSet = optionExcludes |> Set.ofList
-    let copyChild (a : Child) =
+    let rec copyChild (a : Child) =
         match a with
         |NodeC n when Set.contains n.Key optionExcludeSet -> None
         |NodeC n ->
@@ -167,15 +163,6 @@ module rec STLProcess =
         // |LeafValueC lv -> LeafValueC (LeafValue(lv.Value, lv.Position))
         // |LeafC l -> LeafC (Leaf(l.Key, l.Value, l.Position))
         // |CommentC c -> CommentC c
-    let filterOptionToEffects (o : Option) =
-        let newO = EffectBlock(o.Key, o.Position)
-        //let newChildren = FsPickler.Clone(o.AllChildren, pickler = nodePickler)
-        newO.AllChildren <- (o.AllChildren |> Seq.choose copyChild |> ResizeArray<Child>)
-        //copy o newO
-        // newO.All <- newO.All |> List.filter (function |LeafC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
-        // newO.All <- newO.All |> List.filter (function |NodeC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
-        newO.Scope <- o.Scope
-        newO
         //newO :> Node
 
     type Ship (key, pos) =
@@ -206,9 +193,19 @@ module rec STLProcess =
     type TriggerBlock(key, pos) =
         inherit Node(key, pos)
         member val InEffectBlock : bool = false with get, set
+    let filterOptionToEffects (o : Node) =
+        let newO = EffectBlock(o.Key, o.Position)
+        newO.AllChildren <- (o.AllChildren |> Seq.choose copyChild |> ResizeArray<Child>)
+        //let newChildren = FsPickler.Clone(o.AllChildren, pickler = nodePickler)
+        //copy o newO
+        // newO.All <- newO.All |> List.filter (function |LeafC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
+        // newO.All <- newO.All |> List.filter (function |NodeC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
+        newO.Scope <- o.Scope
+        newO
     type Option(key, pos) =
         inherit Node(key, pos)
         member this.AsEffectBlock = filterOptionToEffects this
+
     type ModifierBlock(key, pos) = inherit Node(key, pos)
     type WeightBlock(key, pos) = inherit Node(key, pos)
     type WeightModifierBlock(key, pos) = inherit Node(key, pos)

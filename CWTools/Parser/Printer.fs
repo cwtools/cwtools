@@ -19,7 +19,7 @@ module CKPrinter =
     and printKeyValue kv depth =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"
-        | KeyValue (PosKeyValue(_, KeyValueItem (key, v))) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
+        | KeyValue (PosKeyValue(_, KeyValueItem (key, v, op))) -> (tabs depth) + key.ToString() + " " + operatorToString op + " " + (printValue v depth)
         | Value (_, v) -> (tabs depth) + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""

@@ -1,7 +1,5 @@
 namespace CWTools.Common
 
-open System
-open System.ComponentModel.Design
 open CWTools.Utilities.Utils
 
 module CK2Constants =

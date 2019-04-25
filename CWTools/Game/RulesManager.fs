@@ -1,12 +1,11 @@
 namespace CWTools.Games
-open CWTools.Parser.ConfigParser
+open CWTools.Rules
 open CWTools.Common
-open CWTools.Utilities
 open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
-open CWTools.Validation.Rules
+open CWTools.Rules.RulesHelpers
 type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
@@ -25,7 +24,7 @@ type EmbeddedSettings<'S,'M when 'S : comparison> = {
     eventTargetLinks : EventTargetLink<'S> list
 }
 
-type RuleManagerSettings<'S, 'M, 'T when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData> = {
+type RuleManagerSettings<'S, 'M, 'T, 'L when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData and 'L :> Lookup<'S, 'M>> = {
     rulesSettings : RulesSettings option
     parseScope : string -> 'S
     allScopes : 'S list
@@ -34,14 +33,15 @@ type RuleManagerSettings<'S, 'M, 'T when 'S :> IScope<'S> and 'S : comparison an
     defaultContext : ScopeContext<'S>
     defaultLang : Lang
     oneToOneScopesNames : string list
-    loadConfigRulesHook : RootRule<'S> list -> Lookup<'S,'M> -> EmbeddedSettings<'S, 'M> -> RootRule<'S> list
-    refreshConfigBeforeFirstTypesHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
-    refreshConfigAfterFirstTypesHook : Lookup<'S, 'M> -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    loadConfigRulesHook : RootRule<'S> list -> 'L -> EmbeddedSettings<'S, 'M> -> RootRule<'S> list
+    refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
 }
 
-type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>
-    (resources : IResourceAPI<'T>, lookup : Lookup<_,_>,
-     settings : RuleManagerSettings<'S, 'M, 'T>,
+type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'L :> Lookup<'S,'M>>
+    (resources : IResourceAPI<'T>, lookup : 'L,
+     settings : RuleManagerSettings<'S, 'M, 'T, 'L>,
      localisation : LocalisationManager<'S, 'T, 'M>,
      embeddedSettings : EmbeddedSettings<'S, 'M>) =
 
@@ -56,7 +56,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
     let mutable rulesDataGenerated = false
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
-        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces, vs) (fn, ft) -> let r2, t2, e2, ce2, v2 = parseConfig settings.parseScope settings.allScopes settings.anyScope fn ft in rs@r2, ts@t2, es@e2, ces@ce2, vs@v2) ([], [], [], [], [])
+        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> CWTools.Rules.RulesParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
         // tempEffects <- updateScriptedEffects game rules
         // effects <- tempEffects
         // tempTriggers <- updateScriptedTriggers game rules
@@ -75,7 +75,7 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
 
     let refreshConfig() =
         /// Enums
-        let complexEnumDefs = CWTools.Validation.Rules.getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+        let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
         // let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
         let allEnums = simpleEnums @ complexEnumDefs// @ [modifierEnums] @ [{ key = "provinces"; description = "provinces"; values = lookup.CK2provinces}]
 
@@ -90,11 +90,11 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let files = resources.GetFileNames() |> Set.ofList
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let tempRuleApplicator = RuleApplicator<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.triggersMap, lookup.effectsMap, lookup.eventTargetLinksMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
+        let tempRuleValidationService = RuleValidationService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let typeDefInfo = getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+        let typeDefInfo = getTypesFromDefinitions tempRuleValidationService tempTypes allentities
 
 
         // let typeDefInfo = createLandedTitleTypes game typeDefInfo
@@ -107,28 +107,29 @@ type RulesManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S
         // lookup.scriptedEffects <- tempEffects @ addDataEventTargetLinks game
         // lookup.scriptedTriggers <- tempTriggers @ addDataEventTargetLinks game
         tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-        let tempFoldRules = (FoldRules<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.triggersMap, lookup.effectsMap, lookup.eventTargetLinksMap, tempRuleApplicator, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
+        let tempInfoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
 
-        let infoService = tempFoldRules
-        // game.InfoService <- Some tempFoldRules
+        let infoService = tempInfoService
+        // game.InfoService <- Some tempInfoService
         if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
 
-        let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempFoldRules.GetDefinedVariables e))))
+        let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempInfoService.GetDefinedVariables e))))
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) tempValues
 
         lookup.varDefInfo <- results
+        settings.refreshConfigAfterVarDefHook lookup resources embeddedSettings
 
         let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.triggersMap, lookup.effectsMap, lookup.eventTargetLinksMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang))
+        let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let ruleApplicator =  (RuleApplicator<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.triggersMap, lookup.effectsMap, lookup.eventTargetLinksMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
+        let ruleValidationService =  (RuleValidationService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let infoService = (FoldRules<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.triggersMap, lookup.effectsMap, lookup.eventTargetLinksMap, ruleApplicator, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
+        let infoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
-        ruleApplicator, infoService, completionService
+        ruleValidationService, infoService, completionService
 
     member __.LoadBaseConfig(rulesSettings) = loadBaseConfig rulesSettings
     member __.RefreshConfig() = refreshConfig()

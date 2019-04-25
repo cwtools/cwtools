@@ -1,21 +1,11 @@
 namespace CWTools.Validation.HOI4
-open CWTools.Validation.ValidationCore
+open CWTools.Validation
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open CWTools.Process.ProcessCore
-open CWTools.Parser.Types
-open CWTools.Process.HOI4Scopes
+open CWTools.Process.Scopes.HOI4
 open CWTools.Common
 open CWTools.Common.HOI4Constants
-open DotNet.Globbing
-open System.Xml.Linq
-open System.Threading
-open CWTools.Localisation
-open FParsec
-open System
 open CWTools.Utilities.Utils
-open System.IO
-open CWTools.Utilities.Position
 open CWTools.Process.Scopes
 
 module HOI4LocalisationString =

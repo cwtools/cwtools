@@ -1,0 +1,15 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    ## cardinality = 0..inf
+    scope_field = {
+        ## cardinality = 0..inf
+        scope_field = {
+            
+        }
+    }
+}

@@ -43,6 +43,7 @@ let emptyStellarisSettings (rootDirectory) = {
     }
     scriptFolders = None
     excludeGlobPatterns = None
+    initialLookup = STLLookup()
 }
 let rec getAllFolders dirs =
     if Seq.isEmpty dirs then Seq.empty else
@@ -97,9 +98,12 @@ let perf2(b) =
     ()
 
 let test() =
-    match CKParser.parseFile "./testfiles/localisationtests/gamefiles/common/ambient_objects/ambient_objects_test.txt" with
-    |Success(a,_,_) -> printfn "%A" a
+    let timer = new System.Diagnostics.Stopwatch()
+    timer.Start()
+    match CKParser.parseFile "./combat_locators.txt" with
+    |Success(a,_,_) -> ()
     |Failure(a,_,_) -> printfn "%A" a
+    eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
 [<EntryPoint>]
 let main argv =
     let config = defaultConfig // with ``parallel`` = false}
@@ -121,5 +125,5 @@ let main argv =
     elif Array.tryHead argv = Some "o"
     then perf(false); 0
     elif Array.tryHead argv = Some "t"
-    then test(); 0
+    then test(); test(); 0
     else Tests.runTestsInAssembly config argv

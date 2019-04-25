@@ -1,0 +1,12 @@
+province_event = {
+   test_value_field = 5
+   test_value_field = my_static_value
+   #error
+   test_value_field = blah
+   test_value_field = root.my_script_value
+   #error
+   test_value_field = root
+   test_value_field = {
+
+   }
+}

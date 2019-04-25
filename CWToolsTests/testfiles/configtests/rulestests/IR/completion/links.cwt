@@ -1,0 +1,10 @@
+links = {
+    simple_ship = {
+        input_scopes = station
+        output_scope = ship
+    }
+    simple_station = {
+        input_scopes = ship
+        output_scope = station
+    }
+}

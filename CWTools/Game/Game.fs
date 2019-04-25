@@ -1,20 +1,11 @@
 namespace CWTools.Games
 open CWTools.Common
 // open CWTools.Process.STLScopes
-open CWTools.Validation.Rules
-open CWTools.Validation.ValidationCore
-open CWTools.Games.Stellaris.STLLookup
-open FParsec
-open CWTools.Utilities.Position
-open CWTools.Common
-open CWTools.Process.Scopes
 open Files
 open System.Text
-open CWTools.Localisation
-open System.Resources
 open CWTools.Utilities.Utils
 open System.IO
-open CWTools.Utilities.Utils
+open CWTools.Rules
 
 
 
@@ -24,7 +15,7 @@ type ValidationSettings = {
     experimental : bool
 }
 
-type GameSettings<'M, 'S when 'S : comparison> = {
+type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
     rootDirectory : string
     embedded : EmbeddedSettings<'S, 'M>
     validation : ValidationSettings
@@ -33,42 +24,44 @@ type GameSettings<'M, 'S when 'S : comparison> = {
     excludeGlobPatterns : string list option
     modFilter : string option
     scope : FilesScope
+    initialLookup : 'L
 }
 
-type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>
-    (settings : GameSettings<'M, 'S>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
+type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier
+                    and 'L :> Lookup<'S, 'M>>
+    (settings : GameSettings<'M, 'S, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
      processLocalisation, validateLocalisationCommand, defaultContext, noneContext,
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
-     globalLocalisation : GameObject<'S, 'M, 'T> -> CWError list,
-     afterUpdateFile : GameObject<'S, 'M, 'T> -> string -> unit,
+     globalLocalisation : GameObject<'S, 'M, 'T, 'L> -> CWError list,
+     afterUpdateFile : GameObject<'S, 'M, 'T, 'L> -> string -> unit,
      localisationExtension : string,
-     ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T>) as this =
+     ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T, 'L>) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
     let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
-    // let mutable infoService : FoldRules<_> option = None
+    // let mutable infoService : InfoService<_> option = None
     // let mutable completionService : CompletionService<_> option = None
-    let mutable ruleApplicator : RuleApplicator<'S> option = None
-    let mutable infoService : FoldRules<'S> option = None
+    let mutable ruleValidationService : RuleValidationService<'S> option = None
+    let mutable infoService : InfoService<'S> option = None
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
-    let lookup = Lookup<'S, 'M>()
+    let lookup = settings.initialLookup
     let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
     let validationServices() =
         {
             resources = resourceManager.Api
             lookup = lookup
-            ruleApplicator = ruleApplicator
-            foldRules = infoService
+            ruleValidationService = ruleValidationService
+            infoService = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
     let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, if debugMode then noneContext else defaultContext)
 
-    let rulesManager = RulesManager<'T, 'S, 'M>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded)
+    let rulesManager = RulesManager<'T, 'S, 'M, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []
@@ -149,7 +142,7 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
             if fileManager.ShouldUseEmbedded then resourceManager.Api.UpdateFiles(embedded) |> ignore else ()
     let updateRulesCache() =
         let rules, info, completion = rulesManager.RefreshConfig()
-        this.RuleApplicator <- Some rules
+        this.RuleValidationService <- Some rules
         this.InfoService <- Some info
         this.completionService <- Some completion
         this.RefreshValidationManager()
@@ -164,17 +157,17 @@ type GameObject<'S, 'M, 'T when 'S : comparison and 'S :> IScope<'S> and 'T :> C
         lookup.rootFolder <- settings.rootDirectory
         initialLoad()
 
-    member __.RuleApplicator with get() = ruleApplicator
-    member __.RuleApplicator with set(value) = ruleApplicator <- value
-    // member val ruleApplicator : RuleApplicator<'S> option = None with get, set
+    member __.RuleValidationService with get() = ruleValidationService
+    member __.RuleValidationService with set(value) = ruleValidationService <- value
+    // member val ruleValidationService : RuleValidationService<'S> option = None with get, set
     member __.InfoService with get() = infoService
     member __.InfoService with set(value) = infoService <- value
-    // member val infoService : FoldRules<'S> option = None with get, set
+    // member val infoService : InfoService<'S> option = None with get, set
     member val completionService : CompletionService<'S> option = None with get, set
 
     member __.Resources : IResourceAPI<'T> = resourceManager.Api;
     member __.ResourceManager = resourceManager
-    member __.Lookup : Lookup<'S, 'M> = lookup
+    member __.Lookup : 'L = lookup
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
     member __.FileManager = (fun () -> fileManager)()

@@ -1,11 +1,7 @@
 namespace CWTools.Games
 open CWTools.Process
-open FSharp.Collections.ParallelSeq
-open FParsec
-open System.IO
-open CWTools.Parser
 open CWTools.Process.STLProcess
-open CWTools.Process.STLScopes
+open CWTools.Process.Scopes.STL
 open CWTools.Localisation
 open CWTools.Common
 
@@ -23,7 +19,7 @@ type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     let triggers() = lookup.triggers |> List.map(fun t -> t.Name)
     let effects() = lookup.effects |> List.map(fun e -> e.Name)
     let localisation() =
-        localisation |> List.filter (fun l -> l.GetLang = ((STL STLLang.English)) || l.GetLang = ((HOI4 HOI4Lang.English)) || l.GetLang = (EU4 EU4Lang.English) || l.GetLang = (CK2 CK2Lang.English))
+        localisation |> List.filter (fun l -> l.GetLang = ((STL STLLang.English)) || l.GetLang = ((HOI4 HOI4Lang.English)) || l.GetLang = (EU4 EU4Lang.English) || l.GetLang = (CK2 CK2Lang.English) || l.GetLang = (IR IRLang.English))
                      |> List.collect (fun l -> l.ValueMap |> Map.toList)
     member __.EventIDs = eventIDs()
     member __.ModifierNames = modifiers()
@@ -34,3 +30,4 @@ type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.Technologies = lookup.technologies
     member __.Localisation = localisation()
     member __.TypeMapInfo = lookup.typeDefInfo
+    member __.ConfigRules = lookup.configRules

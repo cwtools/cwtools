@@ -1,6 +1,5 @@
 namespace CWTools.Games
 open CWTools.Utilities.Position
-open CWTools.Parser.Types
 open CWTools.Common
 open CWTools.Process.Scopes
 
@@ -44,12 +43,12 @@ type IGame =
     abstract Types : unit ->  Map<string,(string * range) list>
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option
 
-type IGame<'S when 'S : comparison> =
+type IGame<'S when 'S : comparison and 'S :> IScope<'S>> =
     inherit IGame
     abstract ScriptedTriggers : unit -> Effect<'S> list
     abstract ScriptedEffects : unit -> Effect<'S> list
     abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
-    abstract ScopesAtPos : pos -> string -> string -> OutputScopeContext<'S> option
+    abstract ScopesAtPos : pos -> string -> string -> ScopeContext<'S> option
 
 type IGame<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier> =
     inherit IGame<'S>

@@ -4,7 +4,6 @@ open FSharp.Data
 open System.IO
 open System.Collections.Generic
 open CWTools.Common
-open FSharp.Data.Runtime
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 
@@ -101,7 +100,7 @@ module CK2Localisation =
         //                 results <- addFiles files |> dict
         //     | false -> ()
         //new (settings : CK2Settings) = CKLocalisationService(settings.CK2Directory.localisationDirectory, settings.ck2Language)
-        new(localisationSettings : LocalisationSettings) =
+        new(localisationSettings : LocalisationSettings<CK2Lang>) =
             log (sprintf "Loading CK2 localisation in %s" localisationSettings.folder)
             match Directory.Exists(localisationSettings.folder) with
             | true ->

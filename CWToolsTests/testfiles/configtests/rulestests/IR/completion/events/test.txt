@@ -1,0 +1,15 @@
+event = {
+    #@ 9 simple_ship
+    simple_ship = {
+        #@ 9 simple_station
+        #@? 10 simple_ship
+        simple_station = {
+
+        }
+    }
+    #@ 9 simple_ship
+    #@ 12 simple_station
+    simple_ship.simple_station = {
+
+    }
+}

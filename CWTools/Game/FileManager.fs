@@ -6,7 +6,6 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 open FParsec
-open CWTools.Utilities.Utils
 open DotNet.Globbing
 
 module Files =
@@ -124,6 +123,7 @@ module Files =
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
                         |> List.distinct
                         |> List.filter (fun (_, f) -> f |> excludeGlobTest |> not)
+                        |> List.filter (fun (_, f) -> (f |> FileInfo).Length < 2000000L )
             let fileToResourceInput (scope, filepath : string) =
                 match Path.GetExtension(filepath) with
                 |".txt"

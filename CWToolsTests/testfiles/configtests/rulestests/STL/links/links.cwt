@@ -1,0 +1,37 @@
+links = {
+    simple_no_scope = {
+        output_scope = ship
+    }
+    simple_with_scope = {
+        input_scopes = system
+        output_scope = ship
+    }
+    complex = {
+        from_data = yes
+        data_source = <ship_size>
+        output_scope = ship
+    }
+    from_enum = {
+        from_data = yes
+        data_source = enum[link_test_enum]
+        output_scope = ship
+    }
+    from_value = {
+        from_data = yes
+        data_source = value[link_test_value]
+        output_scope = ship
+    }
+    prefixed_link = {
+        from_data = yes
+        data_source = value[link_test_value]
+        output_scope = ship
+        prefix = test:
+    }
+    prefixed_with_scope = {
+        from_data = yes
+        data_source = value[link_test_value]
+        input_scopes = system
+        output_scope = ship
+        prefix = scope:
+    }
+}

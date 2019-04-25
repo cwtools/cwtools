@@ -28,7 +28,10 @@ type ILocalisationAPICreator =
     abstract Api : Lang -> ILocalisationAPI
 
 
-type LocalisationSettings =
+type LocalisationSettings<'L> =
     {
         folder : string
+        gameName : string
+        keyToLanguage : string -> 'L option
+        gameToLang : 'L -> Lang
     }
