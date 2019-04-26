@@ -9,4 +9,10 @@ event = {
     #error
     #error
     type_loc_ref = my_ship_sub
+
+    ir_test = my_ship.my_ship.my_ship.my_ship
+    #error
+    ir_test = my_ship.my_ship.my_ship
+    #error
+    ir_test = my_ship.my_ship.my_ship.my_ship_fake
 }

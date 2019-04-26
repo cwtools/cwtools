@@ -73,7 +73,7 @@ module internal FieldValidators =
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
-    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
+    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
         if key |> firstCharEqualsAmp then errors else
                 match (vt) with
                 | ValueType.Scalar ->
@@ -115,8 +115,17 @@ module internal FieldValidators =
                     if key.Length <= 14 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
                     then errors
                     else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a portrait properties value, got %s" key) severity) leafornode <&&&> errors
+                | ValueType.IRFamilyName ->
+                    let parts = key.Split([|'.'|])
+                    if (parts.Length <> 4) then
+                        inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a family names value, got %s" key) severity) leafornode <&&&> errors
+                    else
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[0] leafornode errors) |>
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[1] leafornode) |>
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[2] leafornode) |>
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[3] leafornode)
 
-    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
+    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>)  (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
             | ValueType.Scalar ->
@@ -153,6 +162,14 @@ module internal FieldValidators =
                 key.Length = 11 && key |> Seq.forall (Char.IsLetter)
             | ValueType.CK2DNAProperty ->
                 key.Length <= 14 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
+            | ValueType.IRFamilyName ->
+                let parts = key.Split([|'.'|])
+                (parts.Length = 4) &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[0] &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[1] &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[2] &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[3]
+
         )
         || firstCharEqualsAmp key
 
@@ -384,7 +401,7 @@ module internal FieldValidators =
     let checkField (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) (leafornode : IKeyPos) errors =
             match field with
             |ValueField vt ->
-                checkValidValue p.enumsMap severity vt id key leafornode errors
+                checkValidValue p.enumsMap p.localisation severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap severity t key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
@@ -398,7 +415,7 @@ module internal FieldValidators =
     let checkFieldNE (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
-                checkValidValueNE p.enumsMap severity vt id key
+                checkValidValueNE p.enumsMap p.localisation severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap severity t key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
             |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLocalisation p.defaultLang synced key

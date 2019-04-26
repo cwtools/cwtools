@@ -216,7 +216,7 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
         (applyToAll rules (checkCardinality startNode))
 
     and applyValueField severity (vt : CWTools.Rules.ValueType) (leaf : Leaf) =
-        FieldValidators.checkValidValue enumsMap severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
+        FieldValidators.checkValidValue enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
 
     and applyLeafValueRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leafvalue : LeafValue) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)

@@ -30,4 +30,7 @@ ship_size = {
 event = {
     ## cardinality = 0..inf
     type_loc_ref = <ship_size>
+
+    ## cardinality = 0..inf
+    ir_test = ir_family_name_field
 }

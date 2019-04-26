@@ -27,6 +27,7 @@ namespace CWTools.Rules
     | Date
     | CK2DNA
     | CK2DNAProperty
+    | IRFamilyName
     with
       override ToString : unit -> string
     end

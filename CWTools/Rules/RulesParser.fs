@@ -44,6 +44,7 @@ type ValueType =
 | Date
 | CK2DNA
 | CK2DNAProperty
+| IRFamilyName
     override x.ToString() =
         match x with
         | Scalar -> "Scalar"
@@ -56,6 +57,7 @@ type ValueType =
         | Date -> "Date"
         | CK2DNA -> "CK2DNA"
         | CK2DNAProperty -> "CK2DNAProperty"
+        | IRFamilyName -> "IRFamilyName"
 
 type TypeType =
 | Simple of string
@@ -401,6 +403,7 @@ module RulesParser =
         | "portrait_properties_field" -> ValueField CK2DNAProperty
         | "colour_field" -> MarkerField Marker.ColourField
         | "ir_country_tag_field" -> MarkerField Marker.IRCountryTag
+        | "ir_family_name_field" -> ValueField IRFamilyName
         | x ->
             // eprintfn "ps %s" x
             ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
