@@ -302,19 +302,21 @@ module internal FieldValidators =
         |None -> false
 
     let checkFilepathField (files : Collections.Set<string>) (key : string) (prefix : string option) (leafornode) errors =
-        let file = (trimQuote key).Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
+        let file = (trimQuote key).Replace("\\","/")
+        let file2 = file.Replace(".lua",".shader").Replace(".tga",".dds")
         match prefix with
         | Some pre ->
-            if files.Contains file || files.Contains (pre + file) then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
+            if files.Contains file || files.Contains (pre + file) || files.Contains file2 || files.Contains (pre + file2) then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
         | None ->
-            if files.Contains file then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
+            if files.Contains file || files.Contains file2 then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
     let checkFilepathFieldNE (files : Collections.Set<string>) (key : string) (prefix : string option) =
-        let file = (trimQuote key).Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
+        let file = (trimQuote key).Replace("\\","/")
+        let file2 = file.Replace(".lua",".shader").Replace(".tga",".dds")
         match prefix with
         | Some pre ->
-            files.Contains file || files.Contains (pre + file)
+            files.Contains file || files.Contains (pre + file) || files.Contains file2 || files.Contains (pre + file2)
         | None ->
-            files.Contains file
+            files.Contains file || files.Contains file2
 
     let checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) errors =
         let value = folder + "/" + key + ".dds"
