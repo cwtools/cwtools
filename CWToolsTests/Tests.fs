@@ -251,7 +251,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         let configtext = if config then configFilesFromDir configfile else []
         // configtext |> Seq.iter (fun (fn, _) -> eprintfn "%s" fn)
         let completionTest (game : IGame) filename filetext (pos : pos, text : string, negate : bool, lowscore : bool) =
-            let getLabel = 
+            let getLabel =
                 function
                 | Simple(label, score)
                 | Detailed(label, _, score )
@@ -263,11 +263,12 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             | true, _ ->
                 Expect.hasCountOf (labels) 0u ((=) text) (sprintf "Completion shouldn't contain value %s at %A in %s" text pos filename)
             | false, true ->
+                eprintfn "ct %A" compRes
                 Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s" pos filename)
             | false, false ->
                 Expect.contains labels text (sprintf "Incorrect completion values at %A in %s" pos filename)
                 Expect.isNonEmpty labels (sprintf "No completion results, expected %s" text)
-                
+
         let completionTestPerFile (game : IGame) (filename : string, tests) =
             let filetext = File.ReadAllText filename
             tests |> List.iter (completionTest game filename filetext)
@@ -287,12 +288,12 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
-                let completionTests = 
-                                stl.AllEntities() 
+                let completionTests =
+                                stl.AllEntities()
                                 |> List.map (fun struct (e, _) ->
                                     e.filepath,
                                     getCompletionTests e.entity
-                                    )                
+                                    )
                 (stl :> IGame), errors, testVals, completionTests
             else
                 let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
@@ -307,17 +308,17 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                                     rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, IRConstants.Scope, IRConstants.Modifier>
                 let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-                let testVals = ir.AllEntities() 
-                                |> List.map (fun struct (e, _) -> 
-                                    e.filepath, 
+                let testVals = ir.AllEntities()
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
                                     getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r))
                                     )
-                let completionTests = 
-                                ir.AllEntities() 
+                let completionTests =
+                                ir.AllEntities()
                                 |> List.map (fun struct (e, _) ->
                                     e.filepath,
                                     getCompletionTests e.entity
-                                    )                
+                                    )
                 (ir :> IGame), errors, testVals, completionTests
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)

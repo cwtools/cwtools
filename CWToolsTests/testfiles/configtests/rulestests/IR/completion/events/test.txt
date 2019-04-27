@@ -1,15 +1,22 @@
 event = {
-    #@ 9 simple_ship
-    simple_ship = {
-        #@ 9 simple_station
-        #@? 10 simple_ship
-        simple_station = {
+    #@ 9 simple_province
+    simple_province = {
+        #@ 9 simple_character
+        #@? 10 simple_province
+        simple_character = {
 
         }
     }
-    #@ 9 simple_ship
-    #@ 12 simple_station
-    simple_ship.simple_station = {
+    #@ 9 simple_province
+    #@ 12 simple_character
+    simple_province.simple_character = {
+
+    }
+
+    ## Test dot chain completion
+    #@? 18 simple_province
+    #@ 18 simple_character
+    simple_province.simple_character = {
 
     }
 }

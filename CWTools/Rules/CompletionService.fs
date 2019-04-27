@@ -17,7 +17,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                      links : Map<string,Effect<'T>,InsensitiveStringComparer>,
                      valueTriggers : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                     globalScriptVariables : string list, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
+                     globalScriptVariables : string list, changeScope : ChangeScope<'T>, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                     |> List.groupBy fst
@@ -67,11 +67,11 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
     let scopeCompletionList =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> "event_target:" + s)
+                                                |> List.map (fun s -> "event_target:" + s, [anyScope])
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> "event_target:" + s)
-        let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect<'T> as x -> Some x.Name | _ -> None )
+                                                |> List.map (fun s -> "event_target:" + s, [anyScope])
+        let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect<'T> as x -> Some (x.Name, x.Scopes) | _ -> None )
         evs @ gevs @ scopedEffects
 
     let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
@@ -121,36 +121,58 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
 
     and getCompletionFromPath (scoreFunction : 'T list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option) list) scopeContext =
         // log (sprintf "%A" stack)
-        let rec convRuleToCompletion (count : int) (context : ScopeContext<_>) (rule : NewRule<_>) =
+        let completionForScopeDotChain (key : string) (startingContext : ScopeContext<_>) innerRules description =
+            let createSnippetForClauseWithCustomScopeReq scopeContext = (fun (r) -> createSnippetForClause (scoreFunction r scopeContext))
+            let defaultRes = scopeCompletionList |> List.map (fun (l, r) -> createSnippetForClauseWithCustomScopeReq startingContext r innerRules description l)
+            if key.Contains(".")
+            then
+                let splitKey = key.Split([|'.'|])
+                let changeScopeRes =
+                        splitKey |> Array.take (splitKey.Length - 1)
+                         |> String.concat "."
+                         |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                match changeScopeRes with
+                | NewScope (newscope, _) ->
+                    scopeCompletionList |> List.map (fun (l, r) -> createSnippetForClauseWithCustomScopeReq newscope r innerRules description l)
+                | ValueFound
+                | VarFound
+                | VarNotFound _
+                | WrongScope _
+                | NotFound -> defaultRes
+            else
+                defaultRes
+        let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext<_>) (rule : NewRule<_>) =
             let r, o = rule
-            let scoreFunction = scoreFunction o.requiredScopes context
-            let createSnippetForClause = createSnippetForClause scoreFunction
+            let scoreFunctioni = scoreFunction o.requiredScopes context
+            let createSnippetForClausei = createSnippetForClause scoreFunctioni
+            let createSnippetForClauseWithCustomScopeReq = (fun (r) -> createSnippetForClause (scoreFunction r context))
             let enough = o.max <= count
             if enough
             then []
             else
-                let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunction inner))
+                let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunctioni inner))
+                let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction r context) inner))
                 match r with
                 |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
-                    [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
+                    [createSnippetForClausei innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
                 |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
-                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
                 |NodeRule (ValueField(_), _) -> []
                 |NodeRule (AliasField(_), _) -> []
                 |NodeRule (FilepathField(_), _) -> []
                 |NodeRule (IconField(folder), innerRules) ->
-                    checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                    checkIconField folder |> List.map (fun e -> createSnippetForClausei innerRules o.description e)
                 |NodeRule (LocalisationField(_), _) -> []
                 |NodeRule (ScopeField(_), innerRules) ->
-                    scopeCompletionList |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                    completionForScopeDotChain key context innerRules o.description
                 //TODO: Scopes better
                 |NodeRule (SubtypeField(_), _) -> []
                 |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
                 |NodeRule (TypeField(TypeType.Complex (p,t,s)), innerRules) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description (p+e+s))) |> Option.defaultValue []
+                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClausei innerRules o.description (p+e+s))) |> Option.defaultValue []
                 |NodeRule (VariableGetField v, innerRules) ->
-                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
 
                 |LeafRule (ValueField(ValueType.Specific s), _) ->
                     [keyvalue (StringResource.stringManager.GetStringForID s.normal)]
@@ -161,7 +183,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 |LeafRule (FilepathField(_), _) -> []
                 |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
                 |LeafRule (LocalisationField(_), _) -> []
-                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map keyvalue
+                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map (fun (l, r) -> keyvalueWithCustomScopeReq r l)
                     //TODO: Scopes
                 |LeafRule (SubtypeField(_), _) -> []
                 |LeafRule (TypeField(TypeType.Simple t), _) ->
@@ -197,7 +219,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.FilepathField _ -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
-            |NewField.ScopeField _ -> scopeCompletionList |> List.map (CompletionResponse.CreateSimple)
+            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
             |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -234,14 +256,14 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                     | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
                     |x -> [x])
             match stack with
-            | [] -> expandedRules |> List.collect (convRuleToCompletion 0 scopeContext)
+            | [] -> expandedRules |> List.collect (convRuleToCompletion "" 0 scopeContext)
             | (key, count, None)::rest ->
                 match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
+                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
             | (key, count, Some _)::rest ->
                 match expandedRules |> List.choose (function | (LeafRule (l, r), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) | _ -> None) with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
+                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     //log "%s %A" key fs
                     let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
