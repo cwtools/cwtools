@@ -196,7 +196,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 match s with
                 |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-            |NewField.FilepathField -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
+            |NewField.FilepathField _ -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
             |NewField.ScopeField _ -> scopeCompletionList |> List.map (CompletionResponse.CreateSimple)
             |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple

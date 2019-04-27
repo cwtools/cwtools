@@ -109,7 +109,7 @@ and NewField<'a> =
 | TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition<'a>
 | ScopeField of 'a
 | LocalisationField of synced : bool
-| FilepathField
+| FilepathField of prefix : string option
 | IconField of string
 | AliasField of string
 | SingleAliasField of string
@@ -318,7 +318,11 @@ module RulesParser =
         | "percentage_field" -> ValueField ValueType.Percent
         | "localisation" -> LocalisationField false
         | "localisation_synced" -> LocalisationField true
-        | "filepath" -> FilepathField
+        | "filepath" -> FilepathField None
+        | x when x.StartsWith "filepath[" ->
+            match getSettingFromString x "filepath" with
+            | Some (folder) -> FilepathField (Some folder)
+            | None -> FilepathField None
         | "date_field" -> ValueField Date
         | x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (TypeType.Simple (x.Trim([|'<'; '>'|])))
