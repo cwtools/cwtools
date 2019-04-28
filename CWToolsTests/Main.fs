@@ -106,7 +106,7 @@ let test() =
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
 [<EntryPoint>]
 let main argv =
-    let config = defaultConfig // with ``parallel`` = false}
+    let config =  { defaultConfig  with ``parallel`` = false}
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     CultureInfo.DefaultThreadCurrentCulture <-CultureInfo("ru-RU");
     CultureInfo.DefaultThreadCurrentUICulture <-CultureInfo("ru-RU");

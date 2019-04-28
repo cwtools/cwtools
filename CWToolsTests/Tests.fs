@@ -266,7 +266,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 eprintfn "ct %A" compRes
                 Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s" pos filename)
             | false, false ->
-                Expect.contains labels text (sprintf "Incorrect completion values at %A in %s" pos filename)
+                Expect.contains labels text (sprintf "Incorrect completion values at %A in %s, %A" pos filename labels)
                 Expect.isNonEmpty labels (sprintf "No completion results, expected %s" text)
 
         let completionTestPerFile (game : IGame) (filename : string, tests) =
