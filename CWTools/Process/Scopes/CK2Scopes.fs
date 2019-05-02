@@ -70,23 +70,79 @@ module CK2 =
 
 
     let scopedLocEffects = [
-        // ScopedEffect("Capital", [Scope.Country], Scope.Province, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Both, defaultDesc, "", true);
         ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
-        // ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Dip_Advisor", [Scope.Country], Scope.Advisor, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Adm_Advisor", [Scope.Country], Scope.Advisor, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Mil_Advisor", [Scope.Country], Scope.Advisor, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Country", [Scope.Country; Scope.RebelFaction], Scope.Country, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("Betrothed", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Culture", [Scope.Character], Scope.Culture, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Employer", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Father", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("FatherOfUnborn", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("GetLiege", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Governor", [Scope.Offmap], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("GovernorTitle", [Scope.Offmap], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("GrandMaster", [Scope.Society], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Guardian", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Heir", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Holder", [Scope.Title], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("job_chancellor", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("job_marshal", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("job_spiritual", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("job_spymaster", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("job_treasurer", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Killer", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Liege", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Location", [Scope.Title], Scope.Province, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Lover", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Mother", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("NextGrandMaster", [Scope.Society], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Offmap", [Scope.Province], Scope.Offmap, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("OldestChild", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("OriginalOwner", [Scope.Artifact; Scope.Wonder], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Owner", [Scope.Artifact; Scope.Wonder], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ParentReligion", [Scope.character], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("PlotTarget", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("PlotTargetTitle", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("PrevRuler", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Province", [Scope.Wonder], Scope.Province, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("PrimaryTitle", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("RealFather", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Realm", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Regent", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Reincarnation", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Religion", [Scope.Province; Scope.Character], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Ruler", [Scope.Offmap], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("SecretReligion", [Scope.Character], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Society", [Scope.Character], Scope.Society, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Spouse", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("SupportedClaimant", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("SupportedClaimantTitle", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ThePope", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ThirdPartyCharacter", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ThirdPartyTitle", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Title", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("TopLiege", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("TrueFather", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("TrueReligion", [Scope.Character], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Twin", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Wonder", [Scope.Province], Scope.Wonder, EffectType.Link, defaultDesc, "", true);
+        
+        // TODO: Check these as 
+        ScopedEffect("Actor", [Scope.Character], Scope.character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ActorExtra", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("AdultExtra", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("ChildExtra", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Clan", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("County", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Capital", [Scope.Character], Scope.Province, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Duchy", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Government", [Scope.Character], Scope.Government, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Host", [Scope.title], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Kingdom", [Scope.Character], Scope.Title, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Player", [Scope.Character], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Recipient", [Scope.Chacter], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("RecipientExtra", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("RelHead", [Scope.Religion], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("SeaZone", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("Siege", [Scope.Province], Scope.Siege, EffectType.Link, defaultDesc, "", true);
     ]
     let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
 
