@@ -127,7 +127,7 @@ module IRConstants =
             member this.Tag = this.tag
 
     let categoryScopeList = [
-        ModifierCategory.Character, [Scope.Character];
+        ModifierCategory.Character, [Scope.Character; Scope.Country];
         ModifierCategory.Unit, [Scope.Unit; Scope.Country];
         ModifierCategory.Province, [Scope.Province; Scope.Country];
         ModifierCategory.Country, [Scope.Country];
