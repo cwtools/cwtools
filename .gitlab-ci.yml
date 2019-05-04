@@ -1,4 +1,4 @@
-image: tboby/docker-fsharp-mono-netcore-electronnet
+image: fsharp:netcore
 
 variables:
   DOCKER_DRIVER: overlay2
