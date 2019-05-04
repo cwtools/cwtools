@@ -6,10 +6,22 @@ types = {
 
 event = {
     ## cardinality = 0..inf
-    scope_field = {
+    without_alias = {
         ## cardinality = 0..inf
         scope_field = {
-            
+            ## cardinality = 0..inf
+            scope_field = {
+                ## cardinality = 0..inf
+                test = test
+            }
         }
     }
+    ## cardinality = 0..inf
+    with_alias = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
 }
+
+## cardinality = 0..inf
+alias[effect:scope_field] = { alias_name[effect] = alias_match_left[effect] }

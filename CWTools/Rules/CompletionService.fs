@@ -11,13 +11,19 @@ open CWTools.Games
 open CWTools.Utilities.Position
 open System.IO
 
+type CompletionContext =
+    | NodeLHS
+    | NodeRHS
+    | LeafLHS
+    | LeafRHS
+
 type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                     (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
                      enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                      links : Map<string,Effect<'T>,InsensitiveStringComparer>,
                      valueTriggers : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                     globalScriptVariables : string list, changeScope, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
+                     globalScriptVariables : string list, changeScope : ChangeScope<'T>, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                     |> List.groupBy fst
@@ -67,11 +73,11 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
     let scopeCompletionList =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> "event_target:" + s)
+                                                |> List.map (fun s -> "event_target:" + s, [anyScope])
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> "event_target:" + s)
-        let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect<'T> as x -> Some x.Name | _ -> None )
+                                                |> List.map (fun s -> "event_target:" + s, [anyScope])
+        let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect<'T> as x -> Some (x.Name, x.Scopes) | _ -> None )
         evs @ gevs @ scopedEffects
 
     let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
@@ -103,54 +109,88 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
         CompletionResponse.Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description, Some score)
 
 
-    let rec getRulePath (pos : pos) (stack : (string * int * string option) list) (node : Node) =
+    // | LeafValue
+    let rec getRulePath (pos : pos) (stack : (string * int * string option * CompletionContext) list) (node : Node) =
        //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
         let countChildren (n2 : Node) (key : string) =
             n2.Childs key |> Seq.length
         match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
-        | Some c -> getRulePath pos ((c.Key, countChildren node c.Key, None) :: stack) c
+        | Some c ->
+            log (sprintf "%s %A %A" c.Key c.Position pos)
+            match (c.Position.StartLine = (pos.Line)) && ((c.Position.StartColumn + c.Key.Length + 1) > pos.Column) with
+            | true -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeLHS) :: stack) c
+            | false -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeRHS) :: stack) c
         | None ->
                 /// This handles LHS vs RHS beacuse LHS gets an "x" inserted into it, so fails to match any rules
                 match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
                 | Some l ->
                     // SHould be <, but for some reason it isn't
                     match l.Position.StartColumn + l.Key.Length + 1 > pos.Column with
-                    |true -> (l.Key, countChildren node l.Key, Some l.Key)::stack
-                    |false -> (l.Key, countChildren node l.Key, Some l.ValueText)::stack
-                | None -> stack
+                    |true -> (l.Key, countChildren node l.Key, Some l.Key, LeafLHS)::stack
+                    |false -> (l.Key, countChildren node l.Key, Some l.ValueText, LeafRHS)::stack
+                | None ->
+                    stack
+                    // match node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos) with
+                    // | Some lv -> (lv.Key, countChildren node lv.Key, Some lv.ValueText)::stack
+                    // | None -> stack
 
-    and getCompletionFromPath (scoreFunction : 'T list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option) list) scopeContext =
+    and getCompletionFromPath (scoreFunction : 'T list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
         // log (sprintf "%A" stack)
-        let rec convRuleToCompletion (count : int) (context : ScopeContext<_>) (rule : NewRule<_>) =
+        let completionForScopeDotChain (key : string) (startingContext : ScopeContext<_>) innerRules description =
+            let createSnippetForClauseWithCustomScopeReq scopeContext = (fun (r) -> createSnippetForClause (scoreFunction r scopeContext))
+
+            let defaultRes = scopeCompletionList |> List.map (fun (l, r) -> createSnippetForClauseWithCustomScopeReq startingContext r innerRules description l)
+            // eprintfn "dr %A" defaultRes
+            if key.Contains(".")
+            then
+                let splitKey = key.Split([|'.'|])
+                let changeScopeRes =
+                        splitKey |> Array.take (splitKey.Length - 1)
+                         |> String.concat "."
+                         |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                match changeScopeRes with
+                | NewScope (newscope, _) ->
+                    scopeCompletionList |> List.map (fun (l, r) -> createSnippetForClauseWithCustomScopeReq newscope r innerRules description l)
+                | ValueFound
+                | VarFound
+                | VarNotFound _
+                | WrongScope _
+                | NotFound -> defaultRes
+            else
+                defaultRes
+        let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext<_>) (rule : NewRule<_>) =
+            // eprintfn "crtc %A %A" key rule
             let r, o = rule
-            let scoreFunction = scoreFunction o.requiredScopes context
-            let createSnippetForClause = createSnippetForClause scoreFunction
+            let scoreFunctioni = scoreFunction o.requiredScopes context
+            let createSnippetForClausei = createSnippetForClause scoreFunctioni
+            let createSnippetForClauseWithCustomScopeReq = (fun (r) -> createSnippetForClause (scoreFunction r context))
             let enough = o.max <= count
             if enough
             then []
             else
-                let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunction inner))
+                let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunctioni inner))
+                let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction r context) inner))
                 match r with
                 |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
-                    [createSnippetForClause innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
+                    [createSnippetForClausei innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
                 |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
-                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
                 |NodeRule (ValueField(_), _) -> []
                 |NodeRule (AliasField(_), _) -> []
                 |NodeRule (FilepathField(_), _) -> []
                 |NodeRule (IconField(folder), innerRules) ->
-                    checkIconField folder |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                    checkIconField folder |> List.map (fun e -> createSnippetForClausei innerRules o.description e)
                 |NodeRule (LocalisationField(_), _) -> []
                 |NodeRule (ScopeField(_), innerRules) ->
-                    scopeCompletionList |> List.map (fun e -> createSnippetForClause innerRules o.description e)
+                    completionForScopeDotChain key context innerRules o.description
                 //TODO: Scopes better
                 |NodeRule (SubtypeField(_), _) -> []
                 |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
                 |NodeRule (TypeField(TypeType.Complex (p,t,s)), innerRules) ->
-                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClause innerRules o.description (p+e+s))) |> Option.defaultValue []
+                    types.TryFind(t) |> Option.map (fun ts -> ts |> List.map (fun e -> createSnippetForClausei innerRules o.description (p+e+s))) |> Option.defaultValue []
                 |NodeRule (VariableGetField v, innerRules) ->
-                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClause innerRules o.description e)) |> Option.defaultValue []
+                    varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
 
                 |LeafRule (ValueField(ValueType.Specific s), _) ->
                     [keyvalue (StringResource.stringManager.GetStringForID s.normal)]
@@ -161,7 +201,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 |LeafRule (FilepathField(_), _) -> []
                 |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
                 |LeafRule (LocalisationField(_), _) -> []
-                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map keyvalue
+                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map (fun (l, r) -> keyvalueWithCustomScopeReq r l)
                     //TODO: Scopes
                 |LeafRule (SubtypeField(_), _) -> []
                 |LeafRule (TypeField(TypeType.Simple t), _) ->
@@ -197,7 +237,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.FilepathField _ -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
-            |NewField.ScopeField _ -> scopeCompletionList |> List.map (CompletionResponse.CreateSimple)
+            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
             |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -221,7 +261,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
         let severity = Severity.Error
 
-        let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option) list) (scopeContext) =
+        let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option * CompletionContext) list) (scopeContext) =
             let subtypedRules =
                 rules |> List.collect (
                     function
@@ -230,23 +270,35 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             let expandedRules =
                 subtypedRules |> List.collect (
                     function
-                    | LeafRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
-                    | NodeRule((AliasField a),_),_ -> (aliases.TryFind a |> Option.defaultValue [])
+                    | LeafRule((AliasField a),_),o -> (aliases.TryFind a |> Option.defaultValue []) |> List.map (fun (r, oi) -> (r, { oi with min =  o.min; max = oi.max}))
+                    | NodeRule((AliasField a),_),o -> (aliases.TryFind a |> Option.defaultValue []) |> List.map (fun (r, oi) -> (r, { oi with min =  o.min; max = oi.max}))
                     |x -> [x])
+            //eprintfn "fr %A %A" stack (expandedRules |> List.truncate 10)
             match stack with
-            | [] -> expandedRules |> List.collect (convRuleToCompletion 0 scopeContext)
-            | (key, count, None)::rest ->
+            | [] -> expandedRules |> List.collect (convRuleToCompletion "" 0 scopeContext)
+            | [(key, count, None, NodeLHS)] ->
+                expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+            | [(key, count, None, NodeRHS)] ->
                 match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
-                | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
-            | (key, count, Some _)::rest ->
+                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules [] scopeContext)
+            | [(key, count, Some _, LeafLHS)] ->
+                expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+            | [(key, count, Some _, LeafRHS)] ->
                 match expandedRules |> List.choose (function | (LeafRule (l, r), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) | _ -> None) with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion count scopeContext)
+                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     //log "%s %A" key fs
                     let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
                     //log "res %A" res
                     res
+            | (key, count, _, NodeRHS)::rest ->
+                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
+                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
+            | (key, count, _, t)::rest ->
+                log (sprintf "Completion error %A %A" key t)
+                expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
@@ -283,22 +335,22 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
         let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
         let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
         let scoreFunction = scoreFunction allUsedKeys
-        let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option) list) =
+        let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext) list) =
             let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
             match skipRootKeyStack, path with
             |_, [] ->
                 getCompletionFromPath scoreFunction typerules [] scopeContext
-            |[], (head, c, _)::tail ->
+            |[], (head, c, _, _)::tail ->
                 if FieldValidators.typekeyfilter t head
                 then
-                    getCompletionFromPath scoreFunction typerules ((t.name, c, None)::tail) scopeContext else []
-            |head::tail, (pathhead, _, _)::pathtail ->
+                    getCompletionFromPath scoreFunction typerules ((t.name, c, None, NodeRHS)::tail) scopeContext else []
+            |head::tail, (pathhead, _, _,_)::pathtail ->
                 if skiprootkey head pathhead
                 then validateTypeSkipRoot t tail pathtail
                 else []
         let items =
             match path |> List.last with
-            |_, count, Some x when x.Length > 0 && x.StartsWith("@x") ->
+            |_, count, Some x, _ when x.Length > 0 && x.StartsWith("@x") ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
             |_ ->

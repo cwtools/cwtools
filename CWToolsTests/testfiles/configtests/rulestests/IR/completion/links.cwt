@@ -1,10 +1,13 @@
 links = {
-    simple_ship = {
-        input_scopes = station
-        output_scope = ship
+    simple_province = {
+        input_scopes = character
+        output_scope = province
     }
-    simple_station = {
-        input_scopes = ship
-        output_scope = station
+    simple_character = {
+        input_scopes = province
+        output_scope = character
+    }
+    root = {
+
     }
 }

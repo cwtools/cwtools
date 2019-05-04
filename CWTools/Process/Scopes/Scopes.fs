@@ -191,7 +191,7 @@ module Scopes =
                         // if skipEffect then (context, false), NotFound else
                         match eventTargetLinkMatch with
                         | None ->
-                            if last && vars.Contains nextKey
+                            if last && (vars.Contains nextKey)
                             then
                                 (context, false), VarFound
                             else

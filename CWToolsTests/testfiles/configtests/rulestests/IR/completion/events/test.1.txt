@@ -1,5 +1,5 @@
 event = {
-    without_alias = {
+    with_alias = {
         #@ 9 simple_province
         simple_province = {
             #@ 9 simple_character
@@ -18,6 +18,11 @@ event = {
         #@? 18 simple_province
         #@ 18 simple_character
         simple_province.simple_character = {
+
+        }
+
+        #@ 1 root
+        root = {
 
         }
     }
