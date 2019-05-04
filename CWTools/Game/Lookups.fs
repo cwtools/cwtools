@@ -99,3 +99,8 @@ type IRLookup() =
     inherit Lookup<IRConstants.Scope, IRConstants.Modifier>()
     member val IRprovinces : string list = [] with get, set
     member val IRcharacters : string list = [] with get, set
+
+type VIC2Lookup() = 
+    inherit Lookup<VIC2Constants.Scope, VIC2Constants.Modifier>()
+    member val VIC2provinces : string list = [] with get, set
+
