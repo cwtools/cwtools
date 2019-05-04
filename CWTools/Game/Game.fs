@@ -145,6 +145,7 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
         this.RuleValidationService <- Some rules
         this.InfoService <- Some info
         this.completionService <- Some completion
+        this.Resources.ForceRecompute()
         this.RefreshValidationManager()
 
     let initialConfigRules() =
