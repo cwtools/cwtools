@@ -60,6 +60,7 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
             if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
             then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else
             node.Children |> List.collect (inner head)
+         // TODO: Also check Leaves/leafvalues here when both are defined
         |[] ->
             if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText = "enum_name")
             then node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim([|'\"'|])) |> List.ofSeq
