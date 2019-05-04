@@ -145,13 +145,13 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
         this.RuleValidationService <- Some rules
         this.InfoService <- Some info
         this.completionService <- Some completion
-        this.Resources.ForceRecompute()
         this.RefreshValidationManager()
 
     let initialConfigRules() =
         localisationManager.UpdateAllLocalisation()
         if settings.rules.IsSome then rulesManager.LoadBaseConfig(settings.rules.Value) else ()
         updateRulesCache()
+        this.Resources.ForceRecompute()
         localisationManager.UpdateAllLocalisation()
 
     do
