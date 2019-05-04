@@ -35,7 +35,7 @@ let computeIRDataUpdate = computeDataUpdate
 let computeHOI4Data = computeData
 let computeHOI4DataUpdate = computeDataUpdate
 
-module EU4 = 
+module EU4 =
     open CWTools.Process
     open CWTools.Process.ProcessCore
 
@@ -53,7 +53,7 @@ module EU4 =
         if (e.logicalpath.StartsWith("common/scripted_effects", StringComparison.OrdinalIgnoreCase)
                     || e.logicalpath.StartsWith("common/scripted_triggers", StringComparison.OrdinalIgnoreCase))
                 then getScriptedEffectParams (e.entity) else []
-    
+
     let computeEU4Data (infoService : unit -> InfoService<_> option) (e : Entity) =
         let withRulesData = infoService().IsSome
         let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)

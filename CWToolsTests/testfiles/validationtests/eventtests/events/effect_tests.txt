@@ -5,17 +5,17 @@ namespace = test
 country_event = {
     is_triggered_only = yes
     trigger = {
-        ##error
+        #error
         NOT = {
             has_country_flag = yes
             has_country_flag = test
         }
-        ##error
+        #error
         NOT = {
             has_country_flag = yes
             NOT = { has_country_flag = yes }
         }
-        ##error
+        #error
         NOT = {
             NOT = { has_country_flag = yes }
             NOT = { has_country_flag = yes }
@@ -27,13 +27,13 @@ country_event = {
 country_event = {
     is_triggered_only = yes
     immediate = {
-        ##error
+        #error
         OR = {
             else = {
 
             }
         }
-        ##error
+        #error
         OR = {
             else_if = {
 
@@ -50,7 +50,7 @@ country_event = {
 
             }
         }
-        ##error
+        #error
         OR = {
             if = {
 
@@ -63,7 +63,7 @@ country_event = {
             }
         }
         OR = {
-            ##error
+            #error
             if = {
                 else = {
 
@@ -82,9 +82,33 @@ country_event = {
             }
         }
         OR = {
-            ##error
+            #error
             if = {
                 else_if = {
+
+                }
+            }
+        }
+    }
+}
+
+##Test redundant AND/OR
+country_event = {
+    is_triggered_only = yes
+    trigger = {
+        AND = {
+            AND = {
+
+            }
+        }
+        OR = {
+            OR = {
+
+            }
+            has_country_flag = yes
+            AND = {
+                ##error
+                AND = {
 
                 }
             }

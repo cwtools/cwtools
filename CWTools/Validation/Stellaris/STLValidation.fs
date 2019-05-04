@@ -726,7 +726,6 @@ module STLValidation =
             let triggers = (es.AllTriggers)
             let fNode =
                 fun (last : BoolState) (x : Node) ->
-                    eprintfn "rand %A %s" last x.Key
                     match last, x.Key with
                     |AND, k when k == "AND" -> AND, Some (inv (ErrorCodes.UnnecessaryBoolean "AND") x)
                     |OR, k when k == "OR" -> OR, Some (inv (ErrorCodes.UnnecessaryBoolean "OR") x)

@@ -56,3 +56,14 @@ country_event = {
         }
     }
 }
+
+country_event = {
+    option = {
+        OR = {
+            country_only = test
+            AND = {
+
+            }
+        }
+    }
+}
