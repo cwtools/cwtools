@@ -156,9 +156,11 @@ type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>)
 
 type STLEntitySet = EntitySet<STLComputedData>
 type EU4EntitySet = EntitySet<EU4ComputedData>
+type VIC2EntitySet = EntitySet<VIC2ComputedData>
 type StructureValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> EntitySet<'T> -> ValidationResult
 type STLStructureValidator = StructureValidator<STLComputedData>
 type EU4StructureValidator = StructureValidator<EU4ComputedData>
+type VIC2StructureValidator = StructureValidator<VIC2ComputedData>
 type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
 type STLFileValidator = FileValidator<STLComputedData>
 type LookupValidator<'T, 'S, 'M when 'T :> ComputedData and 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = Lookup<'S, 'M> -> StructureValidator<'T>

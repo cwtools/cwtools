@@ -3909,6 +3909,18 @@ namespace CWTools.Validation.HOI4
     val findAllSetVariables : node:Process.Node -> string list
   end
 
+namespace CWTools.Validation.VIC2
+  module CK2Compute = begin
+    val computeVIC2Data :
+      infoService:(unit -> Rules.InfoService<'a> option) ->
+        e:Games.Entity -> Games.VIC2ComputedData
+        when 'a :> Common.IScope<'a> and 'a : comparison
+    val computeVIC2DataUpdate :
+      infoService:(unit -> Rules.InfoService<'a> option) ->
+        e:Games.Entity -> data:Games.VIC2ComputedData -> unit
+        when 'a :> Common.IScope<'a> and 'a : comparison
+  end
+
 namespace CWTools.Games
   type ValidationManagerSettings<'T,'S,'M
                                    when 'T :> ComputedData and

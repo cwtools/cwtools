@@ -34,6 +34,8 @@ let computeIRData = computeData
 let computeIRDataUpdate = computeDataUpdate
 let computeHOI4Data = computeData
 let computeHOI4DataUpdate = computeDataUpdate
+let computeVIC2Data = computeData
+let computeVIC2DataUpdate = computeDataUpdate
 
 module EU4 = 
     open CWTools.Process
