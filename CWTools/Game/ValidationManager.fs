@@ -36,10 +36,11 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         , services : ValidationManagerServices<'T, 'S, 'M>,
          validateLocalisationCommand,
          defaultContext : ScopeContext<'S>,
-         noneContext : ScopeContext<'S>) =
+         noneContext : ScopeContext<'S>,
+         errorCache : System.Runtime.CompilerServices.ConditionalWeakTable<_, CWError list>) =
     let resources = services.resources
     let validators = settings.validators
-    let errorCache = new System.Runtime.CompilerServices.ConditionalWeakTable<_,CWError list>()
+    let errorCache = errorCache
     let addToCache (entity : Entity) errors =
         errorCache.Add(entity, errors)
     let getErrorsForEntity (entity : Entity) =
@@ -165,11 +166,12 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
     member __.CachedRuleErrors(entities : struct (Entity * Lazy<'T>) list) =
         let res = entities |> List.map (fun struct (e, l) -> (struct (e, l)), tryParseWith errorCache.TryGetValue e)
         // TODO: This is too performance slow
-        // res |> List.filter (fun (e, errors) -> errors.IsNone)
-        //             |> List.map fst
-        //             |> (validate true)
-        //             |> ignore
+        res |> List.filter (fun (e, errors) -> errors.IsNone)
+                    |> List.map fst
+                    |> (validate true)
+                    |> ignore
         let forced = res |> List.filter (fun (e, errors) -> errors.IsNone)
                     |> List.choose (fun (struct (e, _), _) -> tryParseWith errorCache.TryGetValue e)
                     |> List.collect id
         (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced
+    member __.ErrorCache() = errorCache
