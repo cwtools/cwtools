@@ -68,5 +68,7 @@ country_event = {
 
 country_event = {
     use_variable = my_preset_variable
+    ## TODO handle anything after @
+    # error
     use_variable = my_preset_variable@test
 }

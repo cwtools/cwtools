@@ -34,7 +34,7 @@ country_event = {
     is_triggered_only = yes
     immediate = {
         event_target:test_global_target = {
-            
+
         }
     }
 }
@@ -52,8 +52,8 @@ country_event = {
     id = testse.6
     is_triggered_only = yes
     immediate = {
-        country_event = { 
-            #not defined
+        country_event = {
+            ##not defined
             id = nothing
         }
     }
