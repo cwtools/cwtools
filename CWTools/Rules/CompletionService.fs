@@ -273,7 +273,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                     | LeafRule((AliasField a),_),o -> (aliases.TryFind a |> Option.defaultValue []) |> List.map (fun (r, oi) -> (r, { oi with min =  o.min; max = oi.max}))
                     | NodeRule((AliasField a),_),o -> (aliases.TryFind a |> Option.defaultValue []) |> List.map (fun (r, oi) -> (r, { oi with min =  o.min; max = oi.max}))
                     |x -> [x])
-            eprintfn "fr %A %A" stack (expandedRules |> List.truncate 10)
+            //eprintfn "fr %A %A" stack (expandedRules |> List.truncate 10)
             match stack with
             | [] -> expandedRules |> List.collect (convRuleToCompletion "" 0 scopeContext)
             | [(key, count, None, NodeLHS)] ->

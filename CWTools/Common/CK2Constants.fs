@@ -16,6 +16,7 @@ module CK2Constants =
         | Society
         | Artifact
         | Bloodline
+        | Wonder
         //Misc
         | Any
         | InvalidScope
@@ -34,6 +35,7 @@ module CK2Constants =
             | Society -> "Society"
             | Artifact -> "Artifact"
             | Bloodline -> "Bloodline"
+            | Wonder -> "Wonder"
             | InvalidScope -> "InvalidScope"
 
         static member AnyScope = Scope.Any
@@ -78,6 +80,7 @@ module CK2Constants =
                 | "society" -> Scope.Society
                 | "artifact" -> Scope.Artifact
                 | "bloodline" -> Scope.Bloodline
+                | "wonder" -> Scope.Wonder
                 | "any" -> Scope.Any
                 | "all" -> Scope.Any
                 | "no_scope" -> Scope.Any

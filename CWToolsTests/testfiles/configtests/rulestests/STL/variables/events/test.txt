@@ -68,4 +68,5 @@ country_event = {
 
 country_event = {
     use_variable = my_preset_variable
+    use_variable = my_preset_variable@test
 }
