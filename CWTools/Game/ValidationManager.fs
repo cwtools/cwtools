@@ -166,10 +166,10 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
     member __.CachedRuleErrors(entities : struct (Entity * Lazy<'T>) list) =
         let res = entities |> List.map (fun struct (e, l) -> (struct (e, l)), tryParseWith errorCache.TryGetValue e)
         // TODO: This is too performance slow
-        res |> List.filter (fun (e, errors) -> errors.IsNone)
-                    |> List.map fst
-                    |> (validate true)
-                    |> ignore
+        // res |> List.filter (fun (e, errors) -> errors.IsNone)
+        //             |> List.map fst
+        //             |> (validate true)
+        //             |> ignore
         let forced = res |> List.filter (fun (e, errors) -> errors.IsNone)
                     |> List.choose (fun (struct (e, _), _) -> tryParseWith errorCache.TryGetValue e)
                     |> List.collect id
