@@ -11,7 +11,7 @@ country_event = {
         random_owned_ship = {
             #error
             random_ship = {
-                
+
             }
         }
     }

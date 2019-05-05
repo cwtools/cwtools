@@ -25,12 +25,6 @@ module Utils =
                 dict.Add(keyFunction(n), temp)
                 temp
 
-    let duration f s =
-        let timer = new System.Diagnostics.Stopwatch()
-        timer.Start()
-        let returnValue = f()
-        //log "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
-        returnValue
 
 
     type LogLevel =
@@ -52,6 +46,13 @@ module Utils =
     let logVerbose message = logInner Verbose message
     let logNormal message = logInner Normal message
     let log = logVerbose
+
+    let duration f s =
+        let timer = new System.Diagnostics.Stopwatch()
+        timer.Start()
+        let returnValue = f()
+        //log (sprintf "Elapsed Time: %i %s" timer.ElapsedMilliseconds s)
+        returnValue
 
     let mkZeroFile file = mkRange file (mkPos 0 0) (mkPos 10000 0)
     type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>

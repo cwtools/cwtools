@@ -36,10 +36,11 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         , services : ValidationManagerServices<'T, 'S, 'M>,
          validateLocalisationCommand,
          defaultContext : ScopeContext<'S>,
-         noneContext : ScopeContext<'S>) =
+         noneContext : ScopeContext<'S>,
+         errorCache : System.Runtime.CompilerServices.ConditionalWeakTable<_, CWError list>) =
     let resources = services.resources
     let validators = settings.validators
-    let errorCache = new System.Runtime.CompilerServices.ConditionalWeakTable<_,CWError list>()
+    let errorCache = errorCache
     let addToCache (entity : Entity) errors =
         errorCache.Add(entity, errors)
     let getErrorsForEntity (entity : Entity) =
@@ -173,3 +174,4 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
                     |> List.choose (fun (struct (e, _), _) -> tryParseWith errorCache.TryGetValue e)
                     |> List.collect id
         (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced
+    member __.ErrorCache() = errorCache

@@ -53,7 +53,7 @@ country_event = {
     is_triggered_only = yes
     immediate = {
         country_event = {
-            ##not defined
+            #not defined
             id = nothing
         }
     }

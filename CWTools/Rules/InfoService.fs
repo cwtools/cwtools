@@ -493,10 +493,12 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let fLeaf (res) (leaf : Leaf) ((field, _) : NewRule<_>) = res
         let fLeafValue (res) (leafvalue : LeafValue) (field, _) = res
         let fNode (res : Node list, finished : bool) (node : Node) ((field, option) : NewRule<_>) =
+        // TODO: Consider adding a case for "non-trigger rule after trigger rule" to reset for inner
             match finished, field with
             |false, NodeRule (_, rs) when rs |> List.exists (function |LeafRule (AliasField "trigger" , _), _-> true |_ -> false) ->
                 node::res, true
-            |_ -> res, false
+            |false, _ -> res, false
+            |true, _ -> res, true
         let fValueClause (res) (valueclause : ValueClause) ((field, option) : NewRule<_>) = res
         let fComment (res) _ _ = res
 
@@ -508,7 +510,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             mergeFolds getTriggersInEntity getEffectsInEntity
             |> mergeFolds getDefVarInEntity
             |> mergeFolds getTypesInEntity
-        let types, (defvars, (triggers, effects)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
+        let types, (defvars, (effects, triggers)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
         (types, defvars, triggers, effects)
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
