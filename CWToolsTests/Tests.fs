@@ -358,10 +358,10 @@ let folderTests =
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]
-[<Tests>]
-let stlAllSubfolderTests = testList "validation all stl" (testSubdirectories true "./testfiles/configtests/rulestests/All" |> List.ofSeq)
-[<Tests>]
-let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false "./testfiles/configtests/rulestests/All" |> List.ofSeq)
+//[<Tests>]
+//let stlAllSubfolderTests = testList "validation all stl" (testSubdirectories true "./testfiles/configtests/rulestests/All" |> List.ofSeq)
+//[<Tests>]
+//let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false "./testfiles/configtests/rulestests/All" |> List.ofSeq)
 [<Tests>]
 let stlSubfolderTests = testList "validation stl" (testSubdirectories true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
 [<Tests>]
