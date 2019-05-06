@@ -19,6 +19,18 @@ enums = {
         }
         start_from_root = yes
     }
+    complex_enum[complex_path] = {
+        path = "game/common/complexpath.txt"
+        name = {
+            enum_name = scalar
+            enum_name
+            enum_name = {
+                blah = enum_name
+                enum_name
+            }
+        }
+        start_from_root = yes
+    }
 }
 
 event = {
@@ -27,4 +39,7 @@ event = {
 
     ## cardinality = 0..inf
     top_leaf = enum[top_leaf]
+
+    ## cardinality = 0..inf
+    complex_path = enum[complex_path]
 }

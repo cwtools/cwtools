@@ -8,4 +8,12 @@ event = {
     top_leaf = two
     #error
     top_leaf = three
+
+    complex_path = test1
+    complex_path = test2
+    complex_path = test3
+    complex_path = test4
+    complex_path = test5
+    #error
+    complex_path = test6
 }

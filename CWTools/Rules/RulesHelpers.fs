@@ -55,22 +55,27 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
     let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
     let rec inner (enumtree : Node) (node : Node) =
         // log "%A %A" (enumtree.ToRaw) (node.Position.FileName)
-        match enumtree.Children with
-        |head::_ ->
-            if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
-            then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else
-            node.Children |> List.collect (inner head)
-         // TODO: Also check Leaves/leafvalues here when both are defined
-        |[] ->
+        let childRes =
+            match enumtree.Children with
+            |head::_ ->
+                let keyRes =
+                    if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
+                    then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else []
+                keyRes @ (node.Children |> List.collect (inner head))
+            // TODO: Also check Leaves/leafvalues here when both are defined
+            |[] -> []
+        let leafValueRes =
             if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText = "enum_name")
             then node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim([|'\"'|])) |> List.ofSeq
-            else
-                match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText = "enum_name") with
-                |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
-                |None ->
-                    match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
-                    |Some leaf -> node.Leaves |> Seq.map(fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq
-                    |None -> []
+            else []
+        let leafRes =
+            match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText = "enum_name") with
+            |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
+            |None ->
+                match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
+                |Some leaf -> node.Leaves |> Seq.map(fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq
+                |None -> []
+        childRes @ leafValueRes @ leafRes
     let getEnumInfo (complexenum : ComplexEnumDef) =
         let cpath = complexenum.path.Replace("\\","/")
         // log "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
