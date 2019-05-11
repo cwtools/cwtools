@@ -300,7 +300,7 @@ type VIC2Game(settings : VIC2Settings) =
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
     let game = GameObject<Scope, Modifier, VIC2ComputedData, VIC2Lookup>.CreateGame
-                ((settings, "imperator", scriptFolders, Compute.computeVIC2Data,
+                ((settings, "victoria 2", scriptFolders, Compute.computeVIC2Data,
                     Compute.computeVIC2DataUpdate,
                      (VIC2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
