@@ -463,6 +463,7 @@ module STL =
         ScopedEffect("capital_scope", allScopes, Scope.Planet, EffectType.Link, defaultDesc, "", true);
         ScopedEffect("system", allScopes, Scope.GalacticObject, EffectType.Link, defaultDesc, "", true);
         ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("star", [Scope.GalacticObject], Scope.Star, EffectType.Link, defaultDesc, "", true);
         ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Link, "", "", true);
         ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Link, defaultDesc, "", true);
         ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector], Scope.Leader, EffectType.Link, "", "", true);
