@@ -8,14 +8,14 @@ enums = {
     complex_enum[singlefile] = {
         path = "game/common/graphicalculturetype.txt"
         name = {
-            enum_name = ignore
+            enum_name = scalar
         }
         start_from_root = yes
     }
     complex_enum[top_leaf] = {
         path = "game/common/anomalies"
         name = {
-            enum_name = ignore
+            enum_name = scalar
         }
         start_from_root = yes
     }
@@ -31,6 +31,22 @@ enums = {
         }
         start_from_root = yes
     }
+
+    complex_enum[specific_path] = {
+        path = "game/common/specificpath.txt"
+        name = {
+            enum_name = {
+                something = enum_name
+                scalar = {
+                    something = {
+                        enum_name
+                    }
+                }
+            }
+        }
+        start_from_root = yes
+
+    }
 }
 
 event = {
@@ -42,4 +58,7 @@ event = {
 
     ## cardinality = 0..inf
     complex_path = enum[complex_path]
+
+    ## cardinality = 0..inf
+    specific_path = enum[specific_path]
 }

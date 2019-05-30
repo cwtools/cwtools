@@ -1,0 +1,12 @@
+stest1 = {
+    something = stest2
+    else = stest3
+    test = {
+        something = {
+            stest4
+        }
+        test = {
+            stest5
+        }
+    }
+}

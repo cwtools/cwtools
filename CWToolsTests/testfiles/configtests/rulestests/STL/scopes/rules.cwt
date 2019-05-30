@@ -26,7 +26,7 @@ enum[test_enum] = {
 complex_enum[country_tags] = {
     path = "game/common/anomalies"
     name = {
-        enum_name = ignore
+        enum_name = scalar
     }
     start_from_root = yes
 }

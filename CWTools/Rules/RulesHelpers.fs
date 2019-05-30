@@ -54,33 +54,58 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types :
 let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
     let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
     let rec inner (enumtree : Node) (node : Node) =
-        // log "%A %A" (enumtree.ToRaw) (node.Position.FileName)
+        // log (sprintf "gece %A %A %A" (node.ToRaw) (enumtree.ToRaw) (node.Position.FileName))
+        // log (sprintf "gecee %A %A" enumtree.Key node.Key)
         let childRes =
-            match enumtree.Children with
-            |head::_ ->
-                let keyRes =
-                    if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
-                    then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else []
-                keyRes @ (node.Children |> List.collect (inner head))
-            // TODO: Also check Leaves/leafvalues here when both are defined
-            |[] -> []
+            let einner (enumtreeNode : Node) =
+                let key = enumtreeNode.Key
+                let isScalar = key == "scalar" || key == "enum_name" || key = "name"
+                // log (sprintf "gecee2 %A %A %A" enumtreeNode.Key node.Key isScalar)
+
+                let enumnameRes = if key == "enum_name" then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else []
+                let innerRes =
+                    if isScalar
+                    then node.Children |> List.collect (inner enumtreeNode)
+                    else node.Children |> List.filter (fun c -> c.Key == key) |> List.collect (inner enumtreeNode)
+                enumnameRes @ innerRes
+            enumtree.Children |> List.collect einner
+            // match enumtree.Children with
+            // |head::_ ->
+            //     let keyRes =
+            //         if enumtree.Children |> List.exists (fun n -> n.Key == "enum_name")
+            //         then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else []
+            //     keyRes @ (node.Children |> List.collect (inner head))
+            // // TODO: Also check Leaves/leafvalues here when both are defined
+            // |[] -> []
         let leafValueRes =
-            if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText = "enum_name")
+            if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText == "enum_name")
             then node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim([|'\"'|])) |> List.ofSeq
             else []
         let leafRes =
-            match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText = "enum_name") with
-            |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
+            match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText == "enum_name") with
+            |Some leaf ->
+                let k = leaf.Key
+                // log (sprintf "gecel %A %A" k node.Leaves)
+                if k == "scalar"
+                then node.Leaves |> Seq.map (fun l -> l.ValueText.Trim([|'\"'|])) |> List.ofSeq
+                else node.TagsText (k) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
             |None ->
                 match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
-                |Some leaf -> node.Leaves |> Seq.map(fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq
+                |Some leaf ->
+                    let vt = leaf.ValueText
+                    // log (sprintf "gecel %A %A" vt node.Leaves)
+                    if vt == "scalar"
+                    then node.Leaves |> Seq.map (fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq
+                    else node.Leaves |> Seq.choose(fun l -> if l.ValueText == vt then Some (l.Key.Trim([|'\"'|])) else None) |> List.ofSeq
                 |None -> []
         childRes @ leafValueRes @ leafRes
+    let innerStart (enumtree : Node) (node : Node) = inner enumtree node
+        //enumtree.Children |> List.collect (fun e -> node.Children |> List.collect (inner e ))
     let getEnumInfo (complexenum : ComplexEnumDef) =
         let cpath = complexenum.path.Replace("\\","/")
-        // log "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath))
+        // log (sprintf "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath)))
         let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
-                              |> List.collect (fun e -> if complexenum.start_from_root then inner complexenum.nameTree e else  e.Children |> List.collect (inner complexenum.nameTree))
+                              |> List.collect (fun e -> if complexenum.start_from_root then innerStart complexenum.nameTree e else  e.Children |> List.collect (innerStart complexenum.nameTree))
         // log "%A %A" complexenum.name values
         { key = complexenum.name; values = values; description = complexenum.description }
     complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq

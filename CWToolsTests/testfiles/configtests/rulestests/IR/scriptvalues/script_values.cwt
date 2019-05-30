@@ -10,7 +10,7 @@ enums = {
         path = "game/common/script_values"
         start_from_root = yes
         name = {
-            enum_name = float
+            enum_name = scalar
         }
     }
 }

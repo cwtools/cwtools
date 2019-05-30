@@ -16,4 +16,12 @@ event = {
     complex_path = test5
     #error
     complex_path = test6
+
+    specific_path = stest1
+    specific_path = stest2
+    #error
+    specific_path = stest3
+    specific_path = stest4
+    #error
+    specific_path = stest5
 }
