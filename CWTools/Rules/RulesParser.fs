@@ -596,8 +596,24 @@ module RulesParser =
                                                     |> Seq.toList
             |true, x -> [SkipRootKey.SpecificKey x]
             |false, _ -> []
+        let validTypeKeys = [|"name_field"; "type_per_file"; "skip_root_key"; "path"; "path_strict"; "path_file"; "starts_with"; "severity"; |]
+        let checkTypeChildren (child : Child) =
+            match child with
+            | LeafC leaf ->
+                if Array.contains leaf.Key validTypeKeys
+                then ()
+                else log (sprintf "Unexpected leaf %s found in type definition at %A" leaf.Key leaf.Position)
+            | NodeC node ->
+                match node.Key with
+                | "localisation" -> ()
+                | x when x.StartsWith "subtype" -> ()
+                | x -> log (sprintf "Unexpected node %s found in type definition at %A" x node.Position)
+            | LeafValueC leafvalue -> log (sprintf "Unexpected leafvalue %s found in type definition at %A" leafvalue.Key leafvalue.Position)
+            | ValueClauseC vc -> log (sprintf "Unexpected valueclause found in type definition at %A" vc.Position)
+            | CommentC _ -> ()
         match node.Key with
         |x when x.StartsWith("type") ->
+            node.All |> List.iter checkTypeChildren
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let type_per_file = node.TagText "type_per_file" == "yes"
