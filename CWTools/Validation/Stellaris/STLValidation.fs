@@ -107,6 +107,29 @@ module STLValidation =
             let ships =
                 es.AllOfTypeChildren EntityType.Events
             ships <&!&> (fun s -> (validateEventValsInternal) s)
+    let stellarisEventPreTriggers =
+        [|
+            "has_owner"
+            "is_homeworld"
+            "original_owner"
+            "is_ai"
+            "has_ground_combat"
+            "is_capital"
+            "is_occupied_flag"
+        |]
+
+    let validatePreTriggers : STLStructureValidator =
+        fun _ es ->
+            let events = es.AllOfTypeChildren EntityType.Events
+            let eventToErrors (event : Node) =
+                match event.Child "trigger" with
+                    | None -> OK
+                    | Some trigger ->
+                        trigger.Leaves <&!&> (fun l ->
+                                                         if Array.contains l.Key stellarisEventPreTriggers
+                                                         then Invalid [inv (ErrorCodes.PossiblePretrigger l.Key) l]
+                                                         else OK)
+            events <&!&> eventToErrors
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->

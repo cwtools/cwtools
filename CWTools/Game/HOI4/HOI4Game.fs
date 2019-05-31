@@ -235,3 +235,5 @@ type HOI4Game(settings : HOI4Settings) =
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()
         member __.Types() = game.Lookup.typeDefInfo
+        member __.GetPossibleCodeEdits file text = []
+        member __.GetCodeEdits file text = None //getFastTrigger fileManager game.ResourceManager file text

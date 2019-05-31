@@ -198,7 +198,7 @@ type STLGame (settings : StellarisSettings) =
         validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                             validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                             validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"; valMegastructureGraphics, "megastructure";
-                            valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"]
+                            valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"; validatePreTriggers, "pre"]
         experimentalValidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
         heavyExperimentalValidators = [getEventChains, "event chains"]
         experimental = settings.validation.experimental
@@ -312,3 +312,5 @@ type STLGame (settings : StellarisSettings) =
             member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
             member __.ForceRecompute() = resources.ForceRecompute()
             member __.Types() = game.Lookup.typeDefInfo
+            member __.GetPossibleCodeEdits file text = getPreTriggerPossible fileManager game.ResourceManager file text
+            member __.GetCodeEdits file text = getFastTrigger fileManager game.ResourceManager file text
