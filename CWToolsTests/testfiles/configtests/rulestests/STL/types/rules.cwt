@@ -61,7 +61,6 @@ types = {
         path = "game/common/edicts"
         starts_with = p
     }
-
 }
 enums = {
 enum[test_enum] = {

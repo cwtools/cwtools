@@ -68,6 +68,7 @@ namespace CWTools.Rules
      startsWith: string option;
      type_per_file: bool;
      warningOnly: bool;
+     unique: bool;
      localisation: TypeLocalisation<'a> list;}
   and NewField<'a> =
     | ValueField of ValueType

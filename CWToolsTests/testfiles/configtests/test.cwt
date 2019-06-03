@@ -222,3 +222,11 @@ alias[effect:NAND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:AND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:OR] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:hidden_effect] = { alias_name[effect] = alias_match_left[effect] }
+
+types = {
+    type[unique] = {
+        path = "game/common"
+        path_file = "unique.txt"
+        unique = yes
+    }
+}

@@ -99,6 +99,7 @@ and TypeDefinition<'a> = {
     startsWith : string option
     type_per_file : bool
     warningOnly : bool
+    unique : bool
     localisation : TypeLocalisation<'a> list
 }
 
@@ -596,7 +597,7 @@ module RulesParser =
                                                     |> Seq.toList
             |true, x -> [SkipRootKey.SpecificKey x]
             |false, _ -> []
-        let validTypeKeys = [|"name_field"; "type_per_file"; "skip_root_key"; "path"; "path_strict"; "path_file"; "starts_with"; "severity"; |]
+        let validTypeKeys = [|"name_field"; "type_per_file"; "skip_root_key"; "path"; "path_strict"; "path_file"; "starts_with"; "severity"; "unique"; |]
         let checkTypeChildren (child : Child) =
             match child with
             | LeafC leaf ->
@@ -624,6 +625,7 @@ module RulesParser =
             let skiprootkey = getSkipRootKey node
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
+            let unique = node.TagText "unique" == "yes"
             let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
             let subtypelocalisations = node.Child "localisation" |> Option.map (fun l -> l.Children |> List.choose parseSubTypeLocalisation) |> Option.defaultValue []
             let subtypes = subtypes |> List.map (fun st -> let loc = subtypelocalisations |> List.filter (fun (stl, _) -> stl = st.name) |> List.collect snd in {st with localisation = loc})
@@ -647,7 +649,7 @@ module RulesParser =
                     else None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation; startsWith = startsWith}
+            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation; startsWith = startsWith; unique = unique}
             |None -> None
         |_ -> None
 
@@ -914,6 +916,7 @@ module RulesParser =
             type_per_file = false
             localisation = []
             startsWith = None
+            unique = false
         }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -1022,6 +1025,7 @@ module RulesParser =
             type_per_file = false
             localisation = []
             startsWith = None
+            unique = false
         }
     let shipSizeType =
         {
@@ -1038,6 +1042,7 @@ module RulesParser =
             type_per_file = false
             localisation = []
             startsWith = None
+            unique = false
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"
