@@ -37,12 +37,12 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
          validateLocalisationCommand,
          defaultContext : ScopeContext<'S>,
          noneContext : ScopeContext<'S>,
-         errorCache : System.Collections.Generic.Dictionary<_, CWError list>) =
+         errorCache : System.Collections.Concurrent.ConcurrentDictionary<_, CWError list>) =
     let resources = services.resources
     let validators = settings.validators
     let errorCache = errorCache
     let addToCache (entity : Entity) errors =
-        errorCache.Add(entity, errors)
+        (errorCache :> System.Collections.Generic.IDictionary<_,_>).Add(entity, errors)
     let getErrorsForEntity (entity : Entity) =
         tryParseWith (errorCache.TryGetValue) entity
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
