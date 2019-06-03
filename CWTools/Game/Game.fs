@@ -59,7 +59,7 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
             infoService = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
-    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Runtime.CompilerServices.ConditionalWeakTable<_,CWError list>())
+    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Generic.Dictionary<_,CWError list>())
 
     let rulesManager = RulesManager<'T, 'S, 'M, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []

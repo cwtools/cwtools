@@ -37,7 +37,7 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
          validateLocalisationCommand,
          defaultContext : ScopeContext<'S>,
          noneContext : ScopeContext<'S>,
-         errorCache : System.Runtime.CompilerServices.ConditionalWeakTable<_, CWError list>) =
+         errorCache : System.Collections.Generic.Dictionary<_, CWError list>) =
     let resources = services.resources
     let validators = settings.validators
     let errorCache = errorCache
