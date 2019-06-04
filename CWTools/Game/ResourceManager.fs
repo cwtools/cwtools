@@ -347,7 +347,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 |FileWithContentResource (f, _) -> fileMap.Add(f, resource)
             match entity with
             |Some e ->
-                let item = struct(e, lazy (computedDataFunction e))
+                let lazyi = new System.Lazy<_>((fun () -> computedDataFunction e),System.Threading.LazyThreadSafetyMode.PublicationOnly)
+                let item = struct(e, lazyi)
                 // log "e %A %A %A" e.filepath e.logicalpath e.overwrite
                 entitiesMap <- entitiesMap.Add(e.filepath, item)
                 yield resource, Some item
@@ -396,7 +397,9 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     let forceRulesData() =
         entitiesMap |> Map.toSeq |> PSeq.iter (fun (_,(struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
     let forceRecompute() =
-        entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) -> struct (e, lazy (computedDataFunction e)))
+        entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) ->
+                                                                         let lazyi = new System.Lazy<_>((fun () -> computedDataFunction e),System.Threading.LazyThreadSafetyMode.PublicationOnly)
+                                                                            in struct (e, lazyi))
 
     let updateFiles files =
         let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList

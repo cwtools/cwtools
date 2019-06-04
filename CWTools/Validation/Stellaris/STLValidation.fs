@@ -120,7 +120,7 @@ module STLValidation =
 
     let validatePreTriggers : STLStructureValidator =
         fun _ es ->
-            let events = es.AllOfTypeChildren EntityType.Events
+            let events = es.AllOfTypeChildren EntityType.Events |> List.filter (fun e -> e.Key == "planet_event")
             let eventToErrors (event : Node) =
                 match event.Child "trigger" with
                     | None -> OK

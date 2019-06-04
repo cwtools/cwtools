@@ -123,7 +123,6 @@ module Files =
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
                         |> List.distinct
                         |> List.filter (fun (_, f) -> f |> excludeGlobTest |> not)
-                        |> List.filter (fun (_, f) -> (f |> FileInfo).Length < 2000000L )
             let fileToResourceInput (scope, filepath : string) =
                 match Path.GetExtension(filepath) with
                 |".txt"
@@ -132,6 +131,7 @@ module Files =
                 |".sfx"
                 |".asset" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
+                    if (filepath |> FileInfo).Length > 2000000L then None else
                     Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText(filepath, encoding); validate = true})
                 |".dds"
                 |".tga"

@@ -172,9 +172,10 @@ module LanguageFeatures =
             if e.logicalpath.StartsWith "events"
             then
                 let findEvents (event : Node) =
-                    match event.Child "trigger" with
-                    | None -> None
-                    | Some trigger ->
+                    match event.Key == "planet_event", event.Child "trigger" with
+                    | _, None -> None
+                    | false, _ -> None
+                    | true, Some trigger ->
                         if Array.exists trigger.Has CWTools.Validation.Stellaris.STLValidation.stellarisEventPreTriggers
                         then Some event.Position
                         else None
@@ -218,8 +219,8 @@ module LanguageFeatures =
                         let ptInsert = startTriggerPos, ptBlock
                         ptInsert
                 let eventToChanges (event : Node) =
-                    match event.Child "trigger" with
-                    |Some trigger ->
+                    match event.Key == "planet_event", event.Child "trigger" with
+                    |true, Some trigger ->
                         let triggers = CWTools.Validation.Stellaris.STLValidation.stellarisEventPreTriggers |> Seq.choose (extractPreTrigger trigger) |> List.ofSeq
                         match triggers with
                         |[] -> None
@@ -227,7 +228,7 @@ module LanguageFeatures =
                             let (insertPos, insertText) = pretriggerBlockForEvent event (triggers |> Seq.map snd)
                             let deletes = triggers |> Seq.map fst
                             Some (deletes, insertPos, insertText)
-                    |None -> None
+                    |_, _ -> None
                 Some (e.entity.Children |> List.choose eventToChanges)
             else
                 None
