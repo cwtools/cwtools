@@ -42,6 +42,8 @@ type IGame =
     abstract ForceRecompute : unit -> unit
     abstract Types : unit ->  Map<string,(string * range) list>
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option
+    abstract GetPossibleCodeEdits : string -> string -> range list
+    abstract GetCodeEdits : string -> string -> (range seq * pos * string) list option
 
 type IGame<'S when 'S : comparison and 'S :> IScope<'S>> =
     inherit IGame

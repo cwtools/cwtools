@@ -358,5 +358,6 @@ type VIC2Game(settings : VIC2Settings) =
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()
         member __.Types() = game.Lookup.typeDefInfo
-
+        member __.GetPossibleCodeEdits file text = []
+        member __.GetCodeEdits file text = None //getFastTrigger fileManager game.ResourceManager file text
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

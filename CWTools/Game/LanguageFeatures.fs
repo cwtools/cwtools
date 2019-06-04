@@ -164,3 +164,71 @@ module LanguageFeatures =
             // |_ -> None
         |_, _ -> None
 
+
+    let getPreTriggerPossible (fileManager : FileManager) (resourceManager : ResourceManager<_>) (filepath : string) (filetext : string) =
+        let resource = makeEntityResourceInput fileManager filepath filetext
+        match resourceManager.ManualProcessResource resource with
+        |Some e ->
+            if e.logicalpath.StartsWith "events"
+            then
+                let findEvents (event : Node) =
+                    match event.Child "trigger" with
+                    | None -> None
+                    | Some trigger ->
+                        if Array.exists trigger.Has CWTools.Validation.Stellaris.STLValidation.stellarisEventPreTriggers
+                        then Some event.Position
+                        else None
+                e.entity.Children |> List.choose findEvents
+            else []
+        | None -> []
+
+    let getFastTrigger (fileManager : FileManager) (resourceManager : ResourceManager<_>) (filepath : string) (filetext : string) =
+        let resource = makeEntityResourceInput fileManager filepath filetext
+        match resourceManager.ManualProcessResource resource with
+        |Some e ->
+            if e.logicalpath.StartsWith "events"
+            then
+                let extractPreTrigger (node : Node) (key : string) =
+                    if node.Has key
+                    then
+                        let leaf = node.Leafs key |> Seq.head
+                        let text = leaf.Key + " = " + leaf.ValueText
+                        let range = leaf.Position
+                        Some (range, text)
+                    else
+                        None
+                let pretriggerBlockForEvent (event : Node) (pretriggers : string seq) =
+                    let ptTemplate (tabs : string) (pt : string) =
+                        sprintf "\t%s\n%s" pt tabs
+                    let createAllPts (tabs : string) = pretriggers |> Seq.map (ptTemplate tabs) |> String.concat ""
+                    if event.Has "pre_triggers"
+                    then
+                        let endPos = event.Childs "pre_triggers" |> Seq.head |> (fun c -> c.Position.End)
+                        let tabCount = endPos.Column - 1
+                        let tabString = String.replicate tabCount "\t"
+                        let ptText = createAllPts tabString
+                        let ptInsert = mkPos endPos.Line (endPos.Column - 1), ptText
+                        ptInsert
+                    else
+                        let startTriggerPos = event.Childs "trigger" |> Seq.head |> (fun c -> c.Position.Start)
+                        let tabCount = startTriggerPos.Column
+                        let tabString = String.replicate tabCount "\t"
+                        let ptText = createAllPts tabString
+                        let ptBlock = sprintf "pre_triggers = {\n%s%s}\n%s" tabString ptText tabString
+                        let ptInsert = startTriggerPos, ptBlock
+                        ptInsert
+                let eventToChanges (event : Node) =
+                    match event.Child "trigger" with
+                    |Some trigger ->
+                        let triggers = CWTools.Validation.Stellaris.STLValidation.stellarisEventPreTriggers |> Seq.choose (extractPreTrigger trigger) |> List.ofSeq
+                        match triggers with
+                        |[] -> None
+                        |triggers ->
+                            let (insertPos, insertText) = pretriggerBlockForEvent event (triggers |> Seq.map snd)
+                            let deletes = triggers |> Seq.map fst
+                            Some (deletes, insertPos, insertText)
+                    |None -> None
+                Some (e.entity.Children |> List.choose eventToChanges)
+            else
+                None
+        |_ -> None
