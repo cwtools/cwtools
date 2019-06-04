@@ -180,44 +180,54 @@ module LanguageFeatures =
                         then Some event.Position
                         else None
                 e.entity.Children |> List.choose findEvents
+            else if e.logicalpath.StartsWith "common/pop_jobs"
+            then
+                let findPopJobs (popjob : Node) =
+                    match popjob.Child "possible" with
+                    | None -> None
+                    | Some possible ->
+                        if Array.exists possible.Has CWTools.Validation.Stellaris.STLValidation.stellarisPopJobPreTriggers
+                        then Some popjob.Position
+                        else None
+                e.entity.Children |> List.choose findPopJobs
             else []
         | None -> []
 
     let getFastTrigger (fileManager : FileManager) (resourceManager : ResourceManager<_>) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
+        let extractPreTrigger (node : Node) (key : string) =
+            if node.Has key
+            then
+                let leaf = node.Leafs key |> Seq.head
+                let text = leaf.Key + " = " + leaf.ValueText
+                let range = leaf.Position
+                Some (range, text)
+            else
+                None
+        let pretriggerBlockForEvent (targetblock : string) (sourceblock : string) (event : Node) (pretriggers : string seq) =
+            let ptTemplate (tabs : string) (pt : string) =
+                sprintf "\t%s\n%s" pt tabs
+            let createAllPts (tabs : string) = pretriggers |> Seq.map (ptTemplate tabs) |> String.concat ""
+            if event.Has targetblock
+            then
+                let endPos = event.Childs targetblock |> Seq.head |> (fun c -> c.Position.End)
+                let tabCount = endPos.Column - 1
+                let tabString = String.replicate tabCount "\t"
+                let ptText = createAllPts tabString
+                let ptInsert = mkPos endPos.Line (endPos.Column - 1), ptText
+                ptInsert
+            else
+                let startTriggerPos = event.Childs sourceblock |> Seq.head |> (fun c -> c.Position.Start)
+                let tabCount = startTriggerPos.Column
+                let tabString = String.replicate tabCount "\t"
+                let ptText = createAllPts tabString
+                let ptBlock = sprintf "%s = {\n%s%s}\n%s" targetblock tabString ptText tabString
+                let ptInsert = startTriggerPos, ptBlock
+                ptInsert
         match resourceManager.ManualProcessResource resource with
         |Some e ->
             if e.logicalpath.StartsWith "events"
             then
-                let extractPreTrigger (node : Node) (key : string) =
-                    if node.Has key
-                    then
-                        let leaf = node.Leafs key |> Seq.head
-                        let text = leaf.Key + " = " + leaf.ValueText
-                        let range = leaf.Position
-                        Some (range, text)
-                    else
-                        None
-                let pretriggerBlockForEvent (event : Node) (pretriggers : string seq) =
-                    let ptTemplate (tabs : string) (pt : string) =
-                        sprintf "\t%s\n%s" pt tabs
-                    let createAllPts (tabs : string) = pretriggers |> Seq.map (ptTemplate tabs) |> String.concat ""
-                    if event.Has "pre_triggers"
-                    then
-                        let endPos = event.Childs "pre_triggers" |> Seq.head |> (fun c -> c.Position.End)
-                        let tabCount = endPos.Column - 1
-                        let tabString = String.replicate tabCount "\t"
-                        let ptText = createAllPts tabString
-                        let ptInsert = mkPos endPos.Line (endPos.Column - 1), ptText
-                        ptInsert
-                    else
-                        let startTriggerPos = event.Childs "trigger" |> Seq.head |> (fun c -> c.Position.Start)
-                        let tabCount = startTriggerPos.Column
-                        let tabString = String.replicate tabCount "\t"
-                        let ptText = createAllPts tabString
-                        let ptBlock = sprintf "pre_triggers = {\n%s%s}\n%s" tabString ptText tabString
-                        let ptInsert = startTriggerPos, ptBlock
-                        ptInsert
                 let eventToChanges (event : Node) =
                     match event.Key == "planet_event", event.Child "trigger" with
                     |true, Some trigger ->
@@ -225,10 +235,23 @@ module LanguageFeatures =
                         match triggers with
                         |[] -> None
                         |triggers ->
-                            let (insertPos, insertText) = pretriggerBlockForEvent event (triggers |> Seq.map snd)
+                            let (insertPos, insertText) = pretriggerBlockForEvent "pre_triggers" "trigger" event (triggers |> Seq.map snd)
                             let deletes = triggers |> Seq.map fst
                             Some (deletes, insertPos, insertText)
                     |_, _ -> None
+                Some (e.entity.Children |> List.choose eventToChanges)
+            else if e.logicalpath.StartsWith "common/pop_jobs" then
+                let eventToChanges (event : Node) =
+                    match event.Child "possible" with
+                    |Some trigger ->
+                        let triggers = CWTools.Validation.Stellaris.STLValidation.stellarisPopJobPreTriggers |> Seq.choose (extractPreTrigger trigger) |> List.ofSeq
+                        match triggers with
+                        |[] -> None
+                        |triggers ->
+                            let (insertPos, insertText) = pretriggerBlockForEvent "possible_pre_triggers" "possible" event (triggers |> Seq.map snd)
+                            let deletes = triggers |> Seq.map fst
+                            Some (deletes, insertPos, insertText)
+                    |_ -> None
                 Some (e.entity.Children |> List.choose eventToChanges)
             else
                 None

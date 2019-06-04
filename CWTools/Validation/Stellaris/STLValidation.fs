@@ -117,6 +117,15 @@ module STLValidation =
             "is_capital"
             "is_occupied_flag"
         |]
+    let stellarisPopJobPreTriggers =
+        [|
+            "has_owner"
+            "is_enslaved"
+            "is_being_purged"
+            "is_being_assimilated"
+            "has_planet"
+            "is_sapient"
+        |]
 
     let validatePreTriggers : STLStructureValidator =
         fun _ es ->
@@ -129,7 +138,17 @@ module STLValidation =
                                                          if Array.contains l.Key stellarisEventPreTriggers
                                                          then Invalid [inv (ErrorCodes.PossiblePretrigger l.Key) l]
                                                          else OK)
-            events <&!&> eventToErrors
+            let popjobs = es.GlobMatchChildren "**/common/pop_jobs/*.txt"
+            let popjobToError (popjob : Node) =
+                match popjob.Child "possible" with
+                    | None -> OK
+                    | Some possible ->
+                        possible.Leaves <&!&> (fun l ->
+                                                         if Array.contains l.Key stellarisPopJobPreTriggers
+                                                         then Invalid [inv (ErrorCodes.PossiblePretrigger l.Key) l]
+                                                         else OK)
+
+            (events <&!&> eventToErrors) <&&> (popjobs <&!&> popjobToError)
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->
