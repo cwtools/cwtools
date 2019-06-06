@@ -68,6 +68,7 @@ module internal SharedParsers =
     let clause inner = betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
     let escapedChar = (pstring "\\\"" <|> pstring "\\") |>> string
+    let metaprogrammingCharSnippet = many1Satisfy (fun c -> c <> ']' && c <> '\\')
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
 
     let parseWithPosition p = pipe3 (getPosition) p (getPosition) (fun s r e -> getRange s e, r)
@@ -125,6 +126,7 @@ module internal SharedParsers =
     let rgb4 = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
     let rgb = strSkip "rgb" >>. rgbI .>> ws
 
+    let metaprograming = pipe3 (pstring "@\\[") ( metaprogrammingCharSnippet) (ch ']') (fun a b c -> ( a + b + string c)) |>> String
     // Complex types
     // =======
 
@@ -144,6 +146,7 @@ module internal SharedParsers =
         let fP = attempt valueF
         let byP = attempt valueBYes <|> valueS
         let bnP = attempt valueBNo <|> valueS
+        let mpP = attempt metaprograming
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
             | '{' ->  vcP stream
@@ -167,6 +170,7 @@ module internal SharedParsers =
                 | "hsv", _ -> hsv stream
                 | "yes", _ -> byP stream
                 | _, "no" -> bnP stream
+                | "@\\[", _ -> mpP stream
                 | _ -> valueS stream
                 //| _ -> choice [(attempt valueB); valueS] stream
                 //choiceL [(attempt valueB); (attempt hsv); (attempt rgb); valueS] "value" stream

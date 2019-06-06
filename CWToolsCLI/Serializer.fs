@@ -36,7 +36,7 @@ let registry = new CustomPicklerRegistry()
 do registry.RegisterFactory mkPickler
 registry.DeclareSerializable<FParsec.Position>()
 let picklerCache = PicklerCache.FromCustomPicklerRegistry registry
-let xmlSerializer = FsPickler.CreateXmlSerializer(picklerResolver = picklerCache)
+let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = picklerCache)
 let assemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
 
 
@@ -55,7 +55,7 @@ let serializeSTL folder cacheDirectory =
                                          |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
-    let pickle = xmlSerializer.Pickle data
+    let pickle = binarySerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
 let serializeEU4 folder cacheDirectory =
@@ -72,7 +72,7 @@ let serializeEU4 folder cacheDirectory =
                                          |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
-    let pickle = xmlSerializer.Pickle data
+    let pickle = binarySerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "eu4.cwb"), pickle)
 let serializeHOI4 folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [])
@@ -88,7 +88,7 @@ let serializeHOI4 folder cacheDirectory =
                                          |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
-    let pickle = xmlSerializer.Pickle data
+    let pickle = binarySerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "hoi4.cwb"), pickle)
 
 let deserialize path =
@@ -99,7 +99,7 @@ let deserialize path =
         let cacheFile = File.ReadAllBytes(path)
         // let cacheFile = Assembly.GetEntryAssembly().GetManifestResourceStream("Main.files.pickled.cwb")
         //                 |> (fun f -> use ms = new MemoryStream() in f.CopyTo(ms); ms.ToArray())
-        let cached = xmlSerializer.UnPickle<CachedResourceData> cacheFile
+        let cached = binarySerializer.UnPickle<CachedResourceData> cacheFile
         fileIndexTable <- cached.fileIndexTable
         StringResource.stringManager <- cached.stringResourceManager
         cached.resources, cached.files
@@ -107,7 +107,7 @@ let deserialize path =
 
 // let deserializeEU4 path =
 //     let cacheFile = File.ReadAllBytes(path)
-//     let cached = xmlSerializer.UnPickle<CachedResourceData> cacheFile
+//     let cached = binarySerializer.UnPickle<CachedResourceData> cacheFile
 //     fileIndexTable <- cached.fileIndexTable
 //     cached.resources
 

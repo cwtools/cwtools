@@ -273,7 +273,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             let filetext = File.ReadAllText filename
             tests |> List.iter (completionTest game filename filetext)
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
-        let (game : IGame), errors, testVals, completionVals =
+        let (game : IGame), errors, testVals, completionVals, parseErrors =
             if stl
             then
                 let eventTargetLinks =
@@ -294,7 +294,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                     e.filepath,
                                     getCompletionTests e.entity
                                     )
-                (stl :> IGame), errors, testVals, completionTests
+                (stl :> IGame), errors, testVals, completionTests, (stl.ParserErrors())
             else
                 let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
                 let effects = JominiParser.parseEffectFilesRes "./testfiles/configtests/rulestests/IR/effects.log" |> CWTools.Parser.JominiParser.processEffects IRConstants.parseScopes
@@ -319,7 +319,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                     e.filepath,
                                     getCompletionTests e.entity
                                     )
-                (ir :> IGame), errors, testVals, completionTests
+                (ir :> IGame), errors, testVals, completionTests, (ir.ParserErrors())
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
         //eprintfn "%A" testVals
@@ -335,6 +335,8 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             //eprintfn "%A" nodekeys
             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+        // eprintfn "ss %s %s" folder testsname
+        yield testCase (sprintf "parse %s" folder) <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
         yield! completionVals |> List.map (fun (f, t) -> testCase ("Completion " + f.ToString()) <| fun() -> completionTestPerFile game (f, t))
     ]

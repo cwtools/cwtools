@@ -1,0 +1,12 @@
+standard_archaeological_site_on_roll_failed_range_entry = {
+	custom_tooltip_with_params = {
+		description = "ARCHAEOLOGICAL_SITE_ON_ROLL_FAILED_RANGE"
+		description_parameters = {
+			"MIN" = $MIN$
+			"MAX" = $MAX$
+			"CLUES" = $CLUES$
+			"CHANCE" = @\[( 2 + ( $MAX$ + $DIE_MAX$ - |$MAX$ - $SCORE$ - $DIE_MAX$| ) - ( $MIN$ + $DIE_MIN$ + |$MIN$ - $SCORE$ - $DIE_MIN$| ) ) / ( 2*( $DIE_MAX$ -  $DIE_MIN$ + 1 ) )]
+			"SCORE" = $SCORE$
+		}
+	}
+}
