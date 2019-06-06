@@ -10,6 +10,7 @@ open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
+open System.Threading.Tasks
 
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
     member val Cache : Map<string, obj list> = Map.empty with get, set
@@ -396,14 +397,19 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
     let forceRulesData() =
         entitiesMap |> Map.toSeq |> PSeq.iter (fun (_,(struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
+    let forceEagerData() =
+        entitiesMap |> Map.toArray |> Array.rev |> PSeq.iter (fun (_,(struct (e, l))) -> (l.Force() |> ignore))
     let forceRecompute() =
         entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) ->
                                                                          let lazyi = new System.Lazy<_>((fun () -> computedDataFunction e),System.Threading.LazyThreadSafetyMode.PublicationOnly)
                                                                             in struct (e, lazyi))
-
+        let task = new Task(fun () -> forceEagerData())
+        task.Start()
     let updateFiles files =
         let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
+        let task = new Task(fun () -> forceEagerData())
+        task.Start()
         news
     let updateFile file =
         let res = updateFiles [file]

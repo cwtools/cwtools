@@ -159,6 +159,7 @@ module STL =
         //foldNode7 fNode node |> List.ofSeq |> Map.ofList
 
     let computeSTLData (infoService : unit -> InfoService<Scope> option) (e : Entity) =
+        // eprintfn "csd %s" e.logicalpath
         let withRulesData = infoService().IsSome
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (fun ee -> if ee.Has "id" then Some (ee.TagText "id") else None) else []
         // let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
