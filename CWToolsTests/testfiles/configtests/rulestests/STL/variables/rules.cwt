@@ -10,6 +10,12 @@ types = {
         path = "game/common/anomalies"
         skip_root_key = { skip }
     }
+    type[subtypeset] = {
+        skip_root_key = tests
+        path = "game/common/ship_sizes"
+        ##type_key_filter = subtype1
+        subtype[subtype1] = { }
+    }
 }
 
 event = {
@@ -27,6 +33,11 @@ event = {
 
     ## cardinality = 0..inf
     use_variable = variable_field
+
+    ## cardinality = 0..inf
+    subtypetest_root = value[subtype_root]
+    ## cardinality = 0..inf
+    subtypetest_1 = value[subtype_1]
 }
 
 skipevent = {
@@ -52,5 +63,18 @@ skipspecificevent = {
 values = {
     value[variable] = {
         my_preset_variable
+    }
+}
+
+subtypeset = {
+    ## cardinality = 0..inf
+    subtype_set = value_set[subtype_root]
+    ## cardinality = 0..inf
+    subtype_get = value[subtype_root]
+    subtype[subtype1] = {
+        ## cardinality = 0..inf
+        subtype_set_1 = value_set[subtype_1]
+        ## cardinality = 0..inf
+        subtype_get_1 = value[subtype_1]
     }
 }

@@ -68,8 +68,9 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     let memoizeRules =
         let memFunction =
             fun rules subtypes ->
+                /// All subtypes in this context
                 let subtypedrules =
-                    rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key subtypes then cfs else []) | x -> []))
+                    rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> []))
                 let expandedbaserules =
                     rules |> List.collect (
                         function
@@ -581,7 +582,6 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let ctx = OK
         let res = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
         res
-
 
 
     //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))

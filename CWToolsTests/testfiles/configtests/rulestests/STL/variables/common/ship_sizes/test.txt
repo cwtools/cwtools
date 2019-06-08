@@ -1,0 +1,16 @@
+tests = {
+    test = {
+        subtype_set = one
+        subtype_get = one
+    }
+
+    subtype1 = {
+        subtype_set_1 = two
+        subtype_get_1 = two
+    }
+
+    subtype1 = {
+        subtype_get = one
+        subtype_get_1 = two
+    }
+}
