@@ -26,6 +26,7 @@ open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
+open FSharp.Collections.ParallelSeq
 
 module STLGameFunctions =
     type GameObject = GameObject<Scope, Modifier, STLComputedData, STLLookup>
@@ -168,8 +169,15 @@ module STLGameFunctions =
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
 
-    let refreshConfigBeforeFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>)  =
-        ()
+    let refreshConfigBeforeFirstTypesHook (lookup : STLLookup) (resources : IResourceAPI<STLComputedData>) (embeddedSettings : EmbeddedSettings<_,_>)  =
+        lookup.STLScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+                                            |> List.ofSeq |> List.collect id)
+        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys }
+        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
+        lookup.enumDefs <-
+            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.values)
+                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
+
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables

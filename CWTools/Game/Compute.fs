@@ -175,7 +175,8 @@ module STL =
         // let definedvariable = (if infoService().IsSome then Some ((infoService().Value.GetDefinedVariables )(e)) else None)
         // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         let hastechs = getAllTechPrereqs e
-        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks)
+        let scriptedeffectparams = Some (EU4.getScriptedEffectParamsEntity e)
+        STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams)
 
     let computeSTLDataUpdate (infoService : unit -> InfoService<Scope> option) (e : Entity) (data : STLComputedData) =
         let withRulesData = infoService().IsSome
