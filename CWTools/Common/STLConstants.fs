@@ -30,6 +30,7 @@ module STLConstants =
         |Starbase
         |Star
         |Deposit
+        |ArchaeologicalSite
         |InvalidScope
         override x.ToString() =
             match x with
@@ -54,6 +55,7 @@ module STLConstants =
             |Starbase -> "Starbase"
             |Star -> "Star"
             |Deposit -> "Deposit"
+            |ArchaeologicalSite -> "Archaeological Site"
             |InvalidScope -> "Invalid Scope"
         static member AnyScope = Scope.Any
         interface IScope<Scope> with
@@ -85,6 +87,7 @@ module STLConstants =
             Megastructure;
             Star;
             Deposit;
+            ArchaeologicalSite;
             ]
     let allScopesSet = allScopes |> Set.ofList
     let parseScope =
@@ -116,6 +119,8 @@ module STLConstants =
             |"starbase" -> Scope.Starbase
             |"star" -> Scope.Star
             |"deposit" -> Scope.Deposit
+            |"archaeologicalsite"
+            |"archaeological_site" -> Scope.ArchaeologicalSite
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any

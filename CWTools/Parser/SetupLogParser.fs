@@ -11,7 +11,7 @@ module SetupLogParser =
 
     let private isvaluechar = SharedParsers.isvaluechar
     let private str s = pstring s .>> SharedParsers.ws <?> ("string " + s)
-    let private header = skipCharsTillString "Initializing Database: CStaticModifierDatabase" true 2000000 .>> SharedParsers.ws <?> "header"
+    let private header = skipCharsTillString "Initializing Database: CStaticModifierDatabase" true 20000000 .>> SharedParsers.ws <?> "header"
     let private pre = skipCharsTillString "Static Modifier #" true 100
     let private num = pre >>. pint64 .>> SharedParsers.ws |>> int
     let private tag = skipString "tag = " >>. many1Satisfy isvaluechar .>> SharedParsers.ws
@@ -19,7 +19,7 @@ module SetupLogParser =
 
     let private staticModifier = pipe3 num tag name (fun i t n -> {num = i; tag = t; name = n})
 
-    let private modifierHeader = skipCharsTillString "Printing Modifier Definitions" true 2000000 .>> SharedParsers.ws <?> "modifier header"
+    let private modifierHeader = skipCharsTillString "Printing Modifier Definitions" true 20000000 .>> SharedParsers.ws <?> "modifier header"
 
     let private mtag = skipCharsTillString "Tag: " true 500 >>. many1CharsTill (satisfy isvaluechar) (pchar ',') .>> SharedParsers.ws
     let private cat = skipString "Categories: " >>. pint64 |>> int

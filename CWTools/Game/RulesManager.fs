@@ -6,6 +6,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
 open CWTools.Rules.RulesHelpers
+open System.IO
 type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
@@ -56,7 +57,10 @@ type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> an
     let mutable rulesDataGenerated = false
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
-        let rules, types, enums, complexenums, values = rulesSettings.ruleFiles |> CWTools.Rules.RulesParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
+        let rules, types, enums, complexenums, values =
+            rulesSettings.ruleFiles
+                |> List.filter (fun (fn, ft) -> Path.GetExtension fn == ".cwt" )
+                |> CWTools.Rules.RulesParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
         // tempEffects <- updateScriptedEffects game rules
         // effects <- tempEffects
         // tempTriggers <- updateScriptedTriggers game rules
@@ -109,7 +113,7 @@ type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> an
         tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
         let tempInfoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
 
-        let infoService = tempInfoService
+        //let infoService = tempInfoService
         // game.InfoService <- Some tempInfoService
         if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
 
