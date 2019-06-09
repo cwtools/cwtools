@@ -397,8 +397,18 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
     let forceRulesData() =
         entitiesMap |> Map.toSeq |> PSeq.iter (fun (_,(struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
+    let rand = new System.Random()
+
+    let swap (a: _[]) x y =
+        let tmp = a.[x]
+        a.[x] <- a.[y]
+        a.[y] <- tmp
+
+    // shuffle an array (in-place)
+    let shuffle a =
+        Array.iteri (fun i _ -> swap a i (rand.Next(i, Array.length a))) a
     let forceEagerData() =
-        entitiesMap |> Map.toArray |> Array.rev |> PSeq.iter (fun (_,(struct (e, l))) -> (l.Force() |> ignore))
+        entitiesMap |> Map.toArray |> (fun a -> shuffle a; a) |> PSeq.iter (fun (_,(struct (e, l))) -> (l.Force() |> ignore))
     let forceRecompute() =
         entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) ->
                                                                          let lazyi = new System.Lazy<_>((fun () -> computedDataFunction e),System.Threading.LazyThreadSafetyMode.PublicationOnly)

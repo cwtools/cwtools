@@ -115,3 +115,12 @@ let getDefinedVariables (infoService : InfoService<_>) (es : Entity list) =
     let results = es |> List.toSeq |> PSeq.map (fun e -> infoService.GetDefinedVariables(e))
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n (k@m2.[n]) m2 else Map.add n k m2) m) Collections.Map.empty
     results
+
+let getEntitiesWithoutTypes (types : TypeDefinition<_> list) (es : Entity list) =
+    let checkEntity (entity : Entity) =
+        let path = entity.logicalpath
+        let dir = Path.GetDirectoryName path
+        let file = Path.GetFileName path
+        let checkPathDir = (fun a b c -> FieldValidators.checkPathDir c a b)
+        if types |> List.exists (checkPathDir dir file) then None else Some entity.logicalpath
+    es |> List.choose checkEntity

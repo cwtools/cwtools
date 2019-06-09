@@ -44,7 +44,8 @@ type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> an
     (resources : IResourceAPI<'T>, lookup : 'L,
      settings : RuleManagerSettings<'S, 'M, 'T, 'L>,
      localisation : LocalisationManager<'S, 'T, 'M>,
-     embeddedSettings : EmbeddedSettings<'S, 'M>) =
+     embeddedSettings : EmbeddedSettings<'S, 'M>,
+     debugMode : bool) =
 
     let mutable tempEffects = []
     let mutable tempTriggers = []
@@ -77,6 +78,13 @@ type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> an
         rulesDataGenerated <- false
         // log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
 
+    let debugChecks() =
+        if debugMode
+        then
+            // let filesWithoutTypes = getEntitiesWithoutTypes lookup.typeDefs (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            // filesWithoutTypes |> List.iter (eprintfn "File without type %s")
+            ()
+        else ()
     let refreshConfig() =
         /// Enums
         let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
@@ -133,6 +141,7 @@ type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> an
         let infoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
+        debugChecks()
         ruleValidationService, infoService, completionService
 
     member __.LoadBaseConfig(rulesSettings) = loadBaseConfig rulesSettings
