@@ -140,13 +140,13 @@ module internal SharedParsers =
     let valueClause = clause (many statement) |>> Clause //<?> "statement clause"
 
     let valueCustom : Parser<Value, unit> =
-        let vcP = attempt valueClause
+        let vcP = valueClause
         let vbP = attempt valueBlock
         let iP = attempt valueI
         let fP = attempt valueF
         let byP = attempt valueBYes <|> valueS
         let bnP = attempt valueBNo <|> valueS
-        let mpP = attempt metaprograming
+        let mpP = metaprograming
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
             | '{' ->  vcP stream
