@@ -9,22 +9,24 @@ open CWTools.Rules
 module LanguageFeatures =
     let makeEntityResourceInput (fileManager : FileManager) filepath filetext  =
         let filepath = Path.GetFullPath(filepath)
-        let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
-        let rootedpath =
-            if indexOfScope = -1
-            then filepath
-            else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
-        let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
-        EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
+        // let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
+        // let rootedpath =
+        //     if indexOfScope = -1
+        //     then filepath
+        //     else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
+        let logicalpath = fileManager.ConvertPathToLogicalPath filepath
+        let scope = fileManager.GetScopeForPath filepath |> Option.defaultValue "unknown"
+        EntityResourceInput {scope = scope; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
     let makeFileWithContentResourceInput (fileManager : FileManager) filepath filetext  =
         let filepath = Path.GetFullPath(filepath)
-        let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
-        let rootedpath =
-            if indexOfScope = -1
-            then filepath
-            else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
-        let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
-        FileWithContentResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
+        // let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
+        // let rootedpath =
+        //     if indexOfScope = -1
+        //     then filepath
+        //     else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
+        let logicalpath = fileManager.ConvertPathToLogicalPath filepath
+        let scope = fileManager.GetScopeForPath filepath |> Option.defaultValue "unknown"
+        FileWithContentResourceInput {scope = scope; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
 
     let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (infoService : InfoService<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')

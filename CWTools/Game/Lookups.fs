@@ -7,6 +7,7 @@ open CWTools.Process.Scopes
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open Microsoft.FSharp.Collections.Tagged
+open Files
 
 
 
@@ -60,7 +61,7 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val onlyScriptedEffects : Effect<'S> list = [] with get, set
     member val onlyScriptedTriggers : Effect<'S> list = [] with get, set
 
-    member val rootFolder : string = "" with get, set
+    member val rootFolders : WorkspaceDirectory list = [] with get, set
     member val staticModifiers : 'M list = [] with get, set
     member val coreModifiers : 'M list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set

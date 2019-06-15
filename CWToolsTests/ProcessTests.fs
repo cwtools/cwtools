@@ -33,8 +33,7 @@ open CWTools.Process.Scopes
 
 
 let emptyStellarisSettings (rootDirectory) = {
-    rootDirectory = rootDirectory
-    scope = FilesScope.All
+    rootDirectories = [{ name = "test"; path = rootDirectory;}]
     modFilter = None
     validation = {
         validateVanilla = false

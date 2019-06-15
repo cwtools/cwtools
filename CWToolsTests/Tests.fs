@@ -27,8 +27,7 @@ open System.Text
 open CWTools.Parser.CKPrinter
 
 let emptyStellarisSettings (rootDirectory) = {
-    rootDirectory = rootDirectory
-    scope = FilesScope.All
+    rootDirectories = [{ name = "test"; path = rootDirectory;}]
     modFilter = None
     validation = {
         validateVanilla = false
@@ -50,8 +49,7 @@ let emptyStellarisSettings (rootDirectory) = {
     initialLookup = STLLookup()
 }
 let emptyImperatorSettings (rootDirectory) = {
-    rootDirectory = rootDirectory
-    scope = FilesScope.All
+    rootDirectories = [{ name = "test"; path = rootDirectory;}]
     modFilter = None
     validation = {
         validateVanilla = false
@@ -440,7 +438,7 @@ let embeddedTests =
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
 
         //Test serialization
-        let fileManager = FileManager("./testfiles/embeddedtest/test", Some "", FilesScope.Vanilla, scriptFolders, "stellaris", Encoding.UTF8, [])
+        let fileManager = FileManager([{ name = "test"; path = "./testfiles/embeddedtest/test"}], Some "", scriptFolders, "stellaris", Encoding.UTF8, [])
         let files = fileManager.AllFilesByPath()
         let resources : IResourceAPI<STLComputedData> = ResourceManager<STLComputedData>(Compute.STL.computeSTLData (fun () -> None), Compute.STL.computeSTLDataUpdate (fun () -> None), Encoding.UTF8, Encoding.GetEncoding(1252)).Api
         let entities = resources.UpdateFiles(files) |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None) |> List.map (fun (r, (struct (e, _))) -> r, e)

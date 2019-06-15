@@ -16,14 +16,13 @@ type ValidationSettings = {
 }
 
 type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
-    rootDirectory : string
+    rootDirectories : WorkspaceDirectory list
     embedded : EmbeddedSettings<'S, 'M>
     validation : ValidationSettings
     rules : RulesSettings option
     scriptFolders : string list option
     excludeGlobPatterns : string list option
     modFilter : string option
-    scope : FilesScope
     initialLookup : 'L
 }
 
@@ -39,7 +38,11 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
      ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T, 'L>) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
-    let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, game, encoding, excludeGlobPatterns)
+    let embeddedDir =
+        settings.embedded.cachedResourceData
+            |> List.tryHead
+            |> Option.map (fun (r,e) -> e.filepath.Replace("\\","/").TrimStart('.').Replace(e.logicalpath, ""))
+    let fileManager = FileManager(settings.rootDirectories, embeddedDir, scriptFolders, game, encoding, excludeGlobPatterns)
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : InfoService<_> option = None
@@ -155,7 +158,7 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
         localisationManager.UpdateAllLocalisation()
 
     do
-        lookup.rootFolder <- settings.rootDirectory
+        lookup.rootFolders <- settings.rootDirectories
         initialLoad()
 
     member __.RuleValidationService with get() = ruleValidationService
