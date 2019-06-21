@@ -16,3 +16,18 @@ event = {
     #error
     ir_test = my_ship.my_ship.my_ship.my_ship_fake
 }
+
+event = {
+    test = {
+        #error
+        my_ship_fake = test
+        #error
+        my_ship_fake = {
+            blah = blah
+        }
+        my_ship = test
+        my_ship = {
+            blah = blah
+        }
+    }
+}

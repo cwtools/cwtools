@@ -33,4 +33,17 @@ event = {
 
     ## cardinality = 0..inf
     ir_test = ir_family_name_field
+
+
+    ## cardinality = 0..inf
+    test = {
+        ## cardinality = 0..inf
+        localisation = scalar
+
+        ## cardinality = 0..inf
+        localisation = {
+            ## cardinality = 0..inf
+            scalar = scalar
+        }  
+    }
 }

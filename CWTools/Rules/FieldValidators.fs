@@ -428,7 +428,7 @@ module internal FieldValidators =
                 checkValidValueNE p.enumsMap p.localisation severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap severity t key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
-            |LocalisationField synced -> checkLocalisationFieldNE p.localisation p.defaultLocalisation p.defaultLang synced key
+            |LocalisationField synced -> true
             |FilepathField prefix -> checkFilepathFieldNE p.files key prefix
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true

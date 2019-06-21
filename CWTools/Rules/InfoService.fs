@@ -543,6 +543,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
                 else res
+            |LeafRule (LocalisationField synced, _) ->
+                FieldValidators.checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced leaf.Key leaf res
             |_ -> res
         let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
             match field with
@@ -573,6 +575,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node) <&&> res
                 else res
+            |NodeRule (LocalisationField synced, _) ->
+                FieldValidators.checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced node.Key node res
             |_ -> res
 
         let fComment (res) _ _ = res
