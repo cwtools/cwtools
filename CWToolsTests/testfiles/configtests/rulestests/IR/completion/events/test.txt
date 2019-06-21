@@ -22,3 +22,17 @@ event = {
         }
     }
 }
+
+#@ 3 event
+#error (mixed)
+event = {
+    #@! 3 event 
+    without_alias = {
+
+    }
+    #@! 3 event
+    #@ 3 without_alias
+    #error
+    without_alias
+
+}

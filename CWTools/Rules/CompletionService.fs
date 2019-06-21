@@ -349,15 +349,25 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 then validateTypeSkipRoot t tail pathtail
                 else []
         let items =
-            match path |> List.last with
-            |_, count, Some x, _ when x.Length > 0 && x.StartsWith("@x") ->
+            match path |> List.last, path.Length with
+            |(_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@x") ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
-            |_ ->
+            |(_, _, _, CompletionContext.NodeLHS), 1 ->
+                []
+            | _ ->
                 pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+        //TODO: Expand this to use a snippet not just the name of the type
+        let rootTypeItems = 
+            match path with
+            | [(_,_,_,CompletionContext.NodeLHS)] ->
+                pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
+            | y when y.Length = 0 ->
+                pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
+            | _ -> []            
         let scoreForLabel (label : string) =
             if allUsedKeys |> List.contains label then 10 else 1
-        items |> List.map
+        (items @ rootTypeItems) |> List.map
                     (function
                      | Simple (label, None) -> Simple (label, Some (scoreForLabel label))
                      | Detailed (label, desc, None) -> Detailed (label, desc, Some (scoreForLabel label))
