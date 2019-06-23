@@ -48,5 +48,5 @@ type LocalisationManager<'S, 'T, 'M when 'S : comparison and 'S :> IScope<'S> an
     member __.UpdateProcessedLocalisation() = updateProcessedLocalisation()
     member __.UpdateLocalisationFile (locFile : FileWithContentResource) = updateLocalisationSource locFile
     member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap |> Map.toList |> List.map snd
-    member __.LocalisationFileNames() : string list = localisationAPIMap |> Map.toList |> List.map fst |> List.map (fun (f, l) -> sprintf "%A, %s" l f)
+    member __.LocalisationFileNames() : string list = localisationAPIMap |> Map.toList |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f (a.GetKeys |> List.length))
     member this.LocalisationKeys() = this.localisationKeys

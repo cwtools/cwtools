@@ -57,12 +57,6 @@ module CK2 =
         "PREVPREV", prev >> prev;
         "PREVPREVPREV", prev >> prev >> prev;
         "PREVPREVPREVPREV", prev >> prev >> prev >> prev
-        "AND", id;
-        "OR", id;
-        "NOR", id;
-        "NOT", id;
-        "hidden_effect", id;
-        "hidden_trigger", id;
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
