@@ -326,6 +326,9 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             match skipRootKey with
             |(SpecificKey key) -> n.Key == key
             |(AnyKey) -> true
+            |(MultipleKeys (keys, shouldMatch)) ->
+                (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
+
         let infoServiceNode typedef rs o =
             (fun a c ->
                 infoService fNode fChild fLeaf fLeafValue fValueClause fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))

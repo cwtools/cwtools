@@ -48,6 +48,7 @@ namespace CWTools.Rules
   type SkipRootKey =
     | SpecificKey of string
     | AnyKey
+    | MultipleKeys of string list * bool
   type SubTypeDefinition<'a> =
     {name: string;
      rules: NewRule<'a> list;

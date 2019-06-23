@@ -30,6 +30,8 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types :
                                     if n.Key == key then n.Children |> List.collect inner else []
                                 |[AnyKey] ->
                                     n.Children |> List.collect inner
+                                |MultipleKeys (keys, shouldMatch)::_ ->
+                                    if (keys |> List.exists ((==) n.Key)) <> (not shouldMatch) then n.Children |> List.collect inner else []
                                 |(SpecificKey key)::tail ->
                                     if n.Key == key then n.Children |> List.collect (skiprootkey tail) else []
                                     // n.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))

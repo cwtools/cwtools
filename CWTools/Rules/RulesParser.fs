@@ -77,7 +77,7 @@ type TypeLocalisation<'a> = {
     replaceScopes : ReplaceScopes<'a> option
 }
 
-type SkipRootKey = |SpecificKey of string |AnyKey
+type SkipRootKey = |SpecificKey of string |AnyKey |MultipleKeys of string list * bool
 type SubTypeDefinition<'a> = {
     name : string
     rules : NewRule<'a> list
@@ -590,13 +590,25 @@ module RulesParser =
             |_ -> None
         let getSkipRootKey (node : Node) =
             let createSkipRoot (s : string) = if s == "any" then SkipRootKey.AnyKey else SkipRootKey.SpecificKey s
-            match node.Has "skip_root_key", node.TagText "skip_root_key" with
-            |_, "any" -> [SkipRootKey.AnyKey]
-            |true, "" -> node.Child "skip_root_key" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> createSkipRoot (lv.Value.ToRawString())))
+            let skipRootKeyLeaves = node.Leafs "skip_root_key" |> List.ofSeq
+            match skipRootKeyLeaves with
+            | [x] when x.ValueText = "any" -> [SkipRootKey.AnyKey]
+            | [x] -> [SkipRootKey.SpecificKey x.ValueText]
+            | x::xs ->
+                let shouldMatch = x.Operator = Operator.Equals
+                eprintfn "gsrk %A %A" shouldMatch (x::xs)
+                [SkipRootKey.MultipleKeys ( (x::xs) |> List.map (fun y -> y.ValueText), shouldMatch)]
+            | [] -> node.Child "skip_root_key" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> createSkipRoot (lv.Value.ToRawString())))
                                                     |> Option.defaultValue Seq.empty
                                                     |> Seq.toList
-            |true, x -> [SkipRootKey.SpecificKey x]
-            |false, _ -> []
+
+            // match node.Has "skip_root_key", node.TagText "skip_root_key" with
+            // |_, "any" -> [SkipRootKey.AnyKey]
+            // |true, "" -> node.Child "skip_root_key" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> createSkipRoot (lv.Value.ToRawString())))
+            //                                         |> Option.defaultValue Seq.empty
+            //                                         |> Seq.toList
+            // |true, x -> [SkipRootKey.SpecificKey x]
+            // |false, _ -> []
         let validTypeKeys = [|"name_field"; "type_per_file"; "skip_root_key"; "path"; "path_strict"; "path_file"; "starts_with"; "severity"; "unique"; |]
         let checkTypeChildren (child : Child) =
             match child with

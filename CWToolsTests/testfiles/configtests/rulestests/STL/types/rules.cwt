@@ -22,6 +22,18 @@ types = {
         path_file = "one_file_skip.txt"
         skip_root_key = skip_me
     }
+    type[type_one_file_multiple_skip] = {
+        path = "game/common"
+        path_file = "one_file_skip_multiple.txt"
+        skip_root_key = skip_me_one
+        skip_root_key = skip_me_two
+    }
+    type[type_one_file_multiple_skip_not] = {
+        path = "game/common"
+        path_file = "one_file_skip_multiple_not.txt"
+        skip_root_key != skip_me_one
+        skip_root_key != skip_me_two
+    }
     type[event] = {
         path = "game/events"
 
@@ -107,6 +119,19 @@ type_one_file_skip = {
     test = test
     ## cardinality = 0..1
     test2 = <type_one_file_skip>
+}
+
+type_one_file_multiple_skip = {
+    test = test
+    ## cardinality = 0..1
+    test2 = <type_one_file_multiple_skip>
+}
+
+type_one_file_multiple_skip_not = {
+    test = test
+    ## cardinality = 0..1
+    test2 = <type_one_file_multiple_skip_not>
+
 }
 
 alias[effect:type_one_file] = <type_one_file>

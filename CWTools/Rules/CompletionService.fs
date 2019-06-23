@@ -331,6 +331,9 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             match skipRootKey with
             |(SpecificKey key) -> s == key
             |(AnyKey) -> true
+            |(MultipleKeys (keys, shouldMatch)) ->
+                (keys |> List.exists ((==) s)) <> (not shouldMatch)
+
         let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t pathDir file)
         let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
         let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
@@ -358,13 +361,13 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             | _ ->
                 pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
         //TODO: Expand this to use a snippet not just the name of the type
-        let rootTypeItems = 
+        let rootTypeItems =
             match path with
             | [(_,_,_,CompletionContext.NodeLHS)] ->
                 pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
             | y when y.Length = 0 ->
                 pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
-            | _ -> []            
+            | _ -> []
         let scoreForLabel (label : string) =
             if allUsedKeys |> List.contains label then 10 else 1
         (items @ rootTypeItems) |> List.map

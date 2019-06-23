@@ -1,0 +1,45 @@
+skip_me_four = {
+
+    value_one = {
+
+        test = test
+
+        test2 = value_two
+
+    }
+
+
+
+    value_two = {
+
+        #error
+
+        test = blah
+
+    }
+
+}
+
+
+
+skip_me_two = {
+
+    value_one = {
+
+        test = test
+
+        test2 = value_two
+
+    }
+
+
+
+    value_two = {
+
+        ### No error as not validated
+
+        test = blah
+
+    }
+
+}
