@@ -41,4 +41,11 @@ let tests =
             | Some value -> Expect.equal "Saved him from bandits" value.desc "Value had wrong value"
             | None -> Expect.isTrue false "Didn't find key"
             ()
+        ftestCase "localisation CK2 - 2" <| fun () ->
+            let files = ["testfiles/CK2/Localisation/v1_09.csv", File.ReadAllText("testfiles/CK2/Localisation/v1_09.csv", Text.Encoding.GetEncoding(1252))]
+            let parsed = CK2LocalisationService(files).Api (CK2 CK2Lang.English)
+            match parsed.ValueMap.TryFind "tp_wall_3_desc" with
+            | Some value -> Expect.equal "These stone walls surround the [Root.Holder.GetHouseOfWorship] and must be overcome by any attacker." value.desc "Value had wrong value"
+            | None -> Expect.isTrue false "Didn't find key"
+            ()
     ]

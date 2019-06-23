@@ -71,7 +71,10 @@ module CK2Localisation =
             |CK2 CK2Lang.Spanish -> x.SPANISH
             |_ -> x.ENGLISH
 
-        let getKeys() = csvFallback |> Seq.map (snd >> (fun f -> f.``#CODE``)) |> List.ofSeq
+        let getKeys() =
+                let one = csv |> Seq.map (snd >> (fun f -> f.``#CODE``))
+                let two = csvFallback |> Seq.map (snd >> (fun f -> f.``#CODE``))
+                Seq.concat [one; two] |> List.ofSeq
         let valueMap lang =
             let one = csv |> Seq.map(fun (p, r)-> (p, r.``#CODE``, getForLang lang r))
             let two = csvFallback |> Seq.map(fun (p, r) -> (p, r.``#CODE``, getForLangFallback lang r))
