@@ -67,3 +67,15 @@ country_event = {
         }
     }
 }
+
+## Filepath tests
+country_event ={
+    option = {
+        any_file = "common/a_file.ttf"
+        any_file_in_folder = "a_file.ttf"
+        any_file_in_folder_with_extension = "a_file"
+        any_file_in_folder = "b_file.otf"
+        #error
+        any_file_in_folder_with_extension = "b_file"
+    }
+}

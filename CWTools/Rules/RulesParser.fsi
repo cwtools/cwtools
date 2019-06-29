@@ -78,7 +78,7 @@ namespace CWTools.Rules
       dummyKey: Utilities.StringLowerToken * typedef: TypeDefinition<'a>
     | ScopeField of 'a
     | LocalisationField of synced: bool
-    | FilepathField of prefix : string option
+    | FilepathField of prefix : string option * extension : string option
     | IconField of string
     | AliasField of string
     | SingleAliasField of string
