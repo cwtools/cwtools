@@ -237,7 +237,8 @@ module Files =
                 |".png"
                 |".mesh"
                 |".ttf"
-                |".otf" ->
+                |".otf"
+                |".wav" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(workspaceDir.normalisedPath) + (workspaceDir.normalisedPathLength) + 1)
                     Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
                 |".yml"

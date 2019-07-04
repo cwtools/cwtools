@@ -197,5 +197,6 @@ module CK2Constants =
         "map";
         "map/statics";
         "music";
+        "sound";
         "tutorial"
     ]

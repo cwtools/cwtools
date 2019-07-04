@@ -301,17 +301,19 @@ module internal FieldValidators =
             values.Contains (value.Split(ampArray, 2).[0])
         |None -> false
 
-    let checkFilepathField (files : Collections.Set<string>) (key : string) (prefix : string option) (leafornode) errors =
+    let checkFilepathField (files : Collections.Set<string>) (key : string) (prefix : string option) (extension : string option) (leafornode) errors =
         let file = (trimQuote key).Replace("\\","/")
         let file2 = file.Replace(".lua",".shader").Replace(".tga",".dds")
+        let file = if extension.IsSome then file + extension.Value else file
         match prefix with
         | Some pre ->
             if files.Contains file || files.Contains (pre + file) || files.Contains file2 || files.Contains (pre + file2) then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
         | None ->
             if files.Contains file || files.Contains file2 then errors else inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
-    let checkFilepathFieldNE (files : Collections.Set<string>) (key : string) (prefix : string option) =
+    let checkFilepathFieldNE (files : Collections.Set<string>) (key : string) (prefix : string option) (extension : string option) =
         let file = (trimQuote key).Replace("\\","/")
         let file2 = file.Replace(".lua",".shader").Replace(".tga",".dds")
+        let file = if extension.IsSome then file + extension.Value else file
         match prefix with
         | Some pre ->
             files.Contains file || files.Contains (pre + file) || files.Contains file2 || files.Contains (pre + file2)
@@ -415,7 +417,7 @@ module internal FieldValidators =
             |TypeField t -> checkTypeField p.typesMap severity t key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
-            |FilepathField prefix -> checkFilepathField p.files key prefix leafornode errors
+            |FilepathField (prefix, extension) -> checkFilepathField p.files key prefix extension leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap severity v key leafornode errors
@@ -429,7 +431,7 @@ module internal FieldValidators =
             |TypeField t -> checkTypeFieldNE p.typesMap severity t key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
             |LocalisationField synced -> true
-            |FilepathField prefix -> checkFilepathFieldNE p.files key prefix
+            |FilepathField (prefix, extension) -> checkFilepathFieldNE p.files key prefix extension
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v key

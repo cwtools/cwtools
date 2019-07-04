@@ -87,3 +87,8 @@ alias[effect:NAND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:AND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:OR] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:hidden_effect] = { alias_name[effect] = alias_match_left[effect] }
+
+#Filepath test
+alias[effect:any_file] = filepath
+alias[effect:any_file_in_folder] = filepath[common/]
+alias[effect:any_file_in_folder_with_extension] = filepath[common/,.ttf]
