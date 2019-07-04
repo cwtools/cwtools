@@ -158,6 +158,7 @@ module EU4GameFunctions =
         updateLegacyGovernments(game)
 type EU4Settings = GameSettings<Modifier, Scope, EU4Lookup>
 open EU4GameFunctions
+open CWTools.Common.NewScope
 type EU4Game(settings : EU4Settings) =
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
@@ -172,15 +173,15 @@ type EU4Game(settings : EU4Settings) =
     }
 
     let settings = { settings with
-                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                         initialLookup = EU4Lookup()
                         }
-
+    do scopeManager.ReInit(defaultScopeInputs)
     let rulesManagerSettings = {
         rulesSettings = settings.rules
-        parseScope = parseScope
-        allScopes = allScopes
-        anyScope = Scope.Any
+        parseScope = scopeManager.ParseScope()
+        allScopes = scopeManager.AllScopes
+        anyScope = scopeManager.AnyScope
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = EU4 EU4Lang.Default
@@ -240,7 +241,7 @@ type EU4Game(settings : EU4Settings) =
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
-        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text
+        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text

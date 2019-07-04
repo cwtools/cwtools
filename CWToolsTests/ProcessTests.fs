@@ -123,7 +123,7 @@ let testc =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let apply = RuleValidationService<Scope>(rules, [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
+                let apply = RuleValidationService<STLConstants.Scope>(rules, [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, Scope.Any, changeScope, defaultContext, STL STLLang.Default)
                 let errors = apply.ApplyNodeRule(Typerules, node)
                 match errors with
                 | OK -> ()

@@ -2,3 +2,4 @@ Expecto
 FParsec
 System.Text.Encoding.CodePages
 FsPickler
+FSharpx.Collections

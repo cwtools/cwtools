@@ -7,6 +7,7 @@ open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils
 open Types
+open CWTools.Common.NewScope
 
 module EU4Parser =
     // let loadModifiers (fileStream : StreamReader) =
@@ -29,8 +30,8 @@ module EU4Parser =
                 |> Option.defaultValue []
 
     let getLocCommands (node : Node) =
-        let simple = node.Values |> List.map (fun v -> v.Key, [parseScope (v.Value.ToRawString())])
-        let complex = node.Children |> List.map (fun v -> v.Key, (v.LeafValues |> Seq.map (fun lv -> parseScope (lv.Value.ToRawString())) |> List.ofSeq))
+        let simple = node.Values |> List.map (fun v -> v.Key, [scopeManager.ParseScope() (v.Value.ToRawString())])
+        let complex = node.Children |> List.map (fun v -> v.Key, (v.LeafValues |> Seq.map (fun lv -> scopeManager.ParseScope() (lv.Value.ToRawString())) |> List.ofSeq))
         simple @ complex
 
     let loadLocCommands filename fileString =

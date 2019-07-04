@@ -5,137 +5,102 @@ open System.ComponentModel.Design
 open CWTools.Utilities.Utils
 open System.Collections.Generic
 
-module NewScope = 
-    type ScopeInput = {
-        name : string
-        inputs : string list
-    }
-    type ScopeWrapper = byte
-    type NewScope =
-        struct
-            val tag: byte
-        end
-        new(tag) = { tag = tag }
-        // override x.ToString() =
-    type ScopeManager(scopes : ScopeInput list) =
-        let dict = Dictionary<string, NewScope>()
-        let reverseDict = Dictionary<NewScope, ScopeInput>()
-        let anyScope = NewScope(0uy)
-        do 
-            dict.Add("any", anyScope)
-            dict.Add("all", anyScope)
-            dict.Add("no_scope", anyScope)
-            let mutable nextByte = 1uy
-            let addScope (newScope : ScopeInput) =
-                let newID = nextByte
-                nextByte <- nextByte + 1uy
-                newScope.inputs |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
-                reverseDict.Add(NewScope(newID), newScope)
-            scopes |> List.iter addScope
-        let parseScope = 
-            (fun (x : string) ->
-            let found, value = dict.TryGetValue x
-            if found
-            then value
-            else log (sprintf "Unexpected scope %O" x); anyScope
-            )
-        member this.GetName(scope : NewScope) = reverseDict.[scope].name
-        member this.AllScopes = reverseDict.Keys
-            
-
-    let mutable scopeManager = ScopeManager([])
- 
-    type NewScope with
-        override x.ToString() = scopeManager.GetName(x)
-        interface IScope<Scope> with
-            member this.AnyScope = Scope.Any
-            member this.MatchesScope target =
-                match this, target with
-                |TradeNode, Province -> true
-                | _, Scope.Any
-                | Scope.Any, _ -> true
-                |this, target -> this = target
 
 module EU4Constants =
 
 
-    type Scope =
-        |Country
-        |Province
-        |TradeNode
-        |Unit
-        //Loc scopes
-        |Monarch
-        |Heir
-        |Consort
-        |RebelFaction
-        |Religion
-        |Culture
-        |Advisor
-        //Misc
-        |Any
-        |InvalidScope
-        override x.ToString() =
-            match x with
-            |TradeNode -> "Trade node"
-            |Country -> "Country"
-            |Province -> "Province"
-            |Unit -> "Unit"
-            |Monarch -> "Monarch"
-            |Heir -> "Heir"
-            |Consort -> "Consort"
-            |RebelFaction -> "Rebel Faction"
-            |Religion -> "Religion"
-            |Culture -> "Culture"
-            |Advisor -> "Advisor"
-            |InvalidScope -> "Invalid Scope"
-            |Any -> "Any/Unknown"
-        static member AnyScope = Scope.Any
-        interface IScope<Scope> with
-            member this.AnyScope = Scope.Any
-            member this.MatchesScope target =
-                match this, target with
-                |TradeNode, Province -> true
-                | _, Scope.Any
-                | Scope.Any, _ -> true
-                |this, target -> this = target
+    // type Scope =
+    //     |Country
+    //     |Province
+    //     |TradeNode
+    //     |Unit
+    //     //Loc scopes
+    //     |Monarch
+    //     |Heir
+    //     |Consort
+    //     |RebelFaction
+    //     |Religion
+    //     |Culture
+    //     |Advisor
+    //     //Misc
+    //     |Any
+    //     |InvalidScope
+    //     override x.ToString() =
+    //         match x with
+    //         |TradeNode -> "Trade node"
+    //         |Country -> "Country"
+    //         |Province -> "Province"
+    //         |Unit -> "Unit"
+    //         |Monarch -> "Monarch"
+    //         |Heir -> "Heir"
+    //         |Consort -> "Consort"
+    //         |RebelFaction -> "Rebel Faction"
+    //         |Religion -> "Religion"
+    //         |Culture -> "Culture"
+    //         |Advisor -> "Advisor"
+    //         |InvalidScope -> "Invalid Scope"
+    //         |Any -> "Any/Unknown"
+    //     static member AnyScope = Scope.Any
+    //     interface IScope<Scope> with
+    //         member this.AnyScope = Scope.Any
+    //         member this.MatchesScope target =
+    //             match this, target with
+    //             |TradeNode, Province -> true
+    //             | _, Scope.Any
+    //             | Scope.Any, _ -> true
+    //             |this, target -> this = target
+    type Scope = NewScope.NewScope
+    // let allScopes = NewScope.scopeManager.allScopes
+    // let allScopes = [
+    //         Country;
+    //         Province;
+    //         TradeNode;
+    //         Unit
+    //         ]
+    // let allScopesSet = allScopes |> Set.ofList
+    let defaultScopes = [
+        "Country", ["country"]
+        "Province", ["province"]
+        "Trade Node", ["trade_node"; "tradenode"]
+        "Unit", ["unit"]
+        "Monarch", ["monarch"]
+        "Heir",["heir"]
+        "Consort",["consort"]
+        "Rebel Faction",["rebel_faction"]
+        "Religion",["religion"]
+        "Culture",["culture"]
+        "Advisor",["advisor"]
+    ]
+    let defaultScopeInputs =
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.inputs = s })
 
-    let allScopes = [
-            Country;
-            Province;
-            TradeNode;
-            Unit
-            ]
-    let allScopesSet = allScopes |> Set.ofList
 
+    // let parseScope =
+    //     (fun (x : string) ->
+    //     x.ToLower()
+    //     |>
+    //         function
+    //         |"country" -> Scope.Country
+    //         |"province" -> Scope.Province
+    //         |"trade_node" -> Scope.TradeNode
+    //         |"tradenode" -> Scope.TradeNode
+    //         |"unit" -> Scope.Unit
+    //         |"monarch" -> Scope.Monarch
+    //         |"heir" -> Scope.Heir
+    //         |"consort" -> Scope.Consort
+    //         |"rebel_faction" -> Scope.RebelFaction
+    //         |"religion" -> Scope.Religion
+    //         |"culture" -> Scope.Culture
+    //         |"advisor" -> Scope.Advisor
+    //         |"any" -> Scope.Any
+    //         |"all" -> Scope.Any
+    //         |"no_scope" -> Scope.Any
+    //         |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
-
-    let parseScope =
-        (fun (x : string) ->
-        x.ToLower()
-        |>
-            function
-            |"country" -> Scope.Country
-            |"province" -> Scope.Province
-            |"trade_node" -> Scope.TradeNode
-            |"tradenode" -> Scope.TradeNode
-            |"unit" -> Scope.Unit
-            |"monarch" -> Scope.Monarch
-            |"heir" -> Scope.Heir
-            |"consort" -> Scope.Consort
-            |"rebel_faction" -> Scope.RebelFaction
-            |"religion" -> Scope.Religion
-            |"culture" -> Scope.Culture
-            |"advisor" -> Scope.Advisor
-            |"any" -> Scope.Any
-            |"all" -> Scope.Any
-            |"no_scope" -> Scope.Any
-            |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
-
-    let parseScopes =
-        function
-        |"all" -> allScopes
-        |x -> [parseScope x]
+    // let parseScopes =
+    //     function
+    //     |"all" -> allScopes
+    //     |x -> [parseScope x]
 
     type Effect = Effect<Scope>
 

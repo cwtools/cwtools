@@ -3,6 +3,7 @@ namespace CWTools.Process.Scopes
 open CWTools.Common.EU4Constants
 open CWTools.Common
 open CWTools.Process.Scopes
+open CWTools.Common.NewScope
 module EU4 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
@@ -26,19 +27,19 @@ module EU4 =
     //         member this.Scopes = this.Scopes
 
     let defaultContext =
-        { Root = Scope.Any; From = []; Scopes = [] }
+        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
     let noneContext =
-        { Root = Scope.InvalidScope; From = []; Scopes = [Scope.InvalidScope] }
+        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope] }
     let defaultDesc = "Scope (/context) switch"
 
 
     let scopedEffects =
         [
-            ScopedEffect("owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true);
-            // Should be rhs only!
-            ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Link, defaultDesc, "", true);
+            ScopedEffect<NewScope>("owner", [scopeManager.ParseScope() "province"], scopeManager.ParseScope() "country", EffectType.Link, defaultDesc, "", true);
+            // ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+            // ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true);
+            // // Should be rhs only!
+            // ScopedEffect("capital", [Scope.Country; Scope.Province], Scope.Province, EffectType.Link, defaultDesc, "", true);
         ]
 
 
@@ -70,7 +71,7 @@ module EU4 =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = Scopes.createChangeScope<Scope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
+    let changeScope = Scopes.createChangeScope<NewScope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
     // let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =
     //     let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
@@ -113,24 +114,26 @@ module EU4 =
     //         res2
 
     let scopedLocEffects = [
-        ScopedEffect("Capital", [Scope.Country], Scope.Province, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Dip_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Adm_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Mil_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Country", [Scope.Country; Scope.RebelFaction], Scope.Country, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("Consort", [Scope.Country;], Scope.Consort, EffectType.Link, defaultDesc, "", true);
+        ScopedEffect<NewScope>("Capital", [scopeManager.ParseScope() "country"], (scopeManager.ParseScope() "province"), EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Owner", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Dip_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Adm_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Mil_Advisor", [Scope.Country], Scope.Advisor, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Country", [Scope.Country; Scope.RebelFaction], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("Consort", [Scope.Country;], Scope.Consort, EffectType.Link, defaultDesc, "", true);
+
+
         // ScopedEffect("GetCult", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
@@ -156,11 +159,11 @@ module EU4 =
         // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
     ]
-    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
+    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect<NewScope>))
 
 
     let locPrimaryScopes =
-        let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
+        let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
         [
         "This", id;
         "Root", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;

@@ -1,4 +1,6 @@
 namespace CWTools.Common
+open System.Collections.Generic
+open System
 
 type Game = |CK2 = 0 |HOI4 = 1 |EU4 = 2 |STL = 3 |VIC2 = 4
 type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Default = 5
@@ -132,3 +134,70 @@ type EventTargetDataLink<'S> = {
 type EventTargetLink<'S when 'S : comparison> =
 | SimpleLink of ScopedEffect<'S>
 | DataLink of EventTargetDataLink<'S>
+
+
+module rec NewScope =
+    open CWTools.Utilities.Utils
+    type ScopeInput = {
+        name : string
+        inputs : string list
+    }
+    type ScopeWrapper = byte
+        // override x.ToString() =
+    type ScopeManager(scopes : ScopeInput list) =
+        let mutable dict = Dictionary<string, NewScope>()
+        let mutable reverseDict = Dictionary<NewScope, ScopeInput>()
+        let anyScope = NewScope(0uy)
+        let invalidScope = NewScope(1uy)
+        let init(scope : ScopeInput list) =
+            dict <- Dictionary<string, NewScope>()
+            reverseDict <- Dictionary<NewScope, ScopeInput>()
+            dict.Add("any", anyScope)
+            dict.Add("all", anyScope)
+            dict.Add("no_scope", anyScope)
+            dict.Add("invalid_scope", invalidScope)
+            let mutable nextByte = 2uy
+            let addScope (newScope : ScopeInput) =
+                let newID = nextByte
+                nextByte <- nextByte + 1uy
+                newScope.inputs |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
+                reverseDict.Add(NewScope(newID), newScope)
+            scopes |> List.iter addScope
+        let parseScope() =
+            (fun (x : string) ->
+            let found, value = dict.TryGetValue x
+            if found
+            then value
+            else log (sprintf "Unexpected scope %O" x); anyScope
+            )
+        member this.GetName(scope : NewScope) = reverseDict.[scope].name
+        member this.AllScopes = reverseDict.Keys |> List.ofSeq
+        member this.AnyScope = anyScope
+        member this.InvalidScope = invalidScope
+        member this.ParseScope = parseScope
+        member this.ReInit(scopes : ScopeInput list) = init(scopes)
+
+
+    let scopeManager = ScopeManager([])
+    type NewScope(tag : byte) =
+        // struct
+        // val tag: byte
+        // end
+        // new(tag) = { tag = tag }
+        member val tag = tag
+        override x.ToString() = scopeManager.GetName(x)
+        override x.Equals (target : obj) =
+            match target with
+            | :? NewScope as t -> tag = t.tag
+            | _ -> false
+        override x.GetHashCode() = tag.GetHashCode()
+        interface IComparable with
+            member this.CompareTo target = tag.CompareTo target
+        interface IScope<NewScope> with
+            member this.AnyScope = scopeManager.AnyScope
+            member this.MatchesScope target =
+                match this, target with
+                // |TradeNode, Province -> true
+                | _, x
+                | x, _ when x = scopeManager.AnyScope -> true
+                |this, target -> this = target
