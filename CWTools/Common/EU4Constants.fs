@@ -3,7 +3,62 @@ namespace CWTools.Common
 open System
 open System.ComponentModel.Design
 open CWTools.Utilities.Utils
+open System.Collections.Generic
+
+module NewScope = 
+    type ScopeInput = {
+        name : string
+        inputs : string list
+    }
+    type ScopeWrapper = byte
+    type NewScope =
+        struct
+            val tag: byte
+        end
+        new(tag) = { tag = tag }
+        // override x.ToString() =
+    type ScopeManager(scopes : ScopeInput list) =
+        let dict = Dictionary<string, NewScope>()
+        let reverseDict = Dictionary<NewScope, ScopeInput>()
+        let anyScope = NewScope(0uy)
+        do 
+            dict.Add("any", anyScope)
+            dict.Add("all", anyScope)
+            dict.Add("no_scope", anyScope)
+            let mutable nextByte = 1uy
+            let addScope (newScope : ScopeInput) =
+                let newID = nextByte
+                nextByte <- nextByte + 1uy
+                newScope.inputs |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
+                reverseDict.Add(NewScope(newID), newScope)
+            scopes |> List.iter addScope
+        let parseScope = 
+            (fun (x : string) ->
+            let found, value = dict.TryGetValue x
+            if found
+            then value
+            else log (sprintf "Unexpected scope %O" x); anyScope
+            )
+        member this.GetName(scope : NewScope) = reverseDict.[scope].name
+        member this.AllScopes = reverseDict.Keys
+            
+
+    let mutable scopeManager = ScopeManager([])
+ 
+    type NewScope with
+        override x.ToString() = scopeManager.GetName(x)
+        interface IScope<Scope> with
+            member this.AnyScope = Scope.Any
+            member this.MatchesScope target =
+                match this, target with
+                |TradeNode, Province -> true
+                | _, Scope.Any
+                | Scope.Any, _ -> true
+                |this, target -> this = target
+
 module EU4Constants =
+
+
     type Scope =
         |Country
         |Province
@@ -52,6 +107,9 @@ module EU4Constants =
             Unit
             ]
     let allScopesSet = allScopes |> Set.ofList
+
+
+
     let parseScope =
         (fun (x : string) ->
         x.ToLower()
