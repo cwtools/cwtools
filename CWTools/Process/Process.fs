@@ -6,6 +6,7 @@ open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
+open CWTools.Common.NewScope
 
 
 module List =
@@ -109,7 +110,7 @@ and ValueClause(pos : range) =
     new() = ValueClause(range.Zero)
 
     member val Position = pos
-    member val Scope : Scope = Scope.Any with get, set
+    member val Scope : Scope = scopeManager.AnyScope with get, set
     member __.AllChildren with get () = all |> ResizeArray<Child>
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
     member __.AllArray with get () = all
@@ -175,7 +176,7 @@ and Node (key : string, pos : range) =
         and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member val Position = pos
-    member val Scope : Scope = Scope.Any with get, set
+    member val Scope : Scope = scopeManager.AnyScope with get, set
     member __.AllChildren with get () = all |> ResizeArray<Child>
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
     member __.AllArray with get () = all

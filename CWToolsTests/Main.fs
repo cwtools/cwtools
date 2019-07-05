@@ -21,6 +21,7 @@ open CWTools.Games.Stellaris.STLLookup
 open System.Threading
 open System.Globalization
 open CWTools.Common.STLConstants
+open CWTools.Common.NewScope
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectories = [{ name = "test"; path = rootDirectory;}]
@@ -57,7 +58,7 @@ let getAllFoldersUnion dirs =
 let perf(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> (DocsParser.processDocs parseScopes) p)
+    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> (DocsParser.processDocs (scopeManager.ParseScopes)) p)
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
@@ -77,7 +78,7 @@ let perf(b) =
 let perf2(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
+    let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))

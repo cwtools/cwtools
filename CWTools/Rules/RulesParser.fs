@@ -12,6 +12,7 @@ open CWTools.Process
 open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
+open CWTools.Common.NewScope
 
 
 type ReplaceScopes<'a> = {
@@ -906,11 +907,11 @@ module RulesParser =
 
 
     let createStarbase =
-        let owner = NewRule (LeafRule(specificField "owner", ScopeField Scope.Any), requiredSingle)
+        let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)
         let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
         let moduleR = NewRule (LeafRule(specificField "module", ValueField(ValueType.Enum "module")), optionalMany)
         let building = NewRule (LeafRule(specificField "building", ValueField(ValueType.Enum "building")), optionalMany)
-        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), { optionalSingle with replaceScopes = Some { froms = None; root = Some (Scope.Country); this = Some (Scope.Country); prevs = None }})
+        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), { optionalSingle with replaceScopes = Some { froms = None; root = Some (scopeManager.ParseScope() "country"); this = Some (scopeManager.ParseScope() "country"); prevs = None }})
         let rule = NewRule (NodeRule(specificField "create_starbase", [owner; size; moduleR; building; effect]), optionalMany)
         rule
     let createStarbaseAlias = AliasRule ("effect", createStarbase)

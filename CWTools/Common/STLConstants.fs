@@ -4,134 +4,161 @@ open System
 open System.ComponentModel.Design
 open System
 open CWTools.Utilities.Utils
+open NewScope
 
 module STLConstants =
     /// Blackninja9939: Country, leader, galatic object, planet, ship, fleet, pop, ambient object, army, tile, species, pop faction, sector and alliance
     /// Blackninja9939: War and Megastructure are scopes too
-    type Scope =
-        |Country
-        |Leader
-        |GalacticObject
-        |Planet
-        |Ship
-        |Fleet
-        |Pop
-        |AmbientObject
-        |Army
-        |Tile
-        |Species
-        |PopFaction
-        |Sector
-        |Alliance
-        |War
-        |Megastructure
-        |Any
-        |Design
-        |Starbase
-        |Star
-        |Deposit
-        |ArchaeologicalSite
-        |InvalidScope
-        override x.ToString() =
-            match x with
-            |GalacticObject -> "System"
-            |AmbientObject -> "Ambient object"
-            |PopFaction -> "Pop faction"
-            |Any -> "Any/Unknown"
-            |Country -> "Country"
-            |Leader -> "Leader"
-            |Planet -> "Planet"
-            |Ship -> "Ship"
-            |Fleet -> "Fleet"
-            |Pop -> "Pop"
-            |Army -> "Army"
-            |Tile -> "Tile"
-            |Species -> "Species"
-            |Sector -> "Sector"
-            |Alliance -> "Alliance"
-            |War -> "War"
-            |Megastructure -> "Megastructure"
-            |Design -> "Design"
-            |Starbase -> "Starbase"
-            |Star -> "Star"
-            |Deposit -> "Deposit"
-            |ArchaeologicalSite -> "Archaeological Site"
-            |InvalidScope -> "Invalid Scope"
-        static member AnyScope = Scope.Any
-        interface IScope<Scope> with
-            member this.AnyScope = Scope.Any
-            member this.MatchesScope target =
-                match this, target with
-                | Scope.Any, _
-                | _, Scope.Any -> true
-                | _, _ -> this = target
+    // type Scope =
+    //     |Country
+    //     |Leader
+    //     |GalacticObject
+    //     |Planet
+    //     |Ship
+    //     |Fleet
+    //     |Pop
+    //     |AmbientObject
+    //     |Army
+    //     |Tile
+    //     |Species
+    //     |PopFaction
+    //     |Sector
+    //     |Alliance
+    //     |War
+    //     |Megastructure
+    //     |Any
+    //     |Design
+    //     |Starbase
+    //     |Star
+    //     |Deposit
+    //     |ArchaeologicalSite
+    //     |InvalidScope
+    //     override x.ToString() =
+    //         match x with
+    //         |GalacticObject -> "System"
+    //         |AmbientObject -> "Ambient object"
+    //         |PopFaction -> "Pop faction"
+    //         |Any -> "Any/Unknown"
+    //         |Country -> "Country"
+    //         |Leader -> "Leader"
+    //         |Planet -> "Planet"
+    //         |Ship -> "Ship"
+    //         |Fleet -> "Fleet"
+    //         |Pop -> "Pop"
+    //         |Army -> "Army"
+    //         |Tile -> "Tile"
+    //         |Species -> "Species"
+    //         |Sector -> "Sector"
+    //         |Alliance -> "Alliance"
+    //         |War -> "War"
+    //         |Megastructure -> "Megastructure"
+    //         |Design -> "Design"
+    //         |Starbase -> "Starbase"
+    //         |Star -> "Star"
+    //         |Deposit -> "Deposit"
+    //         |ArchaeologicalSite -> "Archaeological Site"
+    //         |InvalidScope -> "Invalid Scope"
+    //     static member AnyScope = Scope.Any
+    //     interface IScope<Scope> with
+    //         member this.AnyScope = Scope.Any
+    //         member this.MatchesScope target =
+    //             match this, target with
+    //             | Scope.Any, _
+    //             | _, Scope.Any -> true
+    //             | _, _ -> this = target
 
-    let allScopes = [
-            Country;
-            Leader;
-            GalacticObject;
-            Planet;
-            Ship;
-            Fleet;
-            Pop;
-            AmbientObject;
-            Army;
-            Tile
-            Species;
-            PopFaction;
-            Sector;
-            Alliance;
-            War;
-            Design;
-            Starbase;
-            Megastructure;
-            Star;
-            Deposit;
-            ArchaeologicalSite;
-            ]
-    let allScopesSet = allScopes |> Set.ofList
-    let parseScope =
-        (fun (x : string) ->
-        x.ToLower()
-        |>
-            function
-            |"country" -> Scope.Country
-            |"leader" -> Scope.Leader
-            |"galacticobject"
-            |"system"
-            |"galactic_object" -> Scope.GalacticObject
-            |"planet" -> Scope.Planet
-            |"ship" -> Scope.Ship
-            |"fleet" -> Scope.Fleet
-            |"pop" -> Scope.Pop
-            |"ambientobject"
-            |"ambient_object" -> Scope.AmbientObject
-            |"army" -> Scope.Army
-            |"tile" -> Scope.Tile
-            |"species" -> Scope.Species
-            |"popfaction"
-            |"pop_faction" -> Scope.PopFaction
-            |"sector" -> Scope.Sector
-            |"alliance" -> Scope.Alliance
-            |"war" -> Scope.War
-            |"megastructure" -> Scope.Megastructure
-            |"design" -> Scope.Design
-            |"starbase" -> Scope.Starbase
-            |"star" -> Scope.Star
-            |"deposit" -> Scope.Deposit
-            |"archaeologicalsite"
-            |"archaeological_site" -> Scope.ArchaeologicalSite
-            |"any" -> Scope.Any
-            |"all" -> Scope.Any
-            |"no_scope" -> Scope.Any
-            |"(unknown)" -> Scope.Any
-            |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
+    // let allScopes = [
+    //         Country;
+    //         Leader;
+    //         GalacticObject;
+    //         Planet;
+    //         Ship;
+    //         Fleet;
+    //         Pop;
+    //         AmbientObject;
+    //         Army;
+    //         Tile
+    //         Species;
+    //         PopFaction;
+    //         Sector;
+    //         Alliance;
+    //         War;
+    //         Design;
+    //         Starbase;
+    //         Megastructure;
+    //         Star;
+    //         Deposit;
+    //         ArchaeologicalSite;
+    //         ]
+    // let allScopesSet = allScopes |> Set.ofList
+    let defaultScopes = [
+        "Country", ["country"]
+        "Leader", ["leader"]
+        "System", ["galacticobject"; "system"; "galactic_object"]
+        "Planet", ["planet"]
+        "Ship", ["ship"]
+        "Fleet",["fleet"]
+        "Pop",["pop"]
+        "Ambient Object",["ambientobject"; "ambient_object"]
+        "Army",["army"]
+        "Tile",["tile"]
+        "Species",["species"]
+        "Pop Faction",["popfaction"; "pop_faction"]
+        "Sector",["sector"]
+        "Alliance",["alliance"]
+        "War",["war"]
+        "Megastructure",["megastructure"]
+        "Design",["design"]
+        "Starbase",["starbase"]
+        "Star",["star"]
+        "Deposit",["deposit"]
+        "Archaeological Site",["archaeologicalsite"; "archaeological_site"]
+    ]
+    let defaultScopeInputs =
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.inputs = s })
 
-    let parseScopes =
-        function
-        |"all" -> allScopes
-        |x -> [parseScope x]
+    // let parseScope =
+    //     (fun (x : string) ->
+    //     x.ToLower()
+    //     |>
+    //         function
+    //         |"country" -> Scope.Country
+    //         |"leader" -> Scope.Leader
+    //         |"galacticobject"
+    //         |"system"
+    //         |"galactic_object" -> Scope.GalacticObject
+    //         |"planet" -> Scope.Planet
+    //         |"ship" -> Scope.Ship
+    //         |"fleet" -> Scope.Fleet
+    //         |"pop" -> Scope.Pop
+    //         |"ambientobject"
+    //         |"ambient_object" -> Scope.AmbientObject
+    //         |"army" -> Scope.Army
+    //         |"tile" -> Scope.Tile
+    //         |"species" -> Scope.Species
+    //         |"popfaction"
+    //         |"pop_faction" -> Scope.PopFaction
+    //         |"sector" -> Scope.Sector
+    //         |"alliance" -> Scope.Alliance
+    //         |"war" -> Scope.War
+    //         |"megastructure" -> Scope.Megastructure
+    //         |"design" -> Scope.Design
+    //         |"starbase" -> Scope.Starbase
+    //         |"star" -> Scope.Star
+    //         |"deposit" -> Scope.Deposit
+    //         |"archaeologicalsite"
+    //         |"archaeological_site" -> Scope.ArchaeologicalSite
+    //         |"any" -> Scope.Any
+    //         |"all" -> Scope.Any
+    //         |"no_scope" -> Scope.Any
+    //         |"(unknown)" -> Scope.Any
+    //         |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
+    // let parseScopes =
+    //     function
+    //     |"all" -> allScopes
+    //     |x -> [parseScope x]
+    type Scope = NewScope
     type Effect = Effect<Scope>
 
     type DocEffect = DocEffect<Scope>
@@ -196,20 +223,20 @@ module STLConstants =
             |_ -> ModifierCategory.Any
         { tag = raw.tag; categories = [category]; core = true}
     let categoryScopeList = [
-        ModifierCategory.Army, [Scope.Army; Scope.Planet; Scope.Country]
-        ModifierCategory.Country, [Scope.Country]
-        ModifierCategory.Leader, [Scope.Leader; Scope.Country]
-        ModifierCategory.Megastructure, [Scope.Megastructure; Scope.Country]
-        ModifierCategory.Planet, [Scope.Planet; Scope.GalacticObject; Scope.Country]
-        ModifierCategory.PlanetClass, [Scope.Planet; Scope.Pop; Scope.Country]
-        ModifierCategory.Pop, [Scope.Pop; Scope.Planet; Scope.GalacticObject; Scope.Country]
-        ModifierCategory.PopFaction, [Scope.PopFaction; Scope.Country]
-        ModifierCategory.Science, [Scope.Ship; Scope.Country]
-        ModifierCategory.Ship, [Scope.Ship; Scope.Starbase; Scope.Fleet; Scope.Country]
-        ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
-        ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
-        ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
-        ModifierCategory.Resource, [Scope.Country; Scope.GalacticObject; Scope.Planet; Scope.Pop; Scope.Starbase; Scope.Ship; Scope.Leader]
+        ModifierCategory.Army, [scopeManager.ParseScope() "Army"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
+        ModifierCategory.Leader, [scopeManager.ParseScope() "Leader"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Megastructure, [scopeManager.ParseScope() "Megastructure"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Planet, [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.PlanetClass, [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Pop, [scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.PopFaction, [scopeManager.ParseScope() "PopFaction"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Science, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Ship, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.ShipSize, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Starbase, [scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Tile, [scopeManager.ParseScope() "Tile"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Resource, [scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Leader"]
     ]
 
     let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList

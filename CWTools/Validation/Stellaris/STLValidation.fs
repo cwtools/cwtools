@@ -13,6 +13,7 @@ open System
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Process.Scopes
 open FSharpx.Collections
+open CWTools.Common.NewScope
 
 
 module STLValidation =
@@ -69,7 +70,7 @@ module STLValidation =
     let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
         match List.tryFind (fun (c, _) -> c = cat) categoryScopeList, scope with
         |None, _ -> OK
-        |Some _, s when s = Scope.Any -> OK
+        |Some _, s when s = scopeManager.AnyScope -> OK
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
 
 
@@ -379,7 +380,7 @@ module STLValidation =
     let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
         match List.tryFind (fun (c, _) -> c = cat) categoryScopeList, scope with
         |None, _ -> OK
-        |Some _, s when s = Scope.Any -> OK
+        |Some _, s when s = scopeManager.AnyScope -> OK
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
 
     let valModifier (modifiers : Modifier list) (scope : Scope) (leaf : Leaf) =

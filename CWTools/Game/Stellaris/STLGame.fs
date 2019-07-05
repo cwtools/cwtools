@@ -201,6 +201,7 @@ module STLGameFunctions =
 type StellarisSettings = GameSettings<Modifier, Scope, STLLookup>
 
 open STLGameFunctions
+open CWTools.Common.NewScope
 type STLGame (settings : StellarisSettings) =
     let validationSettings = {
         validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
@@ -220,15 +221,16 @@ type STLGame (settings : StellarisSettings) =
 
     }
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
-                                       embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                                       embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                                        initialLookup = STLLookup()}
 
+        do scopeManager.ReInit(defaultScopeInputs)
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules
-            parseScope = parseScope
-            allScopes = allScopes
-            anyScope = Scope.Any
+            parseScope = scopeManager.ParseScope()
+            allScopes = scopeManager.AllScopes
+            anyScope = scopeManager.AnyScope
             changeScope = changeScope
             defaultContext = defaultContext
             defaultLang = STL STLLang.Default
@@ -309,7 +311,7 @@ type STLGame (settings : StellarisSettings) =
             member __.AllEntities() = resources.AllEntities()
             member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
-            member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text
+            member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
                 // scopesAtPosSTL pos file text
                 // |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
             member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

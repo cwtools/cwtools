@@ -11,6 +11,7 @@ open CWTools.Utilities.Utils
 open System.IO
 open CWTools.Utilities.Position
 open CWTools.Process.Scopes
+open CWTools.Common.NewScope
 
 module STLLocalisationString =
 
@@ -80,7 +81,7 @@ module STLLocalisationString =
             "GetNamePluralInsult";
             "GetClassName"; // Discord reported
         ]
-    let locCommands = commands |> List.map (fun c -> c, allScopes)
+    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
     let processLocalisation = processLocalisationBase<Scope> localisationCommandValidator defaultContext

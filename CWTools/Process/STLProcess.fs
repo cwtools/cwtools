@@ -6,6 +6,7 @@ open CWTools.Common.STLConstants
 open System
 open CWTools.Utilities.Utils
 open CWTools.Common
+open CWTools.Common.NewScope
 
 module STLProcess =
     let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
@@ -32,9 +33,9 @@ module STLProcess =
                         |> List.map (
                             function
                             | x when x.Key = root ->
-                                allScopesSet
+                                scopeManager.AllScopes |> Set.ofList
                             | x when (x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)) ->
-                                allScopesSet
+                                scopeManager.AllScopes |> Set.ofList
                             // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                             //     allScopes
                             | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
@@ -50,12 +51,12 @@ module STLProcess =
                         //|> List.filter (fun v -> v.Key.StartsWith("@"))
                         |> List.map (
                             function
-                            | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> allScopesSet
-                            | x when x.Key = root -> allScopesSet
+                            | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> scopeManager.AllScopes |> Set.ofList
+                            | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                             | x -> (effects @ triggers) |> List.tryFind (fun e -> e.Name = x.Key) |> (function |Some e -> e.ScopesSet |None -> Set.empty)
                            )
-        let combinedScopes = nodeScopes @ valueScopes |> List.map (function | x when Set.isEmpty x -> (if strict then Set.empty else allScopesSet) |x -> x)
-        combinedScopes |> List.fold Set.intersect allScopesSet
+        let combinedScopes = nodeScopes @ valueScopes |> List.map (function | x when Set.isEmpty x -> (if strict then Set.empty else scopeManager.AllScopes |> Set.ofList) |x -> x)
+        combinedScopes |> List.fold Set.intersect (scopeManager.AllScopes |> Set.ofList)
         //combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
 
     let findAllUsedEventTargets (event : Node) =

@@ -3,6 +3,7 @@ open CWTools.Process
 open CWTools.Common.STLConstants
 open CWTools.Games
 open CWTools.Common
+open CWTools.Common.NewScope
 
 module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
@@ -47,11 +48,11 @@ module STLLookup =
 
     let manualEffectScopeOverrides =
         [
-            "set_variable", [Scope.Planet; Scope.Country; Scope.Fleet; Scope.GalacticObject; Scope.Leader]
-            "change_variable", [Scope.Planet; Scope.Country; Scope.Fleet; Scope.GalacticObject; Scope.Leader]
-            "subtract_variable", [Scope.Planet; Scope.Country; Scope.Fleet; Scope.GalacticObject; Scope.Leader]
-            "multiply_variable", [Scope.Planet; Scope.Country; Scope.Fleet; Scope.GalacticObject; Scope.Leader]
-            "divide_variable", [Scope.Planet; Scope.Country; Scope.Fleet; Scope.GalacticObject; Scope.Leader]
+            "set_variable", [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Leader"]
+            "change_variable", [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Leader"]
+            "subtract_variable", [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Leader"]
+            "multiply_variable", [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Leader"]
+            "divide_variable", [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Leader"]
         ] |> Map.ofList
 
     let updateScriptedEffects (resources : IResourceAPI<STLComputedData>) (vanillaEffects : Effect list) (scriptedTriggers : Effect list) =

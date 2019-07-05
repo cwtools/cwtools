@@ -25,6 +25,7 @@ open CWTools.Validation.Stellaris
 open MBrace.FsPickler
 open System.Text
 open CWTools.Parser.CKPrinter
+open CWTools.Common.NewScope
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectories = [{ name = "test"; path = rootDirectory;}]
@@ -276,9 +277,9 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             then
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
-                                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks Scope.Any parseScope allScopes fn ft)
+                                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks (scopeManager.AnyScope) (scopeManager.ParseScope()) (scopeManager.AllScopes) fn ft)
                                     |> Option.defaultValue (Scopes.STL.scopedEffects |> List.map SimpleLink)
-                let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
+                let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
                 let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
                 let settings = emptyStellarisSettings folder
                 let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; eventTargetLinks = eventTargetLinks };
@@ -503,7 +504,7 @@ let overwriteTests =
     testList "overwrite" [
         // eprintfn "%A" filelist
         let configtext = ["./testfiles/overwritetest/test.cwt", File.ReadAllText "./testfiles/overwritetest/test.cwt"]
-        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs parseScopes p)
+        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())

@@ -168,14 +168,19 @@ module rec NewScope =
             let found, value = dict.TryGetValue x
             if found
             then value
-            else log (sprintf "Unexpected scope %O" x); anyScope
+            else log (sprintf "Unexpected scope %O %A" x (reverseDict.Keys |> List.ofSeq) ); anyScope
             )
         member this.GetName(scope : NewScope) = reverseDict.[scope].name
         member this.AllScopes = reverseDict.Keys |> List.ofSeq
         member this.AnyScope = anyScope
         member this.InvalidScope = invalidScope
         member this.ParseScope = parseScope
+        member this.ParseScopes = function | "all" -> this.AllScopes | x -> [this.ParseScope() x]
         member this.ReInit(scopes : ScopeInput list) = init(scopes)
+    // let parseScopes =
+    //     function
+    //     |"all" -> allScopes
+    //     |x -> [parseScope x]
 
 
     let scopeManager = ScopeManager([])
@@ -192,7 +197,10 @@ module rec NewScope =
             | _ -> false
         override x.GetHashCode() = tag.GetHashCode()
         interface IComparable with
-            member this.CompareTo target = tag.CompareTo target
+            member this.CompareTo target =
+            match target with
+            | :? NewScope as t -> tag.CompareTo t.tag
+            | _ -> 0
         interface IScope<NewScope> with
             member this.AnyScope = scopeManager.AnyScope
             member this.MatchesScope target =
