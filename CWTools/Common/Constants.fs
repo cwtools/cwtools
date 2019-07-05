@@ -148,14 +148,19 @@ module rec NewScope =
         let mutable dict = Dictionary<string, NewScope>()
         let mutable reverseDict = Dictionary<NewScope, ScopeInput>()
         let anyScope = NewScope(0uy)
+        let anyScopeInput = { ScopeInput.name = "Any"; inputs = ["any"; "all"; "no_scope"] }
         let invalidScope = NewScope(1uy)
-        let init(scope : ScopeInput list) =
+        let invalidScopeInput = { ScopeInput.name = "Invalid"; inputs = ["invalid_scope"]}
+        let init(scopes : ScopeInput list) =
+            // log (sprintfn "Init scopes %A" scopes)
             dict <- Dictionary<string, NewScope>()
             reverseDict <- Dictionary<NewScope, ScopeInput>()
             dict.Add("any", anyScope)
             dict.Add("all", anyScope)
             dict.Add("no_scope", anyScope)
             dict.Add("invalid_scope", invalidScope)
+            reverseDict.Add(anyScope, anyScopeInput)
+            reverseDict.Add(invalidScope, invalidScopeInput)
             let mutable nextByte = 2uy
             let addScope (newScope : ScopeInput) =
                 let newID = nextByte
@@ -165,12 +170,16 @@ module rec NewScope =
             scopes |> List.iter addScope
         let parseScope() =
             (fun (x : string) ->
-            let found, value = dict.TryGetValue x
+            let found, value = dict.TryGetValue (x.ToLower())
             if found
             then value
-            else log (sprintf "Unexpected scope %O %A" x (reverseDict.Keys |> List.ofSeq) ); anyScope
+            else log (sprintf "Unexpected scope %O" x ); anyScope
             )
-        member this.GetName(scope : NewScope) = reverseDict.[scope].name
+        member this.GetName(scope : NewScope) = 
+            let found, value = reverseDict.TryGetValue scope
+            if found
+            then value.name
+            else log (sprintf "Unexpected scope %O" scope.tag); ""
         member this.AllScopes = reverseDict.Keys |> List.ofSeq
         member this.AnyScope = anyScope
         member this.InvalidScope = invalidScope
