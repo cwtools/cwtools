@@ -140,18 +140,20 @@ module rec NewScope =
     open CWTools.Utilities.Utils
     type ScopeInput = {
         name : string
-        inputs : string list
+        aliases : string list
     }
     type ScopeWrapper = byte
         // override x.ToString() =
-    type ScopeManager(scopes : ScopeInput list) =
+    type ScopeManager() =
+        let mutable initialized = false
         let mutable dict = Dictionary<string, NewScope>()
         let mutable reverseDict = Dictionary<NewScope, ScopeInput>()
         let anyScope = NewScope(0uy)
-        let anyScopeInput = { ScopeInput.name = "Any"; inputs = ["any"; "all"; "no_scope"] }
+        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"] }
         let invalidScope = NewScope(1uy)
-        let invalidScopeInput = { ScopeInput.name = "Invalid"; inputs = ["invalid_scope"]}
+        let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]}
         let init(scopes : ScopeInput list) =
+            initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
             dict <- Dictionary<string, NewScope>()
             reverseDict <- Dictionary<NewScope, ScopeInput>()
@@ -165,17 +167,18 @@ module rec NewScope =
             let addScope (newScope : ScopeInput) =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
-                newScope.inputs |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
+                newScope.aliases |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
                 reverseDict.Add(NewScope(newID), newScope)
             scopes |> List.iter addScope
         let parseScope() =
+            if not initialized then eprintfn "Error: parseScope was used without initializing scopes" else ()
             (fun (x : string) ->
             let found, value = dict.TryGetValue (x.ToLower())
             if found
             then value
             else log (sprintf "Unexpected scope %O" x ); anyScope
             )
-        member this.GetName(scope : NewScope) = 
+        member this.GetName(scope : NewScope) =
             let found, value = reverseDict.TryGetValue scope
             if found
             then value.name
@@ -192,7 +195,7 @@ module rec NewScope =
     //     |x -> [parseScope x]
 
 
-    let scopeManager = ScopeManager([])
+    let scopeManager = ScopeManager()
     type NewScope(tag : byte) =
         // struct
         // val tag: byte

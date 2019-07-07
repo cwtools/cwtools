@@ -96,7 +96,7 @@ module STL =
 // event_target:
 // parameter:
     let defaultDesc = "Scope (/context) switch"
-    let scopedEffects = [
+    let scopedEffects() = [
         ScopedEffect("space_owner", [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("overlord", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("defender", [scopeManager.ParseScope() "War"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
@@ -180,7 +180,7 @@ module STL =
 // any/every/random_pop_faction
 // any/every/random_playable_country
 // any/every/random_subject
-    let effectInnerScopes =[
+    let effectInnerScopes() =[
         //These are from blackninja9939
         "any_ship",  scopeManager.ParseScope() "Ship";
         "every_ship",  scopeManager.ParseScope() "Ship";
@@ -349,7 +349,7 @@ module STL =
         "last_created_species", scopeManager.ParseScope() "Species"
 
         ]
-    let effectInnerScopeFunctions = [
+    let effectInnerScopeFunctions() = [
         "if", None, []
         "while", None, []
         "any_neighbor_system", (Some (scopeManager.ParseScope() "GalacticObject")), ["ignore_hyperlanes"];
@@ -360,11 +360,11 @@ module STL =
     let addInnerScope (des : DocEffect list) =
         let withSimple =
              des |> List.map (fun de ->
-                match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (t) |_ -> None) with
+                match effectInnerScopes() |> List.tryPick (function | (n, t) when n = de.Name -> Some (t) |_ -> None) with
                 | Some t -> ScopedEffect(de, Some t, true, [], false, false) :> DocEffect
                 | None -> de)
         withSimple |> List.map (fun de ->
-                match effectInnerScopeFunctions |> List.tryPick (function | (n, t, s) when n = de.Name -> Some (t, s) |_ -> None) with
+                match effectInnerScopeFunctions() |> List.tryPick (function | (n, t, s) when n = de.Name -> Some (t, s) |_ -> None) with
                 | Some (t, s) -> ScopedEffect(de, t, false, s, false, false) :> DocEffect
                 | None -> de)
 

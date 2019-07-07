@@ -72,7 +72,7 @@ module EU4Constants =
         "Advisor",["advisor"]
     ]
     let defaultScopeInputs =
-        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.inputs = s })
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s })
 
 
     // let parseScope =

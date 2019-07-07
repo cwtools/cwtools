@@ -115,7 +115,7 @@ module STLConstants =
         "Archaeological Site",["archaeologicalsite"; "archaeological_site"]
     ]
     let defaultScopeInputs =
-        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.inputs = s })
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s })
 
     // let parseScope =
     //     (fun (x : string) ->
@@ -222,7 +222,7 @@ module STLConstants =
             | 524288 -> ModifierCategory.Resource
             |_ -> ModifierCategory.Any
         { tag = raw.tag; categories = [category]; core = true}
-    let categoryScopeList = [
+    let categoryScopeList() = [
         ModifierCategory.Army, [scopeManager.ParseScope() "Army"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
         ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
         ModifierCategory.Leader, [scopeManager.ParseScope() "Leader"; scopeManager.ParseScope() "Country"]
@@ -239,7 +239,7 @@ module STLConstants =
         ModifierCategory.Resource, [scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Leader"]
     ]
 
-    let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
+    let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
     type EntityType =
     |Agenda = 1
     |AmbientObjects = 2

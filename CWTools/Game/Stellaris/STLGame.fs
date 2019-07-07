@@ -43,7 +43,7 @@ module STLGameFunctions =
         validateLocalisationCommand localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
-            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let se = scopedEffects() |> List.map (fun e -> e :> Effect)
             let vt = game.Settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
         let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
@@ -53,7 +53,7 @@ module STLGameFunctions =
 
     let updateScriptedEffects (game : GameObject) =
         let vanillaEffects =
-            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let se = scopedEffects() |> List.map (fun e -> e :> Effect)
             let ve = game.Settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ ve
         let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
@@ -108,7 +108,7 @@ module STLGameFunctions =
     let addModifiersWithScopes (lookup : Lookup<_,_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
-                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
+                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
                                     |> List.map Set.ofList
                                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false}
@@ -224,7 +224,7 @@ type STLGame (settings : StellarisSettings) =
                                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                                        initialLookup = STLLookup()}
 
-        do scopeManager.ReInit(defaultScopeInputs)
+        do scopeManager.ReInit(settings.embedded.scopeDefinitions)
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules

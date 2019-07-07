@@ -40,6 +40,7 @@ let emptyStellarisSettings (rootDirectory) = {
         cachedResourceData = []
         localisationCommands = []
         eventTargetLinks = []
+        scopeDefinitions = defaultScopeInputs
     }
     scriptFolders = None
     excludeGlobPatterns = None

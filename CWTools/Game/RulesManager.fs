@@ -7,6 +7,7 @@ open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
 open CWTools.Rules.RulesHelpers
 open System.IO
+open CWTools.Common.NewScope
 type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
@@ -23,6 +24,7 @@ type EmbeddedSettings<'S,'M when 'S : comparison> = {
     cachedResourceData : (Resource * Entity) list
     localisationCommands : (string * ('S list)) list
     eventTargetLinks : EventTargetLink<'S> list
+    scopeDefinitions : ScopeInput list
 }
 
 type RuleManagerSettings<'S, 'M, 'T, 'L when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData and 'L :> Lookup<'S, 'M>> = {

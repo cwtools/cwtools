@@ -68,7 +68,7 @@ module STLValidation =
 
 
     let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
-        match List.tryFind (fun (c, _) -> c = cat) categoryScopeList, scope with
+        match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
         |None, _ -> OK
         |Some _, s when s = scopeManager.AnyScope -> OK
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
@@ -378,7 +378,7 @@ module STLValidation =
             // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))
 
     let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
-        match List.tryFind (fun (c, _) -> c = cat) categoryScopeList, scope with
+        match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
         |None, _ -> OK
         |Some _, s when s = scopeManager.AnyScope -> OK
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]

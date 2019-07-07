@@ -176,7 +176,7 @@ type EU4Game(settings : EU4Settings) =
                         embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                         initialLookup = EU4Lookup()
                         }
-    do scopeManager.ReInit(defaultScopeInputs)
+    do scopeManager.ReInit(settings.embedded.scopeDefinitions)
     let rulesManagerSettings = {
         rulesSettings = settings.rules
         parseScope = scopeManager.ParseScope()

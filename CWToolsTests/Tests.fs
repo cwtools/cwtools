@@ -44,6 +44,7 @@ let emptyStellarisSettings (rootDirectory) = {
         cachedResourceData = []
         localisationCommands = []
         eventTargetLinks = []
+        scopeDefinitions = []
     }
     scriptFolders = None
     excludeGlobPatterns = None
@@ -66,6 +67,7 @@ let emptyImperatorSettings (rootDirectory) = {
         cachedResourceData = []
         localisationCommands = []
         eventTargetLinks = []
+        scopeDefinitions = []
     }
     scriptFolders = None
     excludeGlobPatterns = None
@@ -278,7 +280,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks (scopeManager.AnyScope) (scopeManager.ParseScope()) (scopeManager.AllScopes) fn ft)
-                                    |> Option.defaultValue (Scopes.STL.scopedEffects |> List.map SimpleLink)
+                                    |> Option.defaultValue (Scopes.STL.scopedEffects() |> List.map SimpleLink)
                 let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
                 let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
                 let settings = emptyStellarisSettings folder
@@ -298,6 +300,9 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
                 let effects = JominiParser.parseEffectFilesRes "./testfiles/configtests/rulestests/IR/effects.log" |> CWTools.Parser.JominiParser.processEffects IRConstants.parseScopes
                 eprintfn "testtest %A" triggers
+                configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                            |> (fun f -> UtilityParser.initializeScopes f None )
+
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks IRConstants.Scope.Any IRConstants.parseScope IRConstants.allScopes fn ft)

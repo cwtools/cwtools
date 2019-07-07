@@ -3,6 +3,8 @@ open CWTools.Process
 open CWTools.Common
 open FParsec
 open CWTools.Utilities.Utils
+open CWTools.Process.STLProcess
+open CWTools.Common.NewScope
 
 module UtilityParser =
     let parseLink (anyScope) (parseScope) (allScopes) (node : Node) =
@@ -44,3 +46,31 @@ module UtilityParser =
             root.Child "links"
                 |> Option.map (fun l -> l.Children |> List.map (parseLink anyScope parseScope allScopes))
                 |> Option.defaultValue []
+
+    let parseScopeDef (node : Node) =
+        let name = node.Key
+        let aliases = node.Child "aliases" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq)
+                                          |> Option.defaultValue []
+        { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases }
+
+
+    let loadScopeDefinitions filename fileString =
+        let parsed = CKParser.parseString fileString filename
+        match parsed with
+        | Failure(e, _, _) -> log (sprintf "scopedefinitions file %s failed with %s" filename e); ([])
+        | Success(s,_,_) ->
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            root.Child "scopes"
+                |> Option.map (fun c -> c.Children |> List.map parseScopeDef)
+                |> Option.defaultValue []
+
+    let initializeScopes configFile fallbackScopes =
+        let scopes =
+            match configFile with
+            | Some (filename, fileString) -> loadScopeDefinitions filename fileString
+            | None -> []
+        let fallbackScopes =
+            match scopes, fallbackScopes with
+            | [], Some fallbackScopes -> fallbackScopes
+            | _ -> scopes
+        scopeManager.ReInit(fallbackScopes)
