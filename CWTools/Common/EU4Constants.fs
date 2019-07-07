@@ -59,20 +59,20 @@ module EU4Constants =
     //         ]
     // let allScopesSet = allScopes |> Set.ofList
     let defaultScopes = [
-        "Country", ["country"]
-        "Province", ["province"]
-        "Trade Node", ["trade_node"; "tradenode"]
-        "Unit", ["unit"]
-        "Monarch", ["monarch"]
-        "Heir",["heir"]
-        "Consort",["consort"]
-        "Rebel Faction",["rebel_faction"]
-        "Religion",["religion"]
-        "Culture",["culture"]
-        "Advisor",["advisor"]
+        "Country", ["country"], []
+        "Province", ["province"], []
+        "Trade Node", ["trade_node"; "tradenode"], ["province"]
+        "Unit", ["unit"], []
+        "Monarch", ["monarch"], []
+        "Heir",["heir"], []
+        "Consort",["consort"], []
+        "Rebel Faction",["rebel_faction"], []
+        "Religion",["religion"], []
+        "Culture",["culture"], []
+        "Advisor",["advisor"], []
     ]
     let defaultScopeInputs =
-        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s })
+        defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss })
 
 
     // let parseScope =

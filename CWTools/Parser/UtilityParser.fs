@@ -51,7 +51,9 @@ module UtilityParser =
         let name = node.Key
         let aliases = node.Child "aliases" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq)
                                           |> Option.defaultValue []
-        { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases }
+        let subscopes = node.Child "is_subscope_of" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq)
+                                          |> Option.defaultValue []
+        { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases; NewScope.ScopeInput.isSubscopeOf = subscopes }
 
 
     let loadScopeDefinitions filename fileString =

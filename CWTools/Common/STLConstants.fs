@@ -115,7 +115,7 @@ module STLConstants =
         "Archaeological Site",["archaeologicalsite"; "archaeological_site"]
     ]
     let defaultScopeInputs =
-        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s })
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []})
 
     // let parseScope =
     //     (fun (x : string) ->

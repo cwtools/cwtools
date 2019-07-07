@@ -141,6 +141,7 @@ module rec NewScope =
     type ScopeInput = {
         name : string
         aliases : string list
+        isSubscopeOf : string list
     }
     type ScopeWrapper = byte
         // override x.ToString() =
@@ -148,10 +149,20 @@ module rec NewScope =
         let mutable initialized = false
         let mutable dict = Dictionary<string, NewScope>()
         let mutable reverseDict = Dictionary<NewScope, ScopeInput>()
+        let mutable complexEquality = false
+        let mutable matchesSet = Set<NewScope * NewScope>(Seq.empty)
         let anyScope = NewScope(0uy)
-        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"] }
+        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"]; isSubscopeOf = [] }
         let invalidScope = NewScope(1uy)
-        let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]}
+        let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]; isSubscopeOf = []}
+        let parseScope() =
+            if not initialized then eprintfn "Error: parseScope was used without initializing scopes" else ()
+            (fun (x : string) ->
+            let found, value = dict.TryGetValue (x.ToLower())
+            if found
+            then value
+            else log (sprintf "Unexpected scope %O" x ); anyScope
+            )
         let init(scopes : ScopeInput list) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
@@ -170,14 +181,10 @@ module rec NewScope =
                 newScope.aliases |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
                 reverseDict.Add(NewScope(newID), newScope)
             scopes |> List.iter addScope
-        let parseScope() =
-            if not initialized then eprintfn "Error: parseScope was used without initializing scopes" else ()
-            (fun (x : string) ->
-            let found, value = dict.TryGetValue (x.ToLower())
-            if found
-            then value
-            else log (sprintf "Unexpected scope %O" x ); anyScope
-            )
+            let addScopeSubset (newScope : ScopeInput) =
+                newScope.isSubscopeOf |> List.iter (fun ss -> matchesSet <- (Set.add (parseScope() (newScope.aliases |> List.head), parseScope() ss) matchesSet))
+            scopes |> List.iter addScopeSubset
+            if Set.isEmpty matchesSet then () else complexEquality <- true
         member this.GetName(scope : NewScope) =
             let found, value = reverseDict.TryGetValue scope
             if found
@@ -189,6 +196,21 @@ module rec NewScope =
         member this.ParseScope = parseScope
         member this.ParseScopes = function | "all" -> this.AllScopes | x -> [this.ParseScope() x]
         member this.ReInit(scopes : ScopeInput list) = init(scopes)
+        member this.MatchesScope (source : NewScope) (target : NewScope) =
+            if not complexEquality
+            then
+                match source, target with
+                | x, _
+                | _, x when x = anyScope-> true
+                | x, y -> x = y
+            else
+                match Set.contains (source, target) matchesSet ,source, target with
+                | true, _, _ -> true
+                | _, x, _
+                | _, _, x when x = anyScope -> true
+                | _, x, y -> x = y
+
+
     // let parseScopes =
     //     function
     //     |"all" -> allScopes
@@ -210,9 +232,9 @@ module rec NewScope =
         override x.GetHashCode() = tag.GetHashCode()
         interface IComparable with
             member this.CompareTo target =
-            match target with
-            | :? NewScope as t -> tag.CompareTo t.tag
-            | _ -> 0
+                match target with
+                | :? NewScope as t -> tag.CompareTo t.tag
+                | _ -> 0
         interface IScope<NewScope> with
             member this.AnyScope = scopeManager.AnyScope
             member this.MatchesScope target =
