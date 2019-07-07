@@ -198,11 +198,11 @@ module STLGameFunctions =
 
 
 
-type StellarisSettings = GameSettings<Modifier, Scope, STLLookup>
+type StellarisSettings = GameSetupSettings<Modifier, Scope, STLLookup>
 
 open STLGameFunctions
 open CWTools.Common.NewScope
-type STLGame (settings : StellarisSettings) =
+type STLGame (setupSettings : StellarisSettings) =
     let validationSettings = {
         validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                             validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
@@ -210,16 +210,42 @@ type STLGame (settings : StellarisSettings) =
                             valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"; validatePreTriggers, "pre"]
         experimentalValidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
         heavyExperimentalValidators = [getEventChains, "event chains"]
-        experimental = settings.validation.experimental
+        experimental = setupSettings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
         lookupValidators = [valAllModifiers, "mods"; valUniqueTypes, "uniques"]
-        useRules = settings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
-        debugRulesOnly = settings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
+        useRules = setupSettings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
+        debugRulesOnly = setupSettings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
         localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valTraditionLocCats
 
                                 ; valPolicies; valEffectLocs; valTriggerLocs;]
 
     }
+        let embeddedSettings =
+            match setupSettings.embedded with
+            | FromConfig ->
+                {
+                    triggers = []
+                    effects = []
+                    embeddedFiles = []
+                    modifiers = []
+                    cachedResourceData = []
+                    localisationCommands = []
+                    eventTargetLinks = []
+                    scopeDefinitions = []
+                }
+            | ManualSettings e -> e
+
+        let settings = {
+            rootDirectories = setupSettings.rootDirectories
+            excludeGlobPatterns = setupSettings.excludeGlobPatterns
+            embedded = embeddedSettings
+            GameSettings.rules = setupSettings.rules
+            validation = setupSettings.validation
+            scriptFolders = setupSettings.scriptFolders
+            modFilter = setupSettings.modFilter
+            initialLookup = STLLookup()
+
+        }
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
                                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                                        initialLookup = STLLookup()}

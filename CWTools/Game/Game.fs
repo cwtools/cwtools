@@ -26,6 +26,21 @@ type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :>
     initialLookup : 'L
 }
 
+type EmbeddedSetupSettings<'S, 'M when 'S : comparison> =
+    | FromConfig
+    | ManualSettings of EmbeddedSettings<'S, 'M>
+
+type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
+    rootDirectories : WorkspaceDirectory list
+    embedded : EmbeddedSetupSettings<'S, 'M>
+    validation : ValidationSettings
+    rules : RulesSettings option
+    scriptFolders : string list option
+    excludeGlobPatterns : string list option
+    modFilter : string option
+}
+
+
 type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier
                     and 'L :> Lookup<'S, 'M>>
     (settings : GameSettings<'M, 'S, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
