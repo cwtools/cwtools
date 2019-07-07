@@ -146,12 +146,4 @@ namespace CWTools.Rules
               RootRule<'a> list * TypeDefinition<'a> list * EnumDefinition list *
               ComplexEnumDef list * (string * string list) list
         when 'a : equality
-    val createStarbase : NewRule<Common.STLConstants.Scope>
-    val createStarbaseAlias : RootRule<Common.STLConstants.Scope>
-    val createStarbaseEnums : Map<string,(string * string list)>
-    val createStarbaseTypeDef : TypeDefinition<'a>
-    val building : NewRule<Common.STLConstants.Scope>
-    val shipsize : NewRule<Common.STLConstants.Scope>
-    val shipBehaviorType : TypeDefinition<'a>
-    val shipSizeType : TypeDefinition<'a>
   end

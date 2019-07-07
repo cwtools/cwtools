@@ -44,7 +44,7 @@ let emptyStellarisSettings (rootDirectory) = {
         cachedResourceData = []
         localisationCommands = []
         eventTargetLinks = []
-        scopeDefinitions = []
+        scopeDefinitions = defaultScopeInputs
     }
     scriptFolders = None
     excludeGlobPatterns = None
@@ -169,6 +169,7 @@ let tests =
                 let configtext = ["./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt"]
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false} }
+                UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
                 let parseErrors = stl.ParserErrors()
                 let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k) -> n)
@@ -197,6 +198,7 @@ let tests =
                 let configtext = ["./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt"]
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
                 let locCommands = STLParser.loadLocCommands "./testfiles/localisationtests/test.cwt" (File.ReadAllText "./testfiles/localisationtests/test.cwt")
+                UtilityParser.initializeScopes None (Some defaultScopeInputs)
 
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles]; localisationCommands = locCommands };
@@ -277,6 +279,9 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         let (game : IGame), errors, testVals, completionVals, parseErrors =
             if stl
             then
+                configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+
                 let eventTargetLinks =
                             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks (scopeManager.AnyScope) (scopeManager.ParseScope()) (scopeManager.AllScopes) fn ft)
@@ -381,6 +386,7 @@ let specialtests =
             (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
             let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
             let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
+            UtilityParser.initializeScopes None (Some defaultScopeInputs)
             let stl = STLGame({settings with embedded = {settings.embedded with modifiers = modifiers}}) :> IGame<STLComputedData, Scope, Modifier>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
@@ -471,6 +477,7 @@ let embeddedTests =
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
         let settingsE = { settings with embedded = { settings.embedded with embeddedFiles = filelist; cachedResourceData = cached };}
+        UtilityParser.initializeScopes None (Some defaultScopeInputs)
 
         let stlE = STLGame(settingsE) :> IGame<STLComputedData, Scope, Modifier>
         let stlNE = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
@@ -516,6 +523,7 @@ let overwriteTests =
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
+        UtilityParser.initializeScopes None (Some defaultScopeInputs)
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
