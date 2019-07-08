@@ -551,13 +551,16 @@ let testsv =
 let testsConfig =
     testList "full config" [
         testCase "basic" <| fun () ->
-            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
+            let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
+
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
-            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            // let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
+            // let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
+            let settings = { settings with embedded = FromConfig ([], []);
+                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
             //let stl = STLGame(folder, Files(scopeManager.ParseScope() "All"), "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
@@ -573,13 +576,15 @@ let testsConfig =
             Expect.sequenceEqual suggestions expected "Completion should match"
 
         testCase "basic with config load" <| fun () ->
-            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
+            let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
-            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            // let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
+            // let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
+            let settings = { settings with embedded = FromConfig ([], []);
+                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
             let input =    "ship_size = {\n\
@@ -593,13 +598,15 @@ let testsConfig =
             Expect.sequenceEqual suggestions expected "Completion should match"
 
         testCase "shipsize prerequisits" <| fun () ->
-            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
+            let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
-            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            // let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
+            // let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
+            let settings = { settings with embedded = FromConfig ([], []);
+                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
             let input =    "ship_size = {\n\
@@ -613,13 +620,15 @@ let testsConfig =
             Expect.sequenceEqual suggestions expected "Completion should match"
 
         testCase "shipsize enum" <| fun () ->
-            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
+            let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
             let folder = "./testfiles/configtests/completiontests"
-            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
-            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            // let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
+            // let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
-                                            rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
+            let settings = { settings with embedded = FromConfig ([], []);
+                                            rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
             let input =    "ship_size = {\n\

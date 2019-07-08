@@ -272,11 +272,12 @@ type STLGame (setupSettings : StellarisSettings) =
             initialLookup = STLLookup()
 
         }
+        do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
                                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                                        initialLookup = STLLookup()}
 
-        do scopeManager.ReInit(settings.embedded.scopeDefinitions)
+        // do scopeManager.ReInit(settings.embedded.scopeDefinitions)
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules

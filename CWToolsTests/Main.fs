@@ -85,7 +85,7 @@ let perf2(b) =
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest2/"
-    let settings = {settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects};
+    let settings = {settings with embedded = FromConfig (configs, []);
                                     rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false; debugMode = false}}
     let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 

@@ -166,6 +166,7 @@ let tests =
     testList "localisation" [
         testList "no loc" [
                 let configtext = ["./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt"]
+                let configtext = ("./testfiles/localisationtests/localisation.cwt", File.ReadAllText "./testfiles/localisationtests/localisation.cwt")::configtext
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false} }
                 // UtilityParser.initializeScopes None (Some defaultScopeInputs)
@@ -195,6 +196,7 @@ let tests =
             ];
             testList "with loc" [
                 let configtext = ["./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt"]
+                let configtext = ("./testfiles/localisationtests/localisation.cwt", File.ReadAllText "./testfiles/localisationtests/localisation.cwt")::configtext
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
                 // let locCommands = STLParser.loadLocCommands "./testfiles/localisationtests/test.cwt" (File.ReadAllText "./testfiles/localisationtests/test.cwt")
                 // UtilityParser.initializeScopes None (Some defaultScopeInputs)
@@ -381,13 +383,14 @@ let irSubfolderTests = testList "validation ir" (testSubdirectories false "./tes
 let specialtests =
     testList "log" [
         testCase "modifiers" <| fun () ->
-            let configtext = ("./testfiles/scriptedorstatictest/setup.log", File.ReadAllText "./testfiles/scriptedorstatictest/setup.log")::configtext
-            // let modfile = SetupLogParser.parseLogsFile "./testfiles/scriptedorstatictest/setup.log"
-            // (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
-            // let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
-            // let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
+            let configtext = [("./testfiles/scriptedorstatictest/setup.log", File.ReadAllText "./testfiles/scriptedorstatictest/setup.log")]
+            let modfile = SetupLogParser.parseLogsFile "./testfiles/scriptedorstatictest/setup.log"
+                        // (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
+            let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
+            let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
             // UtilityParser.initializeScopes None (Some defaultScopeInputs)
-            let stl = STLGame({settings with rules = {}}) :> IGame<STLComputedData, Scope, Modifier>
+            let stl = STLGame({settings with rules = Some {  ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false   };
+                                                embedded = ManualSettings { emptyEmbeddedSettings with modifiers = modifiers; scopeDefinitions = defaultScopeInputs}}) :> IGame<STLComputedData, Scope, Modifier>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
             Expect.equal (stl.StaticModifiers()) exp ""
@@ -476,8 +479,8 @@ let embeddedTests =
 
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
-        let settingsE = { settings with embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached };}
-        UtilityParser.initializeScopes None (Some defaultScopeInputs)
+        let settingsE = { settings with embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached; scopeDefinitions = defaultScopeInputs };}
+        // UtilityParser.initializeScopes None (Some defaultScopeInputs)
 
         let stlE = STLGame(settingsE) :> IGame<STLComputedData, Scope, Modifier>
         let stlNE = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
@@ -521,9 +524,9 @@ let overwriteTests =
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
-        let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };
+        let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles; scopeDefinitions = defaultScopeInputs };
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-        UtilityParser.initializeScopes None (Some defaultScopeInputs)
+        // UtilityParser.initializeScopes None (Some defaultScopeInputs)
         let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
