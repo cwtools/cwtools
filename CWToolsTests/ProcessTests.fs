@@ -42,7 +42,11 @@ let emptyStellarisSettings (rootDirectory) = {
         langs = [STL STLLang.English]
     }
     rules = None
-    embedded = {
+    embedded = FromConfig ([], [])
+    scriptFolders = None
+    excludeGlobPatterns = None
+}
+let emptyEmbeddedSettings = {
         triggers = []
         effects = []
         modifiers = []
@@ -50,13 +54,8 @@ let emptyStellarisSettings (rootDirectory) = {
         cachedResourceData = []
         localisationCommands = []
         eventTargetLinks = []
-        scopeDefinitions = defaultScopeInputs
-    }
-    scriptFolders = None
-    excludeGlobPatterns = None
-    initialLookup = STLLookup()
+        scopeDefinitions = []
 }
-
 let createStarbase() =
     let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)
     let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
@@ -557,7 +556,7 @@ let testsConfig =
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
             //let stl = STLGame(folder, Files(scopeManager.ParseScope() "All"), "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
@@ -579,7 +578,7 @@ let testsConfig =
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
@@ -599,7 +598,7 @@ let testsConfig =
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 
@@ -619,7 +618,7 @@ let testsConfig =
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let settings = emptyStellarisSettings folder
-            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+            let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true; debugRulesOnly = false; debugMode = false}}
             let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 

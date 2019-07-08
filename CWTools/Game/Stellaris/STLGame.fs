@@ -27,6 +27,8 @@ open CWTools.Games.LanguageFeatures
 open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open FSharp.Collections.ParallelSeq
+open System.IO
+open CWTools.Common.NewScope
 
 module STLGameFunctions =
     type GameObject = GameObject<Scope, Modifier, STLComputedData, STLLookup>
@@ -196,6 +198,39 @@ module STLGameFunctions =
             updateModifiers(game)
             updateTechnologies(game)
 
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+        let scopeDefinitions =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+        let triggers, effects =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "trigger_docs.log")
+                    |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
+                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
+                    |> Option.defaultWith (fun () -> eprintfn "trigger_docs.log was not found in stellaris config"; ([], []))
+        let modifiers =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
+                    |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
+                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
+                    |> Option.defaultWith (fun () -> eprintfn "setup.log was not found in stellaris config"; ([]))
+        let stlLocCommands =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
+                    |> Option.map (fun (fn, ft) -> STLParser.loadLocCommands fn ft)
+                    |> Option.defaultValue []
+        let stlEventTargetLinks =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
+                    |> Option.defaultValue (CWTools.Process.Scopes.STL.scopedEffects() |> List.map SimpleLink)
+
+        {
+            triggers = triggers
+            effects = effects
+            modifiers = modifiers
+            embeddedFiles = embeddedFiles
+            cachedResourceData = cachedResourceData
+            localisationCommands = stlLocCommands
+            eventTargetLinks = stlEventTargetLinks
+            scopeDefinitions = scopeDefinitions
+        }
 
 
 type StellarisSettings = GameSetupSettings<Modifier, Scope, STLLookup>
@@ -222,17 +257,8 @@ type STLGame (setupSettings : StellarisSettings) =
     }
         let embeddedSettings =
             match setupSettings.embedded with
-            | FromConfig ->
-                {
-                    triggers = []
-                    effects = []
-                    embeddedFiles = []
-                    modifiers = []
-                    cachedResourceData = []
-                    localisationCommands = []
-                    eventTargetLinks = []
-                    scopeDefinitions = []
-                }
+            | FromConfig (ef, crd) ->
+                createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
             | ManualSettings e -> e
 
         let settings = {

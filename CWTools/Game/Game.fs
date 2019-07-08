@@ -27,7 +27,7 @@ type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :>
 }
 
 type EmbeddedSetupSettings<'S, 'M when 'S : comparison> =
-    | FromConfig
+    | FromConfig of embeddedFiles : (string * string) list * cachedResourceData : (Resource * Entity) list
     | ManualSettings of EmbeddedSettings<'S, 'M>
 
 type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {

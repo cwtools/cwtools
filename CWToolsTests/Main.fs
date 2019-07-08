@@ -23,6 +23,16 @@ open System.Globalization
 open CWTools.Common.STLConstants
 open CWTools.Common.NewScope
 
+let emptyEmbeddedSettings = {
+        triggers = []
+        effects = []
+        modifiers = []
+        embeddedFiles = []
+        cachedResourceData = []
+        localisationCommands = []
+        eventTargetLinks = []
+        scopeDefinitions = []
+}
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectories = [{ name = "test"; path = rootDirectory;}]
     modFilter = None
@@ -32,19 +42,9 @@ let emptyStellarisSettings (rootDirectory) = {
         langs = [STL STLLang.English]
     }
     rules = None
-    embedded = {
-        triggers = []
-        effects = []
-        modifiers = []
-        embeddedFiles = []
-        cachedResourceData = []
-        localisationCommands = []
-        eventTargetLinks = []
-        scopeDefinitions = defaultScopeInputs
-    }
+    embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
-    initialLookup = STLLookup()
 }
 let rec getAllFolders dirs =
     if Seq.isEmpty dirs then Seq.empty else
@@ -64,7 +64,7 @@ let perf(b) =
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest/"
-    let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
+    let settings = {settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false; debugMode = false}}
     let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
@@ -85,7 +85,7 @@ let perf2(b) =
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
     let settings = emptyStellarisSettings "./testfiles/performancetest2/"
-    let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
+    let settings = {settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false; debugMode = false}}
     let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
 

@@ -76,3 +76,4 @@ module UtilityParser =
             | [], Some fallbackScopes -> fallbackScopes
             | _ -> scopes
         scopeManager.ReInit(fallbackScopes)
+        fallbackScopes
