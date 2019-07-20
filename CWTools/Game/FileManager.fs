@@ -226,7 +226,8 @@ module Files =
                 |".gui"
                 |".gfx"
                 |".sfx"
-                |".asset" ->
+                |".asset"
+                |".map" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(workspaceDir.normalisedPath) + (workspaceDir.normalisedPathLength) + 1)
                     if (filepath |> FileInfo).Length > 2000000L then None else
                     Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText(filepath, encoding); validate = true})
