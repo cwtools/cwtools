@@ -357,11 +357,11 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 then validateTypeSkipRoot t tail pathtail
                 else []
         let items =
-            match path |> List.last, path.Length with
-            |(_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@x") ->
+            match path |> List.tryLast, path.Length with
+            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@x") ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
-            |(_, _, _, CompletionContext.NodeLHS), 1 ->
+            |Some (_, _, _, CompletionContext.NodeLHS), 1 ->
                 []
             | _ ->
                 pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)

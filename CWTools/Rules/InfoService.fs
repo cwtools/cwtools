@@ -235,6 +235,9 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             match typerules, typedef.type_per_file with
             |[(n, (NodeRule (l, rs), o))], false ->
                 foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
+            |[(n, (NodeRule (l, rs), o))], true ->
+                Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
+
             |_ -> None
         |None, Some typedef when typedef.type_per_file ->
             let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)

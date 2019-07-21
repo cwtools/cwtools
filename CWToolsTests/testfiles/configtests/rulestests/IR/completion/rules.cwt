@@ -39,6 +39,13 @@ type_per_file = {
     test = int
     ## cardinality = 0..inf
     test_enum = enum[test_enum]
+    ## cardinality = 0..inf
+    test_inner = {
+        ## cardinality = 0..inf
+        test2 = int
+        ## cardinality = 0..inf
+        test_enum2 = enum[test_enum]
+    }
 }
 
 skip_root = {
