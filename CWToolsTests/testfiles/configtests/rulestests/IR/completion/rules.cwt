@@ -2,6 +2,14 @@ types = {
     type[event] = {
         path = "game/events"
     }
+    type[type_per_file] = {
+        path = "game/common/script_values"
+        type_per_file = yes
+    }
+    type[skip_root] = {
+        path = "game/common/ship_sizes"
+        skip_root_key = skip_me
+    }
 }
 
 event = {
@@ -25,3 +33,24 @@ event = {
 
 ## cardinality = 0..inf
 alias[effect:scope_field] = { alias_name[effect] = alias_match_left[effect] }
+
+type_per_file = {
+    ## cardinality = 0..inf
+    test = int
+    ## cardinality = 0..inf
+    test_enum = enum[test_enum]
+}
+
+skip_root = {
+    ## cardinality = 0..inf
+    test = int
+    ## cardinality = 0..inf
+    test_enum = enum[test_enum]
+}
+
+enums = {
+    enum[test_enum] = {
+        one
+        two
+    }
+}

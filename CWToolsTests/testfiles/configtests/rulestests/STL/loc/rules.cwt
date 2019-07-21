@@ -17,6 +17,10 @@ types = {
             subtype = yes
         }
     }
+    type[type_per_file] = {
+        path = "game/common/anomalies"
+        type_per_file = yes
+    }
     type[event] = {
         path = "game/events"
     }
@@ -44,6 +48,17 @@ event = {
         localisation = {
             ## cardinality = 0..inf
             scalar = scalar
-        }  
+        }
+    }
+}
+
+type_per_file = {
+    ## cardinality = 0..inf
+    type_per_file_test = <ship_size>
+
+    ## cardinality = 0..inf
+    test = {
+        ## cardinality = 0..inf
+        localisation = scalar
     }
 }

@@ -1,0 +1,9 @@
+#error
+#error
+#error
+type_per_file_test = my_ship_no_loc
+type_per_file_test = my_ship
+test = {
+    #error
+    my_ship_fake = test
+}

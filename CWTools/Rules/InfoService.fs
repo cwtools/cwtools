@@ -209,14 +209,39 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\","/")
         let file = Path.GetFileName logicalpath
         let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
-        //log "%O %A %A" pos pathDir (typedefs |> List.tryHead)
+        // eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
+        // let rec skipRootKeySkipper
+        let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
+            match skipRootKey with
+            |(SpecificKey key) -> n.Key == key
+            |(AnyKey) -> true
+            |(MultipleKeys (keys, shouldMatch)) ->
+                (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
+
+        let rec foldAtPosSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
+            match skipRootKeyStack with
+            |[] ->
+                if FieldValidators.typekeyfilter t n.Key
+                then Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC n) ((NodeRule (TypeMarkerField (n.KeyId.lower, t), rs), o)))
+                else None
+            |head::tail ->
+                if skiprootkey head n
+                then node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) |> Option.bind (foldAtPosSkipRoot rs o t tail acc)
+                else None
+
         match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t pathDir file) with
         |Some c, Some typedef ->
             let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
-            match typerules with
-            |[(n, (NodeRule (l, rs), o))] ->
-                Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC c) ((NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o)))
+            match typerules, typedef.type_per_file with
+            |[(n, (NodeRule (l, rs), o))], false ->
+                foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
             |_ -> None
+        |None, Some typedef when typedef.type_per_file ->
+            let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+            match typerules with
+            | [(n, (NodeRule (l, rs), o))] ->
+                Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
+            | _ -> None
         |_, _ -> None
 
     let getInfoAtPos (pos : pos) (entity : Entity) =
@@ -342,9 +367,11 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 else acc
         let infoServiceBase (n : Node) acc (t : TypeDefinition<_>) =
             let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
-            match typerules with
-            |[(_, (NodeRule (_, rs), o))] ->
+            match typerules, t.type_per_file with
+            |[(_, (NodeRule (_, rs), o))], false  ->
                 n.Children |> List.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
+            |[(_, (NodeRule (_, rs), o))], true  ->
+                infoServiceSkipRoot rs o t t.skipRootKey acc n
             |_ -> acc
         pathFilteredTypes |> List.fold (infoServiceBase node) acc
 
