@@ -146,7 +146,7 @@ type HOI4Settings = GameSettings<Modifier, Scope, HOI4Lookup>
 open HOI4GameFunctions
 type HOI4Game(settings : HOI4Settings) =
     let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; ]
+        validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect" ]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = settings.validation.experimental

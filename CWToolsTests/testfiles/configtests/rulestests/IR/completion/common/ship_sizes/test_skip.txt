@@ -1,0 +1,10 @@
+skip_me = {
+    test = {
+        test = 5
+        #@ 3 test_enum
+        test_enum = one
+        #error
+        #@ 13 two
+        test_enum = three
+    }
+}

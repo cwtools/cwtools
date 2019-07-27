@@ -340,23 +340,28 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
         let scoreFunction = scoreFunction allUsedKeys
         let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext) list) =
             let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
-            match skipRootKeyStack, path with
-            |_, [] ->
+            match skipRootKeyStack, t.type_per_file, path with
+            |_, false, [] ->
                 getCompletionFromPath scoreFunction typerules [] scopeContext
-            |[], (head, c, _, _)::tail ->
+            |_, true, (head, c, b, nt)::tail ->
+                // getCompletionFromPath scoreFunction typerules ((head, c, b, nt)::tail) scopeContext
+                getCompletionFromPath scoreFunction typerules ((t.name, 1, None, NodeRHS)::(head, c, b, nt)::tail) scopeContext
+            |_, true, [] ->
+                getCompletionFromPath scoreFunction typerules ([t.name, 1, None, NodeRHS]) scopeContext
+            |[], false, (head, c, _, _)::tail ->
                 if FieldValidators.typekeyfilter t head
                 then
                     getCompletionFromPath scoreFunction typerules ((t.name, c, None, NodeRHS)::tail) scopeContext else []
-            |head::tail, (pathhead, _, _,_)::pathtail ->
+            |head::tail, false, (pathhead, _, _,_)::pathtail ->
                 if skiprootkey head pathhead
                 then validateTypeSkipRoot t tail pathtail
                 else []
         let items =
-            match path |> List.last, path.Length with
-            |(_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@x") ->
+            match path |> List.tryLast, path.Length with
+            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@x") ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
-            |(_, _, _, CompletionContext.NodeLHS), 1 ->
+            |Some (_, _, _, CompletionContext.NodeLHS), 1 ->
                 []
             | _ ->
                 pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
