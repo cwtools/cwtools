@@ -283,7 +283,7 @@ type IRSettings = GameSettings<Modifier, Scope, IRLookup>
 open IRGameFunctions
 type IRGame(settings : IRSettings) =
     let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed";]
+        validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = false

@@ -38,6 +38,23 @@ module CommonValidation =
             (es.AllEffects <&!&> foldNode2 fNode fCombine OK)
             <&&>
             (es.AllTriggers <&!&> foldNode2 fNode fCombine OK)
+
+    let validateIfWithNoEffect : StructureValidator<_> =
+        fun _ es ->
+            let keyID = CWTools.Utilities.StringResource.stringManager.InternIdentifierToken "limit"
+            let keyIdIF = CWTools.Utilities.StringResource.stringManager.InternIdentifierToken "if"
+            let keyIdelIF = CWTools.Utilities.StringResource.stringManager.InternIdentifierToken "else_if"
+            let fNode = (fun (x : Node) children ->
+                if (x.KeyId = keyIdIF || x.KeyId = keyIdelIF) && (x.Values |> List.isEmpty) && (x.Children |> List.exists (fun c -> c.KeyId <> keyID) |> not)
+                then inv ErrorCodes.EmptyIf x <&&&> children
+                else children
+                )
+            let fCombine = (<&&>)
+            (es.AllEffects <&!&> foldNode2 fNode fCombine OK)
+            <&&>
+            (es.AllTriggers <&!&> foldNode2 fNode fCombine OK)
+
+
     let valUniqueTypes : LookupValidator<_, _, _> =
         (fun lu _ _ ->
             let types = lu.typeDefs |> List.filter (fun td -> td.unique)

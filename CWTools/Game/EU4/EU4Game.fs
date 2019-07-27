@@ -160,7 +160,7 @@ type EU4Settings = GameSettings<Modifier, Scope, EU4Lookup>
 open EU4GameFunctions
 type EU4Game(settings : EU4Settings) =
     let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"]
+        validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"; validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = false

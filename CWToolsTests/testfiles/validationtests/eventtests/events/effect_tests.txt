@@ -36,14 +36,16 @@ country_event = {
         #error
         OR = {
             else_if = {
-
+                set_country_flag = yes
             }
         }
         OR = {
             if = {
+                set_country_flag = yes
 
             }
             else_if = {
+                set_country_flag = yes
 
             }
             else = {
@@ -53,6 +55,7 @@ country_event = {
         #error
         OR = {
             if = {
+                set_country_flag = yes
 
             }
             else ={
@@ -79,12 +82,15 @@ country_event = {
                         }
                     }
                 }
+                set_country_flag = yes
+
             }
         }
         OR = {
             #error
             if = {
                 else_if = {
+                set_country_flag = yes
 
                 }
             }
@@ -111,6 +117,19 @@ country_event = {
                 AND = {
 
                 }
+            }
+        }
+    }
+}
+
+##Test if without any effects
+country_event = {
+    is_triggered_only = yes
+    immediate = {
+        #error
+        if = {
+            limit = {
+
             }
         }
     }
