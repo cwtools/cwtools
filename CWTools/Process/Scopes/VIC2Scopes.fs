@@ -3,14 +3,15 @@ namespace CWTools.Process.Scopes
 open CWTools.Common.VIC2Constants
 open CWTools.Common
 open CWTools.Process.Scopes
+open CWTools.Common.NewScope
 module VIC2 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
     let defaultContext =
-        { Root = Scope.Any; From = []; Scopes = [] }
+        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
     let noneContext =
-        { Root = Scope.InvalidScope; From = []; Scopes = [Scope.InvalidScope] }
+        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope]}
     let defaultDesc = "Scope (/context) switch"
 
 
@@ -63,15 +64,15 @@ module VIC2 =
     let changeScope = Scopes.createJominiChangeScope<Scope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
 
-    let scopedLocEffects = [
-        // ScopedEffect("Capital", [Scope.Country], Scope.Province, EffectType.Both, defaultDesc, "", true);
+    let scopedLocEffects() = [
+         ScopedEffect("Capital", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Province", EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Heir", [Scope.Country], Scope.Heir, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Location", [Scope.RebelFaction], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Monarch", [Scope.Country], Scope.Monarch, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
+        //ScopedEffect("Owner", [Scope.Province], Scope.Character, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("Religion", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Religion, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("SecondaryReligion", [Scope.Country], Scope.Religion, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("TradeCompany", [Scope.Country; Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
@@ -82,11 +83,11 @@ module VIC2 =
         // ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
     ]
-    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
+    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect))
 
 
-    let locPrimaryScopes =
-        let from = fun (s : ScopeContext<_>, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
+    let locPrimaryScopes() =
+        let from = fun (s : ScopeContext<_>, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
         [
         "This", id;
         "Root", fun (s : ScopeContext<_>, change) -> {s with Scopes = s.Root::s.Scopes}, true;
@@ -96,4 +97,4 @@ module VIC2 =
         "FromFromFromFrom", from >> from >> from >> from;
         ]
 
-    let localisationCommandValidator = Scopes.createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator() = Scopes.createLocalisationCommandValidator (locPrimaryScopes()) (scopedLocEffectsMap())

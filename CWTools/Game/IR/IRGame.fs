@@ -22,6 +22,8 @@ open CWTools.Validation.LocalisationString
 open CWTools.Process
 open System
 open CWTools.Games.Helpers
+open CWTools.Parser
+open CWTools.Common.NewScope
 
 module IRGameFunctions =
     type GameObject = GameObject<Scope, Modifier, IRComputedData, IRLookup>
@@ -30,14 +32,14 @@ module IRGameFunctions =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation localisationCommands eventtargets lookup.scriptedLoc definedvars
+        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand localisationCommands eventtargets lookup.scriptedLoc definedvars
+        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let globalLocalisation (game : GameObject) =
         // let locfiles =  resources.GetResources()
@@ -64,7 +66,7 @@ module IRGameFunctions =
     let addModifiersWithScopes (lookup : Lookup<_,_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
-                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
+                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
                                     |> List.map Set.ofList
                                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false}
@@ -279,9 +281,54 @@ module IRGameFunctions =
         // game.LocalisationManager.UpdateAllLocalisation()
         // updateTypeDef game game.Settings.rules
         // game.LocalisationManager.UpdateAllLocalisation()
-type IRSettings = GameSettings<Modifier, Scope, IRLookup>
+
+
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+        let scopeDefinitions =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+        let irMods =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
+                    |> Option.map (fun (fn, ft) -> IRParser.loadModifiers fn ft)
+                    |> Option.defaultValue []
+
+        let irLocCommands =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
+                    |> Option.map (fun (fn, ft) -> IRParser.loadLocCommands fn ft)
+                    |> Option.defaultValue []
+
+        let irEventTargetLinks =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
+                    |> Option.defaultValue (CWTools.Process.Scopes.IR.scopedEffects |> List.map SimpleLink)
+
+        let irEffects =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "effects.log")
+                    |> Option.bind (fun (fn, ft) -> JominiParser.parseEffectStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
+                    |> Option.map (JominiParser.processEffects (scopeManager.ParseScopes))
+                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in ir config"; ([]))
+
+        let irTriggers =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "triggers.log")
+                    |> Option.bind (fun (fn, ft) -> JominiParser.parseTriggerStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
+                    |> Option.map (JominiParser.processTriggers scopeManager.ParseScopes)
+                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in ir config"; ([]))
+
+
+        {
+            triggers = irTriggers
+            effects = irEffects
+            modifiers = irMods
+            embeddedFiles = embeddedFiles
+            cachedResourceData = cachedResourceData
+            localisationCommands = irLocCommands
+            eventTargetLinks = irEventTargetLinks
+            scopeDefinitions = scopeDefinitions
+        }
+
+type IRSettings = GameSetupSettings<Modifier, Scope, IRLookup>
 open IRGameFunctions
-type IRGame(settings : IRSettings) =
+type IRGame(setupSettings : IRSettings) =
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
@@ -293,18 +340,36 @@ type IRGame(settings : IRSettings) =
         debugRulesOnly = false
         localisationValidators = []
     }
+    let embeddedSettings =
+        match setupSettings.embedded with
+        | FromConfig (ef, crd) ->
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+        | ManualSettings e -> e
+
+    let settings = {
+        rootDirectories = setupSettings.rootDirectories
+        excludeGlobPatterns = setupSettings.excludeGlobPatterns
+        embedded = embeddedSettings
+        GameSettings.rules = setupSettings.rules
+        validation = setupSettings.validation
+        scriptFolders = setupSettings.scriptFolders
+        modFilter = setupSettings.modFilter
+        initialLookup = IRLookup()
+
+    }
+    do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
     let settings = {
         settings with
-            embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+            embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
             initialLookup = IRLookup()
             }
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
-        parseScope = parseScope
-        allScopes = allScopes
-        anyScope = Scope.Any
+        parseScope = scopeManager.ParseScope()
+        allScopes = scopeManager.AllScopes
+        anyScope = scopeManager.AnyScope
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = IR IRLang.English
@@ -364,7 +429,7 @@ type IRGame(settings : IRSettings) =
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
-        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text
+        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text

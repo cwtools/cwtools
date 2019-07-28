@@ -459,7 +459,7 @@ module STL =
         keys |> List.fold (fun acc k -> match acc with |Some e -> Some e |None -> inner k) None |> Option.defaultValue scopeManager.AllScopes
 
 
-    let scopedLocEffects = [
+    let scopedLocEffects() = [
         ScopedEffect("capital", scopeManager.AllScopes, scopeManager.ParseScope() "Planet", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("capital_scope", scopeManager.AllScopes, scopeManager.ParseScope() "Planet", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("system", scopeManager.AllScopes, scopeManager.ParseScope() "GalacticObject", EffectType.Link, defaultDesc, "", true);
@@ -478,10 +478,10 @@ module STL =
         ScopedEffect("overlord", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("space_owner", [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
     ]
-    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
+    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect))
 
 
-    let locPrimaryScopes =
+    let locPrimaryScopes() =
         let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
         let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
         [
@@ -500,4 +500,4 @@ module STL =
         "Third_party", id;
         ]
 
-    let localisationCommandValidator = Scopes.createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator() = Scopes.createLocalisationCommandValidator (locPrimaryScopes()) (scopedLocEffectsMap())

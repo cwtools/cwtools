@@ -3,93 +3,113 @@ namespace CWTools.Common
 open CWTools.Utilities.Utils
 
 module CK2Constants =
-    type Scope =
-        | Character
-        | Title
-        | Province
-        | Offmap
-        | War
-        | Siege
-        | Unit
-        | Religion
-        | Culture
-        | Society
-        | Artifact
-        | Bloodline
-        | Wonder
-        //Misc
-        | Any
-        | InvalidScope
-        override x.ToString() =
-            match x with
-            | Any -> "Any/Unknown"
-            | Character -> "Character"
-            | Title -> "Title"
-            | Province -> "Province"
-            | Offmap -> "Offmap"
-            | War -> "War"
-            | Siege -> "Siege"
-            | Unit -> "Unit"
-            | Religion -> "Religion"
-            | Culture -> "Culture"
-            | Society -> "Society"
-            | Artifact -> "Artifact"
-            | Bloodline -> "Bloodline"
-            | Wonder -> "Wonder"
-            | InvalidScope -> "InvalidScope"
+    // type Scope =
+    //     | Character
+    //     | Title
+    //     | Province
+    //     | Offmap
+    //     | War
+    //     | Siege
+    //     | Unit
+    //     | Religion
+    //     | Culture
+    //     | Society
+    //     | Artifact
+    //     | Bloodline
+    //     | Wonder
+    //     //Misc
+    //     | Any
+    //     | InvalidScope
+    //     override x.ToString() =
+    //         match x with
+    //         | Any -> "Any/Unknown"
+    //         | Character -> "Character"
+    //         | Title -> "Title"
+    //         | Province -> "Province"
+    //         | Offmap -> "Offmap"
+    //         | War -> "War"
+    //         | Siege -> "Siege"
+    //         | Unit -> "Unit"
+    //         | Religion -> "Religion"
+    //         | Culture -> "Culture"
+    //         | Society -> "Society"
+    //         | Artifact -> "Artifact"
+    //         | Bloodline -> "Bloodline"
+    //         | Wonder -> "Wonder"
+    //         | InvalidScope -> "InvalidScope"
 
-        static member AnyScope = Scope.Any
+    //     static member AnyScope = Scope.Any
 
-        interface IScope<Scope> with
-            member this.AnyScope = Scope.Any
-            member this.MatchesScope target =
-                match this, target with
-                | Scope.Any, _
-                | _, Scope.Any -> true
-                | _, _ -> this = target
+    //     interface IScope<Scope> with
+    //         member this.AnyScope = Scope.Any
+    //         member this.MatchesScope target =
+    //             match this, target with
+    //             | Scope.Any, _
+    //             | _, Scope.Any -> true
+    //             | _, _ -> this = target
 
-    let allScopes = [
-        Scope.Character;
-        Scope.Title;
-        Scope.Province;
-        Scope.Offmap;
-        Scope.War
-        Scope.Siege;
-        Scope.Unit;
-        Scope.Religion;
-        Scope.Culture;
-        Scope.Society;
-        Scope.Artifact;
-        Scope.Bloodline
-            ]
-    let allScopesSet = allScopes |> Set.ofList
-    let parseScope =
-        (fun (x : string) ->
-        x.ToLower()
-        |>
-            function
-                | "character" -> Scope.Character
-                | "title" -> Scope.Title
-                | "province" -> Scope.Province
-                | "offmap" -> Scope.Offmap
-                | "war" -> Scope.War
-                | "siege" -> Scope.Siege
-                | "unit" -> Scope.Unit
-                | "religion" -> Scope.Religion
-                | "culture" -> Scope.Culture
-                | "society" -> Scope.Society
-                | "artifact" -> Scope.Artifact
-                | "bloodline" -> Scope.Bloodline
-                | "wonder" -> Scope.Wonder
-                | "any" -> Scope.Any
-                | "all" -> Scope.Any
-                | "no_scope" -> Scope.Any
-                | x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
+    // let allScopes = [
+    //     Scope.Character;
+    //     Scope.Title;
+    //     Scope.Province;
+    //     Scope.Offmap;
+    //     Scope.War
+    //     Scope.Siege;
+    //     Scope.Unit;
+    //     Scope.Religion;
+    //     Scope.Culture;
+    //     Scope.Society;
+    //     Scope.Artifact;
+    //     Scope.Bloodline
+    //         ]
+    // let allScopesSet = allScopes |> Set.ofList
+    // let parseScope =
+    //     (fun (x : string) ->
+    //     x.ToLower()
+    //     |>
+    //         function
+    //             | "character" -> Scope.Character
+    //             | "title" -> Scope.Title
+    //             | "province" -> Scope.Province
+    //             | "offmap" -> Scope.Offmap
+    //             | "war" -> Scope.War
+    //             | "siege" -> Scope.Siege
+    //             | "unit" -> Scope.Unit
+    //             | "religion" -> Scope.Religion
+    //             | "culture" -> Scope.Culture
+    //             | "society" -> Scope.Society
+    //             | "artifact" -> Scope.Artifact
+    //             | "bloodline" -> Scope.Bloodline
+    //             | "wonder" -> Scope.Wonder
+    //             | "any" -> Scope.Any
+    //             | "all" -> Scope.Any
+    //             | "no_scope" -> Scope.Any
+    //             | x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
 
-    let parseScopes =
-        function
-        | "all" -> allScopes
-        | x -> [parseScope x]
+    // let parseScopes =
+    //     function
+    //     | "all" -> allScopes
+    //     | x -> [parseScope x]
+
+    type Scope = NewScope.NewScope
+
+    let defaultScopes = [
+        "Character", ["character"], []
+        "Title", ["title"], []
+        "Province", ["province"], []
+        "Offmap", ["offmap"], []
+        "War", ["war"], []
+        "Siege", ["siege"], []
+        "Unit", ["unit"], []
+        "Religion", ["religion"], []
+        "Culture", ["culture"], []
+        "Society", ["society"], []
+        "Artifact", ["artifact"], []
+        "Bloodline", ["bloodline"], []
+        "Wonder", ["wonder"], []
+    ]
+    let defaultScopeInputs =
+        defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss })
 
     type Effect = Effect<Scope>
 
@@ -112,13 +132,13 @@ module CK2Constants =
         interface IModifier with
             member this.Tag = this.tag
 
-    let categoryScopeList = [
-        ModifierCategory.Character, [Scope.Character];
-        ModifierCategory.Province, [Scope.Province];
-        ModifierCategory.Unit, [Scope.Province; Scope.Unit];
+    let categoryScopeList() = [
+        ModifierCategory.Character, [NewScope.scopeManager.ParseScope() "character"];
+        ModifierCategory.Province, [NewScope.scopeManager.ParseScope() "province"];
+        ModifierCategory.Unit, [NewScope.scopeManager.ParseScope() "province"; NewScope.scopeManager.ParseScope() "unit"];
         ModifierCategory.Any, [];
     ]
-    let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
+    let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
 
     let scriptFolders = [
         "common";

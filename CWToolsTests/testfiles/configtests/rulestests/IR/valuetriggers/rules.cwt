@@ -12,3 +12,16 @@ event = {
 
 ## cardinality = 1..5
 alias[trigger:citizen_happiness] = int
+
+# This is a hardcoded reference for value_field
+single_alias[range] = {
+    ## cardinality = 2..2
+    float
+}
+
+# This is a hardcoded reference for value_field
+single_alias[formula] = {
+    ## cardinality = 1..inf
+    alias_name[arithmetic_operation] = alias_match_left[arithmetic_operation]
+}
+

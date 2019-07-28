@@ -1,59 +1,70 @@
 namespace CWTools.Common
 
 open CWTools.Utilities.Utils
-
+open CWTools.Common.NewScope
 module HOI4Constants =
-    type Scope =
-        |State
-        |Country
-        |UnitLeader
-        //Modifier scopes
-        |Air
-        //Misc
-        |Any
-        |InvalidScope
-        override x.ToString() =
-            match x with
-            |UnitLeader -> "Unit leader"
-            |State -> "State"
-            |Air -> "Air"
-            |InvalidScope -> "Invalid Scope"
-            |Country -> "Country"
-            |Any -> "Any/Unknown"
-        static member AnyScope = Scope.Any
-        interface IScope<Scope> with
-            member this.AnyScope = Scope.Any
-            member this.MatchesScope target =
-                match this, target with
-                | Scope.Any, _
-                | _, Scope.Any -> true
-                | _, _ -> this = target
+    // type Scope =
+    //     |State
+    //     |Country
+    //     |UnitLeader
+    //     //Modifier scopes
+    //     |Air
+    //     //Misc
+    //     |Any
+    //     |InvalidScope
+    //     override x.ToString() =
+    //         match x with
+    //         |UnitLeader -> "Unit leader"
+    //         |State -> "State"
+    //         |Air -> "Air"
+    //         |InvalidScope -> "Invalid Scope"
+    //         |Country -> "Country"
+    //         |Any -> "Any/Unknown"
+    //     static member AnyScope = scopeManager.ParseScope() "Any"
+    //     interface IScope<Scope> with
+    //         member this.AnyScope = scopeManager.ParseScope() "Any"
+    //         member this.MatchesScope target =
+    //             match this, target with
+    //             | scopeManager.ParseScope() "Any", _
+    //             | _, scopeManager.ParseScope() "Any" -> true
+    //             | _, _ -> this = target
 
-    let allScopes = [
-        Scope.State;
-        Scope.Country;
-        Scope.UnitLeader;
-            ]
-    let allScopesSet = allScopes |> Set.ofList
-    let parseScope =
-        (fun (x : string) ->
-        x.ToLower()
-        |>
-            function
-            |"state" -> Scope.State
-            |"country" -> Scope.Country
-            |"unit leader" -> Scope.UnitLeader
-            |"unit_leader" -> Scope.UnitLeader
-            |"air" -> Scope.Air
-            |"any" -> Scope.Any
-            |"all" -> Scope.Any
-            |"no_scope" -> Scope.Any
-            |x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
+    // let allScopes = [
+    //     scopeManager.ParseScope() "State";
+    //     scopeManager.ParseScope() "Country";
+    //     scopeManager.ParseScope() "UnitLeader";
+    //         ]
+    // let allScopesSet = allScopes |> Set.ofList
+    // let parseScope =
+    //     (fun (x : string) ->
+    //     x.ToLower()
+    //     |>
+    //         function
+    //         |"state" -> scopeManager.ParseScope() "State"
+    //         |"country" -> scopeManager.ParseScope() "Country"
+    //         |"unit leader" -> scopeManager.ParseScope() "UnitLeader"
+    //         |"unit_leader" -> scopeManager.ParseScope() "UnitLeader"
+    //         |"air" -> scopeManager.ParseScope() "Air"
+    //         |"any" -> scopeManager.ParseScope() "Any"
+    //         |"all" -> scopeManager.ParseScope() "Any"
+    //         |"no_scope" -> scopeManager.ParseScope() "Any"
+    //         |x -> log (sprintf "Unexpected scope %O" x); scopeManager.ParseScope() "Any") //failwith ("unexpected scope" + x.ToString()))
 
-    let parseScopes =
-        function
-        |"all" -> allScopes
-        |x -> [parseScope x]
+    // let parseScopes =
+    //     function
+    //     |"all" -> allScopes
+    //     |x -> [parseScope x]
+
+    let defaultScopes = [
+        "Country", ["country"]
+        "State", ["state"]
+        "Unit Leader", ["unit leader"; "unit_leader"]
+        "Air", ["air"]
+    ]
+    let defaultScopeInputs =
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []})
+    type Scope = NewScope
+
 
     type Effect = Effect<Scope>
 
@@ -78,14 +89,14 @@ module HOI4Constants =
         interface IModifier with
             member this.Tag = this.tag
 
-    let categoryScopeList = [
-        ModifierCategory.Country, [Scope.Country]
-        ModifierCategory.UnitLeader, [Scope.UnitLeader; Scope.Country]
-        ModifierCategory.Unit, [Scope.UnitLeader; Scope.Country]
-        ModifierCategory.State, [Scope.Any]
-        ModifierCategory.Air, [Scope.Air; Scope.Country]
+    let categoryScopeList() = [
+        ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
+        ModifierCategory.UnitLeader, [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.Unit, [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "Country"]
+        ModifierCategory.State, [scopeManager.ParseScope() "Any"]
+        ModifierCategory.Air, [scopeManager.ParseScope() "Air"; scopeManager.ParseScope() "Country"]
     ]
-    let modifierCategoryToScopesMap = categoryScopeList |> Map.ofList
+    let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
 
     let scriptFolders = [
         "common/abilities";

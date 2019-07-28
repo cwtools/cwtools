@@ -3,6 +3,7 @@ namespace CWTools.Process.Scopes
 open CWTools.Common.HOI4Constants
 open CWTools.Common
 open CWTools.Process.Scopes
+open CWTools.Common.NewScope
 module HOI4 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
@@ -26,19 +27,19 @@ module HOI4 =
     //         member this.Scopes = this.Scopes
 
     let defaultContext =
-        { Root = Scope.Any; From = []; Scopes = [] }
+        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
     let noneContext =
-        { Root = Scope.InvalidScope; From =[]; Scopes = [Scope.InvalidScope] }
+        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope] }
     let defaultDesc = "Scope (/context) switch"
 
 
-    let scopedEffects =
+    let scopedEffects() =
         [
-            ScopedEffect("owner", [Scope.UnitLeader; Scope.State], Scope.Country, EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("controller", [Scope.State], Scope.Country, EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("capital", [Scope.State], Scope.State, EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("global", allScopes, Scope.InvalidScope, EffectType.Link, defaultDesc, "", true);
-            // ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Both, defaultDesc, "", true);
+            ScopedEffect("owner", [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", Link, defaultDesc, "", true);
+            ScopedEffect("controller", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("capital", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "State", EffectType.Link, defaultDesc, "", true);
+            ScopedEffect("global", scopeManager.AllScopes, scopeManager.ParseScope() "InvalidScope", EffectType.Link, defaultDesc, "", true);
+            // ScopedEffect("emperor", allScopes, scopeManager.ParseScope() "Country", EffectType.Both, defaultDesc, "", true);
         ]
 
 
@@ -111,7 +112,7 @@ module HOI4 =
     //         // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
     //         // x
     //         res2
-    let scopedLocEffects = [
+    let scopedLocEffects() = [
         // ScopedEffect("Capital", [Scope.Country], Scope.Province, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Culture", [Scope.Country; Scope.Province], Scope.Any, EffectType.Both, defaultDesc, "", true);
@@ -130,15 +131,15 @@ module HOI4 =
         // ScopedEffect("Province", [Scope.Any], Scope.Province, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Consort", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("GetCult", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Link, defaultDesc, "", true);
+        // ScopedEffect("GetCult", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Any", EffectType.Both, defaultDesc, "", true);
+        // ScopedEffect("GetDaughterSon", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Any", EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("GetWifeHusband", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Any", EffectType.Link, defaultDesc, "", true);
     ]
-    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
+    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect))
 
 
-    let locPrimaryScopes =
-        let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
+    let locPrimaryScopes() =
+        let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
         [
         "This", id;
         "Root", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
@@ -148,4 +149,4 @@ module HOI4 =
         "FromFromFromFrom", from >> from >> from >> from;
         ]
 
-    let localisationCommandValidator = Scopes.createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator() = Scopes.createLocalisationCommandValidator (locPrimaryScopes()) (scopedLocEffectsMap())

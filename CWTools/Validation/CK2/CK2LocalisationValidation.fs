@@ -8,6 +8,7 @@ open CWTools.Common.CK2Constants
 
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
+open CWTools.Common.NewScope
 
 module CK2LocalisationString =
 
@@ -54,8 +55,8 @@ module CK2LocalisationString =
             "GetReligionName";
             "GetReligionGroupName";
         ]
-    let locCommands = commands |> List.map (fun c -> c, allScopes)
+    let locCommands = commands |> List.map (fun c -> c, scopeManager.AllScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = processLocalisationBase<Scope> localisationCommandValidator defaultContext
-    let validateLocalisationCommand = validateLocalisationCommandsBase localisationCommandValidator
+    let processLocalisation() = processLocalisationBase<Scope> (localisationCommandValidator()) defaultContext
+    let validateLocalisationCommand() = validateLocalisationCommandsBase (localisationCommandValidator())

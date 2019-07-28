@@ -23,6 +23,9 @@ open CWTools.Validation.EU4.EU4Validation
 open CWTools.Validation.EU4.EU4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Games.Compute.EU4
+open CWTools.Parser
+open System.IO
+open CWTools.Common.NewScope
 
 module EU4GameFunctions =
     type GameObject = GameObject<Scope, Modifier, EU4ComputedData, EU4Lookup>
@@ -39,7 +42,7 @@ module EU4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation localisationCommands eventtargets lookup.scriptedLoc definedvars
+        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
@@ -54,7 +57,7 @@ module EU4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand localisationCommands eventtargets lookup.scriptedLoc definedvars
+        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let globalLocalisation (game : GameObject) =
         // let locfiles =  resources.GetResources()
@@ -105,7 +108,7 @@ module EU4GameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
 
     let updateScriptedTriggers(rules :RootRule<Scope> list) =
         let effects =
@@ -117,7 +120,7 @@ module EU4GameFunctions =
                 |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =
         // let createType (modifier : Modifier) =
@@ -156,10 +159,45 @@ module EU4GameFunctions =
         updateScriptedLoc(game)
         updateModifiers(game)
         updateLegacyGovernments(game)
-type EU4Settings = GameSettings<Modifier, Scope, EU4Lookup>
+
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+        let scopeDefinitions =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+
+
+        let triggers, effects = ([], [])
+
+        let modifiers =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
+                    |> Option.map (fun (fn, ft) -> EU4Parser.loadModifiers fn ft)
+                    |> Option.defaultValue []
+
+        let eu4LocCommands =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
+                    |> Option.map (fun (fn, ft) -> EU4Parser.loadLocCommands fn ft)
+                    |> Option.defaultValue []
+
+        let eu4EventTargetLinks =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
+                    |> Option.defaultValue (CWTools.Process.Scopes.EU4.scopedEffects() |> List.map SimpleLink)
+
+        {
+            triggers = triggers
+            effects = effects
+            modifiers = modifiers
+            embeddedFiles = embeddedFiles
+            cachedResourceData = cachedResourceData
+            localisationCommands = eu4LocCommands
+            eventTargetLinks = eu4EventTargetLinks
+            scopeDefinitions = scopeDefinitions
+        }
+
+type EU4Settings = GameSetupSettings<Modifier, Scope, EU4Lookup>
 open EU4GameFunctions
 open CWTools.Common.NewScope
-type EU4Game(settings : EU4Settings) =
+type EU4Game(setupSettings : EU4Settings) =
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"; validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
@@ -172,11 +210,30 @@ type EU4Game(settings : EU4Settings) =
         localisationValidators = []
     }
 
+    let embeddedSettings =
+        match setupSettings.embedded with
+        | FromConfig (ef, crd) ->
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+        | ManualSettings e -> e
+
+    let settings = {
+        rootDirectories = setupSettings.rootDirectories
+        excludeGlobPatterns = setupSettings.excludeGlobPatterns
+        embedded = embeddedSettings
+        GameSettings.rules = setupSettings.rules
+        validation = setupSettings.validation
+        scriptFolders = setupSettings.scriptFolders
+        modFilter = setupSettings.modFilter
+        initialLookup = EU4Lookup()
+
+    }
+
+    do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
                         initialLookup = EU4Lookup()
                         }
-    do scopeManager.ReInit(settings.embedded.scopeDefinitions)
+
     let rulesManagerSettings = {
         rulesSettings = settings.rules
         parseScope = scopeManager.ParseScope()

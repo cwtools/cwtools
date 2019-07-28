@@ -603,7 +603,6 @@ module RulesParser =
             | [x] -> [SkipRootKey.SpecificKey x.ValueText]
             | x::xs ->
                 let shouldMatch = x.Operator = Operator.Equals
-                eprintfn "gsrk %A %A" shouldMatch (x::xs)
                 [SkipRootKey.MultipleKeys ( (x::xs) |> List.map (fun y -> y.ValueText), shouldMatch)]
             | [] -> node.Child "skip_root_key" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> createSkipRoot (lv.Value.ToRawString())))
                                                     |> Option.defaultValue Seq.empty
@@ -771,10 +770,10 @@ module RulesParser =
             | (LeafRule (l, SingleAliasField name), o) ->
                 match singlealiasesmap() |> Map.tryFind name with
                 | Some (LeafRule (al, ar), ao) ->
-                    log (sprintf "Replaced single alias leaf %A %s with leaf %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
+                    // log (sprintf "Replaced single alias leaf %A %s with leaf %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
                     LeafRule (l, ar), o
                 | Some (NodeRule (al, ar), ao) ->
-                    log (sprintf "Replaced single alias leaf %A %s with node %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
+                    // log (sprintf "Replaced single alias leaf %A %s with node %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
                     NodeRule (l, ar), o
                 | x ->
                     log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)

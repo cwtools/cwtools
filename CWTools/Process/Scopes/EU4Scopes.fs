@@ -33,7 +33,7 @@ module EU4 =
     let defaultDesc = "Scope (/context) switch"
 
 
-    let scopedEffects =
+    let scopedEffects() =
         [
             ScopedEffect<NewScope>("owner", [scopeManager.ParseScope() "province"], scopeManager.ParseScope() "country", EffectType.Link, defaultDesc, "", true);
             // ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
@@ -113,7 +113,7 @@ module EU4 =
     //         // x
     //         res2
 
-    let scopedLocEffects = [
+    let scopedLocEffects() = [
         ScopedEffect<NewScope>("Capital", [scopeManager.ParseScope() "country"], (scopeManager.ParseScope() "province"), EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Link, defaultDesc, "", true);
@@ -159,10 +159,10 @@ module EU4 =
         // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
     ]
-    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect<NewScope>))
+    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect<NewScope>))
 
 
-    let locPrimaryScopes =
+    let locPrimaryScopes() =
         let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
         [
         "This", id;
@@ -173,4 +173,4 @@ module EU4 =
         "FromFromFromFrom", from >> from >> from >> from;
         ]
 
-    let localisationCommandValidator = Scopes.createLocalisationCommandValidator locPrimaryScopes scopedLocEffectsMap
+    let localisationCommandValidator() = Scopes.createLocalisationCommandValidator (locPrimaryScopes()) (scopedLocEffectsMap())

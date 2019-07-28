@@ -357,7 +357,6 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
             |(SpecificKey key) -> n.Key == key
             |(AnyKey) -> true
             |(MultipleKeys (keys, shouldMatch)) ->
-                eprintfn "srk %A %A" keys n.Key
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
         let inner (typedefs : TypeDefinition<_> list) (node : Node) =

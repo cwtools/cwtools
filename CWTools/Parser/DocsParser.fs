@@ -65,10 +65,12 @@ module JominiParser =
     let parseTriggerFile filepath = runParserOnFile triggerFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseTriggerFilesRes filepath = parseTriggerFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
     let parseTriggerStream file = runParserOnStream triggerFile () "triggerFile" file (System.Text.Encoding.GetEncoding(1252))
+    let parseTriggerStreamRes file = parseTriggerStream file |> (function |Success(p, _, _) -> Some p |_ -> None)
 
     let parseEffectFile filepath = runParserOnFile effectFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseEffectFilesRes filepath = parseEffectFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
     let parseEffectStream file = runParserOnStream effectFile () "effectFile" file (System.Text.Encoding.GetEncoding(1252))
+    let parseEffectStreamRes file = parseEffectStream file |> (function |Success(p, _, _) -> Some p |_ -> None)
 
     let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect<'a>(x, effectType, parseScopes)
 

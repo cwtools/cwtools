@@ -152,7 +152,7 @@ module rec NewScope =
         let mutable complexEquality = false
         let mutable matchesSet = Set<NewScope * NewScope>(Seq.empty)
         let anyScope = NewScope(0uy)
-        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"]; isSubscopeOf = [] }
+        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"; "none"]; isSubscopeOf = [] }
         let invalidScope = NewScope(1uy)
         let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]; isSubscopeOf = []}
         let parseScope() =

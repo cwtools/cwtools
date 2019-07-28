@@ -87,3 +87,4 @@ module Helpers =
             |None, Some ges -> (genAll()) @ (if forceGlobal then genGlobal() else ges)
             |Some les, None -> (if force then genAll() else les) @ (genGlobal())
             |None, None -> (genAll()) @ (genGlobal())
+

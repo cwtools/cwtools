@@ -7,6 +7,7 @@ open CWTools.Common
 open CWTools.Common.HOI4Constants
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
+open CWTools.Common.NewScope
 
 module HOI4LocalisationString =
 
@@ -53,8 +54,8 @@ module HOI4LocalisationString =
             "GetReligionName";
             "GetReligionGroupName";
         ]
-    let locCommands = commands |> List.map (fun c -> c, allScopes)
+    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes)
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = processLocalisationBase<Scope> localisationCommandValidator defaultContext
-    let validateLocalisationCommand = validateLocalisationCommandsBase localisationCommandValidator
+    let processLocalisation() = processLocalisationBase<Scope> (localisationCommandValidator()) defaultContext
+    let validateLocalisationCommand() = validateLocalisationCommandsBase (localisationCommandValidator())

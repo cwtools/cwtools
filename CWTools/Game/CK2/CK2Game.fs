@@ -24,6 +24,9 @@ open CWTools.Process.ProcessCore
 open System
 open CWTools.Games.Helpers
 open CWTools.Rules
+open CWTools.Parser
+open CWTools.Common.CK2Constants
+open CWTools.Common.NewScope
 
 module CK2GameFunctions =
     type GameObject = GameObject<Scope, Modifier, ComputedData, CK2Lookup>
@@ -32,14 +35,14 @@ module CK2GameFunctions =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation localisationCommands eventtargets lookup.scriptedLoc definedvars
+        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand localisationCommands eventtargets lookup.scriptedLoc definedvars
+        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let globalLocalisation (game : GameObject) =
         // let locfiles =  resources.GetResources()
@@ -66,7 +69,7 @@ module CK2GameFunctions =
     let addModifiersWithScopes (lookup : Lookup<_,_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
-                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
+                modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
                                     |> List.map Set.ofList
                                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false}
@@ -226,9 +229,44 @@ module CK2GameFunctions =
         // game.LocalisationManager.UpdateAllLocalisation()
         // updateTypeDef game game.Settings.rules
         // game.LocalisationManager.UpdateAllLocalisation()
-type CK2Settings = GameSettings<Modifier, Scope, CK2Lookup>
+
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+        let scopeDefinitions =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+
+
+        let ck2Mods =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
+                    |> Option.map (fun (fn, ft) -> CK2Parser.loadModifiers fn ft)
+                    |> Option.defaultValue []
+
+        let ck2LocCommands =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
+                    |> Option.map (fun (fn, ft) -> CK2Parser.loadLocCommands fn ft)
+                    |> Option.defaultValue []
+
+        let ck2EventTargetLinks =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
+                    |> Option.defaultValue (CWTools.Process.Scopes.CK2.scopedEffects() |> List.map SimpleLink)
+
+        let triggers, effects = ([], [])
+
+        {
+            triggers = triggers
+            effects = effects
+            modifiers = ck2Mods
+            embeddedFiles = embeddedFiles
+            cachedResourceData = cachedResourceData
+            localisationCommands = ck2LocCommands
+            eventTargetLinks = ck2EventTargetLinks
+            scopeDefinitions = scopeDefinitions
+        }
+
+type CK2Settings = GameSetupSettings<Modifier, Scope, CK2Lookup>
 open CK2GameFunctions
-type CK2Game(settings : CK2Settings) =
+type CK2Game(setupSettings : CK2Settings) =
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
@@ -240,6 +278,24 @@ type CK2Game(settings : CK2Settings) =
         debugRulesOnly = false
         localisationValidators = []
     }
+    let embeddedSettings =
+        match setupSettings.embedded with
+        | FromConfig (ef, crd) ->
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+        | ManualSettings e -> e
+
+    let settings = {
+        rootDirectories = setupSettings.rootDirectories
+        excludeGlobPatterns = setupSettings.excludeGlobPatterns
+        embedded = embeddedSettings
+        GameSettings.rules = setupSettings.rules
+        validation = setupSettings.validation
+        scriptFolders = setupSettings.scriptFolders
+        modFilter = setupSettings.modFilter
+        initialLookup = CK2Lookup()
+
+    }
+    do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
@@ -248,9 +304,9 @@ type CK2Game(settings : CK2Settings) =
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
-        parseScope = parseScope
-        allScopes = allScopes
-        anyScope = Scope.Any
+        parseScope = scopeManager.ParseScope()
+        allScopes = scopeManager.AllScopes
+        anyScope = scopeManager.AnyScope
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = CK2 CK2Lang.Default
@@ -310,7 +366,7 @@ type CK2Game(settings : CK2Settings) =
         member __.AllEntities() = resources.AllEntities()
         member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
-        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService Scope.Any pos file text
+        member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
