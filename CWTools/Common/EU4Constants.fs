@@ -49,7 +49,6 @@ module EU4Constants =
     //             | _, Scope.Any
     //             | Scope.Any, _ -> true
     //             |this, target -> this = target
-    type Scope = NewScope.NewScope
     // let allScopes = NewScope.scopeManager.allScopes
     // let allScopes = [
     //         Country;

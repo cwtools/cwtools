@@ -211,3 +211,20 @@ module IR =
         YAMLLocalisationService ( files, keyToLanguage, IR )
     let IRLocalisationServiceFromFolder (folder : string) =
         YAMLLocalisationService ({ folder =  folder; gameName = "Imperator"; keyToLanguage = keyToLanguage; gameToLang = IR })
+
+module Custom =
+    open YAMLLocalisationParser
+    let private keyToLanguage =
+        function
+        |"l_english" -> Some IRLang.English
+        |"l_french" -> Some IRLang.French
+        |"l_german" -> Some IRLang.German
+        |"l_spanish" -> Some IRLang.Spanish
+        |"l_simp_chinese" -> Some IRLang.Chinese
+        |"l_russian" -> Some IRLang.Russian
+        |_ -> None
+
+    let CustomLocalisationService (files : (string * string) list) =
+        YAMLLocalisationService ( files, keyToLanguage, IR )
+    let CustomLocalisationServiceFromFolder (folder : string) =
+        YAMLLocalisationService ({ folder =  folder; gameName = "Custom"; keyToLanguage = keyToLanguage; gameToLang = IR })

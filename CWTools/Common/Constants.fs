@@ -118,6 +118,17 @@ type IScope<'T> =
 type IModifier =
     abstract member Tag : string
 
+type CustomModifier =
+    {
+        tag : string
+        categories : string list
+        /// Is this a core modifier or a static modifier?
+        isCore : bool
+    }
+    interface IModifier with
+        member this.Tag = this.tag
+
+
 type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony
 
 type DataLinkType = |Scope |Value |Both
@@ -135,7 +146,7 @@ type EventTargetLink<'S when 'S : comparison> =
 | SimpleLink of ScopedEffect<'S>
 | DataLink of EventTargetDataLink<'S>
 
-
+[<AutoOpen>]
 module rec NewScope =
     open CWTools.Utilities.Utils
     type ScopeInput = {
@@ -147,13 +158,13 @@ module rec NewScope =
         // override x.ToString() =
     type ScopeManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, NewScope>()
-        let mutable reverseDict = Dictionary<NewScope, ScopeInput>()
+        let mutable dict = Dictionary<string, Scope>()
+        let mutable reverseDict = Dictionary<Scope, ScopeInput>()
         let mutable complexEquality = false
-        let mutable matchesSet = Set<NewScope * NewScope>(Seq.empty)
-        let anyScope = NewScope(0uy)
+        let mutable matchesSet = Set<Scope * Scope>(Seq.empty)
+        let anyScope = Scope(0uy)
         let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"; "none"]; isSubscopeOf = [] }
-        let invalidScope = NewScope(1uy)
+        let invalidScope = Scope(1uy)
         let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]; isSubscopeOf = []}
         let parseScope() =
             if not initialized then eprintfn "Error: parseScope was used without initializing scopes" else ()
@@ -166,8 +177,8 @@ module rec NewScope =
         let init(scopes : ScopeInput list) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
-            dict <- Dictionary<string, NewScope>()
-            reverseDict <- Dictionary<NewScope, ScopeInput>()
+            dict <- Dictionary<string, Scope>()
+            reverseDict <- Dictionary<Scope, ScopeInput>()
             dict.Add("any", anyScope)
             dict.Add("all", anyScope)
             dict.Add("no_scope", anyScope)
@@ -178,14 +189,14 @@ module rec NewScope =
             let addScope (newScope : ScopeInput) =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
-                newScope.aliases |> List.iter (fun s -> dict.Add(s, NewScope(newID)))
-                reverseDict.Add(NewScope(newID), newScope)
+                newScope.aliases |> List.iter (fun s -> dict.Add(s, Scope(newID)))
+                reverseDict.Add(Scope(newID), newScope)
             scopes |> List.iter addScope
             let addScopeSubset (newScope : ScopeInput) =
                 newScope.isSubscopeOf |> List.iter (fun ss -> matchesSet <- (Set.add (parseScope() (newScope.aliases |> List.head), parseScope() ss) matchesSet))
             scopes |> List.iter addScopeSubset
             if Set.isEmpty matchesSet then () else complexEquality <- true
-        member this.GetName(scope : NewScope) =
+        member this.GetName(scope : Scope) =
             let found, value = reverseDict.TryGetValue scope
             if found
             then value.name
@@ -196,7 +207,7 @@ module rec NewScope =
         member this.ParseScope = parseScope
         member this.ParseScopes = function | "all" -> this.AllScopes | x -> [this.ParseScope() x]
         member this.ReInit(scopes : ScopeInput list) = init(scopes)
-        member this.MatchesScope (source : NewScope) (target : NewScope) =
+        member this.MatchesScope (source : Scope) (target : Scope) =
             if not complexEquality
             then
                 match source, target with
@@ -218,7 +229,7 @@ module rec NewScope =
 
 
     let scopeManager = ScopeManager()
-    type NewScope(tag : byte) =
+    type Scope(tag : byte) =
         // struct
         // val tag: byte
         // end
@@ -227,15 +238,15 @@ module rec NewScope =
         override x.ToString() = scopeManager.GetName(x)
         override x.Equals (target : obj) =
             match target with
-            | :? NewScope as t -> tag = t.tag
+            | :? Scope as t -> tag = t.tag
             | _ -> false
         override x.GetHashCode() = tag.GetHashCode()
         interface IComparable with
             member this.CompareTo target =
                 match target with
-                | :? NewScope as t -> tag.CompareTo t.tag
+                | :? Scope as t -> tag.CompareTo t.tag
                 | _ -> 0
-        interface IScope<NewScope> with
+        interface IScope<Scope> with
             member this.AnyScope = scopeManager.AnyScope
             member this.MatchesScope target =
                 match this, target with

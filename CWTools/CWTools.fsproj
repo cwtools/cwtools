@@ -35,7 +35,6 @@
     <Compile Include="Process/Scopes/CK2Scopes.fs" />
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
-    <Compile Include="Rules/RulesParser.fsi" />
     <Compile Include="Rules/RulesParser.fs" />
     <Compile Include="Parser/EU4Parser.fs" />
     <Compile Include="Parser/HOI4Parser.fs" />
@@ -87,6 +86,7 @@
     <Compile Include="Game/CK2/CK2Game.fs" />
     <Compile Include="Game/IR/IRGame.fs" />
     <Compile Include="Game/VIC2/VIC2Game.fs" />
+    <Compile Include="Game/Custom/CustomGame.fs" />
     <Compile Include="CSharp/Extensions.fs" />
     <Compile Include="ExtensionPoints/StatementVisitor.fs" />
   </ItemGroup>

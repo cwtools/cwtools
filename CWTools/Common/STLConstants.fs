@@ -158,7 +158,6 @@ module STLConstants =
     //     function
     //     |"all" -> allScopes
     //     |x -> [parseScope x]
-    type Scope = NewScope
     type Effect = Effect<Scope>
 
     type DocEffect = DocEffect<Scope>

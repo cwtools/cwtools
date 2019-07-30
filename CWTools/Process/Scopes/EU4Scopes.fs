@@ -35,7 +35,7 @@ module EU4 =
 
     let scopedEffects() =
         [
-            ScopedEffect<NewScope>("owner", [scopeManager.ParseScope() "province"], scopeManager.ParseScope() "country", EffectType.Link, defaultDesc, "", true);
+            ScopedEffect<Scope>("owner", [scopeManager.ParseScope() "province"], scopeManager.ParseScope() "country", EffectType.Link, defaultDesc, "", true);
             // ScopedEffect("controller", [Scope.Province], Scope.Country, EffectType.Link, defaultDesc, "", true);
             // ScopedEffect("emperor", allScopes, Scope.Country, EffectType.Link, defaultDesc, "", true);
             // // Should be rhs only!
@@ -71,7 +71,7 @@ module EU4 =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = Scopes.createChangeScope<NewScope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
+    let changeScope = Scopes.createChangeScope<Scope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
     // let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext<Scope>) =
     //     let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
@@ -114,7 +114,7 @@ module EU4 =
     //         res2
 
     let scopedLocEffects() = [
-        ScopedEffect<NewScope>("Capital", [scopeManager.ParseScope() "country"], (scopeManager.ParseScope() "province"), EffectType.Link, defaultDesc, "", true);
+        ScopedEffect<Scope>("Capital", [scopeManager.ParseScope() "country"], (scopeManager.ParseScope() "province"), EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("ColonialParent", [Scope.Country], Scope.Country, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("Culture", [Scope.Country; Scope.Province; Scope.RebelFaction], Scope.Culture, EffectType.Link, defaultDesc, "", true);
         // ScopedEffect("Dynasty", [Scope.Consort; Scope.Monarch; Scope.Heir], Scope.Any, EffectType.Link, defaultDesc, "", true);
@@ -159,7 +159,7 @@ module EU4 =
         // ScopedEffect("GetDaughterSon", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("GetWifeHusband", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
     ]
-    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect<NewScope>))
+    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect<Scope>))
 
 
     let locPrimaryScopes() =

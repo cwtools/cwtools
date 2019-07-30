@@ -91,7 +91,6 @@ module CK2Constants =
     //     | "all" -> allScopes
     //     | x -> [parseScope x]
 
-    type Scope = NewScope.NewScope
 
     let defaultScopes = [
         "Character", ["character"], []

@@ -7,7 +7,7 @@ open CWTools.Process
 open CWTools.Parser
 open CWTools.Parser.Types
 open CWTools.Rules
-open CWTools.Rules.RulesParser
+// open CWTools.Rules.RulesParser
 open CWTools.Games
 open CWTools.Process.ProcessCore
 open System.IO
@@ -56,6 +56,14 @@ let emptyEmbeddedSettings = {
         eventTargetLinks = []
         scopeDefinitions = []
 }
+
+let specificField = RulesParser.specificField
+let optionalMany = RulesParser.optionalMany
+let optionalSingle = RulesParser.optionalSingle
+let requiredSingle = RulesParser.requiredSingle
+let defaultFloat = RulesParser.defaultFloat
+let defaultInt = RulesParser.defaultInt
+let parseConfig = RulesParser.parseConfig
 let createStarbase() =
     let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)
     let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
@@ -297,7 +305,7 @@ let testc =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let apply = RuleValidationService<STLConstants.Scope>(rules, [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let apply = RuleValidationService<Scope>(rules, [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
                 let errors = apply.ApplyNodeRule(Typerules, node)
                 match errors with
                 | OK -> ()

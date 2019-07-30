@@ -63,7 +63,6 @@ module HOI4Constants =
     ]
     let defaultScopeInputs =
         defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []})
-    type Scope = NewScope
 
 
     type Effect = Effect<Scope>

@@ -3,6 +3,7 @@ module CWTools.Games.Compute
 open CWTools.Games
 open System
 open CWTools.Rules
+open CWTools.Common
 
 let computeData (infoService : unit -> InfoService<_> option) (e : Entity) =
     let withRulesData = infoService().IsSome
