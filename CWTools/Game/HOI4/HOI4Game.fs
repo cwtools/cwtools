@@ -11,7 +11,7 @@ open CWTools.Validation.Common.CommonValidation
 // open CWTools.Rules.Rules
 open CWTools.Rules
 open CWTools.Process.Scopes.HOI4
-open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Validation.HOI4
 open System.Text
 open CWTools.Games.LanguageFeatures

@@ -13,7 +13,7 @@ open CWTools.Validation.Common.CommonValidation
 // open CWTools.Rules.Rules
 open CWTools.Common.CK2Constants
 open CWTools.Process.Scopes.CK2
-open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Validation.CK2
 open System.Text
 open CWTools.Games.LanguageFeatures

@@ -8,10 +8,6 @@ module IR =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-    let defaultContext =
-        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
-    let noneContext =
-        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope]}
     let defaultDesc = "Scope (/context) switch"
 
 

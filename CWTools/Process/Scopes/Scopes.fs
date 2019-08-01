@@ -49,6 +49,12 @@ type ScopeResult<'T when 'T :> IScope<'T>> =
 type ChangeScope<'S when 'S :> IScope<'S> and 'S : comparison> = bool -> bool -> EffectMap<'S> -> EffectMap<'S> -> ScopedEffect<'S> list -> StringSet -> string -> ScopeContext<'S> -> ScopeResult<'S>
 
 module Scopes =
+
+    let defaultContext =
+        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
+    let noneContext =
+        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope] }
+
     // type EffectMap<'T> = Map<string, Effect<'T>, InsensitiveStringComparer>
     let simpleVarPrefixFun prefix =
         let varStartsWith = (fun (k : string) -> k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))

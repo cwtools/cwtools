@@ -370,12 +370,6 @@ module STL =
 
 
 
-    let defaultContext =
-        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
-    let noneContext =
-        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope]}
-
-
 
     let oneToOneScopes =
         let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true

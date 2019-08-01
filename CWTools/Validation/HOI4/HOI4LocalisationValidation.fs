@@ -7,6 +7,7 @@ open CWTools.Common
 open CWTools.Common.HOI4Constants
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Common.NewScope
 
 module HOI4LocalisationString =

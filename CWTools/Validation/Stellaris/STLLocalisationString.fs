@@ -11,6 +11,7 @@ open CWTools.Utilities.Utils
 open System.IO
 open CWTools.Utilities.Position
 open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Common.NewScope
 
 module STLLocalisationString =

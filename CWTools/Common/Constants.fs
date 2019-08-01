@@ -254,3 +254,4 @@ module rec NewScope =
                 | _, x
                 | x, _ when x = scopeManager.AnyScope -> true
                 |this, target -> this = target
+

@@ -13,7 +13,7 @@ open CWTools.Validation.Common.CommonValidation
 open CWTools.Rules
 open CWTools.Common.IRConstants
 open CWTools.Process.Scopes.IR
-open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Validation.IR
 open System.Text
 open CWTools.Games.LanguageFeatures

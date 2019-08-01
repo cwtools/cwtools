@@ -7,6 +7,7 @@ open CWTools.Common
 open CWTools.Common.IRConstants
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Common.NewScope
 
 module IRLocalisationString =

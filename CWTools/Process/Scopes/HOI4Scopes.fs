@@ -8,28 +8,6 @@ module HOI4 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-    // type ScopeContext =
-    //     {
-    //         Root : Scope
-    //         From : Scope list
-    //         Scopes : Scope list
-    //     }
-    //     member this.CurrentScope = match this.Scopes with |[] -> Scope.Any |x::_ -> x
-    //     member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
-    //     member this.GetFrom i =
-    //         if this.From.Length >= i then (this.From.Item (i - 1)) else Scope.Any
-    //     interface IScopeContext<Scope> with
-    //         member this.CurrentScope = this.CurrentScope
-    //         member this.PopScope = this.PopScope
-    //         member this.GetFrom i = this.GetFrom i
-    //         member this.Root = this.Root
-    //         member this.From = this.From
-    //         member this.Scopes = this.Scopes
-
-    let defaultContext =
-        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
-    let noneContext =
-        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope] }
     let defaultDesc = "Scope (/context) switch"
 
 

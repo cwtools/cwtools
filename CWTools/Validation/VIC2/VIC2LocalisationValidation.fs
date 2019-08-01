@@ -8,6 +8,7 @@ open CWTools.Common.VIC2Constants
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
 open CWTools.Common.NewScope
+open CWTools.Process.Scopes.Scopes
 module VIC2LocalisationString =
 
     let hardcodedLocalisation =

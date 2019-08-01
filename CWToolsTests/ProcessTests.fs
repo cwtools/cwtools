@@ -30,6 +30,7 @@ open CWTools.Validation
 open CWTools.Validation.Stellaris
 open CWTools.Process.Scopes.STL
 open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Common.NewScope
 
 

@@ -15,7 +15,7 @@ open CWTools.Rules
 open CWTools.Common.EU4Constants
 // open CWTools.Validation.EU4.EU4Rules
 open CWTools.Process.Scopes.EU4
-open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Validation.EU4
 open System.Text
 open CWTools.Games.LanguageFeatures

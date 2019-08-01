@@ -13,7 +13,7 @@ open CWTools.Validation.Common.CommonValidation
 open CWTools.Rules
 open CWTools.Common.VIC2Constants
 open CWTools.Process.Scopes.VIC2
-open CWTools.Process.Scopes
+open CWTools.Process.Scopes.Scopes
 open CWTools.Validation.VIC2
 open System.Text
 open CWTools.Games.LanguageFeatures

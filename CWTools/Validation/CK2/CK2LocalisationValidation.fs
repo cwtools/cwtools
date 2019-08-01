@@ -9,6 +9,7 @@ open CWTools.Common.CK2Constants
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
 open CWTools.Common.NewScope
+open CWTools.Process.Scopes.Scopes
 
 module CK2LocalisationString =
 
