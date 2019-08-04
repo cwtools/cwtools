@@ -182,6 +182,7 @@ module rec NewScope =
             dict.Add("any", anyScope)
             dict.Add("all", anyScope)
             dict.Add("no_scope", anyScope)
+            dict.Add("none", anyScope)
             dict.Add("invalid_scope", invalidScope)
             reverseDict.Add(anyScope, anyScopeInput)
             reverseDict.Add(invalidScope, invalidScopeInput)

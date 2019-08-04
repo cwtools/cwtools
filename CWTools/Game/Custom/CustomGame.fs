@@ -303,10 +303,10 @@ module CustomGameFunctions =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some []) )
-        // let irMods =
-        //     configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-        //             |> Option.map (fun (fn, ft) -> IRParser.loadModifiers fn ft)
-        //             |> Option.defaultValue []
+        let irMods =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
+                    |> Option.map (fun (fn, ft) -> IRParser.loadCustomModifiers fn ft)
+                    |> Option.defaultValue []
 
         let irLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
@@ -334,7 +334,7 @@ module CustomGameFunctions =
         {
             triggers = irTriggers
             effects = irEffects
-            modifiers = []
+            modifiers = irMods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
             localisationCommands = irLocCommands
