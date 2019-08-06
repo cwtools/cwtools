@@ -16,7 +16,7 @@ type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks,
     member val Cache : Map<string, obj list> = Map.empty with get, set
     member val WithRulesData : bool = withRulesData with get,set
     member val Referencedtypes : Map<string, (string  * range) list> option = referencedtypes with get, set
-    member val Definedvariables : Map<string, (string * range) list> option = definedvariable with get, set
+    member val Definedvariables : Map<string, ResizeArray<(string * range)>> option = definedvariable with get, set
     member val EffectBlocks : Node list option = effectBlocks with get, set
     member val TriggerBlocks : Node list option = triggersBlocks with get, set
 

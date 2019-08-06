@@ -374,13 +374,13 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             |[] -> if FieldValidators.typekeyfilter t n.Key then infoServiceNode t rs o acc n else acc
             |head::tail ->
                 if skiprootkey head n
-                then n.Children |> List.fold (infoServiceSkipRoot rs o t tail) acc
+                then n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t tail) acc
                 else acc
         let infoServiceBase (n : Node) acc (t : TypeDefinition<_>) =
             let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
             match typerules, t.type_per_file with
             |[(_, (NodeRule (_, rs), o))], false  ->
-                n.Children |> List.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
+                n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
             |[(_, (NodeRule (_, rs), o))], true  ->
                 infoServiceSkipRoot rs o t t.skipRootKey acc n
             |_ -> acc
@@ -483,22 +483,22 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
 
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
         let getVariableFromString (v : string) (s : string) = if v = "variable" then s.Split('@').[0].Split('.') |> Array.last else s.Split('@').[0]
-        let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
+        let fLeaf (res : Collections.Map<string, ResizeArray<(string * range)>>) (leaf : Leaf) ((field, _) : NewRule<_>) =
             match field with
             |LeafRule (_, VariableSetField v) ->
-                res |> (fun m -> m.Add(v, (getVariableFromString v (leaf.ValueText), leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                res |> (fun m -> m.Add(v, (m.TryFind(v) |> Option.defaultValue (new ResizeArray<_>()) |> (fun i -> i.Add((getVariableFromString v (leaf.ValueText), leaf.Position)); i))) )
             |LeafRule (VariableSetField v, _) ->
-                res |> (fun m -> m.Add(v, (getVariableFromString v leaf.Key, leaf.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                res |> (fun m -> m.Add(v, (m.TryFind(v) |> Option.defaultValue (new ResizeArray<_>()) |> (fun i -> i.Add(((getVariableFromString v leaf.Key, leaf.Position))); i))) )
             |_ -> res
-        let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (field, _) =
+        let fLeafValue (res : Collections.Map<string, ResizeArray<(string * range)>>) (leafvalue : LeafValue) (field, _) =
             match field with
             |LeafValueRule (VariableSetField v) ->
-                res |> (fun m -> m.Add(v, (getVariableFromString v (leafvalue.ValueText), leafvalue.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                res |> (fun m -> m.Add(v, (m.TryFind(v) |> Option.defaultValue (new ResizeArray<_>()) |> (fun i -> i.Add((getVariableFromString v (leafvalue.ValueText), leafvalue.Position)); i )) ))
             |_ -> res
-        let fNode (res : Collections.Map<string, (string * range) list>) (node : Node) ((field, option) : NewRule<_>) =
+        let fNode (res : Collections.Map<string, ResizeArray<(string * range)>>) (node : Node) ((field, option) : NewRule<_>) =
             match field with
             |NodeRule (VariableSetField v, _) ->
-                res |> (fun m -> m.Add(v, (getVariableFromString v node.Key, node.Position)::(m.TryFind(v) |> Option.defaultValue [])) )
+                res |> (fun m -> m.Add(v, (m.TryFind(v) |> Option.defaultValue (new ResizeArray<_>()) |> (fun i -> i.Add((getVariableFromString v node.Key, node.Position)); i) )))
             |_ -> res
         let fComment (res) _ _ = res
         let fValueClause (res) _ _ = res
