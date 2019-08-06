@@ -75,6 +75,7 @@ module Scopes =
     let createJominiChangeScope<'T when 'T :> IScope<'T> and 'T : comparison > (oneToOneScopes) (varPrefixFun : string -> string * bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
+        let amp = [|'@'|]
         (fun (varLHS : bool) (skipEffect : bool) (eventTargetLinks : EffectMap<_>) (valueTriggers : EffectMap<_>) (wildcardLinks : ScopedEffect<_> list) (vars : StringSet) (key : string) (source : ScopeContext<'T>) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
             if
@@ -84,8 +85,12 @@ module Scopes =
             then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
                 let key, varOnly = varPrefixFun key
-                let ampersandSplit = key.Split([|'@'|], 2)
-                let keys = ampersandSplit.[0].Split('.')
+                let beforeAmp, afterAmp, hasAmp =
+                    if key.IndexOf('@') >= 0
+                    then let x = key.Split(amp, 2) in x.[0], x.[1], true
+                    else key, "", false
+                // let ampersandSplit = if key.Contains('@') then key.Split(amp, 2) else
+                let keys = key.Split('.')
                 let keylength = keys.Length - 1
                 let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
                 let inner ((context : ScopeContext<'T>), (changed : bool)) (nextKey : string) (last : bool) =
@@ -146,9 +151,9 @@ module Scopes =
                     |(_, _), None -> NotFound
                     |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
                     |(_, false), Some r -> r
-                if ampersandSplit.Length > 1
+                if hasAmp
                 then
-                    let keys = ampersandSplit.[1].Split('.')
+                    let keys = afterAmp.Split('.')
                     let keylength = keys.Length - 1
                     let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
                     let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)

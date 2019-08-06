@@ -42,7 +42,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     let monitor = new Object()
 
     let memoizeRulesInner memFunction =
-        let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
+        // let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
+        let dict = new System.Collections.Generic.Dictionary<_,System.Collections.Generic.Dictionary<_,_>>()
         fun (rules : NewRule<_> list) (subtypes : string list) ->
                 match dict.TryGetValue(rules) with
                 | (true, v) ->
@@ -68,6 +69,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     let memoizeRules =
         let memFunction =
             fun rules subtypes ->
+                // eprintfn "%A %A," (rules.GetHashCode()) (subtypes.GetHashCode())
                 /// All subtypes in this context
                 let subtypedrules =
                     rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> []))
@@ -338,13 +340,19 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             let inner (child : Child) =
                 match child with
                 | NodeC c ->
-                    noderules |> Seq.choose (fun (l, rs, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+                    let key = c.Key
+                    let keyId = c.KeyId.lower
+                    noderules |> Seq.choose (fun (l, rs, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
                 | ValueClauseC vc ->
                     valueclauserules |> Seq.map (fun (rs, o) -> ValueClauseC vc, ((ValueClauseRule (rs)), o))
                 | LeafC leaf ->
-                    leafrules |> Seq.choose (fun (l, r, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
+                    let key = leaf.Key
+                    let keyId = leaf.KeyId.lower
+                    leafrules |> Seq.choose (fun (l, r, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
                 | LeafValueC leafvalue ->
-                    leafvaluerules |> Seq.choose (fun (lv, o) -> if FieldValidators.checkLeftField p Severity.Error ctx lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
+                    let key = leafvalue.Key
+                    let keyId = leafvalue.ValueId.lower
+                    leafvaluerules |> Seq.choose (fun (lv, o) -> if FieldValidators.checkLeftField p Severity.Error ctx lv keyId key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
                 | CommentC _ -> Seq.empty
             node.AllArray |> Seq.collect inner
 

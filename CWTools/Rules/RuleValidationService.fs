@@ -64,7 +64,7 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
     let mutable i = 0;
 
     let memoizeRulesInner memFunction =
-        let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
+        let dict = new System.Collections.Generic.Dictionary<_,System.Collections.Generic.Dictionary<_,_>>()
         fun (rules : NewRule<_> list) (subtypes : string list) ->
                 match dict.TryGetValue(rules) with
                 | (true, v) ->
