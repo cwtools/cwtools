@@ -65,7 +65,7 @@ module LanguageFeatures =
             |Some (_,( _, Some ((t : string), tv), _)) ->
                 //log "tv %A %A" t tv
                 let t = t.Split('.').[0]
-                resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes) e).TryFind t)
+                resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else let contains, value = ((info.GetReferencedTypes) e).TryGetValue t in if contains then Some (value |> List.ofSeq) else None)
                                |> List.collect id
                                |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                |> Some

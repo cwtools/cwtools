@@ -452,32 +452,52 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     //     pathFilteredTypes |> List.fold (infoServiceBase node) acc
 
     let getTypesInEntity = // (entity : Entity) =
-        let fLeaf (res : Collections.Map<string, (string * range) list>) (leaf : Leaf) ((field, _) : NewRule<_>) =
+        let res = Collections.Generic.Dictionary<string ,ResizeArray<string * range>>()
+        let fLeaf (_) (leaf : Leaf) ((field, _) : NewRule<_>) =
             match field with
             |LeafRule (_, TypeField (TypeType.Simple t)) ->
             // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
-                res |> (fun m -> m.Add(typename, (leaf.ValueText, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                if res.ContainsKey(typename)
+                then res.[typename].Add(leaf.ValueText, leaf.Position); res
+                else
+                    let newArr = ResizeArray<string * range>()
+                    newArr.Add((leaf.ValueText, leaf.Position))
+                    res.Add(typename, newArr)
+                    res
+                // res |> (fun m -> m.Add(typename, (leaf.ValueText, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
             |LeafRule (TypeField (TypeType.Simple t), _) ->
             // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
-                res |> (fun m -> m.Add(typename, (leaf.Key, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                if res.ContainsKey(typename)
+                then res.[typename].Add(leaf.Key, leaf.Position); res
+                else
+                    let newArr = ResizeArray<string * range>()
+                    newArr.Add((leaf.Key, leaf.Position))
+                    res.Add(typename, newArr)
+                    res
             |_ -> res
-        let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (field, _) =
+        let fLeafValue (_) (leafvalue : LeafValue) (field, _) =
             match field with
             |LeafValueRule (TypeField (TypeType.Simple t)) ->
             // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
-                res |> (fun m -> m.Add(t, (leafvalue.ValueText, leafvalue.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
+                if res.ContainsKey(typename)
+                then res.[typename].Add(leafvalue.ValueText, leafvalue.Position); res
+                else
+                    let newArr = ResizeArray<string * range>()
+                    newArr.Add((leafvalue.ValueText, leafvalue.Position))
+                    res.Add(typename, newArr)
+                    res
             |_ -> res
 
-        let fComment (res) _ _ = res
-        let fNode (res) (node : Node) ((field, option) : NewRule<_>) = res
-        let fValueClause (res) _ _ = res
+        let fComment (_) _ _ = res
+        let fNode (_) (node : Node) ((field, option) : NewRule<_>) = res
+        let fValueClause (_) _ _ = res
         let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
-        let ctx = typedefs |> List.fold (fun (a : Collections.Map<string, (string * range) list>) t -> a.Add(t.name, [])) Collections.Map.empty
-        fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx
+        // let ctx = typedefs |> List.fold (fun (a : Collections.Map<string, (string * range) list>) t -> a.Add(t.name, [])) Collections.Map.empty
+        fLeaf, fLeafValue, fComment, fNode, fValueClause, res
         // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
         // res
 
@@ -552,7 +572,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             mergeFolds getTriggersInEntity getEffectsInEntity
             |> mergeFolds getDefVarInEntity
             |> mergeFolds getTypesInEntity
-        let types, (defvars, (effects, triggers)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
+        let (types), (defvars, (effects, triggers)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
         (types, defvars, triggers, effects)
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)

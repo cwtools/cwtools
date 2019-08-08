@@ -13,6 +13,7 @@ let computeData (infoService : unit -> InfoService<_> option) (e : Entity) =
         | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
         | None -> (None, None, None, None)
     // let hastechs = getAllTechPrereqs e
+    let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
     ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
 let computeDataUpdate (infoService : unit -> InfoService<_> option) (e : Entity) (data : ComputedData) =
@@ -23,6 +24,7 @@ let computeDataUpdate (infoService : unit -> InfoService<_> option) (e : Entity)
         | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
         | None -> (None, None, None, None)
 
+    let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
     data.Referencedtypes <- referencedtypes
     data.Definedvariables <- definedvariable
     data.EffectBlocks <- effectBlocks
@@ -67,6 +69,7 @@ module EU4 =
         // let hastechs = getAllTechPrereqs e
         let scriptedeffectparams = Some (getScriptedEffectParamsEntity e)
 
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
         EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks)
     let computeEU4DataUpdate (infoService : unit -> InfoService<_> option) (e : Entity) (data : EU4ComputedData) =
         let withRulesData = infoService().IsSome
@@ -76,6 +79,7 @@ module EU4 =
             | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
             | None -> (None, None, None, None)
 
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
         data.Referencedtypes <- referencedtypes
         data.Definedvariables <- definedvariable
         data.EffectBlocks <- effectBlocks
@@ -177,6 +181,8 @@ module STL =
         // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         let hastechs = getAllTechPrereqs e
         let scriptedeffectparams = Some (EU4.getScriptedEffectParamsEntity e)
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |>  List.ofSeq |> List.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
         STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams)
 
     let computeSTLDataUpdate (infoService : unit -> InfoService<Scope> option) (e : Entity) (data : STLComputedData) =
@@ -186,6 +192,7 @@ module STL =
             match res with
             | Some (r, d, (e, _), (t, _)) -> (Some r, Some d, Some e, Some t)
             | None -> (None, None, None, None)
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
 
         data.Referencedtypes <- referencedtypes
         data.Definedvariables <- definedvariable

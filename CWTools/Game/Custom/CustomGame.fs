@@ -94,14 +94,14 @@ module CustomGameFunctions =
             let se = [] |> List.map (fun e -> e :> Effect<Scope>)
             let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect<Scope>)
             se @ vt
-        let vanillaTriggerNames = vanillaTriggers |> List.map (fun vt -> StringResource.stringManager.InternIdentifierToken vt.Name)
+        let vanillaTriggerNames = vanillaTriggers |> List.map (fun vt -> StringResource.stringManager.InternIdentifierToken vt.Name) |> Set.ofList
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
-        let ruleToTrigger(r,o) =
+        let inline ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
-                |NodeRule(ValueField(Specific n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
+                |LeafRule(ValueField(Specific n),_) when not (Set.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
+                |NodeRule(ValueField(Specific n),_) when not (Set.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
                 |_ -> None
             let effectType = if o.comparison then EffectType.ValueTrigger else EffectType.Trigger
             name |> Option.map (fun name -> DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
