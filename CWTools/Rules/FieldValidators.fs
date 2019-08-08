@@ -112,7 +112,7 @@ module internal FieldValidators =
                     then errors
                     else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a dna value, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.CK2DNAProperty ->
-                    if key.Length <= 14 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
+                    if key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
                     then errors
                     else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a portrait properties value, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.IRFamilyName ->
@@ -161,7 +161,7 @@ module internal FieldValidators =
             | ValueType.CK2DNA ->
                 key.Length = 11 && key |> Seq.forall (Char.IsLetter)
             | ValueType.CK2DNAProperty ->
-                key.Length <= 14 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
+                key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
             | ValueType.IRFamilyName ->
                 let parts = key.Split([|'.'|])
                 (parts.Length = 4) &&
