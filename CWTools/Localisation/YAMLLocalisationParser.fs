@@ -216,15 +216,18 @@ module Custom =
     open YAMLLocalisationParser
     let private keyToLanguage =
         function
-        |"l_english" -> Some IRLang.English
-        |"l_french" -> Some IRLang.French
-        |"l_german" -> Some IRLang.German
-        |"l_spanish" -> Some IRLang.Spanish
-        |"l_simp_chinese" -> Some IRLang.Chinese
-        |"l_russian" -> Some IRLang.Russian
+        |"l_english" -> Some CustomLang.English
+        |"l_french" -> Some CustomLang.French
+        |"l_german" -> Some CustomLang.German
+        |"l_spanish" -> Some CustomLang.Spanish
+        |"l_simp_chinese" -> Some CustomLang.Chinese
+        |"l_russian" -> Some CustomLang.Russian
+        |"l_polish" -> Some CustomLang.Polish
+        |"l_braz_por" -> Some CustomLang.Braz_Por
+        |"l_default" -> Some CustomLang.Default
         |_ -> None
 
     let CustomLocalisationService (files : (string * string) list) =
-        YAMLLocalisationService ( files, keyToLanguage, IR )
+        YAMLLocalisationService ( files, keyToLanguage, Custom )
     let CustomLocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "Custom"; keyToLanguage = keyToLanguage; gameToLang = IR })
+        YAMLLocalisationService ({ folder =  folder; gameName = "Custom"; keyToLanguage = keyToLanguage; gameToLang = Custom })

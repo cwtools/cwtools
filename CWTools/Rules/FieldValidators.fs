@@ -69,7 +69,7 @@ module internal FieldValidators =
     // type ScopeContext = IScopeContext<Scope>
 
     // type RuleContext  = RuleContext<Scope>
-    let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@' || s.[0] = '$')
+    let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)

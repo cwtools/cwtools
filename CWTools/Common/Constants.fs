@@ -2,13 +2,14 @@ namespace CWTools.Common
 open System.Collections.Generic
 open System
 
-type Game = |CK2 = 0 |HOI4 = 1 |EU4 = 2 |STL = 3 |VIC2 = 4
+type Game = |CK2 = 0 |HOI4 = 1 |EU4 = 2 |STL = 3 |VIC2 = 4 |Custom = 99
 type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Default = 5
 type STLLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6  |Default = 7 |Chinese = 8
 type HOI4Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6 |Default = 7 //Default doesnt' exist!
 type EU4Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Default = 4
 type IRLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Chinese = 4 |Russian = 5
 type VIC2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3
+type CustomLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6 |Chinese = 7 |Default = 8
 type Lang =
     |CK2 of CK2Lang
     |STL of STLLang
@@ -16,7 +17,8 @@ type Lang =
     |EU4 of EU4Lang
     |IR of IRLang
     |VIC2 of VIC2Lang
-    override x.ToString() = x |> function |CK2 c -> c.ToString() | STL s -> s.ToString() |HOI4 s -> s.ToString() |EU4 s -> s.ToString() |IR s -> s.ToString() |VIC2 s -> s.ToString()
+    |Custom of CustomLang
+    override x.ToString() = x |> function |CK2 c -> c.ToString() | STL s -> s.ToString() |HOI4 s -> s.ToString() |EU4 s -> s.ToString() |IR s -> s.ToString() |VIC2 s -> s.ToString() |Custom s -> s.ToString()
 
 type RawEffect =
     {

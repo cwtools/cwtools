@@ -186,15 +186,15 @@ module RulesParser =
     let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
 
     let private getNodeComments (clause : IClause) =
-        let findComments t s (a : Child) =
+        let findComments (t : range) s (a : Child) =
                 match (s, a) with
                 | ((b, c), _) when b -> (b, c)
                 | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, nc::c)
                 | ((_, c), CommentC nc) -> (false, c)
-                | ((_, c), NodeC n) when n.Position = t -> (true, c)
-                | ((_, c), LeafC v) when v.Position = t -> (true, c)
-                | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
-                | ((_, c), ValueClauseC vc) when vc.Position = t -> (true, c)
+                | ((_, c), NodeC n) when n.Position.Code = t.Code -> (true, c)
+                | ((_, c), LeafC v) when v.Position.Code = t.Code -> (true, c)
+                | ((_, c), LeafValueC v) when v.Position.Code = t.Code -> (true, c)
+                | ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code-> (true, c)
                 | _ -> (false, [])
                 // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
                 // | ((_, _), _) -> (false, [])

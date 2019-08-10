@@ -10,6 +10,7 @@ open CWTools.Process
 open CWTools.Process.Scopes
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
+open System.Collections.Concurrent
 
 type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                                     (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
@@ -327,7 +328,6 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let ctx = ctx, (None, None, None)
         foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx (pos) (entity.entity) (entity.logicalpath)
 
-
     let foldCollect fLeaf fLeafValue fComment fNode fValueClause acc (node : Node) (path: string) =
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
         let fChild (node : IClause) ((field, options) : NewRule<_>) =
@@ -451,8 +451,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     //         |_ -> acc
     //     pathFilteredTypes |> List.fold (infoServiceBase node) acc
 
-    let getTypesInEntity = // (entity : Entity) =
-        let res = Collections.Generic.Dictionary<string ,ResizeArray<string * range>>()
+    let getTypesInEntity() = // (entity : Entity) =
+        let res = ConcurrentDictionary<string ,ResizeArray<string * range>>()
         let fLeaf (_) (leaf : Leaf) ((field, _) : NewRule<_>) =
             match field with
             |LeafRule (_, TypeField (TypeType.Simple t)) ->
@@ -463,7 +463,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 else
                     let newArr = ResizeArray<string * range>()
                     newArr.Add((leaf.ValueText, leaf.Position))
-                    res.Add(typename, newArr)
+                    res.TryAdd(typename, newArr) |> ignore
                     res
                 // res |> (fun m -> m.Add(typename, (leaf.ValueText, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
             |LeafRule (TypeField (TypeType.Simple t), _) ->
@@ -474,7 +474,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 else
                     let newArr = ResizeArray<string * range>()
                     newArr.Add((leaf.Key, leaf.Position))
-                    res.Add(typename, newArr)
+                    res.TryAdd(typename, newArr) |> ignore
                     res
             |_ -> res
         let fLeafValue (_) (leafvalue : LeafValue) (field, _) =
@@ -487,7 +487,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                 else
                     let newArr = ResizeArray<string * range>()
                     newArr.Add((leafvalue.ValueText, leafvalue.Position))
-                    res.Add(typename, newArr)
+                    res.TryAdd(typename, newArr) |> ignore
                     res
             |_ -> res
 
@@ -571,7 +571,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx =
             mergeFolds getTriggersInEntity getEffectsInEntity
             |> mergeFolds getDefVarInEntity
-            |> mergeFolds getTypesInEntity
+            |> mergeFolds (getTypesInEntity())
         let (types), (defvars, (effects, triggers)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
         (types, defvars, triggers, effects)
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
@@ -651,7 +651,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
 
     //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
     member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
-    member __.GetReferencedTypes(entity : Entity) = singleFold getTypesInEntity entity
+    member __.GetReferencedTypes(entity : Entity) = singleFold (getTypesInEntity()) entity
     member __.GetDefinedVariables(entity : Entity) = singleFold getDefVarInEntity entity
     member __.GetTypeLocalisationErrors(entity : Entity) = validateLocalisationFromTypes entity
     member __.GetEffectBlocks(entity : Entity) = (singleFold getEffectsInEntity entity), (singleFold getTriggersInEntity entity)
