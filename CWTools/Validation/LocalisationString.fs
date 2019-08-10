@@ -18,9 +18,10 @@ module LocalisationString =
 
     let dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
     let dollarColour = pchar '|' .>> dollarChars
-    let commandChars = many1Satisfy (isNoneOf [']'])
+    let commandChars = many1Satisfy (isNoneOf [']'; '|'])
+    let commandFormat = pchar '|' .>> commandChars
     let ref = between (skipChar '$') (skipChar '$') (dollarChars .>> optional dollarColour |>> Ref)
-    let command = between (skipChar '[') (skipChar ']') (commandChars |>> Command)
+    let command = between (skipChar '[') (skipChar ']') ((commandChars) .>> optional commandFormat |>> Command )
     let locStringParser = many (valueChars |>> Chars <|> ref <|> command) .>> eof
 
     let parseLocString fileString filename = runParserOnString locStringParser () filename fileString
