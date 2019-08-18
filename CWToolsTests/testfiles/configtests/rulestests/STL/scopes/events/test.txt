@@ -38,5 +38,18 @@ country_event = {
 
             }
         }
+
+        ### Test subscope
+        to_parent = {
+            in_parent = yes
+            #error
+            in_child = yes
+        }
+        to_child = {
+            in_parent = yes
+            in_child = yes
+        }
+        #error
+        in_child = yes
     }
 }

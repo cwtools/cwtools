@@ -62,4 +62,11 @@ scopes = {
     "Archaeological Site" = {
         aliases = { archaeologicalsite archaeological_site }
     }
+    ParentScope = {
+        aliases = { parent }
+    }
+    ChildScope = {
+        aliases = { child }
+        is_subscope_of = { parent }
+    }
 }

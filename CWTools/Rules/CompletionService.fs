@@ -309,7 +309,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
             | xs ->
                 match currentContext.CurrentScope with
                 | x when x = anyScope -> true
-                | s -> List.exists s.MatchesScope xs
+                | s -> List.exists s.IsOfScope xs
         let usedKey = List.contains key allUsedKeys
         match validScope, usedKey with
         | true, true -> 100

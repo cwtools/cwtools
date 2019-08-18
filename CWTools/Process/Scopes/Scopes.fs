@@ -115,7 +115,7 @@ module Scopes =
                             then
                                 let possibleScopes = e.Scopes
                                 let currentScope = context.CurrentScope :> IScope<_>
-                                let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                                let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
                                 match context.CurrentScope, possibleScopes, exact with
                                 | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound
                                 | _, [], _ -> (context, false), NotFound
@@ -136,7 +136,7 @@ module Scopes =
                         | Some e, _ ->
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope :> IScope<_>
-                            let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                            let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
                             | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren)
@@ -214,7 +214,7 @@ module Scopes =
                         | Some e ->
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope :> IScope<_>
-                            let exact = possibleScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                            let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
                             | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren)
@@ -263,7 +263,7 @@ module Scopes =
                 |> Option.map (fun e ->
                                     let validScopes = e.Scopes
                                     let currentScope = context.CurrentScope :> IScope<_>
-                                    let exact = validScopes |> List.exists (fun x -> currentScope.MatchesScope x)
+                                    let exact = validScopes |> List.exists (fun x -> currentScope.IsOfScope x)
                                     match context.CurrentScope, validScopes, exact with
                                         | x, _, _ when x = context.Root.AnyScope -> (LocContextResult.NewScope ({source with Scopes =applyTargetScope e.Target context.Scopes}))
                                         // | _, [], _ -> (context, false), NotFound

@@ -96,3 +96,21 @@ alias[effect:scope_field] = {
     ## cardinality = 0..1
     alias_name[effect] = alias_match_left[effect]
 }
+
+## push_scope = parent
+alias[effect:to_parent] = {
+    ## cardinality = 0..1
+    alias_name[effect] = alias_match_left[effect]
+}
+
+## push_scope = child
+alias[effect:to_child] = {
+    ## cardinality = 0..1
+    alias_name[effect] = alias_match_left[effect]
+}
+
+## scope = parent
+alias[effect:in_parent] = bool
+
+## scope = child
+alias[effect:in_child] = bool

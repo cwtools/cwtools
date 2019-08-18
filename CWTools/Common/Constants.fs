@@ -115,7 +115,7 @@ type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc
 type IScope<'T> =
     abstract member AnyScope : 'T
     /// The first value is or can be coerced to the second
-    abstract member MatchesScope : 'T -> bool
+    abstract member IsOfScope : 'T -> bool
 
 type IModifier =
     abstract member Tag : string
@@ -251,10 +251,10 @@ module rec NewScope =
                 | _ -> 0
         interface IScope<Scope> with
             member this.AnyScope = scopeManager.AnyScope
-            member this.MatchesScope target =
+            member this.IsOfScope target =
                 match this, target with
                 // |TradeNode, Province -> true
                 | _, x
                 | x, _ when x = scopeManager.AnyScope -> true
-                |this, target -> this = target
+                |this, target -> scopeManager.MatchesScope this target
 

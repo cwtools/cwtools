@@ -44,7 +44,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
 
     let memoizeRulesInner memFunction =
         // let dict = new System.Runtime.CompilerServices.ConditionalWeakTable<_,System.Collections.Generic.Dictionary<_,_>>()
-        let dict = new System.Collections.Generic.Dictionary<_,System.Collections.Generic.Dictionary<_,_>>()
+        let dict = new System.Collections.Concurrent.ConcurrentDictionary<_,System.Collections.Generic.Dictionary<_,_>>()
         fun (rules : NewRule<_> list) (subtypes : string list) ->
                 match dict.TryGetValue(rules) with
                 | (true, v) ->
@@ -64,7 +64,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                         match dict.TryGetValue(rules) with
                         |(true, v2) -> ()
                         |_ ->
-                            dict.Add(rules, innerDict)
+                            dict.TryAdd(rules, innerDict) |> ignore
                     )
                     temp
     let memoizeRules =
