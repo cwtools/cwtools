@@ -103,6 +103,10 @@ type ErrorCodes =
     static member RecursiveLocRef = { ID = "CW259"; Severity = Severity.Error; Message = "This localisation string refers to itself"}
     static member LocCommandWrongScope = fun command expected actual -> { ID = "CW260"; Severity = Severity.Error; Message = sprintf "Loc command %s used in wrong scope. In %s but expected %s" command actual expected }
     static member DuplicateTypeDef = fun typename actualtype -> { ID = "CW261"; Severity = Severity.Error; Message = sprintf "Key %s of type %s is defined multiple times" actualtype typename}
+    static member ConfigRulesUnexpectedPropertyNode = fun message severity -> { ID = "CW262"; Severity = severity; Message = message }
+    static member ConfigRulesUnexpectedPropertyLeaf = fun message severity -> { ID = "CW263"; Severity = severity; Message = message }
+    static member ConfigRulesUnexpectedPropertyLeafValue = fun message severity -> { ID = "CW2464"; Severity = severity; Message = message }
+    static member ConfigRulesUnexpectedPropertyValueClause = fun message severity -> { ID = "CW265"; Severity = severity; Message = message }
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 

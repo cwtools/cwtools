@@ -155,21 +155,21 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
         //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
         //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
         //         |x -> [||])
-        // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules }
+        // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules } sprintfn "%s is unexpected in %s"
         let valueFun innerErrors (leaf : Leaf) =
-            let createDefault() = if enforceCardinality && ((leaf.Key.[0] <> '@')) then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for leaf %s in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
+            let createDefault() = if enforceCardinality && ((leaf.Key.[0] <> '@')) then inv (ErrorCodes.ConfigRulesUnexpectedPropertyNode (sprintf "%s is unexpected in %s" leaf.Key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
             leafrules |> Seq.filter (fun (l, r, o) -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key)
                           |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
         let nodeFun innerErrors (node : Node) =
-            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for node %s in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
+            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyLeaf (sprintf "%s is unexpected in %s" node.Key startNode.Key) severity) node <&&&> innerErrors else innerErrors
             noderules |> Seq.filter (fun (l, rs, o) -> FieldValidators.checkLeftField p Severity.Error ctx l node.KeyId.lower node.Key)
                           |> (fun rs -> lazyErrorMerge rs (fun (l, r, o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
         let leafValueFun innerErrors (leafvalue : LeafValue) =
-            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected key for value %s in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
+            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyLeafValue (sprintf "%s is unexpected in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
             leafvaluerules |> Seq.filter (fun (l, o) -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key)
                           |> (fun rs -> lazyErrorMerge rs (fun (l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
         let valueClauseFun innerErrors (valueclause : ValueClause) =
-            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected clause in %s" startNode.Key) severity) valueclause <&&&> innerErrors else innerErrors
+            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyValueClause (sprintf "Unexpected clause in %s" startNode.Key) severity) valueclause <&&&> innerErrors else innerErrors
             valueclauserules |> (fun rs -> lazyErrorMerge rs (fun (r, o) e -> applyValueClauseRule enforceCardinality ctx o r valueclause e) createDefault innerErrors true)
         let checkCardinality (clause : IClause) innerErrors (rule : NewRule<_>) =
             match rule with
