@@ -258,3 +258,22 @@ module LanguageFeatures =
             else
                 None
         |_ -> None
+
+
+    let graphEventDataForFiles (resourceManager : ResourceManager<_>) (lookup : Lookup<_, _>) (files : string list) : GraphDataItem list =
+        let entities = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
+        match lookup.typeDefInfo |> Map.tryFind("event") with
+        | Some t ->
+            let eventsInFile = t |> List.filter (fun (_, r) -> files |> List.contains r.FileName)
+            let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.bind (Map.tryFind "event") |> Option.defaultValue [])
+            let results = t |> List.map (fun (event, r) -> event, r, (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)))
+            results |> List.map (fun (event, r, refs) ->
+                {
+                    GraphDataItem.id = event
+                    displayName = None
+                    documentation = None
+                    references = refs
+                    location = Some r
+                    details = None
+                })
+        | None -> []                                   

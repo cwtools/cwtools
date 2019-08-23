@@ -16,6 +16,18 @@ type SymbolInformation =
         ruleRequiredScopes : string list
     }
 
+type GraphDataItem = 
+    {
+        id : string
+        displayName : string option
+        documentation : string option
+        references : string list
+        location : range option
+        details : Map<string, string list> option
+    }
+
+type GraphDataRequest = string list -> GraphDataItem list
+
 type CWError = (string * Severity * range * int * string * option<string>)
 
 type CompletionResponse =
@@ -44,6 +56,7 @@ type IGame =
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option
     abstract GetPossibleCodeEdits : string -> string -> range list
     abstract GetCodeEdits : string -> string -> (range seq * pos * string) list option
+    abstract GetEventGraphData : GraphDataRequest
 
 type IGame<'S when 'S : comparison and 'S :> IScope<'S>> =
     inherit IGame
