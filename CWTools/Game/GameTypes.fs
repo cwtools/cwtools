@@ -16,7 +16,7 @@ type SymbolInformation =
         ruleRequiredScopes : string list
     }
 
-type GraphDataItem = 
+type GraphDataItem =
     {
         id : string
         displayName : string option
@@ -24,6 +24,8 @@ type GraphDataItem =
         references : string list
         location : range option
         details : Map<string, string list> option
+        /// Whether this item is in the files given (as opposed to only referenced to)
+        isPrimary : bool
     }
 
 type GraphDataRequest = string list -> GraphDataItem list

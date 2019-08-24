@@ -267,7 +267,7 @@ module LanguageFeatures =
             let eventsInFile = t |> List.filter (fun (_, r) -> files |> List.contains r.FileName)
             let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.bind (Map.tryFind "event") |> Option.defaultValue [])
             let results = eventsInFile |> List.map (fun (event, r) -> event, r, (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)))
-            results |> List.map (fun (event, r, refs) ->
+            let primaries = results |> List.map (fun (event, r, refs) ->
                 {
                     GraphDataItem.id = event
                     displayName = None
@@ -275,5 +275,20 @@ module LanguageFeatures =
                     references = refs
                     location = Some r
                     details = None
+                    isPrimary = true
                 })
+            let refNames = allRefs |> List.map fst |> List.distinct
+            let eventNames = eventsInFile |> List.map fst
+            let referenced = t |> List.filter (fun (name, _) -> refNames |> List.contains name && (eventNames |> List.contains name |> not))
+            let secondaries = referenced |> List.map (fun (name, range) ->
+                {
+                    GraphDataItem.id = name
+                    displayName = None
+                    documentation = None
+                    references = []
+                    location = Some range
+                    details = None
+                    isPrimary = false
+                })
+            primaries @ secondaries
         | None -> []
