@@ -309,7 +309,7 @@ type EU4Game(setupSettings : EU4Settings) =
         member __.Types() = game.Lookup.typeDefInfo
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
-        member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles game.ResourceManager lookup files)
+        member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles game.ResourceManager lookup files ["event"])
 
         //getFastTrigger fileManager game.ResourceManager file text
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

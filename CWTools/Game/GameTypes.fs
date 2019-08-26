@@ -26,6 +26,7 @@ type GraphDataItem =
         details : Map<string, string list> option
         /// Whether this item is in the files given (as opposed to only referenced to)
         isPrimary : bool
+        entityType: string
     }
 
 type GraphDataRequest = string list -> GraphDataItem list
