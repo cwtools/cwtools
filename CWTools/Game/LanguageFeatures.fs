@@ -5,6 +5,7 @@ open Files
 open CWTools.Utilities.Utils
 open CWTools.Process
 open CWTools.Rules
+open CWTools.Common
 
 module LanguageFeatures =
     let makeEntityResourceInput (fileManager : FileManager) filepath filetext  =
@@ -52,7 +53,7 @@ module LanguageFeatures =
             log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             |Some (_, (_, Some (t, tv), _)) ->
-                lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
+                lookup.typeDefInfo.[t] |> List.tryPick (fun (tdi) -> if tdi.id = tv then Some tdi.range else None)
             |_ -> None
         |_, _ -> None
 
@@ -262,18 +263,23 @@ module LanguageFeatures =
 
     let graphEventDataForFiles (referenceManager : References<_, _, _>) (resourceManager : ResourceManager<_>) (lookup : Lookup<_, _>) (files : string list) (sourceTypes : string list) : GraphDataItem list =
         let entities = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
-        let getSourceTypes x = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (v1, v2) -> k, v1, v2))
-        match lookup.typeDefInfo |> getSourceTypes with
+        let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation))
+        let getSourceTypes x = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (v1, v2) -> k, v1, v2, []))
+        let getDisplayNameFromID (id : string) (el : (string * string * bool) list) =
+            let findLoc key = referenceManager.Localisation |> List.tryFind (fun (k, _) -> k == key) |> Option.map (fun (_, l) -> l.desc)
+            el |> List.tryFind (fun (_, _, primary) -> primary)
+               |> Option.bind (fun (_, key, _) -> findLoc key)
+               |> Option.orElseWith (fun _ -> findLoc id)
+        match lookup.typeDefInfo |> getSourceTypesTD with
         | [] -> []
         | t ->
-            let eventsInFile = t |> List.filter (fun (_, _, r) -> files |> List.contains r.FileName)
-            let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r) -> (v, r))) |> Option.defaultValue [])
-            let results = eventsInFile |> List.map (fun (entityType, event, r) -> entityType, event, r, (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)))
-            let getDisplayNameFromID (id : string) = referenceManager.Localisation |> List.tryFind (fun (k, _) -> k == id) |> Option.map (fun (_, l) -> l.desc)
-            let primaries = results |> List.map (fun (entityType, event, r, refs) ->
+            let eventsInFile = t |> List.filter (fun (_, _, r, el) -> files |> List.contains r.FileName)
+            let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, _) -> (v, r))) |> Option.defaultValue [])
+            let results = eventsInFile |> List.map (fun (entityType, event, r, el) -> entityType, event, r, (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)), el)
+            let primaries = results |> List.map (fun (entityType, event, r, refs, el) ->
                 {
                     GraphDataItem.id = event
-                    displayName = getDisplayNameFromID event
+                    displayName = getDisplayNameFromID event el
                     documentation = None
                     references = refs
                     location = Some r
@@ -282,12 +288,12 @@ module LanguageFeatures =
                     entityType = entityType
                 })
             let refNames = allRefs |> List.map fst |> List.distinct
-            let eventNames = eventsInFile |> List.map (fun (k, n, r) -> n)
-            let referenced = t |> List.filter (fun (k, name, _) -> refNames |> List.contains name && (eventNames |> List.contains name |> not))
-            let secondaries = referenced |> List.map (fun (entityType, name, range) ->
+            let eventNames = eventsInFile |> List.map (fun (k, n, r, _) -> n)
+            let referenced = t |> List.filter (fun (k, name, _, _) -> refNames |> List.contains name && (eventNames |> List.contains name |> not))
+            let secondaries = referenced |> List.map (fun (entityType, name, range, el) ->
                 {
                     GraphDataItem.id = name
-                    displayName = getDisplayNameFromID name
+                    displayName = getDisplayNameFromID name el
                     documentation = None
                     references = []
                     location = Some range

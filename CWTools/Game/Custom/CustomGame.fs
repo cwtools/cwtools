@@ -151,9 +151,9 @@ module CustomGameFunctions =
     //     test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
 
-    let addModifiersAsTypes (lookup : Lookup<Scope, CustomModifier>) (typesMap : Map<string,(bool * string * range) list>) =
+    let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
-        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> (false, m.tag, range.Zero)))
+        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero []))
 
     // let updateProvinces (game : GameObject) =
     //     let provinceFile =
@@ -182,7 +182,7 @@ module CustomGameFunctions =
     let addScriptFormulaLinks (lookup : Lookup<Scope, CustomModifier>) =
         match lookup.typeDefInfo |> Map.tryFind "script_value" with
         | Some vs ->
-            let values = vs |> List.map fst
+            let values = vs |> List.map (fun tdi -> tdi.id)
             values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
         | None -> []
 
@@ -268,8 +268,8 @@ module CustomGameFunctions =
                             // |> Map.add charEnums.key (charEnums.description, charEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<Scope, CustomModifier>) _ (embedded : EmbeddedSettings<_,_>) =
-        lookup.typeDefInfoRaw <-
-            (lookup.typeDefInfoRaw)
+        lookup.typeDefInfo <-
+            (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded

@@ -11,6 +11,7 @@ open Files
 
 
 
+
 type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier>() =
 
     let mutable _allCoreLinks : Effect<'S> list = []
@@ -72,9 +73,9 @@ type Lookup<'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier
     member val typeDefs : TypeDefinition<'S> list = [] with get, set
     /// Map<enum key, (description * values list)
     member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
-    member val typeDefInfoRaw : Collections.Map<string, (bool * string * range) list> = Map.empty with get, set
-    member this.typeDefInfo
-        with get () : Collections.Map<string, (string * range) list> = this.typeDefInfoRaw |> Collections.Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
+    member val typeDefInfo : Collections.Map<string, TypeDefInfo list> = Map.empty with get, set
+    // member this.typeDefInfo
+    //     with get () : Collections.Map<string, (string * range) list> = this.typeDefInfoRaw |> Collections.Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
     member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val globalScriptedVariables : string list = [] with get, set

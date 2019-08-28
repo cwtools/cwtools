@@ -27,7 +27,7 @@ module HOI4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
@@ -41,7 +41,7 @@ module HOI4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
@@ -127,7 +127,7 @@ module HOI4GameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
         let states = lookup.typeDefInfo.TryFind "state"
-                            |> Option.map (fun sl -> sl |> List.map fst)
+                            |> Option.map (fun sl -> sl |> List.map (fun tdi -> tdi.id))
                             |> Option.defaultValue []
         let countries = lookup.enumDefs.TryFind "country_tag"
                             |> Option.map snd

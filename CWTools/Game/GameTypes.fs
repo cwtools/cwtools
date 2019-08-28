@@ -31,6 +31,9 @@ type GraphDataItem =
 
 type GraphDataRequest = string list -> GraphDataItem list
 
+
+
+
 type CWError = (string * Severity * range * int * string * option<string>)
 
 type CompletionResponse =
@@ -55,7 +58,7 @@ type IGame =
     abstract RefreshCaches : unit -> unit
     abstract RefreshLocalisationCaches : unit -> unit
     abstract ForceRecompute : unit -> unit
-    abstract Types : unit ->  Map<string,(string * range) list>
+    abstract Types : unit ->  Map<string,TypeDefInfo list>
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option
     abstract GetPossibleCodeEdits : string -> string -> range list
     abstract GetCodeEdits : string -> string -> (range seq * pos * string) list option

@@ -258,3 +258,9 @@ module rec NewScope =
                 | x, _ when x = scopeManager.AnyScope -> true
                 |this, target -> scopeManager.MatchesScope this target
 
+    type TypeDefInfo = {
+        id : string
+        validate : bool
+        range : CWTools.Utilities.Position.range
+        explicitLocalisation : (string * string * bool) list
+    }

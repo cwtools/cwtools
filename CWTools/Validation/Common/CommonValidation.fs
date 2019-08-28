@@ -60,10 +60,10 @@ module CommonValidation =
             let types = lu.typeDefs |> List.filter (fun td -> td.unique)
             let zipped = types |> List.map (fun td -> td.name, lu.typeDefInfo.[td.name])
             let groupFun =
-                List.groupBy fst >> List.filter (fun (k, g) -> g.Length > 1)
+                List.groupBy (fun (tdi : TypeDefInfo) -> tdi.id) >> List.filter (fun (k, g) -> g.Length > 1)
                                  >> List.collect snd
             let res = zipped |> List.collect (fun (tn, ts) -> (groupFun ts) |> List.map (fun t -> tn, t))
-            res <&!&> (fun (typename, (typeactual, range)) ->
-                            Invalid [invManual (ErrorCodes.DuplicateTypeDef typename typeactual) range "" None])
+            res <&!&> (fun (typename, (tdi)) ->
+                            Invalid [invManual (ErrorCodes.DuplicateTypeDef typename tdi.id) tdi.range "" None])
                             //    |> List.map (fun td, ts -> )
             )

@@ -33,7 +33,7 @@ module EU4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
@@ -48,7 +48,7 @@ module EU4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map fst)
+            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
@@ -122,9 +122,9 @@ module EU4GameFunctions =
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
 
-    let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,(bool * string * range) list>) =
+    let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
-        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> (false, m.tag, range.Zero)))
+        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero []))
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
         let ts = updateScriptedTriggers rules
@@ -147,8 +147,8 @@ module EU4GameFunctions =
                             |> Map.add legacyGovEnums.key (legacyGovEnums.description, legacyGovEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
-        lookup.typeDefInfoRaw <-
-            (lookup.typeDefInfoRaw)
+        lookup.typeDefInfo <-
+            (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 

@@ -76,6 +76,7 @@ type TypeLocalisation<'a> = {
     optional : bool
     explicitField : string option
     replaceScopes : ReplaceScopes<'a> option
+    primary : bool
 }
 
 type SkipRootKey = |SpecificKey of string |AnyKey |MultipleKeys of string list * bool
@@ -556,15 +557,16 @@ module RulesParser =
             |LeafC loc ->
                 let required = comments |> List.exists (fun s -> s.Contains "required")
                 let optional = comments |> List.exists (fun s -> s.Contains "optional")
+                let primary = comments |> List.exists (fun s -> s.Contains "primary")
                 let key = loc.Key
                 let value = loc.Value.ToRawString()
                 match value.IndexOf "$" with
                 | -1 ->
-                    Some { name = key; prefix = ""; suffix = ""; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments; explicitField = Some value }
+                    Some { name = key; prefix = ""; suffix = ""; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments; explicitField = Some value; primary = primary }
                 | dollarIndex ->
                     let prefix = value.Substring(0, dollarIndex)
                     let suffix = value.Substring(dollarIndex + 1)
-                    Some { name = key; prefix = prefix; suffix = suffix; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments; explicitField = None }
+                    Some { name = key; prefix = prefix; suffix = suffix; required = required; optional = optional; replaceScopes = replaceScopes parseScope comments; explicitField = None; primary = primary }
             |_ -> None
         let parseSubTypeLocalisation (subtype : Node) =
             match subtype.Key.StartsWith("subtype[") with

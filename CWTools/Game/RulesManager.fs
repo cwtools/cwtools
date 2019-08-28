@@ -112,15 +112,15 @@ type RulesManager<'T, 'S, 'M, 'L when 'T :> ComputedData and 'S :> IScope<'S> an
 
 
         // let typeDefInfo = createLandedTitleTypes game typeDefInfo
-        lookup.typeDefInfoRaw <- typeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
+        lookup.typeDefInfo <- typeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
         // lookup.typeDefInfo <- addModifiersAsTypes game lookup.typeDefInfo
 
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
-        lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (v, t, r) -> if v then Some (t, r) else None))
+        lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (tdi) -> if tdi.validate then Some (tdi.id, tdi.range) else None))
 
         // lookup.scriptedEffects <- tempEffects @ addDataEventTargetLinks game
         // lookup.scriptedTriggers <- tempTriggers @ addDataEventTargetLinks game
-        tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+        tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
         let tempInfoService = (InfoService<'S>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
 
         //let infoService = tempInfoService

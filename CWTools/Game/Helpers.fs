@@ -15,7 +15,7 @@ module Helpers =
         | x when x.StartsWith "<" && x.EndsWith ">" ->
             let sourceType = x.Trim([|'<';'>'|])
             match lookup.typeDefInfo |> Map.tryFind (sourceType) with
-                | Some x -> x |> List.map fst
+                | Some x -> x |> List.map (fun tdi -> tdi.id)
                 | None ->
                     log (sprintf "Link %s refers to undefined type %s" link.name sourceType)
                     []
@@ -88,3 +88,10 @@ module Helpers =
             |Some les, None -> (if force then genAll() else les) @ (genGlobal())
             |None, None -> (genAll()) @ (genGlobal())
 
+    let createTypeDefInfo validate id range explicitLocalisation =
+        {
+            TypeDefInfo.id = id
+            validate = validate
+            range = range
+            explicitLocalisation = explicitLocalisation
+        }
