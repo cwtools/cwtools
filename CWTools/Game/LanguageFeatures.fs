@@ -262,11 +262,12 @@ module LanguageFeatures =
 
 
     let graphEventDataForFiles (referenceManager : References<_, _, _>) (resourceManager : ResourceManager<_>) (lookup : Lookup<_, _>) (files : string list) (sourceTypes : string list) : GraphDataItem list =
+        let locSet = referenceManager.Localisation |> Map.ofList
+        let findLoc key = locSet |> Map.tryFind key |> Option.map (fun (l) -> l.desc)
         let entities = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
         let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation))
         let getSourceTypes x = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (v1, v2) -> k, v1, v2, []))
         let getDisplayNameFromID (id : string) (el : (string * string * bool) list) =
-            let findLoc key = referenceManager.Localisation |> List.tryFind (fun (k, _) -> k == key) |> Option.map (fun (_, l) -> l.desc)
             el |> List.tryFind (fun (_, _, primary) -> primary)
                |> Option.bind (fun (_, key, _) -> findLoc key)
                |> Option.orElseWith (fun _ -> findLoc id)

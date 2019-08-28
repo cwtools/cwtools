@@ -22,7 +22,7 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types :
                                 match def.nameField with
                                 |Some f -> n.TagText f
                                 |None -> n.Key
-                            let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys e def))
+                            let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def))
                             if CWTools.Rules.FieldValidators.typekeyfilter def n.Key then result else []
                         let childres =
                             let rec skiprootkey (srk : SkipRootKey list) (n : Node)=
