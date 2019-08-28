@@ -247,6 +247,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
+    let references = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
@@ -290,4 +291,4 @@ type HOI4Game(setupSettings : HOI4Settings) =
         member __.Types() = game.Lookup.typeDefInfo
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None //getFastTrigger fileManager game.ResourceManager file text
-        member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles game.ResourceManager lookup files ["event"])
+        member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles references game.ResourceManager lookup files ["event"])

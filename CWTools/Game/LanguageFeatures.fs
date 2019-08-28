@@ -260,7 +260,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let graphEventDataForFiles (resourceManager : ResourceManager<_>) (lookup : Lookup<_, _>) (files : string list) (sourceTypes : string list) : GraphDataItem list =
+    let graphEventDataForFiles (referenceManager : References<_, _, _>) (resourceManager : ResourceManager<_>) (lookup : Lookup<_, _>) (files : string list) (sourceTypes : string list) : GraphDataItem list =
         let entities = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
         let getSourceTypes x = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (v1, v2) -> k, v1, v2))
         match lookup.typeDefInfo |> getSourceTypes with
@@ -269,10 +269,11 @@ module LanguageFeatures =
             let eventsInFile = t |> List.filter (fun (_, _, r) -> files |> List.contains r.FileName)
             let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r) -> (v, r))) |> Option.defaultValue [])
             let results = eventsInFile |> List.map (fun (entityType, event, r) -> entityType, event, r, (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)))
+            let getDisplayNameFromID (id : string) = referenceManager.Localisation |> List.tryFind (fun (k, _) -> k == id) |> Option.map (fun (_, l) -> l.desc)
             let primaries = results |> List.map (fun (entityType, event, r, refs) ->
                 {
                     GraphDataItem.id = event
-                    displayName = None
+                    displayName = getDisplayNameFromID event
                     documentation = None
                     references = refs
                     location = Some r
@@ -286,7 +287,7 @@ module LanguageFeatures =
             let secondaries = referenced |> List.map (fun (entityType, name, range) ->
                 {
                     GraphDataItem.id = name
-                    displayName = None
+                    displayName = getDisplayNameFromID name
                     documentation = None
                     references = []
                     location = Some range

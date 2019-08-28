@@ -315,6 +315,7 @@ type STLGame (setupSettings : StellarisSettings) =
         let lookup = game.Lookup
         let resources = game.Resources
         let fileManager = game.FileManager
+        let references = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
         let useRules = settings.rules.IsSome
         let parseErrors() =
@@ -378,4 +379,4 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.Types() = game.Lookup.typeDefInfo
             member __.GetPossibleCodeEdits file text = getPreTriggerPossible fileManager game.ResourceManager file text
             member __.GetCodeEdits file text = getFastTrigger fileManager game.ResourceManager file text
-            member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles game.ResourceManager lookup files ["event"; "special_project"])
+            member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles references game.ResourceManager lookup files ["event"; "special_project"])
