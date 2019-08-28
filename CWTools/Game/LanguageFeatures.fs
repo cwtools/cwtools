@@ -276,15 +276,23 @@ module LanguageFeatures =
         | t ->
             let eventsInFile = t |> List.filter (fun (_, _, r, el) -> files |> List.contains r.FileName)
             let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, _) -> (v, r))) |> Option.defaultValue [])
-            let results = eventsInFile |> List.map (fun (entityType, event, r, el) -> entityType, event, r, (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)), el)
-            let primaries = results |> List.map (fun (entityType, event, r, refs, el) ->
+            let definedVariables = entities |> List.collect (fun struct(_, data) -> data.Force().Definedvariables |> Option.map (Map.toList >> List.collect (fun (k, vs) -> vs |> List.ofSeq |> List.map (fun (v1, v2) -> k, v1, v2))) |> Option.defaultValue [])
+            let results = eventsInFile
+                        |> List.map (fun (entityType, event, r, el) ->
+                            entityType,
+                            event,
+                            r,
+                            (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)),
+                            (definedVariables |> List.choose (fun (varname, defVar, r2) -> if rangeContainsRange r r2 then Some (varname, defVar) else None)),
+                            el)
+            let primaries = results |> List.map (fun (entityType, event, r, refs, defvar, el) ->
                 {
                     GraphDataItem.id = event
                     displayName = getDisplayNameFromID event el
                     documentation = None
                     references = refs
                     location = Some r
-                    details = None
+                    details = Some (defvar |> List.groupBy fst |> List.map (fun (k, vs) -> k, vs |> List.map snd) |> Map.ofList)
                     isPrimary = true
                     entityType = entityType
                 })
