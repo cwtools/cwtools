@@ -27,6 +27,8 @@ type GraphDataItem =
         /// Whether this item is in the files given (as opposed to only referenced to)
         isPrimary : bool
         entityType: string
+        entityTypeDisplayName : string option
+        abbreviation : string option
     }
 
 type GraphDataRequest = string list -> GraphDataItem list

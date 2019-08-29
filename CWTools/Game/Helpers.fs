@@ -88,10 +88,11 @@ module Helpers =
             |Some les, None -> (if force then genAll() else les) @ (genGlobal())
             |None, None -> (genAll()) @ (genGlobal())
 
-    let createTypeDefInfo validate id range explicitLocalisation =
+    let createTypeDefInfo validate id range explicitLocalisation subtypes =
         {
             TypeDefInfo.id = id
             validate = validate
             range = range
             explicitLocalisation = explicitLocalisation
+            subtypes = subtypes
         }

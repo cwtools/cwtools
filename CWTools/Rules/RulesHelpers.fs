@@ -17,12 +17,13 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types :
         entities |> List.choose (fun (path, e, file, validate) -> if FieldValidators.checkPathDir def path file then Some (e.entity, file, validate) else None)
                  |> List.collect (fun (e, f, v) ->
                         let inner (n : Node) =
-                            let subtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
+                            let rawSubtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd
+                            let subtypes = rawSubtypes |> List.map (fun s -> def.name + "." + s)
                             let key =
                                 match def.nameField with
                                 |Some f -> n.TagText f
                                 |None -> n.Key
-                            let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def))
+                            let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def, rawSubtypes))
                             if CWTools.Rules.FieldValidators.typekeyfilter def n.Key then result else []
                         let childres =
                             let rec skiprootkey (srk : SkipRootKey list) (n : Node)=
@@ -43,8 +44,9 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types :
                                     // n.Children |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
                             match def.type_per_file, def.skipRootKey with
                             |true, _ ->
-                                let subtypes = ruleapplicator.TestSubType(def.subtypes, e) |> snd |> List.map (fun s -> def.name + "." + s)
-                                def.name::subtypes |> List.map (fun s -> s, (v, Path.GetFileNameWithoutExtension f, e.Position, getExplicitLocalisationKeys e def))
+                                let rawSubtypes = ruleapplicator.TestSubType(def.subtypes, e) |> snd
+                                let subtypes = rawSubtypes |> List.map (fun s -> def.name + "." + s)
+                                def.name::subtypes |> List.map (fun s -> s, (v, Path.GetFileNameWithoutExtension f, e.Position, getExplicitLocalisationKeys e def, rawSubtypes))
                             |false, [] ->
                                 (e.Children |> List.collect inner)
                             |false, srk ->
@@ -52,10 +54,10 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types :
                             // |false, _ ->
                         childres
                         @
-                        (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (v ,lv.Value.ToString(), lv.Position, []))))
+                        (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (v ,lv.Value.ToString(), lv.Position, [], []))))
     let results = types |> Seq.ofList |> PSeq.collect getTypeInfo |> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
     types |> List.map (fun t -> t.name) |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m ) results
-          |> Map.map (fun _ vs -> vs |> List.map (fun (v, n, r, el) -> { TypeDefInfo.validate = v; id = n; range = r; explicitLocalisation = el}))
+          |> Map.map (fun _ vs -> vs |> List.map (fun (v, n, r, el, sts) -> { TypeDefInfo.validate = v; id = n; range = r; explicitLocalisation = el; subtypes = sts}))
 
 let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
     let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)

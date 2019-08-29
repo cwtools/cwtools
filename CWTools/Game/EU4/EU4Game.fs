@@ -124,7 +124,7 @@ module EU4GameFunctions =
 
     let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
-        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero []))
+        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
     let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
         let ts = updateScriptedTriggers rules

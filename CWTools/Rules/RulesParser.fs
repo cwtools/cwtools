@@ -82,6 +82,8 @@ type TypeLocalisation<'a> = {
 type SkipRootKey = |SpecificKey of string |AnyKey |MultipleKeys of string list * bool
 type SubTypeDefinition<'a> = {
     name : string
+    displayName : string option
+    abbreviation : string option
     rules : NewRule<'a> list
     typeKeyField : string option
     startsWith : string option
@@ -584,6 +586,14 @@ module RulesParser =
                     match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                     |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
                     |None -> None
+                let displayName =
+                    match comments |> List.tryFind (fun s -> s.Contains "display_name") with
+                    |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
+                    |None -> None
+                let abbreviation =
+                    match comments |> List.tryFind (fun s -> s.Contains "abbreviation") with
+                    |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
+                    |None -> None
                 let pushScope =
                     match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
                     |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
@@ -594,7 +604,7 @@ module RulesParser =
                     |None -> None
                 let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope))
                 match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = []; startsWith = startsWith }
+                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = []; startsWith = startsWith; displayName = displayName; abbreviation = abbreviation }
                 |None -> None
             |_ -> None
         let getSkipRootKey (node : Node) =

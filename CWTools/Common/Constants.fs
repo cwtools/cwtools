@@ -263,4 +263,5 @@ module rec NewScope =
         validate : bool
         range : CWTools.Utilities.Position.range
         explicitLocalisation : (string * string * bool) list
+        subtypes : string list
     }

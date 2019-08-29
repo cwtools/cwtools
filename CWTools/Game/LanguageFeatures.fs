@@ -265,27 +265,36 @@ module LanguageFeatures =
         let locSet = referenceManager.Localisation |> Map.ofList
         let findLoc key = locSet |> Map.tryFind key |> Option.map (fun (l) -> l.desc)
         let entities = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
-        let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation))
+        let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
         let getSourceTypes x = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (v1, v2) -> k, v1, v2, []))
         let getDisplayNameFromID (id : string) (el : (string * string * bool) list) =
             el |> List.tryFind (fun (_, _, primary) -> primary)
                |> Option.bind (fun (_, key, _) -> findLoc key)
                |> Option.orElseWith (fun _ -> findLoc id)
+        let getAbbrevInfo (typeName : string) (subtypes : string list) =
+            lookup.typeDefs |> List.tryPick (fun td -> if td.name = typeName then Some td.subtypes else None)
+                            |> Option.defaultValue []
+                            |> List.filter (fun st -> st.abbreviation.IsSome || st.displayName.IsSome)
+                            |> List.tryFind (fun st -> subtypes |> List.contains st.name)
+
+
         match lookup.typeDefInfo |> getSourceTypesTD with
         | [] -> []
         | t ->
-            let eventsInFile = t |> List.filter (fun (_, _, r, el) -> files |> List.contains r.FileName)
+            let eventsInFile = t |> List.filter (fun (_, _, r, el, _) -> files |> List.contains r.FileName)
             let allRefs = entities |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, _) -> (v, r))) |> Option.defaultValue [])
             let definedVariables = entities |> List.collect (fun struct(_, data) -> data.Force().Definedvariables |> Option.map (Map.toList >> List.collect (fun (k, vs) -> vs |> List.ofSeq |> List.map (fun (v1, v2) -> k, v1, v2))) |> Option.defaultValue [])
             let results = eventsInFile
-                        |> List.map (fun (entityType, event, r, el) ->
+                        |> List.map (fun (entityType, event, r, el, sts) ->
                             entityType,
                             event,
                             r,
                             (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)),
                             (definedVariables |> List.choose (fun (varname, defVar, r2) -> if rangeContainsRange r r2 then Some (varname, defVar) else None)),
-                            el)
-            let primaries = results |> List.map (fun (entityType, event, r, refs, defvar, el) ->
+                            el,
+                            sts)
+            let primaries = results |> List.map (fun (entityType, event, r, refs, defvar, el, sts) ->
+                let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
                 {
                     GraphDataItem.id = event
                     displayName = getDisplayNameFromID event el
@@ -295,11 +304,14 @@ module LanguageFeatures =
                     details = Some (defvar |> List.groupBy fst |> List.map (fun (k, vs) -> k, vs |> List.map snd) |> Map.ofList)
                     isPrimary = true
                     entityType = entityType
+                    entityTypeDisplayName = subtypeName
+                    abbreviation = abbrev
                 })
             let refNames = allRefs |> List.map fst |> List.distinct
-            let eventNames = eventsInFile |> List.map (fun (k, n, r, _) -> n)
-            let referenced = t |> List.filter (fun (k, name, _, _) -> refNames |> List.contains name && (eventNames |> List.contains name |> not))
-            let secondaries = referenced |> List.map (fun (entityType, name, range, el) ->
+            let eventNames = eventsInFile |> List.map (fun (k, n, r, _, _) -> n)
+            let referenced = t |> List.filter (fun (k, name, _, _, _) -> refNames |> List.contains name && (eventNames |> List.contains name |> not))
+            let secondaries = referenced |> List.map (fun (entityType, name, range, el, sts) ->
+                let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
                 {
                     GraphDataItem.id = name
                     displayName = getDisplayNameFromID name el
@@ -309,5 +321,7 @@ module LanguageFeatures =
                     details = None
                     isPrimary = false
                     entityType = entityType
+                    entityTypeDisplayName = subtypeName
+                    abbreviation = abbrev
                 })
             primaries @ secondaries
