@@ -321,7 +321,7 @@ module LanguageFeatures =
                     details = None
                     isPrimary = false
                     entityType = entityType
-                    entityTypeDisplayName = subtypeName
+                    entityTypeDisplayName = subtypeName |> Option.orElse (Some entityType)
                     abbreviation = abbrev
                 })
             primaries @ secondaries
