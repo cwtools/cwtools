@@ -289,8 +289,8 @@ module LanguageFeatures =
                             entityType,
                             event,
                             r,
-                            (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None)),
-                            (definedVariables |> List.choose (fun (varname, defVar, r2) -> if rangeContainsRange r r2 then Some (varname, defVar) else None)),
+                            (allRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None) |> List.distinct),
+                            (definedVariables |> List.choose (fun (varname, defVar, r2) -> if rangeContainsRange r r2 then Some (varname, defVar) else None) |> List.distinct),
                             el,
                             sts)
             let primaries = results |> List.map (fun (entityType, event, r, refs, defvar, el, sts) ->
