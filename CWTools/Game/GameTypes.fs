@@ -76,4 +76,4 @@ type IGame<'S when 'S : comparison and 'S :> IScope<'S>> =
 type IGame<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier> =
     inherit IGame<'S>
     abstract AllEntities : unit -> struct (Entity * Lazy<'T>) list
-    abstract References : unit -> References<'T, 'S, 'M>
+    abstract References : unit -> References<'T, 'M>

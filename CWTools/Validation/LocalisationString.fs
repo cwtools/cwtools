@@ -8,13 +8,23 @@ open CWTools.Validation.ValidationCore
 open System
 open CWTools.Localisation
 open CWTools.Utilities.Position
+open CWTools.Parser.SharedParsers
 
 module LocalisationString =
+
+    let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
+        fun stream ->
+            printfn "%A: Entering %s" stream.Position label
+            let reply = p stream
+            printfn "%A: Leaving %s (%A)" stream.Position label reply.Status
+            reply
+
     type LocElement =
     | Ref of string
     | Command of string
+    | JominiCommand of JominiLocCommand list
     | Chars of string
-    let valueChars = many1Satisfy ( isNoneOf ['$'; '['; ']'] )
+    let valueChars = many1Satisfy ( isNoneOf ['$'; '['; ']'; '#'] )
 
     let dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
     let dollarColour = pchar '|' .>> dollarChars
@@ -24,7 +34,19 @@ module LocalisationString =
     let command = between (skipChar '[') (skipChar ']') ((commandChars) .>> optional commandFormat |>> Command )
     let locStringParser = many (valueChars |>> Chars <|> ref <|> command) .>> eof
 
+    let jominiCommand, jominiCommandImpl = createParserForwardedToRef()
+    let simpleParam = chSkip '\'' >>. many1Satisfy ( isNoneOf ['.'; '\'']) .>> chSkip '\'' .>> ws |>> JominiLocCommandParam.Param// <!> "Param"
+    let simpleCommands = ((sepBy1 (jominiCommand) (chSkip '.')) |>> JominiLocCommandParam.Commands)// <!> "Commands"
+    let segment = many1Satisfy ( isNoneOf ['.'; '('; '|'; ']'; ')'; ' '; ',']) .>> ws |>> (fun k -> JominiLocCommand.Command (k, [])) //<!> "segment" //<!> "segment"
+    let pParams = sepBy1 (simpleParam <|> simpleCommands) (chSkip ',')// <!> "pParams"//<!> "pParams"
+    let pFunction = (many1Satisfy ( isNoneOf ['.'; ']'; '('; ')']) ) .>> (chSkip '(' ) .>>.  (pParams) .>> chSkip ')' |>> (fun (key, cs) -> JominiLocCommand.Command (key, cs))// <!> "function"
+    // let pFunction = many1Satisfy ( isNoneOf ['.'; ']']) .>> ch '(' .>> ws .>>. sepBy1 (sepBy1 jominiCommand (ch '.')) (ch ',') .>> ch ')' |>> (fun (key, cs) -> JominiLocCommand.Command (key, cs)) <?> "function"
+    jominiCommandImpl := ((attempt pFunction) <|> segment)// <!> "command"
+    let jominiCommandWrapper = between (skipChar '[' .>> ws) (skipChar ']' .>> ws) ((sepBy1 jominiCommand (ch '.')) .>> optional commandFormat |>> JominiCommand )
+    let jominiLocStringParser = many ((valueChars |>> Chars <|> ref <|> (jominiCommandWrapper)) .>> optional (ch '#' .>> restOfLine false .>> ws) ) .>> eof
+
     let parseLocString fileString filename = runParserOnString locStringParser () filename fileString
+    let parseJominiLocString fileString filename = runParserOnString jominiLocStringParser () filename fileString
 
     let checkRef (hardcodedLocalisation) (lang : Lang) (keys : LocKeySet) (entry : LocEntry<_>) (r : string) =
         match keys.Contains r with
@@ -39,6 +61,7 @@ module LocalisationString =
             match cr with
             | LocContextResult.Found _ -> OK
             | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
+            | LocNotFoundInType (s, dataType, confident) -> Invalid [invManual (ErrorCodes.LocCommandNotInDataType e.key s dataType confident) (e.position) e.key None]
             | LocContextResult.NewScope s -> Invalid [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %O" s) Severity.Error ) (e.position) e.key None ]
             | LocContextResult.WrongScope (c, actual, (expected : 'S list)) ->
                 Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (e.position) e.key None]
@@ -68,6 +91,20 @@ module LocalisationString =
         let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator (scriptedLoc @ commands) eventTargets setvariables defaultContext s) }))
         result
 
+    let processJominiLocalisationBase<'S when 'S :> IScope<'S>> localisationCommandValidator (defaultContext : ScopeContext<'S>) (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry<'S>>=
+        // let lang = api |> fst
+        // let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
+        // let all = api |> snd
+        // let commands = commands |> List.map fst
+        let extractResult =
+            function
+            |Success (v, _, _) -> v
+            |Failure (e, _, _) -> eprintfn "%A" e; []
+        let parseLoc (e : Entry) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function |JominiCommand s -> Some s |_ -> None)
+        let parseLocRef (e : Entry) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
+        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator eventtargets setvariables defaultContext s) }))
+        result
+
     let validateLocalisationCommandsBase<'S when 'S :> IScope<'S>> localisationCommandValidator (commands : (string * 'S list) list) (eventTargets : string list) (scriptedLoc : string list) (setvariables : string list) (locentry : LocEntry<'S>) (startContext : ScopeContext<'S>)  =
         let allcommands = commands |> List.map fst
         let extractResult =
@@ -78,6 +115,20 @@ module LocalisationString =
         let keycommands = parseLoc locentry
         let validateCommand (c : string) =
             match localisationCommandValidator (scriptedLoc @ allcommands) eventTargets setvariables startContext c with
+            | LocContextResult.WrongScope (c, actual, (expected : 'S list)) ->
+                Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None]
+            | _ -> OK
+        keycommands <&!&> validateCommand
+
+    let validateJominiLocalisationCommandsBase<'S when 'S :> IScope<'S>> localisationCommandValidator (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (locentry : LocEntry<'S>) (startContext : ScopeContext<'S>)  =
+        let extractResult =
+            function
+            | Success (v, _, _) -> v
+            | Failure _ -> []
+        let parseLoc (e : LocEntry<'S>) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function | JominiCommand s -> Some s | _ -> None)
+        let keycommands = parseLoc locentry
+        let validateCommand (c : JominiLocCommand list) =
+            match localisationCommandValidator eventtargets setvariables startContext c with
             | LocContextResult.WrongScope (c, actual, (expected : 'S list)) ->
                 Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None]
             | _ -> OK

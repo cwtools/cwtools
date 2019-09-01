@@ -41,16 +41,16 @@ type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 
 }
 
 
-type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier
-                    and 'L :> Lookup<'S, 'M>>
-    (settings : GameSettings<'M, 'S, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
+type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
+                    and 'L :> Lookup<'M>>
+    (settings : GameSettings<'M, Scope, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
      processLocalisation, validateLocalisationCommand, defaultContext, noneContext,
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
-     globalLocalisation : GameObject<'S, 'M, 'T, 'L> -> CWError list,
-     afterUpdateFile : GameObject<'S, 'M, 'T, 'L> -> string -> unit,
+     globalLocalisation : GameObject<'M, 'T, 'L> -> CWError list,
+     afterUpdateFile : GameObject<'M, 'T, 'L> -> string -> unit,
      localisationExtension : string,
-     ruleManagerSettings : RuleManagerSettings<'S, 'M, 'T, 'L>) as this =
+     ruleManagerSettings : RuleManagerSettings<Scope, 'M, 'T, 'L>) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
     let embeddedDir =
@@ -62,12 +62,12 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : InfoService<_> option = None
     // let mutable completionService : CompletionService<_> option = None
-    let mutable ruleValidationService : RuleValidationService<'S> option = None
-    let mutable infoService : InfoService<'S> option = None
+    let mutable ruleValidationService : RuleValidationService<Scope> option = None
+    let mutable infoService : InfoService option = None
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = settings.initialLookup
-    let localisationManager = LocalisationManager<'S, 'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
+    let localisationManager = LocalisationManager<'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
     let validationServices() =
         {
@@ -77,9 +77,9 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
             infoService = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
-    let mutable validationManager : ValidationManager<'T, 'S, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
+    let mutable validationManager : ValidationManager<'T, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
 
-    let rulesManager = RulesManager<'T, 'S, 'M, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, debugMode)
+    let rulesManager = RulesManager<'T, 'M, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, debugMode)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []
@@ -190,7 +190,7 @@ type GameObject<'S, 'M, 'T, 'L when 'S : comparison and 'S :> IScope<'S> and 'T 
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
     member __.FileManager = (fun () -> fileManager)()
-    member __.LocalisationManager : LocalisationManager<'S, 'T, 'M> = localisationManager
+    member __.LocalisationManager : LocalisationManager<'T, 'M> = localisationManager
     member __.ValidationManager = validationManager
     member __.Settings = settings
     member __.UpdateFile shallow file text = updateFile shallow file text

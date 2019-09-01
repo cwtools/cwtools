@@ -9,7 +9,7 @@ module Helpers =
         let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect<_>) | _ -> None)
         simpleEventTargetLinks
 
-    let private convertSourceRuleType (lookup : Lookup<'S,'M>) (link : EventTargetDataLink<_>) =
+    let private convertSourceRuleType (lookup : Lookup<'M>) (link : EventTargetDataLink<_>) =
         // log (sprintf "csr %A" link)
         match link.sourceRuleType.Trim() with
         | x when x.StartsWith "<" && x.EndsWith ">" ->
@@ -43,7 +43,7 @@ module Helpers =
             Some (ScopedEffect(prefix, link.inputScopes, Some link.outputScope, EffectType.Link, link.description, "", true, [], true, false, true))
         | _ -> None
 
-    let addDataEventTargetLinks (lookup : Lookup<'S,'M>) (embeddedSettings : EmbeddedSettings<_,_>) (addWildCardLinks : bool) =
+    let addDataEventTargetLinks (lookup : Lookup<'M>) (embeddedSettings : EmbeddedSettings<_,_>) (addWildCardLinks : bool) =
         let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
         let convertLinkToEffects (link : EventTargetDataLink<_>) =
             let typeDefinedKeys = convertSourceRuleType lookup link
@@ -69,7 +69,7 @@ module Helpers =
             | None -> all
         links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect<_>)
 
-    let getLocalisationErrors (game : GameObject<_,_,_,_>) globalLocalisation =
+    let getLocalisationErrors (game : GameObject<_,_,_>) globalLocalisation =
         fun (force : bool, forceGlobal : bool) ->
             let resources = game.Resources
             let rulesLocErrors = game.ValidationManager.CachedRuleErrors(resources.ValidatableEntities()) |> List.filter (fun (id, _, _, _, _, _) -> id = "CW100")

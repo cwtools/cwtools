@@ -78,4 +78,12 @@ module JominiParser =
     let processTriggers parseScopes (t : RawEffect list) =
         t |> List.map (fun t -> if t.traits.IsSome && t.traits.Value.Contains "<, <=, =, !=, >, >=" then toDocEffect EffectType.ValueTrigger parseScopes t else toDocEffect EffectType.Trigger parseScopes t)
 
-
+module DataTypeParser =
+    open SharedParsers
+    type JominiLocDataTypes =
+        {
+            dataTypes : Map<string,Map<string,string>>
+            dataTypeNames : Set<string>
+            functions : Map<string,string>
+            promotes : Map<string,string>
+        }

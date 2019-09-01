@@ -29,15 +29,15 @@ open CWTools.Common.CK2Constants
 open CWTools.Common.NewScope
 
 module CK2GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, ComputedData, CK2Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    type GameObject = GameObject<Modifier, ComputedData, CK2Lookup>
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
@@ -66,7 +66,7 @@ module CK2GameFunctions =
     let updateModifiers (game : GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup : Lookup<_,_>) =
+    let addModifiersWithScopes (lookup : Lookup<_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
                 modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
@@ -160,38 +160,38 @@ module CK2GameFunctions =
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.CK2provinces <- provinces
 
-    let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedEffects (lookup : Lookup<_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
         let ruleToEffect(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |LeafRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedTriggers (lookup : Lookup<_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |LeafRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
-    let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup : Lookup<_>) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
 
-    let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
+    let loadConfigRulesHook rules (lookup : Lookup<_>) embedded =
         let ts = updateScriptedTriggers lookup rules embedded
         let es = updateScriptedEffects lookup rules embedded
         let ls = updateEventTargetLinks embedded
@@ -211,7 +211,7 @@ module CK2GameFunctions =
             |> addModifiersAsTypes lookup
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
 
@@ -259,7 +259,7 @@ module CK2GameFunctions =
             modifiers = ck2Mods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
-            localisationCommands = ck2LocCommands
+            localisationCommands = Legacy ck2LocCommands
             eventTargetLinks = ck2EventTargetLinks
             scopeDefinitions = scopeDefinitions
         }
@@ -297,8 +297,9 @@ type CK2Game(setupSettings : CK2Settings) =
     }
     do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy locCommands else Legacy l) |_ -> Legacy locCommands
     let settings = { settings with
-                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands else l )}
+                        embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = CK2Lookup()
                         }
 
@@ -320,8 +321,8 @@ type CK2Game(setupSettings : CK2Settings) =
                 ((settings, "crusader kings ii", scriptFolders, Compute.computeCK2Data,
                     Compute.computeCK2DataUpdate,
                      (CK2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
-                     CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
+                     CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
@@ -335,7 +336,7 @@ type CK2Game(setupSettings : CK2Settings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
-    let references = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+    let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
     let parseErrors() =
         resources.GetResources()
@@ -364,7 +365,7 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text =game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member __.References() = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

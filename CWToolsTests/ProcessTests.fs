@@ -53,7 +53,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = []
+        localisationCommands = Legacy []
         eventTargetLinks = []
         scopeDefinitions = []
 }
@@ -121,7 +121,7 @@ let createStarbaseTypeDef =
 let building =
     let inner =
         [
-            NewRule (LeafRule(specificField "allow", ValueField ValueType.Scalar), requiredSingle)
+            NewRule (LeafRule(specificField "allow", ScalarField ScalarValue), requiredSingle)
             NewRule (LeafRule(specificField "empire_unique", ValueField ValueType.Bool), optionalSingle)
         ]
     NewRule(NodeRule(specificField "building", inner), optionalMany)
@@ -182,9 +182,9 @@ let shipsize =
             NewRule(NodeRule(specificField "prerequisites", []), optionalSingle);
             NewRule(LeafRule(specificField "combat_disengage_chance", defaultFloat), optionalSingle);
             NewRule(LeafRule(specificField "has_mineral_upkeep", ValueField ValueType.Bool), requiredSingle);
-            NewRule(LeafRule(specificField "class", ValueField ValueType.Scalar), requiredSingle);
-            NewRule(LeafRule(specificField "construction_type", ValueField ValueType.Scalar), requiredSingle);
-            NewRule(LeafRule(specificField "required_component_set", ValueField ValueType.Scalar), requiredSingle);
+            NewRule(LeafRule(specificField "class", ScalarField ScalarValue), requiredSingle);
+            NewRule(LeafRule(specificField "construction_type", ScalarField ScalarValue), requiredSingle);
+            NewRule(LeafRule(specificField "required_component_set", ScalarField ScalarValue), requiredSingle);
         ]
     NewRule(NodeRule(specificField "ship_size", inner), optionalMany)
 
@@ -316,8 +316,8 @@ let testc =
     ]
 
 let leftScope() = RootRule.AliasRule("effect", (NodeRule((ScopeField (scopeManager.ParseScope() "Any")), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany))
-let eopEffect() = RootRule.AliasRule("effect", (NodeRule((ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken "every_owned_planet"))), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} ))
-let logEffect() = RootRule.AliasRule("effect", (LeafRule((NewField.ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken "log"))), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} ))
+let eopEffect() = RootRule.AliasRule("effect", (NodeRule((SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken "every_owned_planet"))), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} ))
+let logEffect() = RootRule.AliasRule("effect", (LeafRule((NewField.SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken "log"))), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} ))
 
 [<Tests>]
 let testsv =
@@ -481,7 +481,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let rules = RuleValidationService<Scope>([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap,(scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
-                let infoService = InfoService<Scope>([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
+                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 3 23
                 let suggestions = infoService.GetInfo (pos, entity)
@@ -507,7 +507,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let rules = RuleValidationService<Scope>([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
-                let infoService = InfoService<Scope>([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
+                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 9
                 let suggestions = infoService.GetInfo (pos, entity)
@@ -532,7 +532,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let rules = RuleValidationService<Scope>([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap , (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
-                let infoService = InfoService<Scope>([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
+                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 2
                 let suggestions = infoService.GetInfo (pos, entity)

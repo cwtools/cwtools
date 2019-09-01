@@ -32,7 +32,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = []
+        localisationCommands = Legacy []
         eventTargetLinks = []
         scopeDefinitions = []
 }
@@ -97,6 +97,27 @@ let getNodeComments (clause : IClause) =
             )
     let fCombine = (@)
     clause |> (foldClause2 fNode fCombine [])
+
+// [<Tests>]
+// let testsConfig =
+//     testList "testFindComments" [
+//         ftestCase "basic" <| fun () ->
+//             let testString = """
+// #error
+// test = test
+// #error
+// test2 = test
+// test3 = test
+// test
+// """
+//             let parsed = CWTools.Parser.CKParser.parseString testString "test"
+//             match parsed with
+//             |Success(res,_,_) ->
+//                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) res)
+//                 let comments = getNodeComments (node)
+//                 eprintfn "%A" comments
+//             |_ -> ()
+//     ]
 
 let getCompletionTests (clause : IClause) =
     let findComments t s (a : Child) =
@@ -210,7 +231,7 @@ let tests =
                 // eprintfn "%A" (stl.LocalisationErrors(true))
                 let globalLocError = stl.LocalisationErrors(true, true) |> List.filter (fun (c, s, n, l, f, k) -> List.contains c locErrorCodes)
                 yield testCase "globalLoc" <| fun () ->
-                    Expect.hasCountOf globalLocError 8u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
+                    Expect.hasCountOf globalLocError 10u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
             ]
     ]
 

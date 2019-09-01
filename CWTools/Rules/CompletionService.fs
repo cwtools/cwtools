@@ -83,20 +83,20 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
     let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
         let filterToCompletion =
             function
-            |LeafRule(ValueField(ValueType.Specific _), _) -> true
-            |NodeRule(ValueField(ValueType.Specific _), _) -> true
+            |LeafRule(SpecificField(SpecificValue _), _) -> true
+            |NodeRule(SpecificField(SpecificValue _), _) -> true
             |_ -> false
         let ruleToDistinctKey =
             function
-            |LeafRule(ValueField(ValueType.Specific s), _) -> StringResource.stringManager.GetStringForID s.normal
-            |NodeRule(ValueField(ValueType.Specific s), _) -> StringResource.stringManager.GetStringForID s.normal
+            |LeafRule(SpecificField(SpecificValue s), _) -> StringResource.stringManager.GetStringForID s.normal
+            |NodeRule(SpecificField(SpecificValue s), _) -> StringResource.stringManager.GetStringForID s.normal
             |_ -> ""
 
         let rulePrint (i : int) =
             function
-            |LeafRule(ValueField(ValueType.Specific s), r) ->
+            |LeafRule(SpecificField(SpecificValue s), r) ->
                 sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s.normal) (i + 1) (fieldToCompletionList r)
-            |NodeRule(ValueField(ValueType.Specific s), _) ->
+            |NodeRule(SpecificField(SpecificValue s), _) ->
                 sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s.normal) (i + 1) "{ }"
             |_ -> ""
 
@@ -171,7 +171,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunctioni inner))
                 let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction r context) inner))
                 match r with
-                |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
+                |NodeRule (SpecificField(SpecificValue s), innerRules) ->
                     [createSnippetForClausei innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
                 |NodeRule (ValueField(ValueType.Enum e), innerRules) ->
                     enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
@@ -192,7 +192,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 |NodeRule (VariableGetField v, innerRules) ->
                     varMap.TryFind(v) |> Option.map (fun ss -> ss.ToList() |> List.map (fun e -> createSnippetForClausei innerRules o.description e)) |> Option.defaultValue []
 
-                |LeafRule (ValueField(ValueType.Specific s), _) ->
+                |LeafRule (SpecificField(SpecificValue s), _) ->
                     [keyvalue (StringResource.stringManager.GetStringForID s.normal)]
                 |LeafRule (ValueField(ValueType.Enum e), _) ->
                     enums.TryFind(e) |> Option.map (fun (_, es) -> es.ToList() |> List.map (fun e -> keyvalue e)) |> Option.defaultValue []

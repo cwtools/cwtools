@@ -22,8 +22,8 @@ open CWTools.Parser
 open CWTools.Common.NewScope
 
 module HOI4GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, HOI4ComputedData, HOI4Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    type GameObject = GameObject<Modifier, HOI4ComputedData, HOI4Lookup>
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -37,7 +37,7 @@ module HOI4GameFunctions =
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -83,8 +83,8 @@ module HOI4GameFunctions =
         let ruleToEffect(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |LeafRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "State"), EffectType.Link, defaultDesc, "", true));
@@ -98,15 +98,15 @@ module HOI4GameFunctions =
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-                |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |LeafRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
+                |NodeRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "State"), EffectType.Link, defaultDesc, "", true));
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "Country"), EffectType.Link, defaultDesc, "", true));
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
-    let addModifiersWithScopes (lookup : Lookup<_,Modifier>) =
+    let addModifiersWithScopes (lookup : Lookup<Modifier>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
                 modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
@@ -116,7 +116,7 @@ module HOI4GameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
+    let loadConfigRulesHook rules (lookup : Lookup<_>) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
         rules @ addModifiersWithScopes lookup
 
@@ -125,7 +125,7 @@ module HOI4GameFunctions =
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
         let states = lookup.typeDefInfo.TryFind "state"
                             |> Option.map (fun sl -> sl |> List.map (fun tdi -> tdi.id))
                             |> Option.defaultValue []
@@ -137,7 +137,7 @@ module HOI4GameFunctions =
         let ls = updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
     let afterInit (game : GameObject) =
@@ -171,7 +171,7 @@ module HOI4GameFunctions =
             modifiers = hoi4Mods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
-            localisationCommands = hoi4LocCommands
+            localisationCommands = Legacy hoi4LocCommands
             eventTargetLinks = eventTargetLinks
             scopeDefinitions = scopeDefinitions
         }
@@ -209,8 +209,9 @@ type HOI4Game(setupSettings : HOI4Settings) =
     }
     do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
     let settings = { settings with
-                        embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
+                        embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = HOI4Lookup()}
 
     let rulesManagerSettings = {
@@ -232,8 +233,8 @@ type HOI4Game(setupSettings : HOI4Settings) =
                 (settings, "hearts of iron iv", scriptFolders, Compute.computeHOI4Data,
                 Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
-                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
+                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                  defaultContext,
                  noneContext,
                  Encoding.UTF8,
@@ -247,7 +248,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
-    let references = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+    let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
@@ -278,7 +279,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member __.References() = References<HOI4ComputedData, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

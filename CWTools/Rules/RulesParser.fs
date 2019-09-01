@@ -35,9 +35,7 @@ type Options<'a> = {
 
 [<Struct>]
 type ValueType =
-| Scalar
 | Enum of enumc : string
-| Specific of valuec : StringTokens
 | Float of minmax: (float*float)
 | Bool
 | Int of minmaxi: (int*int)
@@ -48,9 +46,9 @@ type ValueType =
 | IRFamilyName
     override x.ToString() =
         match x with
-        | Scalar -> "Scalar"
+        // | Scalar -> "Scalar"
         | Enum enumc -> sprintf "Enum %s" enumc
-        | Specific valuec -> sprintf "Specific %s" (StringResource.stringManager.GetStringForIDs valuec)
+        // | Specific valuec -> sprintf "Specific %s" (StringResource.stringManager.GetStringForIDs valuec)
         | Float (min, max) -> sprintf "Float with min %f and max %f" min max
         | Bool -> "Bool"
         | Int (min, max) -> sprintf "Int with min %i and max %i" min max
@@ -59,6 +57,11 @@ type ValueType =
         | CK2DNA -> "CK2DNA"
         | CK2DNAProperty -> "CK2DNAProperty"
         | IRFamilyName -> "IRFamilyName"
+
+[<Struct>]
+type SpecificValue = |SpecificValue of valuec : StringTokens
+[<Struct>]
+type ScalarValue = |ScalarValue
 
 type TypeType =
 | Simple of string
@@ -109,6 +112,8 @@ and TypeDefinition<'a> = {
 
 and NewField<'a> =
 | ValueField of ValueType
+| SpecificField of SpecificValue
+| ScalarField of ScalarValue
 | TypeField of TypeType
 /// This is only used internally to match type definitions
 | TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition<'a>
@@ -170,7 +175,7 @@ type ComplexEnumDef = {
 
 [<RequireQualifiedAccess>]
 module RulesParser =
-    let specificField x = ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x))
+    let specificField x = SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x))
     let private parseSeverity =
         function
         |"error" -> Severity.Error
@@ -318,7 +323,7 @@ module RulesParser =
 
     let processKey parseScope anyScope =
         function
-        | "scalar" -> ValueField ValueType.Scalar
+        | "scalar" -> ScalarField ScalarValue
         | "bool" -> ValueField ValueType.Bool
         | "percentage_field" -> ValueField ValueType.Percent
         | "localisation" -> LocalisationField false
@@ -359,15 +364,15 @@ module RulesParser =
         | x when x.StartsWith "icon[" ->
             match getSettingFromString x "icon" with
             | Some (folder) -> IconField folder
-            | None -> ValueField (ValueType.Scalar)
+            | None -> ScalarField (ScalarValue)
         | x when x.StartsWith "alias_match_left[" ->
             match getSettingFromString x "alias_match_left" with
             | Some alias -> AliasField alias
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | x when x.StartsWith "alias_name[" ->
             match getSettingFromString x "alias_name" with
             | Some alias -> AliasField alias
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | "scope_field" -> ScopeField (anyScope)
         | "variable_field" -> VariableField (false, (-1E+12, 1E+12))
         | x when x.StartsWith "variable_field[" ->
@@ -393,27 +398,27 @@ module RulesParser =
             match getSettingFromString x "value_set" with
             | Some variable ->
                 VariableSetField variable
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | x when x.StartsWith "value[" ->
             match getSettingFromString x "value" with
             | Some variable ->
                 VariableGetField variable
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | x when x.StartsWith "scope[" ->
             match getSettingFromString x "scope" with
             | Some target ->
                 ScopeField (parseScope target)
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | x when x.StartsWith "event_target" ->
             match getSettingFromString x "event_target" with
             | Some target ->
                 ScopeField (parseScope target)
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | x when x.StartsWith "single_alias_right" ->
             match getSettingFromString x "single_alias_right" with
             | Some alias ->
                 SingleAliasField alias
-            | None -> ValueField ValueType.Scalar
+            | None -> ScalarField (ScalarValue)
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
         | "colour_field" -> MarkerField Marker.ColourField
@@ -421,7 +426,7 @@ module RulesParser =
         | "ir_family_name_field" -> ValueField IRFamilyName
         | x ->
             // eprintfn "ps %s" x
-            ValueField (ValueType.Specific (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
+            SpecificField (SpecificValue (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
 
 
 
@@ -524,16 +529,16 @@ module RulesParser =
                 // log "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
-                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+                TypeRule (x, NewRule(NodeRule(SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
         |x when x.StartsWith "single_alias[" ->
             match getSettingFromString x "single_alias" with
             |Some (a) ->
                 let innerRule = configNode processChildConfig parseScope allScopes anyScope node comments x
                 SingleAliasRule (a, innerRule)
             |None ->
-                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+                TypeRule (x, NewRule(NodeRule(SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
         |x ->
-            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
+            TypeRule (x, NewRule(NodeRule(SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
 
     let rec processChildConfig (parseScope) allScopes (anyScope) ((child, comments) : Child * string list)  =
         match child with
@@ -788,7 +793,7 @@ module RulesParser =
                     // log (sprintf "Replaced single alias leaf %A %s with node %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
                     NodeRule (l, ar), o
                 | x ->
-                    log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
+                    log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |SpecificField (SpecificValue x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
                     rule
             | _ -> rule
         let singlealiasesmapper =

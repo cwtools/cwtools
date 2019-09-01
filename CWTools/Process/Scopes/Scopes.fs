@@ -24,8 +24,15 @@ type LocContextResult<'S when 'S :> IScope<'S>> =
     | NewScope of newScope : ScopeContext<'S>
     | WrongScope of command : string * scope : 'S * expected : 'S list
     //Not sure what this should be
-    | Found of endContext : ScopeContext<'S>
+    | Found of endContext : string
     | LocNotFound of key : string
+    | LocNotFoundInType of key : string * dataType : string * confident : bool
+    // Jomini loc
+    | NewDataType of newDataType : string * confident : bool
+
+// type JominiLocContextResult =
+//     | Start of startDataType : string
+//     | NotFound of key : string * context : string
 
 [<Struct>]
 type LocEntry<'S when 'S :> IScope<'S>> = {
@@ -36,6 +43,11 @@ type LocEntry<'S when 'S :> IScope<'S>> = {
     scopes : LocContextResult<'S> list
     refs : string list
 }
+type JominiLocCommandParam =
+    |Commands of JominiLocCommand list
+    |Param of string
+and JominiLocCommand =
+    |Command of string * JominiLocCommandParam list
 
 
 type ScopeResult<'T when 'T :> IScope<'T>> =
@@ -273,46 +285,90 @@ module Scopes =
             let commandMatch() =
                 let matchedCommand = commands |> List.tryFind (fun c -> c == nextKey)
                 match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
-                |Some _, _, _ -> Found (context)
-                | _, _, true -> Found (context)
+                |Some _, _, _ -> LocContextResult.Found (context.CurrentScope.ToString())
+                | _, _, true -> LocContextResult.Found (context.CurrentScope.ToString())
                 |None, false, false ->
                     match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
-                    | true -> Found (context)
+                    | true -> LocContextResult.Found (context.CurrentScope.ToString())
                     | false -> LocNotFound (nextKey)
                 |None, true, false ->
                     match eventtargets |> List.exists (fun et -> et == nextKey) with
-                    | true -> Found (context)
+                    | true -> LocContextResult.Found (context.CurrentScope.ToString())
                     | false -> LocNotFound (nextKey)
             onetooneMatch()
             |> Option.orElseWith effectMatch
             |> Option.defaultWith commandMatch
-
-            // match onetoone with
-            // | Some (_, f) -> (f (context, false), NewScope (f (context, false) |> fst))
-            // | None ->
-            //     let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e -> Some e |_ -> None)
-            //     match effectMatch with
-            //     | Some e -> Found (rootScope, e.Scopes), false
-            //     | None ->
-            //         let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
-            //         match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
-            //         |Some _, _, _ -> Found (rootScope, scopes), false
-            //         | _, _, true -> Found (rootScope, scopes), false
-            //         |None, false, false ->
-            //             match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
-            //             | true -> Found (rootScope, scopes), false
-            //             | false -> LocNotFound (nextKey), false
-            //         |None, true, false ->
-            //             match eventtargets |> List.exists (fun et -> et == nextKey) with
-            //             | true -> Found (rootScope, scopes), false
-            //             | false -> LocNotFound (nextKey), false
         let locKeyFolder (result : LocContextResult<_>) (nextKey : string) =
             match result with
-            | Start startContext -> inner (true, startContext) nextKey
+            | LocContextResult.Start startContext -> inner (true, startContext) nextKey
             | LocContextResult.NewScope newContext -> inner (false, newContext) nextKey
-            | Found endContext -> inner (false, endContext) nextKey
+            // | LocContextResult.Found endContext -> inner (false, endContext) nextKey
+            | LocContextResult.Found endContext -> LocContextResult.LocNotFound nextKey //inner (false, endContext) nextKey
             | res -> res
-        keys |> List.fold locKeyFolder (Start source)
+        keys |> List.fold locKeyFolder (LocContextResult.Start source)
+
+    // type LocContext
+    let createJominiLocalisationCommandValidator (dataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes) =
+        fun (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (source : ScopeContext<Scope>) (command : JominiLocCommand list) ->
+        // let keys = command.Split('.') |> List.ofArray
+        // let keys =
+        //     match
+        // eprintfn "%A" command
+        let convScopeToDataType (scope : Scope) =
+            let s = scope.ToString()
+            match s with
+            | s -> s
+        let command = command |> List.map (function |Command (key, cs) -> key, cs)
+        let keys = command |> List.map fst
+        let inner ((context : bool * string * bool)) (nextKey : string) =
+            let first, dataType, confident = context
+            // TODO: Replace this with some smarter
+            let savedScopedMatch() =
+                Map.tryFind nextKey eventtargets
+                    |> Option.map (fun ets ->
+                                            let scope, confident =
+                                                match ets with
+                                                | [x] when x = scopeManager.AnyScope -> "Country", false
+                                                | [x] -> convScopeToDataType x, true
+                                                | [x; y] when x = scopeManager.AnyScope -> convScopeToDataType y, true
+                                                | x::y::_ when x = scopeManager.AnyScope -> convScopeToDataType y, false
+                                                | x::_ -> convScopeToDataType x, false
+                                                | _ -> "Country", false
+                                            NewDataType ((scope, confident)))
+            let promoteMatch() =
+                dataTypes.promotes |> Map.tryFind nextKey
+                |> Option.orElse (dataTypes.promotes |> Map.tryFind (nextKey.ToUpperInvariant()))
+                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+            let globalFunctionMatch() =
+                dataTypes.functions |> Map.tryFind nextKey
+                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+            let functionMatch() =
+                dataTypes.dataTypes |> Map.tryFind dataType
+                |> Option.bind (fun dataTypeMap -> dataTypeMap |> Map.tryFind nextKey)
+                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+            let res =
+                match first with
+                | true ->
+                    (promoteMatch()) |> Option.orElse (globalFunctionMatch()) |> Option.orElse (savedScopedMatch())
+                | false ->
+                    functionMatch()
+            res |> Option.defaultWith (fun _ -> LocNotFoundInType (nextKey, dataType, confident))
+        let locKeyFolder (result : LocContextResult<Scope>) (nextKey : string) =
+            match result with
+            | Start startDataType when startDataType.CurrentScope = scopeManager.AnyScope ->
+                inner (true, "None", true) nextKey
+            | Start startDataType ->
+                inner (true, startDataType.CurrentScope.ToString(), true) nextKey
+            | NewDataType (newDataType, confident) -> inner (false, newDataType, confident) nextKey
+            | Found endDataType -> LocNotFound (nextKey)
+            | LocNotFound (n) -> LocNotFound (n)
+            | res -> res
+        // TODO: Better scopecontext to starting datatype
+        keys |> List.fold locKeyFolder (Start (source))
+        // match res with
+        // | Start _ -> LocContextResult.Start source
+        // | NewDataType newDataType -> LocContextResult.LocNotFound newDataType
+        // | Found endDataType -> LocContextResult.Found
         // keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
 
     // let createLocalisationScopeValidator<'T when 'T :> IScope<'T> and 'T : comparison > (locPrimaryScopes : (string * (ScopeContext<'T> * bool -> ScopeContext<'T> * bool)) list) (scopedLocEffectsMap : EffectMap<'T>) =

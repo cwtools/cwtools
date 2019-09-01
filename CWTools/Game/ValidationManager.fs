@@ -15,10 +15,10 @@ open FSharp.Collections.ParallelSeq
 type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
-    heavyExperimentalValidators : (LookupValidator<'T, 'S, 'M> * string) list
+    heavyExperimentalValidators : (LookupValidator<'T, 'M> * string) list
     experimental : bool
     fileValidators : (FileValidator<'T> * string) list
-    lookupValidators : (LookupValidator<'T, 'S, 'M> * string) list
+    lookupValidators : (LookupValidator<'T, 'M> * string) list
     useRules : bool
     debugRulesOnly : bool
     localisationValidators : LocalisationValidator<'T> list
@@ -26,23 +26,24 @@ type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> ISco
 
 type ValidationManagerServices<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     resources : IResourceAPI<'T>
-    lookup : Lookup<'S, 'M>
+    lookup : Lookup<'M>
     ruleValidationService : RuleValidationService<'S> option
-    infoService : InfoService<'S> option
+    infoService : InfoService option
     localisationKeys : unit -> (Lang * Set<string>) list
 }
-type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier>
-        (settings : ValidationManagerSettings<'T, 'S, 'M>
-        , services : ValidationManagerServices<'T, 'S, 'M>,
+type ValidationManager<'T, 'M when 'T :> ComputedData and 'M :> IModifier>
+        (settings : ValidationManagerSettings<'T,Scope, 'M>
+        , services : ValidationManagerServices<'T, Scope, 'M>,
          validateLocalisationCommand,
-         defaultContext : ScopeContext<'S>,
-         noneContext : ScopeContext<'S>,
+         defaultContext : ScopeContext<Scope>,
+         noneContext : ScopeContext<Scope>,
          errorCache : System.Collections.Concurrent.ConcurrentDictionary<_, CWError list>) =
     let resources = services.resources
     let validators = settings.validators
     let errorCache = errorCache
     let addToCache (entity : Entity) errors =
-        (errorCache :> System.Collections.Generic.IDictionary<_,_>).Add(entity, errors)
+        let cache = (errorCache :> System.Collections.Generic.IDictionary<_,_>)
+        if cache.ContainsKey entity then cache.[entity] <- errors else cache.Add(entity, errors)
     let getErrorsForEntity (entity : Entity) =
         tryParseWith (errorCache.TryGetValue) entity
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
@@ -97,7 +98,7 @@ type ValidationManager<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> a
         log (sprintf "Localisation check took %ims" timer.ElapsedMilliseconds)
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
-    let createScopeContextFromReplace (rep : ReplaceScopes<'S> option) =
+    let createScopeContextFromReplace (rep : ReplaceScopes<Scope> option) =
         match rep with
         | None -> noneContext
         | Some rs ->

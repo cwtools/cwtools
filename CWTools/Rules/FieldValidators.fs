@@ -76,8 +76,8 @@ module internal FieldValidators =
     let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
         if key |> firstCharEqualsAmp then errors else
                 match (vt) with
-                | ValueType.Scalar ->
-                    errors
+                // | ValueType.Scalar ->
+                //     errors
                 | ValueType.Bool ->
                     if key == "yes" || key == "no" then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.Int (min, max) ->
@@ -98,9 +98,9 @@ module internal FieldValidators =
                     match enumsMap.TryFind e with
                     | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
                     | None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
-                | ValueType.Specific s ->
-                    // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
-                    if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
+                // | ValueType.Specific s ->
+                //     // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
+                //     if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
                 | ValueType.Percent ->
                     if key.EndsWith("%") then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.Date ->
@@ -128,8 +128,8 @@ module internal FieldValidators =
     let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>)  (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
-            | ValueType.Scalar ->
-                true
+            // | ValueType.Scalar ->
+            //     true
             | ValueType.Bool ->
                 key == "yes" || key == "no"
             | ValueType.Int (min, max) ->
@@ -150,9 +150,9 @@ module internal FieldValidators =
                 match enumsMap.TryFind e with
                 | Some (_, es) -> es.Contains (trimQuote key)
                 | None -> false
-            | ValueType.Specific s ->
-                // if trimQuote key == s then true else false
-                id = s.lower
+            // | ValueType.Specific s ->
+            //     // if trimQuote key == s then true else false
+            //     id = s.lower
             | ValueType.Percent ->
                 key.EndsWith("%")
             | ValueType.Date ->
@@ -423,7 +423,14 @@ module internal FieldValidators =
             |VariableGetField v -> checkVariableGetField p.varMap severity v key leafornode errors
             |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
-            |_ -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
+            |ScalarField _ -> errors
+            |SpecificField (SpecificValue v) -> if id = v.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(v.normal))) severity) leafornode <&&&> errors
+            |AliasField (_)
+            |MarkerField (_)
+            |SingleAliasField (_)
+            |SubtypeField (_)
+            |TypeMarkerField (_)
+            |ValueScopeMarkerField (_) -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
     let checkFieldNE (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
             match field with
             |ValueField vt ->
@@ -438,7 +445,14 @@ module internal FieldValidators =
             |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
-            |_ -> false
+            |ScalarField (_) -> true
+            |SpecificField (SpecificValue v) -> v.lower = id
+            |AliasField (_)
+            |MarkerField (_)
+            |SingleAliasField (_)
+            |SubtypeField (_)
+            |TypeMarkerField (_)
+            |ValueScopeMarkerField (_) -> false
 
     let checkLeftField (p : CheckFieldParams<_>) (severity : Severity) (ctx : RuleContext<_>) (field : NewField<_>) id (key : string) =
         checkFieldNE p severity ctx field id key

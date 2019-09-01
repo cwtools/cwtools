@@ -31,14 +31,14 @@ open System.IO
 open CWTools.Common.NewScope
 
 module STLGameFunctions =
-    type GameObject = GameObject<Scope, Modifier, STLComputedData, STLLookup>
+    type GameObject = GameObject<Modifier, STLComputedData, STLLookup>
 
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
@@ -82,7 +82,7 @@ module STLGameFunctions =
     let updateDefinedVariables(game : GameObject) =
         game.Lookup.definedScriptVariables <- (game.Resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().Setvariables)
 
-    let afterUpdateFile (game : GameObject<Scope, Modifier,STLComputedData,STLLookup>) (filepath : string) =
+    let afterUpdateFile (game : GameObject<Modifier,STLComputedData,STLLookup>) (filepath : string) =
         match filepath with
         |x when x.Contains("scripted_triggers") -> updateScriptedTriggers(game) |> ignore
         |x when x.Contains("scripted_effects") -> updateScriptedEffects(game) |> ignore
@@ -107,7 +107,7 @@ module STLGameFunctions =
     let updateTechnologies(game : GameObject) =
         game.Lookup.technologies <- getTechnologies (EntitySet (game.Resources.AllEntities()))
 
-    let addModifiersWithScopes (lookup : Lookup<_,_>) =
+    let addModifiersWithScopes (lookup : Lookup<_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
                 modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
@@ -117,7 +117,7 @@ module STLGameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let addTriggerDocsScopes (lookup : Lookup<_,_>) (rules : RootRule<_> list) =
+    let addTriggerDocsScopes (lookup : Lookup<_>) (rules : RootRule<_> list) =
             let scriptedOptions (effect : ScriptedEffect) =
                 {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false}
             let getAllScriptedEffects =
@@ -146,18 +146,18 @@ module STLGameFunctions =
                 { o with requiredScopes = newScopes}
             rules |> List.collect (
                     function
-                    |AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
-                    |AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
-                    |AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
-                    |AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
-                    |AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
-                        [AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesE s o))]
-                    |AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
-                        [AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (LeafRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("effect", (LeafRule(SpecificField(SpecificValue s),r), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (LeafRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("trigger", (LeafRule(SpecificField(SpecificValue s),r), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (NodeRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("effect", (NodeRule(SpecificField(SpecificValue s),r), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (NodeRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("trigger", (NodeRule(SpecificField(SpecificValue s),r), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
+                        [AliasRule ("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
+                        [AliasRule ("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o))]
                     |AliasRule ("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
                         getAllScriptedEffects
                     |AliasRule ("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
@@ -165,7 +165,7 @@ module STLGameFunctions =
                     |x -> [x])
 
 
-    let loadConfigRulesHook rules (lookup : Lookup<_,_>) embedded =
+    let loadConfigRulesHook rules (lookup : Lookup<_>) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         let rulesWithMod = rules @ addModifiersWithScopes(lookup)
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
@@ -181,11 +181,11 @@ module STLGameFunctions =
                             |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
 
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_,_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
     let afterInit (game : GameObject) =
             let ts = updateScriptedTriggers(game)
@@ -227,7 +227,7 @@ module STLGameFunctions =
             modifiers = modifiers
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
-            localisationCommands = stlLocCommands
+            localisationCommands = Legacy stlLocCommands
             eventTargetLinks = stlEventTargetLinks
             scopeDefinitions = scopeDefinitions
         }
@@ -274,8 +274,10 @@ type STLGame (setupSettings : StellarisSettings) =
 
         }
         do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
+        let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
+
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
-                                       embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
+                                       embedded = { settings.embedded with localisationCommands = locSettings }
                                        initialLookup = STLLookup()}
 
         // do scopeManager.ReInit(settings.embedded.scopeDefinitions)
@@ -295,12 +297,12 @@ type STLGame (setupSettings : StellarisSettings) =
             refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
         }
 
-        let game = GameObject<Scope, Modifier, STLComputedData, STLLookup>.CreateGame
+        let game = GameObject<Modifier, STLComputedData, STLLookup>.CreateGame
                     (settings, "stellaris", scriptFolders, Compute.STL.computeSTLData,
                     Compute.STL.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
-                     STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
+                     STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                      defaultContext,
                      defaultContext,
                      Encoding.UTF8,
@@ -315,7 +317,7 @@ type STLGame (setupSettings : StellarisSettings) =
         let lookup = game.Lookup
         let resources = game.Resources
         let fileManager = game.FileManager
-        let references = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
         let useRules = settings.rules.IsSome
         let parseErrors() =
@@ -364,7 +366,7 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = game.UpdateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<_, _, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+            member __.References() = References<_, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
                 // scopesAtPosSTL pos file text

@@ -55,7 +55,7 @@ module CommonValidation =
             (es.AllTriggers <&!&> foldNode2 fNode fCombine OK)
 
 
-    let valUniqueTypes : LookupValidator<_, _, _> =
+    let valUniqueTypes : LookupValidator<_, _> =
         (fun lu _ _ ->
             let types = lu.typeDefs |> List.filter (fun td -> td.unique)
             let zipped = types |> List.map (fun td -> td.name, lu.typeDefInfo.[td.name])

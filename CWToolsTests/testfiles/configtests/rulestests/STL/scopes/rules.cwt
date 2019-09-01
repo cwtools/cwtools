@@ -16,6 +16,9 @@ types = {
     type[country_tag] = {
         path = "game/common/anomalies"
     }
+    type[ship_size] = {
+        path = "game/common/ship_sizes"
+    }
 }
 
 country_tag = scalar
@@ -96,6 +99,13 @@ alias[effect:scope_field] = {
     ## cardinality = 0..1
     alias_name[effect] = alias_match_left[effect]
 }
+
+## push_scope = ship
+ship_size = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+alias[effect:save_scope_as] = value_set[event_target]
 
 ## push_scope = parent
 alias[effect:to_parent] = {

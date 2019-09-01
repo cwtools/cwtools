@@ -12,6 +12,7 @@ country_event = {
             }
             #error
             country_only = test
+            save_scope_as = ship_target
         }
         ##Test subtype scopes
         #error
@@ -24,6 +25,7 @@ country_event = {
 
 
         USA = {
+            save_scope_as = country_target
             USA = {
                 #error
                 ship_only = test
@@ -37,6 +39,7 @@ country_event = {
             random_owned_ship = {
 
             }
+            save_scope_as = et
         }
 
         ### Test subscope

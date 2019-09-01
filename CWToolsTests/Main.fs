@@ -22,6 +22,8 @@ open System.Threading
 open System.Globalization
 open CWTools.Common.STLConstants
 open CWTools.Common.NewScope
+open System.Text
+open System
 
 let emptyEmbeddedSettings = {
         triggers = []
@@ -29,7 +31,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = []
+        localisationCommands = Legacy []
         eventTargetLinks = []
         scopeDefinitions = []
 }
@@ -98,6 +100,11 @@ let perf2(b) =
     else ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
     ()
+
+let getFolderList (filename : string, filetext : string) =
+    if Path.GetFileName filename = "folders.cwt"
+    then Some (filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None) |> List.ofArray |> List.filter (fun s -> s <> ""))
+    else None
 
 let test() =
     let timer = new System.Diagnostics.Stopwatch()

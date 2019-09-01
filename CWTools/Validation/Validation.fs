@@ -105,8 +105,13 @@ type ErrorCodes =
     static member DuplicateTypeDef = fun typename actualtype -> { ID = "CW261"; Severity = Severity.Error; Message = sprintf "Key %s of type %s is defined multiple times" actualtype typename}
     static member ConfigRulesUnexpectedPropertyNode = fun message severity -> { ID = "CW262"; Severity = severity; Message = message }
     static member ConfigRulesUnexpectedPropertyLeaf = fun message severity -> { ID = "CW263"; Severity = severity; Message = message }
-    static member ConfigRulesUnexpectedPropertyLeafValue = fun message severity -> { ID = "CW2464"; Severity = severity; Message = message }
+    static member ConfigRulesUnexpectedPropertyLeafValue = fun message severity -> { ID = "CW264"; Severity = severity; Message = message }
     static member ConfigRulesUnexpectedPropertyValueClause = fun message severity -> { ID = "CW265"; Severity = severity; Message = message }
+    static member LocCommandNotInDataType = fun key command datatype confident ->
+        let sev = if confident then Severity.Error else Severity.Warning
+        let message = sprintf "Localisation key %s uses command %s which does not exist in data type %s." key command datatype
+        let message = if confident then message else sprintf "%s (guessed data type)" message
+        { ID = "CW266"; Severity = sev; Message = message }
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
@@ -170,7 +175,7 @@ type EU4StructureValidator = StructureValidator<EU4ComputedData>
 type VIC2StructureValidator = StructureValidator<VIC2ComputedData>
 type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
 type STLFileValidator = FileValidator<STLComputedData>
-type LookupValidator<'T, 'S, 'M when 'T :> ComputedData and 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = Lookup<'S, 'M> -> StructureValidator<'T>
+type LookupValidator<'T, 'M when 'T :> ComputedData and 'M :> IModifier> = Lookup<'M> -> StructureValidator<'T>
 type LocalisationValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> (Lang * Set<string>) list -> EntitySet<'T> -> ValidationResult
 
 module ValidationCore =

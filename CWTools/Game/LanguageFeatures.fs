@@ -29,7 +29,7 @@ module LanguageFeatures =
         let scope = fileManager.GetScopeForPath filepath |> Option.defaultValue "unknown"
         FileWithContentResourceInput {scope = scope; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
 
-    let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (infoService : InfoService<_> option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
+    let completion (fileManager : FileManager) (completionService : CompletionService<_> option) (infoService : InfoService option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
         let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
@@ -46,7 +46,7 @@ module LanguageFeatures =
         | _, _, _ -> []
 
 
-    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) =
+    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup<_>) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -57,7 +57,7 @@ module LanguageFeatures =
             |_ -> None
         |_, _ -> None
 
-    let findAllRefsFromPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (pos : pos) (filepath : string) (filetext : string) =
+    let findAllRefsFromPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -73,7 +73,7 @@ module LanguageFeatures =
             |_ -> None
         |_, _ -> None
 
-    let scopesAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (anyScope : 'a) (pos : pos) (filepath : string) (filetext : string) =
+    let scopesAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (anyScope : 'a) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -86,7 +86,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService<_> option) (lookup : Lookup<_, _>) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
+    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup<_>) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -261,7 +261,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let graphEventDataForFiles (referenceManager : References<_, _, _>) (resourceManager : ResourceManager<_>) (lookup : Lookup<_, _>) (files : string list) (sourceTypes : string list) : GraphDataItem list =
+    let graphEventDataForFiles (referenceManager : References<_, _>) (resourceManager : ResourceManager<_>) (lookup : Lookup<_>) (files : string list) (sourceTypes : string list) : GraphDataItem list =
         let entitiesInSelectedFiles = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
 
         let locSet = referenceManager.Localisation |> Map.ofList

@@ -12,15 +12,31 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open System.Collections.Concurrent
 
-type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
-                                    (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
+module Test =
+    let inline mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
+        let fLeaf = (fun (acc1, acc2) l r -> (l1 acc1 l r, l2 acc2 l r))
+        let fLeafValue = (fun (acc1, acc2) lv r -> (lv1 acc1 lv r, lv2 acc2 lv r))
+        let fNode = (fun (acc1, acc2) n r -> (n1 acc1 n r, n2 acc2 n r))
+        let fComment = (fun (acc1, acc2) c r -> (c1 acc1 c r, c2 acc2 c r))
+        let fValueClause = (fun (acc1, acc2) vc r -> (vc1 acc1 vc r, vc2 acc2 vc r))
+        fLeaf, fLeafValue, fComment, fNode, fValueClause, (ctx1, ctx2)
+    let inline mergeFolds2 (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
+        let fLeaf = (fun ctx (acc1, acc2) l r -> (l1 ctx acc1 l r, l2 ctx acc2 l r))
+        let fLeafValue = (fun ctx (acc1, acc2) lv r -> (lv1 ctx acc1 lv r, lv2 ctx acc2 lv r))
+        let fNode = (fun ctx (acc1, acc2) n r -> (n1 ctx acc1 n r, n2 ctx acc2 n r))
+        let fComment = (fun ctx (acc1, acc2) c r -> (c1 ctx acc1 c r, c2 ctx acc2 c r))
+        let fValueClause = (fun ctx (acc1, acc2) vc r -> (vc1 ctx acc1 vc r, vc2 ctx acc2 vc r))
+        fLeaf, fLeafValue, fComment, fNode, fValueClause, (ctx1, ctx2)
+
+type InfoService
+                                    (rootRules : RootRule<Scope> list, typedefs : TypeDefinition<Scope> list , types : Collections.Map<string, StringSet>,
                                      enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
-                                     links : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                                     valueTriggers : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                                     ruleValidationService : RuleValidationService<'T>, changeScope, defaultContext, anyScope, defaultLang) =
+                                     links : Map<string,Effect<Scope>,InsensitiveStringComparer>,
+                                     valueTriggers : Map<string,Effect<Scope>,InsensitiveStringComparer>,
+                                     ruleValidationService : RuleValidationService<Scope>, changeScope, defaultContext, anyScope, defaultLang) =
     let linkMap = links
-    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
+    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<Scope> as e when e.IsWildCard -> Some e |_ -> None )
     let valueTriggerMap = valueTriggers
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -72,6 +88,21 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             fun rules subtypes ->
                 // eprintfn "%A %A," (rules.GetHashCode()) (subtypes.GetHashCode())
                 /// All subtypes in this context
+                // let subtypedrules =
+                //     rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> []))
+                // let expandedbaserules =
+                //     rules |> List.collect (
+                //         function
+                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                //         |x -> [])
+                // let expandedsubtypedrules =
+                //     subtypedrules |> List.collect (
+                //         function
+                //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
+                //         |x -> [])
+
                 let subtypedrules =
                     rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (_, _, cfs) -> cfs | x -> []))
                 let expandedbaserules =
@@ -86,17 +117,45 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
                         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         |x -> [])
-                let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
-
-                res
-                    |> Seq.fold (fun (na, la, lva, vca) r ->
+                // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+                // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
+                let noderules = new ResizeArray<_>()
+                let leafrules = new ResizeArray<_>()
+                let leafvaluerules = new ResizeArray<_>()
+                let valueclauserules = new ResizeArray<_>()
+                let nodeSpecificMap = new System.Collections.Generic.Dictionary<_,_>()
+                let leafSpecificMap = new System.Collections.Generic.Dictionary<_,_>()
+                let inner =
+                    (fun r ->
                         match r with
-                        | (NodeRule (l, rs), o) -> (l, rs, o)::na, la, lva, vca
-                        | (LeafRule (l, r), o) -> na, (l, r, o)::la, lva, vca
-                        | (LeafValueRule (lv), o) -> na, la,(lv, o)::lva, vca
-                        | (ValueClauseRule (rs), o) -> na, la, lva, (rs, o)::vca
-                        | _ -> na, la, lva, vca
-                        ) ([], [], [], [])
+                        | (NodeRule (SpecificField (SpecificValue v), rs), o) as x ->
+                            let found, res = nodeSpecificMap.TryGetValue(v.lower)
+                            if found
+                            then nodeSpecificMap.[v.lower] <- x::res
+                            else nodeSpecificMap.[v.lower] <- [x]
+                        | (NodeRule (l, rs), o) as x -> noderules.Add(x)
+                        | (LeafRule (SpecificField (SpecificValue v), r), o) as x ->
+                            let found, res = leafSpecificMap.TryGetValue(v.lower)
+                            if found
+                            then leafSpecificMap.[v.lower] <- x::res
+                            else leafSpecificMap.[v.lower] <- [x]
+                        | (LeafRule (l, r), o) as x -> leafrules.Add(x)
+                        | (LeafValueRule (lv), o) as x -> leafvaluerules.Add(x)
+                        | (ValueClauseRule (rs), o) as x -> valueclauserules.Add(x)
+                        // | (NodeRule (l, rs), o) as x -> noderules.Add(l, rs, o)
+                        // | (LeafRule (l, r), o) as x -> leafrules.Add(l, r, o)
+                        // | (LeafValueRule (lv), o) as x -> leafvaluerules.Add(lv, o)
+                        // | (ValueClauseRule (rs), o) as x -> valueclauserules.Add(rs, o)
+                        | _ -> ()
+                        )
+                // res |> Seq.iter inner
+                // expandedres |> Seq.iter inner
+                // expandedres2 |> Seq.iter inner
+                expandedsubtypedrules |> Seq.iter inner
+                subtypedrules |> Seq.iter inner
+                rules |> Seq.iter inner
+                expandedbaserules |> Seq.iter inner
+                noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificMap, leafSpecificMap
 
         memoizeRulesInner memFunction
 
@@ -122,8 +181,8 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         |CommentC comment ->
             fComment acc comment rule
 
-    let rec infoService fNode fChild fLeaf fLeafValue fValueClause fComment acc child rule :'r =
-        let recurse = infoService fNode fChild fLeaf fLeafValue fValueClause fComment
+    let rec infoService fNode fChild fLeaf fLeafValue fValueClause fComment (ignore) acc child rule :'r =
+        let recurse = infoService fNode fChild fLeaf fLeafValue fValueClause fComment ignore
         match child with
         |NodeC node ->
             let finalAcc = fNode acc node rule
@@ -138,6 +197,78 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         |CommentC comment ->
             fComment acc comment rule
 
+    /// Don't share context between siblings
+    let rec depthInfoService fNode fChild fLeaf fLeafValue fValueClause fComment (ctx : 'c) (acc : 'r) child rule :'r =
+        let recurse = depthInfoService fNode fChild fLeaf fLeafValue fValueClause fComment
+        match child with
+        |NodeC node ->
+            let newCtx, finalAcc = fNode ctx acc node rule
+            fChild (node :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse newCtx a c r) finalAcc
+        |ValueClauseC valueClause ->
+            let newCtx, finalAcc = fValueClause ctx acc valueClause rule
+            fChild (valueClause :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse newCtx a c r) finalAcc
+        |LeafC leaf ->
+            fLeaf ctx acc leaf rule
+        |LeafValueC leafvalue ->
+            fLeafValue ctx acc leafvalue rule
+        |CommentC comment ->
+            fComment ctx acc comment rule
+
+    // let fOtherContextAugmenter fOther =
+    //     (fun ctx acc item rule -> fOther ctx acc item rule)
+    let fNodeContextAugmenter fNode = //: 'a -> Node -> _ -> (RuleContext<Scope> * 'a) =
+        let x ctx acc (node : Node) ((field, options) : NewRule<_>) =
+            let newCtx =
+                match options.pushScope with
+                |Some ps ->
+                    {ctx with RuleContext.scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                |None ->
+                    match options.replaceScopes with
+                    |Some rs ->
+                        let newctx =
+                            match rs.this, rs.froms with
+                            |Some this, Some froms ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                            |Some this, None ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                            |None, Some froms ->
+                                {ctx with scopes = {ctx.scopes with From = froms}}
+                            |None, None ->
+                                ctx
+                        match rs.root with
+                        |Some root ->
+                            {newctx with scopes = {newctx.scopes with Root = root}}
+                        |None -> newctx
+                    |None ->
+                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                        then {ctx with scopes = {ctx.scopes with Scopes = anyScope::ctx.scopes.Scopes}}
+                        else ctx
+            let newCtx =
+                match field with
+                | NodeRule (ScopeField s, f) ->
+                    let scope = newCtx.scopes
+                    let key = node.Key
+                    let newCtx =
+                        match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+                        |NewScope ({Scopes = current::_} ,_) ->
+                            // log "cs %A %A %A" s node.Key current
+                            {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
+                        |VarFound ->
+                            // log "cs %A %A %A" s node.Key current
+                            {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
+                        |_ -> newCtx
+                    newCtx
+                   // newCtx//, (Some options, None, Some (NodeC node))
+                // | NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
+                //     ctx//, (Some options, Some (typename, node.Key), Some (NodeC node))
+                // | NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
+                //     let typevalue = node.TagText namefield
+                //     ctx//, (Some options, Some (typename, typevalue), Some (NodeC node))
+                // | NodeRule (TypeField (TypeType.Simple t), _) -> ctx//, (Some options, Some (t, node.Key), Some (NodeC node))
+                // | NodeRule (_, f) -> newCtx//, (Some options, None, Some (NodeC node))
+                | _ -> newCtx//, (Some options, None, Some (NodeC node))
+            newCtx, fNode ctx acc node ((field, options))
+        x
     // let rec infoServiceEarlyExit fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
     //     let recurse = infoServiceEarlyExit fNode fChild fLeaf fLeafValue fComment
     //     match child with
@@ -328,31 +459,41 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let ctx = ctx, (None, None, None)
         foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx (pos) (entity.entity) (entity.logicalpath)
 
-    let foldCollect fLeaf fLeafValue fComment fNode fValueClause acc (node : Node) (path: string) =
+    let foldCollect infoServiceFunction fLeaf fLeafValue fComment fNode fValueClause acc (node : Node) (path: string) =
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
         let fChild (node : IClause) ((field, options) : NewRule<_>) =
             let rules =
                 match field with
                 | (NodeRule (_, rs)) -> rs
                 | _ -> []
-            let noderules, leafrules, leafvaluerules, valueclauserules = memoizeRules rules ctx.subtypes
+            let noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificDict, leafSpecificDict = memoizeRules rules ctx.subtypes
 
             let inner (child : Child) =
                 match child with
                 | NodeC c ->
                     let key = c.Key
                     let keyId = c.KeyId.lower
-                    noderules |> Seq.choose (fun (l, rs, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
+                    let found, value = nodeSpecificDict.TryGetValue keyId
+                    let rs =
+                        if found
+                        then seq { yield! value; yield! noderules }
+                        else upcast noderules
+                    rs |> Seq.choose (function |NodeRule (l, rs), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None) |_ -> None)
                 | ValueClauseC vc ->
-                    valueclauserules |> Seq.map (fun (rs, o) -> ValueClauseC vc, ((ValueClauseRule (rs)), o))
+                    valueclauserules |> Seq.choose (function |ValueClauseRule rs, o -> Some (ValueClauseC vc, ((ValueClauseRule (rs)), o)) |_ -> None)
                 | LeafC leaf ->
                     let key = leaf.Key
                     let keyId = leaf.KeyId.lower
-                    leafrules |> Seq.choose (fun (l, r, o) -> if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
+                    let found, value = leafSpecificDict.TryGetValue keyId
+                    let rs =
+                        if found
+                        then seq { yield! value; yield! leafrules }
+                        else upcast leafrules
+                    rs |> Seq.choose (function |LeafRule (l, r), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None) |_ -> None)
                 | LeafValueC leafvalue ->
                     let key = leafvalue.Key
                     let keyId = leafvalue.ValueId.lower
-                    leafvaluerules |> Seq.choose (fun (lv, o) -> if FieldValidators.checkLeftField p Severity.Error ctx lv keyId key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
+                    leafvaluerules |> Seq.choose (function |LeafValueRule lv, o -> (if FieldValidators.checkLeftField p Severity.Error ctx lv keyId key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None) |_ -> None)
                 | CommentC _ -> Seq.empty
             node.AllArray |> Seq.collect inner
 
@@ -365,9 +506,14 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
             |(MultipleKeys (keys, shouldMatch)) ->
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let infoServiceNode typedef rs o =
+        let infoServiceNode (typedef : TypeDefinition<_>) rs o =
             (fun a c ->
-                infoService fNode fChild fLeaf fLeafValue fValueClause fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
+                let ctx =
+                    let pushScope, subtypes = ruleValidationService.TestSubType (typedef.subtypes, c)
+                    match pushScope with
+                    |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
+                    |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
+                infoServiceFunction fNode fChild fLeaf fLeafValue fValueClause fComment ctx a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
         let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t pathDir file)
         let rec infoServiceSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
             match skipRootKeyStack with
@@ -524,16 +670,35 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let fValueClause (res) _ _ = res
 
         fLeaf, fLeafValue, fComment, fNode, fValueClause, Map.empty
-        //let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-        //res
 
-    let mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
-        let fLeaf = (fun (acc1, acc2) l r -> (l1 acc1 l r, l2 acc2 l r))
-        let fLeafValue = (fun (acc1, acc2) lv r -> (lv1 acc1 lv r, lv2 acc2 lv r))
-        let fNode = (fun (acc1, acc2) n r -> (n1 acc1 n r, n2 acc2 n r))
-        let fComment = (fun (acc1, acc2) c r -> (c1 acc1 c r, c2 acc2 c r))
-        let fValueClause = (fun (acc1, acc2) vc r -> (vc1 acc1 vc r, vc2 acc2 vc r))
-        fLeaf, fLeafValue, fComment, fNode, fValueClause, (ctx1, ctx2)
+    let getSavedScopesInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
+        // let getVariableFromString (v : string) (s : string) = if v = "variable" then s.Split('@').[0].Split('.') |> Array.last else s.Split('@').[0]
+        let fLeaf (ctx : RuleContext<_>) (res : ResizeArray<(string * range * Scope)>) (leaf : Leaf) ((field, _) : NewRule<_>) =
+            match field with
+            |LeafRule (_, VariableSetField "event_target") ->
+                res.Add((leaf.ValueText, leaf.Position, ctx.scopes.CurrentScope))
+            |LeafRule (VariableSetField "event_target", _) ->
+                res.Add((leaf.Key, leaf.Position, ctx.scopes.CurrentScope))
+            |_ -> ()
+            res
+        let fLeafValue (ctx : RuleContext<_>) (res : ResizeArray<(string * range * Scope)>) (leafvalue : LeafValue) (field, _) =
+            match field with
+            |LeafValueRule (VariableSetField v) ->
+                res.Add(leafvalue.ValueText, leafvalue.Position, ctx.scopes.CurrentScope)
+            |_ -> ()
+            res
+        let fNode (ctx : RuleContext<_>) (res : ResizeArray<(string * range * Scope)>) (node : Node) ((field, option) : NewRule<_>) =
+            match field with
+            |NodeRule (VariableSetField v, _) ->
+                res.Add(node.Key, node.Position, ctx.scopes.CurrentScope)
+//                res |> (fun m -> m.Add(v, (m.TryFind(v) |> Option.defaultValue (new ResizeArray<_>()) |> (fun i -> i.Add((getVariableFromString v node.Key, node.Position)); i) )))
+            |_ -> ()
+            res
+        let fComment _ (res) _ _ = res
+        let fValueClause _ (res) _ _ = res
+
+        fLeaf, fLeafValue, fComment, fNode, fValueClause, (fun () -> new ResizeArray<_>())
+
 
 
     let getEffectsInEntity = //(ctx) (entity : Entity) =
@@ -567,16 +732,55 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         fLeaf, fLeafValue, fComment, fNode, fValueClause, ([], false)
         // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
         // res
+    // let getDefVarFolder =
+    //     let (fLeaf, fLeafValue, fComment, fNode, fValueClause, acc) = getDefVarInEntity
+    //     let ctx = defaultContext
+    //     let fLeaf = fOtherContextAugmenter fLeaf
+    //     let fLeafValue = fOtherContextAugmenter fLeafValue
+    //     let fComment = fOtherContextAugmenter fComment
+    //     let fNode = fNodeContextAugmenter fNode
+    //     let fValueClause = (fun c r vc rul -> c, fValueClause r vc rul)
+    //     fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
+        // foldCollect depthInfoService fLeaf fLeafValue fComment fNode fValueClause acc (entity.entity) (entity.logicalpath)
+
+    let augmentFolder (fLeaf, fLeafValue, fComment, fNode, fValueClause, acc) =
+        // let fLeaf = fOtherContextAugmenter fLeaf
+        // let fLeafValue = fOtherContextAugmenter fLeafValue
+        // let fComment = fOtherContextAugmenter fComment
+        let fNode = fNodeContextAugmenter fNode
+        // let fValueClause = (fun c r vc rul -> c, fValueClause r vc rul)
+        fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
+
+    // let augmentFolder2 (fLeaf, fLeafValue, fComment, (fNode : Collections.Map<string,ResizeArray<string * range>> -> Node -> _), fValueClause, acc) =
+    //     let fLeaf = fOtherContextAugmenter fLeaf
+    //     let fLeafValue = fOtherContextAugmenter fLeafValue
+    //     let fComment = fOtherContextAugmenter fComment
+    //     let fNode = fNodeContextAugmenter fNode
+    //     let fValueClause = (fun c r vc rul -> c, fValueClause r vc rul)
+    //     fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
+
+    // let x = augmentFolder2 getDefVarInEntity
     let allFolds entity =
         let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx =
-            mergeFolds getTriggersInEntity getEffectsInEntity
-            |> mergeFolds getDefVarInEntity
-            |> mergeFolds (getTypesInEntity())
-        let (types), (defvars, (effects, triggers)) = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
-        (types, defvars, triggers, effects)
+            Test.mergeFolds (getTriggersInEntity) ( getEffectsInEntity)
+            |> Test.mergeFolds (getDefVarInEntity)
+            |> Test.mergeFolds ( (getTypesInEntity()))
+            // |> augmentFolder
+            // |> Test.mergeFolds2 (getDefVarFolder)
+            //|> Test.mergeFolds getDefVarInEntity
+        let (types), (defvars, (effects, triggers)) = foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
+        let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx = getSavedScopesInEntity
+        let fValueClause = (fun c r vc rul -> c, fValueClause c r vc rul)
+        let eventtargets = foldCollect depthInfoService fLeaf fLeafValue fComment (fNodeContextAugmenter fNode) fValueClause (ctx()) (entity.entity) (entity.logicalpath)
+        (types, defvars, triggers, effects, eventtargets)
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
-        foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
-
+        foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
+    let singleDepthFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
+        foldCollect depthInfoService fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
+    let getSavedScopesInEntityFolder entity =
+        let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx = getSavedScopesInEntity
+        let fValueClause = (fun c r vc rul -> c, fValueClause c r vc rul)
+        foldCollect depthInfoService fLeaf fLeafValue fComment (fNodeContextAugmenter fNode) fValueClause (ctx()) (entity.entity) (entity.logicalpath)
     let validateLocalisationFromTypes (entity : Entity) =
         let fLeaf (res : ValidationResult) (leaf : Leaf) ((field, _) : NewRule<_>) =
             match field with
@@ -645,7 +849,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
         let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
         let ctx = OK
-        let res = foldCollect fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
+        let res = foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx (entity.entity) (entity.logicalpath)
         res
 
 
@@ -653,6 +857,7 @@ type InfoService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
     member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
     member __.GetReferencedTypes(entity : Entity) = singleFold (getTypesInEntity()) entity
     member __.GetDefinedVariables(entity : Entity) = singleFold getDefVarInEntity entity
+    member __.GetSavedEventTargets(entity : Entity) = getSavedScopesInEntityFolder entity
     member __.GetTypeLocalisationErrors(entity : Entity) = validateLocalisationFromTypes entity
     member __.GetEffectBlocks(entity : Entity) = (singleFold getEffectsInEntity entity), (singleFold getTriggersInEntity entity)
     member __.BatchFolds(entity : Entity) = allFolds entity

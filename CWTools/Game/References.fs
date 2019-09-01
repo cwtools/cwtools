@@ -8,7 +8,7 @@ open CWTools.Common
 
 
 
-type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'S, 'M>, localisation : ILocalisationAPI list) =
+type References<'T, 'M when 'T :> ComputedData and 'M :> IModifier>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'M>, localisation : ILocalisationAPI list) =
     let entities() = resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
     let events() =
         entities()
@@ -31,3 +31,4 @@ type References<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> C
     member __.Localisation = localisation()
     member __.TypeMapInfo = lookup.typeDefInfo
     member __.ConfigRules = lookup.configRules
+    member __.SavedScopes = lookup.savedEventTargets

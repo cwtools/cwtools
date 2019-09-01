@@ -26,15 +26,15 @@ open CWTools.Parser
 open CWTools.Common.NewScope
 
 module VIC2GameFunctions =
-    type GameObject = GameObject<Scope, Modifier, VIC2ComputedData, VIC2Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    type GameObject = GameObject<Modifier, VIC2ComputedData, VIC2Lookup>
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Scope, Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
@@ -63,7 +63,7 @@ module VIC2GameFunctions =
     let updateModifiers (game : GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup : Lookup<_,_>) =
+    let addModifiersWithScopes (lookup : Lookup<_>) =
         let modifierOptions (modifier : Modifier) =
             let requiredScopes =
                 modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
@@ -84,8 +84,8 @@ module VIC2GameFunctions =
         let ruleToTrigger(r,o) =
             let name =
                 match r with
-                |LeafRule(ValueField(Specific n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
-                |NodeRule(ValueField(Specific n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
+                |LeafRule(SpecificField(SpecificValue n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
+                |NodeRule(SpecificField(SpecificValue n),_) when not (List.contains n vanillaTriggerNames) -> Some (StringResource.stringManager.GetStringForID n.normal)
                 |_ -> None
             let effectType = if o.comparison then EffectType.ValueTrigger else EffectType.Trigger
             name |> Option.map (fun name -> DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
@@ -135,7 +135,7 @@ module VIC2GameFunctions =
     //     test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
 
-    let addModifiersAsTypes (lookup : Lookup<_,_>) (typesMap : Map<string,TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup : Lookup<_>) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
@@ -202,18 +202,18 @@ module VIC2GameFunctions =
                 { o with requiredScopes = newScopes; pushScope = innerScope }
             rules |> List.collect (
                     function
-                    |AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("effect", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
-                    |AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("trigger", (LeafRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
-                    |AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("effect", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesE s o))]
-                    |AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), o)) ->
-                        [AliasRule ("trigger", (NodeRule(ValueField(ValueType.Specific s),r), addRequiredScopesT s o))]
-                    |AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
-                        [AliasRule ("effect", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesE s o))]
-                    |AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), o)) ->
-                        [AliasRule ("trigger", (LeafValueRule(ValueField(ValueType.Specific s)), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (LeafRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("effect", (LeafRule(SpecificField(SpecificValue s),r), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (LeafRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("trigger", (LeafRule(SpecificField(SpecificValue s),r), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (NodeRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("effect", (NodeRule(SpecificField(SpecificValue s),r), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (NodeRule(SpecificField(SpecificValue s),r), o)) ->
+                        [AliasRule ("trigger", (NodeRule(SpecificField(SpecificValue s),r), addRequiredScopesT s o))]
+                    |AliasRule ("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
+                        [AliasRule ("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o))]
+                    |AliasRule ("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
+                        [AliasRule ("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o))]
                     // |AliasRule ("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
                     //     getAllScriptedEffects
                     // |AliasRule ("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
@@ -293,7 +293,7 @@ module VIC2GameFunctions =
             modifiers = vic2Mods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
-            localisationCommands = vic2LocCommands
+            localisationCommands = Legacy vic2LocCommands
             eventTargetLinks = vic2EventTargetLinks
             scopeDefinitions = scopeDefinitions
         }
@@ -329,11 +329,11 @@ type VIC2Game(setupSettings : VIC2Settings) =
 
     }
     do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
-
-    let settings = {
-        settings with
-            embedded = { settings.embedded with localisationCommands = settings.embedded.localisationCommands |> (fun l -> if l.Length = 0 then locCommands() else l )}
-            initialLookup = VIC2Lookup()
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
+    let settings =
+            { settings with
+                embedded = { settings.embedded with localisationCommands = locSettings }
+                initialLookup = VIC2Lookup()
             }
 
     let rulesManagerSettings = {
@@ -350,12 +350,12 @@ type VIC2Game(setupSettings : VIC2Settings) =
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
-    let game = GameObject<Scope, Modifier, VIC2ComputedData, VIC2Lookup>.CreateGame
+    let game = GameObject<Modifier, VIC2ComputedData, VIC2Lookup>.CreateGame
                 ((settings, "victoria 2", scriptFolders, Compute.computeVIC2Data,
                     Compute.computeVIC2DataUpdate,
                      (VIC2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
-                     VIC2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
+                     VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     VIC2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
@@ -369,7 +369,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
-    let references = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+    let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
 
     let parseErrors() =
@@ -399,7 +399,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text =game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<_, Scope, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member __.References() = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
