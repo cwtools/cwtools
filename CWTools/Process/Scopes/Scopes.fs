@@ -293,7 +293,7 @@ module Scopes =
                     | false -> LocNotFound (nextKey)
                 |None, true, false ->
                     match eventtargets |> List.exists (fun et -> et == nextKey) with
-                    | true -> LocContextResult.Found (context.CurrentScope.ToString())
+                    | true -> LocContextResult.NewScope ({source with Scopes = context.Root.AnyScope::source.Scopes })
                     | false -> LocNotFound (nextKey)
             onetooneMatch()
             |> Option.orElseWith effectMatch
