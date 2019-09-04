@@ -1,0 +1,55 @@
+test = {
+    option = {
+        #error
+        int_no_limit = a
+        #error
+        int_no_limit = 0.5
+        int_no_limit = -10000
+        int_no_limit = 50000
+
+        #error
+        int_fixed_range = -100
+        #error
+        int_fixed_range = 500
+        int_fixed_range = 10
+        #error
+        int_fixed_range = a
+
+        #error
+        int_inf_upper = -50
+        int_inf_upper = 100000
+        int_inf_upper = 10
+
+        #error
+        int_inf_lower = 50
+        int_inf_lower = -10000
+        int_inf_lower = 10
+
+        #error
+        float_no_limit = a
+        float_no_limit = -10000.0
+        float_no_limit = 50000.0
+
+        #error
+        float_fixed_range = -100.0
+        #error
+        float_fixed_range = 500.0
+        float_fixed_range = 10.0
+        float_fixed_range = -5.0
+        #error
+        float_fixed_range = -5.2
+        #error
+        float_fixed_range = a
+
+        #error
+        float_inf_upper = -50.0
+        float_inf_upper = 100000.0
+        float_inf_upper = 10.0
+
+        #error
+        float_inf_lower = 50.0
+        float_inf_lower = -10000.0
+        float_inf_lower = 10.0
+
+    }
+}

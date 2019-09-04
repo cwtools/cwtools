@@ -225,11 +225,17 @@ module RulesParser =
         match getSettingFromString full "float" with
         |Some s ->
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
+            let parseFloat (s : string) =
+                match s, Double.TryParse s with
+                | "inf", _ -> Some (float 1E+12)
+                | "-inf", _ -> Some -(float 1E+12)
+                | _, (true, num) -> Some (num)
+                | _, (false, _) -> None
+            eprintfn "%A %A" split.[0] split.[1]
             if split.Length < 2 then None else
-                try
-                    Some ((float split.[0]), (float split.[1]))
-                with
-                |_ -> None
+                match (parseFloat split.[0]), (parseFloat split.[1]) with
+                | Some min, Some max -> Some (min, max)
+                | _ -> None
         |None -> None
 
 
@@ -237,11 +243,16 @@ module RulesParser =
         match getSettingFromString full "int" with
         |Some s ->
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
+            let parseInt (s : string) =
+                match s, Int32.TryParse s with
+                | "inf", _ -> Some Int32.MaxValue
+                | "-inf", _ -> Some Int32.MinValue
+                | _, (true, num) -> Some num
+                | _, (false, _) -> None
             if split.Length < 2 then None else
-                try
-                    Some ((int split.[0]), (int split.[1]))
-                with
-                |_ -> None
+                match (parseInt split.[0]), (parseInt split.[1]) with
+                | Some min, Some max -> Some (min, max)
+                | _ -> None
         |None -> None
 
     let getAliasSettingsFromString (full : string) =
@@ -353,7 +364,7 @@ module RulesParser =
             | Some (min, max) -> ValueField (ValueType.Int (min, max))
             | None -> (defaultInt)
         | "float" -> defaultFloat
-        | x when x.StartsWith "float" ->
+        | x when x.StartsWith "float[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueField (ValueType.Float (min, max))
             | None -> (defaultFloat)
