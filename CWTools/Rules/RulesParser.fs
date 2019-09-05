@@ -231,7 +231,6 @@ module RulesParser =
                 | "-inf", _ -> Some -(float 1E+12)
                 | _, (true, num) -> Some (num)
                 | _, (false, _) -> None
-            eprintfn "%A %A" split.[0] split.[1]
             if split.Length < 2 then None else
                 match (parseFloat split.[0]), (parseFloat split.[1]) with
                 | Some min, Some max -> Some (min, max)

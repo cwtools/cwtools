@@ -378,6 +378,6 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.Types() = game.Lookup.typeDefInfo
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
-        member __.GetEventGraphData : GraphDataRequest = (fun files -> graphEventDataForFiles references game.ResourceManager lookup files ["event"])
+        member __.GetEventGraphData : GraphDataRequest = (fun files types -> graphEventDataForFiles references game.ResourceManager lookup files types)
  //getFastTrigger fileManager game.ResourceManager file text
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
