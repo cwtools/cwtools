@@ -32,7 +32,7 @@ type GraphDataItem =
         abbreviation : string option
     }
 
-type GraphDataRequest = string list -> string list -> GraphDataItem list
+type GraphDataRequest = string list -> string -> GraphDataItem list
 
 
 
@@ -62,19 +62,17 @@ type IGame =
     abstract RefreshLocalisationCaches : unit -> unit
     abstract ForceRecompute : unit -> unit
     abstract Types : unit ->  Map<string,TypeDefInfo list>
+    abstract TypeDefs : unit -> CWTools.Rules.TypeDefinition<Scope> list
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option
     abstract GetPossibleCodeEdits : string -> string -> range list
     abstract GetCodeEdits : string -> string -> (range seq * pos * string) list option
     abstract GetEventGraphData : GraphDataRequest
-
-type IGame<'S when 'S : comparison and 'S :> IScope<'S>> =
-    inherit IGame
-    abstract ScriptedTriggers : unit -> Effect<'S> list
-    abstract ScriptedEffects : unit -> Effect<'S> list
+    abstract ScriptedTriggers : unit -> Effect<Scope> list
+    abstract ScriptedEffects : unit -> Effect<Scope> list
     abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
-    abstract ScopesAtPos : pos -> string -> string -> ScopeContext<'S> option
+    abstract ScopesAtPos : pos -> string -> string -> ScopeContext<Scope> option
 
-type IGame<'T, 'S, 'M when 'S : comparison and 'S :> IScope<'S> and 'T :> ComputedData and 'M :> IModifier> =
-    inherit IGame<'S>
+type IGame<'T, 'M when 'T :> ComputedData and 'M :> IModifier> =
+    inherit IGame
     abstract AllEntities : unit -> struct (Entity * Lazy<'T>) list
     abstract References : unit -> References<'T, 'M>

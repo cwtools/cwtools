@@ -109,6 +109,7 @@ and TypeDefinition<'a> = {
     warningOnly : bool
     unique : bool
     localisation : TypeLocalisation<'a> list
+    graphRelatedTypes : string list
 }
 
 and NewField<'a> =
@@ -701,8 +702,22 @@ module RulesParser =
                         Some (values, negative)
                     else None
                 |None -> None
+            let graphData =
+                match comments |> List.tryFind (fun s -> s.Contains "graph_related_types") with
+                |Some c ->
+                    let valid = c.Contains "="
+                    if valid
+                    then
+                        let rhs = c.Substring(c.IndexOf "=" + 1).Trim()
+                        let values =
+                            match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                            |true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> List.ofArray
+                            |false -> [rhs]
+                        values
+                    else []
+                |None -> []
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation; startsWith = startsWith; unique = unique}
+            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation; startsWith = startsWith; unique = unique; graphRelatedTypes = graphData}
             |None -> None
         |_ -> None
 

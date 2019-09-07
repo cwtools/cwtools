@@ -343,7 +343,7 @@ type CK2Game(setupSettings : CK2Settings) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<CK2ComputedData, Scope, Modifier> with
+    interface IGame<CK2ComputedData, Modifier> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
@@ -376,8 +376,9 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()
         member __.Types() = game.Lookup.typeDefInfo
+        member __.TypeDefs() = game.Lookup.typeDefs
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
-        member __.GetEventGraphData : GraphDataRequest = (fun files types -> graphEventDataForFiles references game.ResourceManager lookup files types)
+        member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)
  //getFastTrigger fileManager game.ResourceManager file text
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

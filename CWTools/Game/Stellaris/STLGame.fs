@@ -344,7 +344,7 @@ type STLGame (setupSettings : StellarisSettings) =
         //     |_ -> None
 
 
-        interface IGame<STLComputedData, Scope, Modifier> with
+        interface IGame<STLComputedData, Modifier> with
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
@@ -379,6 +379,7 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
             member __.ForceRecompute() = resources.ForceRecompute()
             member __.Types() = game.Lookup.typeDefInfo
+            member __.TypeDefs() = game.Lookup.typeDefs
             member __.GetPossibleCodeEdits file text = getPreTriggerPossible fileManager game.ResourceManager file text
             member __.GetCodeEdits file text = getFastTrigger fileManager game.ResourceManager file text
-            member __.GetEventGraphData : GraphDataRequest = (fun files types -> graphEventDataForFiles references game.ResourceManager lookup files types)
+            member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)

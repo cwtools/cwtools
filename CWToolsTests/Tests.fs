@@ -181,7 +181,7 @@ let tests =
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false} }
                 // UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+                let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
                 let parseErrors = stl.ParserErrors()
                 let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k) -> n)
                 let entities = stl.AllEntities()
@@ -216,7 +216,7 @@ let tests =
                 let settings = { settings with embedded = FromConfig ([locfiles], []);
                                             validation = {settings.validation with langs = [STL STLLang.English; STL STLLang.German] };
                                             rules = Some { ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false} }
-                let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+                let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
                 let parseErrors = stl.ParserErrors()
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
@@ -303,7 +303,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 // let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
                 let settings = emptyStellarisSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
-                let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+                let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
                 let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
                 let completionTests =
@@ -328,7 +328,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 //                     |> Option.defaultValue (Scopes.IR.scopedEffects |> List.map SimpleLink)
                 let settings = emptyImperatorSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
-                let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, Scope, IRConstants.Modifier>
+                let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, IRConstants.Modifier>
                 let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = ir.AllEntities()
                                 |> List.map (fun struct (e, _) ->
@@ -402,7 +402,7 @@ let specialtests =
             let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
             // UtilityParser.initializeScopes None (Some defaultScopeInputs)
             let stl = STLGame({settings with rules = Some {  ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false   };
-                                                embedded = ManualSettings { emptyEmbeddedSettings with modifiers = modifiers; scopeDefinitions = defaultScopeInputs}}) :> IGame<STLComputedData, Scope, Modifier>
+                                                embedded = ManualSettings { emptyEmbeddedSettings with modifiers = modifiers; scopeDefinitions = defaultScopeInputs}}) :> IGame<STLComputedData, Modifier>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
             Expect.equal (stl.StaticModifiers()) exp ""
@@ -494,8 +494,8 @@ let embeddedTests =
         let settingsE = { settings with embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached; scopeDefinitions = defaultScopeInputs };}
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
 
-        let stlE = STLGame(settingsE) :> IGame<STLComputedData, Scope, Modifier>
-        let stlNE = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+        let stlE = STLGame(settingsE) :> IGame<STLComputedData, Modifier>
+        let stlNE = STLGame(settings) :> IGame<STLComputedData, Modifier>
         let eerrors = stlE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
         eprintfn "%A" (stlE.ValidationErrors())
         let neerrors = stlNE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n)
@@ -539,7 +539,7 @@ let overwriteTests =
         let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles; scopeDefinitions = defaultScopeInputs };
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
-        let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+        let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let inner (file, ((nodekeys : range list)) )=

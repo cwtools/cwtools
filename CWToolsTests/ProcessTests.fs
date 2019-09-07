@@ -95,6 +95,7 @@ let createStarbaseTypeDef =
         localisation = []
         startsWith = None
         unique = false
+        graphRelatedTypes = []
     }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -204,6 +205,7 @@ let shipBehaviorType =
         localisation = []
         startsWith = None
         unique = false
+        graphRelatedTypes = []
     }
 let shipSizeType =
     {
@@ -221,6 +223,7 @@ let shipSizeType =
         localisation = []
         startsWith = None
         unique = false
+        graphRelatedTypes = []
     }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"
@@ -570,7 +573,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
             //let stl = STLGame(folder, Files(scopeManager.ParseScope() "All"), "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
@@ -594,7 +597,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -616,7 +619,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
 
             let input =    "ship_size = {\n\
                             prerequisites = {\n\
@@ -638,7 +641,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Scope, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
 
             let input =    "ship_size = {\n\
                             class = \n\
