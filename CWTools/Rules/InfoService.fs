@@ -598,17 +598,25 @@ type InfoService
     //     pathFilteredTypes |> List.fold (infoServiceBase node) acc
 
     let getTypesInEntity() = // (entity : Entity) =
-        let res = ConcurrentDictionary<string ,ResizeArray<string * range>>()
-        let fLeaf (_) (leaf : Leaf) ((field, _) : NewRule<_>) =
+        let createReferenceDetails name pos isOutgoing referenceLabel =
+            {
+                ReferenceDetails.name = name
+                position = pos
+                isOutgoing = isOutgoing
+                referenceLabel = referenceLabel
+            }
+        let res = ConcurrentDictionary<string ,ResizeArray<ReferenceDetails>>()
+        let fLeaf (_) (leaf : Leaf) ((field, options) : NewRule<_>) =
+            let isOutgoing, referenceLabel = options.referenceDetails |> Option.map (fun (b, s) -> b, Some s) |> Option.defaultValue (true, None)
             match field with
             |LeafRule (_, TypeField (TypeType.Simple t)) ->
             // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
                 if res.ContainsKey(typename)
-                then res.[typename].Add(leaf.ValueText, leaf.Position); res
+                then res.[typename].Add(createReferenceDetails (leaf.ValueText) (leaf.Position) isOutgoing referenceLabel); res
                 else
-                    let newArr = ResizeArray<string * range>()
-                    newArr.Add((leaf.ValueText, leaf.Position))
+                    let newArr = ResizeArray<ReferenceDetails>()
+                    newArr.Add(createReferenceDetails (leaf.ValueText) (leaf.Position) isOutgoing referenceLabel)
                     res.TryAdd(typename, newArr) |> ignore
                     res
                 // res |> (fun m -> m.Add(typename, (leaf.ValueText, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
@@ -616,23 +624,24 @@ type InfoService
             // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
                 if res.ContainsKey(typename)
-                then res.[typename].Add(leaf.Key, leaf.Position); res
+                then res.[typename].Add(createReferenceDetails (leaf.Key) (leaf.Position) isOutgoing referenceLabel); res
                 else
-                    let newArr = ResizeArray<string * range>()
-                    newArr.Add((leaf.Key, leaf.Position))
+                    let newArr = ResizeArray<ReferenceDetails>()
+                    newArr.Add(createReferenceDetails (leaf.Key) (leaf.Position) isOutgoing referenceLabel)
                     res.TryAdd(typename, newArr) |> ignore
                     res
             |_ -> res
-        let fLeafValue (_) (leafvalue : LeafValue) (field, _) =
+        let fLeafValue (_) (leafvalue : LeafValue) (field, options) =
+            let isOutgoing, referenceLabel = options.referenceDetails |> Option.map (fun (b, s) -> b, Some s) |> Option.defaultValue (true, None)
             match field with
             |LeafValueRule (TypeField (TypeType.Simple t)) ->
             // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
                 if res.ContainsKey(typename)
-                then res.[typename].Add(leafvalue.ValueText, leafvalue.Position); res
+                then res.[typename].Add(createReferenceDetails (leafvalue.ValueText) (leafvalue.Position) isOutgoing referenceLabel); res
                 else
-                    let newArr = ResizeArray<string * range>()
-                    newArr.Add((leafvalue.ValueText, leafvalue.Position))
+                    let newArr = ResizeArray<ReferenceDetails>()
+                    newArr.Add(createReferenceDetails (leafvalue.ValueText) (leafvalue.Position) isOutgoing referenceLabel)
                     res.TryAdd(typename, newArr) |> ignore
                     res
             |_ -> res

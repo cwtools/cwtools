@@ -68,7 +68,7 @@ module LanguageFeatures =
                 let t = t.Split('.').[0]
                 resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else let contains, value = ((info.GetReferencedTypes) e).TryGetValue t in if contains then Some (value |> List.ofSeq) else None)
                                |> List.collect id
-                               |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
+                               |> List.choose (fun ref -> if ref.name == tv then Some (ref.position) else None)
                                |> Some
             |_ -> None
         |_, _ -> None
@@ -268,7 +268,7 @@ module LanguageFeatures =
         let findLoc key = locSet |> Map.tryFind key |> Option.map (fun (l) -> l.desc)
 
         let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
-        let getSourceTypes x = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (v1, v2) -> k, v1, v2, []))
+        let getSourceTypes (x : Map<string, ReferenceDetails list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (rd) -> k, rd.name, rd.position, rd.isOutgoing, rd.referenceLabel, []))
         let getDisplayNameFromID (id : string) (el : (string * string * bool) list) =
             el |> List.tryFind (fun (_, _, primary) -> primary)
                |> Option.bind (fun (_, key, _) -> findLoc key)
@@ -284,14 +284,14 @@ module LanguageFeatures =
         | [] -> []
         | t ->
             let typesDefinedInFiles = t |> List.filter (fun (_, _, r, el, _) -> files |> List.contains r.FileName)
-            let allInternalOrOutgoingRefs = entitiesInSelectedFiles |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, _) -> (v, r))) |> Option.defaultValue [])
+            let allInternalOrOutgoingRefs = entitiesInSelectedFiles |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v, r, isOutgoing, refLabel))) |> Option.defaultValue [])
             let definedVariables = entitiesInSelectedFiles |> List.collect (fun struct(_, data) -> data.Force().Definedvariables |> Option.map (Map.toList >> List.collect (fun (k, vs) -> vs |> List.ofSeq |> List.map (fun (v1, v2) -> k, v1, v2))) |> Option.defaultValue [])
             let results = typesDefinedInFiles
                         |> List.map (fun (entityType, event, r, el, sts) ->
                             entityType,
                             event,
                             r,
-                            (allInternalOrOutgoingRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None) |> List.distinct),
+                            (allInternalOrOutgoingRefs |> List.choose (fun (reference, r2, isOutgoing, refLabel) -> if rangeContainsRange r r2 then Some (reference, isOutgoing, refLabel) else None) |> List.distinct),
                             (definedVariables |> List.choose (fun (varname, defVar, r2) -> if rangeContainsRange r r2 then Some (varname, defVar) else None) |> List.distinct),
                             el,
                             sts)
@@ -309,24 +309,24 @@ module LanguageFeatures =
                     entityTypeDisplayName = subtypeName
                     abbreviation = abbrev
                 })
-            let refNames = allInternalOrOutgoingRefs |> List.map fst |> List.distinct
+            let refNames = allInternalOrOutgoingRefs |> List.map (fun (r, _, _, _) -> r) |> List.distinct
             let typeNames = typesDefinedInFiles |> List.map (fun (k, n, r, _, _) -> n)
-            let referenced = t |> List.filter (fun (k, name, _, _, _) -> refNames |> List.contains name && (typeNames |> List.contains name |> not))
+            let referenced = t |> List.filter (fun (k, name, _, _, _) -> refNames |> List.contains name && (typeNames |> List.contains name |> not)) |> List.distinctBy (fun (_, name, _, _, _) -> name)
             let secondaryNames = referenced |> List.map (fun (k, n, r, _, _) -> n)
             let allOtherFiles = t |> List.filter (fun (_, id, range, _, _) -> files |> List.contains range.FileName |> not)
                                          |> List.map (fun (_, _, range, _, _) -> range.FileName)
             let allIncomingRefs = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> allOtherFiles |> List.contains e.filepath)
-                                    |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, _) -> (v, r))) |> Option.defaultValue [])
-                                    |> List.filter (fun (v, r) -> typeNames |> List.contains v)
+                                    |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v, r, isOutgoing, refLabel))) |> Option.defaultValue [])
+                                    |> List.filter (fun (v, r, isOutgoing, refLabel) -> typeNames |> List.contains v)
             let typesNotDefinedInFiles = t |> List.filter (fun (_, name, r, el, _) -> (typeNames |> List.contains name |> not) && (secondaryNames |> List.contains name |> not))
-                                           |> List.filter (fun (_, _, r, _, _) -> allIncomingRefs |> List.exists (fun (_, r2) -> rangeContainsRange r r2))
+                                           |> List.filter (fun (_, _, r, _, _) -> allIncomingRefs |> List.exists (fun (_, r2, isOutgoing, refLabel) -> rangeContainsRange r r2))
             let secondaries = referenced @ typesNotDefinedInFiles |> List.map (fun (entityType, name, range, el, sts) ->
                 let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
                 {
                     GraphDataItem.id = name
                     displayName = getDisplayNameFromID name el
                     documentation = None
-                    references = (allIncomingRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange range r2 then Some reference else None) |> List.distinct)
+                    references = (allIncomingRefs |> List.choose (fun (reference, r2, isOutgoing, refLabel) -> if rangeContainsRange range r2 then Some (reference, isOutgoing, refLabel) else None) |> List.distinct)
                     location = Some range
                     details = None
                     isPrimary = false

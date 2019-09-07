@@ -21,7 +21,8 @@ type GraphDataItem =
         id : string
         displayName : string option
         documentation : string option
-        references : string list
+        /// name * isOutgoing
+        references : (string * bool * string option) list
         location : range option
         details : Map<string, string list> option
         /// Whether this item is in the files given (as opposed to only referenced to)

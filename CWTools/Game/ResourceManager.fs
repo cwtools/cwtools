@@ -12,10 +12,17 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities
 open System.Threading.Tasks
 
+type ReferenceDetails = {
+    name: string
+    position : range
+    isOutgoing : bool
+    referenceLabel : string option
+}
+
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets) =
     member val Cache : Map<string, obj list> = Map.empty with get, set
     member val WithRulesData : bool = withRulesData with get,set
-    member val Referencedtypes : Map<string, (string  * range) list> option = referencedtypes with get, set
+    member val Referencedtypes : Map<string, (ReferenceDetails) list> option = referencedtypes with get, set
     member val Definedvariables : Map<string, ResizeArray<(string * range)>> option = definedvariable with get, set
     member val SavedEventTargets : ResizeArray<string * range * CWTools.Common.NewScope.Scope> option = savedEventTargets with get, set
     member val EffectBlocks : Node list option = effectBlocks with get, set

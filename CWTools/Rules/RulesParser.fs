@@ -31,6 +31,7 @@ type Options<'a> = {
     severity : Severity option
     requiredScopes : 'a list
     comparison : bool
+    referenceDetails : (bool * string) option
 }
 
 [<Struct>]
@@ -64,7 +65,7 @@ type SpecificValue = |SpecificValue of valuec : StringTokens
 type ScalarValue = |ScalarValue
 
 type TypeType =
-| Simple of string
+| Simple of name: string
 | Complex of prefix : string * name : string * suffix : string
 
 type Marker =
@@ -184,7 +185,7 @@ module RulesParser =
         |"information" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
     let requiredSingle : Options<Scope> = { defaultOptions with min = 1; max = 1 }
     let requiredMany<'a> = { defaultOptions with min = 1; max = 100 }
     let optionalSingle : Options<Scope> = { defaultOptions with min = 0; max = 1 }
@@ -328,8 +329,15 @@ module RulesParser =
             match comments |> List.tryFind (fun s -> s.Contains("severity")) with
             | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseSeverity |> Some
             | None -> None
+        let referenceDetails =
+            match comments |> List.tryFind (fun s -> s.Contains("outgoingReferenceLabel")) with
+            | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> (fun s -> true, s) |> Some
+            | None ->
+                match comments |> List.tryFind (fun s -> s.Contains("incomingReferenceLabel")) with
+                | Some s -> s.Substring(s.IndexOf "=" + 1).Trim()|> (fun s -> false, s) |> Some
+                | None -> None
         let comparison = operator = Operator.EqualEqual
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison }
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails }
 
     let processKey parseScope anyScope =
         function
@@ -476,8 +484,8 @@ module RulesParser =
 
 
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
 
     let configLeaf processChildConfig (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
