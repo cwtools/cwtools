@@ -271,9 +271,14 @@ module LanguageFeatures =
 
         let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
         let getSourceTypes (x : Map<string, ReferenceDetails list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (rd) -> k, rd.name, rd.position, rd.isOutgoing, rd.referenceLabel, []))
-        let getDisplayNameFromID (id : string) (el : (string * string * bool) list) =
+        let getNonExplicitLoc (id : string) (typeName : string) =
+            lookup.typeDefs |> List.tryPick (fun td -> if td.name = typeName then Some td.localisation else None)
+                            |> Option.bind (fun ls -> ls |> List.tryFind (fun l -> l.explicitField.IsNone && l.primary))
+                            |> Option.bind (fun l -> l.prefix + id + l.suffix |> findLoc)
+        let getDisplayNameFromID (id : string) (el : (string * string * bool) list) (entityType : string) =
             el |> List.tryFind (fun (_, _, primary) -> primary)
                |> Option.bind (fun (_, key, _) -> findLoc key)
+               |> Option.orElseWith (fun _ -> getNonExplicitLoc id entityType)
                |> Option.orElseWith (fun _ -> findLoc id)
         let getAbbrevInfo (typeName : string) (subtypes : string list) =
             lookup.typeDefs |> List.tryPick (fun td -> if td.name = typeName then Some td.subtypes else None)
@@ -301,7 +306,7 @@ module LanguageFeatures =
                 let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
                 {
                     GraphDataItem.id = event
-                    displayName = getDisplayNameFromID event el
+                    displayName = getDisplayNameFromID event el entityType
                     documentation = None
                     references = refs
                     location = Some r
@@ -326,7 +331,7 @@ module LanguageFeatures =
                 let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
                 {
                     GraphDataItem.id = name
-                    displayName = getDisplayNameFromID name el
+                    displayName = getDisplayNameFromID name el entityType
                     documentation = None
                     references = (allIncomingRefs |> List.choose (fun (reference, r2, isOutgoing, refLabel) -> if rangeContainsRange range r2 then Some (reference, isOutgoing, refLabel) else None) |> List.distinct)
                     location = Some range
