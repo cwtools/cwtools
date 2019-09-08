@@ -106,7 +106,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                                   |> String.concat ""
 
         let score = scoreFunction key
-        CompletionResponse.Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description, Some score)
+        CompletionResponse.Snippet (key, (sprintf "%s = {\n%s}" key requiredRules), description, Some score)
 
 
     // | LeafValue
