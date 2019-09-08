@@ -30,7 +30,7 @@ module SetupLogParser =
     let private logFile = SharedParsers.ws >>. header >>. many1 (attempt staticModifier) .>> modifierHeader .>>. many1 (attempt modifier) .>> footer .>> eof
 
 
-    let toDocEffect<'a when 'a : comparison> effectType parseScope (x : RawEffect) = DocEffect<'a>(x, effectType, parseScope)
+    let toDocEffect<'a when 'a : comparison> effectType parseScope (x : RawEffect) = DocEffect(x, effectType, parseScope)
 
     let parseLogsFile filepath = runParserOnFile logFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseLogsStream file = runParserOnStream logFile () "logFile" file (System.Text.Encoding.GetEncoding(1252))

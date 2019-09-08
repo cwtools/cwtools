@@ -419,10 +419,10 @@ namespace CWTools.Common
     val allScopesSet : Set<Scope>
     val parseScope : x:string -> Scope
     val parseScopes : _arg1:string -> Scope list
-    type Effect = Effect<Scope>
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
+    type Effect = Effect
+    type DocEffect = DocEffect
+    type ScriptedEffect = ScriptedEffect
+    type ScopedEffect = ScopedEffect
     type ModifierCategory =
       | Pop
       | Science
@@ -577,10 +577,10 @@ namespace CWTools.Common
     val allScopesSet : Set<Scope>
     val parseScope : x:string -> Scope
     val parseScopes : _arg1:string -> Scope list
-    type Effect = Effect<Scope>
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
+    type Effect = Effect
+    type DocEffect = DocEffect
+    type ScriptedEffect = ScriptedEffect
+    type ScopedEffect = ScopedEffect
     type ModifierCategory =
       | Country
       | Province
@@ -613,10 +613,10 @@ namespace CWTools.Common
     val allScopesSet : Set<Scope>
     val parseScope : x:string -> Scope
     val parseScopes : _arg1:string -> Scope list
-    type Effect = Effect<Scope>
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
+    type Effect = Effect
+    type DocEffect = DocEffect
+    type ScriptedEffect = ScriptedEffect
+    type ScopedEffect = ScopedEffect
     type ModifierCategory =
       | State
       | Country
@@ -662,10 +662,10 @@ namespace CWTools.Common
     val allScopesSet : Set<Scope>
     val parseScope : x:string -> Scope
     val parseScopes : _arg1:string -> Scope list
-    type Effect = Effect<Scope>
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
+    type Effect = Effect
+    type DocEffect = DocEffect
+    type ScriptedEffect = ScriptedEffect
+    type ScopedEffect = ScopedEffect
     type ModifierCategory =
       | Character
       | Province
@@ -719,10 +719,10 @@ namespace CWTools.Common
     val allScopesSet : Set<Scope>
     val parseScope : x:string -> Scope
     val parseScopes : _arg1:string -> Scope list
-    type Effect = Effect<Scope>
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
+    type Effect = Effect
+    type DocEffect = DocEffect
+    type ScriptedEffect = ScriptedEffect
+    type ScopedEffect = ScopedEffect
     type ModifierCategory =
       | Character
       | Province

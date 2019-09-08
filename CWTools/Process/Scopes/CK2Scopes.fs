@@ -57,7 +57,7 @@ module CK2 =
     ]
     let oneToOneScopesNames = List.map fst oneToOneScopes
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
-    let changeScope = Scopes.createChangeScope<Scope> oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
+    let changeScope = Scopes.createChangeScope oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
 
     let scopedLocEffects() = [

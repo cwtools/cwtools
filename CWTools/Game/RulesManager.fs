@@ -15,18 +15,18 @@ type RulesSettings = {
     debugMode : bool
 }
 
-type LocalisationEmbeddedSettings<'S when 'S : comparison> =
-| Legacy of (string * ('S list)) list
+type LocalisationEmbeddedSettings =
+| Legacy of (string * (Scope list)) list
 | Jomini of CWTools.Parser.DataTypeParser.JominiLocDataTypes
 
-type EmbeddedSettings<'S,'M when 'S : comparison> = {
-    triggers : DocEffect<'S> list
-    effects : DocEffect<'S> list
+type EmbeddedSettings<'M> = {
+    triggers : DocEffect list
+    effects : DocEffect list
     embeddedFiles : (string * string) list
     modifiers : 'M list
     cachedResourceData : (Resource * Entity) list
-    localisationCommands : LocalisationEmbeddedSettings<'S>
-    eventTargetLinks : EventTargetLink<'S> list
+    localisationCommands : LocalisationEmbeddedSettings
+    eventTargetLinks : EventTargetLink list
     scopeDefinitions : ScopeInput list
 }
 
@@ -39,17 +39,17 @@ type RuleManagerSettings<'S, 'M, 'T, 'L when 'S :> IScope<'S> and 'S : compariso
     defaultContext : ScopeContext<'S>
     defaultLang : Lang
     oneToOneScopesNames : string list
-    loadConfigRulesHook : RootRule<'S> list -> 'L -> EmbeddedSettings<'S, 'M> -> RootRule<'S> list
-    refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
-    refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
-    refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'S, 'M> -> unit
+    loadConfigRulesHook : RootRule<'S> list -> 'L -> EmbeddedSettings<'M> -> RootRule<'S> list
+    refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'M> -> unit
+    refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'M> -> unit
+    refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'M> -> unit
 }
 
 type RulesManager<'T, 'M, 'L when 'T :> ComputedData and 'M :> IModifier and 'L :> Lookup<'M>>
     (resources : IResourceAPI<'T>, lookup : 'L,
      settings : RuleManagerSettings<Scope, 'M, 'T, 'L>,
      localisation : LocalisationManager<'T, 'M>,
-     embeddedSettings : EmbeddedSettings<Scope, 'M>,
+     embeddedSettings : EmbeddedSettings<'M>,
      debugMode : bool) =
 
     let mutable tempEffects = []
@@ -107,7 +107,7 @@ type RulesManager<'T, 'M, 'L when 'T :> ComputedData and 'M :> IModifier and 'L 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let files = resources.GetFileNames() |> Set.ofList
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let tempRuleValidationService = RuleValidationService<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
+        let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -146,7 +146,7 @@ type RulesManager<'T, 'M, 'L when 'T :> ComputedData and 'M :> IModifier and 'L 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let ruleValidationService =  (RuleValidationService<Scope>(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
+        let ruleValidationService =  (RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let infoService = (InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

@@ -15,9 +15,9 @@ type ValidationSettings = {
     experimental : bool
 }
 
-type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
+type GameSettings<'M,'L when 'M :> IModifier> = {
     rootDirectories : WorkspaceDirectory list
-    embedded : EmbeddedSettings<'S, 'M>
+    embedded : EmbeddedSettings<'M>
     validation : ValidationSettings
     rules : RulesSettings option
     scriptFolders : string list option
@@ -26,13 +26,13 @@ type GameSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :>
     initialLookup : 'L
 }
 
-type EmbeddedSetupSettings<'S, 'M when 'S : comparison> =
+type EmbeddedSetupSettings<'M> =
     | FromConfig of embeddedFiles : (string * string) list * cachedResourceData : (Resource * Entity) list
-    | ManualSettings of EmbeddedSettings<'S, 'M>
+    | ManualSettings of EmbeddedSettings<'M>
 
 type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
     rootDirectories : WorkspaceDirectory list
-    embedded : EmbeddedSetupSettings<'S, 'M>
+    embedded : EmbeddedSetupSettings<'M>
     validation : ValidationSettings
     rules : RulesSettings option
     scriptFolders : string list option
@@ -43,7 +43,7 @@ type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 
 
 type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
                     and 'L :> Lookup<'M>>
-    (settings : GameSettings<'M, Scope, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
+    (settings : GameSettings<'M, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
      processLocalisation, validateLocalisationCommand, defaultContext, noneContext,
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
@@ -62,7 +62,7 @@ type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : InfoService<_> option = None
     // let mutable completionService : CompletionService<_> option = None
-    let mutable ruleValidationService : RuleValidationService<Scope> option = None
+    let mutable ruleValidationService : RuleValidationService option = None
     let mutable infoService : InfoService option = None
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
@@ -182,7 +182,7 @@ type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
     member __.InfoService with get() = infoService
     member __.InfoService with set(value) = infoService <- value
     // member val infoService : InfoService<'S> option = None with get, set
-    member val completionService : CompletionService<'S> option = None with get, set
+    member val completionService : CompletionService option = None with get, set
 
     member __.Resources : IResourceAPI<'T> = resourceManager.Api;
     member __.ResourceManager = resourceManager

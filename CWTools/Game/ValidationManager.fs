@@ -27,7 +27,7 @@ type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> ISco
 type ValidationManagerServices<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
     resources : IResourceAPI<'T>
     lookup : Lookup<'M>
-    ruleValidationService : RuleValidationService<'S> option
+    ruleValidationService : RuleValidationService option
     infoService : InfoService option
     localisationKeys : unit -> (Lang * Set<string>) list
 }

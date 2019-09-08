@@ -65,11 +65,6 @@ module HOI4Constants =
         defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []})
 
 
-    type Effect = Effect<Scope>
-
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
         |State
         |Country

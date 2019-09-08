@@ -73,7 +73,7 @@ module IRGameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let updateScriptedTriggers (lookup : IRLookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedTriggers (lookup : IRLookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let vanillaTriggers =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
@@ -96,7 +96,7 @@ module IRGameFunctions =
         // game.Lookup.onlyScriptedTriggers <- sts
         vanillaTriggers @ extraFromRules
 
-    let updateScriptedEffects (lookup : IRLookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedEffects (lookup : IRLookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
@@ -251,7 +251,7 @@ module IRGameFunctions =
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
                             |> Map.add charEnums.key (charEnums.description, charEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : IRLookup) _ (embedded : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : IRLookup) _ (embedded : EmbeddedSettings<_>) =
         lookup.typeDefInfo <-
             (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
@@ -260,7 +260,7 @@ module IRGameFunctions =
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : IRLookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : IRLookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_>) =
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false

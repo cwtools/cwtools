@@ -17,13 +17,13 @@ type CompletionContext =
     | LeafLHS
     | LeafRHS
 
-type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
-                    (rootRules : RootRule<'T> list, typedefs : TypeDefinition<'T> list , types : Collections.Map<string, StringSet>,
+type CompletionService
+                    (rootRules : RootRule<Scope> list, typedefs : TypeDefinition<Scope> list , types : Collections.Map<string, StringSet>,
                      enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
-                     links : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                     valueTriggers : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                     globalScriptVariables : string list, changeScope : ChangeScope<'T>, defaultContext : ScopeContext<'T>, anyScope, oneToOneScopes, defaultLang)  =
+                     links : Map<string,Effect,InsensitiveStringComparer>,
+                     valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
+                     globalScriptVariables : string list, changeScope : ChangeScope<_>, defaultContext : ScopeContext<_>, anyScope, oneToOneScopes, defaultLang)  =
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                     |> List.groupBy fst
@@ -41,7 +41,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
 
 
     let linkMap = links
-    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
+    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect as e when e.IsWildCard -> Some e |_ -> None )
     let valueTriggerMap = valueTriggers
     let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
 
@@ -77,7 +77,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
                                                 |> List.map (fun s -> "event_target:" + s, [anyScope])
-        let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect<'T> as x -> Some (x.Name, x.Scopes) | _ -> None )
+        let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect as x -> Some (x.Name, x.Scopes) | _ -> None )
         evs @ gevs @ scopedEffects
 
     let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
@@ -134,7 +134,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                     // | Some lv -> (lv.Key, countChildren node lv.Key, Some lv.ValueText)::stack
                     // | None -> stack
 
-    and getCompletionFromPath (scoreFunction : 'T list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
+    and getCompletionFromPath (scoreFunction : _ list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
         // log (sprintf "%A" stack)
         let completionForScopeDotChain (key : string) (startingContext : ScopeContext<_>) innerRules description =
             let createSnippetForClauseWithCustomScopeReq scopeContext = (fun (r) -> createSnippetForClause (scoreFunction r scopeContext))
@@ -224,7 +224,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
                 |SubtypeRule(_) -> []
                 |_ -> []
             //TODO: Add leafvalue
-        let fieldToRules (field : NewField<'T>) =
+        let fieldToRules (field : NewField<_>) =
             //log "%A" types
             //log "%A" field
             match field with
@@ -261,7 +261,7 @@ type CompletionService<'T when 'T :> IScope<'T> and 'T : equality and 'T : compa
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
         let severity = Severity.Error
 
-        let rec findRule (rules : NewRule<'T> list) (stack : (string * int * string option * CompletionContext) list) (scopeContext) =
+        let rec findRule (rules : NewRule<_> list) (stack : (string * int * string option * CompletionContext) list) (scopeContext) =
             let subtypedRules =
                 rules |> List.collect (
                     function

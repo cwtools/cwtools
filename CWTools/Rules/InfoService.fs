@@ -32,11 +32,11 @@ type InfoService
                                     (rootRules : RootRule<Scope> list, typedefs : TypeDefinition<Scope> list , types : Collections.Map<string, StringSet>,
                                      enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
-                                     links : Map<string,Effect<Scope>,InsensitiveStringComparer>,
-                                     valueTriggers : Map<string,Effect<Scope>,InsensitiveStringComparer>,
-                                     ruleValidationService : RuleValidationService<Scope>, changeScope, defaultContext, anyScope, defaultLang) =
+                                     links : Map<string,Effect,InsensitiveStringComparer>,
+                                     valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
+                                     ruleValidationService : RuleValidationService, changeScope, defaultContext, anyScope, defaultLang) =
     let linkMap = links
-    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<Scope> as e when e.IsWildCard -> Some e |_ -> None )
+    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect as e when e.IsWildCard -> Some e |_ -> None )
     let valueTriggerMap = valueTriggers
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)

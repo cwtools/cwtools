@@ -5,11 +5,11 @@ open CWTools.Process
 open CWTools.Utilities.Utils
 
 module Helpers =
-    let updateEventTargetLinks (embeddedSettings : EmbeddedSettings<_,_>) =
-        let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect<_>) | _ -> None)
+    let updateEventTargetLinks (embeddedSettings : EmbeddedSettings<_>) =
+        let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         simpleEventTargetLinks
 
-    let private convertSourceRuleType (lookup : Lookup<'M>) (link : EventTargetDataLink<_>) =
+    let private convertSourceRuleType (lookup : Lookup<'M>) (link : EventTargetDataLink) =
         // log (sprintf "csr %A" link)
         match link.sourceRuleType.Trim() with
         | x when x.StartsWith "<" && x.EndsWith ">" ->
@@ -37,15 +37,15 @@ module Helpers =
             log (sprintf "Link %s refers to invalid source %s" link.name x)
             []
 
-    let private getWildCard (link : EventTargetDataLink<_>) =
+    let private getWildCard (link : EventTargetDataLink) =
         match link.sourceRuleType.Trim(), link.dataPrefix with
         | x, Some prefix when x.StartsWith "value[" ->
             Some (ScopedEffect(prefix, link.inputScopes, Some link.outputScope, EffectType.Link, link.description, "", true, [], true, false, true))
         | _ -> None
 
-    let addDataEventTargetLinks (lookup : Lookup<'M>) (embeddedSettings : EmbeddedSettings<_,_>) (addWildCardLinks : bool) =
+    let addDataEventTargetLinks (lookup : Lookup<'M>) (embeddedSettings : EmbeddedSettings<_>) (addWildCardLinks : bool) =
         let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
-        let convertLinkToEffects (link : EventTargetDataLink<_>) =
+        let convertLinkToEffects (link : EventTargetDataLink) =
             let typeDefinedKeys = convertSourceRuleType lookup link
             let keyToEffect (key : string) =
                 let prefkey = link.dataPrefix |> Option.map (fun pref -> pref + key ) |> Option.defaultValue key
@@ -67,7 +67,7 @@ module Helpers =
             match extra with
             | Some e -> e::all
             | None -> all
-        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect<_>)
+        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect)
 
     let getLocalisationErrors (game : GameObject<_,_,_>) globalLocalisation =
         fun (force : bool, forceGlobal : bool) ->

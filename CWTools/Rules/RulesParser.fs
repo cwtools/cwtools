@@ -353,8 +353,10 @@ module RulesParser =
             | Some (setting) ->
                 match setting.Contains "," with
                 | true ->
-                    let [|folder; extension|] = setting.Split([|','|], 2)
-                    FilepathField (Some folder, Some extension)
+                    match setting.Split([|','|], 2) with
+                    | [|folder; extension|] ->
+                        FilepathField (Some folder, Some extension)
+                    | _ -> FilepathField (Some setting, None)
                 | false ->
                     FilepathField (Some setting, None)
             | None -> FilepathField (None, None)

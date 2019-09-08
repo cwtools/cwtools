@@ -101,11 +101,6 @@ module EU4Constants =
     //     |"all" -> allScopes
     //     |x -> [parseScope x]
 
-    type Effect = Effect<Scope>
-
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
         |Country
         |Province

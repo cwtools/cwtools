@@ -160,7 +160,7 @@ module CK2GameFunctions =
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.CK2provinces <- provinces
 
-    let updateScriptedEffects (lookup : Lookup<_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedEffects (lookup : Lookup<_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
         let ruleToEffect(r,o) =
@@ -173,7 +173,7 @@ module CK2GameFunctions =
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers (lookup : Lookup<_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedTriggers (lookup : Lookup<_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
         let ruleToTrigger(r,o) =
@@ -205,13 +205,13 @@ module CK2GameFunctions =
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : CK2Lookup) _ (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : CK2Lookup) _ (embeddedSettings : EmbeddedSettings<_>) =
         lookup.typeDefInfo <-
             createLandedTitleTypes lookup (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_>) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
 

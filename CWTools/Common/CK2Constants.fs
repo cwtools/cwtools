@@ -110,11 +110,6 @@ module CK2Constants =
     let defaultScopeInputs =
         defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss })
 
-    type Effect = Effect<Scope>
-
-    type DocEffect = DocEffect<Scope>
-    type ScriptedEffect = ScriptedEffect<Scope>
-    type ScopedEffect = ScopedEffect<Scope>
     type ModifierCategory =
         | Character
         | Province

@@ -25,7 +25,7 @@ module DocsParser =
 
     let private twoDocs = docFile .>>. docFile
 
-    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect<'a>(x, effectType, parseScopes)
+    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect(x, effectType, parseScopes)
     let processDocs parseScopes (t, e) = t |> List.map (toDocEffect EffectType.Trigger parseScopes), e |> List.map (toDocEffect EffectType.Effect parseScopes)
 
     let parseDocsFile filepath = runParserOnFile twoDocs () filepath (System.Text.Encoding.GetEncoding(1252))
@@ -72,7 +72,7 @@ module JominiParser =
     let parseEffectStream file = runParserOnStream effectFile () "effectFile" file (System.Text.Encoding.GetEncoding(1252))
     let parseEffectStreamRes file = parseEffectStream file |> (function |Success(p, _, _) -> Some p |_ -> None)
 
-    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect<'a>(x, effectType, parseScopes)
+    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect(x, effectType, parseScopes)
 
     let processEffects parseScopes e = e |> List.map (toDocEffect EffectType.Effect parseScopes)
     let processTriggers parseScopes (t : RawEffect list) =

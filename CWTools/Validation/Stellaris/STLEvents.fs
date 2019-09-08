@@ -7,6 +7,7 @@ open CWTools.Common.STLConstants
 open CWTools.Utilities.Utils
 open System
 open QuickGraph
+open CWTools.Common
 
 module STLEventValidation =
     type 'a Node = 'a * 'a list

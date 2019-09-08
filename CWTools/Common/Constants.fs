@@ -36,82 +36,6 @@ type Severity =
 | Information = 3
 | Hint = 4
 
-
-
-
-type EffectType = |Effect |Trigger |Link |ValueTrigger
-type Effect<'T when 'T : comparison> internal (name, scopes, effectType) =
-    member val Name : string = name
-    member val Scopes : 'T list = scopes
-    member this.ScopesSet = this.Scopes |> Set.ofList
-    member val Type : EffectType = effectType
-    override x.Equals(y) =
-        match y with
-        | :? Effect<'T> as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
-        |_ -> false
-    interface System.IComparable with
-        member x.CompareTo yobj =
-            match yobj with
-            | :? Effect<'T> as y ->
-                let r1 = x.Name.CompareTo(y.Name)
-                if r1 = 0 then 0 else List.compareWith compare x.Scopes y.Scopes
-            | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
-    override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
-type ScriptedEffect<'T when 'T : comparison>(name, scopes, effectType, comments, globals, settargets, usedtargets) =
-    inherit Effect<'T>(name, scopes, effectType)
-    member val Comments : string = comments
-    member val GlobalEventTargets : string list = globals
-    member val SavedEventTargets : string list = settargets
-    member val UsedEventTargets : string list = usedtargets
-    override x.Equals(y) =
-        match y with
-        | :? ScriptedEffect<'T> as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
-        |_ -> false
-    interface System.IComparable with
-        member x.CompareTo yobj =
-            match yobj with
-            | :? Effect<'T> as y -> x.Name.CompareTo(y.Name)
-            | _ -> invalidArg "yobj" "cannot compare values of different types"
-
-type DocEffect<'T when 'T : comparison>(name, scopes, target, effectType, desc, usage) =
-    inherit Effect<'T>(name, scopes, effectType)
-    member val Desc : string = desc
-    member val Usage : string = usage
-    member val Target : 'T option = target
-    override x.Equals(y) =
-        match y with
-        | :? DocEffect<'T> as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type && x.Desc = y.Desc && x.Usage = y.Usage
-        |_ -> false
-    interface System.IComparable with
-        member x.CompareTo yobj =
-            match yobj with
-            | :? Effect<'T> as y -> x.Name.CompareTo(y.Name)
-            | _ -> invalidArg "yobj" "cannot compare values of different types"
-    new(rawEffect : RawEffect, effectType : EffectType, parseScopes) =
-        let scopes = rawEffect.scopes |> List.collect parseScopes
-        let target = rawEffect.targets |> List.collect parseScopes |> List.tryHead
-        DocEffect<'T>(rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
-
-type ScopedEffect<'T when 'T : comparison>(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue, isWildCard) =
-    inherit DocEffect<'T>(name, scopes, inner, effectType, desc, usage)
-    member val IsScopeChange : bool = isScopeChange
-    member val IgnoreChildren : string list = ignoreChildren
-    member val ScopeOnlyNotEffect : bool = scopeonlynoteffect
-    /// If this scoped effect is a value scope
-    member val IsValueScope : bool = isValue
-    /// If this scoped effect is a prefix that should accept anything afterwards
-    member val IsWildCard : bool = isWildCard
-    new(de : DocEffect<'T>, inner : 'T option, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
-        ScopedEffect<'T>(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue, false)
-    new(de : DocEffect<'T>, inner : 'T option) =
-        ScopedEffect<'T>(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, true, [], false, false, false)
-    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue) =
-        ScopedEffect<'T>(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false)
-    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect<'T>(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
-    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect<'T>(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
-
 type IScope<'T> =
     abstract member AnyScope : 'T
     /// The first value is or can be coerced to the second
@@ -120,33 +44,6 @@ type IScope<'T> =
 type IModifier =
     abstract member Tag : string
 
-type CustomModifier =
-    {
-        tag : string
-        categories : string list
-        /// Is this a core modifier or a static modifier?
-        isCore : bool
-    }
-    interface IModifier with
-        member this.Tag = this.tag
-
-
-type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony
-
-type DataLinkType = |Scope |Value |Both
-type EventTargetDataLink<'S> = {
-    name : string
-    inputScopes : 'S list
-    outputScope : 'S
-    description : string
-    dataPrefix : string option
-    sourceRuleType : string
-    dataLinkType : DataLinkType
-}
-
-type EventTargetLink<'S when 'S : comparison> =
-| SimpleLink of ScopedEffect<'S>
-| DataLink of EventTargetDataLink<'S>
 
 [<AutoOpen>]
 module rec NewScope =
@@ -249,6 +146,14 @@ module rec NewScope =
                 match target with
                 | :? Scope as t -> tag.CompareTo t.tag
                 | _ -> 0
+        member this.AnyScope = scopeManager.AnyScope
+        member this.IsOfScope target =
+            match this, target with
+            // |TradeNode, Province -> true
+            | _, x
+            | x, _ when x = scopeManager.AnyScope -> true
+            |this, target -> scopeManager.MatchesScope this target
+
         interface IScope<Scope> with
             member this.AnyScope = scopeManager.AnyScope
             member this.IsOfScope target =
@@ -265,3 +170,109 @@ module rec NewScope =
         explicitLocalisation : (string * string * bool) list
         subtypes : string list
     }
+
+type EffectType = |Effect |Trigger |Link |ValueTrigger
+type Effect internal (name, scopes, effectType) =
+    member val Name : string = name
+    member val Scopes : Scope list = scopes
+    member this.ScopesSet = this.Scopes |> Set.ofList
+    member val Type : EffectType = effectType
+    override x.Equals(y) =
+        match y with
+        | :? Effect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
+        |_ -> false
+    interface System.IComparable with
+        member x.CompareTo yobj =
+            match yobj with
+            | :? Effect as y ->
+                let r1 = x.Name.CompareTo(y.Name)
+                if r1 = 0 then 0 else List.compareWith compare x.Scopes y.Scopes
+            | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
+    override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
+type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, usedtargets) =
+    inherit Effect(name, scopes, effectType)
+    member val Comments : string = comments
+    member val GlobalEventTargets : string list = globals
+    member val SavedEventTargets : string list = settargets
+    member val UsedEventTargets : string list = usedtargets
+    override x.Equals(y) =
+        match y with
+        | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
+        |_ -> false
+    interface System.IComparable with
+        member x.CompareTo yobj =
+            match yobj with
+            | :? Effect as y -> x.Name.CompareTo(y.Name)
+            | _ -> invalidArg "yobj" "cannot compare values of different types"
+
+type DocEffect(name, scopes, target, effectType, desc, usage) =
+    inherit Effect(name, scopes, effectType)
+    member val Desc : string = desc
+    member val Usage : string = usage
+    member val Target : Scope option = target
+    override x.Equals(y) =
+        match y with
+        | :? DocEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type && x.Desc = y.Desc && x.Usage = y.Usage
+        |_ -> false
+    interface System.IComparable with
+        member x.CompareTo yobj =
+            match yobj with
+            | :? Effect as y -> x.Name.CompareTo(y.Name)
+            | _ -> invalidArg "yobj" "cannot compare values of different types"
+    new(rawEffect : RawEffect, effectType : EffectType, parseScopes) =
+        let scopes = rawEffect.scopes |> List.collect parseScopes
+        let target = rawEffect.targets |> List.collect parseScopes |> List.tryHead
+        DocEffect(rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
+
+type ScopedEffect(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue, isWildCard) =
+    inherit DocEffect(name, scopes, inner, effectType, desc, usage)
+    member val IsScopeChange : bool = isScopeChange
+    member val IgnoreChildren : string list = ignoreChildren
+    member val ScopeOnlyNotEffect : bool = scopeonlynoteffect
+    /// If this scoped effect is a value scope
+    member val IsValueScope : bool = isValue
+    /// If this scoped effect is a prefix that should accept anything afterwards
+    member val IsWildCard : bool = isWildCard
+    new(de : DocEffect, inner, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
+        ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue, false)
+    new(de : DocEffect, inner) =
+        ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, true, [], false, false, false)
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue) =
+        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false)
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+        ScopedEffect(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
+
+
+type CustomModifier =
+    {
+        tag : string
+        categories : string list
+        /// Is this a core modifier or a static modifier?
+        isCore : bool
+    }
+    interface IModifier with
+        member this.Tag = this.tag
+
+
+type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony
+
+type DataLinkType = |Scope |Value |Both
+
+
+
+
+type EventTargetDataLink = {
+    name : string
+    inputScopes : Scope list
+    outputScope : Scope
+    description : string
+    dataPrefix : string option
+    sourceRuleType : string
+    dataLinkType : DataLinkType
+}
+
+type EventTargetLink =
+| SimpleLink of ScopedEffect
+| DataLink of EventTargetDataLink

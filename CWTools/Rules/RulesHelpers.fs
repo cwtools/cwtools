@@ -8,7 +8,7 @@ open CWTools.Utilities.Utils
 open CWTools.Common
 
 
-let getTypesFromDefinitions (ruleapplicator : RuleValidationService<_>) (types : TypeDefinition<_> list) (es : Entity list) =
+let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : TypeDefinition<_> list) (es : Entity list) =
     let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath), e.validate)
     let getExplicitLocalisationKeys (entity : Node) (typeDef : TypeDefinition<_>) =
         typeDef.localisation |> List.choose (fun ld -> ld.explicitField |> Option.map (fun ef -> ld.name, ef, ld.primary))

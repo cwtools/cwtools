@@ -34,7 +34,7 @@ module CustomGameFunctions =
     let noneContext =
         { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope] }
 
-    let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings<Scope>) (lookup : Lookup<Modifier>) =
+    let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup<Modifier>) =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
         let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
         let processLocalisation() = processJominiLocalisationBase<Scope> (localisationCommandValidator()) defaultContext
@@ -49,7 +49,7 @@ module CustomGameFunctions =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() eventtargets definedvars
 
-    let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings<Scope>) (lookup : Lookup<Modifier>) =
+    let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup<Modifier>) =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
         let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
@@ -98,10 +98,10 @@ module CustomGameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let updateScriptedTriggers (lookup : Lookup<CustomModifier>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedTriggers (lookup : Lookup<CustomModifier>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let vanillaTriggers =
-            let se = [] |> List.map (fun e -> e :> Effect<Scope>)
-            let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect<Scope>)
+            let se = [] |> List.map (fun e -> e :> Effect)
+            let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
             se @ vt
         let vanillaTriggerNames = vanillaTriggers |> List.map (fun vt -> StringResource.stringManager.InternIdentifierToken vt.Name) |> Set.ofList
         let effects =
@@ -115,16 +115,16 @@ module CustomGameFunctions =
             let effectType = if o.comparison then EffectType.ValueTrigger else EffectType.Trigger
             name |> Option.map (fun name -> DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
         // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-        let extraFromRules = (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect<Scope>))
+        let extraFromRules = (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect))
         // let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
         // game.Lookup.triggers <- sts @ ts
         // game.Lookup.onlyScriptedTriggers <- sts
         vanillaTriggers @ extraFromRules
 
-    let updateScriptedEffects (lookup : Lookup<CustomModifier>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedEffects (lookup : Lookup<CustomModifier>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let vanillaEffects =
-            let se = [] |> List.map (fun e -> e :> Effect<Scope>)
-            let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect<Scope>)
+            let se = [] |> List.map (fun e -> e :> Effect)
+            let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
             se @ ve
         // let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
         // game.Lookup.effects <- ses @ es
@@ -215,7 +215,7 @@ module CustomGameFunctions =
                     match o.pushScope with
                     | None ->
                         lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
-                            |> Option.bind (function | :? DocEffect<Scope> as se -> Some se | _ -> None)
+                            |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
                 { o with requiredScopes = newScopes; pushScope = innerScope}
@@ -231,7 +231,7 @@ module CustomGameFunctions =
                     match o.pushScope with
                     | None ->
                         lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
-                            |> Option.bind (function | :? DocEffect<Scope> as se -> Some se | _ -> None)
+                            |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
 
@@ -275,7 +275,7 @@ module CustomGameFunctions =
                             // |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
                             // |> Map.add charEnums.key (charEnums.description, charEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<CustomModifier>) _ (embedded : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup<CustomModifier>) _ (embedded : EmbeddedSettings<_>) =
         lookup.typeDefInfo <-
             (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
@@ -284,7 +284,7 @@ module CustomGameFunctions =
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<CustomModifier>) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup<CustomModifier>) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_>) =
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
@@ -391,7 +391,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         settings with
             initialLookup = Lookup()
             }
-    let changeScope = Scopes.createJominiChangeScope<Scope> CWTools.Process.Scopes.IR.oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
+    let changeScope = Scopes.createJominiChangeScope CWTools.Process.Scopes.IR.oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules

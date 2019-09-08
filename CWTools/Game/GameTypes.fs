@@ -67,8 +67,8 @@ type IGame =
     abstract GetPossibleCodeEdits : string -> string -> range list
     abstract GetCodeEdits : string -> string -> (range seq * pos * string) list option
     abstract GetEventGraphData : GraphDataRequest
-    abstract ScriptedTriggers : unit -> Effect<Scope> list
-    abstract ScriptedEffects : unit -> Effect<Scope> list
+    abstract ScriptedTriggers : unit -> Effect list
+    abstract ScriptedEffects : unit -> Effect list
     abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
     abstract ScopesAtPos : pos -> string -> string -> ScopeContext<Scope> option
 

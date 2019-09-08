@@ -125,7 +125,7 @@ module HOI4GameFunctions =
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_>) _ (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_>) _ (embeddedSettings : EmbeddedSettings<_>) =
         let states = lookup.typeDefInfo.TryFind "state"
                             |> Option.map (fun sl -> sl |> List.map (fun tdi -> tdi.id))
                             |> Option.defaultValue []
@@ -137,7 +137,7 @@ module HOI4GameFunctions =
         let ls = updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_>) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
     let afterInit (game : GameObject) =

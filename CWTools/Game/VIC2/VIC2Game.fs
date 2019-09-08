@@ -73,7 +73,7 @@ module VIC2GameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let updateScriptedTriggers (lookup : VIC2Lookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedTriggers (lookup : VIC2Lookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let vanillaTriggers =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
@@ -96,7 +96,7 @@ module VIC2GameFunctions =
         // game.Lookup.onlyScriptedTriggers <- sts
         vanillaTriggers @ extraFromRules
 
-    let updateScriptedEffects (lookup : VIC2Lookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    let updateScriptedEffects (lookup : VIC2Lookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
@@ -237,7 +237,7 @@ module VIC2GameFunctions =
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : VIC2Lookup) _ (embedded : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : VIC2Lookup) _ (embedded : EmbeddedSettings<_>) =
         lookup.typeDefInfo <-
             (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
@@ -246,7 +246,7 @@ module VIC2GameFunctions =
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : VIC2Lookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_,_>) =
+    let refreshConfigAfterVarDefHook (lookup : VIC2Lookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_>) =
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false

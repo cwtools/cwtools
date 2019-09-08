@@ -17,13 +17,13 @@ open CWTools.Games
 
 // let inline ruleValidationServiceCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
 // let inline ruleValidationServiceCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
-type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : comparison>
-                                (rootRules : RootRule<'T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>,
+type RuleValidationService
+                                (rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>,
                                  enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                                  localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
-                                 links : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                                 valueTriggers : Map<string,Effect<'T>,InsensitiveStringComparer>,
-                                 anyScope, changeScope : ChangeScope<'T>, defaultContext : ScopeContext<_>, defaultLang) =
+                                 links : Map<string,Effect,InsensitiveStringComparer>,
+                                 valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
+                                 anyScope, changeScope : ChangeScope<_>, defaultContext : ScopeContext<_>, defaultLang) =
 
     let mutable errorList : ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
@@ -39,7 +39,7 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
     let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
-    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect<'T> as e when e.IsWildCard -> Some e |_ -> None )
+    let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect as e when e.IsWildCard -> Some e |_ -> None )
     let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
     let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
 
@@ -401,7 +401,7 @@ type RuleValidationService<'T when 'T :> IScope<'T> and 'T : equality and 'T : c
             |(MultipleKeys (keys, shouldMatch)) ->
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let inner (typedefs : TypeDefinition<_> list) (node : Node) =
+        let inner (typedefs : TypeDefinition<Scope> list) (node : Node) =
             let validateType (typedef : TypeDefinition<_>) (n : Node) =
                 let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)
                 //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
