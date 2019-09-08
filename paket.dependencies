@@ -3,7 +3,7 @@ source https://api.nuget.org/v3/index.json
 
 nuget Expecto >= 5.0 #
 nuget FParsec 1.0.4-RC3 #
-nuget FSharp.Data 3.0.0-beta #
+nuget FSharp.Data 3.0.1 #
 nuget FSharp.Collections.ParallelSeq #
 nuget FSharpPlus #
 nuget DotNet.Glob #
