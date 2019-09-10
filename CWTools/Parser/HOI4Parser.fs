@@ -10,18 +10,6 @@ open CWTools.Common
 open CWTools.Common.NewScope
 
 module HOI4Parser =
-    // let loadModifiers (fileStream : StreamReader) =
-    //     let csv = CsvFile.Load(fileStream, hasHeaders=false)
-    // let private parseModifier =
-    //     function
-    //     |"state" -> ModifierCategory.State
-    //     |"country" -> ModifierCategory.Country
-    //     |"unit" -> ModifierCategory.Unit
-    //     |"unit_leader" -> ModifierCategory.UnitLeader
-    //     |"air" -> ModifierCategory.Air
-    //     |_ -> ModifierCategory.Any
-    //     csv.Rows |> Seq.map(fun r -> r.Columns.[0])
-
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with

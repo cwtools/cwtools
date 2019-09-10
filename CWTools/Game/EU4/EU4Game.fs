@@ -10,13 +10,10 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities.Position
 open CWTools.Utilities
 open CWTools.Validation.Common.CommonValidation
-// open CWTools.Rules.Rules
 open CWTools.Rules
 open CWTools.Common.EU4Constants
-// open CWTools.Validation.EU4.EU4Rules
 open CWTools.Process.Scopes.EU4
 open CWTools.Process.Scopes.Scopes
-open CWTools.Validation.EU4
 open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
@@ -25,7 +22,6 @@ open CWTools.Games.Helpers
 open CWTools.Games.Compute.EU4
 open CWTools.Parser
 open System.IO
-open CWTools.Common.NewScope
 
 module EU4GameFunctions =
     type GameObject = GameObject<EU4ComputedData, EU4Lookup>
@@ -60,14 +56,8 @@ module EU4GameFunctions =
         validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let globalLocalisation (game : GameObject) =
-        // let locfiles =  resources.GetResources()
-        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
-        //                 |> List.map (fun f -> f.filepath)
-        // let locFileValidation = validateLocalisationFiles locfiles
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
-        // locFileValidation <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) =
         let rawLocs =
@@ -89,14 +79,6 @@ module EU4GameFunctions =
 
     let addModifiersWithScopes (lookup : Lookup) =
         (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None}))))
-        // let modifierOptions (modifier : Modifier) =
-        //     let requiredScopes =
-        //         modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap.TryFind c)
-        //                             |> List.map Set.ofList
-        //                             |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
-        //     {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes}
-        // lookup.coreModifiers
-        //     |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
     let updateScriptedEffects(rules :RootRule list) =
         let effects =
@@ -123,7 +105,6 @@ module EU4GameFunctions =
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (lookup : Lookup) (typesMap : Map<string,TypeDefInfo list>) =
-        // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
     let loadConfigRulesHook rules (lookup : Lookup) embedded =
@@ -197,7 +178,6 @@ module EU4GameFunctions =
 
 type EU4Settings = GameSetupSettings<EU4Lookup>
 open EU4GameFunctions
-open CWTools.Common.NewScope
 type EU4Game(setupSettings : EU4Settings) =
     let validationSettings = {
         validators = [ validateMixedBlocks, "mixed"; validateEU4NaiveNot, "not"; validateIfWithNoEffect, "ifnoeffect"]
@@ -279,22 +259,15 @@ type EU4Game(setupSettings : EU4Settings) =
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<EU4ComputedData> with
-    //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-        //member __.ValidationWarnings = warningsAll
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() =
             resources.GetResources()
         member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
-            // |> List.map
-            //     (function
-            //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
-            //         |FileResource (f, r) ->  (r.filepath, false, 0L))
-            //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
         member __.ScriptedTriggers() = lookup.triggers
         member __.ScriptedEffects() = lookup.effects
         member __.StaticModifiers() = [] //lookup.staticModifiers
@@ -315,6 +288,3 @@ type EU4Game(setupSettings : EU4Settings) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)
-
-        //getFastTrigger fileManager game.ResourceManager file text
-            //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

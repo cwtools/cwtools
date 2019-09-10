@@ -10,11 +10,9 @@ open CWTools.Utilities.Position
 open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-// open CWTools.Rules.Rules
 open CWTools.Common.CK2Constants
 open CWTools.Process.Scopes.CK2
 open CWTools.Process.Scopes.Scopes
-open CWTools.Validation.CK2
 open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.CK2.CK2LocalisationString
@@ -25,8 +23,6 @@ open System
 open CWTools.Games.Helpers
 open CWTools.Rules
 open CWTools.Parser
-open CWTools.Common.CK2Constants
-open CWTools.Common.NewScope
 
 module CK2GameFunctions =
     type GameObject = GameObject<ComputedData, CK2Lookup>
@@ -45,11 +41,6 @@ module CK2GameFunctions =
         validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
     let globalLocalisation (game : GameObject) =
-        // let locfiles =  resources.GetResources()
-        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
-        //                 |> List.map (fun f -> f.filepath)
-        // let locFileValidation = validateLocalisationFiles locfiles
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
@@ -70,9 +61,6 @@ module CK2GameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-                // modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
-                //                     |> List.map Set.ofList
-                //                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
@@ -171,7 +159,6 @@ module CK2GameFunctions =
                 |NodeRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
-        // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
 
     let updateScriptedTriggers (lookup : Lookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
@@ -184,11 +171,9 @@ module CK2GameFunctions =
                 |NodeRule(SpecificField(SpecificValue n),_) -> StringResource.stringManager.GetStringForID n.normal
                 |_ -> ""
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-        // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (lookup : Lookup) (typesMap : Map<string,TypeDefInfo list>) =
-        // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
 
@@ -345,22 +330,15 @@ type CK2Game(setupSettings : CK2Settings) =
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<CK2ComputedData> with
-    //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-        //member __.ValidationWarnings = warningsAll
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() =
             resources.GetResources()
         member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
-            // |> List.map
-            //     (function
-            //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
-            //         |FileResource (f, r) ->  (r.filepath, false, 0L))
-            //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
         member __.ScriptedTriggers() = lookup.triggers
         member __.ScriptedEffects() = lookup.effects
         member __.StaticModifiers() = [] //lookup.staticModifiers
@@ -381,5 +359,3 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)
- //getFastTrigger fileManager game.ResourceManager file text
-            //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

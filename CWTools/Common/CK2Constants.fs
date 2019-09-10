@@ -1,96 +1,6 @@
 namespace CWTools.Common
 
-open CWTools.Utilities.Utils
-
 module CK2Constants =
-    // type Scope =
-    //     | Character
-    //     | Title
-    //     | Province
-    //     | Offmap
-    //     | War
-    //     | Siege
-    //     | Unit
-    //     | Religion
-    //     | Culture
-    //     | Society
-    //     | Artifact
-    //     | Bloodline
-    //     | Wonder
-    //     //Misc
-    //     | Any
-    //     | InvalidScope
-    //     override x.ToString() =
-    //         match x with
-    //         | Any -> "Any/Unknown"
-    //         | Character -> "Character"
-    //         | Title -> "Title"
-    //         | Province -> "Province"
-    //         | Offmap -> "Offmap"
-    //         | War -> "War"
-    //         | Siege -> "Siege"
-    //         | Unit -> "Unit"
-    //         | Religion -> "Religion"
-    //         | Culture -> "Culture"
-    //         | Society -> "Society"
-    //         | Artifact -> "Artifact"
-    //         | Bloodline -> "Bloodline"
-    //         | Wonder -> "Wonder"
-    //         | InvalidScope -> "InvalidScope"
-
-    //     static member AnyScope = Scope.Any
-
-    //     interface IScope<Scope> with
-    //         member this.AnyScope = Scope.Any
-    //         member this.MatchesScope target =
-    //             match this, target with
-    //             | Scope.Any, _
-    //             | _, Scope.Any -> true
-    //             | _, _ -> this = target
-
-    // let allScopes = [
-    //     Scope.Character;
-    //     Scope.Title;
-    //     Scope.Province;
-    //     Scope.Offmap;
-    //     Scope.War
-    //     Scope.Siege;
-    //     Scope.Unit;
-    //     Scope.Religion;
-    //     Scope.Culture;
-    //     Scope.Society;
-    //     Scope.Artifact;
-    //     Scope.Bloodline
-    //         ]
-    // let allScopesSet = allScopes |> Set.ofList
-    // let parseScope =
-    //     (fun (x : string) ->
-    //     x.ToLower()
-    //     |>
-    //         function
-    //             | "character" -> Scope.Character
-    //             | "title" -> Scope.Title
-    //             | "province" -> Scope.Province
-    //             | "offmap" -> Scope.Offmap
-    //             | "war" -> Scope.War
-    //             | "siege" -> Scope.Siege
-    //             | "unit" -> Scope.Unit
-    //             | "religion" -> Scope.Religion
-    //             | "culture" -> Scope.Culture
-    //             | "society" -> Scope.Society
-    //             | "artifact" -> Scope.Artifact
-    //             | "bloodline" -> Scope.Bloodline
-    //             | "wonder" -> Scope.Wonder
-    //             | "any" -> Scope.Any
-    //             | "all" -> Scope.Any
-    //             | "no_scope" -> Scope.Any
-    //             | x -> log (sprintf "Unexpected scope %O" x); Scope.Any) //failwith ("unexpected scope" + x.ToString()))
-
-    // let parseScopes =
-    //     function
-    //     | "all" -> allScopes
-    //     | x -> [parseScope x]
-
 
     let defaultScopes = [
         "Character", ["character"], []
@@ -110,21 +20,6 @@ module CK2Constants =
     let defaultScopeInputs =
         defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss })
 
-    // type ModifierCategory =
-    //     | Character
-    //     | Province
-    //     | Unit
-    //     | Any
-
-    // type Modifier =
-    //     {
-    //         tag : string
-    //         categories : ModifierCategory list
-    //         /// Is this a core modifier or a static modifier?
-    //         core : bool
-    //     }
-    //     interface IModifier with
-    //         member this.Tag = this.tag
     let defaultModifiers = [
         "Character", None, ["character"]
         "Province", None, ["province"]
@@ -138,14 +33,6 @@ module CK2Constants =
                 NewScope.ModifierCategoryInput.internalID = intID;
                 NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope())
                 })
-
-    // let categoryScopeList() = [
-    //     modifierCategoryManager.ParseModifier() "character", [NewScope.scopeManager.ParseScope() "character"];
-    //     modifierManager.ParseModifier() "province", [NewScope.scopeManager.ParseScope() "province"];
-    //     modifierManager.ParseModifier() "unit", [NewScope.scopeManager.ParseScope() "province"; NewScope.scopeManager.ParseScope() "unit"];
-    //     modifierManager.AnyModifier, [];
-    // ]
-    // let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
 
     let scriptFolders = [
         "common";

@@ -8,18 +8,15 @@ open CWTools.Localisation.HOI4
 open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-// open CWTools.Rules.Rules
 open CWTools.Rules
 open CWTools.Process.Scopes.HOI4
 open CWTools.Process.Scopes.Scopes
-open CWTools.Validation.HOI4
 open System.Text
 open CWTools.Games.LanguageFeatures
 open System
 open CWTools.Validation.HOI4.HOI4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
-open CWTools.Common.NewScope
 
 module HOI4GameFunctions =
     type GameObject = GameObject<HOI4ComputedData, HOI4Lookup>
@@ -52,14 +49,7 @@ module HOI4GameFunctions =
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
     let globalLocalisation (game : GameObject) =
-        // let locfiles =  resources.GetResources()
-        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
-        //                 |> List.map (fun f -> f.filepath)
-        // let locFileValidation = validateLocalisationFiles locfiles
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-        // lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys <&&>
-        // locFileValidation <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
 
     let updateModifiers (game : GameObject) =
@@ -110,9 +100,6 @@ module HOI4GameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-                // modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
-                //                     |> List.map Set.ofList
-                //                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
@@ -263,22 +250,15 @@ type HOI4Game(setupSettings : HOI4Settings) =
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<ComputedData> with
-    //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-        //member __.ValidationWarnings = warningsAll
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() =
             resources.GetResources()
         member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
-            // |> List.map
-            //     (function
-            //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
-            //         |FileResource (f, r) ->  (r.filepath, false, 0L))
-            //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
         member __.ScriptedTriggers() = lookup.triggers
         member __.ScriptedEffects() = lookup.effects
         member __.StaticModifiers() = [] //lookup.staticModifiers

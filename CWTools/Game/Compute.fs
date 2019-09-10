@@ -12,7 +12,6 @@ let computeData (infoService : unit -> InfoService option) (e : Entity) =
         match res with
         | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
         | None -> (None, None, None, None, None)
-    // let hastechs = getAllTechPrereqs e
     let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
     ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 

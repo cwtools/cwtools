@@ -3,22 +3,11 @@ namespace CWTools.Parser
 
 open FParsec
 open CWTools.Common
-open CWTools.Common.EU4Constants
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils
-open Types
-open CWTools.Common.NewScope
 
 module EU4Parser =
-    // let loadModifiers (fileStream : StreamReader) =
-    //     let csv = CsvFile.Load(fileStream, hasHeaders=false)
-    // let private parseModifier =
-    //     function
-    //     |"province" -> ModifierCategory.Province
-    //     |"country" -> ModifierCategory.Country
-    //     |_ -> ModifierCategory.Any
-    //     csv.Rows |> Seq.map(fun r -> r.Columns.[0])
 
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename

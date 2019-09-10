@@ -1,9 +1,7 @@
 namespace CWTools.Games.Stellaris
 open CWTools.Process
-open CWTools.Common.STLConstants
 open CWTools.Games
 open CWTools.Common
-open CWTools.Common.NewScope
 
 module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
@@ -32,7 +30,6 @@ module STLLookup =
             resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
             |> List.collect getChildrenWithComments
-            //|> List.rev
         let mutable final = vanillaTriggers
         let mutable i = 0
         let mutable first = true
@@ -60,7 +57,6 @@ module STLLookup =
             resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
             |> List.collect getChildrenWithComments
-            //|> List.rev
         let mutable final = vanillaEffects
         let mutable i = 0
         let mutable first = true

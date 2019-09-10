@@ -34,18 +34,6 @@ module Types =
         | Key of string
         override x.ToString() = let (Key v) = x in sprintf "%s" v;
 
-    // let valueToString =
-    //     let inner =
-    //             fun x ->
-    //             match x with
-    //             | Clause b -> "{ " + sprintf "%O" b + " }"
-    //             | QString s -> "\"" + s + "\""
-    //             | String s -> s
-    //             | Bool b -> if b then "yes" else "no"
-    //             | Float f -> sprintf "%f" f
-    //             | Int i -> sprintf "%i" i
-    //     //memoize id inner
-    //     inner
     [<Struct>]
     type KeyValueItem =
         | KeyValueItem of Key * Value * Operator
@@ -85,14 +73,6 @@ module Types =
                 k = k2
             | _ -> false
         override x.GetHashCode() = let (PosKeyValue(_, k)) = x in k.GetHashCode()
-        // interface System.IComparable with
-        //     member x.CompareTo(y) =
-        //         match y with
-        //         | :? PosKeyValue as y ->
-        //             let (PosKeyValue(_, k)) = x
-        //             let (PosKeyValue(_, k2)) = y
-        //             compare k k2
-        //         | _ -> failwith "wrong type"
 
     and [<CustomEquality; NoComparison>] Statement =
         | Comment of string
@@ -112,24 +92,6 @@ module Types =
             |Comment c -> c.GetHashCode()
             |KeyValue kv -> kv.GetHashCode()
             |Value (r, v) -> v.GetHashCode()
-        // interface System.IComparable with
-        //     member x.CompareTo(y) =
-        //         match y with
-        //         | :? Statement as y ->
-        //             match x, y with
-        //             | Comment s1, Comment s2 -> s1.CompareTo(s2)
-        //             | KeyValue kv1, KeyValue kv2 -> kv1.CompareTo(kv2)
-        //             | Value (r1, v1), Value (r2, v2) -> r1.CompareTo(r2) + v1.CompareTo(v2)//r1 = r2 && v1 = v2
-        //             | _ -> false
-        //         | _ -> false
-
-                // match y with
-                // | :? PosKeyValue as y ->
-                //     let (PosKeyValue(_, k)) = x
-                //     let (PosKeyValue(_, k2)) = y
-                //     compare k k2
-                // | _ -> failwith "wrong type"
-
 
 
 

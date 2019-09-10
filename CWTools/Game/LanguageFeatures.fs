@@ -10,21 +10,11 @@ open CWTools.Common
 module LanguageFeatures =
     let makeEntityResourceInput (fileManager : FileManager) filepath filetext  =
         let filepath = Path.GetFullPath(filepath)
-        // let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
-        // let rootedpath =
-        //     if indexOfScope = -1
-        //     then filepath
-        //     else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
         let logicalpath = fileManager.ConvertPathToLogicalPath filepath
         let scope = fileManager.GetScopeForPath filepath |> Option.defaultValue "unknown"
         EntityResourceInput {scope = scope; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
     let makeFileWithContentResourceInput (fileManager : FileManager) filepath filetext  =
         let filepath = Path.GetFullPath(filepath)
-        // let indexOfScope = filepath.IndexOf(fileManager.ScopeDirectory)
-        // let rootedpath =
-        //     if indexOfScope = -1
-        //     then filepath
-        //     else filepath.Substring(indexOfScope + (fileManager.ScopeDirectory.Length))
         let logicalpath = fileManager.ConvertPathToLogicalPath filepath
         let scope = fileManager.GetScopeForPath filepath |> Option.defaultValue "unknown"
         FileWithContentResourceInput {scope = scope; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
@@ -123,48 +113,6 @@ module LanguageFeatures =
                 ruleDescription = ruleOptions |> Option.bind (fun ro -> ro.description)
                 ruleRequiredScopes = ruleOptions |> Option.map (fun ro -> ro.requiredScopes |> List.map (fun s -> s.ToString())) |> Option.defaultValue []
             }
-            // match (info.GetInfo)(pos, e) with
-            // |Some (_, (ruleDesc, Some (t, tv), (None))) ->
-            //     let splitType = t.Split '.'
-            //     let typename = splitType.[0]
-            //     let subtype = if splitType.Length > 1 then splitType.[1] else ""
-            //     match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
-            //     |Some td ->
-            //         let locs = td.localisation @ (td.subtypes |> List.collect (fun st -> if st.name = subtype then st.localisation else []))
-            //                 |> List.choose (fun l -> if l.explicitField.IsNone then Some { key = l.name; value = (l.prefix + tv + l.suffix) } else None)
-            //         Some {
-            //                 name = tv
-            //                 typename = t
-            //                 localisation = locs
-            //                 ruleDescription = ruleDesc
-            //             }
-            //     |None -> None
-            // |Some (_, (ruleDesc, Some (t, tv), (Some (NodeC node)))) ->
-            //     let splitType = t.Split '.'
-            //     let typename = splitType.[0]
-            //     let subtype = if splitType.Length > 1 then splitType.[1] else ""
-            //     match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
-            //     |Some td ->
-            //         let locs = td.localisation @ (td.subtypes |> List.collect (fun st -> if st.name = subtype then st.localisation else []))
-            //                 |> List.map (fun l ->
-            //                     match l.explicitField with
-            //                     | None -> { key = l.name; value = (l.prefix + tv + l.suffix) }
-            //                     | Some field -> { key = l.name; value = node.TagText field})
-            //         Some {
-            //                 name = tv
-            //                 typename = t
-            //                 localisation = locs
-            //                 ruleDescription = ruleDesc
-            //             }
-            //     |None -> None
-            // | Some (_, (ruleDesc, None, None)) ->
-            //     Some {
-            //         name = ""
-            //         typename = ""
-            //         localisation = []
-            //         ruleDescription = ruleDesc
-            //     }
-            // |_ -> None
         |_, _ -> None
 
 
@@ -341,28 +289,4 @@ module LanguageFeatures =
                     entityTypeDisplayName = subtypeName |> Option.orElse (Some entityType)
                     abbreviation = abbrev
                 })
-            // let incoming =
-            //     typesNotDefinedInFiles
-            //             |> List.map ((fun (entityType, event, r, el, sts) ->
-            //                 entityType,
-            //                 event,
-            //                 r,
-            //                 (allIncomingRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None) |> List.distinct),
-            //                 None,
-            //                 el,
-            //                 sts) >> (fun (entityType, event, r, refs, defvar, el, sts) ->
-            //             let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
-            //             {
-            //                 GraphDataItem.id = event
-            //                 displayName = getDisplayNameFromID event el
-            //                 documentation = None
-            //                 references = refs
-            //                 location = Some r
-            //                 details = None
-            //                 isPrimary = false
-            //                 entityType = entityType
-            //                 entityTypeDisplayName = subtypeName
-            //                 abbreviation = abbrev
-            //             }))
-            // let res = (allIncomingRefs |> List.choose (fun (reference, r2) -> if rangeContainsRange r r2 then Some reference else None) |> List.distinct),
-            primaries @ secondaries// @ incoming
+            primaries @ secondaries

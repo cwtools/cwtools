@@ -45,7 +45,7 @@ module rec NewScope =
         isSubscopeOf : string list
     }
     type ScopeWrapper = byte
-        // override x.ToString() =
+
     type ScopeManager() =
         let mutable initialized = false
         let mutable dict = Dictionary<string, Scope>()
@@ -170,7 +170,6 @@ module rec NewScope =
         member this.AnyModifier= anyModifier
         member this.InvalidModifiere = invalidModifier
         member this.ParseModifier = parseModifierCategory
-        // member this.ParseScopes = function | "all" -> this.AllScopes | x -> [this.ParseScope() x]
         member this.ReInit(modifiers : ModifierCategoryInput list) = init(modifiers)
         member this.SupportsScope (source : ModifierCategory) (target : Scope) =
             match Set.contains (source, target) matchesSet ,source, target with
@@ -223,7 +222,6 @@ module rec NewScope =
         member this.AnyScope = scopeManager.AnyScope
         member this.IsOfScope target =
             match this, target with
-            // |TradeNode, Province -> true
             | _, x
             | x, _ when x = scopeManager.AnyScope -> true
             |this, target -> scopeManager.MatchesScope this target
@@ -239,7 +237,6 @@ module rec NewScope =
 
 type ActualModifier = {
         tag : string
-        // categories : ModifierCategory list
         category : ModifierCategory
     }
 
@@ -319,17 +316,6 @@ type ScopedEffect(name, scopes, inner, effectType, desc, usage, isScopeChange, i
         ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
         ScopedEffect(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
-
-
-// type CustomModifier =
-//     {
-//         tag : string
-//         categories : string list
-//         /// Is this a core modifier or a static modifier?
-//         isCore : bool
-//     }
-//     interface IModifier with
-//         member this.Tag = this.tag
 
 
 type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony

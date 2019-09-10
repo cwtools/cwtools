@@ -30,11 +30,6 @@ module CK2 =
         ]
 
 
-    // type ScopeResult =
-    //     | NewScope of newScope : ScopeContext<Scope> * ignoreKeys : string list
-    //     | WrongScope of command : string * scope : Scope * expected : Scope list
-    //     | NotFound
-
     let oneToOneScopes =
         let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
         let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true

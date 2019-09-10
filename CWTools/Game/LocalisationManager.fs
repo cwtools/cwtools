@@ -38,7 +38,6 @@ type LocalisationManager<'T when 'T :> ComputedData>
         let processLoc = processLocalisation lookup
         lookup.proccessedLoc <- validatableEntries |> List.map processLoc
 
-    // member val localisationAPIs : (bool * ILocalisationAPI) list = [] with get, set
     member val localisationErrors : CWError list option = None with get, set
     member val globalLocalisationErrors : CWError list option = None with get, set
     member val rulesLocalisationErrors : CWError list option = None with get, set

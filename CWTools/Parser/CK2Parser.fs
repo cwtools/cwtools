@@ -11,14 +11,6 @@ open CWTools.Common.NewScope
 
 module CK2Parser =
 
-    // let private parseModifier =
-    //     function
-    //     | "character" -> modifierCategoryManager.ParseModifier() Character
-    //     | "province" -> ModifierCategory.Province
-    //     | "unit" -> ModifierCategory.Unit
-    //     // |"country" -> ModifierCategory.Country
-    //     |_ -> ModifierCategory.Any
-
 
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename

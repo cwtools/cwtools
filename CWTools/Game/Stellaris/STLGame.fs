@@ -28,7 +28,6 @@ open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open FSharp.Collections.ParallelSeq
 open System.IO
-open CWTools.Common.NewScope
 
 module STLGameFunctions =
     type GameObject = GameObject<STLComputedData, STLLookup>
@@ -49,7 +48,6 @@ module STLGameFunctions =
             let vt = game.Settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
         let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
-        // game.Lookup.triggers <- sts @ ts
         game.Lookup.onlyScriptedTriggers <- sts
         sts @ ts
 
@@ -59,7 +57,6 @@ module STLGameFunctions =
             let ve = game.Settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ ve
         let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
-        // game.Lookup.effects <- ses @ es
         game.Lookup.onlyScriptedEffects <- ses
         ses @ es
 
@@ -68,7 +65,6 @@ module STLGameFunctions =
             game.Resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
             |> List.collect (fun n -> n.Children)
-            //|> List.rev
         let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory game.Settings.embedded.modifiers e)
         game.Lookup.staticModifiers <- newModifiers
 
@@ -111,9 +107,6 @@ module STLGameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-                // modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
-                //                     |> List.map Set.ofList
-                //                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
@@ -240,7 +233,6 @@ module STLGameFunctions =
 type StellarisSettings = GameSetupSettings<STLLookup>
 
 open STLGameFunctions
-open CWTools.Common.NewScope
 type STLGame (setupSettings : StellarisSettings) =
     let validationSettings = {
         validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
@@ -284,7 +276,6 @@ type STLGame (setupSettings : StellarisSettings) =
                                        embedded = { settings.embedded with localisationCommands = locSettings }
                                        initialLookup = STLLookup()}
 
-        // do scopeManager.ReInit(settings.embedded.scopeDefinitions)
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules
@@ -334,37 +325,17 @@ type STLGame (setupSettings : StellarisSettings) =
             let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/"))
             tech
 
-        // let scopesAtPosSTL pos file text =
-        //     let resource = makeEntityResourceInput fileManager file text
-        //     match game.ResourceManager.ManualProcessResource resource, game.InfoService with
-        //     |Some e, Some info ->
-        //         // match info.GetInfo(pos, e) with
-        //         match (info.GetInfo)(pos, e) with
-        //         |Some (ctx, _) when ctx <> { Root = Scope.Any; From = []; Scopes = [] } ->
-        //             Some (ctx)
-        //         |_ ->
-        //             getScopeContextAtPos pos lookup.triggers lookup.effects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
-        //     |Some e, _ -> getScopeContextAtPos pos lookup.triggers lookup.effects e.entity |> Option.map (fun s -> {From = s.From; Root = s.Root; Scopes = s.Scopes})
-        //     |_ -> None
-
 
         interface IGame<STLComputedData> with
-        //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
             member __.LocalisationErrors(force : bool, forceGlobal : bool) =
                 getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-            //member __.ValidationWarnings = warningsAll
             member __.Folders() = fileManager.AllFolders()
             member __.AllFiles() =
                 resources.GetResources()
             member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
-                // |> List.map
-                //     (function
-                //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
-                //         |FileResource (f, r) ->  (r.filepath, false, 0L))
-                //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
             member __.ScriptedTriggers() = lookup.triggers
             member __.ScriptedEffects() = lookup.effects
             member __.StaticModifiers() = lookup.staticModifiers
@@ -373,8 +344,6 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-                // scopesAtPosSTL pos file text
-                // |> Option.map (fun sc -> { OutputScopeContext.From = sc.From; Scopes = sc.Scopes; Root = sc.Root})
             member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
             member __.InfoAtPos pos file text = game.InfoAtPos pos file text

@@ -11,14 +11,6 @@ open CWTools.Common
 
 module VIC2Parser =
 
-    // let private parseModifier =
-    //     function
-    //     | "character" -> ModifierCategory.Character
-    //     | "province" -> ModifierCategory.Province
-    //     | "unit" -> ModifierCategory.Unit
-    //     // |"country" -> ModifierCategory.Country
-    //     |_ -> ModifierCategory.Any
-
 
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename

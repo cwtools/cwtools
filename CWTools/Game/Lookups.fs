@@ -1,7 +1,6 @@
 namespace CWTools.Games
 open CWTools.Process
 open CWTools.Common
-// open CWTools.Process.STLScopes
 open CWTools.Rules
 open CWTools.Process.Scopes
 open CWTools.Utilities.Position
@@ -73,8 +72,6 @@ type Lookup() =
     /// Map<enum key, (description * values list)
     member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
     member val typeDefInfo : Collections.Map<string, TypeDefInfo list> = Map.empty with get, set
-    // member this.typeDefInfo
-    //     with get () : Collections.Map<string, (string * range) list> = this.typeDefInfoRaw |> Collections.Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
     member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val savedEventTargets : ResizeArray<string * range * Scope> = new ResizeArray<_> () with get, set

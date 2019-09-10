@@ -224,13 +224,6 @@ and Node (key : string, pos : range) =
 module ProcessCore =
 
     let processNode (postinit : Node -> Node) inner (key : string) (pos : range) (sl : Statement list) : Node =
-        // let node = match key with
-        //             |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
-        //             |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
-        //let paramList : obj[] = [|key; pos|]
-        //let bindingFlags = BindingFlags.CreateInstance ||| BindingFlags.Public ||| BindingFlags.Instance ||| BindingFlags.OptionalParamBinding
-        //let node = Activator.CreateInstance(typeof<'T>, bindingFlags ,null, paramList, null) :?> Node
-        // let node =  Activator.CreateInstance(typeof<'T>, key, pos) :?> 'T |> postinit :> Node//  |> postinit// :?> Node |> postinit
         let node =  Node(key, pos) |> postinit//  |> postinit// :?> Node |> postinit
         let children = sl |> List.map inner
         node.All <- children
@@ -252,11 +245,6 @@ module ProcessCore =
                 let children = sl |> List.map (fun e -> (processNodeInner context e))
                 n.All <- children
                 NodeC n
-                // match maps (key, pos, context) with
-                // |(t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
-                // // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
-                // |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
-                // |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
                 )
         and lookupVC =
             (fun (pos : range) (context : LookupContext) (sl : Statement list) ->
@@ -264,12 +252,6 @@ module ProcessCore =
                 let children = sl |> List.map (fun e -> (processNodeInner context e))
                 vc.All <- children
                 ValueClauseC vc)
-                // match maps (pos, context) with
-                // |(t, n, c) -> t context (processNodeInner (context)) key pos
-                // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
-                // |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
-                // |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
-                // ) >> (fun f a b c -> NodeC (f a b c |> (fun n -> n)))
         and processNodeInner (c : LookupContext) statement =
             //log "%A" node.Key
             match statement with

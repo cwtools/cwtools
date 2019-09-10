@@ -4,26 +4,18 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
-// open CWTools.Localisation.IR
 open CWTools.Utilities.Position
 open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-// open CWTools.Rules.Rules
 open CWTools.Rules
-// open CWTools.Common.IRConstants
-// open CWTools.Process.Scopes.IR
 open CWTools.Process.Scopes
-// open CWTools.Validation.IR
 open System.Text
 open CWTools.Games.LanguageFeatures
-// open CWTools.Validation.IR.IRLocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
-open System
 open CWTools.Games.Helpers
 open CWTools.Parser
-open CWTools.Common.NewScope
 open CWTools.Utilities.Utils
 
 module CustomGameFunctions =
@@ -38,8 +30,6 @@ module CustomGameFunctions =
         let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
         let processLocalisation() = processJominiLocalisationBase (localisationCommandValidator()) defaultContext
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
-        // let eventtargets =
-        //     (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let eventtargets =
             lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
                                      |> List.distinct
@@ -52,8 +42,6 @@ module CustomGameFunctions =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
         let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
-        // let eventtargets =
-        //     (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let eventtargets =
             lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
                                      |> List.distinct
@@ -65,23 +53,12 @@ module CustomGameFunctions =
     let globalLocalisation (game : GameObject) =
         let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase []
 
-        // let locfiles =  resources.GetResources()
-        //                 |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-        //                 |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
-        //                 |> List.map (fun f -> f.filepath)
-        // let locFileValidation = validateLocalisationFiles locfiles
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
         globalTypeLoc |> (function |Invalid es -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
-        // let rawLocs =
-        //     game.Resources.AllEntities()
-        //     |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some (f.entity) |_ -> None)
-        //     |> List.collect (fun n -> n.Children)
-        //     |> List.map (fun l -> l.TagText "name")
-        // game.Lookup.scriptedLoc <- rawLocs
 
     let updateModifiers (game : GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
@@ -91,9 +68,6 @@ module CustomGameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-                // modifier.categories |> List.choose (fun c -> modifierCategoryToScopesMap().TryFind c)
-                //                     |> List.map Set.ofList
-                //                     |> (fun l -> if List.isEmpty l then [] else l |> List.reduce (Set.intersect) |> Set.toList)
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
@@ -114,11 +88,7 @@ module CustomGameFunctions =
                 |_ -> None
             let effectType = if o.comparison then EffectType.ValueTrigger else EffectType.Trigger
             name |> Option.map (fun name -> DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
-        // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
         let extraFromRules = (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect))
-        // let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
-        // game.Lookup.triggers <- sts @ ts
-        // game.Lookup.onlyScriptedTriggers <- sts
         vanillaTriggers @ extraFromRules
 
     let updateScriptedEffects (lookup : Lookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
@@ -126,66 +96,11 @@ module CustomGameFunctions =
             let se = [] |> List.map (fun e -> e :> Effect)
             let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
             se @ ve
-        // let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
-        // game.Lookup.effects <- ses @ es
-        // game.Lookup.onlyScriptedEffects <- ses
         vanillaEffects
 
 
-    // let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
-    //     let effects =
-    //         rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
-    //     let ruleToEffect(r,o) =
-    //         let name =
-    //             match r with
-    //             |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-    //             |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-    //             |_ -> ""
-    //         DocEffect(name, o.requiredScopes, EffectType.Effect, o.description |> Option.defaultValue "", "")
-    //     // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-    //     (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
-
-    // let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
-    //     let effects =
-    //         rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
-    //     let ruleToTrigger(r,o) =
-    //         let name =
-    //             match r with
-    //             |LeafRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-    //             |NodeRule(ValueField(Specific n),_) -> StringResource.stringManager.GetStringForID n.normal
-    //             |_ -> ""
-    //         DocEffect(name, o.requiredScopes, EffectType.Trigger, o.description |> Option.defaultValue "", "")
-    //     let test = ScopedEffect("test_value_trigger", allScopes, Scope.NoneScope, EffectType.Trigger, "", "", false, true) :> Effect
-    //     // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
-    //     test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
-
     let addModifiersAsTypes (lookup : Lookup) (typesMap : Map<string,TypeDefInfo list>) =
-        // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
-
-    // let updateProvinces (game : GameObject) =
-    //     let provinceFile =
-    //         game.Resources.GetResources()
-    //         |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-    //         |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
-    //     match provinceFile with
-    //     |None -> ()
-    //     |Some pf ->
-    //         let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
-    //         let provinces = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
-    //         game.Lookup.IRprovinces <- provinces
-
-    // let updateCharacters (game : GameObject) =
-    //     let characterFile =
-    //         game.Resources.GetResources()
-    //         |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-    //         |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "character_setup.csv")
-    //     match characterFile with
-    //     |None -> ()
-    //     |Some pf ->
-    //         let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
-    //         let chars = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|','|], 3, StringSplitOptions.RemoveEmptyEntries) |> (fun a -> if a.Length > 1 then a |> Array.skip 1 |> Array.tryHead else None)) |> List.ofArray
-    //         game.Lookup.IRcharacters <- chars
 
     let addScriptFormulaLinks (lookup : Lookup) =
         match lookup.typeDefInfo |> Map.tryFind "script_value" with
@@ -195,14 +110,6 @@ module CustomGameFunctions =
         | None -> []
 
     let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =
-            // let scriptedOptions (effect : ScriptedEffect) =
-            //     {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false}
-            // let getAllScriptedEffects =
-            //     lookup.onlyScriptedEffects |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
-            //                                     |> List.map (fun se -> AliasRule("effect", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
-            // let getAllScriptedTriggers =
-            //     lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
-            //                                     |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
             let addRequiredScopesE (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
@@ -250,10 +157,6 @@ module CustomGameFunctions =
                         [AliasRule ("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o))]
                     |AliasRule ("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
                         [AliasRule ("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o))]
-                    // |AliasRule ("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
-                    //     getAllScriptedEffects
-                    // |AliasRule ("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
-                    //     getAllScriptedTriggers
                     |x -> [x])
 
 
@@ -268,12 +171,8 @@ module CustomGameFunctions =
 
     let refreshConfigBeforeFirstTypesHook (lookup : Lookup) _ _ =
         let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
-        // let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.IRprovinces}
-        // let charEnums = { key = "character_ids"; description = "character_ids"; values = lookup.IRcharacters}
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
-                            // |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
-                            // |> Map.add charEnums.key (charEnums.description, charEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
@@ -440,22 +339,15 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<ComputedData> with
-    //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-        //member __.ValidationWarnings = warningsAll
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() =
             resources.GetResources()
         member __.AllLoadedLocalisation() = game.LocalisationManager.LocalisationFileNames()
-            // |> List.map
-            //     (function
-            //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
-            //         |FileResource (f, r) ->  (r.filepath, false, 0L))
-            //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
         member __.ScriptedTriggers() = lookup.triggers
         member __.ScriptedEffects() = lookup.effects
         member __.StaticModifiers() = [] //lookup.staticModifiers
@@ -476,5 +368,3 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)
-         //getFastTrigger fileManager game.ResourceManager file text
-            //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
