@@ -15,7 +15,7 @@ type References<'T, 'M when 'T :> ComputedData and 'M :> IModifier>(resourceMana
         |> List.collect(fun e -> e.Children)
         |> List.choose (function | :? Event as e -> Some e |_ -> None)
     let eventIDs() = events() |> List.map (fun e -> e.ID)
-    let modifiers() = lookup.staticModifiers |> List.map(fun m -> m.Tag)
+    let modifiers() = lookup.staticModifiers |> List.map(fun m -> m.tag)
     let triggers() = lookup.triggers |> List.map(fun t -> t.Name)
     let effects() = lookup.effects |> List.map(fun e -> e.Name)
     let localisation() =

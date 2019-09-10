@@ -62,8 +62,8 @@ type Lookup< 'M when 'M :> IModifier>() =
     member val onlyScriptedTriggers : Effect list = [] with get, set
 
     member val rootFolders : WorkspaceDirectory list = [] with get, set
-    member val staticModifiers : 'M list = [] with get, set
-    member val coreModifiers : 'M list = [] with get, set
+    member val staticModifiers : StaticModifier list = [] with get, set
+    member val coreModifiers : ActualModifier list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<Scope>>) list = [] with get, set
@@ -81,29 +81,29 @@ type Lookup< 'M when 'M :> IModifier>() =
     member val globalScriptedVariables : string list = [] with get, set
 
 type CK2Lookup() =
-    inherit Lookup<CK2Constants.Modifier>()
+    inherit Lookup<Modifier>()
     member val CK2LandedTitles : Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
     member val CK2provinces : string list = [] with get, set
 
 type EU4Lookup() =
-    inherit Lookup<EU4Constants.Modifier>()
+    inherit Lookup<Modifier>()
     member val EU4ScriptedEffectKeys : string list = [] with get, set
     member val EU4TrueLegacyGovernments : string list = [] with get, set
 
 type HOI4Lookup() =
-    inherit Lookup<HOI4Constants.Modifier>()
+    inherit Lookup<Modifier>()
     member val HOI4provinces : string list = [] with get, set
 
 type STLLookup() =
-    inherit Lookup<STLConstants.Modifier>()
+    inherit Lookup<Modifier>()
     member val STLScriptedEffectKeys : string list = [] with get, set
 
 type IRLookup() =
-    inherit Lookup<IRConstants.Modifier>()
+    inherit Lookup<Modifier>()
     member val IRprovinces : string list = [] with get, set
     member val IRcharacters : string list = [] with get, set
 
 type VIC2Lookup() =
-    inherit Lookup<VIC2Constants.Modifier>()
+    inherit Lookup<Modifier>()
     member val VIC2provinces : string list = [] with get, set
 

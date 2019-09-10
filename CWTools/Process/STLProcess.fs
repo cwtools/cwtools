@@ -635,16 +635,16 @@ module STLProcess =
     let shipProcess = BaseProcess(fun _ -> processNodeSimple, "", id)
     let simpleProcess = BaseProcess(fun _ -> processNodeSimple, "", id)
 
-    let staticModifierCategory (modifiers : (string * ModifierCategory list) list) (node : Node) =
+    let staticModifierCategory (modifiers : (string * ModifierCategory) list) (node : Node) =
         node.Values |> List.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
                     |> List.map (fun v -> List.tryPick (function |(m, c) when m = v.Key -> Some c |_ -> None) modifiers)
                     |> List.choose id
-                    |> List.collect id
+                    // |> List.collect id
                     |> List.distinct
 
-    let getStaticModifierCategory (modifiers : Modifier list) (node : Node) =
-        let modifiers2 = modifiers |> List.map (fun t -> t.tag, t.categories)
-        let category = staticModifierCategory modifiers2 node
-        {tag = node.Key; categories = category; core = false}
+    let getStaticModifierCategory (modifiers : ActualModifier list) (node : Node) =
+        let modifiers2 = modifiers |> List.map (fun t -> t.tag, t.category)
+        let categories = staticModifierCategory modifiers2 node
+        {tag = node.Key; categories = categories }
 
 

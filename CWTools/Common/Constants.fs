@@ -120,20 +120,103 @@ module rec NewScope =
                 | _, x, _
                 | _, _, x when x = anyScope -> true
                 | _, x, y -> x = y
-
-
-    // let parseScopes =
-    //     function
-    //     |"all" -> allScopes
-    //     |x -> [parseScope x]
-
-
     let scopeManager = ScopeManager()
+
+    type ModifierCategoryInput = {
+        name : string
+        internalID : int option
+        scopes : Scope list
+    }
+
+    type ModifierCategoryManager() =
+        let mutable initialized = false
+        let mutable dict = Dictionary<string, ModifierCategory>()
+        let mutable reverseDict = Dictionary<ModifierCategory, ModifierCategoryInput>()
+        let mutable matchesSet = Set<ModifierCategory * Scope>(Seq.empty)
+        let mutable idMap = Map<int, ModifierCategory>([])
+        let anyModifier = ModifierCategory(0uy)
+        let anyModifierInput = { ModifierCategoryInput.name = "Any"; internalID = None; scopes = [scopeManager.AnyScope] }
+        let invalidModifier = ModifierCategory(1uy)
+        let invalidModifierInput = { ModifierCategoryInput.name = "Invalid"; internalID = None; scopes = []}
+        let parseModifierCategory() =
+            if not initialized then eprintfn "Error: parseModifierCategory was used without initializing modifier categories" else ()
+            (fun (x : string) ->
+            let found, value = dict.TryGetValue (x.ToLower())
+            if found
+            then value
+            else log (sprintf "Unexpected modifier category %O" x ); anyModifier
+            )
+        let init(modifiers : ModifierCategoryInput list) =
+            initialized <- true
+            // log (sprintfn "Init scopes %A" scopes)
+            dict <- Dictionary<string, ModifierCategory>()
+            reverseDict <- Dictionary<ModifierCategory, ModifierCategoryInput>()
+            dict.Add("any", anyModifier)
+            dict.Add("invalid_modifier", invalidModifier)
+            reverseDict.Add(anyModifier, anyModifierInput)
+            reverseDict.Add(invalidModifier, invalidModifierInput)
+            let mutable nextByte = 2uy
+            let addModifier (newModifier : ModifierCategoryInput) =
+                let newID = nextByte
+                nextByte <- nextByte + 1uy
+                let modifier = ModifierCategory(newID)
+                dict.Add(newModifier.name.ToLower(), modifier)
+                reverseDict.Add(modifier, newModifier)
+                newModifier.scopes |> List.iter (fun s -> matchesSet <- matchesSet |> Set.add (modifier, s) )
+                match newModifier.internalID with
+                | Some id ->
+                    idMap <- idMap |> (Map.add id modifier)
+                | None -> ()
+            modifiers |> List.iter addModifier
+
+        member this.GetName(modifier : ModifierCategory) =
+            let found, value = reverseDict.TryGetValue modifier
+            if found
+            then value.name
+            else log (sprintf "Unexpected modifier category %O" modifier.tag); ""
+        member this.AllModifiers = reverseDict.Keys |> List.ofSeq
+        member this.AnyModifier= anyModifier
+        member this.InvalidModifiere = invalidModifier
+        member this.ParseModifier = parseModifierCategory
+        // member this.ParseScopes = function | "all" -> this.AllScopes | x -> [this.ParseScope() x]
+        member this.ReInit(modifiers : ModifierCategoryInput list) = init(modifiers)
+        member this.SupportsScope (source : ModifierCategory) (target : Scope) =
+            match Set.contains (source, target) matchesSet ,source, target with
+            | true, _, _ -> true
+            | _, x, _ when x = anyModifier -> true
+            | _, _, x when x = scopeManager.AnyScope -> true
+            | _ -> false
+        member this.SupportedScopes (modifier : ModifierCategory) =
+            let found, value = reverseDict.TryGetValue modifier
+            if found
+            then value.scopes
+            else log (sprintf "Unexpected modifier category %O" modifier.tag); []
+        member this.GetCategoryFromID (id: int) =
+            match idMap |> Map.tryFind id with
+            | Some category -> category
+            | None -> anyModifier
+    let modifierCategoryManager = ModifierCategoryManager()
+    type ModifierCategory(tag : byte) =
+        member val tag = tag
+        override x.ToString() = modifierCategoryManager.GetName(x)
+        override x.Equals (target : obj) =
+            match target with
+            | :? ModifierCategory as t -> tag = t.tag
+            | _ -> false
+        override x.GetHashCode() = tag.GetHashCode()
+        interface IComparable with
+            member this.CompareTo target =
+                match target with
+                | :? ModifierCategory as t -> tag.CompareTo t.tag
+                | _ -> 0
+        member this.SupportsScope x =
+            modifierCategoryManager.SupportsScope this x
+        member this.Name =
+            modifierCategoryManager.GetName this
+        interface IModifier with
+            member this.Tag = modifierCategoryManager.GetName this
+    type Modifier = ModifierCategory
     type Scope(tag : byte) =
-        // struct
-        // val tag: byte
-        // end
-        // new(tag) = { tag = tag }
         member val tag = tag
         override x.ToString() = scopeManager.GetName(x)
         override x.Equals (target : obj) =
@@ -171,6 +254,16 @@ module rec NewScope =
         subtypes : string list
     }
 
+type ActualModifier = {
+        tag : string
+        // categories : ModifierCategory list
+        category : ModifierCategory
+    }
+
+type StaticModifier = {
+    tag : string
+    categories : ModifierCategory list
+}
 type EffectType = |Effect |Trigger |Link |ValueTrigger
 type Effect internal (name, scopes, effectType) =
     member val Name : string = name
@@ -245,15 +338,15 @@ type ScopedEffect(name, scopes, inner, effectType, desc, usage, isScopeChange, i
         ScopedEffect(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
 
 
-type CustomModifier =
-    {
-        tag : string
-        categories : string list
-        /// Is this a core modifier or a static modifier?
-        isCore : bool
-    }
-    interface IModifier with
-        member this.Tag = this.tag
+// type CustomModifier =
+//     {
+//         tag : string
+//         categories : string list
+//         /// Is this a core modifier or a static modifier?
+//         isCore : bool
+//     }
+//     interface IModifier with
+//         member this.Tag = this.tag
 
 
 type TitleType = |Empire |Kingdom |Duchy_Hired |Duchy_Normal |County |Barony

@@ -65,32 +65,47 @@ module HOI4Constants =
         defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []})
 
 
-    type ModifierCategory =
-        |State
-        |Country
-        |Unit
-        |UnitLeader
-        |Air
-        |Any
+    // type ModifierCategory =
+    //     |State
+    //     |Country
+    //     |Unit
+    //     |UnitLeader
+    //     |Air
+    //     |Any
 
-    type Modifier =
-        {
-            tag : string
-            categories : ModifierCategory list
-            /// Is this a core modifier or a static modifier?
-            core : bool
-        }
-        interface IModifier with
-            member this.Tag = this.tag
-
-    let categoryScopeList() = [
-        ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
-        ModifierCategory.UnitLeader, [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Unit, [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.State, [scopeManager.ParseScope() "Any"]
-        ModifierCategory.Air, [scopeManager.ParseScope() "Air"; scopeManager.ParseScope() "Country"]
+    // type Modifier =
+    //     {
+    //         tag : string
+    //         categories : ModifierCategory list
+    //         /// Is this a core modifier or a static modifier?
+    //         core : bool
+    //     }
+    //     interface IModifier with
+    //         member this.Tag = this.tag
+    let defaultModifiers = [
+        "State", None, ["any"]
+        "Country", None, ["country"]
+        "Unit", None, ["UnitLeader"; "Country"]
+        "UnitLeader", None, ["UnitLeader"; "Country"]
+        "Air", None, ["air"; "country"]
     ]
-    let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
+
+    let defaultModifiersInputs() =
+        defaultModifiers |> List.map (fun (n, intID, ss) ->
+            {
+                NewScope.ModifierCategoryInput.name = n;
+                NewScope.ModifierCategoryInput.internalID = intID;
+                NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope())
+                })
+
+    // let categoryScopeList() = [
+    //     ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.UnitLeader, [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Unit, [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.State, [scopeManager.ParseScope() "Any"]
+    //     ModifierCategory.Air, [scopeManager.ParseScope() "Air"; scopeManager.ParseScope() "Country"]
+    // ]
+    // let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
 
     let scriptFolders = [
         "common/abilities";

@@ -101,20 +101,33 @@ module EU4Constants =
     //     |"all" -> allScopes
     //     |x -> [parseScope x]
 
-    type ModifierCategory =
-        |Country
-        |Province
-        |Any
+    // type ModifierCategory =
+    //     |Country
+    //     |Province
+    //     |Any
 
-    type Modifier =
-        {
-            tag : string
-            categories : ModifierCategory list
-            /// Is this a core modifier or a static modifier?
-            core : bool
-        }
-        interface IModifier with
-            member this.Tag = this.tag
+    // type Modifier =
+    //     {
+    //         tag : string
+    //         categories : ModifierCategory list
+    //         /// Is this a core modifier or a static modifier?
+    //         core : bool
+    //     }
+    //     interface IModifier with
+    //         member this.Tag = this.tag
+
+    let defaultModifiers = [
+        "Country", None, ["country"]
+        "Province", None, ["province"]
+    ]
+    let defaultModifiersInputs() =
+        defaultModifiers |> List.map (fun (n, intID, ss) ->
+            {
+                NewScope.ModifierCategoryInput.name = n;
+                NewScope.ModifierCategoryInput.internalID = intID;
+                NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope())
+                })
+
     let scriptFolders = [
         "common/advisortypes";
         "common/ages";

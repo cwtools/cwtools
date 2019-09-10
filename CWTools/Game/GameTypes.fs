@@ -69,7 +69,7 @@ type IGame =
     abstract GetEventGraphData : GraphDataRequest
     abstract ScriptedTriggers : unit -> Effect list
     abstract ScriptedEffects : unit -> Effect list
-    abstract StaticModifiers : unit -> CWTools.Common.STLConstants.Modifier list
+    abstract StaticModifiers : unit -> StaticModifier list
     abstract ScopesAtPos : pos -> string -> string -> ScopeContext<Scope> option
 
 type IGame<'T, 'M when 'T :> ComputedData and 'M :> IModifier> =

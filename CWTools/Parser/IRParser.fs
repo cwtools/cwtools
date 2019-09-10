@@ -7,17 +7,18 @@ open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Common.NewScope
+open CWTools.Common
 
 module IRParser =
 
-    let private parseModifier =
-        function
-        | "character" -> ModifierCategory.Character
-        | "province" -> ModifierCategory.Province
-        | "country" -> ModifierCategory.Country
-        | "unit" -> ModifierCategory.Unit
-        // |"country" -> ModifierCategory.Country
-        |_ -> ModifierCategory.Any
+    // let private parseModifier =
+    //     function
+    //     | "character" -> ModifierCategory.Character
+    //     | "province" -> ModifierCategory.Province
+    //     | "country" -> ModifierCategory.Country
+    //     | "unit" -> ModifierCategory.Unit
+    //     // |"country" -> ModifierCategory.Country
+    //     |_ -> ModifierCategory.Any
 
 
     let loadModifiers filename fileString =
@@ -27,18 +28,18 @@ module IRParser =
         |Success(s,_,_) ->
             let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
             root.Child "modifiers"
-                |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {tag = l.Key; categories = [parseModifier (l.Value.ToRawString())]; core = true}))
+                |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {ActualModifier.tag = l.Key; category = modifierCategoryManager.ParseModifier() (l.Value.ToRawString())}))
                 |> Option.defaultValue []
 
-    let loadCustomModifiers filename fileString =
-        let parsed = CKParser.parseString fileString filename
-        match parsed with
-        |Failure(e, _, _) -> log (sprintf "modifier file %s failed with %s" filename e); ([])
-        |Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
-            root.Child "modifiers"
-                |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {CWTools.Common.CustomModifier.tag = l.Key; CWTools.Common.CustomModifier.categories = [(l.Value.ToRawString())]; CWTools.Common.CustomModifier.isCore = true}))
-                |> Option.defaultValue []
+    // let loadCustomModifiers filename fileString =
+    //     let parsed = CKParser.parseString fileString filename
+    //     match parsed with
+    //     |Failure(e, _, _) -> log (sprintf "modifier file %s failed with %s" filename e); ([])
+    //     |Success(s,_,_) ->
+    //         let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+    //         root.Child "modifiers"
+    //             |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {CWTools.Common.CustomModifier.tag = l.Key; CWTools.Common.CustomModifier.categories = [(l.Value.ToRawString())]; CWTools.Common.CustomModifier.isCore = true}))
+    //             |> Option.defaultValue []
 
     let getLocCommands (node : Node) =
         let simple = node.Values |> List.map (fun v -> v.Key, [scopeManager.ParseScope() (v.Value.ToRawString())])

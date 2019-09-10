@@ -328,7 +328,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 //                     |> Option.defaultValue (Scopes.IR.scopedEffects |> List.map SimpleLink)
                 let settings = emptyImperatorSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
-                let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, IRConstants.Modifier>
+                let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData, Modifier>
                 let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = ir.AllEntities()
                                 |> List.map (fun struct (e, _) ->
@@ -404,7 +404,7 @@ let specialtests =
             let stl = STLGame({settings with rules = Some {  ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false   };
                                                 embedded = ManualSettings { emptyEmbeddedSettings with modifiers = modifiers; scopeDefinitions = defaultScopeInputs}}) :> IGame<STLComputedData, Modifier>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
-            let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
+            let exp = [{tag = "test"; categories = [modifierCategoryManager.ParseModifier() "pop"] }]
             Expect.equal (stl.StaticModifiers()) exp ""
     ]
 // [<Tests>]

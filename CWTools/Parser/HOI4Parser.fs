@@ -6,19 +6,20 @@ open CWTools.Common.HOI4Constants
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Utilities.Utils
+open CWTools.Common
 open CWTools.Common.NewScope
 
 module HOI4Parser =
     // let loadModifiers (fileStream : StreamReader) =
     //     let csv = CsvFile.Load(fileStream, hasHeaders=false)
-    let private parseModifier =
-        function
-        |"state" -> ModifierCategory.State
-        |"country" -> ModifierCategory.Country
-        |"unit" -> ModifierCategory.Unit
-        |"unit_leader" -> ModifierCategory.UnitLeader
-        |"air" -> ModifierCategory.Air
-        |_ -> ModifierCategory.Any
+    // let private parseModifier =
+    //     function
+    //     |"state" -> ModifierCategory.State
+    //     |"country" -> ModifierCategory.Country
+    //     |"unit" -> ModifierCategory.Unit
+    //     |"unit_leader" -> ModifierCategory.UnitLeader
+    //     |"air" -> ModifierCategory.Air
+    //     |_ -> ModifierCategory.Any
     //     csv.Rows |> Seq.map(fun r -> r.Columns.[0])
 
     let loadModifiers filename fileString =
@@ -28,7 +29,7 @@ module HOI4Parser =
         |Success(s,_,_) ->
             let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
             root.Child "modifiers"
-                |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {tag = l.Key; categories = [parseModifier (l.Value.ToRawString())]; core = true}))
+                |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {ActualModifier.tag = l.Key; category = modifierCategoryManager.ParseModifier() (l.Value.ToRawString())}))
                 |> Option.defaultValue []
 
     let private getLocCommands (node : Node) =

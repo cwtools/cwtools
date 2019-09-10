@@ -110,29 +110,42 @@ module CK2Constants =
     let defaultScopeInputs =
         defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss })
 
-    type ModifierCategory =
-        | Character
-        | Province
-        | Unit
-        | Any
+    // type ModifierCategory =
+    //     | Character
+    //     | Province
+    //     | Unit
+    //     | Any
 
-    type Modifier =
-        {
-            tag : string
-            categories : ModifierCategory list
-            /// Is this a core modifier or a static modifier?
-            core : bool
-        }
-        interface IModifier with
-            member this.Tag = this.tag
-
-    let categoryScopeList() = [
-        ModifierCategory.Character, [NewScope.scopeManager.ParseScope() "character"];
-        ModifierCategory.Province, [NewScope.scopeManager.ParseScope() "province"];
-        ModifierCategory.Unit, [NewScope.scopeManager.ParseScope() "province"; NewScope.scopeManager.ParseScope() "unit"];
-        ModifierCategory.Any, [];
+    // type Modifier =
+    //     {
+    //         tag : string
+    //         categories : ModifierCategory list
+    //         /// Is this a core modifier or a static modifier?
+    //         core : bool
+    //     }
+    //     interface IModifier with
+    //         member this.Tag = this.tag
+    let defaultModifiers = [
+        "Character", None, ["character"]
+        "Province", None, ["province"]
+        "Unit", None, ["unit"; "province"]
     ]
-    let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
+
+    let defaultModifiersInputs() =
+        defaultModifiers |> List.map (fun (n, intID, ss) ->
+            {
+                NewScope.ModifierCategoryInput.name = n;
+                NewScope.ModifierCategoryInput.internalID = intID;
+                NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope())
+                })
+
+    // let categoryScopeList() = [
+    //     modifierCategoryManager.ParseModifier() "character", [NewScope.scopeManager.ParseScope() "character"];
+    //     modifierManager.ParseModifier() "province", [NewScope.scopeManager.ParseScope() "province"];
+    //     modifierManager.ParseModifier() "unit", [NewScope.scopeManager.ParseScope() "province"; NewScope.scopeManager.ParseScope() "unit"];
+    //     modifierManager.AnyModifier, [];
+    // ]
+    // let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
 
     let scriptFolders = [
         "common";

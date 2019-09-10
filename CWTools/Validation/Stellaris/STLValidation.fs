@@ -67,18 +67,18 @@ module STLValidation =
 
 
 
-    let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
-        match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
-        |None, _ -> OK
-        |Some _, s when s = scopeManager.AnyScope -> OK
-        |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+    // let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
+    //     match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
+    //     |None, _ -> OK
+    //     |Some _, s when s = scopeManager.AnyScope -> OK
+    //     |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
 
 
-    let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (modifier : string) (node) =
-        let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
-        match exists with
-        |None -> Invalid [inv (ErrorCodes.UndefinedStaticModifier modifier) node]
-        |Some m -> m.categories <&!&>  (checkCategoryInScope modifier scopes.CurrentScope node)
+    // let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (modifier : string) (node) =
+    //     let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
+    //     match exists with
+    //     |None -> Invalid [inv (ErrorCodes.UndefinedStaticModifier modifier) node]
+    //     |Some m -> m.categories <&!&>  (checkCategoryInScope modifier scopes.CurrentScope node)
 
     let valNotUsage (node : Node) = if (node.Values.Length + node.Children.Length) > 1 then Invalid [inv ErrorCodes.IncorrectNotUsage node] else OK
 
@@ -378,23 +378,26 @@ module STLValidation =
             // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))
 
     let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
-        match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
-        |None, _ -> OK
-        |Some _, s when s = scopeManager.AnyScope -> OK
-        |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+        match cat.SupportsScope scope with
+        | true -> OK
+        | false -> Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (scope.ToString()) ((modifierCategoryManager.SupportedScopes cat ) |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+        // match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
+        // |None, _ -> OK
+        // |Some _, s when s = scopeManager.AnyScope -> OK
+        // |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
 
-    let valModifier (modifiers : Modifier list) (scope : Scope) (leaf : Leaf) =
+    let valModifier (modifiers : ActualModifier list) (scope : Scope) (leaf : Leaf) =
         match modifiers |> List.tryFind (fun m -> m.tag == leaf.Key) with
         |None -> Invalid [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf]
         |Some m ->
-            m.categories <&!&> checkModifierInScope (leaf.Key) (scope) leaf
+            checkModifierInScope (leaf.Key) (scope) leaf m.category
             <&&> (leaf.Value |> (function |Value.Int x when x = 0 -> Invalid [inv (ErrorCodes.ZeroModifier leaf.Key) leaf] | _ -> OK))
             // match m.categories |> List.contains (modifierCategory) with
             // |true -> OK
             // |false -> Invalid [inv (ErrorCodes.IncorrectModifierScope (leaf.Key) (modifierCategory.ToString()) (m.categories.ToString())) leaf]
 
 
-    let valModifiers (modifiers : Modifier list) (node : ModifierBlock) =
+    let valModifiers (modifiers : ActualModifier list) (node : ModifierBlock) =
         let filteredModifierKeys = ["description"; "key"]
         let filtered = node.Values |> List.filter (fun f -> not (filteredModifierKeys |> List.exists (fun k -> k == f.Key)))
         filtered <&!&> valModifier modifiers node.Scope
@@ -409,28 +412,28 @@ module STLValidation =
             let fCombine = (<&&>)
             es.All <&!!&> foldNode2 fNode fCombine OK)
 
-    let addGeneratedModifiers (modifiers : Modifier list) (es : STLEntitySet) =
+    let addGeneratedModifiers (modifiers : ActualModifier list) (es : STLEntitySet) : ActualModifier list =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)
         let shipModifierCreate =
             (fun k ->
             [
-                {tag = "shipsize_"+k+"_build_speed_mult"; categories = [ModifierCategory.Starbase]; core = true }
-                // {tag = "shipsize_"+k+"_build_cost_mult"; categories = [ModifierCategory.Starbase]; core = true }
-                {tag = "shipsize_"+k+"_hull_mult"; categories = [ModifierCategory.Ship]; core = true }
-                {tag = "shipsize_"+k+"_hull_add"; categories = [ModifierCategory.Ship]; core = true }
-                // {tag = "shipsize_"+k+"_damage_mult"; categories = [ModifierCategory.Ship]; core = true }
-                // {tag = "shipsize_"+k+"_evasion_addt"; categories = [ModifierCategory.Ship]; core = true }
-                // {tag = "shipsize_"+k+"_disengage_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {ActualModifier.tag = "shipsize_"+k+"_build_speed_mult"; category = modifierCategoryManager.ParseModifier() "Starbase" }
+                // {tag = "shipsize_"+k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Starbase" }
+                {tag = "shipsize_"+k+"_hull_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_hull_add"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                // {tag = "shipsize_"+k+"_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                // {tag = "shipsize_"+k+"_evasion_addt"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                // {tag = "shipsize_"+k+"_disengage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
             ])
         let shipModifiers = shipKeys |> List.collect shipModifierCreate
         let weaponTags = es.GlobMatch("**/common/component_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
         let weaponTagsModifierCreate =
             (fun k ->
             [
-                {tag = k+"_weapon_damage_mult"; categories = [ModifierCategory.Ship]; core = true }
-                {tag = k+"_weapon_fire_rate_mult"; categories = [ModifierCategory.Ship]; core = true }
-                {tag = k+"_speed_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {ActualModifier.tag = k+"_weapon_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = k+"_weapon_fire_rate_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = k+"_speed_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
             ])
         let weaponModifiers = weaponTags |> List.map (fun l -> l.Value.ToRawString())
                                              |> List.collect weaponTagsModifierCreate
@@ -446,16 +449,16 @@ module STLValidation =
             (fun k ->
             [
                 if cost then
-                    yield {tag = prefix+k+"_cost_add"; categories = [ModifierCategory.Resource]; core = true }
-                    yield {tag = prefix+k+"_cost_mult"; categories = [ModifierCategory.Resource]; core = true }
+                    yield {ActualModifier.tag = prefix+k+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                    yield {tag = prefix+k+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
                 else ()
                 if produces then
-                    yield {tag = prefix+k+"_produces_add"; categories = [ModifierCategory.Resource]; core = true }
-                    yield {tag = prefix+k+"_produces_mult"; categories = [ModifierCategory.Resource]; core = true }
+                    yield {tag = prefix+k+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                    yield {tag = prefix+k+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
                 else ()
                 if upkeep then
-                    yield {tag = prefix+k+"_upkeep_add"; categories = [ModifierCategory.Resource]; core = true }
-                    yield {tag = prefix+k+"_upkeep_mult"; categories = [ModifierCategory.Resource]; core = true }
+                    yield {tag = prefix+k+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                    yield {tag = prefix+k+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
                 else ()
             ]
             )
@@ -469,7 +472,7 @@ module STLValidation =
         let srModifierCreate =
             (fun k ->
             [
-                yield {tag = "country_resource_max_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
+                yield {ActualModifier.tag = "country_resource_max_"+k+"_add"; category = modifierCategoryManager.ParseModifier() "Country" }
                 yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
                 yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
                 yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
@@ -483,8 +486,8 @@ module STLValidation =
         let popCatModifierCreate =
             (fun k ->
                 [
-                    {tag = "pop_cat_" + k + "_happiness"; categories = [ModifierCategory.Pop]; core = true}
-                    {tag = "pop_cat_" + k + "_political_power"; categories = [ModifierCategory.Pop]; core = true}
+                    {ActualModifier.tag = "pop_cat_" + k + "_happiness"; category = modifierCategoryManager.ParseModifier() "Pop"}
+                    {tag = "pop_cat_" + k + "_political_power"; category = modifierCategoryManager.ParseModifier() "Pop"}
                 ])
         let popCatModifiers = pop_cats |> List.collect popCatModifierCreate
 
@@ -492,21 +495,21 @@ module STLValidation =
         let jobModifierCreate =
             (fun k ->
                 [
-                    {tag = "job_" + k + "_add"; categories = [ModifierCategory.Planet]; core = true}
-                    {tag = "job_" + k + "_per_pop"; categories = [ModifierCategory.Planet]; core = true}
-                    {tag = "job_" + k + "_per_crime"; categories = [ModifierCategory.Planet]; core = true}
+                    {ActualModifier.tag = "job_" + k + "_add"; category = modifierCategoryManager.ParseModifier() "Planet"}
+                    {tag = "job_" + k + "_per_pop"; category = modifierCategoryManager.ParseModifier() "Planet"}
+                    {tag = "job_" + k + "_per_crime"; category = modifierCategoryManager.ParseModifier() "Planet"}
                 ])
         let jobModifiers = jobs |> List.collect jobModifierCreate
 
         let planetclasses = es.GlobMatchChildren("**/common/planet_classes/*.txt")
         let pcKeys = planetclasses |> List.map (fun f -> f.Key)
-        let pcModifiers = pcKeys |> List.map (fun k -> {tag = k+"_habitability"; categories = [ModifierCategory.PlanetClass]; core = true})
+        let pcModifiers = pcKeys |> List.map (fun k -> {ActualModifier.tag = k+"_habitability"; category = modifierCategoryManager.ParseModifier() "PlanetClass"})
         let buildingTags = es.GlobMatch("**/common/building_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
         let buildingTagModifierCreate =
             (fun k ->
             [
-                {tag = k+"_construction_speed_mult"; categories = [ModifierCategory.Planet]; core = true }
-                {tag = k+"_build_cost_mult"; categories = [ModifierCategory.Planet]; core = true }
+                {ActualModifier.tag = k+"_construction_speed_mult"; category = modifierCategoryManager.ParseModifier() "Planet" }
+                {tag = k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Planet" }
             ])
         let buildingModifiers = buildingTags |> List.map (fun l -> l.Value.ToRawString())
                                              |> List.collect buildingTagModifierCreate
@@ -514,22 +517,22 @@ module STLValidation =
         let buildingWithModCapCreate =
             (fun k ->
             [
-                {tag = k+"_max"; categories = [ModifierCategory.Planet]; core = true }
+                {ActualModifier.tag = k+"_max"; category = modifierCategoryManager.ParseModifier() "Planet" }
             ])
         let buildingWithModCapModifiers = buildingWithModCap |> List.map (fun n -> n.Key)
                                                              |> List.collect buildingWithModCapCreate
         let countryTypeKeys = es.GlobMatchChildren("**/common/country_types/*.txt") |> List.map (fun f -> f.Key)
-        let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {tag = "damage_vs_country_type_"+k+"_mult"; categories = [ModifierCategory.Ship]; core = true})
+        let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {ActualModifier.tag = "damage_vs_country_type_"+k+"_mult"; category = modifierCategoryManager.ParseModifier() "Ship"})
         let speciesKeys = es.GlobMatchChildren("**/common/species_archetypes/*.txt")
                             //|> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
-        let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
+        let speciesModifiers = speciesKeys |> List.map (fun k -> {ActualModifier.tag = k+"_species_trait_points_add"; category = modifierCategoryManager.ParseModifier() "Country"})
         let districts = es.GlobMatchChildren("**/common/districts/*.txt") |> List.filter (fun d -> not (d.TagText "is_capped_by_modifier" == "no"))
-        let districtModifiers = districts |> List.map (fun k -> {tag = k.Key+"_max"; categories = [ModifierCategory.Planet]; core = true})
+        let districtModifiers = districts |> List.map (fun k -> {ActualModifier.tag = k.Key+"_max"; category = modifierCategoryManager.ParseModifier() "Planet"})
         let popEthicKeys = es.GlobMatchChildren("**/common/ethics/*.txt") |> List.map (fun s -> s.Key)
-        let popEthicModifiers = popEthicKeys |> List.map (fun k -> { tag = "pop_" + k + "_attraction_mult"; categories = [ModifierCategory.Pop]; core = true})
+        let popEthicModifiers = popEthicKeys |> List.map (fun k -> { ActualModifier.tag = "pop_" + k + "_attraction_mult"; category = modifierCategoryManager.ParseModifier() "Pop"})
         let techCategoryKeys = es.GlobMatchChildren("**/common/technology/category/*.txt") |> List.map (fun s -> s.Key)
-        let techCatModifiers = techCategoryKeys |> List.map (fun k -> { tag = "category_"+  k + "_research_speed_mult"; categories = [ModifierCategory.Country]; core = true})
+        let techCatModifiers = techCategoryKeys |> List.map (fun k -> { ActualModifier.tag = "category_"+  k + "_research_speed_mult"; category = modifierCategoryManager.ParseModifier() "Country"})
         shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
                     @ districtModifiers @ popEthicModifiers @ techCatModifiers
 

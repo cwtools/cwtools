@@ -197,43 +197,68 @@ module STLConstants =
         interface IModifier with
             member this.Tag = this.tag
 
-    let createModifier (raw : RawModifier) =
-        let category =
-            match raw.category with
-            | 2 -> ModifierCategory.Pop
-            | 64 -> ModifierCategory.Science
-            | 256 -> ModifierCategory.Country
-            | 512 -> ModifierCategory.Army
-            | 1024 -> ModifierCategory.Leader
-            | 2048 -> ModifierCategory.Planet
-            | 8192 -> ModifierCategory.PopFaction
-            | 16496 -> ModifierCategory.ShipSize
-            | 16508 -> ModifierCategory.Ship
-            | 32768 -> ModifierCategory.Tile
-            | 65536 -> ModifierCategory.Megastructure
-            | 131072 -> ModifierCategory.PlanetClass
-            | 262144 -> ModifierCategory.Starbase
-            | 524288 -> ModifierCategory.Resource
-            |_ -> ModifierCategory.Any
-        { tag = raw.tag; categories = [category]; core = true}
-    let categoryScopeList() = [
-        ModifierCategory.Army, [scopeManager.ParseScope() "Army"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
-        ModifierCategory.Leader, [scopeManager.ParseScope() "Leader"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Megastructure, [scopeManager.ParseScope() "Megastructure"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Planet, [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.PlanetClass, [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Pop, [scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.PopFaction, [scopeManager.ParseScope() "PopFaction"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Science, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Ship, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.ShipSize, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Starbase, [scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Tile, [scopeManager.ParseScope() "Tile"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
-        ModifierCategory.Resource, [scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Leader"]
+    let defaultModifiers = [
+        "Pop", Some 2, ["pop"; "planet"; "galacticobject"; "country"]
+        "Science", Some 64, ["ship"; "country"]
+        "Country", Some 256, ["country"]
+        "Army", Some 512, ["army"; "planet"; "country"]
+        "Leader", Some 1024, ["leader"; "country"]
+        "Planet", Some 2048, ["planet"; "galacticobject"; "country"]
+        "PopFaction", Some 8192, ["popfaction"; "country"]
+        "ShipSize", Some 16496, ["ship"; "starbase"; "country"]
+        "Ship", Some 16508, ["ship"; "starbase";"fleet";"country"]
+        "Tile", Some 32768, ["tile";"pop";"planet";"country"]
+        "Megastructure", Some 65536, ["megastructure";"country"]
+        "PlanetClass", Some 131072, ["planet"; "pop"; "country"]
+        "Starbase", Some 262144, ["starbase";"country"]
+        "Resource", Some 524288, ["country";"galacticobject";"planet";"pop";"starbase";"leader";"ship"]
     ]
 
-    let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
+    let defaultModifiersInputs() =
+        defaultModifiers |> List.map (fun (n, intID, ss) ->
+            {
+                NewScope.ModifierCategoryInput.name = n;
+                NewScope.ModifierCategoryInput.internalID = intID;
+                NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope())
+                })
+
+    // let createModifier (raw : RawModifier) =
+    //     let category =
+    //         match raw.category with
+    //         | 2 -> ModifierCategory.Pop
+    //         | 64 -> ModifierCategory.Science
+    //         | 256 -> ModifierCategory.Country
+    //         | 512 -> ModifierCategory.Army
+    //         | 1024 -> ModifierCategory.Leader
+    //         | 2048 -> ModifierCategory.Planet
+    //         | 8192 -> ModifierCategory.PopFaction
+    //         | 16496 -> ModifierCategory.ShipSize
+    //         | 16508 -> ModifierCategory.Ship
+    //         | 32768 -> ModifierCategory.Tile
+    //         | 65536 -> ModifierCategory.Megastructure
+    //         | 131072 -> ModifierCategory.PlanetClass
+    //         | 262144 -> ModifierCategory.Starbase
+    //         | 524288 -> ModifierCategory.Resource
+    //         |_ -> ModifierCategory.Any
+    //     { tag = raw.tag; categories = [category]; core = true}
+    // let categoryScopeList() = [
+    //     ModifierCategory.Army, [scopeManager.ParseScope() "Army"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Country, [scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Leader, [scopeManager.ParseScope() "Leader"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Megastructure, [scopeManager.ParseScope() "Megastructure"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Planet, [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.PlanetClass, [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Pop, [scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.PopFaction, [scopeManager.ParseScope() "PopFaction"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Science, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Ship, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.ShipSize, [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Starbase, [scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Tile, [scopeManager.ParseScope() "Tile"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"]
+    //     ModifierCategory.Resource, [scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Pop"; scopeManager.ParseScope() "Starbase"; scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Leader"]
+    // ]
+
+    // let modifierCategoryToScopesMap() = categoryScopeList() |> Map.ofList
     type EntityType =
     |Agenda = 1
     |AmbientObjects = 2
