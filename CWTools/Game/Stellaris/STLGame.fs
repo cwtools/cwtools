@@ -31,14 +31,14 @@ open System.IO
 open CWTools.Common.NewScope
 
 module STLGameFunctions =
-    type GameObject = GameObject<Modifier, STLComputedData, STLLookup>
+    type GameObject = GameObject<STLComputedData, STLLookup>
 
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
@@ -82,7 +82,7 @@ module STLGameFunctions =
     let updateDefinedVariables(game : GameObject) =
         game.Lookup.definedScriptVariables <- (game.Resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().Setvariables)
 
-    let afterUpdateFile (game : GameObject<Modifier,STLComputedData,STLLookup>) (filepath : string) =
+    let afterUpdateFile (game : GameObject<STLComputedData,STLLookup>) (filepath : string) =
         match filepath with
         |x when x.Contains("scripted_triggers") -> updateScriptedTriggers(game) |> ignore
         |x when x.Contains("scripted_effects") -> updateScriptedEffects(game) |> ignore
@@ -107,7 +107,7 @@ module STLGameFunctions =
     let updateTechnologies(game : GameObject) =
         game.Lookup.technologies <- getTechnologies (EntitySet (game.Resources.AllEntities()))
 
-    let addModifiersWithScopes (lookup : Lookup<_>) =
+    let addModifiersWithScopes (lookup : Lookup) =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
@@ -118,7 +118,7 @@ module STLGameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let addTriggerDocsScopes (lookup : Lookup<_>) (rules : RootRule<_> list) =
+    let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =
             let scriptedOptions (effect : ScriptedEffect) =
                 {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false; referenceDetails = None}
             let getAllScriptedEffects =
@@ -127,7 +127,7 @@ module STLGameFunctions =
             let getAllScriptedTriggers =
                 lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
                                                 |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
-            let addRequiredScopesE (s : StringTokens) (o : Options<_>) =
+            let addRequiredScopesE (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -136,7 +136,7 @@ module STLGameFunctions =
                             |> Option.defaultValue []
                     |x -> x
                 { o with requiredScopes = newScopes}
-            let addRequiredScopesT (s : StringTokens) (o : Options<_>) =
+            let addRequiredScopesT (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -166,13 +166,13 @@ module STLGameFunctions =
                     |x -> [x])
 
 
-    let loadConfigRulesHook rules (lookup : Lookup<_>) embedded =
+    let loadConfigRulesHook rules (lookup : Lookup) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         let rulesWithMod = rules @ addModifiersWithScopes(lookup)
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
 
-    let refreshConfigBeforeFirstTypesHook (lookup : STLLookup) (resources : IResourceAPI<STLComputedData>) (embeddedSettings : EmbeddedSettings<_>)  =
+    let refreshConfigBeforeFirstTypesHook (lookup : STLLookup) (resources : IResourceAPI<STLComputedData>) (embeddedSettings : EmbeddedSettings)  =
         lookup.STLScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
                                             |> List.ofSeq |> List.collect id)
         let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys }
@@ -182,11 +182,11 @@ module STLGameFunctions =
                             |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
 
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
         lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
     let afterInit (game : GameObject) =
             let ts = updateScriptedTriggers(game)
@@ -237,7 +237,7 @@ module STLGameFunctions =
         }
 
 
-type StellarisSettings = GameSetupSettings<Modifier, Scope, STLLookup>
+type StellarisSettings = GameSetupSettings<STLLookup>
 
 open STLGameFunctions
 open CWTools.Common.NewScope
@@ -301,7 +301,7 @@ type STLGame (setupSettings : StellarisSettings) =
             refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
         }
 
-        let game = GameObject<Modifier, STLComputedData, STLLookup>.CreateGame
+        let game = GameObject<STLComputedData, STLLookup>.CreateGame
                     (settings, "stellaris", scriptFolders, Compute.STL.computeSTLData,
                     Compute.STL.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
@@ -321,7 +321,7 @@ type STLGame (setupSettings : StellarisSettings) =
         let lookup = game.Lookup
         let resources = game.Resources
         let fileManager = game.FileManager
-        let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        let references = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
         let useRules = settings.rules.IsSome
         let parseErrors() =
@@ -348,7 +348,7 @@ type STLGame (setupSettings : StellarisSettings) =
         //     |_ -> None
 
 
-        interface IGame<STLComputedData, Modifier> with
+        interface IGame<STLComputedData> with
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
@@ -370,7 +370,7 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.StaticModifiers() = lookup.staticModifiers
             member __.UpdateFile shallow file text = game.UpdateFile shallow file text
             member __.AllEntities() = resources.AllEntities()
-            member __.References() = References<_, Modifier>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+            member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
             member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
             member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
                 // scopesAtPosSTL pos file text

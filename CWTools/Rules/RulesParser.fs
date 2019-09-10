@@ -15,21 +15,21 @@ open CWTools.Parser
 open CWTools.Common.NewScope
 
 
-type ReplaceScopes<'a> = {
-    root : 'a option
-    this : 'a option
-    froms : 'a list option
-    prevs : 'a list option
+type ReplaceScopes = {
+    root : Scope option
+    this : Scope option
+    froms : Scope list option
+    prevs : Scope list option
 }
-type Options<'a> = {
+type Options = {
     min : int
     max : int
     leafvalue : bool
     description : string option
-    pushScope : 'a option
-    replaceScopes : ReplaceScopes<'a> option
+    pushScope : Scope option
+    replaceScopes : ReplaceScopes option
     severity : Severity option
-    requiredScopes : 'a list
+    requiredScopes : Scope list
     comparison : bool
     referenceDetails : (bool * string) option
 }
@@ -72,60 +72,60 @@ type Marker =
 | ColourField
 | IRCountryTag
 
-type TypeLocalisation<'a> = {
+type TypeLocalisation = {
     name : string
     prefix : string
     suffix: string
     required : bool
     optional : bool
     explicitField : string option
-    replaceScopes : ReplaceScopes<'a> option
+    replaceScopes : ReplaceScopes option
     primary : bool
 }
 
 type SkipRootKey = |SpecificKey of string |AnyKey |MultipleKeys of string list * bool
-type SubTypeDefinition<'a> = {
+type SubTypeDefinition = {
     name : string
     displayName : string option
     abbreviation : string option
-    rules : NewRule<'a> list
+    rules : NewRule list
     typeKeyField : string option
     startsWith : string option
-    pushScope : 'a option
-    localisation : TypeLocalisation<'a> list
+    pushScope : Scope option
+    localisation : TypeLocalisation list
 }
-and TypeDefinition<'a> = {
+and TypeDefinition = {
     name : string
     nameField : string option
     path : string list
     path_strict : bool
     path_file : string option
     conditions : Node option
-    subtypes : SubTypeDefinition<'a> list
+    subtypes : SubTypeDefinition list
     typeKeyFilter : (string list * bool) option
     skipRootKey : SkipRootKey list
     startsWith : string option
     type_per_file : bool
     warningOnly : bool
     unique : bool
-    localisation : TypeLocalisation<'a> list
+    localisation : TypeLocalisation list
     graphRelatedTypes : string list
 }
 
-and NewField<'a> =
+and NewField =
 | ValueField of ValueType
 | SpecificField of SpecificValue
 | ScalarField of ScalarValue
 | TypeField of TypeType
 /// This is only used internally to match type definitions
-| TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition<'a>
-| ScopeField of 'a
+| TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition
+| ScopeField of Scope
 | LocalisationField of synced : bool
 | FilepathField of prefix : string option * extension : string option
 | IconField of string
 | AliasField of string
 | SingleAliasField of string
-| SubtypeField of string * bool * NewRule<'a> list
+| SubtypeField of string * bool * NewRule list
 | VariableSetField of string
 | VariableGetField of string
 | VariableField of isInt : bool * minmax : (float * float)
@@ -136,12 +136,12 @@ and NewField<'a> =
         match x with
         | ValueField vt -> sprintf "Field of %O" vt
         | _ -> sprintf "Field of %A" x
-and RuleType<'a> =
-|NodeRule of left : NewField<'a> * rules : NewRule<'a> list
-|LeafRule of left : NewField<'a> * right : NewField<'a>
-|LeafValueRule of right : NewField<'a>
-|ValueClauseRule of rules : NewRule<'a> list
-|SubtypeRule of string * bool * NewRule<'a> list
+and RuleType =
+|NodeRule of left : NewField * rules : NewRule list
+|LeafRule of left : NewField * right : NewField
+|LeafValueRule of right : NewField
+|ValueClauseRule of rules : NewRule list
+|SubtypeRule of string * bool * NewRule list
     override x.ToString() =
         match x with
         | NodeRule (l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
@@ -149,12 +149,12 @@ and RuleType<'a> =
         | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
         | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
         | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
-and NewRule<'a> = RuleType<'a> * Options<'a>
+and NewRule = RuleType * Options
 
-type RootRule<'a> =
-| AliasRule of string * NewRule<'a>
-| SingleAliasRule of string * NewRule<'a>
-| TypeRule of string * NewRule<'a>
+type RootRule =
+| AliasRule of string * NewRule
+| SingleAliasRule of string * NewRule
+| TypeRule of string * NewRule
     override x.ToString() =
         match x with
         | AliasRule (n, r) -> sprintf "Alias definition %s (%O)" n r
@@ -187,10 +187,10 @@ module RulesParser =
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
     let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
-    let requiredSingle : Options<Scope> = { defaultOptions with min = 1; max = 1 }
-    let requiredMany<'a> = { defaultOptions with min = 1; max = 100 }
-    let optionalSingle : Options<Scope> = { defaultOptions with min = 0; max = 1 }
-    let optionalMany : Options<Scope> = { defaultOptions with min = 0; max = 100 }
+    let requiredSingle : Options = { defaultOptions with min = 1; max = 1 }
+    let requiredMany = { defaultOptions with min = 1; max = 100 }
+    let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
+    let optionalMany : Options = { defaultOptions with min = 0; max = 100 }
 
     let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
     let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
@@ -810,11 +810,11 @@ module RulesParser =
 
 
 
-    let replaceSingleAliases (rules : RootRule<_> list) =
+    let replaceSingleAliases (rules : RootRule list) =
         let mutable singlealiases = rules |> List.choose (function |SingleAliasRule (name, inner) -> Some (SingleAliasRule (name, inner)) |_ -> None) //|> Map.ofList
         let singlealiasesmap() = singlealiases |> List.choose (function |SingleAliasRule (name, inner) -> Some (name, inner) |_ -> None) |> Map.ofList
 
-        let rec cataRule rule : NewRule<_> =
+        let rec cataRule rule : NewRule =
             match rule with
             | (NodeRule (l, r), o) -> (NodeRule (l, r |> List.map cataRule), o)
             | (ValueClauseRule (r), o) -> (ValueClauseRule (r |> List.map cataRule), o)
@@ -855,9 +855,9 @@ module RulesParser =
         rules |> List.map rulesMapper
 
 
-    let replaceColourField (rules : RootRule<_> list) =
+    let replaceColourField (rules : RootRule list) =
 
-        let rec cataRule rule : NewRule<_> list =
+        let rec cataRule rule : NewRule list =
             match rule with
             | LeafRule (l, MarkerField (ColourField)), o  ->
                 [
@@ -890,8 +890,8 @@ module RulesParser =
             | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
         rules |> List.collect rulesMapper
 
-    let replaceValueMarkerFields (rules : RootRule<_> list) =
-        let rec cataRule rule : NewRule<_> list =
+    let replaceValueMarkerFields (rules : RootRule list) =
+        let rec cataRule rule : NewRule list =
             match rule with
             | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when not o.comparison ->
                 [

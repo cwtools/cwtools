@@ -175,7 +175,7 @@ type EU4StructureValidator = StructureValidator<EU4ComputedData>
 type VIC2StructureValidator = StructureValidator<VIC2ComputedData>
 type FileValidator<'T when 'T :> ComputedData> = IResourceAPI<'T> -> EntitySet<'T> -> ValidationResult
 type STLFileValidator = FileValidator<STLComputedData>
-type LookupValidator<'T, 'M when 'T :> ComputedData and 'M :> IModifier> = Lookup<'M> -> StructureValidator<'T>
+type LookupValidator<'T when 'T :> ComputedData> = Lookup -> StructureValidator<'T>
 type LocalisationValidator<'T when 'T :> ComputedData> = EntitySet<'T> -> (Lang * Set<string>) list -> EntitySet<'T> -> ValidationResult
 
 module ValidationCore =

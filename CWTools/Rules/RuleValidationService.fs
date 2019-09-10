@@ -18,12 +18,12 @@ open CWTools.Games
 // let inline ruleValidationServiceCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
 // let inline ruleValidationServiceCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
 type RuleValidationService
-                                (rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>,
+                                (rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>,
                                  enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                                  localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                                  links : Map<string,Effect,InsensitiveStringComparer>,
                                  valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
-                                 anyScope, changeScope : ChangeScope<_>, defaultContext : ScopeContext<_>, defaultLang) =
+                                 anyScope, changeScope : ChangeScope, defaultContext : ScopeContext, defaultLang) =
 
     let mutable errorList : ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
@@ -65,7 +65,7 @@ type RuleValidationService
 
     let memoizeRulesInner memFunction =
         let dict = new System.Collections.Concurrent.ConcurrentDictionary<_,System.Collections.Generic.Dictionary<_,_>>()
-        fun (rules : NewRule<_> list) (subtypes : string list) ->
+        fun (rules : NewRule list) (subtypes : string list) ->
                 match dict.TryGetValue(rules) with
                 | (true, v) ->
                     match v.TryGetValue(subtypes) with
@@ -165,7 +165,7 @@ type RuleValidationService
     }
 
 
-    let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext<_>) (rules : NewRule<_> list) (startNode : IClause) errors =
+    let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext) (rules : NewRule list) (startNode : IClause) errors =
         let severity = nodeSeverity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         // TODO: Memoize expanded rules depending  on ctx.subtypes ad rules?
         let noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificDict, leafSpecificDict = memoizeRules rules ctx.subtypes
@@ -213,7 +213,7 @@ type RuleValidationService
         let valueClauseFun innerErrors (valueclause : ValueClause) =
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyValueClause (sprintf "Unexpected clause in %s" startNode.Key) severity) valueclause <&&&> innerErrors else innerErrors
             valueclauserules |> (fun rs -> lazyErrorMerge rs (fun (ValueClauseRule r, o) e -> applyValueClauseRule enforceCardinality ctx o r valueclause e) createDefault innerErrors true)
-        let checkCardinality (clause : IClause) innerErrors (rule : NewRule<_>) =
+        let checkCardinality (clause : IClause) innerErrors (rule : NewRule) =
             match rule with
             |NodeRule(SpecificField(SpecificValue key), _), opts
             |LeafRule(SpecificField(SpecificValue key), _), opts ->
@@ -260,12 +260,12 @@ type RuleValidationService
     and applyValueField severity (vt : CWTools.Rules.ValueType) (leaf : Leaf) =
         FieldValidators.checkValidValue enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
 
-    and applyLeafValueRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leafvalue : LeafValue) errors =
+    and applyLeafValueRule (ctx : RuleContext) (options : Options) (rule : NewField) (leafvalue : LeafValue) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         // let errors = OK
         FieldValidators.checkField p severity ctx rule (leafvalue.ValueId.lower) (leafvalue.ValueText) (leafvalue) errors
 
-    and applyLeafRule (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (leaf : Leaf) errors =
+    and applyLeafRule (ctx : RuleContext) (options : Options) (rule : NewField) (leaf : Leaf) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
 
         // let errors = OK
@@ -277,7 +277,7 @@ type RuleValidationService
             |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf])
         <&&>
         FieldValidators.checkField p severity ctx rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
-    and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rule : NewField<_>) (rules : NewRule<_> list) (node : Node) errors =
+    and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =
             match options.pushScope with
@@ -333,7 +333,7 @@ type RuleValidationService
             |_ -> inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node <&&&> errors
         |_ -> applyClauseField enforceCardinality options.severity newCtx rules node errors
 
-    and applyValueClauseRule (enforceCardinality : bool) (ctx : RuleContext<_>) (options : Options<_>) (rules : NewRule<_> list) (valueclause : ValueClause) errors =
+    and applyValueClauseRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rules : NewRule list) (valueclause : ValueClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =
             match options.pushScope with
@@ -371,7 +371,7 @@ type RuleValidationService
         <&&>
         applyClauseField enforceCardinality options.severity newCtx rules valueclause errors
 
-    let testSubtype (subtypes : SubTypeDefinition<_> list) (node : Node) =
+    let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
         let results =
             subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
                      |> List.filter (fun st -> st.startsWith |> function | Some sw -> node.Key.StartsWith(sw, StringComparison.OrdinalIgnoreCase) | None -> true )
@@ -380,7 +380,7 @@ type RuleValidationService
         res |> List.tryPick fst, res |> List.map snd
 
     let rootId = StringResource.stringManager.InternIdentifierToken "root"
-    let applyNodeRuleRoot (typedef : TypeDefinition<_>) (rules : NewRule<_> list) (options : Options<_>) (node : Node) =
+    let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : Node) =
         let pushScope, subtypes = testSubtype (typedef.subtypes) node
         let startingScopeContext =
             match Option.orElse pushScope options.pushScope with
@@ -401,8 +401,8 @@ type RuleValidationService
             |(MultipleKeys (keys, shouldMatch)) ->
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let inner (typedefs : TypeDefinition<Scope> list) (node : Node) =
-            let validateType (typedef : TypeDefinition<_>) (n : Node) =
+        let inner (typedefs : TypeDefinition list) (node : Node) =
+            let validateType (typedef : TypeDefinition) (n : Node) =
                 let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)
                 //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
                 //let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
@@ -414,7 +414,7 @@ type RuleValidationService
                 |_ ->
                     OK
             let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t pathDir file)
-            let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (n : Node) =
+            let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : Node) =
                 match skipRootKeyStack with
                 |[] -> if FieldValidators.typekeyfilter t n.Key then validateType t n else OK
                 |head::tail ->

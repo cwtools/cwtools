@@ -46,7 +46,7 @@ module LanguageFeatures =
         | _, _, _ -> []
 
 
-    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup<_>) (pos : pos) (filepath : string) (filetext : string) =
+    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -86,7 +86,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup<_>) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
+    let symbolInformationAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup) (pos : pos) (filepath : string) (filetext : string) : SymbolInformation option =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
@@ -261,7 +261,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let graphEventDataForFiles (referenceManager : References<_, _>) (resourceManager : ResourceManager<_>) (lookup : Lookup<_>) (files : string list) (sourceType : string) : GraphDataItem list =
+    let graphEventDataForFiles (referenceManager : References<_>) (resourceManager : ResourceManager<_>) (lookup : Lookup) (files : string list) (sourceType : string) : GraphDataItem list =
         let sourceTypes = lookup.typeDefs |> List.tryPick (fun td -> if td.name = sourceType then Some (sourceType::td.graphRelatedTypes) else None)
                                           |> Option.defaultValue [sourceType]
         let entitiesInSelectedFiles = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)

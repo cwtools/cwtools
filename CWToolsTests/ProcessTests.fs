@@ -572,7 +572,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData>
             //let stl = STLGame(folder, Files(scopeManager.ParseScope() "All"), "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
@@ -596,7 +596,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData>
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -618,7 +618,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData>
 
             let input =    "ship_size = {\n\
                             prerequisites = {\n\
@@ -640,7 +640,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = FromConfig ([], []);
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
-            let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>
+            let stl = STLGame(settings) :> IGame<STLComputedData>
 
             let input =    "ship_size = {\n\
                             class = \n\

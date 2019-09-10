@@ -36,15 +36,6 @@ type Severity =
 | Information = 3
 | Hint = 4
 
-type IScope<'T> =
-    abstract member AnyScope : 'T
-    /// The first value is or can be coerced to the second
-    abstract member IsOfScope : 'T -> bool
-
-type IModifier =
-    abstract member Tag : string
-
-
 [<AutoOpen>]
 module rec NewScope =
     open CWTools.Utilities.Utils
@@ -215,8 +206,6 @@ module rec NewScope =
             modifierCategoryManager.SupportsScope this x
         member this.Name =
             modifierCategoryManager.GetName this
-        interface IModifier with
-            member this.Tag = modifierCategoryManager.GetName this
     type Modifier = ModifierCategory
     type Scope(tag : byte) =
         member val tag = tag
@@ -239,14 +228,6 @@ module rec NewScope =
             | x, _ when x = scopeManager.AnyScope -> true
             |this, target -> scopeManager.MatchesScope this target
 
-        interface IScope<Scope> with
-            member this.AnyScope = scopeManager.AnyScope
-            member this.IsOfScope target =
-                match this, target with
-                // |TradeNode, Province -> true
-                | _, x
-                | x, _ when x = scopeManager.AnyScope -> true
-                |this, target -> scopeManager.MatchesScope this target
 
     type TypeDefInfo = {
         id : string

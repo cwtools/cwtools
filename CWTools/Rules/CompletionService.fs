@@ -18,12 +18,12 @@ type CompletionContext =
     | LeafRHS
 
 type CompletionService
-                    (rootRules : RootRule<Scope> list, typedefs : TypeDefinition<Scope> list , types : Collections.Map<string, StringSet>,
+                    (rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>,
                      enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                      links : Map<string,Effect,InsensitiveStringComparer>,
                      valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
-                     globalScriptVariables : string list, changeScope : ChangeScope<_>, defaultContext : ScopeContext<_>, anyScope, oneToOneScopes, defaultLang)  =
+                     globalScriptVariables : string list, changeScope : ChangeScope, defaultContext : ScopeContext, anyScope, oneToOneScopes, defaultLang)  =
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                     |> List.groupBy fst
@@ -53,7 +53,7 @@ type CompletionService
                     )
         foldNode7 fNode root
 
-    let fieldToCompletionList (field : NewField<_>) =
+    let fieldToCompletionList (field : NewField) =
         match field with
         |ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (fun (_, s) -> if s.IsEmpty then None else Some (s.MaximumElement)) |> Option.defaultValue "x"
         |ValueField v -> FieldValidators.getValidValues v |> Option.bind (List.tryHead) |> Option.defaultValue "x"
@@ -80,7 +80,7 @@ type CompletionService
         let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect as x -> Some (x.Name, x.Scopes) | _ -> None )
         evs @ gevs @ scopedEffects
 
-    let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule<_> list) (description : string option) (key : string) =
+    let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule list) (description : string option) (key : string) =
         let filterToCompletion =
             function
             |LeafRule(SpecificField(SpecificValue _), _) -> true
@@ -134,9 +134,9 @@ type CompletionService
                     // | Some lv -> (lv.Key, countChildren node lv.Key, Some lv.ValueText)::stack
                     // | None -> stack
 
-    and getCompletionFromPath (scoreFunction : _ list -> ScopeContext<_> -> string -> int) (rules : NewRule<_> list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
+    and getCompletionFromPath (scoreFunction : _ list -> ScopeContext -> string -> int) (rules : NewRule list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
         // log (sprintf "%A" stack)
-        let completionForScopeDotChain (key : string) (startingContext : ScopeContext<_>) innerRules description =
+        let completionForScopeDotChain (key : string) (startingContext : ScopeContext) innerRules description =
             let createSnippetForClauseWithCustomScopeReq scopeContext = (fun (r) -> createSnippetForClause (scoreFunction r scopeContext))
 
             let defaultRes = scopeCompletionList |> List.map (fun (l, r) -> createSnippetForClauseWithCustomScopeReq startingContext r innerRules description l)
@@ -158,7 +158,7 @@ type CompletionService
                 | NotFound -> defaultRes
             else
                 defaultRes
-        let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext<_>) (rule : NewRule<_>) =
+        let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =
             // eprintfn "crtc %A %A" key rule
             let r, o = rule
             let scoreFunctioni = scoreFunction o.requiredScopes context
@@ -224,7 +224,7 @@ type CompletionService
                 |SubtypeRule(_) -> []
                 |_ -> []
             //TODO: Add leafvalue
-        let fieldToRules (field : NewField<_>) =
+        let fieldToRules (field : NewField) =
             //log "%A" types
             //log "%A" field
             match field with
@@ -261,7 +261,7 @@ type CompletionService
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
         let severity = Severity.Error
 
-        let rec findRule (rules : NewRule<_> list) (stack : (string * int * string option * CompletionContext) list) (scopeContext) =
+        let rec findRule (rules : NewRule list) (stack : (string * int * string option * CompletionContext) list) (scopeContext) =
             let subtypedRules =
                 rules |> List.collect (
                     function
@@ -302,7 +302,7 @@ type CompletionService
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
-    let scoreFunction (allUsedKeys : string list) (requiredScopes : 'T list) (currentContext : ScopeContext<_>) (key : string) =
+    let scoreFunction (allUsedKeys : string list) (requiredScopes : 'T list) (currentContext : ScopeContext) (key : string) =
         let validScope =
             match requiredScopes with
             | [] -> true
@@ -317,7 +317,7 @@ type CompletionService
         | false, true -> 10
         | false, false -> 1
 
-    let complete (pos : pos) (entity : Entity) (scopeContext : ScopeContext<_> option) =
+    let complete (pos : pos) (entity : Entity) (scopeContext : ScopeContext option) =
         let scopeContext = Option.defaultValue defaultContext scopeContext
         let path = getRulePath pos [] entity.entity |> List.rev
         log (sprintf "%A" path)
@@ -338,7 +338,7 @@ type CompletionService
         let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
         let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
         let scoreFunction = scoreFunction allUsedKeys
-        let rec validateTypeSkipRoot (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext) list) =
+        let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext) list) =
             let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
             match skipRootKeyStack, t.type_per_file, path with
             |_, false, [] ->

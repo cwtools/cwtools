@@ -12,31 +12,31 @@ open CWTools.Utilities.TryParser
 open CWTools.Process.Scopes
 open FSharp.Collections.ParallelSeq
 
-type ValidationManagerSettings<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
+type ValidationManagerSettings<'T when 'T :> ComputedData> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
-    heavyExperimentalValidators : (LookupValidator<'T, 'M> * string) list
+    heavyExperimentalValidators : (LookupValidator<'T> * string) list
     experimental : bool
     fileValidators : (FileValidator<'T> * string) list
-    lookupValidators : (LookupValidator<'T, 'M> * string) list
+    lookupValidators : (LookupValidator<'T> * string) list
     useRules : bool
     debugRulesOnly : bool
     localisationValidators : LocalisationValidator<'T> list
 }
 
-type ValidationManagerServices<'T, 'S, 'M when 'T :> ComputedData and 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier> = {
+type ValidationManagerServices<'T when 'T :> ComputedData> = {
     resources : IResourceAPI<'T>
-    lookup : Lookup<'M>
+    lookup : Lookup
     ruleValidationService : RuleValidationService option
     infoService : InfoService option
     localisationKeys : unit -> (Lang * Set<string>) list
 }
-type ValidationManager<'T, 'M when 'T :> ComputedData and 'M :> IModifier>
-        (settings : ValidationManagerSettings<'T,Scope, 'M>
-        , services : ValidationManagerServices<'T, Scope, 'M>,
+type ValidationManager<'T when 'T :> ComputedData>
+        (settings : ValidationManagerSettings<'T>
+        , services : ValidationManagerServices<'T>,
          validateLocalisationCommand,
-         defaultContext : ScopeContext<Scope>,
-         noneContext : ScopeContext<Scope>,
+         defaultContext : ScopeContext,
+         noneContext : ScopeContext,
          errorCache : System.Collections.Concurrent.ConcurrentDictionary<_, CWError list>) =
     let resources = services.resources
     let validators = settings.validators
@@ -98,7 +98,7 @@ type ValidationManager<'T, 'M when 'T :> ComputedData and 'M :> IModifier>
         log (sprintf "Localisation check took %ims" timer.ElapsedMilliseconds)
         ((vs) |> (function |Invalid es -> es |_ -> []))
 
-    let createScopeContextFromReplace (rep : ReplaceScopes<Scope> option) =
+    let createScopeContextFromReplace (rep : ReplaceScopes option) =
         match rep with
         | None -> noneContext
         | Some rs ->
@@ -124,9 +124,9 @@ type ValidationManager<'T, 'M when 'T :> ComputedData and 'M :> IModifier>
 
     let globalTypeDefLoc () =
         let valLocCommand = validateLocalisationCommand services.lookup
-        let validateLoc (values : (string * range) list) (locdef : TypeLocalisation<_>)  =
+        let validateLoc (values : (string * range) list) (locdef : TypeLocalisation)  =
             let res1 (value : string) =
-                let validate (locentry : LocEntry<_>) = valLocCommand locentry (createScopeContextFromReplace locdef.replaceScopes)
+                let validate (locentry : LocEntry) = valLocCommand locentry (createScopeContextFromReplace locdef.replaceScopes)
                 services.lookup.proccessedLoc |> List.fold (fun r (_, m) -> Map.tryFind value m |> function | Some le -> validate le <&&> r | None -> r) OK
             //     let value = locdef.prefix + value + locdef.suffix
             //     validateLocalisationCommand (createScopeContextFromReplace locdef.replaceScopes) value

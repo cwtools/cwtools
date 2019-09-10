@@ -8,7 +8,7 @@ open CWTools.Common
 
 
 
-type References<'T, 'M when 'T :> ComputedData and 'M :> IModifier>(resourceManager : IResourceAPI<'T>, lookup : Lookup<'M>, localisation : ILocalisationAPI list) =
+type References<'T when 'T :> ComputedData>(resourceManager : IResourceAPI<'T>, lookup : Lookup, localisation : ILocalisationAPI list) =
     let entities() = resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
     let events() =
         entities()

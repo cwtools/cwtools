@@ -15,9 +15,9 @@ type ValidationSettings = {
     experimental : bool
 }
 
-type GameSettings<'M,'L when 'M :> IModifier> = {
+type GameSettings<'L> = {
     rootDirectories : WorkspaceDirectory list
-    embedded : EmbeddedSettings<'M>
+    embedded : EmbeddedSettings
     validation : ValidationSettings
     rules : RulesSettings option
     scriptFolders : string list option
@@ -26,13 +26,13 @@ type GameSettings<'M,'L when 'M :> IModifier> = {
     initialLookup : 'L
 }
 
-type EmbeddedSetupSettings<'M> =
+type EmbeddedSetupSettings =
     | FromConfig of embeddedFiles : (string * string) list * cachedResourceData : (Resource * Entity) list
-    | ManualSettings of EmbeddedSettings<'M>
+    | ManualSettings of EmbeddedSettings
 
-type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 'M :> IModifier> = {
+type GameSetupSettings<'L> = {
     rootDirectories : WorkspaceDirectory list
-    embedded : EmbeddedSetupSettings<'M>
+    embedded : EmbeddedSetupSettings
     validation : ValidationSettings
     rules : RulesSettings option
     scriptFolders : string list option
@@ -41,16 +41,16 @@ type GameSetupSettings<'M, 'S, 'L when 'S : comparison and 'S :> IScope<'S> and 
 }
 
 
-type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
-                    and 'L :> Lookup<'M>>
-    (settings : GameSettings<'M, 'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
+type GameObject<'T, 'L when 'T :> ComputedData
+                    and 'L :> Lookup>
+    (settings : GameSettings<'L>, game, scriptFolders, computeFunction, computeUpdateFunction, localisationService,
      processLocalisation, validateLocalisationCommand, defaultContext, noneContext,
      encoding : Encoding, fallbackencoding : Encoding,
      validationSettings,
-     globalLocalisation : GameObject<'M, 'T, 'L> -> CWError list,
-     afterUpdateFile : GameObject<'M, 'T, 'L> -> string -> unit,
+     globalLocalisation : GameObject<'T, 'L> -> CWError list,
+     afterUpdateFile : GameObject<'T, 'L> -> string -> unit,
      localisationExtension : string,
-     ruleManagerSettings : RuleManagerSettings<Scope, 'M, 'T, 'L>) as this =
+     ruleManagerSettings : RuleManagerSettings<'T, 'L>) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
     let embeddedDir =
@@ -67,7 +67,7 @@ type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
     let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = settings.initialLookup
-    let localisationManager = LocalisationManager<'T, 'M>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
+    let localisationManager = LocalisationManager<'T>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
     let validationServices() =
         {
@@ -77,9 +77,9 @@ type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
             infoService = infoService
             localisationKeys = localisationManager.LocalisationKeys
         }
-    let mutable validationManager : ValidationManager<'T, 'M> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
+    let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
 
-    let rulesManager = RulesManager<'T, 'M, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, debugMode)
+    let rulesManager = RulesManager<'T, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, debugMode)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []
@@ -190,7 +190,7 @@ type GameObject<'M, 'T, 'L when 'T :> ComputedData and 'M :> IModifier
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
     member __.FileManager = (fun () -> fileManager)()
-    member __.LocalisationManager : LocalisationManager<'T, 'M> = localisationManager
+    member __.LocalisationManager : LocalisationManager<'T> = localisationManager
     member __.ValidationManager = validationManager
     member __.Settings = settings
     member __.UpdateFile shallow file text = updateFile shallow file text

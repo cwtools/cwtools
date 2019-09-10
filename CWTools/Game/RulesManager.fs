@@ -19,37 +19,36 @@ type LocalisationEmbeddedSettings =
 | Legacy of (string * (Scope list)) list
 | Jomini of CWTools.Parser.DataTypeParser.JominiLocDataTypes
 
-type EmbeddedSettings<'M> = {
+type EmbeddedSettings = {
     triggers : DocEffect list
     effects : DocEffect list
     embeddedFiles : (string * string) list
     modifiers : ActualModifier list
-    // modifierCategories : ModifierCategoryInput list
     cachedResourceData : (Resource * Entity) list
     localisationCommands : LocalisationEmbeddedSettings
     eventTargetLinks : EventTargetLink list
 }
 
-type RuleManagerSettings<'S, 'M, 'T, 'L when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData and 'L :> Lookup<'M>> = {
+type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> = {
     rulesSettings : RulesSettings option
-    parseScope : string -> 'S
-    allScopes : 'S list
-    anyScope : 'S
-    changeScope : ChangeScope<'S>
-    defaultContext : ScopeContext<'S>
+    parseScope : string -> Scope
+    allScopes : Scope list
+    anyScope : Scope
+    changeScope : ChangeScope
+    defaultContext : ScopeContext
     defaultLang : Lang
     oneToOneScopesNames : string list
-    loadConfigRulesHook : RootRule<'S> list -> 'L -> EmbeddedSettings<'M> -> RootRule<'S> list
-    refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'M> -> unit
-    refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'M> -> unit
-    refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings<'M> -> unit
+    loadConfigRulesHook : RootRule list -> 'L -> EmbeddedSettings -> RootRule list
+    refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
+    refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
+    refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
 }
 
-type RulesManager<'T, 'M, 'L when 'T :> ComputedData and 'M :> IModifier and 'L :> Lookup<'M>>
+type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (resources : IResourceAPI<'T>, lookup : 'L,
-     settings : RuleManagerSettings<Scope, 'M, 'T, 'L>,
-     localisation : LocalisationManager<'T, 'M>,
-     embeddedSettings : EmbeddedSettings<'M>,
+     settings : RuleManagerSettings<'T, 'L>,
+     localisation : LocalisationManager<'T>,
+     embeddedSettings : EmbeddedSettings,
      debugMode : bool) =
 
     let mutable tempEffects = []

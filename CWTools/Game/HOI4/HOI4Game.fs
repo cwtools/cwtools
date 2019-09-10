@@ -22,8 +22,8 @@ open CWTools.Parser
 open CWTools.Common.NewScope
 
 module HOI4GameFunctions =
-    type GameObject = GameObject<Modifier, HOI4ComputedData, HOI4Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    type GameObject = GameObject<HOI4ComputedData, HOI4Lookup>
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -37,7 +37,7 @@ module HOI4GameFunctions =
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -77,7 +77,7 @@ module HOI4GameFunctions =
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.HOI4provinces <- provinces
 
-    let updateScriptedEffects(rules :RootRule<Scope> list) (states : string list) (countries : string list) =
+    let updateScriptedEffects(rules :RootRule list) (states : string list) (countries : string list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
         let ruleToEffect(r,o) =
@@ -92,7 +92,7 @@ module HOI4GameFunctions =
         (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers(rules :RootRule<Scope> list) states countries =
+    let updateScriptedTriggers(rules :RootRule list) states countries =
         let effects =
             rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
         let ruleToTrigger(r,o) =
@@ -106,7 +106,7 @@ module HOI4GameFunctions =
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "Country"), EffectType.Link, defaultDesc, "", true));
         (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
-    let addModifiersWithScopes (lookup : Lookup<Modifier>) =
+    let addModifiersWithScopes (lookup : Lookup) =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
@@ -117,7 +117,7 @@ module HOI4GameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let loadConfigRulesHook rules (lookup : Lookup<_>) embedded =
+    let loadConfigRulesHook rules (lookup : Lookup) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
         rules @ addModifiersWithScopes lookup
 
@@ -126,7 +126,7 @@ module HOI4GameFunctions =
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : Lookup<_>) _ (embeddedSettings : EmbeddedSettings<_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embeddedSettings : EmbeddedSettings) =
         let states = lookup.typeDefInfo.TryFind "state"
                             |> Option.map (fun sl -> sl |> List.map (fun tdi -> tdi.id))
                             |> Option.defaultValue []
@@ -138,7 +138,7 @@ module HOI4GameFunctions =
         let ls = updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : Lookup<_>) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings<_>) =
+    let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
     let afterInit (game : GameObject) =
@@ -181,7 +181,7 @@ module HOI4GameFunctions =
             eventTargetLinks = eventTargetLinks
         }
 
-type HOI4Settings = GameSetupSettings<Modifier, Scope, HOI4Lookup>
+type HOI4Settings = GameSetupSettings<HOI4Lookup>
 open HOI4GameFunctions
 type HOI4Game(setupSettings : HOI4Settings) =
     let validationSettings = {
@@ -253,7 +253,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
-    let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+    let references = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
     let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
@@ -262,7 +262,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<ComputedData, Modifier> with
+    interface IGame<ComputedData> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
@@ -284,7 +284,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text = game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<HOI4ComputedData, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member __.References() = References<HOI4ComputedData>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

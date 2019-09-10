@@ -9,8 +9,6 @@ module STL =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-    type LocEntry = LocEntry<Scope>
-
 //         COUNTRY:
 // space_owner
 // overlord

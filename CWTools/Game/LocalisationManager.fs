@@ -5,9 +5,9 @@ open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
 
 
-type LocalisationManager<'T, 'M when 'T :> ComputedData and 'M :> IModifier>
-    (resources : IResourceAPI<'T>, localisationService : _ -> ILocalisationAPICreator, langs : Lang list, lookup: Lookup<_>,
-     processLocalisation : (Lookup<'M> -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry<_>>),
+type LocalisationManager<'T when 'T :> ComputedData>
+    (resources : IResourceAPI<'T>, localisationService : _ -> ILocalisationAPICreator, langs : Lang list, lookup: Lookup,
+     processLocalisation : (Lookup -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry>),
      localisationExtension : string) as this =
     let mutable localisationAPIMap : Map<string * Lang, (bool * ILocalisationAPI)> = Map.empty
     let allLocalisation() = this.LocalisationAPIs() |> List.map snd

@@ -8,12 +8,12 @@ open CWTools.Utilities.Utils
 open CWTools.Common
 
 
-let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : TypeDefinition<_> list) (es : Entity list) =
+let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : TypeDefinition list) (es : Entity list) =
     let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath), e.validate)
-    let getExplicitLocalisationKeys (entity : Node) (typeDef : TypeDefinition<_>) =
+    let getExplicitLocalisationKeys (entity : Node) (typeDef : TypeDefinition) =
         typeDef.localisation |> List.choose (fun ld -> ld.explicitField |> Option.map (fun ef -> ld.name, ef, ld.primary))
                              |> List.choose (fun (name, field, primary) -> entity.Tag field |> Option.map (fun v -> name, v.ToRawString(), primary))
-    let getTypeInfo (def : TypeDefinition<_>) =
+    let getTypeInfo (def : TypeDefinition) =
         entities |> List.choose (fun (path, e, file, validate) -> if FieldValidators.checkPathDir def path file then Some (e.entity, file, validate) else None)
                  |> List.collect (fun (e, f, v) ->
                         let inner (n : Node) =
@@ -124,7 +124,7 @@ let getDefinedVariables (infoService : InfoService) (es : Entity list) =
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) Collections.Map.empty
     results
 
-let getEntitiesWithoutTypes (types : TypeDefinition<_> list) (es : Entity list) =
+let getEntitiesWithoutTypes (types : TypeDefinition list) (es : Entity list) =
     let checkEntity (entity : Entity) =
         let path = entity.logicalpath
         let dir = Path.GetDirectoryName path

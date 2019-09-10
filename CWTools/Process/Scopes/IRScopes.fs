@@ -83,10 +83,10 @@ module IR =
 
 
     let locPrimaryScopes() =
-        let from = fun (s : ScopeContext<_>, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
+        let from = fun (s : ScopeContext, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
         [
         "This", id;
-        "Root", fun (s : ScopeContext<_>, change) -> {s with Scopes = s.Root::s.Scopes}, true;
+        "Root", fun (s : ScopeContext, change) -> {s with Scopes = s.Root::s.Scopes}, true;
         "From", from; //TODO Make it actually use FROM
         "FromFrom", from >> from;
         "FromFromFrom", from >> from >> from;

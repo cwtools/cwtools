@@ -26,15 +26,15 @@ open CWTools.Parser
 open CWTools.Common.NewScope
 
 module IRGameFunctions =
-    type GameObject = GameObject<Modifier, IRComputedData, IRLookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    type GameObject = GameObject<IRComputedData, IRLookup>
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
@@ -63,7 +63,7 @@ module IRGameFunctions =
     let updateModifiers (game : GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup : Lookup<_>) =
+    let addModifiersWithScopes (lookup : Lookup) =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
@@ -74,7 +74,7 @@ module IRGameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let updateScriptedTriggers (lookup : IRLookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
+    let updateScriptedTriggers (lookup : IRLookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
         let vanillaTriggers =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
@@ -97,7 +97,7 @@ module IRGameFunctions =
         // game.Lookup.onlyScriptedTriggers <- sts
         vanillaTriggers @ extraFromRules
 
-    let updateScriptedEffects (lookup : IRLookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
+    let updateScriptedEffects (lookup : IRLookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
@@ -108,7 +108,7 @@ module IRGameFunctions =
         vanillaEffects
 
 
-    // let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    // let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule list) (embeddedSettings : EmbeddedSettings<_,_>) =
     //     let effects =
     //         rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
     //     let ruleToEffect(r,o) =
@@ -121,7 +121,7 @@ module IRGameFunctions =
     //     // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
     //     (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
 
-    // let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    // let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule list) (embeddedSettings : EmbeddedSettings<_,_>) =
     //     let effects =
     //         rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
     //     let ruleToTrigger(r,o) =
@@ -136,7 +136,7 @@ module IRGameFunctions =
     //     test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
 
-    let addModifiersAsTypes (lookup : Lookup<_>) (typesMap : Map<string,TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup : Lookup) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
@@ -171,7 +171,7 @@ module IRGameFunctions =
             values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
         | None -> []
 
-    let addTriggerDocsScopes (lookup : IRLookup) (rules : RootRule<_> list) =
+    let addTriggerDocsScopes (lookup : IRLookup) (rules : RootRule list) =
             // let scriptedOptions (effect : ScriptedEffect) =
             //     {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false}
             // let getAllScriptedEffects =
@@ -180,7 +180,7 @@ module IRGameFunctions =
             // let getAllScriptedTriggers =
             //     lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
             //                                     |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
-            let addRequiredScopesE (s : StringTokens) (o : Options<_>) =
+            let addRequiredScopesE (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -196,7 +196,7 @@ module IRGameFunctions =
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
                 { o with requiredScopes = newScopes; pushScope = innerScope}
-            let addRequiredScopesT (s : StringTokens) (o : Options<_>) =
+            let addRequiredScopesT (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -252,7 +252,7 @@ module IRGameFunctions =
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
                             |> Map.add charEnums.key (charEnums.description, charEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : IRLookup) _ (embedded : EmbeddedSettings<_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : IRLookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
             (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
@@ -261,7 +261,7 @@ module IRGameFunctions =
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : IRLookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_>) =
+    let refreshConfigAfterVarDefHook (lookup : IRLookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings) =
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
@@ -330,7 +330,7 @@ module IRGameFunctions =
             eventTargetLinks = irEventTargetLinks
         }
 
-type IRSettings = GameSetupSettings<Modifier, Scope, IRLookup>
+type IRSettings = GameSetupSettings<IRLookup>
 open IRGameFunctions
 type IRGame(setupSettings : IRSettings) =
     let validationSettings = {
@@ -384,7 +384,7 @@ type IRGame(setupSettings : IRSettings) =
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
-    let game = GameObject<Modifier, IRComputedData, IRLookup>.CreateGame
+    let game = GameObject<IRComputedData, IRLookup>.CreateGame
                 ((settings, "imperator", scriptFolders, Compute.computeIRData,
                     Compute.computeIRDataUpdate,
                      (IRLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
@@ -403,7 +403,7 @@ type IRGame(setupSettings : IRSettings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
-    let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+    let references = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
 
     let parseErrors() =
@@ -411,7 +411,7 @@ type IRGame(setupSettings : IRSettings) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<IRComputedData, Modifier> with
+    interface IGame<IRComputedData> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
@@ -433,7 +433,7 @@ type IRGame(setupSettings : IRSettings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text =game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

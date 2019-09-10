@@ -84,8 +84,8 @@ module STLLocalisationString =
         ]
     let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes)
 
-    let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry<Scope>>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation() = processLocalisationBase<Scope> (localisationCommandValidator()) defaultContext
+    let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
+    let processLocalisation() = processLocalisationBase (localisationCommandValidator()) defaultContext
     let validateLocalisationCommand() = validateLocalisationCommandsBase (localisationCommandValidator())
     // let checkCommand localisationCommandContext (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
     //     match localisationCommandContext commands eventtargets setvariables entry command with

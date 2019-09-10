@@ -26,15 +26,15 @@ open CWTools.Parser
 open CWTools.Common.NewScope
 
 module VIC2GameFunctions =
-    type GameObject = GameObject<Modifier, VIC2ComputedData, VIC2Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    type GameObject = GameObject<VIC2ComputedData, VIC2Lookup>
+    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup<Modifier>) =
+    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
@@ -63,7 +63,7 @@ module VIC2GameFunctions =
     let updateModifiers (game : GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup : Lookup<_>) =
+    let addModifiersWithScopes (lookup : Lookup) =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
@@ -74,7 +74,7 @@ module VIC2GameFunctions =
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
 
-    let updateScriptedTriggers (lookup : VIC2Lookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
+    let updateScriptedTriggers (lookup : VIC2Lookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
         let vanillaTriggers =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers  |> List.map (fun e -> e :> Effect)
@@ -97,7 +97,7 @@ module VIC2GameFunctions =
         // game.Lookup.onlyScriptedTriggers <- sts
         vanillaTriggers @ extraFromRules
 
-    let updateScriptedEffects (lookup : VIC2Lookup) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_>) =
+    let updateScriptedEffects (lookup : VIC2Lookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
@@ -108,7 +108,7 @@ module VIC2GameFunctions =
         vanillaEffects
 
 
-    // let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    // let updateScriptedEffects (lookup : Lookup<_,_>) (rules :RootRule list) (embeddedSettings : EmbeddedSettings<_,_>) =
     //     let effects =
     //         rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
     //     let ruleToEffect(r,o) =
@@ -121,7 +121,7 @@ module VIC2GameFunctions =
     //     // let simpleEventTargetLinks = embeddedSettings.eventTargetLinks |> List.choose (function | SimpleLink l -> Some (l :> Effect) | _ -> None)
     //     (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
 
-    // let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule<Scope> list) (embeddedSettings : EmbeddedSettings<_,_>) =
+    // let updateScriptedTriggers (lookup : Lookup<_,_>) (rules :RootRule list) (embeddedSettings : EmbeddedSettings<_,_>) =
     //     let effects =
     //         rules |> List.choose (function |AliasRule("trigger", r) -> Some r |_ -> None)
     //     let ruleToTrigger(r,o) =
@@ -136,7 +136,7 @@ module VIC2GameFunctions =
     //     test::(effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
 
 
-    let addModifiersAsTypes (lookup : Lookup<_>) (typesMap : Map<string,TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup : Lookup) (typesMap : Map<string,TypeDefInfo list>) =
         // let createType (modifier : Modifier) =
         typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
@@ -159,7 +159,7 @@ module VIC2GameFunctions =
             values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
         | None -> []
 
-    let addTriggerDocsScopes (lookup : VIC2Lookup) (rules : RootRule<_> list) =
+    let addTriggerDocsScopes (lookup : VIC2Lookup) (rules : RootRule list) =
             // let scriptedOptions (effect : ScriptedEffect) =
             //     {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false}
             // let getAllScriptedEffects =
@@ -168,7 +168,7 @@ module VIC2GameFunctions =
             // let getAllScriptedTriggers =
             //     lookup.onlyScriptedTriggers |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
             //                                     |> List.map (fun se -> AliasRule("trigger", NewRule(LeafRule(specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))
-            let addRequiredScopesE (s : StringTokens) (o : Options<_>) =
+            let addRequiredScopesE (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -184,7 +184,7 @@ module VIC2GameFunctions =
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
                 { o with requiredScopes = newScopes; pushScope = innerScope}
-            let addRequiredScopesT (s : StringTokens) (o : Options<_>) =
+            let addRequiredScopesT (s : StringTokens) (o : Options) =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
@@ -238,7 +238,7 @@ module VIC2GameFunctions =
             lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
                             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
 
-    let refreshConfigAfterFirstTypesHook (lookup : VIC2Lookup) _ (embedded : EmbeddedSettings<_>) =
+    let refreshConfigAfterFirstTypesHook (lookup : VIC2Lookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
             (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
@@ -247,7 +247,7 @@ module VIC2GameFunctions =
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
         lookup.allCoreLinks <- ts @ es @ ls
 
-    let refreshConfigAfterVarDefHook (lookup : VIC2Lookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings<_>) =
+    let refreshConfigAfterVarDefHook (lookup : VIC2Lookup) (resources : IResourceAPI<_>) (embedded : EmbeddedSettings) =
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
         let ls = updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
@@ -301,7 +301,7 @@ module VIC2GameFunctions =
             localisationCommands = Legacy vic2LocCommands
             eventTargetLinks = vic2EventTargetLinks
         }
-type VIC2Settings = GameSetupSettings<Modifier, Scope, VIC2Lookup>
+type VIC2Settings = GameSetupSettings<VIC2Lookup>
 open VIC2GameFunctions
 type VIC2Game(setupSettings : VIC2Settings) =
     let validationSettings = {
@@ -354,7 +354,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
-    let game = GameObject<Modifier, VIC2ComputedData, VIC2Lookup>.CreateGame
+    let game = GameObject<VIC2ComputedData, VIC2Lookup>.CreateGame
                 ((settings, "victoria 2", scriptFolders, Compute.computeVIC2Data,
                     Compute.computeVIC2DataUpdate,
                      (VIC2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
@@ -373,7 +373,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
     let lookup = game.Lookup
     let resources = game.Resources
     let fileManager = game.FileManager
-    let references = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+    let references = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
 
     let parseErrors() =
@@ -381,7 +381,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<VIC2ComputedData, Modifier> with
+    interface IGame<VIC2ComputedData> with
     //member __.Results = parseResults
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
@@ -403,7 +403,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         member __.StaticModifiers() = [] //lookup.staticModifiers
         member __.UpdateFile shallow file text =game.UpdateFile shallow file text
         member __.AllEntities() = resources.AllEntities()
-        member __.References() = References<_, _>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text

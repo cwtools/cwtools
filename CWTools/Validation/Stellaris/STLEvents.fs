@@ -238,7 +238,7 @@ module STLEventValidation =
 
 
 
-    let getEventChains : LookupValidator<_, _> =
+    let getEventChains : LookupValidator<_> =
         fun lu os es ->
             let reffects = lu.effects
             let events = es.GlobMatchChildren("**/events/*.txt")

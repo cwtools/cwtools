@@ -11,7 +11,7 @@ open Files
 
 
 
-type Lookup< 'M when 'M :> IModifier>() =
+type Lookup() =
 
     let mutable _allCoreLinks : Effect list = []
 
@@ -66,10 +66,10 @@ type Lookup< 'M when 'M :> IModifier>() =
     member val coreModifiers : ActualModifier list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
-    member val proccessedLoc : (Lang * Collections.Map<string, LocEntry<Scope>>) list = [] with get, set
+    member val proccessedLoc : (Lang * Collections.Map<string, LocEntry>) list = [] with get, set
     member val technologies : (string * (string list)) list =  [] with get, set
-    member val configRules : RootRule<Scope> list = [] with get, set
-    member val typeDefs : TypeDefinition<Scope> list = [] with get, set
+    member val configRules : RootRule list = [] with get, set
+    member val typeDefs : TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)
     member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
     member val typeDefInfo : Collections.Map<string, TypeDefInfo list> = Map.empty with get, set
@@ -81,29 +81,29 @@ type Lookup< 'M when 'M :> IModifier>() =
     member val globalScriptedVariables : string list = [] with get, set
 
 type CK2Lookup() =
-    inherit Lookup<Modifier>()
+    inherit Lookup()
     member val CK2LandedTitles : Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
     member val CK2provinces : string list = [] with get, set
 
 type EU4Lookup() =
-    inherit Lookup<Modifier>()
+    inherit Lookup()
     member val EU4ScriptedEffectKeys : string list = [] with get, set
     member val EU4TrueLegacyGovernments : string list = [] with get, set
 
 type HOI4Lookup() =
-    inherit Lookup<Modifier>()
+    inherit Lookup()
     member val HOI4provinces : string list = [] with get, set
 
 type STLLookup() =
-    inherit Lookup<Modifier>()
+    inherit Lookup()
     member val STLScriptedEffectKeys : string list = [] with get, set
 
 type IRLookup() =
-    inherit Lookup<Modifier>()
+    inherit Lookup()
     member val IRprovinces : string list = [] with get, set
     member val IRcharacters : string list = [] with get, set
 
 type VIC2Lookup() =
-    inherit Lookup<Modifier>()
+    inherit Lookup()
     member val VIC2provinces : string list = [] with get, set
 

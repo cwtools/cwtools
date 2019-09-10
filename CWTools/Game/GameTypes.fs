@@ -62,7 +62,7 @@ type IGame =
     abstract RefreshLocalisationCaches : unit -> unit
     abstract ForceRecompute : unit -> unit
     abstract Types : unit ->  Map<string,TypeDefInfo list>
-    abstract TypeDefs : unit -> CWTools.Rules.TypeDefinition<Scope> list
+    abstract TypeDefs : unit -> CWTools.Rules.TypeDefinition list
     abstract InfoAtPos : pos -> string -> string -> SymbolInformation option
     abstract GetPossibleCodeEdits : string -> string -> range list
     abstract GetCodeEdits : string -> string -> (range seq * pos * string) list option
@@ -70,9 +70,9 @@ type IGame =
     abstract ScriptedTriggers : unit -> Effect list
     abstract ScriptedEffects : unit -> Effect list
     abstract StaticModifiers : unit -> StaticModifier list
-    abstract ScopesAtPos : pos -> string -> string -> ScopeContext<Scope> option
+    abstract ScopesAtPos : pos -> string -> string -> ScopeContext option
 
-type IGame<'T, 'M when 'T :> ComputedData and 'M :> IModifier> =
+type IGame<'T when 'T :> ComputedData> =
     inherit IGame
     abstract AllEntities : unit -> struct (Entity * Lazy<'T>) list
-    abstract References : unit -> References<'T, 'M>
+    abstract References : unit -> References<'T>
