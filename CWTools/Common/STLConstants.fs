@@ -159,22 +159,22 @@ module STLConstants =
     //     |"all" -> allScopes
     //     |x -> [parseScope x]
 
-    type ModifierCategory =
-        |Pop
-        |Science
-        |Country
-        |Army
-        |Leader
-        |Planet
-        |PopFaction
-        |ShipSize
-        |Ship
-        |Tile
-        |Megastructure
-        |PlanetClass
-        |Starbase
-        |Resource
-        |Any
+    // type ModifierCategory =
+    //     |Pop
+    //     |Science
+    //     |Country
+    //     |Army
+    //     |Leader
+    //     |Planet
+    //     |PopFaction
+    //     |ShipSize
+    //     |Ship
+    //     |Tile
+    //     |Megastructure
+    //     |PlanetClass
+    //     |Starbase
+    //     |Resource
+    //     |Any
     type RawStaticModifier =
         {
             num : int
@@ -187,15 +187,15 @@ module STLConstants =
             category : int
         }
 
-    type Modifier =
-        {
-            tag : string
-            categories : ModifierCategory list
-            /// Is this a core modifier or a static modifier?
-            core : bool
-        }
-        interface IModifier with
-            member this.Tag = this.tag
+    // type Modifier =
+    //     {
+    //         tag : string
+    //         categories : ModifierCategory list
+    //         /// Is this a core modifier or a static modifier?
+    //         core : bool
+    //     }
+    //     interface IModifier with
+    //         member this.Tag = this.tag
 
     let defaultModifiers = [
         "Pop", Some 2, ["pop"; "planet"; "galacticobject"; "country"]

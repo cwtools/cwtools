@@ -28,7 +28,6 @@ type EmbeddedSettings<'M> = {
     cachedResourceData : (Resource * Entity) list
     localisationCommands : LocalisationEmbeddedSettings
     eventTargetLinks : EventTargetLink list
-    scopeDefinitions : ScopeInput list
 }
 
 type RuleManagerSettings<'S, 'M, 'T, 'L when 'S :> IScope<'S> and 'S : comparison and 'M :> IModifier and 'T :> ComputedData and 'L :> Lookup<'M>> = {

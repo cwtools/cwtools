@@ -34,7 +34,6 @@ let emptyEmbeddedSettings = {
         cachedResourceData = []
         localisationCommands = Legacy []
         eventTargetLinks = []
-        scopeDefinitions = []
 }
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectories = [{ name = "test"; path = rootDirectory;}]
@@ -402,7 +401,7 @@ let specialtests =
             let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
             // UtilityParser.initializeScopes None (Some defaultScopeInputs)
             let stl = STLGame({settings with rules = Some {  ruleFiles = configtext; validateRules = false; debugRulesOnly = false; debugMode = false   };
-                                                embedded = ManualSettings { emptyEmbeddedSettings with modifiers = modifiers; scopeDefinitions = defaultScopeInputs}}) :> IGame<STLComputedData, Modifier>
+                                                embedded = ManualSettings { emptyEmbeddedSettings with modifiers = modifiers}}) :> IGame<STLComputedData, Modifier>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [modifierCategoryManager.ParseModifier() "pop"] }]
             Expect.equal (stl.StaticModifiers()) exp ""
@@ -491,7 +490,7 @@ let embeddedTests =
 
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
-        let settingsE = { settings with embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached; scopeDefinitions = defaultScopeInputs };}
+        let settingsE = { settings with embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached };}
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
 
         let stlE = STLGame(settingsE) :> IGame<STLComputedData, Modifier>
@@ -536,7 +535,7 @@ let overwriteTests =
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
-        let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles; scopeDefinitions = defaultScopeInputs };
+        let settings = { settings with embedded = ManualSettings {emptyEmbeddedSettings with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
         let stl = STLGame(settings) :> IGame<STLComputedData, Modifier>

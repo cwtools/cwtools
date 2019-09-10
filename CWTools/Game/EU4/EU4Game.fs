@@ -164,6 +164,8 @@ module EU4GameFunctions =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+        configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
+                |> (fun f -> UtilityParser.initializeModifierCategories f (Some (defaultModifiersInputs())) )
 
 
         let triggers, effects = ([], [])
@@ -191,7 +193,6 @@ module EU4GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy eu4LocCommands
             eventTargetLinks = eu4EventTargetLinks
-            scopeDefinitions = scopeDefinitions
         }
 
 type EU4Settings = GameSetupSettings<Modifier, Scope, EU4Lookup>
@@ -228,7 +229,7 @@ type EU4Game(setupSettings : EU4Settings) =
 
     }
 
-    do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
+    do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
     let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
     let settings = { settings with

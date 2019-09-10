@@ -33,7 +33,6 @@ let emptyEmbeddedSettings = {
         cachedResourceData = []
         localisationCommands = Legacy []
         eventTargetLinks = []
-        scopeDefinitions = []
 }
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectories = [{ name = "test"; path = rootDirectory;}]

@@ -232,10 +232,11 @@ module CK2GameFunctions =
         // game.LocalisationManager.UpdateAllLocalisation()
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
-        let scopeDefinitions =
-            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-                            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+        configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
 
+        configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
+                |> (fun f -> UtilityParser.initializeModifierCategories f (Some (defaultModifiersInputs())) )
 
         let ck2Mods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
@@ -262,7 +263,6 @@ module CK2GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy ck2LocCommands
             eventTargetLinks = ck2EventTargetLinks
-            scopeDefinitions = scopeDefinitions
         }
 
 type CK2Settings = GameSetupSettings<Modifier, Scope, CK2Lookup>
@@ -296,7 +296,7 @@ type CK2Game(setupSettings : CK2Settings) =
         initialLookup = CK2Lookup()
 
     }
-    do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
+    do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
     let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy locCommands else Legacy l) |_ -> Legacy locCommands
     let settings = { settings with

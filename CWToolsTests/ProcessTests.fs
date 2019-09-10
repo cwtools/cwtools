@@ -55,7 +55,6 @@ let emptyEmbeddedSettings = {
         cachedResourceData = []
         localisationCommands = Legacy []
         eventTargetLinks = []
-        scopeDefinitions = []
 }
 
 let specificField = RulesParser.specificField

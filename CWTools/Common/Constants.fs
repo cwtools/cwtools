@@ -120,6 +120,7 @@ module rec NewScope =
                 | _, x, _
                 | _, _, x when x = anyScope -> true
                 | _, x, y -> x = y
+        member this.Initialized = initialized
     let scopeManager = ScopeManager()
 
     type ModifierCategoryInput = {
@@ -195,6 +196,7 @@ module rec NewScope =
             match idMap |> Map.tryFind id with
             | Some category -> category
             | None -> anyModifier
+        member this.Initialized = initialized
     let modifierCategoryManager = ModifierCategoryManager()
     type ModifierCategory(tag : byte) =
         member val tag = tag

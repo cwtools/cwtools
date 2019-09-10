@@ -5,6 +5,7 @@ open FParsec
 open CWTools.Utilities.Utils
 open CWTools.Process.STLProcess
 open CWTools.Common.NewScope
+open CWTools.Utilities
 
 module UtilityParser =
     let parseLink (anyScope) (parseScope) (allScopes) (node : Node) =
@@ -76,4 +77,33 @@ module UtilityParser =
             | [], Some fallbackScopes -> fallbackScopes
             | _ -> scopes
         scopeManager.ReInit(fallbackScopes)
-        fallbackScopes
+
+    let parseModCatDef (node : Node) =
+        let name = node.Key
+        let internalID = node.TagText "internal_id" |> TryParser.parseInt
+        let scopes = node.Child "supported_scopes" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText |> scopeManager.ParseScope()) |> List.ofSeq)
+                                          |> Option.defaultValue []
+        { NewScope.ModifierCategoryInput.name = name; NewScope.ModifierCategoryInput.internalID = internalID; NewScope.ModifierCategoryInput.scopes = scopes }
+
+
+    let loadModCatDefinitions filename fileString =
+        let parsed = CKParser.parseString fileString filename
+        match parsed with
+        | Failure(e, _, _) -> log (sprintf "modifiercategorydefinitions file %s failed with %s" filename e); ([])
+        | Success(s,_,_) ->
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            root.Child "modifier_categories"
+                |> Option.map (fun c -> c.Children |> List.map parseModCatDef)
+                |> Option.defaultValue []
+
+    let initializeModifierCategories configFile fallbackModifierCategories =
+        let modcats =
+            match configFile with
+            | Some (filename, fileString) -> loadModCatDefinitions filename fileString
+            | None -> []
+        let fallbackModifierCategories =
+            match modcats, fallbackModifierCategories with
+            | [], Some fallbackModifierCategories -> fallbackModifierCategories
+            | _ -> modcats
+        modifierCategoryManager.ReInit(fallbackModifierCategories)
+        // fallbackScopes

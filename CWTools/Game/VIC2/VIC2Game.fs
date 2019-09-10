@@ -273,6 +273,10 @@ module VIC2GameFunctions =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
+        configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
+                |> (fun f -> UtilityParser.initializeModifierCategories f (Some (defaultModifiersInputs())) )
+
+
         let vic2Mods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
                     |> Option.map (fun (fn, ft) -> VIC2Parser.loadModifiers fn ft)
@@ -296,7 +300,6 @@ module VIC2GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy vic2LocCommands
             eventTargetLinks = vic2EventTargetLinks
-            scopeDefinitions = scopeDefinitions
         }
 type VIC2Settings = GameSetupSettings<Modifier, Scope, VIC2Lookup>
 open VIC2GameFunctions
@@ -329,7 +332,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         initialLookup = VIC2Lookup()
 
     }
-    do if settings.embedded.scopeDefinitions = [] then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
+    do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
     let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
     let settings =
             { settings with
