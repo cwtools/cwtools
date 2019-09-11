@@ -210,6 +210,7 @@ module LanguageFeatures =
 
 
     let graphEventDataForFiles (referenceManager : References<_>) (resourceManager : ResourceManager<_>) (lookup : Lookup) (files : string list) (sourceType : string) : GraphDataItem list =
+        let depth = 3
         let sourceTypes = lookup.typeDefs |> List.tryPick (fun td -> if td.name = sourceType then Some (sourceType::td.graphRelatedTypes) else None)
                                           |> Option.defaultValue [sourceType]
         let entitiesInSelectedFiles = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
@@ -264,18 +265,49 @@ module LanguageFeatures =
                     entityTypeDisplayName = subtypeName
                     abbreviation = abbrev
                 })
-            let refNames = allInternalOrOutgoingRefs |> List.map (fun (r, _, _, _) -> r) |> List.distinct
-            let typeNames = typesDefinedInFiles |> List.map (fun (k, n, r, _, _) -> n)
-            let referenced = t |> List.filter (fun (k, name, _, _, _) -> refNames |> List.contains name && (typeNames |> List.contains name |> not)) |> List.distinctBy (fun (_, name, _, _, _) -> name)
-            let secondaryNames = referenced |> List.map (fun (k, n, r, _, _) -> n)
-            let allOtherFiles = t |> List.filter (fun (_, id, range, _, _) -> files |> List.contains range.FileName |> not)
-                                         |> List.map (fun (_, _, range, _, _) -> range.FileName)
-            let allIncomingRefs = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> allOtherFiles |> List.contains e.filepath)
+            let allInternalOrOutgoingRefNames = allInternalOrOutgoingRefs |> List.map (fun (r, _, _, _) -> r) |> List.distinct
+            let allTypeNamesInFiles = typesDefinedInFiles |> List.map (fun (k, n, r, _, _) -> n)
+            let allOutgoingRefs = t |> List.filter (fun (k, name, _, _, _) -> allInternalOrOutgoingRefNames |> List.contains name && (allTypeNamesInFiles |> List.contains name |> not)) |> List.distinctBy (fun (_, name, _, _, _) -> name)
+            let secondaryNames = allOutgoingRefs |> List.map (fun (k, n, r, _, _) -> n)
+            // let allOtherFiles = t |> List.filter (fun (_, id, range, _, _) -> files |> List.contains range.FileName |> not)
+            //                              |> List.map (fun (_, _, range, _, _) -> range.FileName)
+            // let get
+            let getNewIncomingRefs (excludedFiles : string list) (targetTypeNames : string list) =
+                let allOtherFiles = t |> List.filter (fun (_, id, range, _, _) -> excludedFiles |> List.contains range.FileName |> not)
+                                             |> List.map (fun (_, _, range, _, _) -> range.FileName)
+                let newIncomingRefs = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> allOtherFiles |> List.contains e.filepath)
                                     |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v, r, isOutgoing, refLabel))) |> Option.defaultValue [])
-                                    |> List.filter (fun (v, r, isOutgoing, refLabel) -> typeNames |> List.contains v)
-            let typesNotDefinedInFiles = t |> List.filter (fun (_, name, r, el, _) -> (typeNames |> List.contains name |> not) && (secondaryNames |> List.contains name |> not))
-                                           |> List.filter (fun (_, _, r, _, _) -> allIncomingRefs |> List.exists (fun (_, r2, isOutgoing, refLabel) -> rangeContainsRange r r2))
-            let secondaries = referenced @ typesNotDefinedInFiles |> List.map (fun (entityType, name, range, el, sts) ->
+                                    |> List.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)
+                newIncomingRefs
+            let getTypesFromRefs (previouslyScannedTypes : string list) refs =
+                t |> List.filter (fun (_, name, r, el, _) -> (previouslyScannedTypes |> List.contains name |> not) && (secondaryNames |> List.contains name |> not))
+                   |> List.filter (fun (_, _, r, _, _) -> refs |> List.exists (fun (_, r2, isOutgoing, refLabel) -> rangeContainsRange r r2))
+            // let allIncomingRefs = getNewIncomingRefs files allTypeNamesInFiles
+            // let typesNotDefinedInFiles = getTypesFromRefs allTypeNamesInFiles allIncomingRefs
+            // let typesNotDefinedInFilesNames = typesNotDefinedInFiles |> List.map (fun (k, n, r, _, _) -> n)
+            // let allIncomingMinusOneRefs = getNewIncomingRefs files typesNotDefinedInFilesNames
+            // let typesNotDefinedInFilesMinusOne = getTypesFromRefs (allTypeNamesInFiles @ typesNotDefinedInFilesNames) allIncomingMinusOneRefs
+            // let typesNotDefinedInFilesMinusOneNames = typesNotDefinedInFilesMinusOne |> List.map (fun (k, n, r, _, _) -> n)
+            // let allIncomingMinusTwoRefs = getNewIncomingRefs files typesNotDefinedInFilesMinusOneNames
+            // let typesNotDefinedInFilesMinusTwo = getTypesFromRefs (allTypeNamesInFiles @ typesNotDefinedInFilesNames @ typesNotDefinedInFilesMinusOneNames) allIncomingMinusTwoRefs
+            let searchBackwards typesToSearchBackFrom allPreviousTypes =
+                let typesToSearchBackFromNames = typesToSearchBackFrom |> List.map (fun (k, n, r, _, _) -> n)
+                let allIncoming = getNewIncomingRefs files typesToSearchBackFromNames
+                let allNewTypes = getTypesFromRefs allPreviousTypes allIncoming
+                allIncoming, allNewTypes, typesToSearchBackFromNames
+            // let directBackRefs, directBackTypes, directNowSearched = searchBackwards typesNotDefinedInFiles allTypeNamesInFiles
+            // let minusOneBackRefs, minusOneBackTypes, minusOneNowSearched = searchBackwards directBackTypes (directNowSearched @ allTypeNamesInFiles)
+            let folder (allRefs, backTypes, backSearched, allBackTypes) =
+                let nextBackRefs, nextBackTypes, nextNowSearched = searchBackwards backTypes backSearched
+                allRefs @ nextBackRefs, nextBackTypes, nextNowSearched @ backSearched, nextBackTypes @ allBackTypes
+            let allIncomingRefs, _, _, allIncomingTypes = repeatN folder depth ([], typesDefinedInFiles, allTypeNamesInFiles, [])
+            // let allIncomingRefs = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> allOtherFiles |> List.contains e.filepath)
+            //                         |> List.collect (fun struct(_, data) -> data.Force().Referencedtypes |> Option.map (getSourceTypes >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v, r, isOutgoing, refLabel))) |> Option.defaultValue [])
+            //                         |> List.filter (fun (v, r, isOutgoing, refLabel) -> allTypeNamesInFiles |> List.contains v)
+            // let typesNotDefinedInFiles = t |> List.filter (fun (_, name, r, el, _) -> (allTypeNamesInFiles |> List.contains name |> not) && (secondaryNames |> List.contains name |> not))
+            //                                |> List.filter (fun (_, _, r, _, _) -> allIncomingRefs |> List.exists (fun (_, r2, isOutgoing, refLabel) -> rangeContainsRange r r2))
+            // let allRefs = allIncomingRefs @ allIncomingMinusOneRefs @ allIncomingMinusTwoRefs
+            let secondaries = allOutgoingRefs @ allIncomingTypes |> List.map (fun (entityType, name, range, el, sts) ->
                 let subtypeName, abbrev = getAbbrevInfo entityType sts |> Option.map (fun st -> st.displayName, st.abbreviation) |> Option.defaultValue (None, None)
                 {
                     GraphDataItem.id = name

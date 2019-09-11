@@ -56,6 +56,11 @@ module Utils =
 
     let mkZeroFile file = mkRange file (mkPos 0 0) (mkPos 10000 0)
     type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
+    let repeatN f n x =
+        let mutable x = x
+        for i = 1 to n do
+            x <- f x
+        x
 
 module TryParser =
     // convenient, functional TryParse wrappers returning option<'a>
