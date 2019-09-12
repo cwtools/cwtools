@@ -209,8 +209,7 @@ module LanguageFeatures =
         |_ -> None
 
 
-    let graphEventDataForFiles (referenceManager : References<_>) (resourceManager : ResourceManager<_>) (lookup : Lookup) (files : string list) (sourceType : string) : GraphDataItem list =
-        let depth = 3
+    let graphEventDataForFiles (referenceManager : References<_>) (resourceManager : ResourceManager<_>) (lookup : Lookup) (files : string list) (sourceType : string) (depth : int) : GraphDataItem list =
         let sourceTypes = lookup.typeDefs |> List.tryPick (fun td -> if td.name = sourceType then Some (sourceType::td.graphRelatedTypes) else None)
                                           |> Option.defaultValue [sourceType]
         let entitiesInSelectedFiles = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)

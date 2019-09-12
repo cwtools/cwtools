@@ -358,4 +358,4 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.TypeDefs() = game.Lookup.typeDefs
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
-        member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)
+        member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)

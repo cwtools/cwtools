@@ -355,4 +355,4 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.TypeDefs() = game.Lookup.typeDefs
             member __.GetPossibleCodeEdits file text = getPreTriggerPossible fileManager game.ResourceManager file text
             member __.GetCodeEdits file text = getFastTrigger fileManager game.ResourceManager file text
-            member __.GetEventGraphData : GraphDataRequest = (fun files gameType -> graphEventDataForFiles references game.ResourceManager lookup files gameType)
+            member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)

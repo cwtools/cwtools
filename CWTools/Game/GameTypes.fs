@@ -32,7 +32,7 @@ type GraphDataItem =
         abbreviation : string option
     }
 
-type GraphDataRequest = string list -> string -> GraphDataItem list
+type GraphDataRequest = string list -> string -> int -> GraphDataItem list
 
 
 
