@@ -4,6 +4,7 @@ open CWTools.Process.Scopes
 open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities
 open CWTools.Utilities.Utils
+open CWTools.Utilities.StringResource
 
 type RuleContext =
         {
@@ -69,12 +70,13 @@ module internal FieldValidators =
     // type ScopeContext = IScopeContext<Scope>
 
     // type RuleContext  = RuleContext<Scope>
-    let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
+    let firstCharEqualsAmp (key : StringToken) = (stringManager.GetMetadataForID key).startsWithAmp
+    // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
     let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
-        if key |> firstCharEqualsAmp then errors else
+        if firstCharEqualsAmp id then errors else
                 match (vt) with
                 // | ValueType.Scalar ->
                 //     errors
@@ -171,7 +173,7 @@ module internal FieldValidators =
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[3]
 
         )
-        || firstCharEqualsAmp key
+        || firstCharEqualsAmp id
 
     let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
         match synced with
@@ -199,7 +201,7 @@ module internal FieldValidators =
                 dict.Add(keyFunction(n), temp)
                 temp
     // let memoizedComplexTypes (typetype : TypeType) (values : StringSet)
-    let checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) leafornode errors =
+    let checkTypeField (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (id : StringToken) (key : string) leafornode errors =
         let isComplex, fieldType =
             match typetype with
             |TypeType.Simple t -> false, t
@@ -211,7 +213,7 @@ module internal FieldValidators =
         match typesMap.TryFind fieldType with
         |Some values ->
             let value = trimQuote key
-            if value |> firstCharEqualsAmp then errors else
+            if firstCharEqualsAmp id then errors else
             // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
             // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
             let found =
@@ -242,7 +244,7 @@ module internal FieldValidators =
             //let values = values typeKeyMap values
             // if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
         |None -> inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode <&&&> errors
-    let checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (key : string) =
+    let checkTypeFieldNE (typesMap : Collections.Map<_,StringSet>) severity (typetype : TypeType) (id : StringToken) (key : string) =
         let isComplex, fieldType =
             match typetype with
             |TypeType.Simple t -> false, t
@@ -254,7 +256,7 @@ module internal FieldValidators =
         match typesMap.TryFind fieldType with
         |Some values ->
             let value = trimQuote key
-            if value |> firstCharEqualsAmp then true else
+            if firstCharEqualsAmp id then true else
             let value =
                 match typetype with
                 | TypeType.Simple t -> Some value
@@ -286,18 +288,18 @@ module internal FieldValidators =
             //let values = values typeKeyMap values
         |None -> false
 
-    let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) leafornode errors =
+    let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) leafornode errors =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
-            if value |> firstCharEqualsAmp then errors else
+            if firstCharEqualsAmp id then errors else
             if values.Contains (value.Split(ampArray, 2).[0]) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
         |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode <&&&> errors
-    let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (key : string) =
+    let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
-            if value |> firstCharEqualsAmp then true else
+            if firstCharEqualsAmp id then true else
             values.Contains (value.Split(ampArray, 2).[0])
         |None -> false
 
@@ -411,16 +413,17 @@ module internal FieldValidators =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
     let checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) (leafornode : IKeyPos) errors =
+            if (stringManager.GetMetadataForID id).containsDoubleDollar then errors else
             match field with
             |ValueField vt ->
                 checkValidValue p.enumsMap p.localisation severity vt id key leafornode errors
-            |TypeField t -> checkTypeField p.typesMap severity t key leafornode errors
+            |TypeField t -> checkTypeField p.typesMap severity t id key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
             |FilepathField (prefix, extension) -> checkFilepathField p.files key prefix extension leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
-            |VariableGetField v -> checkVariableGetField p.varMap severity v key leafornode errors
+            |VariableGetField v -> checkVariableGetField p.varMap severity v id key leafornode errors
             |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
             |ScalarField _ -> errors
@@ -432,16 +435,17 @@ module internal FieldValidators =
             |TypeMarkerField (_)
             |ValueScopeMarkerField (_) -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
     let checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
+            if (stringManager.GetMetadataForID id).containsDoubleDollar then true else
             match field with
             |ValueField vt ->
                 checkValidValueNE p.enumsMap p.localisation severity vt id key
-            |TypeField t -> checkTypeFieldNE p.typesMap severity t key
+            |TypeField t -> checkTypeFieldNE p.typesMap severity t id key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
             |LocalisationField synced -> true
             |FilepathField (prefix, extension) -> checkFilepathFieldNE p.files key prefix extension
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
-            |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v key
+            |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v id key
             |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id

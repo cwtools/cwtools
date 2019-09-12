@@ -90,13 +90,19 @@ type StringTokens =
         val normal: StringToken
         new(lower, normal) = { lower = lower; normal = normal }
     end
-
+type StringMetadata =
+    struct
+        val startsWithAmp : bool
+        val containsDoubleDollar : bool
+        new(startsWithAmp, containsDoubleDollar) = { startsWithAmp = startsWithAmp; containsDoubleDollar = containsDoubleDollar }
+    end
 [<Sealed>]
 type StringResourceManager() =
     let strings = new System.Collections.Generic.Dictionary<string, StringTokens>(1024)
     let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
+    let metadata = new System.Collections.Generic.Dictionary<StringToken, StringMetadata>(1024)
     let mutable i = 0
-    let monitor = new Object()
+    let monitor = Object()
     member x.InternIdentifierToken(s) =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
@@ -108,20 +114,27 @@ type StringResourceManager() =
             then
                 let stringID = i
                 i <- i + 1
-                let resn = new StringTokens(res.lower, stringID)
+                let resn = StringTokens(res.lower, stringID)
                 strings.[s] <- resn;
                 ints.[stringID] <- s
+                metadata.[stringID] <- metadata.[res.lower]
                 resn
             else
                 let stringID = i
                 let lowID = i + 1
                 i <- i + 2
-                let res = new StringTokens(lowID, stringID)
-                let resl = new StringTokens(lowID, lowID)
+                let res = StringTokens(lowID, stringID)
+                let resl = StringTokens(lowID, lowID)
                 strings.[s] <- res;
                 strings.[ls] <- resl;
                 ints.[lowID] <- ls;
                 ints.[stringID] <- s;
+                let startsWithAmp = ls.Length > 0 && ls.[0] = '@'
+                let first = ls.IndexOf('$')
+                let last = ls.LastIndexOf('$')
+                let containsDoubleDollar = first >= 0 && first <> last
+                metadata.[lowID] <- StringMetadata(startsWithAmp, containsDoubleDollar)
+                metadata.[stringID] <- StringMetadata(startsWithAmp, containsDoubleDollar)
                 res
         )
     member x.GetStringForIDs(id : StringTokens) =
@@ -130,6 +143,8 @@ type StringResourceManager() =
         ints.[id.lower]
     member x.GetStringForID(id : StringToken) =
         ints.[id]
+    member x.GetMetadataForID(id : StringToken) =
+        metadata.[id]
 
 module StringResource =
     let mutable stringManager = StringResourceManager()

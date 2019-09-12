@@ -14,6 +14,7 @@ open QuickGraph
 open System
 open CWTools.Process.Scopes
 open CWTools.Games
+open CWTools.Utilities.StringResource
 
 // let inline ruleValidationServiceCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
 // let inline ruleValidationServiceCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
@@ -317,18 +318,21 @@ type RuleValidationService
         |ScopeField s ->
             let scope = newCtx.scopes
             let key = node.Key
-            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
-            |NewScope (newScopes ,_) ->
+            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope, (stringManager.GetMetadataForID (node.KeyId.lower)).containsDoubleDollar with
+            |_, true ->
+                let newCtx = { newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
+                applyClauseField enforceCardinality options.severity newCtx rules node errors
+            |NewScope (newScopes ,_), _ ->
                 let newCtx = {newCtx with scopes = newScopes}
                 applyClauseField enforceCardinality options.severity newCtx rules node errors
-            |NotFound _ ->
+            |NotFound _, _  ->
                 inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
-            |WrongScope (command, prevscope, expected) ->
+            |WrongScope (command, prevscope, expected), _  ->
                 inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node <&&&> errors
-            |VarFound ->
+            |VarFound, _  ->
                 let newCtx = {newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes }}
                 applyClauseField enforceCardinality options.severity newCtx rules node errors
-            |VarNotFound v ->
+            |VarNotFound v, _ ->
                 inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node <&&&> errors
             |_ -> inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node <&&&> errors
         |_ -> applyClauseField enforceCardinality options.severity newCtx rules node errors
