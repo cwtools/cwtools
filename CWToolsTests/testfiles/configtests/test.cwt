@@ -188,6 +188,9 @@ types = {
     type[test] = {
         path = "game/common/war_goals"
     }
+    type[scripted_effect] = {
+        path = "game/common/scripted_effects"
+    }
 }
 
 enums = {

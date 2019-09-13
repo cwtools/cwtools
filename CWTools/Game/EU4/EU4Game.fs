@@ -186,6 +186,7 @@ type EU4Game(setupSettings : EU4Settings) =
         experimental = false
         fileValidators = []
         lookupValidators = [valUniqueTypes, "uniques"]
+        lookupFileValidators = []
         useRules = true
         debugRulesOnly = false
         localisationValidators = []

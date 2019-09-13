@@ -260,6 +260,7 @@ type CK2Game(setupSettings : CK2Settings) =
         experimental = false
         fileValidators = []
         lookupValidators = [valUniqueTypes, "uniques"]
+        lookupFileValidators = []
         useRules = true
         debugRulesOnly = false
         localisationValidators = []

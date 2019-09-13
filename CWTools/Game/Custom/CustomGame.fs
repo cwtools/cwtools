@@ -266,6 +266,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         experimental = false
         fileValidators = []
         lookupValidators = [valUniqueTypes, "uniques"]
+        lookupFileValidators = []
         useRules = true
         debugRulesOnly = false
         localisationValidators = []

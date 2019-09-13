@@ -245,6 +245,7 @@ type STLGame (setupSettings : StellarisSettings) =
         experimental = setupSettings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
         lookupValidators = [valAllModifiers, "mods"; valUniqueTypes, "uniques"]
+        lookupFileValidators = [valScriptedEffectParams, "scripted_effects"]
         useRules = setupSettings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = setupSettings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
         localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valTraditionLocCats

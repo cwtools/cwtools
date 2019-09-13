@@ -275,6 +275,7 @@ type IRGame(setupSettings : IRSettings) =
         experimental = false
         fileValidators = []
         lookupValidators = [valUniqueTypes, "uniques"]
+        lookupFileValidators = []
         useRules = true
         debugRulesOnly = false
         localisationValidators = []

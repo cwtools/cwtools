@@ -247,6 +247,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         experimental = false
         fileValidators = []
         lookupValidators = [valUniqueTypes, "uniques"]
+        lookupFileValidators = []
         useRules = true
         debugRulesOnly = false
         localisationValidators = []

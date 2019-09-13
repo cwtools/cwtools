@@ -12,6 +12,8 @@ open CWTools.Utilities.TryParser
 open CWTools.Process.Scopes
 open FSharp.Collections.ParallelSeq
 
+type LookupFileValidator<'T when 'T :> ComputedData> = RuleValidationService option -> Lookup -> FileValidator<'T>
+
 type ValidationManagerSettings<'T when 'T :> ComputedData> = {
     validators : (StructureValidator<'T> * string) list
     experimentalValidators : (StructureValidator<'T> * string) list
@@ -19,6 +21,7 @@ type ValidationManagerSettings<'T when 'T :> ComputedData> = {
     experimental : bool
     fileValidators : (FileValidator<'T> * string) list
     lookupValidators : (LookupValidator<'T> * string) list
+    lookupFileValidators : (LookupFileValidator<'T> * string) list
     useRules : bool
     debugRulesOnly : bool
     localisationValidators : LocalisationValidator<'T> list
@@ -77,8 +80,9 @@ type ValidationManager<'T when 'T :> ComputedData>
         let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
         // log "Validating effects/triggers"
         let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> []
+        let lfres = settings.lookupFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.ruleValidationService services.lookup resources oldEntities) s) |> function |Invalid es -> es |_ -> []
         let hres = if settings.experimental && (not (shallow)) then settings.heavyExperimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> [] else []
-        let shallow = if settings.debugRulesOnly then rres else res @ fres @ lres @ rres
+        let shallow = if settings.debugRulesOnly then rres else res @ fres @ lres @ lfres @ rres
         let deep = hres
         shallow, deep
 

@@ -178,6 +178,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         experimental = setupSettings.validation.experimental
         fileValidators = []
         lookupValidators = [valUniqueTypes, "uniques"]
+        lookupFileValidators = []
         useRules = true
         debugRulesOnly = false
         localisationValidators = []

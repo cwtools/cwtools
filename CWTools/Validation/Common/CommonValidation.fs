@@ -6,6 +6,7 @@ open CWTools.Validation.ValidationCore
 open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils
 open CWTools.Common
+open CWTools.Utilities.Position
 
 
 module CommonValidation =
@@ -66,4 +67,45 @@ module CommonValidation =
             res <&!&> (fun (typename, (tdi)) ->
                             Invalid [invManual (ErrorCodes.DuplicateTypeDef typename tdi.id) tdi.range "" None])
                             //    |> List.map (fun td, ts -> )
+            )
+
+    let valScriptedEffectParams : LookupFileValidator<_> =
+        (fun rulesValidator lu res es ->
+
+            let findParams (pos : CWTools.Utilities.Position.range) (key : string) =
+                match res.AllEntities() |> List.tryFind (fun struct(e, _) -> e.filepath = pos.FileName) with
+                | Some struct (e, _) ->
+                    let rec findChild (node: Node) =
+                        if node.Position = pos
+                        then Some node
+                        else
+                            match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                            | Some c -> findChild c
+                            | None -> None
+                    findChild e.entity
+                | None -> None
+                |> Option.map (fun s -> eprintfn "vsep %A %A" s.Key key; s)
+                |> Option.map (fun s -> s.Values |> List.map (fun l -> l.Key, l.ValueText))
+            let findSE (pos : range) =
+                match res.AllEntities() |> List.tryFind (fun struct(e, _) -> e.filepath = pos.FileName) with
+                | Some struct (e, _) ->
+                    let rec findChild (node: Node) =
+                        if node.Position = pos
+                        then Some node
+                        else
+                            match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                            | Some c -> findChild c
+                            | None -> None
+                    findChild e.entity
+                | None -> None
+            match rulesValidator, lu.typeDefInfo |> Map.tryFind "scripted_effect" with
+            | Some rv, Some ses ->
+                let allScriptedEffects = ses |> List.map (fun se -> se.id, findSE se.range)
+                let getRefs (seName : string) =
+                    es.
+                let temp = ses |> List.map (fun se -> {| effectName = se.id; callSite = se.range; seParams = findParams se.range se.id |})
+                               |> List.groupBy (fun se -> se.effectName)
+                               |> List.map (fun (se, seps) -> se)
+
+            | _ -> OK
             )
