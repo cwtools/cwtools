@@ -239,12 +239,12 @@ type STLGame (setupSettings : StellarisSettings) =
                             validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar";
                              validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"; valMegastructureGraphics, "megastructure";
                             valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"; validatePreTriggers, "pre";
-                            validateIfWithNoEffect, "ifnoeffect"]
+                            validateIfWithNoEffect, "ifnoeffect";]
         experimentalValidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
         heavyExperimentalValidators = [getEventChains, "event chains"]
         experimental = setupSettings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-        lookupValidators = [valAllModifiers, "mods"; valUniqueTypes, "uniques"]
+        lookupValidators = [valAllModifiers, "mods"; valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget"]
         lookupFileValidators = [valScriptedEffectParams, "scripted_effects"]
         useRules = setupSettings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = setupSettings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false

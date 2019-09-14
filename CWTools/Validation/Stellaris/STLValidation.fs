@@ -788,3 +788,22 @@ module STLValidation =
                         Invalid [inv ErrorCodes.DeprecatedSetName x] <&&> children
                     else children
             effects <&!&> (foldNode2 fNode (<&&>) OK)
+    let validateEconomicCatAIBudget : LookupValidator<_> =
+        fun lu os es ->
+            let budgets = os.GlobMatchChildren("**/ai_budget/*.txt") |> List.map (fun b -> b.TagText "category") |> Set.ofList
+            let econs = es.GlobMatchChildren("**/economic_categories/*.txt")
+            let econWithParent = econs |> List.choose (fun e -> if e.Has "parent" then Some (e.Key, e.TagText "parent") else None) |> Map.ofList
+            let rec checkKey (key : string) =
+                if Set.contains key budgets
+                then true
+                else
+                    match econWithParent |> Map.tryFind key with
+                    | Some k -> checkKey k
+                    | None -> false
+            let checkEcon (econ : Node) =
+                let key = econ.Key
+                if checkKey key
+                then OK
+                else
+                    Invalid [inv ((ErrorCodes.CustomError (sprintf "Economic category %s nor any of its parents have an ai_budget" econ.Key)) Severity.Warning) econ]
+            econs <&!!&> checkEcon
