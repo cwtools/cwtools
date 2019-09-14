@@ -1,4 +1,4 @@
-module internal CWTools.Rules.RulesHelpers
+module CWTools.Rules.RulesHelpers
 open System
 open System.IO
 open CWTools.Games

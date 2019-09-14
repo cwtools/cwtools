@@ -72,7 +72,7 @@ module Helpers =
     let getLocalisationErrors (game : GameObject<_,_>) globalLocalisation =
         fun (force : bool, forceGlobal : bool) ->
             let resources = game.Resources
-            let rulesLocErrors = game.ValidationManager.CachedRuleErrors(resources.ValidatableEntities()) |> List.filter (fun (id, _, _, _, _, _) -> id = "CW100")
+            let rulesLocErrors = game.ValidationManager.CachedRuleErrors(resources.ValidatableEntities()) |> List.filter (fun (id, _, _, _, _, _, _) -> id = "CW100")
             let genGlobal() =
                 let ges = (globalLocalisation(game))
                 game.LocalisationManager.globalLocalisationErrors <- Some ges

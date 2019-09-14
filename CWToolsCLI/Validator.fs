@@ -39,8 +39,7 @@ module Validator =
         //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
         let STLoptions : StellarisSettings = {
-            rootDirectory = dir
-            scope = scope
+            rootDirectories = [ {path = dir; name = "undefined"}]
             modFilter = Some modFilter
             validation = {
                 validateVanilla = false
@@ -48,21 +47,20 @@ module Validator =
                 langs = langs
             }
             rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = {
+            embedded = ManualSettings {
                 triggers = triggers
                 effects = effects
                 modifiers = []
                 embeddedFiles = []
                 cachedResourceData = []
-                localisationCommands = []
+                localisationCommands = Legacy []
                 eventTargetLinks = []
             }
             scriptFolders = None
             excludeGlobPatterns = None
         }
         let HOI4options : HOI4Settings = {
-            rootDirectory = dir
-            scope = scope
+            rootDirectories = [ {path = dir; name = "undefined"}]
             modFilter = Some modFilter
             validation = {
                 validateVanilla = false
@@ -70,19 +68,19 @@ module Validator =
                 langs = langs
             }
             rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = {
+            embedded = ManualSettings {
                 modifiers = []
                 embeddedFiles = []
                 cachedResourceData = []
                 triggers = []
                 effects = []
-                localisationCommands = []
+                localisationCommands = Legacy []
                 eventTargetLinks = []
             }
             scriptFolders = None
             excludeGlobPatterns = None
         }
-        let game = STLGame(STLoptions) :> IGame<STLComputedData, STLConstants.Scope, STLConstants.Modifier>
+        let game = STLGame(STLoptions) :> IGame<STLComputedData>
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
@@ -101,8 +99,7 @@ module Validator =
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
         let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
         let STLoptions : StellarisSettings = {
-            rootDirectory = dir
-            scope = scope
+            rootDirectories = [ {path = dir; name = "undefined"}]
             modFilter = Some modFilter
             validation = {
                 validateVanilla = false
@@ -110,21 +107,20 @@ module Validator =
                 langs = langs
             }
             rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = {
+            embedded = ManualSettings {
                 triggers = triggers
                 effects = effects
                 modifiers = []
                 embeddedFiles = cachedFiles
                 cachedResourceData = cached
-                localisationCommands = []
+                localisationCommands = Legacy []
                 eventTargetLinks = []
             }
             scriptFolders = None
             excludeGlobPatterns = None
         }
         let HOI4options : HOI4Settings = {
-            rootDirectory = dir
-            scope = scope
+            rootDirectories = [ {path = dir; name = "undefined"}]
             modFilter = Some modFilter
             validation = {
                 validateVanilla = false
@@ -132,13 +128,13 @@ module Validator =
                 langs = langs
             }
             rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = {
+            embedded = ManualSettings {
                 modifiers = []
                 embeddedFiles = cachedFiles
                 cachedResourceData = cached
                 triggers = []
                 effects = []
-                localisationCommands = []
+                localisationCommands = Legacy []
                 eventTargetLinks = []
             }
             scriptFolders = Some HOI4Constants.scriptFolders

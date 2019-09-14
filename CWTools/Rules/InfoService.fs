@@ -647,7 +647,19 @@ type InfoService
             |_ -> res
 
         let fComment (_) _ _ = res
-        let fNode (_) (node : Node) ((field, option) : NewRule) = res
+        let fNode (_) (node : Node) ((field, options) : NewRule) =
+            let isOutgoing, referenceLabel = options.referenceDetails |> Option.map (fun (b, s) -> b, Some s) |> Option.defaultValue (true, None)
+            match field with
+            |NodeRule (TypeField (TypeType.Simple t), _) ->
+                let typename = t.Split('.').[0]
+                if res.ContainsKey(typename)
+                then res.[typename].Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel); res
+                else
+                    let newArr = ResizeArray<ReferenceDetails>()
+                    newArr.Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel)
+                    res.TryAdd(typename, newArr) |> ignore
+                    res
+            | _ -> res
         let fValueClause (_) _ _ = res
         let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 

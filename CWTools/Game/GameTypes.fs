@@ -36,8 +36,8 @@ type GraphDataRequest = string list -> string -> int -> GraphDataItem list
 
 
 
-
-type CWError = (string * Severity * range * int * string * option<string>)
+type CWRelatedError = { location : range; message : string }
+type CWError = (string * Severity * range * int * string * option<string> * option<CWRelatedError>)
 
 type CompletionResponse =
     |Simple of label : string * score : int option

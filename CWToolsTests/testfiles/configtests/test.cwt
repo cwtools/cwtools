@@ -62,6 +62,12 @@ alias[trigger:scope_field] = {
     ## cardinality = 0..inf
     alias_name[trigger] = alias_match_left[trigger]
 }
+
+alias[effect:scope_field] = {
+    ## cardinality = 0..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
 ship_size = {
     ## cardinality = 0..1
     formation_priority = int
@@ -232,4 +238,33 @@ types = {
         path_file = "unique.txt"
         unique = yes
     }
+}
+
+scripted_effect = {
+    alias_name[effect] = alias_match_left[effect]
+    ## cardinality = 0..inf
+    test = {
+        ## cardinality = 0..inf
+        <scripted_effect> = {
+        ## cardinality = 1..inf
+        enum[scripted_effect_params] = scalar
+        ## cardinality = 1..inf
+        enum[scripted_effect_params] = scope_field
+       }
+    }
+}
+
+## scope = ship
+alias[effect:set_ship_flag] = bool
+
+## scope = country
+alias[effect:set_country_flag] = bool
+
+###The scripted effect will draw the value of the right clause via $left_clause$.
+#Todo: Make sure this works
+alias[effect:<scripted_effect>] = {
+	## cardinality = 1..inf
+	enum[scripted_effect_params] = scalar
+	## cardinality = 1..inf
+	enum[scripted_effect_params] = scope_field
 }

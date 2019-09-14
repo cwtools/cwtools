@@ -9,7 +9,7 @@ open FParsec
 open System.Diagnostics.Tracing
 open System.Reflection
 open CWTools.Localisation
-open CWTools.Localisation.STLLocalisation
+open CWTools.Localisation.STL
 open CWTools.Games.Files
 open CWTools.Common.STLConstants
 open CWTools.Games
@@ -20,9 +20,10 @@ open CWTools.Utilities.Position
 open CWTools.Utilities
 open CWTools.Games.EU4
 open CWTools.Validation.EU4
-open CWTools.Validation.Rules
+open CWTools.Rules
 open CWTools.Validation.HOI4
 open CWTools.Games.Stellaris.STLLookup
+open CWTools.Games.Compute
 
 
 let mkPickler (resolver : IPicklerResolver) =
@@ -42,10 +43,10 @@ let assemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Locatio
 
 let serialize gameDirName scriptFolders cacheDirectory = ()
 let serializeSTL folder cacheDirectory =
-    let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [])
+    let fileManager = FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [])
     let files = fileManager.AllFilesByPath()
-    let computefun : unit -> FoldRules<STLConstants.Scope> option = (fun () -> (None))
-    let resources = ResourceManager<STLComputedData>(STLCompute.computeSTLData computefun, STLCompute.computeSTLDataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<STLComputedData>(STL.computeSTLData computefun, STL.computeSTLDataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
     let entities =
         resources.UpdateFiles(files)
          |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
@@ -59,10 +60,10 @@ let serializeSTL folder cacheDirectory =
     File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
 let serializeEU4 folder cacheDirectory =
-    let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [])
+    let fileManager = FileManager(folder, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [])
     let files = fileManager.AllFilesByPath()
-    let computefun : unit -> FoldRules<EU4Constants.Scope> option = (fun () -> (None))
-    let resources = ResourceManager<EU4ComputedData>(EU4Compute.computeEU4Data computefun, EU4Compute.computeEU4DataUpdate computefun, Encoding.GetEncoding(1252), Encoding.UTF8).Api
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<EU4ComputedData>(EU4.computeEU4Data computefun, EU4.computeEU4DataUpdate computefun, Encoding.GetEncoding(1252), Encoding.UTF8).Api
     let entities =
         resources.UpdateFiles(files)
         |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
@@ -75,10 +76,10 @@ let serializeEU4 folder cacheDirectory =
     let pickle = binarySerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "eu4.cwb"), pickle)
 let serializeHOI4 folder cacheDirectory =
-    let fileManager = FileManager(folder, Some "", FilesScope.Vanilla, HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [])
+    let fileManager = FileManager(folder, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [])
     let files = fileManager.AllFilesByPath()
-    let computefun : unit -> FoldRules<HOI4Constants.Scope> option = (fun () -> (None))
-    let resources = ResourceManager<HOI4ComputedData>(HOI4Compute.computeHOI4Data computefun, HOI4Compute.computeHOI4DataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<HOI4ComputedData>(computeHOI4Data computefun, computeHOI4DataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
     let entities =
         resources.UpdateFiles(files)
         |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)

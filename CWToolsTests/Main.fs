@@ -70,7 +70,7 @@ let perf(b) =
     let stl = STLGame(settings) :> IGame<STLComputedData>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> n)
         let testVals = stl.AllEntities()
         ()
     else ()
@@ -92,7 +92,7 @@ let perf2(b) =
 
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> n)
         let testVals = stl.AllEntities()
         stl.RefreshCaches()
         ()

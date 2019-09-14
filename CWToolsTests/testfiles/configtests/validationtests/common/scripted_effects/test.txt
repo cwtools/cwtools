@@ -11,12 +11,26 @@ test_scripted_effect_country = {
 }
 
 test_scripted_effect_none = {
+    test = {
+        test_scripted_effect_params = {
+               test_lhs = OR
+               test_rhs = yes
+           }
 
+           test_scripted_effect_params = {
+               test_lhs = blah
+               test_rhs = blah
+           }
+    }
 }
 
 test_scripted_effect_params = {
+    #error
+    #error
     $test_lhs$ = {
 
     }
+    #error
+    #error
     set_ship_flag = $test_rhs$
 }

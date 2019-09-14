@@ -42,7 +42,7 @@ type IClause =
     abstract member Clauses : IClause seq
 
 
-and [<Struct>] Leaf =
+and Leaf =
     val mutable KeyId : StringTokens
     // val mutable Key : string
     val mutable private _valueId : StringTokens

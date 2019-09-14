@@ -117,6 +117,25 @@ module STLProcess =
             then s.SetValue(target, value, null)
             else copy value (s.GetValue(target,null))
         )
+    let rec cloneNode (source : Node) =
+        let rec mapChild =
+            function
+            | NodeC n ->
+                let newNode = Node(n.Key, n.Position)
+                newNode.AllArray <- n.AllArray |> Array.map mapChild
+                NodeC newNode
+            | LeafC l ->
+                LeafC (Leaf(l.Key, l.Value, l.Position, l.Operator))
+            | LeafValueC lv ->
+                LeafValueC (LeafValue(lv.Value, lv.Position))
+            | ValueClauseC vc ->
+                let newVC = ValueClause(vc.Position)
+                newVC.AllArray <- vc.AllArray |> Array.map mapChild
+                ValueClauseC newVC
+            | CommentC c ->
+                CommentC c
+        mapChild (NodeC source) |> function |NodeC node -> node
+
     // let nodePickler : (ResizeArray<Child> -> ResizeArray<Child>) =
     //     let mkPickler (resolver : IPicklerResolver) =
     //         let arrayPickler = resolver.Resolve<Leaf array> ()

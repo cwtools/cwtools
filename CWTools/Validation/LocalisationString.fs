@@ -139,4 +139,4 @@ module LocalisationString =
     let validateLocalisationSyntax (results : Results) =
         results.Values |> List.ofSeq
                        |> List.filter (fun (v, _, _, _) -> not v)
-                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid [("CW001", Severity.Error, (getRange pos.Value pos.Value), 0, error, None)] else OK)
+                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid [("CW001", Severity.Error, (getRange pos.Value pos.Value), 0, error, None, None)] else OK)

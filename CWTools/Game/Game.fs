@@ -76,6 +76,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
             ruleValidationService = ruleValidationService
             infoService = infoService
             localisationKeys = localisationManager.LocalisationKeys
+            fileManager = fileManager
         }
     let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
 

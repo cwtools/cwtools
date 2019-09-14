@@ -8,7 +8,7 @@ open FParsec
 open System.Diagnostics.Tracing
 open System.Reflection
 open CWTools.Localisation
-open CWTools.Localisation.STLLocalisation
+open CWTools.Localisation.STL
 open CWTools.Games.Files
 open CWTools.Common.STLConstants
 open CWTools.Games
@@ -119,7 +119,7 @@ module CWToolsCLI =
             | None ->
                 DocsParser.parseDocsStream (Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsCLI.game_effects_triggers_1.9.1.txt"))
         match docsParsed with
-        |Success(p, _, _) -> p |> (DocsParser.processDocs parseScopes)
+        |Success(p, _, _) -> p |> (DocsParser.processDocs scopeManager.ParseScopes)
         |Failure(msg,_,_) -> failwith ("docs parsing failed with " + msg)
     let merge (a : Map<'a, 'b>) (b : Map<'a, 'b>) (f : 'a -> 'b * 'b -> 'b) =
         Map.fold (fun s k v ->
@@ -183,8 +183,8 @@ module CWToolsCLI =
             let referencedTypes = gameObj.entities() |> List.choose (fun struct(e,l) -> l.Force().Referencedtypes)
             // printfn "%A" referencedTypes
             let combinedReferences = referencedTypes |> List.fold (fun s m -> merge s m (fun _ (a,b) -> a @ b)) Map.empty
-                                        |> Map.map (fun _ vs -> vs |> List.map fst)
-            let types = gameObj.references().TypeMapInfo |> Map.map (fun _ vs -> vs |> List.map fst)
+                                        |> Map.map (fun _ vs -> vs |> List.map (fun v -> v.name))
+            let types = gameObj.references().TypeMapInfo |> Map.map (fun _ vs -> vs |> List.map (fun t -> t.id))
             let events = types |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
             let eventReferences = combinedReferences |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
             // eventReferences |> List.iter (printfn "%s")
@@ -293,7 +293,7 @@ module CWToolsCLI =
         | List r -> list game directory scope modFilter docsPath r
         | Validate r -> validate game directory scope modFilter docsPath cachePath r
         | Directory _
-        | Serialize _ -> serialize game directory scope modFilter docsPath
+        | Serialize _ -> serialize game [{path = directory; name = "undefined"}] scope modFilter docsPath
         | Game _ -> failwith "internal error: this code should never be reached"
 
         //printfn "%A" argv
