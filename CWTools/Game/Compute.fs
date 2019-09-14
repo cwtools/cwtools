@@ -46,8 +46,9 @@ module EU4 =
 
     let getScriptedEffectParams (node : Node) =
         let getDollarText (s : string) (acc) =
-            let split = s.Split([|'$'|],3)
-            if split.Length = 3 then split.[1]::acc else acc
+            s.Split('$') |> Array.mapi (fun i s -> i, s) |> Array.fold (fun acc (i, s) -> if i % 2 = 1 then s::acc else acc ) acc
+            // let split = s.Split([|'$'|],3)
+            // if split.Length = 3 then split.[1]::acc else acc
         let fNode = (fun (x:Node) acc ->
                         let nodeRes = getDollarText x.Key acc
                         x.Values |> List.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes
