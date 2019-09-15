@@ -106,23 +106,30 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let files = resources.GetFileNames() |> Set.ofList
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
-        // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let typeDefInfo = getTypesFromDefinitions tempRuleValidationService tempTypes allentities
+        let refreshTypeInfo() =
+            let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
+            let typeDefInfo = getTypesFromDefinitions tempRuleValidationService tempTypes allentities
+            lookup.typeDefInfo <- typeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
+            tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
+            tempTypeMap
+        let timer = System.Diagnostics.Stopwatch()
+        timer.Start()
+        let mutable i = 0
+        let step() =
+            //log "%A" current
+            i <- i + 1
+            let before = tempTypeMap
+            tempTypeMap <- refreshTypeInfo()
+            log (sprintf "Refresh types time: %i" timer.ElapsedMilliseconds); timer.Restart()
+            tempTypeMap = before || i > 5
+        while (not(step())) do ()
 
+        let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang)
 
-        // let typeDefInfo = createLandedTitleTypes game typeDefInfo
-        lookup.typeDefInfo <- typeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
-        // lookup.typeDefInfo <- addModifiersAsTypes game lookup.typeDefInfo
-
+        lookup.typeDefInfoForValidation <- lookup.typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (tdi) -> if tdi.validate then Some (tdi.id, tdi.range) else None))
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
-        lookup.typeDefInfoForValidation <- typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (tdi) -> if tdi.validate then Some (tdi.id, tdi.range) else None))
-
-        // lookup.scriptedEffects <- tempEffects @ addDataEventTargetLinks game
-        // lookup.scriptedTriggers <- tempTriggers @ addDataEventTargetLinks game
-        tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
         let tempInfoService = (InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
 
 

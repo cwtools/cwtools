@@ -73,6 +73,17 @@ types = {
         path = "game/common/edicts"
         starts_with = p
     }
+
+    type[recursive_subtype] = {
+        path = "game/common/armies"
+        subtype[subtype] = {
+			## cardinality = 0..1
+			start = yes
+			## cardinality = 0..1
+			parent = <recursive_subtype.subtype>
+		}
+
+    }
 }
 enums = {
 enum[test_enum] = {
@@ -169,4 +180,11 @@ starts_with_c = {
 
 starts_with_p = {
     p = true
+}
+
+recursive_subtype = {
+    ## cardinality = 0..1
+    start = yes
+    ## cardinality = 0..1
+    parent = <recursive_subtype.subtype>
 }

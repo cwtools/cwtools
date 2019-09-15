@@ -1,0 +1,15 @@
+a = {
+    start = yes
+}
+b = {
+    parent = a
+}
+c = {
+    parent = b
+}
+d = {
+    parent = c
+}
+e = {
+    parent = d
+}
