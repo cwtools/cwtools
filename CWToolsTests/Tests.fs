@@ -288,7 +288,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             tests |> List.iter (completionTest game filename filetext)
         // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let (game : IGame), errors, testVals, completionVals, parseErrors =
-            if stl
+            if stl = 1
             then
                 let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
                 // configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
@@ -312,7 +312,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                     getCompletionTests e.entity
                                     )
                 (stl :> IGame), errors, testVals, completionTests, (stl.ParserErrors())
-            else
+            else if stl = 0 then
                 let configtext = ("./testfiles/configtests/rulestests/IR/triggers.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/triggers.log")::configtext
                 let configtext = ("./testfiles/configtests/rulestests/IR/effects.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/effects.log")::configtext
                 // let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
@@ -341,6 +341,36 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                     getCompletionTests e.entity
                                     )
                 (ir :> IGame), errors, testVals, completionTests, (ir.ParserErrors())
+            else
+                // let configtext = ("./testfiles/configtests/rulestests/IR/triggers.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/triggers.log")::configtext
+                // let configtext = ("./testfiles/configtests/rulestests/IR/effects.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/effects.log")::configtext
+                // let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
+                // let effects = JominiParser.parseEffectFilesRes "./testfiles/configtests/rulestests/IR/effects.log" |> CWTools.Parser.JominiParser.processEffects IRConstants.parseScopes
+                // eprintfn "testtest %A" triggers
+                // configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+                //             |> (fun f -> UtilityParser.initializeScopes f None )
+
+                // let eventTargetLinks =
+                //             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
+                //                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks IRConstants.Scope.Any IRConstants.parseScope IRConstants.allScopes fn ft)
+                //                     |> Option.defaultValue (Scopes.IR.scopedEffects |> List.map SimpleLink)
+                let settings = emptyImperatorSettings folder
+                let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
+                let hoi4 = CWTools.Games.HOI4.HOI4Game(settings) :> IGame<HOI4ComputedData>
+                let errors = hoi4.ValidationErrors() @ (if configLoc then hoi4.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k, _) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let testVals = hoi4.AllEntities()
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
+                                    getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r))
+                                    )
+                let completionTests =
+                                hoi4.AllEntities()
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
+                                    getCompletionTests e.entity
+                                    )
+                (hoi4 :> IGame), errors, testVals, completionTests, (hoi4.ParserErrors())
+
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
         //eprintfn "%A" testVals
@@ -368,16 +398,16 @@ let testSubdirectories stl dir =
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false false "" false false true "en-GB"
-        testFolder "./testfiles/validationtests/gfxtests" "gfx" false false "" false false true "en-GB"
+        testFolder "./testfiles/validationtests/interfacetests" "interface" false false "" false false 1 "en-GB"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx" false false "" false false 1 "en-GB"
         // testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false false "en-GB"
         // testFolder "./testfiles/validationtests/variabletests" "variables" true false "./testfiles/stellarisconfig" false false "en-GB"
         // testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "" false false "en-GB"
-        testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false true "en-GB"
+        testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false 1 "en-GB"
         // testFolder "./testfiles/validationtests/weighttests" "weights" false "" false false "en-GB"
-        testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false true "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false true "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false true "ru-RU"
+        testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false 1 "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false 1 "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false 1 "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]
@@ -386,9 +416,11 @@ let folderTests =
 //[<Tests>]
 //let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false "./testfiles/configtests/rulestests/All" |> List.ofSeq)
 [<Tests>]
-let stlSubfolderTests = testList "validation stl" (testSubdirectories true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
+let stlSubfolderTests = testList "validation stl" (testSubdirectories 1 "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
 [<Tests>]
-let irSubfolderTests = testList "validation ir" (testSubdirectories false "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
+let irSubfolderTests = testList "validation ir" (testSubdirectories 0 "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
+[<Tests>]
+let hoi4SubfolderTests = testList "validation hoi4" (testSubdirectories 2 "./testfiles/configtests/rulestests/HOI4" |> List.ofSeq)
 
 [<Tests>]
 let specialtests =

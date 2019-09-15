@@ -1,34 +1,8 @@
 types = {
     type[event] = {
         path = "game/events"
-
-        ## type_key_filter = ship_event
-		## push_scope = ship
-        subtype[ship] = {
-        }
-
-        ## type_key_filter = country_event
-		## push_scope = country
-        subtype[country] = {
-        }
-
     }
 }
-
-## scope = ship
-alias[effect:ship_only] = test
-
-## scope = country
-alias[effect:country_only] = test
-
-## scope = { ship country }
-alias[effect:ship_and_country] = test
-
-## scope = country
-alias[trigger:is_country] = bool
-
-## scope = ship
-alias[trigger:is_ship] = bool
 
 event = {
     option = {
@@ -46,23 +20,6 @@ alias[effect:scope_field] = {
 # alias[effect:OR] = {
 #     alias_name[effect] = alias_match_left[effect]
 # }
-alias[effect:test] = {
-    alias_name[effect] = alias_match_left[effect]
-}
-alias[effect:uniquetesttest] = {
-    alias_name[effect] = alias_match_left[effect]
-}
-alias[effect:if] = {
-    alias_name[effect] = alias_match_left[effect]
-}
-
-alias[effect:random_list] = {
-	##cardinality = 0..inf
-	int = {
-        test = scalar
-	}
-}
-
 
 #These are not required as covered by scope_field
 alias[trigger:NOT] = {
@@ -87,11 +44,6 @@ alias[effect:NAND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:AND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:OR] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:hidden_effect] = { alias_name[effect] = alias_match_left[effect] }
-
-#Filepath test
-alias[effect:any_file] = filepath
-alias[effect:any_file_in_folder] = filepath[common/]
-alias[effect:any_file_in_folder_with_extension] = filepath[common/,.ttf]
 
 #Dual path set_variable test
 alias[effect:dual_path_simple] = {

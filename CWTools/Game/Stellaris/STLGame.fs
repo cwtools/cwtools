@@ -300,7 +300,7 @@ type STLGame (setupSettings : StellarisSettings) =
                      STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                      STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                      defaultContext,
-                     defaultContext,
+                     noneContext,
                      Encoding.UTF8,
                      Encoding.GetEncoding(1252),
                      validationSettings,

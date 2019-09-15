@@ -1,0 +1,52 @@
+namespace = test
+
+##Dual path set_variable test
+country_event = {
+    option = {
+        dual_path_simple = {
+            test = test
+        }
+        dual_path_simple = {
+            test2 = test2
+        }
+        #error
+        dual_path_simple = {
+            #error
+            #error
+            test2 = test
+        }
+
+        dual_path_double = {
+            test = test
+        }
+        dual_path_double = {
+            test2 = test2
+            test3 = test3
+        }
+
+        dual_path_complex = {
+            test_var2 = 1
+        }
+        dual_path_complex = {
+            test_var = 1
+        }
+        dual_path_complex = {
+            var = test_var2
+            value = test_var
+        }
+        dual_path_complex = {
+            test_var3 = THIS.test_var
+        }
+        dual_path_complex = {
+            test_var4 = THIS.test_var@THIS
+        }
+        dual_path_complex = {
+            test_var_@THIS = 1
+        }
+        dual_path_complex = { test_var5 = THIS.test_var_@THIS }
+        dual_path_complex = {
+            var = test_var6
+            value = test_var3
+        }
+    }
+}
