@@ -14,7 +14,7 @@ module CKPrinter =
 
     let rec printValue v depth =
         match v with
-        | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth) + " }\n"
+        | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth) + "}\n"
         | x -> x.ToString() + "\n"
     and printKeyValue kv depth =
         match kv with
@@ -23,6 +23,13 @@ module CKPrinter =
         | Value (_, v) -> (tabs depth) + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
+    let printTopLevelKeyValueList kvl =
+        kvl |> List.map (
+            function
+            | KeyValue (PosKeyValue(_, KeyValueItem(_, Clause _, _))) as x -> printKeyValue x 0, true
+            | x -> printKeyValue x 0, false
+        ) |> List.fold (fun (acc, start) (nextString, newline) -> if newline && (not start) then acc + nextString + "\n", false else acc + nextString, false) ("", true)
+        |> fst
     let prettyPrint ef =
         let (ParsedFile sl) = ef
         printKeyValueList sl 0
