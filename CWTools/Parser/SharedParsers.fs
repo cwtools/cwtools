@@ -88,7 +88,7 @@ module internal SharedParsers =
     // let opp = new OperatorPrecedenceParser<float,unit,unit>()
     // let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
     let operatorLookahead = choice [chSkip '='; chSkip '>'; chSkip '<'; chSkip '!'] <?> "operator 1"
-    let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
+    let comment = parseWithPosition (skipChar '#' >>. restOfLine true .>> ws |>> string) <?> "comment"
 
     let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"
     let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> (fun s -> "\""+s+"\"") |>> Key <?> "quoted key"

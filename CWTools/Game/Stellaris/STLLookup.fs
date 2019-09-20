@@ -20,7 +20,7 @@ module STLLookup =
         let findComment t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, c), CommentC nc) -> (false, nc::c)
+            | ((_, c), CommentC (_, nc)) -> (false, nc::c)
             | ((_, c), NodeC n) when n.Key = t -> (true, c)
             | ((_, _), _) -> (false, [])
         root.Children |> List.map (fun e -> e, root.All |> List.fold (findComment e.Key) (false, []) |> snd)

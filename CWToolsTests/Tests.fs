@@ -74,9 +74,9 @@ let getNodeComments (clause : IClause) =
     let findComments t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, c)
-            | ((_, c), CommentC nc) when nc.StartsWith("@") -> (false, c)
-            | ((_, c), CommentC nc) -> (false, nc::c)
+            | ((_, c), CommentC (_, nc)) when nc.StartsWith("#") -> (false, c)
+            | ((_, c), CommentC (_, nc)) when nc.StartsWith("@") -> (false, c)
+            | ((_, c), CommentC (_, nc)) -> (false, nc::c)
             | ((_, c), NodeC n) when n.Position = t -> (true, c)
             | ((_, c), LeafC v) when v.Position = t -> (true, c)
             | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
@@ -122,7 +122,7 @@ let getCompletionTests (clause : IClause) =
     let findComments t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, c), CommentC nc) when nc.StartsWith("@") -> (false, nc::c)
+            | ((_, c), CommentC (_, nc)) when nc.StartsWith("@") -> (false, nc::c)
             | ((_, c), CommentC _) -> (false, c)
             | ((_, c), NodeC n) when n.Position = t -> (true, c)
             | ((_, c), LeafC v) when v.Position = t -> (true, c)

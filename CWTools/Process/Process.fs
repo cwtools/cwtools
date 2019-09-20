@@ -96,7 +96,7 @@ and LeafValue(value : Value, ?pos : range) =
         member this.Position = this.Position
 
 
-and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of leafvalue : LeafValue |ValueClauseC of valueclause : ValueClause
+and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : (range * string) |LeafValueC of leafvalue : LeafValue |ValueClauseC of valueclause : ValueClause
 and ValueClause(pos : range) =
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty
@@ -141,7 +141,7 @@ and ValueClause(pos : range) =
                                            |LeafValueC lv -> lv.ToRaw
                                            |LeafC l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
                                            |ValueClauseC vc -> Value(vc.Position, Value.Clause vc.ToRaw)
-                                           |CommentC c -> (Comment c))
+                                           |CommentC (r, c) -> (Comment (r, c)))
 
     static member Create = ValueClause
     interface IKeyPos with
@@ -257,7 +257,7 @@ module ProcessCore =
             match statement with
             | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl), _))) -> lookupN k pos c sl
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
-            | Comment(c) -> CommentC c
+            | Comment(r, c) -> CommentC (r, c)
             | Value(pos, Value.Clause sl) -> lookupVC pos c sl
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
         member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})

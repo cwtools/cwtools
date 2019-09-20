@@ -147,7 +147,7 @@ module CK2Process =
         let findComment t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, _), CommentC nc) -> (false, nc)
+            | ((_, _), CommentC (_, nc)) -> (false, nc)
             | ((_, c), NodeC (:? Event as n)) when n.ID = t -> (true, c)
             | ((_, _), _) -> (false, "")
         root.Events |> List.map (fun e -> e.ID, root.All |> List.fold (findComment e.ID) (false, "") |> snd)

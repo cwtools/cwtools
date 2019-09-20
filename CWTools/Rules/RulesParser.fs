@@ -200,8 +200,8 @@ module RulesParser =
         let findComments (t : range) s (a : Child) =
                 match (s, a) with
                 | ((b, c), _) when b -> (b, c)
-                | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, nc::c)
-                | ((_, c), CommentC nc) -> (false, c)
+                | ((_, c), CommentC (_, nc)) when nc.StartsWith("#") -> (false, nc::c)
+                | ((_, c), CommentC (_, nc)) -> (false, c)
                 | ((_, c), NodeC n) when n.Position.Code = t.Code -> (true, c)
                 | ((_, c), LeafC v) when v.Position.Code = t.Code -> (true, c)
                 | ((_, c), LeafValueC v) when v.Position.Code = t.Code -> (true, c)

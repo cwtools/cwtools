@@ -75,21 +75,21 @@ module Types =
         override x.GetHashCode() = let (PosKeyValue(_, k)) = x in k.GetHashCode()
 
     and [<CustomEquality; NoComparison>] Statement =
-        | Comment of string
+        | Comment of range * string
         | KeyValue of PosKeyValue
         | Value of range * Value
         override x.Equals(y) =
             match y with
             | :? Statement as y ->
                 match x, y with
-                | Comment s1, Comment s2 -> s1 = s2
+                | Comment (r1, s1), Comment (r2, s2) -> s1 = s2 && r1 = r2
                 | KeyValue kv1, KeyValue kv2 -> kv1 = kv2
                 | Value (r1, v1), Value (r2, v2) -> r1 = r2 && v1 = v2
                 | _ -> false
             | _ -> false
         override x.GetHashCode() =
             match x with
-            |Comment c -> c.GetHashCode()
+            |Comment (r, c) -> c.GetHashCode()
             |KeyValue kv -> kv.GetHashCode()
             |Value (r, v) -> v.GetHashCode()
 
