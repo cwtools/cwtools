@@ -95,6 +95,7 @@ let createStarbaseTypeDef =
         startsWith = None
         unique = false
         graphRelatedTypes = []
+        path_extension = None
     }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -205,6 +206,7 @@ let shipBehaviorType =
         startsWith = None
         unique = false
         graphRelatedTypes = []
+        path_extension = None
     }
 let shipSizeType =
     {
@@ -223,6 +225,7 @@ let shipSizeType =
         startsWith = None
         unique = false
         graphRelatedTypes = []
+        path_extension = None
     }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

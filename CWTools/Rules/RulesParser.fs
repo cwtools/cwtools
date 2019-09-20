@@ -100,6 +100,7 @@ and TypeDefinition = {
     path : string list
     path_strict : bool
     path_file : string option
+    path_extension : string option
     conditions : Node option
     subtypes : SubTypeDefinition list
     typeKeyFilter : (string list * bool) option
@@ -677,6 +678,7 @@ module RulesParser =
             let path = (node.TagsText "path") |> List.ofSeq |> List.map (fun s -> s.Replace("game/","").Replace("game\\",""))
             let path_strict = node.TagText "path_strict" == "yes"
             let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
+            let path_extension = if node.Has "path_extension" then Some (node.TagText "path_extension") else None
             let startsWith = if node.Has "starts_with" then Some (node.TagText "starts_with") else None
             let skiprootkey = getSkipRootKey node
             let subtypes = getNodeComments node |> List.choose parseSubType
@@ -719,7 +721,25 @@ module RulesParser =
                     else []
                 |None -> []
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; type_per_file = type_per_file; path = path; path_file = path_file; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict; localisation = localisation; startsWith = startsWith; unique = unique; graphRelatedTypes = graphData}
+            |Some tn ->
+                Some {
+                    name = tn;
+                    nameField = namefield;
+                    type_per_file = type_per_file;
+                    path = path;
+                    path_file = path_file;
+                    conditions = None;
+                    subtypes = subtypes;
+                    typeKeyFilter = typekeyfilter;
+                    skipRootKey = skiprootkey;
+                    warningOnly = warningOnly;
+                    path_strict = path_strict;
+                    localisation = localisation;
+                    startsWith = startsWith;
+                    unique = unique;
+                    graphRelatedTypes = graphData
+                    path_extension = path_extension
+                    }
             |None -> None
         |_ -> None
 

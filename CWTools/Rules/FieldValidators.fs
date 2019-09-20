@@ -5,6 +5,7 @@ open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
+open System.IO
 
 type RuleContext =
         {
@@ -50,6 +51,10 @@ module internal FieldValidators =
         match t.path_file with
         |Some f -> file == f
         |None -> true
+        &&
+        match t.path_extension with
+        | Some ext ->  Path.GetExtension file == ext
+        | None -> true
 
     let getValidValues =
         function

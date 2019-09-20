@@ -8,6 +8,26 @@ open CWTools.Rules
 open CWTools.Common
 
 module LanguageFeatures =
+
+    let getNodeForTypeDefAndType (resourceManager : ResourceManager<_>) (lookup : Lookup) (typedef : TypeDefinition) (typename : string) =
+        let findNode (pos : range) (startNode : Node) =
+            let rec findChild (node: Node) =
+                if node.Position = pos
+                then Some node
+                else
+                    match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                    | Some c -> findChild c
+                    | None -> None
+            findChild startNode
+        lookup.typeDefInfo.TryFind typedef.name
+            |> Option.bind (List.tryFind (fun tdi -> tdi.id = typename))
+            |> Option.bind
+                (fun typeDefInfoForTypeName ->
+                    let targetRange = typeDefInfoForTypeName.range
+                    resourceManager.Api.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath = typeDefInfoForTypeName.range.FileName)
+                        |> Option.bind (fun struct (e, _) -> findNode typeDefInfoForTypeName.range e.entity)
+                )
+
     let makeEntityResourceInput (fileManager : FileManager) filepath filetext  =
         let filepath = Path.GetFullPath(filepath)
         let logicalpath = fileManager.ConvertPathToLogicalPath filepath
@@ -95,10 +115,11 @@ module LanguageFeatures =
                     match lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
                     | Some td ->
                         let locs = td.localisation @ (td.subtypes |> List.collect (fun st -> if st.name = subtype then st.localisation else []))
-                        match nodeAtPos with
+                        let typeDefNode = getNodeForTypeDefAndType resourceManager lookup td tv
+                        match typeDefNode |> Option.orElse nodeAtPos with
                         | Some node ->
-                           tv, tv,
-                           locs |> List.map (fun l ->
+                            tv, tv,
+                            locs |> List.map (fun l ->
                                 match l.explicitField with
                                 | None -> { key = l.name; value = (l.prefix + tv + l.suffix) }
                                 | Some field -> { key = l.name; value = node.TagText field})

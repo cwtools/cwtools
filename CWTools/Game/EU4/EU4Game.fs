@@ -31,11 +31,11 @@ module EU4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+            @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
@@ -46,11 +46,11 @@ module EU4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+            @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
         validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars

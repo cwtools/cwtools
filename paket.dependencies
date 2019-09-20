@@ -7,7 +7,7 @@ nuget FSharp.Data 3.0.1 #
 nuget FSharp.Collections.ParallelSeq #
 nuget FSharpPlus #
 nuget DotNet.Glob #
-nuget FSharpx.Collections #
+nuget FSharpx.Collections 2.0 #
 nuget FSharp.Compiler.Service
 nuget Sandwych.QuickGraph.Core #
 nuget FsPickler #
