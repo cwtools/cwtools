@@ -34,6 +34,13 @@ type Options = {
     referenceDetails : (bool * string) option
 }
 
+type PathOptions = {
+    paths : string list
+    pathStrict : bool
+    pathFile : string option
+    pathExtension : string option
+}
+
 [<Struct>]
 type ValueType =
 | Enum of enumc : string
@@ -97,10 +104,7 @@ type SubTypeDefinition = {
 and TypeDefinition = {
     name : string
     nameField : string option
-    path : string list
-    path_strict : bool
-    path_file : string option
-    path_extension : string option
+    pathOptions : PathOptions
     conditions : Node option
     subtypes : SubTypeDefinition list
     typeKeyFilter : (string list * bool) option
@@ -171,7 +175,7 @@ type EnumDefinition = {
 type ComplexEnumDef = {
     name : string
     description : string
-    path : string
+    pathOptions : PathOptions
     nameTree : Node
     start_from_root : bool
 }
@@ -270,6 +274,17 @@ module RulesParser =
             if split.Length < 2 then None else Some (split.[0], split.[1])
         |None -> None
 
+    let getPathOptions (node : Node) =
+        let path = (node.TagsText "path") |> List.ofSeq |> List.map (fun s -> s.Replace("game/","").Replace("game\\",""))
+        let pathStrict = node.TagText "path_strict" == "yes"
+        let pathFile = if node.Has "path_file" then Some (node.TagText "path_file") else None
+        let pathExtension = if node.Has "path_extension" then Some (node.TagText "path_extension") else None
+        {
+            paths = path
+            pathStrict = pathStrict
+            pathFile = pathFile
+            pathExtension = pathExtension
+        }
 
     let inline private replaceScopes parseScope (comments : string list) =
         match comments |> List.tryFind (fun s -> s.Contains("replace_scope")) with
@@ -675,10 +690,7 @@ module RulesParser =
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let type_per_file = node.TagText "type_per_file" == "yes"
-            let path = (node.TagsText "path") |> List.ofSeq |> List.map (fun s -> s.Replace("game/","").Replace("game\\",""))
-            let path_strict = node.TagText "path_strict" == "yes"
-            let path_file = if node.Has "path_file" then Some (node.TagText "path_file") else None
-            let path_extension = if node.Has "path_extension" then Some (node.TagText "path_extension") else None
+            let pathOptions = getPathOptions node
             let startsWith = if node.Has "starts_with" then Some (node.TagText "starts_with") else None
             let skiprootkey = getSkipRootKey node
             let subtypes = getNodeComments node |> List.choose parseSubType
@@ -726,19 +738,16 @@ module RulesParser =
                     name = tn;
                     nameField = namefield;
                     type_per_file = type_per_file;
-                    path = path;
-                    path_file = path_file;
+                    pathOptions = pathOptions;
                     conditions = None;
                     subtypes = subtypes;
                     typeKeyFilter = typekeyfilter;
                     skipRootKey = skiprootkey;
                     warningOnly = warningOnly;
-                    path_strict = path_strict;
                     localisation = localisation;
                     startsWith = startsWith;
                     unique = unique;
                     graphRelatedTypes = graphData
-                    path_extension = path_extension
                     }
             |None -> None
         |_ -> None
@@ -784,7 +793,7 @@ module RulesParser =
         match node.Key with
         | x when x.StartsWith("complex_enum") ->
             let enumname = getSettingFromString node.Key "complex_enum"
-            let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            let pathOptions = getPathOptions node
             let nametree = node.Child "name"
             let start_from_root = node.TagText "start_from_root" == "yes"
             match (enumname, nametree) with
@@ -793,7 +802,7 @@ module RulesParser =
                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
                     | Some d -> (d.Trim('#'))
                     | None -> en
-                Some {name = en; path = path; nameTree = nt; start_from_root = start_from_root; description = description}
+                Some {name = en; pathOptions = pathOptions; nameTree = nt; start_from_root = start_from_root; description = description}
             | _ -> None
         | _ -> None
 

@@ -14,7 +14,7 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : Ty
         typeDef.localisation |> List.choose (fun ld -> ld.explicitField |> Option.map (fun ef -> ld.name, ef, ld.primary))
                              |> List.choose (fun (name, field, primary) -> entity.Tag field |> Option.map (fun v -> name, v.ToRawString(), primary))
     let getTypeInfo (def : TypeDefinition) =
-        entities |> List.choose (fun (path, e, file, validate) -> if FieldValidators.checkPathDir def path file then Some (e.entity, file, validate) else None)
+        entities |> List.choose (fun (path, e, file, validate) -> if FieldValidators.checkPathDir def.pathOptions path file then Some (e.entity, file, validate) else None)
                  |> List.collect (fun (e, f, v) ->
                         let inner (n : Node) =
                             let rawSubtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd
@@ -110,9 +110,14 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
     let innerStart (enumtree : Node) (node : Node) = inner enumtree node
         //enumtree.Children |> List.collect (fun e -> node.Children |> List.collect (inner e ))
     let getEnumInfo (complexenum : ComplexEnumDef) =
-        let cpath = complexenum.path.Replace("\\","/")
+        // let cpath = complexenum.path.Replace("\\","/")
         // log (sprintf "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath)))
-        let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
+        let values = entities |> List.choose (fun (path, e) ->
+                                                let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
+                                                let file = Path.GetFileName path
+                                                if CWTools.Rules.FieldValidators.checkPathDir complexenum.pathOptions pathDir file
+                                                then Some e.entity
+                                                else None)
                               |> List.collect (fun e -> if complexenum.start_from_root then innerStart complexenum.nameTree e else  e.Children |> List.collect (innerStart complexenum.nameTree))
         // log "%A %A" complexenum.name values
         { key = complexenum.name; values = values; description = complexenum.description }
@@ -130,5 +135,5 @@ let getEntitiesWithoutTypes (types : TypeDefinition list) (es : Entity list) =
         let dir = Path.GetDirectoryName path
         let file = Path.GetFileName path
         let checkPathDir = (fun a b c -> FieldValidators.checkPathDir c a b)
-        if types |> List.exists (checkPathDir dir file) then None else Some entity.logicalpath
+        if types |> List.exists (fun t -> checkPathDir dir file t.pathOptions) then None else Some entity.logicalpath
     es |> List.choose checkEntity

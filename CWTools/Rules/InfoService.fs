@@ -363,7 +363,7 @@ type InfoService
                 then node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) |> Option.bind (foldAtPosSkipRoot rs o t tail acc)
                 else None
 
-        match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t pathDir file) with
+        match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
         |Some c, Some typedef ->
             let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
             match typerules, typedef.type_per_file with
@@ -448,7 +448,7 @@ type InfoService
         let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
         // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
         let ctx =
-            match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t pathDir file) with
+            match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
             |Some c, Some typedef ->
                 let pushScope, subtypes = ruleValidationService.TestSubType (typedef.subtypes, c)
                 match pushScope with
@@ -514,7 +514,7 @@ type InfoService
                     |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
                     |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
                 infoServiceFunction fNode fChild fLeaf fLeafValue fValueClause fComment ctx a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
-        let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t pathDir file)
+        let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
         let rec infoServiceSkipRoot rs o (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
             match skipRootKeyStack with
             |[] -> if FieldValidators.typekeyfilter t n.Key then infoServiceNode t rs o acc n else acc

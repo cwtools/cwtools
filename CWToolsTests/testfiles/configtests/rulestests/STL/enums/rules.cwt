@@ -6,7 +6,8 @@ types = {
 
 enums = {
     complex_enum[singlefile] = {
-        path = "game/common/graphicalculturetype.txt"
+        path = "game/common"
+        path_file = "graphicalculturetype.txt"
         name = {
             enum_name = scalar
         }
@@ -20,7 +21,8 @@ enums = {
         start_from_root = yes
     }
     complex_enum[complex_path] = {
-        path = "game/common/complexpath.txt"
+        path = "game/common"
+        path_file = "complexpath.txt"
         name = {
             enum_name = scalar
             enum_name
@@ -33,7 +35,8 @@ enums = {
     }
 
     complex_enum[specific_path] = {
-        path = "game/common/specificpath.txt"
+        path = "game/common"
+        path_file = "specificpath.txt"
         name = {
             enum_name = {
                 something = enum_name

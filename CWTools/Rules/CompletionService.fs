@@ -334,7 +334,7 @@ type CompletionService
             |(MultipleKeys (keys, shouldMatch)) ->
                 (keys |> List.exists ((==) s)) <> (not shouldMatch)
 
-        let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t pathDir file)
+        let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
         let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
         let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
         let scoreFunction = scoreFunction allUsedKeys

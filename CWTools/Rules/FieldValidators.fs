@@ -43,16 +43,16 @@ module internal FieldValidators =
 
 
 
-    let checkPathDir (t : TypeDefinition) (pathDir : string) (file : string) =
-        match t.path_strict with
-        |true -> t.path |> List.exists (fun tp -> pathDir == tp.Replace("\\","/"))
-        |false -> t.path |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\","/")))
+    let checkPathDir (pathOptions : PathOptions) (pathDir : string) (file : string) =
+        match pathOptions.pathStrict with
+        |true -> pathOptions.paths |> List.exists (fun tp -> pathDir == tp.Replace("\\","/"))
+        |false -> pathOptions.paths |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\","/")))
         &&
-        match t.path_file with
+        match pathOptions.pathFile with
         |Some f -> file == f
         |None -> true
         &&
-        match t.path_extension with
+        match pathOptions.pathExtension with
         | Some ext ->  Path.GetExtension file == ext
         | None -> true
 

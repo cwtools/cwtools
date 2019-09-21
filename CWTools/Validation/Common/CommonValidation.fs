@@ -106,7 +106,7 @@ module CommonValidation =
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
                     referencedtypes |> (fun refMap -> Map.tryFind "scripted_effect" refMap) |> Option.defaultValue []
-                let allRefs = res |> List.collect (fun struct (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
+                let allRefs = es.AllWithData |> List.collect (fun (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
                                              |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref.position ref.name|})
                                              |> List.groupBy (fun ref -> ref.effectName)
                                              |> Map.ofList

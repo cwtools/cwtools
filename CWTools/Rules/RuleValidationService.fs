@@ -417,7 +417,7 @@ type RuleValidationService
                     if FieldValidators.typekeyfilter typedef n.Key then applyNodeRuleRoot typedef rs o n else OK
                 |_ ->
                     OK
-            let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t pathDir file)
+            let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
             let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : Node) =
                 match skipRootKeyStack with
                 |[] -> if FieldValidators.typekeyfilter t n.Key then validateType t n else OK

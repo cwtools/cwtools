@@ -82,9 +82,12 @@ let createStarbaseTypeDef =
     {
         name = "create_starbase"
         nameField = None
-        path = ["events"]
-        path_strict = false
-        path_file = None
+        pathOptions = {
+            paths = ["events"]
+            pathStrict = false
+            pathFile = None
+            pathExtension = None
+        }
         conditions = None
         subtypes = []
         typeKeyFilter = None
@@ -95,7 +98,6 @@ let createStarbaseTypeDef =
         startsWith = None
         unique = false
         graphRelatedTypes = []
-        path_extension = None
     }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -193,39 +195,43 @@ let shipBehaviorType =
     {
         name = "ship_behavior";
         nameField = Some "name";
-        path = ["common/ship_behaviors"];
+        pathOptions = {
+            paths = ["common/ship_behaviors"];
+            pathStrict = false
+            pathFile = None
+            pathExtension = None
+        }
         conditions = None;
         subtypes = [];
         typeKeyFilter = None
         skipRootKey = []
         warningOnly = false
-        path_strict = false
-        path_file = None
         type_per_file = false
         localisation = []
         startsWith = None
         unique = false
         graphRelatedTypes = []
-        path_extension = None
     }
 let shipSizeType =
     {
         name = "ship_size";
-        path = ["common/ship_sizes"];
+        pathOptions = {
+            paths = ["common/ship_sizes"];
+            pathStrict = false
+            pathFile = None
+            pathExtension = None
+        }
         nameField = None;
         conditions = None;
         subtypes = [];
         typeKeyFilter = None
         skipRootKey = []
         warningOnly = false
-        path_strict = false
-        path_file = None
         type_per_file = false
         localisation = []
         startsWith = None
         unique = false
         graphRelatedTypes = []
-        path_extension = None
     }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"
