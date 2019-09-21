@@ -72,15 +72,16 @@ module CommonValidation =
 
     let valScriptedEffectParams<'T when 'T :> ComputedData> : CWTools.Games.LookupFileValidator<'T> =
         (fun fileManager rulesValidator lu res es ->
-
+            let res = res.AllEntities()
+            let entityMap = res |> List.map (fun struct(e, d) -> e.filepath, struct(e, d)) |> Map.ofList
             let findParams (pos : CWTools.Utilities.Position.range) (key : string) =
-                match res.AllEntities() |> List.tryFind (fun struct(e, _) -> e.filepath = pos.FileName) with
+                match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
                         if node.Position = pos
                         then Some node
                         else
-                            match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
                             | Some c -> findChild c
                             | None -> None
                     findChild e.entity
@@ -88,13 +89,13 @@ module CommonValidation =
                 //|> Option.map (fun s -> eprintfn "vsep %A %A" s.Key key; s)
                 |> Option.map (fun s -> s.Values |> List.map (fun l -> "$" + l.Key + "$", l.ValueText))
             let findSE (pos : range) =
-                match res.AllEntities() |> List.tryFind (fun struct(e, _) -> e.filepath = pos.FileName) with
+                match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
                         if node.Position = pos
                         then Some node
                         else
-                            match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
                             | Some c -> findChild c
                             | None -> None
                     findChild e.entity
@@ -105,13 +106,12 @@ module CommonValidation =
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
                     referencedtypes |> (fun refMap -> Map.tryFind "scripted_effect" refMap) |> Option.defaultValue []
-                let allRefs = res.AllEntities() |> List.collect (fun struct (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
+                let allRefs = res |> List.collect (fun struct (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
                                              |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref.position ref.name|})
                                              |> List.groupBy (fun ref -> ref.effectName)
                                              |> Map.ofList
                 // eprintfn "ar %A" allRefs
                 let scriptedEffects = allScriptedEffects |> List.map (fun (name, filename, node) -> name, fileManager.ConvertPathToLogicalPath(filename), node, allRefs |> Map.tryFind name |> Option.defaultValue [])
-
                 let stringReplace (seParams : (string * string) list) (key : string) =
                     seParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
                 let rec foldOverNode (stringReplacer) (node : Node) =
@@ -120,7 +120,7 @@ module CommonValidation =
                     node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.Children |> List.iter (foldOverNode stringReplacer)
-                let validateSESpecific (name : string) (logicalpath : string) (node : Node) (callSite : range) (seParams : (string * string) list option) =
+                let validateSESpecific ((name : string), (logicalpath : string), (node : Node), (callSite : range), (seParams : (string * string) list option)) =
                     let newNode = CWTools.Process.STLProcess.cloneNode node
                     let rootNode = Node("root")
                     rootNode.AllArray <- [|NodeC newNode|]
@@ -138,12 +138,18 @@ module CommonValidation =
                     res |> (function
                             | OK -> OK
                             | Invalid (inv) -> Invalid (inv |> List.map (fun (a, b, c, d, e, f, _) -> (a, b, c, d, e, f, Some message))))
+                let memoizeValidation =
+                    let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
+                    let memFun = validateSESpecific
+                    memoize keyFun memFun
                 let validateSE (name: string) (logicalpath : string) (node : Node option) (refs : {|callSite : range ; effectName : string ; seParams : (string * string) list option|} list) =
                     // eprintfn "vse %A %A %A" name node refs
-                    match node with
-                    | Some node ->
-                        refs <&!&> (fun ref -> validateSESpecific name logicalpath node ref.callSite ref.seParams)
-                    | None -> OK
+                    let res =
+                        match node with
+                        | Some node ->
+                            refs <&!&> (fun ref -> memoizeValidation (name, logicalpath, node, ref.callSite, ref.seParams))
+                        | None -> OK
+                    res
                 scriptedEffects <&!&> (fun (name, lp, node, refs) -> validateSE name lp node refs)
             | _ -> OK
             )

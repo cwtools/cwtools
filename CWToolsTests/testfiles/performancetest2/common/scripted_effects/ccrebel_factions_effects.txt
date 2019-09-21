@@ -959,7 +959,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = imperialist }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -974,7 +974,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = prosperity }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -989,7 +989,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = totalitarian }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1004,7 +1004,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = progressive }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1019,7 +1019,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = technologist }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1034,7 +1034,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = traditionalist }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1049,7 +1049,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = xenoist }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1064,7 +1064,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = supremacist }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1079,7 +1079,7 @@ save_faction_revolt_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = isolationist }
 			save_event_target_as = cc_rebellious_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1097,7 +1097,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = imperialist }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1112,7 +1112,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = prosperity }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1127,7 +1127,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = totalitarian }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1142,7 +1142,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = progressive }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1157,7 +1157,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = technologist }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1172,7 +1172,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = traditionalist }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1187,7 +1187,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = xenoist }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1202,7 +1202,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = supremacist }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1217,7 +1217,7 @@ save_faction_revolt_2nd_event_target = {
 		random_pop_faction = {
 			limit = { is_pop_faction_type = isolationist }
 			save_event_target_as = cc_new_reb_faction
-			
+
 			if = {
 				limit = {
 					exists = leader
@@ -1226,6 +1226,18 @@ save_faction_revolt_2nd_event_target = {
 				leader = { save_event_target_as = cc_new_reb_faction_leader }
 			}
 		}
+	}
+	remove_all_faction_revolt_flags = {
+		FLAG = cc_imperialist_revolt_active
+	}
+	remove_all_faction_revolt_flags = {
+		FLAG = cc_imperialist_revolt_active
+	}
+	remove_all_faction_revolt_flags = {
+		FLAG = cc_imperialist_revolt_active
+	}
+	remove_all_faction_revolt_flags = {
+		FLAG = cc_imperialist_revolt_active
 	}
 }
 
@@ -1302,7 +1314,7 @@ remove_all_faction_revolt_flags = {
 		limit = { has_country_flag = cc_isolationist_secondary_revolt_active }
 		remove_country_flag = cc_isolationist_secondary_revolt_active
 	}
-	
+
 	if = {
 		limit = { has_country_flag = cc_xenoist_seditions_active }
 		remove_country_flag = cc_xenoist_seditions_active
@@ -1318,7 +1330,7 @@ remove_all_faction_revolt_flags = {
 	if = {
 		limit = { has_country_flag = cc_totalitarian_seditions_active }
 		remove_country_flag = cc_totalitarian_seditions_active
-	} 
+	}
 	if = {
 		limit = { has_country_flag = cc_progressive_seditions_active }
 		remove_country_flag = cc_progressive_seditions_active
@@ -1354,7 +1366,7 @@ remove_all_faction_revolt_flags = {
 	if = {
 		limit = { has_country_flag = cc_totalitarian_stage2_active }
 		remove_country_flag = cc_totalitarian_stage2_active
-	} 
+	}
 	if = {
 		limit = { has_country_flag = cc_progressive_stage2_active }
 		remove_country_flag = cc_progressive_stage2_active
@@ -1390,7 +1402,7 @@ remove_all_faction_revolt_flags = {
 	if = {
 		limit = { has_country_flag = cc_totalitarian_stage3_active }
 		remove_country_flag = cc_totalitarian_stage3_active
-	} 
+	}
 	if = {
 		limit = { has_country_flag = cc_progressive_stage3_active }
 		remove_country_flag = cc_progressive_stage3_active
@@ -1411,4 +1423,10 @@ remove_all_faction_revolt_flags = {
 		limit = { has_country_flag = cc_prosperity_stage3_active }
 		remove_country_flag = cc_prosperity_stage3_active
 	}
+	remove_country_flag = $FLAG$
+	remove_country_flag = $FLAG$
+	remove_country_flag = $FLAG$
+	remove_country_flag = $FLAG$
+	remove_country_flag = $FLAG$
+	remove_country_flag = $FLAG$
 }

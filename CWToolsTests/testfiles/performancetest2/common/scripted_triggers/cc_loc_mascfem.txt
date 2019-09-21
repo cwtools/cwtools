@@ -18,4 +18,15 @@ cc_loc_leader_nogenders = {
 		gender = female
 		gender = male
 	}
+	cc_loc_leader_nogenders2 = { GENDER = female }
+	cc_loc_leader_nogenders2 = { GENDER = female }
+	cc_loc_leader_nogenders2 = { GENDER = male }
+	cc_loc_leader_nogenders2 = { GENDER = male }
+}
+
+cc_loc_leader_nogenders2 = {
+	NOR = {
+		gender = female
+		gender = $GENDER$
+	}
 }
