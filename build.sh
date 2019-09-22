@@ -1,24 +1,9 @@
 #!/bin/bash
-if test "$OS" = "Windows_NT"
-then
-  # use .Net
-  dotnet tool install --tool-path ./.paket paket
-  dotnet tool install --tool-path ./.fake-cli fake-cli
-  .paket/paket.exe restore
-  exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-  	exit $exit_code
-  fi
 
-  ./.fake-cli/FAKE.exe run $@ --fsiargs build.fsx
-else
-  # use linux version
-  dotnet tool install --tool-path ./.paket paket
-  dotnet tool install --tool-path ./.fake-cli fake-cli
-  .paket/paket restore
-  exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-  	exit $exit_code
-  fi
-  ./.fake-cli/fake run --fsiargs -d:MONO build.fsx $@
+dotnet tool restore
+dotnet tool run paket restore
+exit_code=$?
+if [ $exit_code -ne 0 ]; then
+  exit $exit_code
 fi
+dotnet tool run fake run --fsiargs -d:MONO build.fsx --target $@

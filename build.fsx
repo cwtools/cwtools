@@ -2,10 +2,19 @@
 // FAKE build script
 // --------------------------------------------------------------------------------------
 
-#I ".fake-cli"
-#r "FakeLib.dll"
+#r "paket:
+source https://api.nuget.org/v3/index.json
+nuget Fake.Core.Target
+nuget Fake.DotNet.Cli
+nuget Fake.IO.FileSystem
+nuget Fake.Core.ReleaseNotes //"
+#load "./.fake/build.fsx/intellisense.fsx"
 
 open Fake
+open Fake.IO
+open Fake.DotNet
+open Fake.IO.Globbing.Operators
+open Fake.Core.TargetOperators
 open System
 
 // --------------------------------------------------------------------------------------
@@ -26,8 +35,8 @@ let owners = "Thomas Boby"
 let description = "A library for parsing, editing, and validating Paradox Interactive script files."
 
 let release =
-    ReadFile "RELEASE_NOTES.md"
-    |> ReleaseNotesHelper.parseReleaseNotes
+    File.read "RELEASE_NOTES.md"
+    |> Fake.Core.ReleaseNotes.parse
 
 
 
@@ -35,24 +44,26 @@ let release =
 // Helpers
 // --------------------------------------------------------------------------------------
 
-let run' timeout cmd args dir =
-    if execProcess (fun info ->
-        info.FileName <- cmd
-        if not (String.IsNullOrWhiteSpace dir) then
-            info.WorkingDirectory <- dir
-        info.Arguments <- args
-    ) timeout |> not then
-        failwithf "Error while running '%s' with args: %s" cmd args
+// let run' timeout cmd args dir =
+//     if execProcess (fun info ->
+//         info.FileName <- cmd
+//         if not (String.IsNullOrWhiteSpace dir) then
+//             info.WorkingDirectory <- dir
+//         info.Arguments <- args
+//     ) timeout |> not then
+//         failwithf "Error while running '%s' with args: %s" cmd args
 
-let run = run' System.TimeSpan.MaxValue
+// let run = run' System.TimeSpan.MaxValue
 
-let runDotnet workingDir args =
-    let result =
-        ExecProcess (fun info ->
-            info.FileName <- dotnetExePath
-            info.WorkingDirectory <- workingDir
-            info.Arguments <- args) TimeSpan.MaxValue
-    if result <> 0 then failwithf "dotnet %s failed" args
+// let runDotnet workingDir args =
+//     let result =
+//         ExecProcess (fun info ->
+//             info.FileName <- dotnetExePath
+//             info.WorkingDirectory <- workingDir
+//             info.Arguments <- args) TimeSpan.MaxValue
+//     if result <> 0 then failwithf "dotnet %s failed" args
+
+open Fake.DotNet.NuGet
 
 let packParameters name =
   [ //"--no-build"
@@ -63,7 +74,7 @@ let packParameters name =
     sprintf "/p:Owners=\"%s\"" owners
     "/p:PackageRequireLicenseAcceptance=false"
     sprintf "/p:Description=\"%s\"" (description.Replace(",",""))
-    sprintf "/p:PackageReleaseNotes=\"%O\"" ((toLines release.Notes).Replace(",",""))
+    sprintf "/p:PackageReleaseNotes=\"%O\"" ((Core.String.toLines release.Notes).Replace(",",""))
     // sprintf "/p:Copyright=\"%s\"" copyright
     // sprintf "/p:PackageTags=\"%s\"" tags
     // sprintf "/p:PackageProjectUrl=\"%s\"" projectUrl
@@ -72,59 +83,73 @@ let packParameters name =
   ]
   |> String.concat " "
 
+let buildParams (release : bool) =
+    (fun (b : DotNet.BuildOptions) ->
+        { b with
+            Common =
+                {
+                    b.Common with
+                        WorkingDirectory = "src/Main"
+                        CustomParams = Some ((if release then "" else " /p:LinkDuringPublish=false"))
+                }
+            OutputPath = Some ("../../out/server/local")
+            Configuration = if release  then DotNet.BuildConfiguration.Release else DotNet.BuildConfiguration.Debug
+        })
+
 // --------------------------------------------------------------------------------------
 // Targets
 // --------------------------------------------------------------------------------------
 
-Target "Clean" (fun _ ->
-    CleanDirs [buildDir; "bin"]
+Core.Target.create "Clean" (fun _ ->
+    Shell.cleanDirs [buildDir; "bin"]
     appReferences
     |> Seq.iter (fun p ->
         let dir = System.IO.Path.GetDirectoryName p
-        runDotnet dir "clean"
+        DotNet.exec ( (fun (b : DotNet.Options) -> { b with WorkingDirectory = dir })) "clean" "" |> ignore
     )
-    DotNetCli.RunCommand id "clean"
+    DotNet.exec id "clean" "" |> ignore
+
     !! "**/obj/**/*.nuspec"
-    |> DeleteFiles
+    |> File.deleteAll
 
 )
 
 
-Target "Restore" (fun _ ->
+Core.Target.create "Restore" (fun _ ->
     appReferences
     |> Seq.iter (fun p ->
         let dir = System.IO.Path.GetDirectoryName p
-        runDotnet dir "restore"
+        DotNet.restore id dir
     )
 )
 
-Target "Build" (fun _ ->
+Core.Target.create "Build" (fun _ ->
     appReferences
     |> Seq.iter (fun p ->
         let dir = System.IO.Path.GetDirectoryName p
-        runDotnet dir "build"
+        DotNet.build id dir
     )
 )
 
-Target "Test" (fun _ ->
+Core.Target.create "Test" (fun _ ->
     testReferences
     |> Seq.iter (fun p ->
         let dir = System.IO.Path.GetDirectoryName p
-        runDotnet dir "run"
+        DotNet.exec ( (fun (b : DotNet.Options) -> { b with WorkingDirectory = dir })) "run" "" |> ignore
     )
 )
 
-Target "Pack" (fun _ ->
+Core.Target.create "Pack" (fun _ ->
   !! "CWTools/CWTools.fsproj"
   |> Seq.iter (fun proj ->
     let path = proj.Substring(0, proj.Length - ".fsproj".Length)
     printfn "%A" path
     let name = System.IO.Path.GetFileName path
-    DotNetCli.RunCommand id (
+    DotNet.exec id "pack" (
       sprintf
-        "pack \"%s\" -o ../bin %s"
+        "\"%s\" -o ../bin %s"
         //"pack \"%s\" -c Debug  -o ../bin %s"
-        proj  (packParameters name))
+        proj  (packParameters name)) |> ignore
   )
 //   DotNetCli.RunCommand id (
 //       sprintf
@@ -144,4 +169,4 @@ Target "Pack" (fun _ ->
   ==> "Restore"
   ==> "Build"
 
-RunTargetOrDefault "Build"
+Fake.Core.Target.runOrDefaultWithArguments "Build"
