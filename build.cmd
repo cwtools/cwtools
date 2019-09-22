@@ -7,4 +7,4 @@ if errorlevel 1 (
   exit /b %errorlevel%
 )
 
-.\.fake-cli\FAKE.exe build.fsx %*
+.\.fake-cli\FAKE.exe run build.fsx %*

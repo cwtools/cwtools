@@ -10,7 +10,7 @@ then
   	exit $exit_code
   fi
 
-  ./.fake-cli/FAKE.exe $@ --fsiargs build.fsx
+  ./.fake-cli/FAKE.exe run $@ --fsiargs build.fsx
 else
   # use linux version
   dotnet tool install --tool-path ./.paket paket
@@ -20,5 +20,5 @@ else
   if [ $exit_code -ne 0 ]; then
   	exit $exit_code
   fi
-  ./.fake-cli/fake $@ --fsiargs -d:MONO build.fsx
+  ./.fake-cli/fake run $@ --fsiargs -d:MONO build.fsx
 fi
