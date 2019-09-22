@@ -128,6 +128,8 @@ and NewField =
 | LocalisationField of synced : bool
 | FilepathField of prefix : string option * extension : string option
 | IconField of string
+/// The keys of an alias rule
+| AliasValueKeysField of string
 | AliasField of string
 | SingleAliasField of string
 | SubtypeField of string * bool * NewRule list
@@ -455,6 +457,11 @@ module RulesParser =
             match getSettingFromString x "single_alias_right" with
             | Some alias ->
                 SingleAliasField alias
+            | None -> ScalarField (ScalarValue)
+        | x when x.StartsWith "alias_keys_field" ->
+            match getSettingFromString x "alias_keys_field" with
+            | Some aliasKey ->
+                AliasValueKeysField aliasKey
             | None -> ScalarField (ScalarValue)
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty

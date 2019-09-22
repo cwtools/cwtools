@@ -13,7 +13,7 @@ types = {
         }
 
     }
-    
+
 }
 
 ## scope = ship
@@ -123,3 +123,5 @@ alias[effect:dual_path_complex] = {
     var = value_set[variable]
     value = variable_field
 }
+
+alias[effect:effect_alias_test] = alias_keys_field[effect]

@@ -39,6 +39,10 @@ type CompletionService
     let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
     let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
 
+    let aliasKeyMap =
+        aliases |> Map.toList |> List.map (fun (key, rules) -> key, (rules |> List.choose (function | LeafRule (SpecificField (SpecificValue x), _), _ -> Some x.lower | NodeRule (SpecificField (SpecificValue x), _), _ -> Some x.lower | _ -> None)))
+                |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
+                |> Map.ofList
 
     let linkMap = links
     let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect as e when e.IsWildCard -> Some e |_ -> None )
@@ -257,6 +261,7 @@ type CompletionService
             anyScope = anyScope
             defaultLang = defaultLang
             wildcardLinks = wildCardLinks
+            aliasKeyList = aliasKeyMap
         }
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
         let severity = Severity.Error

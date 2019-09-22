@@ -130,3 +130,11 @@ country_event = {
         }
     }
 }
+
+country_event = {
+    option = {
+        effect_alias_test = dual_path_complex
+        #error
+        effect_alias_test = not_real
+    }
+}

@@ -55,7 +55,10 @@ type InfoService
         typesMap |> Map.toList |> List.fold (fun m (t, set) -> inner m t set) Map.empty
     let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
     let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
-
+    let aliasKeyMap =
+        aliases |> Map.toList |> List.map (fun (key, rules) -> key, (rules |> List.choose (function | LeafRule (SpecificField (SpecificValue x), _), _ -> Some x.lower | NodeRule (SpecificField (SpecificValue x), _), _ -> Some x.lower | _ -> None)))
+                |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
+                |> Map.ofList
     let monitor = new Object()
 
     let memoizeRulesInner memFunction =
@@ -297,6 +300,7 @@ type InfoService
             anyScope = anyScope
             defaultLang = defaultLang
             wildcardLinks = wildCardLinks
+            aliasKeyList = aliasKeyMap
         }
     let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos : pos) (node : Node) (logicalpath : string) =
         let fChild (ctx, _) (node : IClause) ((field, options) : NewRule) =

@@ -29,6 +29,7 @@ type CheckFieldParams =
         changeScope : ChangeScope
         anyScope : Scope
         defaultLang : Lang
+        aliasKeyList : Collections.Map<string, Collections.Set<StringToken>>
     }
 
 [<RequireQualifiedAccess>]
@@ -417,6 +418,16 @@ module internal FieldValidators =
         // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_ -> false
+
+    let checkAliasValueKeysField (aliasKeyList : Collections.Map<string, Collections.Set<StringToken>>) aliasKey (id : StringToken) key severity leafornode errors =
+        match aliasKeyList |> Map.tryFind aliasKey with
+        | Some values -> if values |> Set.contains id then errors else inv (ErrorCodes.ConfigRulesUnexpectedAliasKeyValue aliasKey key severity) leafornode <&&&> errors
+        | None -> inv (ErrorCodes.ConfigRulesUnexpectedAliasKeyValue aliasKey key severity) leafornode <&&&> errors
+
+    let checkAliasValueKeysFieldNE (aliasKeyList : Collections.Map<string, Collections.Set<StringToken>>) aliasKey id =
+        match aliasKeyList |> Map.tryFind aliasKey with
+        | Some values -> values |> Set.contains id
+        | None -> true
     let checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) (leafornode : IKeyPos) errors =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then errors else
             match field with
@@ -439,6 +450,7 @@ module internal FieldValidators =
             |SubtypeField (_)
             |TypeMarkerField (_)
             |ValueScopeMarkerField (_) -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
+            |AliasValueKeysField aliasKey -> checkAliasValueKeysField p.aliasKeyList aliasKey id key severity leafornode errors
     let checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then true else
             match field with
@@ -462,6 +474,7 @@ module internal FieldValidators =
             |SubtypeField (_)
             |TypeMarkerField (_)
             |ValueScopeMarkerField (_) -> false
+            |AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeyList aliasKey id
 
     let checkLeftField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
         checkFieldNE p severity ctx field id key
