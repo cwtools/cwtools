@@ -20,5 +20,5 @@ else
   if [ $exit_code -ne 0 ]; then
   	exit $exit_code
   fi
-  ./.fake-cli/FAKE $@ --fsiargs -d:MONO build.fsx
+  ./.fake-cli/fake $@ --fsiargs -d:MONO build.fsx
 fi
