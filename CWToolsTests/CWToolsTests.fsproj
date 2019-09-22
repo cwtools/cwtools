@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilation>true</TieredCompilation>
-    <PaketCommand>dotnet tool run paket</PaketCommand>
+    <PaketCommand>dotnet paket</PaketCommand>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
