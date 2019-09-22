@@ -39,7 +39,7 @@ namespace CWToolsCSTests
         public static MyNode ToMyNode(Node n) {
             var nodes = n.AllChildren.Where(x => x.IsNodeC).Select(x => ToMyNode(x.node)).ToList();
             var leaves = n.AllChildren.Where(x => x.IsLeafC).Select(x => ToMyKeyValue(x.leaf)).ToList();
-            var values = n.AllChildren.Where(x => x.IsLeafValueC).Select(x => ToMyValue(x.lefavalue)).ToList();
+            var values = n.AllChildren.Where(x => x.IsLeafValueC).Select(x => ToMyValue(x.leafvalue)).ToList();
             return new MyNode { Key = n.Key, Nodes = nodes, Values = values, KeyValues = leaves};
         }
         public static MyNode MapToMyNode() {
@@ -76,7 +76,7 @@ namespace CWToolsCSTests
             var myEvent = processed.Events.FirstOrDefault(x => x.ID == "test.1");
 
             //Add is_triggered_only = true
-            var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true)), FSharpOption<range>.None);
+            var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), FSharpOption<range>.None);
             myEvent.AllChildren.Add(Child.NewLeafC(leaf));
             // or
             // myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true)));
