@@ -91,6 +91,7 @@ module CWToolsCLI =
         | [<Inherit>]Scope of FilesScope
         | [<Inherit>]ModFilter of string
         | [<Inherit>]CacheFile of path : string
+        | [<Inherit>]RulesPath of path : string
         | DocsPath of string
         | [<CustomCommandLine("validate")>] Validate of ParseResults<ValidateArgs>
         | [<CustomCommandLine("list")>] List of ParseResults<ListArgs>
@@ -110,6 +111,8 @@ module CWToolsCLI =
                 | DocsPath _ -> "path to a custom trigger_docs game.log file"
                 | Parse _ -> "parse a file"
                 | Serialize _ -> "created serialized files for embedding"
+                | CacheFile _ -> "path to the cache file"
+                | RulesPath _ -> "path to the cwt rules"
 
 
     let getEffectsAndTriggers docsPath =
@@ -136,14 +139,15 @@ module CWToolsCLI =
             yield! getAllFolders dirs
         }
 
-    let getConfigFiles(gameDir : string option) =
+    let getConfigFiles(gameDir : string option, rulesDir : string option) =
         let configpath = "Main.files.config.cwt"
         let configDir =
-            match gameDir with
-            |Some dir -> Path.Combine(dir, ".cwtools")
-            |None -> "./.cwtools"
+            match gameDir, rulesDir with
+            | _, Some rulesDir -> rulesDir
+            |Some dir, _ -> Path.Combine(dir, ".cwtools")
+            |None, _ -> "./.cwtools"
         let configFiles = (if Directory.Exists configDir then getAllFoldersUnion ([configDir] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
-        let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
+        let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
         let configs =
             match true, configFiles.Length > 0 with
             |false, _ -> []
@@ -154,7 +158,7 @@ module CWToolsCLI =
         configs
     let list game directory scope modFilter docsPath (results : ParseResults<ListArgs>) =
         let triggers, effects = getEffectsAndTriggers docsPath
-        let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory))
+        let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory, None))
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -198,7 +202,7 @@ module CWToolsCLI =
 
         | _ -> failwith "Unexpected list type"
 
-    let validate game directory scope modFilter docsPath cachePath (results : ParseResults<_>) =
+    let validate game directory scope modFilter docsPath cachePath rulesPath (results : ParseResults<_>) =
         let cached, cachedFiles =
             match cachePath with
             |Some path ->
@@ -207,9 +211,8 @@ module CWToolsCLI =
                 if doesCacheExist then Serializer.deserialize path else [], []
             |None -> [], []
         //printfn "%A" cachedFiles
-        let  triggers, effects = getEffectsAndTriggers docsPath
         let valType = results.GetResult <@ ValType @>
-        let gameObj = ErrorGame(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory),game, cached, cachedFiles)
+        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, cached, cachedFiles)
         let errors =
             match valType with
             | ValidateType.ParseErrors -> (gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse
@@ -289,9 +292,10 @@ module CWToolsCLI =
         let modFilter = results.GetResult(<@ ModFilter @>, defaultValue = "")
         let docsPath = results.TryGetResult <@ DocsPath @>
         let cachePath = results.TryGetResult <@ CacheFile @>
+        let rulesPath = results.TryGetResult <@ RulesPath @>
         match results.GetSubCommand() with
         | List r -> list game directory scope modFilter docsPath r
-        | Validate r -> validate game directory scope modFilter docsPath cachePath r
+        | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath r
         | Directory _
         | Serialize _ -> serialize game [{path = directory; name = "undefined"}] scope modFilter docsPath
         | Game _ -> failwith "internal error: this code should never be reached"

@@ -95,7 +95,7 @@ module Validator =
         member val references = game.References
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
-    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config, game : Game, cached, cachedFiles) =
+    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cached, cachedFiles) =
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
         let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
         let STLoptions : StellarisSettings = {
@@ -107,15 +107,7 @@ module Validator =
                 langs = langs
             }
             rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = ManualSettings {
-                triggers = triggers
-                effects = effects
-                modifiers = []
-                embeddedFiles = cachedFiles
-                cachedResourceData = cached
-                localisationCommands = Legacy []
-                eventTargetLinks = []
-            }
+            embedded = FromConfig (cachedFiles, cached)
             scriptFolders = None
             excludeGlobPatterns = None
         }
@@ -128,15 +120,7 @@ module Validator =
                 langs = langs
             }
             rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = ManualSettings {
-                modifiers = []
-                embeddedFiles = cachedFiles
-                cachedResourceData = cached
-                triggers = []
-                effects = []
-                localisationCommands = Legacy []
-                eventTargetLinks = []
-            }
+            embedded = FromConfig (cachedFiles, cached)
             scriptFolders = Some HOI4Constants.scriptFolders
             excludeGlobPatterns = None
 
