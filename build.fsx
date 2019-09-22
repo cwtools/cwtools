@@ -2,7 +2,7 @@
 // FAKE build script
 // --------------------------------------------------------------------------------------
 
-#I "packages/tools/FAKE/tools"
+#I ".fake-cli"
 #r "FakeLib.dll"
 
 open Fake
