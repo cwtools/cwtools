@@ -72,3 +72,5 @@ dotnetcore
 .idea
 
 .ionide/
+.paket/
+.fake-cli/

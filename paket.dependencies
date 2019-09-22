@@ -13,7 +13,3 @@ nuget Sandwych.QuickGraph.Core #
 nuget FsPickler #
 nuget FSharp.Core 4.7.0 #
 nuget System.Text.Encoding.CodePages #
-
-group tools
-    source https://api.nuget.org/v3/index.json
-    nuget FAKE ~> 4

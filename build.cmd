@@ -1,10 +1,10 @@
 @echo off
 cls
-
+dotnet tool install --tool-path ./.paket paket
+dotnet tool install --tool-path ./.fake-cli fake-cli
 .paket\paket.exe restore
-.paket\paket.exe restore -g tools
 if errorlevel 1 (
   exit /b %errorlevel%
 )
 
-packages\tools\FAKE\tools\FAKE.exe build.fsx %*
+.\.fake-cli\FAKE.exe build.fsx %*
