@@ -1,4 +1,4 @@
-image: fsharp:netcore
+image: mcr.microsoft.com/dotnet/core-nightly/sdk:3.0.100-alpine3.10
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -10,14 +10,6 @@ stages:
 test:
     stage: test
     script:
-    - apt-get update && apt-get -y install git wget
-    - wget -O /tmp/dotnet-sdk.tar.gz https://download.visualstudio.microsoft.com/download/pr/b81a2bd3-a8a4-4c7e-bd69-030f412ff7b4/3fc5f2c0481313daf2e18c348362ff3f/dotnet-sdk-3.0.100-rc1-014190-linux-x64.tar.gz
-    - mkdir /opt/dotnet
-    - cd /opt/dotnet
-    - tar xzf /tmp/dotnet-sdk.tar.gz
-    - export DOTNET_ROOT="/opt/dotnet"
-    - export PATH="/opt/dotnet:${PATH}"
-    - cd /builds/tboby/cwtools
     - ls -A
     - chmod +x ./build.sh
-    - bash ./build.sh Test
+    - /bin/sh ./build.sh Test
