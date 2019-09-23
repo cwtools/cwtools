@@ -44,7 +44,7 @@ type PathOptions = {
 [<Struct>]
 type ValueType =
 | Enum of enumc : string
-| Float of minmax: (float*float)
+| Float of minmax: (decimal*decimal)
 | Bool
 | Int of minmaxi: (int*int)
 | Percent
@@ -135,9 +135,9 @@ and NewField =
 | SubtypeField of string * bool * NewRule list
 | VariableSetField of string
 | VariableGetField of string
-| VariableField of isInt : bool * minmax : (float * float)
-| ValueScopeMarkerField of isInt : bool * minmax : (float * float)
-| ValueScopeField of isInt : bool * minmax : (float * float)
+| VariableField of isInt : bool * minmax : (decimal * decimal)
+| ValueScopeMarkerField of isInt : bool * minmax : (decimal * decimal)
+| ValueScopeField of isInt : bool * minmax : (decimal * decimal)
 | MarkerField of Marker
     override x.ToString() =
         match x with
@@ -199,7 +199,7 @@ module RulesParser =
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
     let optionalMany : Options = { defaultOptions with min = 0; max = 100 }
 
-    let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
+    let defaultFloat = ValueField (ValueType.Float (-1E+12M, 1E+12M))
     let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
 
     let private getNodeComments (clause : IClause) =
@@ -234,14 +234,14 @@ module RulesParser =
         match getSettingFromString full "float" with
         |Some s ->
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
-            let parseFloat (s : string) =
-                match s, Double.TryParse s with
-                | "inf", _ -> Some (float 1E+12)
-                | "-inf", _ -> Some -(float 1E+12)
+            let parseDecimal (s : string) =
+                match s, Decimal.TryParse s with
+                | "inf", _ -> Some (decimal 1E+12M)
+                | "-inf", _ -> Some -(decimal 1E+12M)
                 | _, (true, num) -> Some (num)
                 | _, (false, _) -> None
             if split.Length < 2 then None else
-                match (parseFloat split.[0]), (parseFloat split.[1]) with
+                match (parseDecimal split.[0]), (parseDecimal split.[1]) with
                 | Some min, Some max -> Some (min, max)
                 | _ -> None
         |None -> None
@@ -413,26 +413,26 @@ module RulesParser =
             | Some alias -> AliasField alias
             | None -> ScalarField (ScalarValue)
         | "scope_field" -> ScopeField (anyScope)
-        | "variable_field" -> VariableField (false, (-1E+12, 1E+12))
+        | "variable_field" -> VariableField (false, (-1E+12M, 1E+12M))
         | x when x.StartsWith "variable_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> VariableField (false,(min, max))
-            | None -> VariableField (false,(-1E+12, 1E+12))
-        | "int_variable_field" -> VariableField (true, (float Int32.MinValue, float Int32.MaxValue))
+            | None -> VariableField (false,(-1E+12M, 1E+12M))
+        | "int_variable_field" -> VariableField (true, (decimal Int32.MinValue, decimal Int32.MaxValue))
         | x when x.StartsWith "int_variable_field[" ->
             match getIntSettingFromString x with
-            | Some (min, max) -> VariableField (true,(float min,float max))
-            | None -> VariableField (true,(float Int32.MinValue, float Int32.MaxValue))
-        | "value_field" -> ValueScopeMarkerField (false, (-1E+12, 1E+12))
+            | Some (min, max) -> VariableField (true,(decimal min,decimal max))
+            | None -> VariableField (true,(decimal Int32.MinValue, decimal Int32.MaxValue))
+        | "value_field" -> ValueScopeMarkerField (false, (-1E+12M, 1E+12M))
         | x when x.StartsWith "value_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (false,(min, max))
-            | None -> ValueScopeMarkerField (false,(-1E+12, 1E+12))
-        | "int_value_field" -> ValueScopeMarkerField (true, (float Int32.MinValue, float Int32.MaxValue))
+            | None -> ValueScopeMarkerField (false,(-1E+12M, 1E+12M))
+        | "int_value_field" -> ValueScopeMarkerField (true, (decimal Int32.MinValue, decimal Int32.MaxValue))
         | x when x.StartsWith "int_value_field[" ->
             match getIntSettingFromString x with
-            | Some (min, max) -> ValueScopeMarkerField (true,(float min,float max))
-            | None -> ValueScopeMarkerField (true,(float Int32.MinValue, float Int32.MaxValue))
+            | Some (min, max) -> ValueScopeMarkerField (true,(decimal min,decimal max))
+            | None -> ValueScopeMarkerField (true,(decimal Int32.MinValue, decimal Int32.MaxValue))
         | x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             | Some variable ->
@@ -511,7 +511,7 @@ module RulesParser =
 
 
     let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
 
     let configLeaf processChildConfig (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
@@ -897,7 +897,7 @@ module RulesParser =
             match rule with
             | LeafRule (l, MarkerField (ColourField)), o  ->
                 [
-                    NodeRule((l), [LeafValueRule(ValueField(ValueType.Float(-256.0, 256.0))), { defaultOptions with min = 3; max = 3 } ]), o
+                    NodeRule((l), [LeafValueRule(ValueField(ValueType.Float(-256.0M, 256.0M))), { defaultOptions with min = 3; max = 3 } ]), o
                 ]
             | LeafRule (l, MarkerField (IRCountryTag)), o  ->
                 [

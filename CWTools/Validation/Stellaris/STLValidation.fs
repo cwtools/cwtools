@@ -623,7 +623,7 @@ module STLValidation =
                 let hasChildren = techChildren |> Set.contains t.Key
                 let isUsedElsewhere = allPrereqs |> Set.contains t.Key
                 let isWeightZero = t.Tag "weight" |> (function |Some (Value.Int 0) -> true |_ -> false)
-                let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00) -> true |_ -> false)) |> Option.defaultValue false
+                let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00m) -> true |_ -> false)) |> Option.defaultValue false
                 let hasFeatureFlag = t.Has "feature_flags"
                 if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid [inv (ErrorCodes.UnusedTech (t.Key)) t]
             let res = techs <&!&> inner

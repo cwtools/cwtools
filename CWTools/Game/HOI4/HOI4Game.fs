@@ -102,7 +102,7 @@ module HOI4GameFunctions =
                 modifierCategoryManager.SupportedScopes modifier.category
             {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
-            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), modifierOptions c)))
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
     let loadConfigRulesHook rules (lookup : Lookup) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded

@@ -104,7 +104,7 @@ module internal SharedParsers =
     let valueBNo = skipString "no" .>> nextCharSatisfiesNot (isvaluechar) |>> (fun _ -> Bool(false))
 
     let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) |>> int |>> Int
-    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> float |>> Float
+    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> decimal |>> Float
 
     let hsv3 = clause (pipe3 ((parseWithPosition valueF .>> ws) .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
     let hsv4 = clause (pipe4 (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))

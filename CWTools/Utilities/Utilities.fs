@@ -73,6 +73,7 @@ module TryParser =
     let parseIntWithDecimal    =  tryParseWith (fun s -> System.Int32.TryParse(s, Globalization.NumberStyles.AllowDecimalPoint ||| Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture))
     let parseSingle = tryParseWith System.Single.TryParse
     let parseDouble = tryParseWith (fun s -> (System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
+    let parseDecimal = tryParseWith (fun s -> (System.Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
     // etc.
 
     // active patterns for try-parsing strings

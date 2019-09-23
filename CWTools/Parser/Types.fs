@@ -41,7 +41,7 @@ module Types =
     and Value =
         | String of string
         | QString of string
-        | Float of float
+        | Float of decimal
         | Int of int
         | Bool of bool
         | Clause of Statement list
@@ -51,7 +51,7 @@ module Types =
                 | QString s -> "\"" + s + "\""
                 | String s -> s
                 | Bool b -> if b then "yes" else "no"
-                | Float f -> sprintf "%f" f
+                | Float f -> f.ToString()
                 | Int i -> sprintf "%i" i
 
 

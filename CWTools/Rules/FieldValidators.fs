@@ -96,7 +96,7 @@ module internal FieldValidators =
                         | Some (_, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode <&&&> errors
                         | None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.Float (min, max) ->
-                    match TryParser.parseDouble key with
+                    match TryParser.parseDecimal key with
                     | Some f -> if f <= max && f >= min then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leafornode <&&&> errors
                     | None ->
                         match enumsMap.TryFind "static_values" with
@@ -148,7 +148,7 @@ module internal FieldValidators =
                         | Some (_, es) -> es.Contains (trimQuote key)
                         | None -> false
             | ValueType.Float (min, max) ->
-                match TryParser.parseDouble key with
+                match TryParser.parseDecimal key with
                 | Some f -> f <= max && f >= min
                 | None ->
                         match enumsMap.TryFind "static_values" with
@@ -361,8 +361,8 @@ module internal FieldValidators =
     let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key leafornode errors =
         let scope = ctx.scopes
 
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
+        match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
@@ -373,8 +373,8 @@ module internal FieldValidators =
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
     let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        |_, Some i, _ -> isInt && min <= float i && max >= float i
+        match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
         |_, _, VarNotFound s -> false
@@ -386,8 +386,8 @@ module internal FieldValidators =
     let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key leafornode errors =
         let scope = ctx.scopes
         // let res = changeScope false true linkMap valueTriggerMap varSet key scope
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        |_, Some i, _ when isInt && min <= float i && max >= float i -> errors
+        match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
@@ -403,8 +403,8 @@ module internal FieldValidators =
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
     let checkValueScopeFieldNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key =
         let scope = ctx.scopes
-        match TryParser.parseDouble key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        |_, Some i, _ -> isInt && min <= float i && max >= float i
+        match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
         |_, _, VarNotFound s -> false

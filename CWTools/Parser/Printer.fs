@@ -14,7 +14,7 @@ module CKPrinter =
 
     let rec printValue v depth =
         match v with
-        | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth) + "}"
+        | Clause kvl -> "{\n" + printKeyValueList kvl (depth + 1) + tabs (depth) + "}"
         | x -> x.ToString() + ""
     and printKeyValue (acc, leadingNewline, prevStart, prevEnd) kv depth =
         match kv with

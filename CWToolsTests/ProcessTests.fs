@@ -270,7 +270,7 @@ let tests =
                 let ifblock = anyplanet.Children |> List.head
                 let limit = ifblock.Children |> List.head
                 let num = limit.Leaves |> Seq.head
-                let value = num.Value |> (function |Value.Float f when f = -1.0 -> Some f |_ -> None)
+                let value = num.Value |> (function |Value.Float f when f = -1.0M -> Some f |_ -> None)
                 Expect.isTrue (event :? STLProcess.Event) "event not right type"
                 Expect.isTrue (option :? STLProcess.Option) "option not right type"
                 Expect.isTrue (limit :? TriggerBlock) "node not right type"
