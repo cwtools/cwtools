@@ -1,0 +1,31 @@
+# I guess these are for running many games in observer mode and seeing if stuff works? If so, excellent feature!
+
+enums = {
+    enum[scripted_test_intervals] = {
+        daily
+        monthly
+    }
+}
+
+types = {
+    type[scripted_test] = {
+        path = "game/common/scripted_tests"
+    }
+}
+
+# Scope seems to be global
+scripted_test = {
+    ## cardinality = 0..1
+    suite = scalar
+    interval = enum[scripted_test_intervals]
+
+    success = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    failure = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+}

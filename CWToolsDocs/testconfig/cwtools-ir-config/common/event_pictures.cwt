@@ -1,0 +1,24 @@
+types = {
+    type[event_picture] = {
+        path = "game/common/event_pictures"
+        picture = filepath
+    }
+}
+
+event_picture = {
+    theme = <event_theme>
+
+    # Subtypes wouldn't work well so I guess just doc it up
+    ## cardinality = 1..inf
+    picture = filepath
+
+    ## cardinality = 1..inf
+    picture = {
+        ## replace_scope = { this = country }
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+        texture = filepath
+    }
+}

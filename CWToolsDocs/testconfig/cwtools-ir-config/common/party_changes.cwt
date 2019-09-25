@@ -1,0 +1,21 @@
+# Must 1:1 party_types. TODO: ensure that
+
+types = {
+    type[party_changes_validation] = {
+        path = "game/common/party_changes"
+        type_per_file = yes
+    }
+}
+
+party_changes_validation = {
+    ## cardinality = 1..inf
+    <party_type> = {
+        base = int
+        # Probably uses same structure as the modifier in chance/weight, but desc is throwing me off; TODO: figure out
+        ## cardinality = 0..inf
+        modifier = {
+            add = value_field
+            desc = localisation
+        }
+    }
+}

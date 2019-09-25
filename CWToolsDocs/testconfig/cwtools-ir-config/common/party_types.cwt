@@ -1,0 +1,31 @@
+types = {
+    type[party_type] = {
+        path = "game/common/party_types"
+
+        localisation = {
+            name = "$"
+            short = "$_short"
+            # TODO: Figure out if the stuff like $_ticking_modifier or $_pleasure_tooltip is dynamic
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+party_type = {
+    ## cardinality = 0..1
+    ### Defaults to no.
+    populist_party = bool
+
+    allow = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ruler_modifier = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ai_max_power = int
+}

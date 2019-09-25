@@ -1,0 +1,22 @@
+types = {
+    type[building] = {
+        path = "game/common/buildings"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+            # cost = "$_cost" # Not sure if that's defined anywhere else, but seems like it'd be useful to show here
+        }
+    }
+}
+
+## replace_scope = { this = province root = province }
+building = {
+    ## cardinality = 0..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    cost = int # float?
+    time = int
+
+    order = int
+}

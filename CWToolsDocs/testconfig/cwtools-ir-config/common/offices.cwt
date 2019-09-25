@@ -1,0 +1,32 @@
+types = {
+    type[office] = {
+        path = "game/common/offices"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+            # _<culture_group>
+        }
+    }
+}
+
+office = {
+    type = enum[government_types]
+    skill = enum[character_skills]
+
+    ## replace_scope = { this = character root = character }
+    personal_modifier = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## replace_scope = { this = country root = country }
+    ### Multiplied by the skill specified in skill.
+    skill_modifier = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ai_disallow_party = <party_type>
+}

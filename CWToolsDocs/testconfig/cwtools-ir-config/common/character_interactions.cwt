@@ -1,0 +1,70 @@
+types = {
+    type[character_interaction] = {
+        path = "game/common/character_interactions"
+
+        localisation = {
+            # TODO: Add subtyping, figure out what means what
+            name = "$"
+            past = "$_past"
+            act = "$_act"
+            act_past = "$_act_past"
+            # $_tooltip_government_group
+            ## optional
+            select_title = "$_select_title"
+        }
+    }
+}
+
+character_interaction = {
+    ## cardinality = 0..1
+    ### Defaults to yes.
+    message = bool
+
+    on_own_nation = bool
+    on_other_nation = bool
+
+    # TODO: Sound
+    ## cardinality = 0..1
+    sound = scalar
+
+    ## cardinality = 0..1
+    ### Defaults to yes, probably.
+    requires_envoy = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    close_ui = bool
+
+    ## set_saved_scope = { actor = country target = character }
+    potential_trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## set_saved_scope = { actor = country target = character }
+    allowed_trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    character_actor_trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    character_target_trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## set_saved_scope = { actor = country target = character }
+    effect = {
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..1
+	ai_will_do = single_alias_right[chance_block]
+}

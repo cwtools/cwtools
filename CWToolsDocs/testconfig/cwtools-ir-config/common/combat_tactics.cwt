@@ -1,0 +1,40 @@
+types = {
+    type[combat_tactic] = {
+        path = "game/common/combat_tactics"
+
+        subtype[default_disabled] = {
+            enable = no
+        }
+
+        localisation = {
+            name = "$"
+            # Optional, apparently - not used in some languages
+            ## optional
+            description = "$_desc"
+        }
+    }
+}
+
+combat_tactic = {
+    ## cardinality = 0..1
+    ### Defaults to no.
+    use_as_default = bool
+
+    enable = bool
+
+    # TODO: Sound
+    sound = scalar
+
+    # TODO: Probably 0..inf, actually, but needs checking and probably is built into the UI by default.
+    ## cardinality = 4..4
+    <combat_tactic> = float
+
+    ## cardinality = 0..1
+    casualties = float
+
+    effective_composition = {
+        # TODO: still wanting that "one of each" rule :)
+        ## cardinality = 0..inf
+        <unit_type.army> = float[0.0..inf]
+    }
+}

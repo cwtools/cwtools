@@ -1,0 +1,166 @@
+enums = {
+    enum[event_types] = {
+        country_event
+        major_country_event
+        province_event
+        character_event
+        state_event
+    }
+}
+
+single_alias[complex_event_desc] = {
+    ## cardinality = 0..inf
+    desc = localisation
+
+    ## cardinality = 0..inf
+    random_valid = {
+        ## cardinality = 2..inf
+        desc = localisation
+    }
+
+    ## cardinality = 0..inf
+    first_valid = {
+        ## cardinality = 1..inf
+        triggered_desc = {
+            desc = localisation
+            trigger = {
+                ## cardinality = 1..inf
+                alias_name[trigger] = alias_match_left[trigger]
+            }
+        }
+    }
+}
+
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## push_scope = country
+        subtype[country] = {
+            type = country_event
+        }
+        ## push_scope = country
+        subtype[major_country] = {
+            type = major_country_event
+        }
+        ## push_scope = province
+        subtype[province] = {
+            type = province_event
+        }
+        ## push_scope = character
+        subtype[character] = {
+            type = character_event
+        }
+        ## push_scope = state
+        subtype[state] = {
+            type = state_event
+        }
+        subtype[visible] = {
+            ## cardinality = 0..1
+            hidden = no
+        }
+        subtype[complex_desc_and_visible] = {
+            ## cardinality = 0..1
+            hidden = no
+            desc = {
+
+            }
+        }
+        subtype[non_complex_desc_and_visible] = {
+            ## cardinality = 0..1
+            hidden = no
+            desc = localisation
+        }
+
+        localisation = {
+            subtype[visible] = {
+                title = title
+            }
+            subtype[non_complex_desc_and_visible] = {
+                description = desc
+            }
+        }
+    }
+}
+
+event = {
+    type = enum[event_types]
+
+    subtype[visible] = {
+        title = localisation
+        picture = <event_picture>
+        desc = localisation
+        desc = single_alias_right[complex_event_desc]
+    }
+    subtype[!visible] = {
+        # So that things don't yell at you if you make an event hidden for a lil while
+        ## cardinality = 0..1
+        title = localisation
+        ## cardinality = 0..1
+        picture = <event_picture>
+        ## cardinality = 0..1
+        desc = localisation
+        ## cardinality = 0..1
+        desc = single_alias_right[complex_event_desc]
+    }
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    hidden = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    fire_only_once = bool
+
+    ## cardinality = 0..inf
+    left_portrait = scope[character]
+
+    ## cardinality = 0..inf
+    right_portrait = scope[character]
+
+    ## cardinality = 0..1
+    goto_location = scope[province]
+
+    ## cardinality = 0..1
+    weight_multiplier = single_alias_right[weight_block]
+
+    ## cardinality = 0..1
+    trigger = {
+        ## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## cardinality = 0..1
+    immediate = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+    ## cardinality = 0..inf
+    option = {
+        ## cardinality = 0..1
+        name = localisation
+
+        ## cardinality = 0..1
+        highlight = bool
+
+        ## cardinality = 0..1
+        ### Defaults to no.
+        exclusive = bool
+
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+
+        ## cardinality = 0..1
+        trigger = {
+            ## cardinality = 0..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        ## cardinality = 0..1
+    	ai_chance = single_alias_right[chance_block]
+    }
+    ## cardinality = 0..inf
+    after = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+}

@@ -1,0 +1,453 @@
+links = {
+    color = {
+        desc =  eventtarget_link_desc_color
+        input_scopes = { country religion culture_group }
+        output_scope = color
+    }
+    state = {
+        desc =  eventtarget_link_desc_state
+        input_scopes = province
+        output_scope = state
+    }
+    value = {
+        desc =  eventtarget_link_desc_value
+        output_scope = value
+    }
+    yes = {
+        desc =  eventtarget_link_desc_yes
+        output_scope = bool
+    }
+    no = {
+        desc =  eventtarget_link_desc_no
+        output_scope = bool
+    }
+    compare_value = {
+        desc =  eventtarget_link_desc_compare_value
+        output_scope = value
+    }
+    named_script_value = {
+        desc =  eventtarget_link_desc_named_script_value
+        output_scope = value
+    }
+    from = {
+        desc =  eventtarget_link_desc_from
+    }
+    color1 = {
+        desc =  eventtarget_link_desc_color1
+        input_scopes = country
+        output_scope = color
+    }
+    color2 = {
+        desc =  eventtarget_link_desc_color2
+        input_scopes = country
+        output_scope = color
+    }
+    color3 = {
+        desc =  eventtarget_link_desc_color3
+        input_scopes = country
+        output_scope = color
+    }
+    character = {
+        desc =  eventtarget_link_desc_character
+        input_scopes = job
+        output_scope = character
+    }
+    root = {
+        desc =  eventtarget_link_desc_root
+    }
+    prev = {
+        desc =  eventtarget_link_desc_prev
+    }
+    this = {
+        desc =  eventtarget_link_desc_this
+    }
+    culture = {
+        desc =  eventtarget_link_desc_culture
+        input_scopes = { country character province pop }
+        output_scope = culture
+    }
+    location = {
+        desc =  eventtarget_link_desc_location
+        input_scopes = { character pop }
+        output_scope = province
+    }
+    unit = {
+        desc =  eventtarget_link_desc_unit
+        input_scopes = character
+        output_scope = unit
+    }
+    religion = {
+        desc =  eventtarget_link_desc_religion
+        input_scopes = { country character province pop }
+        output_scope = religion
+    }
+    employer = {
+        desc =  eventtarget_link_desc_employer
+        input_scopes = character
+        output_scope = country
+    }
+    father = {
+        desc =  eventtarget_link_desc_father
+        input_scopes = character
+        output_scope = character
+    }
+    mother = {
+        desc =  eventtarget_link_desc_mother
+        input_scopes = character
+        output_scope = character
+    }
+    spouse = {
+        desc =  eventtarget_link_desc_spouse
+        input_scopes = character
+        output_scope = character
+    }
+    owner = {
+        desc =  eventtarget_link_desc_owner
+        input_scopes = { province state governorship }
+        output_scope = country
+    }
+    commander = {
+        desc =  eventtarget_link_desc_commander
+        input_scopes = unit
+        output_scope = character
+    }
+    controller = {
+        desc =  eventtarget_link_desc_controller
+        input_scopes = province
+        output_scope = country
+    }
+    country = {
+        desc =  eventtarget_link_desc_country
+        input_scopes = { character pop job }
+        output_scope = country
+    }
+    culture_group = {
+        desc =  eventtarget_link_desc_culture_group
+        input_scopes = { country character province pop culture }
+        output_scope = culture_group
+    }
+    capital_scope = {
+        desc =  eventtarget_link_desc_capital_scope
+        input_scopes = { country state governorship }
+        output_scope = province
+    }
+    ruler = {
+        desc =  eventtarget_link_desc_ruler
+        input_scopes = character
+        output_scope = character
+    }
+    family = {
+        desc =  eventtarget_link_desc_family
+        input_scopes = character
+        output_scope = family
+    }
+    governor = {
+        desc =  eventtarget_link_desc_governor
+        input_scopes = { province state governorship }
+        output_scope = character
+    }
+    job = {
+        desc =  eventtarget_link_desc_job
+        input_scopes = character
+        output_scope = job
+    }
+    current_heir = {
+        desc =  eventtarget_link_desc_current_heir
+        input_scopes = country
+        output_scope = character
+    }
+    preferred_heir = {
+        desc =  eventtarget_link_desc_preferred_heir
+        input_scopes = character
+        output_scope = character
+    }
+    current_ruler = {
+        desc =  eventtarget_link_desc_current_ruler
+        input_scopes = country
+        output_scope = character
+    }
+    unit_owner = {
+        desc =  eventtarget_link_desc_unit_owner
+        input_scopes = unit
+        output_scope = country
+    }
+    unit_location = {
+        desc =  eventtarget_link_desc_unit_location
+        input_scopes = unit
+        output_scope = province
+    }
+    area = {
+        desc =  eventtarget_link_desc_area
+        input_scopes = { province state }
+        output_scope = area
+    }
+    region = {
+        desc =  eventtarget_link_desc_region
+        input_scopes = { province area state }
+        output_scope = region
+    }
+    governorship = {
+        desc =  eventtarget_link_desc_governorship
+        input_scopes = { province state }
+        output_scope = governorship
+    }
+    red = {
+        desc =  eventtarget_link_desc_red
+        type = value
+        input_scopes = color
+        output_scope = value
+    }
+    green = {
+        desc =  eventtarget_link_desc_green
+        type = value
+        input_scopes = color
+        output_scope = value
+    }
+    blue = {
+        desc =  eventtarget_link_desc_blue
+        type = value
+        input_scopes = color
+        output_scope = value
+    }
+    hue = {
+        desc =  eventtarget_link_desc_hue
+        type = value
+        input_scopes = color
+        output_scope = value
+    }
+    saturation = {
+        desc =  eventtarget_link_desc_saturation
+        type = value
+        input_scopes = color
+        output_scope = value
+    }
+    brightness = {
+        desc =  eventtarget_link_desc_brightness
+        type = value
+        input_scopes = color
+        output_scope = value
+    }
+    unit_destination = {
+        desc =  eventtarget_link_desc_unit_destination
+        input_scopes = unit
+        output_scope = province
+    }
+    unit_next_location = {
+        desc =  eventtarget_link_desc_unit_next_location
+        input_scopes = unit
+        output_scope = province
+    }
+    unit_objective_destination = {
+        desc =  eventtarget_link_desc_unit_objective_destination
+        input_scopes = unit
+        output_scope = province
+    }
+    dominant_province_culture = {
+        desc =  eventtarget_link_desc_dominant_province_culture
+        input_scopes = province
+        output_scope = culture
+    }
+    dominant_province_culture_group = {
+        desc =  eventtarget_link_desc_dominant_province_culture_group
+        input_scopes = province
+        output_scope = culture_group
+    }
+    dominant_province_religion = {
+        desc =  eventtarget_link_desc_dominant_province_religion
+        input_scopes = province
+        output_scope = religion
+    }
+    overlord = {
+        desc =  eventtarget_link_desc_overlord
+        input_scopes = country
+        output_scope = country
+    }
+    party_country = {
+        desc =  eventtarget_link_desc_party_country
+        input_scopes = party
+        output_scope = country
+    }
+    family_country = {
+        desc =  eventtarget_link_desc_family_country
+        input_scopes = family
+        output_scope = country
+    }
+    party_leader = {
+        desc =  eventtarget_link_desc_party_leader
+        input_scopes = party
+        output_scope = character
+    }
+    governor_or_ruler = {
+        desc =  eventtarget_link_desc_governor_or_ruler
+        input_scopes = { province state governorship }
+        output_scope = character
+    }
+    personal_loyalty = {
+        desc =  eventtarget_link_desc_personal_loyalty
+        input_scopes = subunit
+        output_scope = character
+    }
+    owning_unit = {
+        desc =  eventtarget_link_desc_owning_unit
+        input_scopes = subunit
+        output_scope = unit
+    }
+    character_party = {
+        desc =  eventtarget_link_desc_character_party
+        input_scopes = character
+        output_scope = party
+    }
+    next_in_family = {
+        desc =  eventtarget_link_desc_next_in_family
+        input_scopes = character
+        output_scope = character
+    }
+    head_of_family = {
+        desc =  eventtarget_link_desc_head_of_family
+        input_scopes = family
+        output_scope = character
+    }
+    flag = {
+        desc =  eventtarget_link_desc_flag
+        from_data = yes
+        type = scope
+        prefix = flag:
+        data_source = <flag>
+        output_scope = flag
+    }
+    custom = {
+        desc =  eventtarget_link_desc_custom
+        from_data = yes
+        type = scope
+        prefix = custom:
+        data_source = <custom>
+    }
+    scope = {
+        desc =  eventtarget_link_desc_scope
+        from_data = yes
+		type = scope
+        data_source = value[event_target]
+        prefix = scope:
+    }
+    var = {
+        desc =  eventtarget_link_desc_var
+        from_data = yes
+		type = both
+        prefix = var:
+        data_source = value[variable]
+    }
+    local_var = {
+        desc =  eventtarget_link_desc_local_var
+        from_data = yes
+		type = both
+        prefix = local_var:
+        data_source = value[local_variable]
+    }
+    global_var = {
+        desc =  eventtarget_link_desc_global_var
+        from_data = yes
+		type = both
+        prefix = global_var:
+        data_source = value[global_variable]
+    }
+    culture = {
+        desc =  eventtarget_link_desc_culture
+        from_data = yes
+        type = scope
+        prefix = culture:
+        data_source = <culture>
+        output_scope = culture
+    }
+    religion = {
+        desc =  eventtarget_link_desc_religion
+        from_data = yes
+        type = scope
+        prefix = religion:
+        data_source = <religion>
+        output_scope = religion
+    }
+    culture_group = {
+        desc =  eventtarget_link_desc_culture_group
+        from_data = yes
+        type = scope
+        prefix = culture_group:
+        data_source = <culture_group>
+        output_scope = culture_group
+    }
+    char = {
+        desc =  eventtarget_link_desc_char
+        from_data = yes
+        type = scope
+        prefix = char:
+        data_source = enum[character_ids]
+        output_scope = character
+    }
+    job = {
+        desc =  eventtarget_link_desc_job
+        from_data = yes
+        type = scope
+        prefix = job:
+        data_source = <job>
+        input_scopes = { country province state governorship }
+        output_scope = job
+    }
+    party = {
+        desc =  eventtarget_link_desc_party
+        from_data = yes
+        type = scope
+        prefix = party:
+        data_source = <party_type>
+        input_scopes = country
+        output_scope = party
+    }
+    fam = {
+        desc =  eventtarget_link_desc_fam
+        from_data = yes
+        type = scope
+        prefix = fam:
+        data_source = <fam>
+        input_scopes = country
+        output_scope = family
+    }
+    area = {
+        desc =  eventtarget_link_desc_area
+        from_data = yes
+        type = scope
+        prefix = area:
+        data_source = <area>
+        output_scope = area
+    }
+    region = {
+        desc =  eventtarget_link_desc_region
+        from_data = yes
+        type = scope
+        prefix = region:
+        data_source = <region>
+        output_scope = region
+    }
+    p = {
+        desc =  eventtarget_link_desc_p
+        from_data = yes
+        type = scope
+        prefix = p:
+        data_source = enum[provinces]
+        output_scope = province
+    }
+    c = {
+        desc =  eventtarget_link_desc_c
+        from_data = yes
+        type = scope
+        prefix = c:
+        data_source = enum[country_tags]
+        output_scope = country
+    }
+    job_holder = {
+        desc =  eventtarget_link_desc_job_holder
+        from_data = yes
+        type = scope
+        prefix = job_holder:
+        data_source = <job_holder>
+        input_scopes = { country province state governorship }
+        output_scope = character
+    }
+}

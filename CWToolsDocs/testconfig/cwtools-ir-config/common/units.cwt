@@ -1,0 +1,72 @@
+types = {
+    type[unit_type] = {
+        path = "game/common/units"
+
+        subtype[army] = {
+            army = yes
+        }
+        # I know !army would suffice in most cases, but this is more explicit and readable
+        subtype[navy] = {
+            army = no
+        }
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+            # no_culture_group_name = "$_noculturegroup"
+            # <culture_group>_name = "$_<culture_group>"
+            # loc for dynamic modifiers (like $_cost)?
+        }
+    }
+}
+
+unit_type = {
+    army = bool
+
+    ## cardinality = 0..1
+    enable = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    assault = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    default = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    is_flank = bool
+
+	maneuver = int
+	movement_speed = int
+	build_cost = int # float?
+    build_time = int
+
+    subtype[army] = {
+        # TODO: still wanting that "one of each" rule :)
+        ## cardinality = 0..inf
+        <unit_type.army> = float[0.0..inf]
+    }
+    subtype[navy] = {
+        # TODO: still wanting that "one of each" rule :)
+        ## cardinality = 0..inf
+        <unit_type.navy> = float[0.0..inf]
+    }
+
+    subtype[army] = {
+        attrition_weight = float
+
+        ## cardinality = 0..1
+        setup_fraction = float
+
+        ## cardinality = 0..1
+        morale_damage_taken = float
+
+        ## cardinality = 0..1
+        strength_damage_taken = float
+
+        ## cardinality = 0..1
+        ai_max_percentage = int[0..100]
+    }
+}

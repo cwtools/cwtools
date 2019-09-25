@@ -1,0 +1,122 @@
+enums = {
+    enum[ai_diplochance_types] = {
+        requestpeace
+        allianceaction
+        annexationaction
+        milaccess
+        offermilaccess
+        callaction
+        sellprov
+        ransom
+        trade_access
+        barbarian_demand_surrender
+        barbarian_create_client
+        barbarian_payoff
+        barbarian_settle
+        invite_to_defensive_league
+        ask_to_join_defensive_league
+        enforce_peace
+        threaten_war
+    }
+    enum[ai_diplochance_factors] = {
+        at_war
+        civil_war
+        multiple_offensive_wars
+        same_religion
+        different_religion
+        same_culture
+        different_culture
+        opinion
+        war_score
+        peace_offer
+        months_at_war
+        planning_demise
+        conflicting_interests
+        stronger_than_current_allies
+        max_relations
+        max_actor_relations
+        capital_distance
+        yesman
+        defeat
+        victory
+        has_border
+        allies
+        same_league
+        guaranteeing
+        base
+        giving_them_access
+        in_debt
+        cost
+        free
+        core
+        current_strength
+        potential_strength
+        capital
+        province_value
+        vital
+        interesting
+        avoided
+        negative_stability
+        war_exhaustion
+        low_manpower
+        no_action
+        separate_peace
+        needs_help
+        junior_to
+        martial
+        charisma
+        finesse
+        zeal
+        price
+        exhaustion
+        desperation
+        war_balance
+        war_goal
+        making_gains
+        on_retreat
+        tutorial
+        barbarian_occupation
+        barbarian_present_in_lands
+        barbarian_not_present_in_lands
+        target_opinion
+        lacks_border
+        another_war
+        fighting_together
+        border_distance
+        strategic_trade_good
+        will_lose_capital_bonus
+        good_for_us
+        bad_for_us
+        province_distance
+        dont_care
+        revolter
+        rank
+        common_threat
+        competing_power
+        at_peace
+    }
+    # For cardinality
+    enum[ai_diplochance_offset_scale] = {
+        offset
+        scale
+    }
+}
+
+types = {
+    type[ai_diplochance_validation] = {
+        path = "game/common/ai_diplochance"
+        type_per_file = yes
+    }
+}
+
+ai_diplochance_validation = {
+    # TODO: maybe some kind of ensure one of each enum? to avoid excessive copypasta
+    ## cardinality = 0..inf
+    enum[ai_diplochance_types] = {
+        ## cardinality = 0..inf
+        enum[ai_diplochance_factors] = {
+            # TODO: offset is probably int. dunno how to implement atm
+            enum[ai_diplochance_offset_scale] = float
+        }
+    }
+}

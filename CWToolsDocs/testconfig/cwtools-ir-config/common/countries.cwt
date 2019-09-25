@@ -1,0 +1,31 @@
+types = {
+    type[country] = {
+        path = "game/common/countries"
+        type_per_file = yes
+    }
+}
+
+country = {
+    # TODO: Make sure it coincides with the definitions when I come around to them
+    ## cardinality = 0..1
+    graphical_culture = enum[graphical_cultures]
+
+    color = colour_field
+    ## cardinality = 0..1
+    color2 = colour_field
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    gender_equality = bool
+
+    ## cardinality = 0..1
+    ### If yes, the country will receive the lucky_nation modifier if it's an AI. Defaults to no.
+    lucky = bool
+
+    # TODO: Might be required for everyone, even if empty, sans mercs, barbs and rebels
+    ## cardinality = 0..1
+    ship_names = {
+        ## cardinality = 0..inf
+        scalar
+    }
+}

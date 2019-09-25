@@ -1,0 +1,23 @@
+types = {
+    type[governor_policy] = {
+        path = "game/common/governor_policies"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scopes = { this = state root = state }
+governor_policy = {
+    province = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    chance = single_alias_right[chance_block]
+
+    ## cardinality = 0..1
+    on_action = <on_action>
+}

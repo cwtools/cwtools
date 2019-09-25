@@ -1,0 +1,48 @@
+types = {
+    type[on_action] = {
+        path = "game/common/on_action"
+    }
+}
+
+on_action = {
+	## cardinality = 0..1
+    effect = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+	## cardinality = 0..1
+	on_actions = {
+		## cardinality = 0..inf
+		<on_action>
+		## cardinality = 0..inf
+		delay = {
+            ## cardinality = 0..1
+            enum[duration] = int
+            ## cardinality = 0..1
+            enum[duration] = {
+                ## cardinality = 2..2
+                int
+            }
+        }
+	}
+	## cardinality = 0..1
+	random_events = {
+		## cardinality = 0..inf
+		int = <event>
+		## cardinality = 0..inf
+		int = 0
+	}
+	## cardinality = 0..1
+	events = {
+		## cardinality = 0..inf
+		<event>
+	}
+	## cardinality = 0..1
+	trigger = {
+		## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+	}
+
+    ## cardinality = 0..1
+    fallback = <on_action>
+}

@@ -1,0 +1,29 @@
+types = {
+    type[death_reason] = {
+        path = "game/common/deathreasons"
+
+        localisation = {
+            description = "$"
+        }
+    }
+}
+
+## replace_scope = { this = character root = character }
+death_reason = {
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    default = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    natural = bool
+
+    ## cardinality = 0..1
+    natural_death_trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    priority = int
+}

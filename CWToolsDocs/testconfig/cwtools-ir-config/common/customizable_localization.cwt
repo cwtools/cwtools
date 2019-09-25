@@ -1,0 +1,77 @@
+enums = {
+    enum[custom_loc_scopes] = {
+        character
+        country
+        province
+        area
+        state
+        region
+        pop
+        unit
+        subunit
+    }
+}
+
+types = {
+    # These zs are going to drive me mad
+    type[customizable_localization] = {
+        path = "game/common/customizable_localization"
+
+        ## push_scope = character
+        subtype[character] = {
+            type = character
+        }
+        ## push_scope = country
+        subtype[country] = {
+            type = country
+        }
+        ## push_scope = province
+        subtype[province] = {
+            type = province
+        }
+        ## push_scope = area
+        subtype[area] = {
+            type = area
+        }
+        ## push_scope = region
+        subtype[region] = {
+            type = region
+        }
+        ## push_scope = state
+        subtype[state] = {
+            type = state
+        }
+        ## push_scope = pop
+        subtype[pop] = {
+            type = pop
+        }
+        ## push_scope = unit
+        subtype[unit] = {
+            type = unit
+        }
+        ## push_scope = subunit
+        subtype[subunit] = {
+            type = subunit
+        }
+    }
+}
+
+customizable_localization = {
+    type = enum[custom_loc_scopes]
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    random_valid = bool
+
+    ## cardinality = 2..inf
+    text = {
+        localization_key = localisation
+
+        ## cardinality = 0..1
+        ### Defaults to always = yes.
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+    }
+}

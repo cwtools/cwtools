@@ -1,0 +1,36 @@
+enums = {
+    enum[prices_int] = {
+        civic
+        military
+        oratory
+        religious
+        gold
+        manpower
+    }
+    enum[prices_float] = {
+        scaled_gold
+        scaled_manpower
+    }
+}
+
+types = {
+    type[price] = {
+        path = "game/common/prices"
+    }
+}
+
+price = {
+    ## cardinality = 0..inf
+    enum[prices_int] = int
+
+    ## cardinality = 0..inf
+    ### 1.0 is 100% of monthly income.
+    enum[prices_float] = float
+
+    ## cardinality = 0..1
+    min = float
+
+    # TODO: Confirm
+    # ## cardinality = 0..1
+    # max = float
+}

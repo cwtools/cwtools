@@ -1,0 +1,14 @@
+types = {
+    type[religion] = {
+        path = "game/common/religions"
+
+        localisation = {
+            name = "$"
+            description = "desc_$"
+        }
+    }
+}
+
+religion = {
+    color = colour_field
+}

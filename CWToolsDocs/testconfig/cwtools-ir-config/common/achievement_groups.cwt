@@ -1,0 +1,22 @@
+types = {
+    ## type_key_filter = group
+    type[achievement_group] = {
+        path = "game/common"
+        path_file = "achievement_groups.txt"
+        name_field = name
+
+        localisation = {
+            name = "ACHIEVEMENT_GROUP_$"
+        }
+    }
+}
+
+# No real need to make each a type instead of validation but eh why not.
+achievement_group = {
+    name = scalar
+
+    order = {
+        ## cardinality = 1..inf
+        <achievement>
+    }
+}

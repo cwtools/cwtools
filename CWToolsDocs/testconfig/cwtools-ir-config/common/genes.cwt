@@ -1,0 +1,311 @@
+enums = {
+    enum[gene_colors] = {
+        hair
+        skin
+        eye
+    }
+    enum[gene_decal_types] = {
+        skin
+        paint
+    }
+    # Will update for all genes if the "at most one of" rule is introduced
+    enum[gene_genders_ages] = {
+        male
+        female
+        boy
+        girl
+        # infant
+    }
+}
+
+single_alias[morph_gene_settings] = {
+    ## cardinality = 0..inf
+    setting = {
+        # TODO: Match up with actual attributes in assets, somehow?
+        attribute = scalar
+
+        ## cardinality = 0..1
+        ### Format is "tag1,tag2,not(tag3)"
+        required_tags = scalar
+
+        value = {
+            min = float[-1.0..1.0]
+            max = float[-1.0..1.0]
+        }
+
+        # TODO: Figure out because this might be only for age because the first float is age percentage. Also cardinalities probably wrong, based on vanilla.
+        ## cardinality = 0..1
+        animation_curve = {
+            ## cardinality = 3..3
+            {
+                ## cardinality = 2..2
+                float
+            }
+        }
+    }
+
+    ## cardinality = 0..1
+    decal = {
+        type = enum[gene_decal_types]
+
+        ## cardinality = 0..1
+        ### Format is "tag1,tag2,not(tag3)"
+        required_tags = scalar
+
+        atlas_pos = {
+            ## cardinality = 2..2
+            int
+        }
+
+        # TODO: Figure out because this might be only for age because the first float is age percentage. Also cardinalities probably wrong, based on vanilla.
+        ## cardinality = 0..1
+        alpha_curve = {
+            ## cardinality = 2..2
+            {
+                ## cardinality = 2..2
+                float
+            }
+        }
+    }
+
+    ## cardinality = 0..1
+    texture_override = {
+        ## cardinality = 0..1
+        ### Format is "tag1,tag2,not(tag3)"
+        required_tags = scalar
+
+        weight = int
+
+        # TODO/WISHLIST: Necessiate texture filepath? something like filepath:dds or filepath[dds]?
+        diffuse = filepath
+        normal = filepath
+        specular = filepath
+    }
+
+    # TODO: Figure out because the hsv things might be only for age because the first float is age percentage. Also cardinalities probably wrong, based on vanilla.
+    ## cardinality = 0..1
+    hair_hsv_shift_curve = {
+        ## cardinality = 2..2
+        {
+            float
+            {
+                ## cardinality = 3..3
+                float
+            }
+        }
+    }
+
+    ## cardinality = 0..1
+    skin_hsv_shift_curve = {
+        ## cardinality = 2..2
+        {
+            float
+            {
+                ## cardinality = 3..3
+                float
+            }
+        }
+    }
+
+    ## cardinality = 0..1
+    eye_hsv_shift_curve = {
+        ## cardinality = 2..2
+        {
+            float
+            {
+                ## cardinality = 3..3
+                float
+            }
+        }
+    }
+}
+
+single_alias[accessory_subgene_rhs] = {
+    index = int
+
+    ## cardinality = 0..1
+    ### Format is "tag1,tag2,tag3"
+    set_tags = scalar
+
+    ## cardinality = 0..1
+    male = {
+        # TODO: object in gfx/portrait/accessories/
+        ## cardinality = 1..inf
+        int = scalar
+    }
+    ## cardinality = 0..1
+    male = enum[gene_genders_ages]
+
+    ## cardinality = 0..1
+    female = {
+        # TODO: object in gfx/portrait/accessories/
+        ## cardinality = 1..inf
+        int = scalar
+    }
+    ## cardinality = 0..1
+    female = enum[gene_genders_ages]
+
+    ## cardinality = 0..1
+    boy = {
+        # TODO: object in gfx/portrait/accessories/
+        ## cardinality = 1..inf
+        int = scalar
+    }
+    ## cardinality = 0..1
+    boy = enum[gene_genders_ages]
+
+    ## cardinality = 0..1
+    girl = {
+        # TODO: object in gfx/portrait/accessories/
+        ## cardinality = 1..inf
+        int = scalar
+    }
+    ## cardinality = 0..1
+    girl = enum[gene_genders_ages]
+}
+
+types = {
+    # TODO: special genes; not touching that part yet, it's a bit confusing
+    type[color_gene] = {
+        path = "game/common/genes"
+        skip_root_key = color_genes
+    }
+    type[morph_gene] = {
+        path = "game/common/genes"
+        skip_root_key = morph_genes
+    }
+    type[morph_subgene] = {
+        path = "game/common/genes"
+        skip_root_key = { morph_genes any }
+    }
+    type[accessory_gene] = {
+        path = "game/common/genes"
+        skip_root_key = accessory_genes
+    }
+    type[accessory_subgene] = {
+        path = "game/common/genes"
+        skip_root_key = { accessory_genes any }
+    }
+    ## type_key_filter = special_genes
+    type[special_genes_validation] = {
+        path = "game/common/genes"
+    }
+}
+
+color_gene = {
+    ## cardinality = 0..1
+    sync_inheritance_with = <color_gene>
+
+    # WISHLIST: Rule to ensure uniqueness? Also could help with the default = yes in other types
+    index = int
+
+    color = enum[gene_colors]
+
+    # [0.0..1.0]?
+    ## cardinality = 0..1
+    max_blend = float
+
+    # # [0.0..1.0]?
+    # ## cardinality = 0..1
+    # max_recessive_drift = float
+}
+
+morph_gene = {
+    index = int
+
+    # I'm gonna put this here; accessory genes have this and morph genes probably have it too, but TODO: Confirm
+    # ## cardinality = 0..1
+    # ### Defaults to yes, probably.
+    # inheritable = bool
+
+    # Some things are extrapolated from others (such as usage of enum[gene_genders_ages] in boy)
+    ## cardinality = 1..inf
+    <morph_subgene> = {
+        index = int
+
+        ## cardinality = 0..1
+        ### Format is "tag1,tag2,tag3"
+        set_tags = scalar
+
+        ## cardinality = 0..1
+        male = single_alias_right[morph_gene_settings]
+
+        ## cardinality = 0..1
+        female = single_alias_right[morph_gene_settings]
+
+        ## cardinality = 0..1
+        boy = single_alias_right[morph_gene_settings]
+        ## cardinality = 0..1
+        boy = enum[gene_genders_ages]
+
+        ## cardinality = 0..1
+        girl = single_alias_right[morph_gene_settings]
+        ## cardinality = 0..1
+        girl = enum[gene_genders_ages]
+
+        ## cardinality = 0..1
+        infant = single_alias_right[morph_gene_settings]
+    }
+}
+
+accessory_gene = {
+    index = int
+
+    ## cardinality = 0..1
+    ### Defaults to yes, probably.
+    inheritable = bool
+
+    ## cardinality = 1..inf
+    <accessory_subgene> = single_alias_right[accessory_subgene_rhs]
+}
+
+# Since these are hardcoded and not referenced elsewhere in script, just need to keep this specific thing updated
+special_genes_validation = {
+    accessory_genes = {
+        bust_gene = {
+            ## cardinality = 1..inf
+            scalar = single_alias_right[accessory_subgene_rhs]
+        }
+    }
+    morph_genes = {
+        age = {
+            ## cardinality = 1..inf
+            scalar = {
+                index = int
+
+                ## cardinality = 0..1
+                ### Format is "tag1,tag2,tag3"
+                set_tags = scalar
+
+                ## cardinality = 0..1
+                male = single_alias_right[morph_gene_settings]
+
+                ## cardinality = 0..1
+                female = single_alias_right[morph_gene_settings]
+
+                ## cardinality = 0..1
+                boy = single_alias_right[morph_gene_settings]
+                ## cardinality = 0..1
+                boy = enum[gene_genders_ages]
+
+                ## cardinality = 0..1
+                girl = single_alias_right[morph_gene_settings]
+                ## cardinality = 0..1
+                girl = enum[gene_genders_ages]
+
+                ## cardinality = 0..1
+                infant = single_alias_right[morph_gene_settings]
+            }
+        }
+        gene_tags = {
+            ## cardinality = 1..inf
+            scalar = {
+                index = int
+
+                ## cardinality = 0..1
+                ### Format is "tag1,tag2,tag3"
+                set_tags = scalar
+            }
+        }
+    }
+}

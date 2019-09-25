@@ -1,0 +1,18 @@
+types = {
+    type[invention] = {
+        path = "game/common/inventions"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+invention = {
+    ## cardinality = 1..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    <technology_table> = int[0..inf]
+}

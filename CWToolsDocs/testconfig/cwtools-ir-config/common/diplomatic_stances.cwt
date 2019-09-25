@@ -1,0 +1,18 @@
+# TODO: Somehow connect to corresponding opinion modifiers?
+types = {
+    type[diplomatic_stance] = {
+        path = "game/common/diplomatic_stances"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+diplomatic_stance = {
+    modifier = {
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+}

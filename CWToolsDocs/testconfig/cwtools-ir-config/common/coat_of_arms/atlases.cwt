@@ -1,0 +1,18 @@
+types = {
+    # Will probably need reworking with updates, keep an eye out for that
+    type[coat_of_arms_atlas_validation] = {
+        path = "game/common/coat_of_arms/options"
+        type_per_file = yes
+    }
+}
+
+coat_of_arms_atlas_validation = {
+    ## cardinality = 1..inf
+    atlas = {
+        tile_size = {
+            ## cardinality = 2..2
+            int
+        }
+        nr_of_tiles = int
+    }
+}

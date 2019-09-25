@@ -1,0 +1,18 @@
+# TODO: Consider moving to a single-instance validator for performance since it's not like these are used anywhere directly
+# Can also help to force matching up with modifiers
+types = {
+    type[modifier_icon] = {
+        path = "game/common/modifier_icons"
+    }
+}
+
+modifier_icon = {
+    positive = filepath
+
+    ## cardinality = 0..1
+    negative = filepath
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    default = bool
+}

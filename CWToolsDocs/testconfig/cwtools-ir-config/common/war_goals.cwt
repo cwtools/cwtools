@@ -1,0 +1,32 @@
+enums = {
+    enum[war_goal_types] = {
+        take_province
+        superiority
+        naval_superiority
+    }
+}
+
+types = {
+    type[war_goal] = {
+        path = "game/common/wargoals"
+
+        localisation = {
+            ## optional
+            name = "$"
+        }
+    }
+}
+
+war_goal = {
+    type = enum[war_goal_types]
+
+    attacker = {
+        ## cardinality = 0..1
+        conquer_cost = float
+    }
+    defender = {
+        # Not used in vanilla but extrapolating
+        ## cardinality = 0..1
+        conquer_cost = float
+    }
+}

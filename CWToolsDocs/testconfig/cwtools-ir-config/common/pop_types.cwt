@@ -1,0 +1,48 @@
+types = {
+    type[pop_type] = {
+        path = "game/common/pop_types"
+
+        localisation = {
+            name = "$"
+            # header = "$_header"
+            # lots of modifier stuff
+        }
+    }
+}
+
+## replace_scope = { this = province root = province }
+pop_type = {
+    ## cardinality = 0..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    is_slaves = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    tribal = bool
+
+    ## cardinality = 0..1
+    can_promote_to = <pop_type>
+
+    demotes_to = <pop_type>
+
+    conquest_demote_chance = int[0..100]
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    score = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    block_colonization = bool
+
+    # GAH
+    base_happyness = float[0.0..1.0]
+
+    color = colour_field
+
+    ## cardinality = 0..1
+    ai_max_percentage = int[0..100]
+}

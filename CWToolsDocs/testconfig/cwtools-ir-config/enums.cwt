@@ -1,0 +1,66 @@
+enums = {
+    enum[power_types] = {
+        civic
+        military
+        oratory
+        religious
+    }
+    enum[government_types] = {
+        republic
+        monarchy
+        tribal
+    }
+    enum[character_skills] = {
+        charisma
+        finesse
+        martial
+        zeal
+    }
+    # Used for party impact but maybe something else too, so adding that to the main.
+    enum[diplomatic_actions] = {
+        declare_war
+        request_peace
+        alliance
+        guarantee
+        demand_annexation
+        demand_tribute
+        military_access
+        offer_military_access
+        call_ally
+        sell_province
+        ransom_prisoner
+        barbarian_demand_surrender
+        barbarian_create_client
+        barbarian_payoff
+        barbarian_settle
+        fabricate_claim
+        invite_to_defensive_league
+        ask_to_join_defensive_league
+        leave_defensive_league
+        improve_relation
+        intervene_in_war
+        enforce_peace
+        threaten_war
+        support_rebels
+        abandon_civil_war
+    }
+    enum[minmax] = {
+        min
+        max
+    }
+    enum[succession_types] = {
+        agnatic
+        cognatic
+        agnatic_seniority
+        old_egyptian_succession
+    }
+    enum[dlcs] = {
+        "Epirus Flavor Pack"
+        "Hellenistic World Flavor Pack"
+    }
+    enum[duration] = {
+        days
+        months
+        years
+    }
+}

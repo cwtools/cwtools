@@ -1,0 +1,85 @@
+single_alias[coat_of_arms_rhs] = {
+    # I think we need a "list format" for a bunch of stuff here, not just colours
+    pattern = filepath[gfx/coat_of_arms/patterns/]
+    # pattern = list <pattern_texture_list>
+
+    # Using colour field assuming it supports adding the list thing
+    color1 = enum[named_colors]
+
+    ## cardinality = 0..1
+    color2 = enum[named_colors]
+
+    ## cardinality = 0..1
+    color3 = enum[named_colors]
+
+    # TODO: Based on usage in vanilla; might want to dig a bit deeper
+    ## cardinality = 0..1
+    textured_emblem = {
+        texture = filepath[gfx/coat_of_arms/textured_emblems/]
+    }
+
+    # TODO: cardinality based on usage in vanilla, might be actually different but I doubt it; still, confirm; quite possibly based on pattern
+    ## cardinality = 0..2
+    colored_emblem = {
+        ## cardinality = 0..1
+        pattern = filepath[gfx/coat_of_arms/colored_emblems/]
+        # ## cardinality = 0..1
+        # pattern = list <colored_emblem_texture_list>
+
+        color1 = enum[named_colors]
+        ## cardinality = 0..1
+        color2 = enum[named_colors]
+
+        # TODO: Figure out
+        ## cardinality = 0..1
+        ### Vanilla uses either { 2 } or { 1 2 3 }
+        mask = {
+            ## cardinality = 1..3
+            int[1..3]
+        }
+
+        # TODO: Figure out cardinality and everything
+        ## cardinality = 0..inf
+        instance = {
+            ## cardinality = 0..1
+            position = {
+                ## cardinality = 2..2
+                float
+            }
+
+            ## cardinality = 0..1
+            rotation = int[0..359]
+
+            ## cardinality = 0..1
+            scale = {
+                ## cardinality = 2..2
+                float
+            }
+        }
+    }
+}
+
+types = {
+    type[coat_of_arms_validation] = {
+        path = "game/common/coat_of_arms/coat_of_arms"
+        type_per_file = yes
+    }
+    type[coat_of_arms_template] = {
+        path = "game/common/coat_of_arms/coat_of_arms"
+        skip_root_key = template
+    }
+}
+
+coat_of_arms_validation = {
+    ## cardinality = 0..inf
+    ir_country_tag_field = single_alias_right[coat_of_arms_rhs]
+
+    ## cardinality = 0..inf
+    value[country_flag] = single_alias_right[coat_of_arms_rhs]
+
+    ## cardinality = 0..inf
+    template = {
+        ## cardinality = 1..inf
+        <coat_of_arms_template> = single_alias_right[coat_of_arms_rhs]
+    }
+}

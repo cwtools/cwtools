@@ -1,0 +1,84 @@
+types = {
+    type[subject_type] = {
+        path = "game/common/subject_types"
+
+        localisation = {
+            name = "$"
+            # Jesus that's a lot of extra loc
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+subject_type = {
+    subject_pays = <price>
+
+    joins_overlord_in_war = bool
+
+    protected_when_attacked = bool
+
+    ## cardinality = 0..1
+    has_overlords_ruler = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    can_be_integrated = bool
+
+    costs_diplomatic_slot = bool
+
+    subject_can_cancel = bool
+
+    has_limited_diplomacy = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    only_trade_with_overlord = bool
+
+    ## cardinality = 0..1
+    overlord_modifier = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    subject_modifier = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ### future_overlord scope
+    allow = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    ### future_overlord scope
+    on_enable = {
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..1
+    on_disable = {
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..1
+    ### former_overlord scope
+    on_monthly = {
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    # See ai_diplochance.cwt
+    diplo_chance = {
+        ## cardinality = 0..inf
+        enum[ai_diplochance_factors] = {
+            # TODO: offset is probably int. dunno how to implement atm
+            enum[ai_diplochance_offset_scale] = float
+        }
+    }
+}

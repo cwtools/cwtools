@@ -1,0 +1,57 @@
+enums = {
+    enum[ai_plan_goal_exponents] = {
+        economy_exponent
+        research_exponent
+        army_offensive_exponent
+        army_quantity_exponent
+        army_longevity_exponent
+        army_cost_exponent
+        army_fort_exponent
+        goods_exponent
+    }
+    enum[ai_plan_goal_amplifiers] = {
+        # economy_amplifier?
+        research_amplifier
+        army_offensive_amplifier
+        army_quantity_amplifier
+        army_longevity_amplifier
+        army_cost_amplifier
+        army_fort_amplifier
+        goods_amplifier
+    }
+}
+
+types = {
+    type[ai_plan_goal] = {
+        path = "game/common/ai_plan_goals"
+    }
+}
+
+## replace_scope = { this = country root = country }
+ai_plan_goal = {
+    trigger = {
+        # TODO: keep an eye on it, it's hardcoded at the moment, apparently
+        ## cardinality = 0..1
+        has_coasts = bool
+
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..inf
+    enum[ai_plan_goal_exponents] = int
+    ## cardinality = 0..inf
+    enum[ai_plan_goal_amplifiers] = float
+
+    ## cardinality = 0..1
+    base_precision = int
+
+    # TODO: Confirm! I'm fairly sure that's how it works, though
+    ## cardinality = 0..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    ## cardinality = 0..1
+    aggressive = int
+    ## cardinality = 0..1
+    trustworthy = int
+}

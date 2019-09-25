@@ -1,0 +1,36 @@
+types = {
+    type[area] = {
+        path = "game/map_data"
+        path_file = "areas.txt"
+    }
+
+    type[region] = {
+        path = "game/map_data"
+        path_file = "regions.txt"
+    }
+
+    type[season] = {
+        path = "game/map_data"
+        path_file = "seasons.txt"
+    }
+}
+
+area = {
+    test = test
+    provinces = {
+        ## cardinality = 1..inf
+        enum[provinces]
+    }
+}
+
+region = {
+    areas = {
+        ## cardinality = 1..inf
+        <area>
+    }
+}
+
+season = {
+    start_date = date_field
+    end_date = date_field
+}

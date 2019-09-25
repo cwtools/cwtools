@@ -1,0 +1,930 @@
+###Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or script value This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+alias[effect:set_local_variable] = {
+    name = value_set[local_variable]
+
+    ## cardinality = 0..1
+    enum[duration] = int
+
+    ## cardinality = 0..1
+    value = value_field
+    ## cardinality = 0..1
+    value = scope_field
+}
+
+###Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or script value This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+alias[effect:set_local_variable] = value_set[local_variable]
+
+###Creates a specific poptype in a province
+alias[effect:create_pop] = <pop_type>
+
+###Empties the list clear_variable_list = variable_name
+alias[effect:clear_variable_list] = replace_me
+
+###Clamps a variable the specified max and min clamp_variable = { name = X max = Y min = Z } Where X is the name of the variable Where Y and Z are script values
+alias[effect:clamp_local_variable] = {
+    name = value[local_variable]
+}
+
+###Removes a friend from the character
+alias[effect:remove_friend] = scope[character]
+
+###Removes an opinion modifier, remove_opinion = { modifier = X  target = Z  } X is a scripted modifier name.
+alias[effect:remove_opinion] = {
+    modifier = <opinion>
+    target = scope[country]
+}
+
+###Unlocks a locked Unit
+alias[effect:unlock_unit] = bool
+
+###Removes a triggered modifier from a Character
+alias[effect:remove_triggered_character_modifier] = <modifier_container.triggered>
+
+###Sets the trade goods in a province
+alias[effect:set_trade_goods] = <trade_goods>
+
+###Banishes a character to another country
+alias[effect:banish] = scope[country]
+
+###Changes the value or a numeric variable change_variable = { name = X operation = Y } Where X is the name of the numeric variable to modify Where the valid operations are add, subtract, multiply, divide and modulo Where Y is a fixed point value, script value or event target of a value type
+alias[effect:change_variable] = {
+    name = value[variable]
+    alias_name[arithmetic_operation] = alias_match_left[arithmetic_operation]
+}
+
+###Destroys the unit from the current scope
+alias[effect:destroy_unit] = bool
+
+###adds one level of the specified Building
+alias[effect:add_building_level] = <building>
+
+###Marries two characters
+alias[effect:marry_character] = scope[character]
+
+###Set the culture for this character
+alias[effect:set_culture] = <culture>
+
+###Clear the ambition for this character
+alias[effect:clear_ambition] = yes
+
+# TODO: See if I can narrow the RHS down
+###adds a new family with the specified name (must be valid from culture files)
+alias[effect:add_new_family] = scalar
+
+###kills a character, death = { killer = X death_reason = Y }, where X is a character and Y is one of the death reason keys
+alias[effect:death] = {
+    ## cardinality = 0..1
+    killer = scope[character]
+    death_reason = <death_reason>
+}
+
+###gives (or takes) Tyranny to a country
+alias[effect:add_tyranny] = value_field
+
+###makes the currrent province owned and controlled by the target country
+alias[effect:set_conquered_by] = scope[country]
+
+###Removes a variable remove_variable = variable_name
+alias[effect:remove_local_variable] = value[local_variable]
+
+###conditionally break execution of effects, break_if = { X }, where X is a trigger
+alias[effect:break_if] = {
+    ## cardinality = 1..inf
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###Adds CIVIC Power
+alias[effect:add_civic_power] = int_value_field
+
+# TODO: Confirm scope
+###Destroys the unit from the current scope
+alias[effect:change_unit_owner] = scope[country]
+
+# TODO: Confirm RHS
+###just a tooltip, the scope as object (for grouping, localization)
+alias[effect:custom_label] = localisation
+
+###Set the religion for this character
+alias[effect:set_character_religion] = scope[religion]
+
+###Set the religion for this character
+alias[effect:set_character_religion] = <religion>
+
+###Moves a family to another country
+alias[effect:move_family] = scope[country]
+
+###adds a truce for a country towards another country
+alias[effect:add_truce] = scope[country]
+
+# TODO: Confirm bounds and intness
+###Sets the number of people in each Cohort in the Unit to the given percentage of maximum
+alias[effect:set_unit_size] = value_field
+
+###Removes a modifier from a country
+alias[effect:remove_country_modifier] = <modifier_container>
+
+###makes the currrent province owned and controlled by the target country, without incurring any penalties
+alias[effect:set_owned_by] = scope[country]
+
+###Adds a subunit to a Unit
+alias[effect:add_loyal_subunit] = <unit_type>
+
+###changes the adjective of a country
+alias[effect:change_country_adjective] = localisation
+
+###sets the governor of a province to the specified character
+alias[effect:set_as_governor] = scope[character]
+
+# TODO: Proper switch support
+###Switch on a trigger for the evaluation of another trigger with an optional fallback trigger. switch = { 	trigger = simple_assign_trigger 	case_1 = { <effects> } 	case_2 = { <effects> } 	case_n = { <effects> } 	fallback = { <effects> }
+alias[effect:switch] = {
+    trigger = scalar
+
+    ## cardinality = 1..inf
+    scalar = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..1
+    fallback = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+}
+
+###changes the historical tag of a country
+alias[effect:change_country_tag] = enum[country_tags]
+###changes the historical tag of a country
+alias[effect:change_country_tag] = value_set[dynamic_country_tag]
+
+###gives (or takes) morale to a unit
+alias[effect:add_morale] = value_field
+
+###Locks a Unit for the specified number of days
+alias[effect:lock_unit] = int_value_field
+
+###Character stops being a researcher
+alias[effect:remove_as_researcher] = bool
+
+###Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or script value This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+alias[effect:set_variable] = {
+    name = value_set[variable]
+
+    ## cardinality = 0..1
+    enum[duration] = int
+
+    ## cardinality = 0..1
+    value = value_field
+    ## cardinality = 0..1
+    value = scope_field
+}
+
+###Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or script value This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+alias[effect:set_variable] = value_set[variable]
+
+###Adds a friend to the character
+alias[effect:add_friend] = scope[character]
+
+# TODO: 0-1 or 0-100?
+###Applies the given morale damage to each Cohort in the unit as a percentage of their current morale
+alias[effect:damage_unit_morale_percent] = value_field
+
+###Adds a trait to a character (will show tooltip even if already having the trait)
+alias[effect:force_add_trait] = <trait>
+
+###Adds charisma skill
+alias[effect:add_charisma] = int_value_field
+
+###Makes the currently scoped character adopt another character
+alias[effect:adopt] = scope[character]
+
+###Moves a character to another country (with message popups)
+alias[effect:move_country_with_message] = scope[country]
+
+###Set the culture for this pop
+alias[effect:set_pop_culture] = <culture>
+
+###Set the culture for this pop
+alias[effect:set_pop_culture] = scope[culture]
+
+###Removes the target from a variable list remove_list_variable = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[effect:remove_list_local_variable] = replace_me
+
+###Adds a rival to the character
+alias[effect:add_rival] = scope[character]
+
+###Removes a trait from a character
+alias[effect:remove_trait] = <trait>
+
+###creates a country in the given province
+alias[effect:create_country] = scope[province]
+
+###Set the pop_type for this pop
+alias[effect:set_pop_type] = <pop_type>
+
+###sets the ruler of a country to the specified character
+alias[effect:set_as_ruler] = scope[character]
+
+###Adds the event target to a variable list add_to_variable_list = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[effect:add_to_local_variable_list] = replace_me
+
+###break execution of effects, break = yes/no/boolean event target
+alias[effect:break] = bool
+
+###Adds finesse skill
+alias[effect:add_finesse] = int_value_field
+
+# TODO: bool? is it with birth or not?
+###end a pregnancy
+alias[effect:end_pregnancy] = bool
+
+# TODO: Probably supports a scope too, but confirm
+###changes the color of a country
+alias[effect:change_country_color] = colour_field
+
+###changes the color of a country
+alias[effect:change_country_color] = scope[color]
+###changes the color of a country
+alias[effect:change_country_color] = enum[named_colors]
+
+
+###Removes a variable remove_variable = variable_name
+alias[effect:remove_variable] = value[variable]
+
+###Empties the list clear_variable_list = variable_name
+alias[effect:clear_local_variable_list] = replace_me
+
+###gives (or takes) Corruption to a character
+alias[effect:add_corruption] = int_value_field
+
+###Destroys the unit from the current scope
+alias[effect:destroy_subunit] = bool
+
+###Removes a modifier from a Province
+alias[effect:remove_province_modifier] = <modifier_container>
+
+# TODO: Check if it's value_field
+###gives (or takes) gold to a character
+alias[effect:add_gold] = int_value_field
+
+###Changes a law in a country
+alias[effect:change_law] = <law>
+
+###Adds MILITARY Power
+alias[effect:add_military_power] = int_value_field
+
+# TODO: see if province is optional depending on wargoal
+###Declares a war between this country and the target country
+alias[effect:declare_war_with_wargoal] = {
+    war_goal = <war_goal>
+
+    province = scope[province]
+    province = enum[provinces]
+
+    target = scope[country]
+    target = enum[country_tags]
+}
+
+###Moves a family to another country
+alias[effect:reset_scoring] = scope[country]
+
+###Gives a Office to a character
+alias[effect:give_office] = <office>
+
+###Clears a saved scope from the top scope save_scope_as = cool_scope -> clear_saved_scope = cool_scope
+alias[effect:clear_saved_scope] = value_set[event_target]
+
+###Rounds a variable to the nearest specified value clamp_variable = { name = X nearest = Y } Where X is the name of the variable Where Y is a script value
+alias[effect:round_local_variable] = {
+    name = value[local_variable]
+}
+
+###Adds RELIGIOUS Power
+alias[effect:add_religious_power] = int_value_field
+
+# TODO: value_field?
+###adds state loyalty to a province
+alias[effect:add_state_loyalty] = int_value_field
+
+###Rounds a variable to the nearest specified value clamp_variable = { name = X nearest = Y } Where X is the name of the variable Where Y is a script value
+alias[effect:round_variable] = {
+    name = value[variable]
+}
+
+###Set the ambition for this character
+alias[effect:set_ambition] = <ambition>
+
+###Kill the pop in the current scope
+alias[effect:kill_pop] = bool
+
+###a random effect, random = { chance = X modifier = Y effects... } where X is a chance of the enclosed effects being fired and can be modified by optional value modifier list (AKA MTTH) Y
+alias[effect:random] = {
+    chance = int_value_field
+
+    ## cardinality = 0..inf
+    modifier = single_alias_right[weight_chance_modifier]
+
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###creates a character in a country
+alias[effect:create_character] = {
+    ## cardinality = 0..1
+    first_name = scalar
+
+    ## cardinality = 0..1
+    age = int
+
+    ## cardinality = 0..1
+    female = bool
+
+    ## cardinality = 0..1
+    culture = <culture>
+    ## cardinality = 0..1
+    culture = scope[culture]
+
+    ## cardinality = 0..1
+    religion = <religion>
+    ## cardinality = 0..1
+    religion = scope[religion]
+
+    ## cardinality = 0..1
+    birth_province = enum[provinces]
+
+    ## cardinality = 0..1
+    family = scope[family]
+
+    ## cardinality = 0..1
+    father = scope[character]
+
+    ## cardinality = 0..1
+    mother = scope[character]
+
+    ## cardinality = 0..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###Effect only shown in tooltips (but not executed)
+alias[effect:show_as_tooltip] = {
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###Removes the personal loyalty of a specific subunit
+alias[effect:remove_subunit_loyalty] = bool
+
+###Adds an reverse opinion modifier, reverse_add_opinion = { modifier = X target = Z } X is a scripted modifier name.
+alias[effect:reverse_add_opinion] = {
+    modifier = <opinion>
+    target = scope[country]
+}
+
+###Removes a variable remove_variable = variable_name
+alias[effect:remove_global_variable] = value[global_variable]
+
+# TODO: 0-1 or 0-100?
+###Applies the given damage to each Cohort in the unit as a percentage of their current strength
+alias[effect:damage_unit_percent] = int_value_field
+
+###adds a permanent modifier from a Province
+alias[effect:add_permanent_province_modifier] = {
+    name = <modifier_container>
+
+    ## cardinality = 0..1
+    duration = -1
+}
+
+## scopes = none
+###Saves the current scope as an arbitrarily-named target to be referenced later in the (unbroken) event chain save_event_target_as = <string>
+alias[effect:save_scope_as] = value_set[event_target]
+
+###Conditionally cause an assert during read time assert_read = X, where X is yes or the string to be printed in the assert
+alias[effect:assert_read] = bool
+
+###Conditionally cause an assert during read time assert_read = X, where X is yes or the string to be printed in the assert
+alias[effect:assert_read] = scalar
+
+###Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the same effect add_to_temporary_list = <string> NOTE, if adding a temporary target to a permanent list, the list will stay permanent
+alias[effect:add_to_temporary_list] = replace_me
+
+###Removes a Office from a character
+alias[effect:remove_office] = <office>
+
+###Rounds a variable to the nearest specified value clamp_variable = { name = X nearest = Y } Where X is the name of the variable Where Y is a script value
+alias[effect:round_global_variable] = {
+    name = value[global_variable]
+}
+
+###Removes the personal loyalty of all cohorts in a unit
+alias[effect:remove_unit_loyalty] = bool
+
+###Imprisons the target character as this character's prisoner, imprison = { target = X  }, where X is a character
+alias[effect:imprison] = {
+    target = scope[character]
+}
+
+###changes the name of a country
+alias[effect:change_country_name] = localisation
+
+###Pays a Price from a country
+alias[effect:pay_price] = <price>
+
+###Executes enclosed effects if limit criteria are met if = { limit = { <triggers> } <effects> }
+alias[effect:if] = {
+    limit = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or script value This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+alias[effect:set_global_variable] = {
+    name = value_set[global_variable]
+
+    ## cardinality = 0..1
+    enum[duration] = int
+
+    ## cardinality = 0..1
+    value = value_field
+    ## cardinality = 0..1
+    value = scope_field
+}
+
+###Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or script value This variable will be accessible with <type_>var:X. With type being in a scope object or in a top scope
+alias[effect:set_global_variable] = value_set[global_variable]
+
+###Removes a modifier from a country
+alias[effect:change_government] = <government>
+
+###Clamps a variable the specified max and min clamp_variable = { name = X max = Y min = Z } Where X is the name of the variable Where Y and Z are script values
+alias[effect:clamp_global_variable] = {
+    name = value[global_variable]
+}
+
+###remove the leader from a party in a country
+alias[effect:remove_party_leadership] = <party_type>
+
+###removes the targetcountry's claim on the province.
+alias[effect:remove_claim] = scope[country]
+
+###gives (or takes) Stability to a country
+alias[effect:add_stability] = int_value_field
+
+###Changes the value or a numeric variable change_variable = { name = X operation = Y } Where X is the name of the numeric variable to modify Where the valid operations are add, subtract, multiply, divide and modulo Where Y is a fixed point value, script value or event target of a value type
+alias[effect:change_local_variable] = {
+    name = value[local_variable]
+}
+
+###adds a modifier from a Province
+alias[effect:add_province_modifier] = {
+    name = <modifier_container>
+
+    duration = int_value_field
+}
+
+###Removes a modifier from a State
+alias[effect:remove_state_modifier] = <modifier_container>
+
+# TODO: Elaborate, figure out
+###Adds ruler conviction
+alias[effect:add_ruler_conviction] = {
+    value = int_value_field
+}
+
+###Sets the personal loyalty of a specific subunit to the target character
+alias[effect:set_personal_loyalty] = scope[character]
+
+###Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met, and its own limit is met if = { limit = { <triggers> } <effects> } else_if = { limit = { <triggers> } <effects> }
+alias[effect:else_if] = {
+    limit = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###makes the target a subject of the current scope
+alias[effect:make_subject] = {
+    target = scope[country]
+    type = <subject_type>
+}
+
+###Removes the current scope from a named list remove_from_list = <string>
+alias[effect:remove_from_list] = replace_me
+
+###Adds martial skill
+alias[effect:add_martial] = int_value_field
+
+###makes a character pregnant
+alias[effect:make_pregnant] = {
+    father = scope[character]
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    known_bastard = bool
+
+    ## cardinality = 0..1
+    number_of_children = int_value_field
+}
+
+# TODO: value_field?
+###gives (or takes) Loyalty to a character
+alias[effect:add_loyalty] = int_value_field
+
+###adds or removes aggressive expansion for a country
+alias[effect:add_aggressive_expansion] = value_field
+
+# TODO: I guess I'll have to rename the validation part now that it turns out it's used :P
+###changes the flag of a country
+alias[effect:change_country_flag] = <coat_of_arms_validation>
+
+# TODO: Confirm
+###Character stops being a governor
+alias[effect:remove_as_governor] = bool
+
+###sets the culture of the pop to be the same as the culture of the target
+alias[effect:set_pop_culture_same_as] = scope[culture]
+
+###gives (or takes) Prestige to a family
+alias[effect:add_prestige] = int_value_field
+
+###Effect not shown in tooltips
+alias[effect:hidden_effect] = {
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###Changes a characters employer, if they are mecenary
+alias[effect:change_mercenary_employer] = scope[country]
+
+###sets the culture of the character to be the same as the culture of the target
+alias[effect:set_culture_same_as] = scope[culture]
+
+###sets the commander of a unit to the specified character
+alias[effect:set_as_commander] = scope[character]
+
+###Creates a specific poptype with the countrys religion/culture in a province
+alias[effect:create_state_pop] = <pop_type>
+
+###Conditionally cause an assert during run time assert_if = { limit = { X } text = Y }, where X is a trigger and Y is an optional string
+alias[effect:assert_if] = {
+    limit = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    text = scalar
+}
+
+###Removes the target from a variable list remove_list_variable = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[effect:remove_list_global_variable] = replace_me
+
+# TODO: value_field?
+###the scope character pays gold to the target character, pay_gold = { target = X gold = Y }
+alias[effect:pay_gold] = {
+    target = scope[character]
+
+    gold = int_value_field
+}
+
+###Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the (unbroken) event chain add_to_list = <string> NOTE, if adding a permanent target to a temporary list, the whole list becomes permanent
+alias[effect:add_to_list] = replace_me
+
+###Release the target character if imprisoned, release_prisoner = { target = X  }, where X is a character
+alias[effect:release_prisoner] = {
+    target = scope[character]
+}
+
+###adds civilisation to a province
+alias[effect:add_civilization_value] = value_field
+
+###sets gender equality for a country
+alias[effect:set_gender_equality] = bool
+
+###Empties the list clear_variable_list = variable_name
+alias[effect:clear_global_variable_list] = replace_me
+
+# TODO: Value_field? 0-1 or 0-100?
+###gives (or takes) morale to a subunit
+alias[effect:add_subunit_morale] = int_value_field
+
+###adds a modifier to a Character
+alias[effect:add_character_modifier] = {
+    name = <modifier_container>
+
+    duration = int_value_field
+}
+
+###Repeats enclosed effects while limit criteria are met or until set iteration count is reached while = { limit = { <triggers> } <effects> }  while = { count = 3 <effects> } Default max of 1000.
+alias[effect:while] = {
+    ## cardinality = 0..1
+    count = int_value_field
+
+    ## cardinality = 0..1
+    limit = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###Changes the value or a numeric variable change_variable = { name = X operation = Y } Where X is the name of the numeric variable to modify Where the valid operations are add, subtract, multiply, divide and modulo Where Y is a fixed point value, script value or event target of a value type
+alias[effect:change_global_variable] = {
+    name = value[global_variable]
+}
+
+###Adds an opinion modifier, add_opinion = { modifier = X  target = Z  } X is a scripted modifier name.
+alias[effect:add_opinion] = {
+    modifier = <opinion>
+
+    target = scope[country]
+}
+
+###Moves a character to another country (without message_popups)
+alias[effect:move_country] = scope[country]
+
+###Removes a rival from the character
+alias[effect:remove_rival] = scope[character]
+
+###sets the Religion of the pop to be the same as the Religion of the target
+alias[effect:set_pop_religion_same_as] = scope[religion]
+
+###gives (or takes) Manpower to a country
+alias[effect:add_manpower] = value_field
+
+###sets the graphical culture of a country
+alias[effect:set_graphical_culture] = enum[graphical_cultures]
+
+###Creates a Unit with a single cohort for a Country given by the current scope.  The cohort will be of the first defined type in the unit type db.  Optional properties:   name [string, defaults to generated name]   navy [bool, defaults to no]   mercenary [bool, defaults to no]   location [Province, defaults to capital of country scope]   commander [Character, defaults to none]   attachto [Unit, will not attach by default]
+alias[effect:create_unit] = {
+    ## cardinality = 0..1
+    name = scalar
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    navy = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    mercenary = bool
+
+    ## cardinality = 0..1
+    ### Defaults to capital of country scope.
+    location = scope[province]
+    ## cardinality = 0..1
+    ### Defaults to capital of country scope.
+    location = enum[provinces]
+
+    ## cardinality = 0..1
+    ### Defaults to none.
+    commander = scope[character]
+
+    ## cardinality = 0..1
+    ### Defaults to not attached.
+    attachto = scope[unit]
+
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+# TODO: Confirm if scope[culture] works (probably does)
+###Sets primary culture for a country
+alias[effect:set_primary_culture] = <culture>
+
+###Adds ORATORY Power
+alias[effect:add_oratory_power] = int_value_field
+
+###Removes all Offices from a character
+alias[effect:remove_all_offices] = bool
+
+###Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met if = { limit = { <triggers> } <effects> } else = { <effects> }
+alias[effect:else] = {
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
+###Adds a trait to a character
+alias[effect:add_trait] = <trait>
+
+###Adds a subunit to a Unit
+alias[effect:add_subunit] = <unit_type>
+
+###adds a modifier from a State
+alias[effect:add_state_modifier] = {
+    name = <modifier_container>
+
+    duration = int_value_field
+}
+
+###adds party support for a country
+alias[effect:add_party_support] = {
+    party = <party_type>
+
+    value = int_value_field
+}
+
+###gives (or takes) Prominence to a character
+alias[effect:add_prominence] = int_value_field
+
+###Adds the event target to a variable list add_to_variable_list = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[effect:add_to_variable_list] = replace_me
+
+# TODO: value_field?
+###gives (or takes) Treasury to a country
+alias[effect:add_treasury] = int_value_field
+
+###Clamps a variable the specified max and min clamp_variable = { name = X max = Y min = Z } Where X is the name of the variable Where Y and Z are script values
+alias[effect:clamp_variable] = {
+    name = value[variable]
+}
+
+###adds a cancellable modifier to a Character
+alias[effect:add_triggered_character_modifier] = {
+    name = <modifier_container.triggered>
+    ## cardinality = 0..1
+    duration = int_value_field
+}
+
+###Refunds a Price from a country
+alias[effect:refund_price] = <price>
+
+###gives a nickname to a character
+alias[effect:add_nickname] = random
+
+###gives a nickname to a character
+alias[effect:add_nickname] = localisation
+
+###country in scope breaks any applicable alliance with the target
+alias[effect:break_alliance] = scope[country]
+
+# TODO: value_field?
+###gives (or takes) Popularity to a character
+alias[effect:add_popularity] = int_value_field
+
+# TODO: value_field?
+###adds party conviction for a character
+alias[effect:add_party_conviction] = int_value_field
+
+# TODO: value_field?
+###adds party conviction for a character
+alias[effect:add_party_conviction] = {
+    party = <party_type>
+
+    value = int_value_field
+}
+
+###Log the current scope to the game log when this effect executes yes = full scope info, no=only current scope
+alias[effect:debug_log_scopes] = bool
+
+# TODO: 0-1 or 0-100?
+###gives (or takes) Strength to a subunit
+alias[effect:add_subunit_strength] = int_value_field
+
+###gives the targetcountry a claim on the province.
+alias[effect:add_claim] = scope[country]
+
+###Set the Religion for this pop
+alias[effect:set_pop_religion] = <religion>
+
+###Set the Religion for this pop
+alias[effect:set_pop_religion] = scope[religion]
+
+# TODO: Confirm if scope[province]
+###Changes the capital of a country
+alias[effect:set_capital] = enum[provinces]
+
+###Character stops being a Mercenary
+alias[effect:remove_as_mercenary] = bool
+
+###Removes command from a character
+alias[effect:remove_command] = bool
+
+###makes the currrent province controlled by the target country, if province owner and target are at war
+alias[effect:set_controller] = scope[country]
+
+###adds a modifier from a country
+alias[effect:add_country_modifier] = {
+    name = <modifier_container>
+
+    duration = int_value_field
+}
+
+###moves the pop to target province.
+alias[effect:move_pop] = enum[provinces]
+
+###moves the pop to target province.
+alias[effect:move_pop] = scope[province]
+
+###Removes a modifier from a Unit
+alias[effect:remove_unit_modifier] = <modifier_container>
+
+###adds research for a country { technology = table value = percent(0-100) }
+alias[effect:add_research] = {
+    technology = <technology_table>
+
+    value = int_value_field[0..100]
+}
+
+# TODO: value_field?
+###gives (or takes) centralization to a country
+alias[effect:add_centralization] = int_value_field
+
+# TODO: value_field?
+###gives (or takes) Legitimacy to a country
+alias[effect:add_legitimacy] = int_value_field
+
+###triggers an event or on_action trigger_event = { id = X days/months/years = Y } (for events) or trigger_event = { on_action = X days/months/years = Y } (for on_actions) Days/months/years are optional and equal to 0 if not specified. If specified, Y can be a value or an inclusive interval "{ A B }" from which the duration will be picked randomly.
+alias[effect:trigger_event] = {
+    id = <event>
+
+    ## cardinality = 0..1
+    enum[duration] = int_value_field
+}
+
+###triggers an event or on_action trigger_event = { id = X days/months/years = Y } (for events) or trigger_event = { on_action = X days/months/years = Y } (for on_actions) Days/months/years are optional and equal to 0 if not specified. If specified, Y can be a value or an inclusive interval "{ A B }" from which the duration will be picked randomly.
+alias[effect:trigger_event] = {
+    on_action = <on_action>
+
+    ## cardinality = 0..1
+    enum[duration] = int_value_field
+}
+
+# TODO: value_field?
+###adds or subtracts health from a character
+alias[effect:add_health] = int_value_field
+
+###Log a string to the debug log when this effect executes, debug_log = message, the message can be a localization string with ROOT, SCOPE and PREV available
+alias[effect:debug_log] = scalar
+
+###Sets religion for a country
+alias[effect:set_country_religion] = <religion>
+
+# TODO: value_field?
+###gives (or takes) war exhaustion to a country
+alias[effect:add_war_exhaustion] = int_value_field
+
+###just a tooltip, the scope as subject (for grouping, localization)
+alias[effect:custom_tooltip] = localisation
+
+###adds a road towards the target
+alias[effect:add_road_towards] = scope[province]
+
+###Sets the Family of the character
+alias[effect:set_family] = scope[family]
+
+###Removes the target from a variable list remove_list_variable = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[effect:remove_list_variable] = replace_me
+
+###Saves the current scope as an arbitrarily-named temporary target to be referenced later in the same effect save_temporary_event_target_as = <string>
+alias[effect:save_temporary_scope_as] = value_set[temporary_scope]
+
+###Removes a modifier from a Character
+alias[effect:remove_character_modifier] = <modifier_container>
+
+###Adds the event target to a variable list add_to_variable_list = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[effect:add_to_global_variable_list] = replace_me
+
+###adds a modifier from a Unit
+alias[effect:add_unit_modifier] = {
+    name = <modifier_container>
+
+    duration = int_value_field
+}
+
+###sets up a pop culture/religion/type possible to set.
+alias[effect:define_pop] = {
+    type = <pop_type>
+    religion = scope[religion]
+    culture = scope[culture]
+}
+
+###Adds zeal skill
+alias[effect:add_zeal] = int_value_field
+
+###creates a family for the target character
+alias[effect:create_family] = scope[character]
+
+###a random list effect random_list = { X1 = { trigger = { enables/disable this effect} modifier/compare_modifier/opinion_modifier = Y1 effect1 } X2 = { trigger = { enables/disable this effect} modifier/compare_modifier/opinion_modifier = Y2 effect2 } ... } Selects one effect from the list and fires it. The effects are weighted by numbers X1, X2... (the higher the number, the higher the chance of the effect being picked). The chances can be modified by optional value modifier lists Y1, Y2... (AKA MTTH)
+alias[effect:random_list] = {
+    ## cardinality = 2..inf
+    int = {
+        ## cardinality = 0..1
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        ## cardinality = 0..inf
+        modifier = single_alias_right[weight_chance_modifier]
+
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..inf
+    alias_name[effect] = alias_match_left[effect]
+}

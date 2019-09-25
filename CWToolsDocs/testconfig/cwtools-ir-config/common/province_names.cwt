@@ -1,0 +1,22 @@
+single_alias[province_names_rhs] = {
+    ## cardinality = 1..inf
+    enum[provinces] = localisation
+}
+
+types = {
+    type[province_names_validation] = {
+        path = "game/common/province_names"
+        type_per_file = yes
+    }
+}
+
+province_names_validation = {
+    ## cardinality = 0..inf
+    enum[country_tags] = single_alias_right[province_names_rhs]
+
+    ## cardinality = 0..inf
+    <culture> = single_alias_right[province_names_rhs]
+
+    ## cardinality = 0..inf
+    <culture_group> = single_alias_right[province_names_rhs]
+}

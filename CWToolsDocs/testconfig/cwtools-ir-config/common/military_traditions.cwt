@@ -1,0 +1,71 @@
+types = {
+    type[military_tradition] = {
+        path = "game/common/military_traditions"
+
+        localisation = {
+            name = "$"
+            description = "$desc"
+            start_bonus = "$_start_bonus"
+            start_bonus_description = "$_start_bonus_desc"
+        }
+    }
+    ## type_key_filter <> { allow start }
+    type[military_tradition_path] = {
+        path = "game/common/military_traditions"
+        skip_root_key = any
+
+        localisation = {
+            end_bonus = "$_end_bonus"
+            end_bonus_description = "$_end_bonus_desc"
+        }
+    }
+    ## type_key_filter <> bonus
+    type[military_tradition_path_step] = {
+        path = "game/common/military_traditions"
+        skip_root_key = { any any }
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+military_tradition = {
+    primary = <unit_type.army>
+    second = <unit_type.army>
+    flank = <unit_type.army>
+
+    allow = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    start = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    # UI-based. Mods can change.
+    ## cardinality = 3..3
+    <military_tradition_path> = {
+        # UI-based. Mods can change.
+        ## cardinality = 7..7
+        <military_tradition_path_step> = {
+            ## cardinality = 1..inf
+            alias_name[modifier] = alias_match_left[modifier]
+
+            ## cardinality = 0..1
+            ai_plan = {
+                ## cardinality = 1..inf
+                after = "military_tradition <military_tradition_path_step>"
+            }
+        }
+
+        bonus = {
+            ## cardinality = 1..inf
+            alias_name[modifier] = alias_match_left[modifier]
+        }
+    }
+}

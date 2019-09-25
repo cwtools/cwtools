@@ -1,0 +1,12 @@
+alias[trigger:<scripted_trigger>] = bool
+
+types = {
+    type[scripted_trigger] = {
+        path = "game/common/scripted_triggers"
+    }
+}
+
+scripted_trigger = {
+    ## cardinality = 1..inf
+    alias_name[trigger] = alias_match_left[trigger]
+}

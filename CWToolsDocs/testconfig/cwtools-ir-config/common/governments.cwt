@@ -1,0 +1,67 @@
+types = {
+    type[government] = {
+        path = "game/common/governments"
+
+        subtype[term] = {
+            election_delay = int[1..inf]
+        }
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+            ruler = "$_ruler"
+            ruler_female = "$_ruler_female"
+            # _TAG, _culture_group versions
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+government = {
+    # enum[power_types]_ideas = int - wish something like this could work
+
+    ## cardinality = 0..1
+    ### Make sure sum of this and other _ideas is not above the UI maximum of 4
+    civic_ideas = int[1..inf]
+
+    ## cardinality = 0..1
+    ### Make sure sum of this and other _ideas is not above the UI maximum of 4
+    military_ideas = int[1..inf]
+
+    ## cardinality = 0..1
+    ### Make sure sum of this and other _ideas is not above the UI maximum of 4
+    oratory_ideas = int[1..inf]
+
+    ## cardinality = 0..1
+    ### Make sure sum of this and other _ideas is not above the UI maximum of 4
+    religious_ideas = int[1..inf]
+
+    ## cardinality = 0..1
+    ### Defaults to monarchy, probably.
+    type = enum[government_types]
+
+    ## cardinality = 0..1
+    ### Defaults to yes, probably.
+    revolt = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    allows_migration = bool
+
+    base = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+    bonus = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ### Defaults to 0. 0 is no ruler terms.
+    election_delay = int[0..inf]
+
+    subtype[term] = {
+        ruler_term = int
+    }
+}

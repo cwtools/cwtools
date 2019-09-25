@@ -1,0 +1,12 @@
+alias[effect:<scripted_effect>] = yes
+
+types = {
+    type[scripted_effect] = {
+        path = "game/common/scripted_effects"
+    }
+}
+
+scripted_effect = {
+    ## cardinality = 1..inf
+    alias_name[effect] = alias_match_left[effect]
+}

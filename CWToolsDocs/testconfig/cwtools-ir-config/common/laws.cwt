@@ -1,0 +1,44 @@
+types = {
+    type[law_category] = {
+        path = "game/common/laws"
+
+        localisation = {
+            name = "$"
+        }
+    }
+    ## type_key_filter <> potential
+    type[law] = {
+        path = "game/common/laws"
+        skip_root_key = any
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+law_category = {
+    potential = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    # Based on existing UI. Might be changed based on mod.
+    ## cardinality = 4..4
+    <law> = {
+        ## cardinality = 0..1
+        allow = {
+            ## cardinality = 0..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        alias_name[modifier] = alias_match_left[modifier]
+
+        ## cardinality = 0..1
+        on_enact = {
+            alias_name[effect] = alias_match_left[effect]
+        }
+    }
+}

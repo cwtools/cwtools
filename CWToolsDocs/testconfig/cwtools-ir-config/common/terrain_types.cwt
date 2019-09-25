@@ -1,0 +1,24 @@
+types = {
+    type[terrain] = {
+        path = "game/common/terrain_types"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+# Hopefully got the scopes right
+## replace_scope = { this = province root = province }
+terrain = {
+    color = colour_field
+
+    ## cardinality = 0..1
+    defender = int
+
+    modifier = {
+        ## cardinality = 0..1
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+}

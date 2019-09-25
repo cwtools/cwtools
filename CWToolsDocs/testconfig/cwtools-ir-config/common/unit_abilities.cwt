@@ -1,0 +1,129 @@
+enums = {
+    enum[unit_ability_army_navy_only] = {
+        army_only
+        navy_only
+    }
+}
+
+types = {
+    type[unit_ability] = {
+        path = "game/common/unit_abilities"
+
+        subtype[toggleable] = {
+            toggle = yes
+        }
+
+        subtype[default_disabled] = {
+            enable = no
+        }
+
+        localisation = {
+            name = "$"
+            description = "$desc"
+        }
+    }
+}
+
+## replace_scope = { this = unit }
+unit_ability = {
+    subtype[!toggleable] = {
+        ### 0 for instant, apparently.
+        duration = int[0..inf]
+    }
+    subtype[toggleable] = {
+        duration = -1
+    }
+
+    enable = bool
+
+    toggle = bool
+
+    enum[unit_ability_army_navy_only] = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    map = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    is_road_building = bool
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    cancel_on_combat_end = bool
+
+    # TODO: Figure out
+    ## cardinality = 0..1
+    shortcut = scalar
+
+    # TODO: Sound
+    ## cardinality = 0..1
+    soundeffect = scalar
+
+    ## cardinality = 0..1
+    hidden = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    allow = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    modifier = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    start_effect = {
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..1
+    finished_when = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    finish_effect = {
+        ## cardinality = 1..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+    ## cardinality = 0..1
+    ai_will_do = {
+        ## cardinality = 0..inf
+        modifier = {
+            trigger = {
+                ## cardinality = 1..inf
+                alias_name[trigger] = alias_match_left[trigger]
+            }
+            add = {
+                value = value_field
+                # 0..inf cardinality?
+                ## cardinality = 0..1
+                multiply = {
+                    value = value_field
+                }
+            }
+        }
+    }
+
+    ## cardinality = 0..1
+    ai_will_revoke = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    # TODO: maybe match up with actual states?
+
+    ## cardinality = 0..1
+    move_entity_state = scalar
+
+    ## cardinality = 0..1
+    idle_entity_state = scalar
+}

@@ -1,0 +1,36 @@
+types = {
+    # Since those are apparently "hardcoded connections"
+    ## type_key_filter = { income_tax income_commerce income_tribute expense_army expense_navy expense_fort expense_wages }
+    type[economic_policy] = {
+        path = "game/common/economic_policies"
+
+        localisation = {
+            low = "$_low"
+            default = "$_default"
+            high = "$_high"
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+economic_policy = {
+    low = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+    default = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+    high = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ai_will_do_low = single_alias_right[weight_block]
+    ## cardinality = 0..1
+    ai_will_do = single_alias_right[weight_block]
+    ## cardinality = 0..1
+    ai_will_do_high = single_alias_right[weight_block]
+}

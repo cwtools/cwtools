@@ -1,0 +1,13 @@
+types = {
+    type[event_theme] = {
+        path = "game/common/event_themes"
+    }
+}
+
+event_theme = {
+    # Uh.
+    icon = ""
+
+    # TODO: Sound
+    soundeffect = scalar
+}

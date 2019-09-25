@@ -1,0 +1,10 @@
+enums = {
+    complex_enum[country_tags] = {
+        path_strict = yes
+        path = "game/common/countries.txt"
+        start_from_root = yes
+        name = {
+            enum_name = scalar
+        }
+    }
+}

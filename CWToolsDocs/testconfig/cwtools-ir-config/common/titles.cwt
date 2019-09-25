@@ -1,0 +1,32 @@
+enums = {
+    enum[titles_hardcoded] = {
+        title_ruler
+        title_general
+        title_admiral
+        title_tech_office
+        title_consort
+        title_crown_prince
+        title_governor
+        title_party_leader
+        title_clan_chief
+    }
+}
+
+types = {
+    type[titles_validation] = {
+        path = "game/common/titles"
+        type_per_file = yes
+    }
+}
+
+## replace_scope = { this = character }
+titles_validation = {
+    # TODO: uniqueness rule
+    ## cardinality = 1..inf
+    enum[titles_hardcoded] = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+
+        title_importance = int
+    }
+}

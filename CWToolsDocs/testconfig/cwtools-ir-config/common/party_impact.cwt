@@ -1,0 +1,38 @@
+# Purely validation, doesn't need referencing
+
+single_alias[party_impact_rhs] = {
+    approval = {
+        ## cardinality = 1..inf
+        <party_type> = single_alias_right[weight_block]
+    }
+    loyalty = {
+        ## cardinality = 0..inf
+        <party_type> = float
+    }
+    support = {
+        ## cardinality = 0..inf
+        <party_type> = int
+    }
+}
+
+types = {
+    type[party_impact_validation] = {
+        path = "game/common/party_impact"
+        type_per_file = yes
+    }
+}
+
+party_impact_validation = {
+    ## cardinality = 0..inf
+    <law_category> = single_alias_right[party_impact_rhs]
+
+    ## cardinality = 0..inf
+    ### scope:target is the character
+    <character_interaction> = single_alias_right[party_impact_rhs]
+
+    ## cardinality = 0..inf
+    enum[diplomatic_actions] = single_alias_right[party_impact_rhs]
+
+    ## cardinality = 0..1
+    default = single_alias_right[party_impact_rhs]
+}

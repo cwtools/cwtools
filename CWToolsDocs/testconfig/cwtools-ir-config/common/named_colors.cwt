@@ -1,0 +1,12 @@
+enums = {
+    complex_enum[named_colors] = {
+        path = "game/common/named_colors"
+        start_from_root = yes
+        name = {
+            colors = {
+                # TODO: Because the hsv/rgb { values } syntax is likely not supported yet, and even if it is by some "colour_field" thing that should likely include the enum in the first place
+                enum_name = { }
+            }
+        }
+    }
+}

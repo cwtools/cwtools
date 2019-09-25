@@ -1,0 +1,68 @@
+# More specifically, those are unit objectives
+
+enums = {
+    enum[ai_objective_weight_modes] = {
+        none
+        add
+        replace
+    }
+}
+
+types = {
+    type[ai_objective] = {
+        path = "game/common/ai_objectives"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = unit root = unit }
+ai_objective = {
+    ## cardinality = 0..1
+    priority = int
+
+    allow = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## cardinality = 0..1
+    interface_allow = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    interface_priority = int
+
+    # TODO: float?
+    ## cardinality = 0..1
+    search_depth = int
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    pure_weight = bool
+
+    mode = enum[ai_objective_weight_modes]
+
+    # Apparently objectives use a format for weight different from everything else
+    weight = {
+        ## cardinality = 0..inf
+        modifier = {
+            trigger = {
+                ## cardinality = 1..inf
+                alias_name[trigger] = alias_match_left[trigger]
+            }
+            add = {
+                value = value_field
+                # 0..inf cardinality?
+                ## cardinality = 0..1
+                multiply = {
+                    value = value_field
+                }
+            }
+        }
+    }
+}

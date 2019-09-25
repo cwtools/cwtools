@@ -1,0 +1,48 @@
+types = {
+    type[trade_goods] = {
+        path = "game/common/trade_goods"
+
+        localisation = {
+            name = "$"
+            description = "$DESC"
+        }
+    }
+}
+
+trade_goods = {
+    # enum?
+    category = int
+
+    ## cardinality = 0..inf
+    allow_unit_type = <unit_type>
+
+    ## replace_scope = { this = province }
+    ### Base, applied to all cities in province.
+    province = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## replace_scope = { this = province }
+    ### Surplus in province, applied to province capital.
+    state_capital = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ### Surplus in the capital province, applied to country.
+    ## replace_scope = { this = country }
+    country = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ### Exporting, applied to country.
+    ## replace_scope = { this = country }
+    export = {
+        ## cardinality = 1..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    color = colour_field
+}

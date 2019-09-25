@@ -1,0 +1,36 @@
+types = {
+    type[effect_localization_validation] = {
+        path = "game/common/effect_localization"
+        type_per_file = yes
+    }
+}
+
+# TODO: make an enum[effects] and sync with it
+# TODO: see about all the different pre/post/suffixes - first, third, no, global, past, neg - and if they can be combined dynamically
+effect_localization_validation = {
+    ## cardinality = 1..inf
+    scalar = {
+        global = localisation
+
+        ## cardinality = 0..1
+        global_neg = localisation
+
+        ## cardinality = 0..1
+        third = localisation
+
+        ## cardinality = 0..1
+        third_neg = localisation
+
+        ## cardinality = 0..1
+        no_past = localisation
+
+        ## cardinality = 0..1
+        no_past_neg = localisation
+
+        ## cardinality = 0..1
+        third_past = localisation
+
+        ## cardinality = 0..1
+        third_past_neg = localisation
+    }
+}

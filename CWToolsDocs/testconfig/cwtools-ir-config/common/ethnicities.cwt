@@ -1,0 +1,50 @@
+single_alias[ethnicity_morph_subgene_usage] = {
+    name = <morph_subgene>
+    range = {
+        ## cardinality = 2..2
+        float[0.0..1.0]
+    }
+}
+
+single_alias[ethnicity_accessory_subgene_usage] = {
+    name = <accessory_subgene>
+    range = {
+        ## cardinality = 2..2
+        float[0.0..1.0]
+    }
+}
+
+types = {
+    type[ethnicity] = {
+        path = "game/common/ethnicities"
+    }
+}
+
+ethnicity = {
+    ## cardinality = 0..1
+    template = <ethnicity>
+
+    # TODO: Not sure what cardinality to actually put there
+    ## cardinality = 0..inf
+    <color_gene> = {
+        ## cardinality = 1..inf
+        int = {
+            ## cardinality = 4..4
+            float[0.0..1.0]
+        }
+    }
+
+    ## cardinality = 0..inf
+    <morph_gene> = {
+        # Weird, the whole bit is commented out in some parts, dunno how that'd work in the end
+        ## cardinality = 0..inf
+        int = single_alias_right[ethnicity_morph_subgene_usage]
+    }
+
+    ## cardinality = 0..inf
+    <accessory_gene> = {
+        # Weird, the whole bit is commented out in some parts, dunno how that'd work in the end
+        ## cardinality = 0..inf
+        int = single_alias_right[ethnicity_accessory_subgene_usage]
+    }
+}

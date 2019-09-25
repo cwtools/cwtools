@@ -1,0 +1,41 @@
+enums = {
+    enum[idea_groups] = {
+        civic_ideas
+        military_ideas
+        oratory_ideas
+        religious_ideas
+    }
+}
+
+types = {
+    type[idea] = {
+        path = "game/common/ideas"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = country root = country }
+idea = {
+    trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 1..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    group = enum[idea_groups]
+
+    # TODO: <sound>? filepath? weird format
+    soundeffect = scalar
+
+    ## cardinality = 0..1
+    ai_plan = {
+        ## cardinality = 1..inf
+        after = "idea <idea>"
+    }
+}

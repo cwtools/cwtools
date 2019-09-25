@@ -1,0 +1,19 @@
+types = {
+    type[scripted_modifier] = {
+        path = "game/common/scripted_modifiers"
+    }
+}
+
+scripted_modifier = {
+    ## cardinality = 0..inf
+    ### Appears in the tooltip only if the conditions are fulfilled.
+    modifier = single_alias_right[weight_chance_modifier]
+
+    ## cardinality = 0..inf
+    ### Always appears in the tooltip, if any.
+    always_modifier = single_alias_right[weight_chance_modifier]
+
+    # TODO: Confirm this works
+    # ## cardinality = 0..inf
+    # <scripted_modifier> = yes
+}

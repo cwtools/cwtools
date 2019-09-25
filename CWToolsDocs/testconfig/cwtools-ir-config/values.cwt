@@ -1,0 +1,19 @@
+# Hardcoded values
+values = {
+    value[event_target] = {
+        context
+        actor
+        recipient
+        former_ruler
+        target
+        newborn
+        owner
+        attacker
+        defender
+        province
+        victory
+        former_overlord
+        future_overlord
+        old_country
+    }
+}

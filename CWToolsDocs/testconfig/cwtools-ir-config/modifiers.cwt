@@ -1,0 +1,554 @@
+modifiers = {
+
+    build_cost = country
+
+    build_time = country
+
+    minimum_unrest = province
+
+    local_unrest = province
+
+    global_unrest = country
+
+    tax_income = province
+
+    global_tax_income = province
+
+    local_tax_modifier = province
+
+    global_tax_modifier = country
+
+    local_population_growth = province
+
+    global_population_growth = country
+
+    local_building_slot = province
+
+    global_building_slot = country
+
+    global_monthly_state_loyalty = country
+
+    local_monthly_state_loyalty = state
+
+    city_monthly_state_loyalty = province
+
+    happiness_for_wrong_culture_modifier = province
+
+    happiness_for_wrong_culture_group_modifier = province
+
+    happiness_for_same_culture_modifier = province
+
+    land_morale = country
+
+    naval_morale = country
+
+    land_morale_modifier = unit
+
+    naval_morale_modifier = country
+
+    local_manpower = province
+
+    global_manpower = country
+
+    local_manpower_modifier = province
+
+    global_manpower_modifier = country
+
+    manpower_recovery_speed = country
+
+    attrition = province
+
+    land_unit_attrition = country
+
+    naval_unit_attrition = country
+
+    max_attrition = province
+
+    supply_limit = province
+
+    supply_limit_modifier = province
+
+    global_supply_limit_modifier = country
+
+    war_exhaustion = country
+
+    max_war_exhaustion = country
+
+    fort_level = province
+
+    blockade_efficiency = country
+
+    monthly_centralization = country
+
+    monthly_legitimacy = country
+
+    agressive_expansion_impact = country
+
+    agressive_expansion_monthly_change = country
+
+    agressive_expansion_monthly_decay = country
+
+    local_ship_recruit_speed = province
+
+    local_cohort_recruit_speed = province
+
+    global_ship_recruit_speed = country
+
+    global_cohort_recruit_speed = country
+
+    garrison_size = province
+
+    garrison_growth = province
+
+    technology_investment = country
+
+    movement_cost = province
+
+    army_movement_speed = province
+
+    navy_movement_speed = province
+
+    movement_speed_if_no_road = province
+
+    local_state_trade_routes = state
+
+    global_capital_trade_routes = country
+
+    global_state_trade_routes = country
+
+    research_points = province
+
+    research_points_modifier = country
+
+    local_research_points_modifier = province
+
+    omen_power = country
+
+    omen_duration = country
+
+    discipline = unit
+
+    local_defensive = province
+
+    global_defensive = country
+
+    commerce_value = province
+
+    global_commerce_modifier = country
+
+    local_commerce_modifier = province
+
+    tribute_income_modifier = country
+
+    ruler_popularity_gain = country
+
+    max_loyalty = country
+
+    integrate_speed = country
+
+    monthly_wage_for_character = character
+
+    monthly_wage_modifier = country
+
+    monthly_wage_on_character_modifier = character
+
+    monthly_governor_wage = country
+
+    monthly_local_governor_wage = country
+
+    monthly_character_loyalty = country
+
+    monthly_character_loyalty = character
+
+    monthly_character_popularity = character
+
+    monthly_character_popularity_decay = character
+
+    monthly_character_prominence = character
+
+    monthly_character_fam_prestige = character
+
+    cohort_reinforcement_speed = unit
+
+    land_morale_recovery = country
+
+    naval_morale_recovery = country
+
+    siege_ability = unit
+
+    assault_ability = unit
+
+    siege_engineers = unit
+
+    diplomatic_reputation = country
+
+    diplomatic_relations = country
+
+    max_rivals = character
+
+    max_friends = character
+
+    current_corruption = character
+
+    monthly_corruption = country
+
+    subject_opinions = country
+
+    subject_loyalty = country
+
+    loyalty_to_overlord = country
+
+    fort_maintenance_cost = country
+
+    army_maintenance_cost = country
+
+    navy_maintenance_cost = country
+
+    mercenary_maintenance_cost = country
+
+    country_civilization_value = country
+
+    local_country_civilization_value = province
+
+    local_monthly_civilization = province
+
+    global_monthly_civilization = country
+
+    global_start_experience = country
+
+    local_start_experience = province
+
+    global_cohort_start_experience = country
+
+    local_cohort_start_experience = province
+
+    global_ship_start_experience = country
+
+    local_ship_start_experience = province
+
+    experience_decay = country
+
+    martial = character
+
+    finesse = character
+
+    charisma = character
+
+    zeal = character
+
+    fertility = character
+
+    health = character
+
+    barbarian_growth = country
+
+    barbarian_spawn_chance = country
+
+    loyalty_gain_chance = unit
+
+    loyalty_gain_chance_modifier = country
+
+    prominence = character
+
+    senate_influence = country
+
+    monthly_tyranny = country
+
+    retreat_delay = country
+
+    pirate_spawn_chance = country
+
+    local_pirate_spawn_chance = country
+
+    all_power_cost = country
+
+    improve_relation_impact = country
+
+    hostile_attrition = country
+
+    local_hostile_attrition = province
+
+    election_term_duration = country
+
+    ship_repair_at_sea = country
+
+    war_score_cost = country
+
+    monthly_general_loyalty = country
+
+    monthly_admiral_loyalty = country
+
+    monthly_governor_loyalty = country
+
+    base_resources = province
+
+    local_goods_from_slaves = province
+
+    global_goods_from_slaves = country
+
+    show_3d_fort = character
+
+    control_range_modifier = country
+
+    diplomatic_range_modifier = country
+
+    monthly_character_wealth = character
+
+    primary_heir_attraction = character
+
+    support_for_character_as_heir = character
+
+    next_ruler_legitimacy = character
+
+    num_of_clan_chiefs = country
+
+    power_conversion_cost_modifier = character
+
+    clan_retinue_size = character
+
+    enslavement_efficiency = unit
+
+    local_output_modifier = character
+
+    archers_plains_combat_bonus = country
+
+    camels_plains_combat_bonus = country
+
+    chariots_plains_combat_bonus = country
+
+    heavy_cavalry_plains_combat_bonus = country
+
+    heavy_infantry_plains_combat_bonus = country
+
+    horse_archers_plains_combat_bonus = country
+
+    light_cavalry_plains_combat_bonus = country
+
+    light_infantry_plains_combat_bonus = country
+
+    warelephant_plains_combat_bonus = country
+
+    trireme_plains_combat_bonus = country
+
+    archers_mountain_combat_bonus = country
+
+    camels_mountain_combat_bonus = country
+
+    chariots_mountain_combat_bonus = country
+
+    heavy_cavalry_mountain_combat_bonus = country
+
+    heavy_infantry_mountain_combat_bonus = country
+
+    horse_archers_mountain_combat_bonus = country
+
+    light_cavalry_mountain_combat_bonus = country
+
+    light_infantry_mountain_combat_bonus = country
+
+    warelephant_mountain_combat_bonus = country
+
+    trireme_mountain_combat_bonus = country
+
+    archers_hills_combat_bonus = country
+
+    camels_hills_combat_bonus = country
+
+    chariots_hills_combat_bonus = country
+
+    heavy_cavalry_hills_combat_bonus = country
+
+    heavy_infantry_hills_combat_bonus = country
+
+    horse_archers_hills_combat_bonus = country
+
+    light_cavalry_hills_combat_bonus = country
+
+    light_infantry_hills_combat_bonus = country
+
+    warelephant_hills_combat_bonus = country
+
+    trireme_hills_combat_bonus = country
+
+    archers_desert_combat_bonus = country
+
+    camels_desert_combat_bonus = country
+
+    chariots_desert_combat_bonus = country
+
+    heavy_cavalry_desert_combat_bonus = country
+
+    heavy_infantry_desert_combat_bonus = country
+
+    horse_archers_desert_combat_bonus = country
+
+    light_cavalry_desert_combat_bonus = country
+
+    light_infantry_desert_combat_bonus = country
+
+    warelephant_desert_combat_bonus = country
+
+    trireme_desert_combat_bonus = country
+
+    archers_marsh_combat_bonus = country
+
+    camels_marsh_combat_bonus = country
+
+    chariots_marsh_combat_bonus = country
+
+    heavy_cavalry_marsh_combat_bonus = country
+
+    heavy_infantry_marsh_combat_bonus = country
+
+    horse_archers_marsh_combat_bonus = country
+
+    light_cavalry_marsh_combat_bonus = country
+
+    light_infantry_marsh_combat_bonus = country
+
+    warelephant_marsh_combat_bonus = country
+
+    trireme_marsh_combat_bonus = country
+
+    archers_jungle_combat_bonus = country
+
+    camels_jungle_combat_bonus = country
+
+    chariots_jungle_combat_bonus = country
+
+    heavy_cavalry_jungle_combat_bonus = country
+
+    heavy_infantry_jungle_combat_bonus = country
+
+    horse_archers_jungle_combat_bonus = country
+
+    light_cavalry_jungle_combat_bonus = country
+
+    light_infantry_jungle_combat_bonus = country
+
+    warelephant_jungle_combat_bonus = country
+
+    trireme_jungle_combat_bonus = country
+
+    archers_farmland_combat_bonus = country
+
+    camels_farmland_combat_bonus = country
+
+    chariots_farmland_combat_bonus = country
+
+    heavy_cavalry_farmland_combat_bonus = country
+
+    heavy_infantry_farmland_combat_bonus = country
+
+    horse_archers_farmland_combat_bonus = country
+
+    light_cavalry_farmland_combat_bonus = country
+
+    light_infantry_farmland_combat_bonus = country
+
+    warelephant_farmland_combat_bonus = country
+
+    trireme_farmland_combat_bonus = country
+
+    archers_forest_combat_bonus = country
+
+    camels_forest_combat_bonus = country
+
+    chariots_forest_combat_bonus = country
+
+    heavy_cavalry_forest_combat_bonus = country
+
+    heavy_infantry_forest_combat_bonus = country
+
+    horse_archers_forest_combat_bonus = country
+
+    light_cavalry_forest_combat_bonus = country
+
+    light_infantry_forest_combat_bonus = country
+
+    warelephant_forest_combat_bonus = country
+
+    trireme_forest_combat_bonus = country
+
+    archers_ocean_combat_bonus = country
+
+    camels_ocean_combat_bonus = country
+
+    chariots_ocean_combat_bonus = country
+
+    heavy_cavalry_ocean_combat_bonus = country
+
+    heavy_infantry_ocean_combat_bonus = country
+
+    horse_archers_ocean_combat_bonus = country
+
+    light_cavalry_ocean_combat_bonus = country
+
+    light_infantry_ocean_combat_bonus = country
+
+    warelephant_ocean_combat_bonus = country
+
+    trireme_ocean_combat_bonus = country
+}
+
+## scopes = { province country }
+alias[modifier:local_<pop_type>_output] = float
+## scopes = country
+alias[modifier:global_<pop_type>_output] = float
+## scopes = { province country }
+alias[modifier:local_<pop_type>_happyness] = float
+## scopes = country
+alias[modifier:global_<pop_type>_happyness] = float
+
+## scopes = country
+alias[modifier:monthly_<office>_loyalty] = float
+
+## scopes = country
+alias[modifier:<building>_cost] = float
+
+## scopes = country
+alias[modifier:<technology_table>_investment] = float
+## scopes = country
+alias[modifier:monthly_<technology_table>_loyalty] = float
+
+## scopes = character
+alias[modifier:monthly_<party_type>_conviction] = float
+## scopes = country
+alias[modifier:<party_type>_influence] = float
+
+## scopes = unit
+alias[modifier:<unit_type>_discipline] = float
+## scopes = unit
+alias[modifier:<unit_type>_morale] = float
+## scopes = unit
+alias[modifier:<unit_type>_offensive] = float
+## scopes = unit
+alias[modifier:<unit_type>_defensive] = float
+## scopes = unit
+alias[modifier:<unit_type>_cost] = float
+## scopes = unit
+alias[modifier:<unit_type>_maintenance_cost] = float
+## scopes = unit
+alias[modifier:<unit_type>_movement_speed] = float
+
+## scopes = country
+alias[modifier:<price>_cost_modifier] = float
+
+# TODO: Scope is maybe unit, confirm
+## scopes = country
+alias[modifier:enable_tactic] = <combat_tactic.default_disabled>
+
+## scopes = country
+alias[modifier:enable_ability] = <unit_ability.default_disabled>
+
+## scopes = character
+alias[modifier:disallow_job] = yes
+
+## scopes = character
+alias[modifier:disallow_office] = yes
+
+## scopes = character
+alias[modifier:disallow_command] = yes
+
+## scopes = country
+alias[modifier:succession] = enum[succession_types]

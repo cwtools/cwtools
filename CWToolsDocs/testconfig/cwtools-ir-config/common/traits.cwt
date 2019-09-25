@@ -1,0 +1,64 @@
+enums = {
+    enum[trait_types] = {
+        health
+        military
+        personality
+        status
+    }
+}
+
+types = {
+    type[trait] = {
+        path = "game/common/traits"
+
+        localisation = {
+            name = "$"
+            description = "$_desc"
+        }
+    }
+}
+
+## replace_scope = { this = character }
+trait = {
+    type = enum[trait_types]
+
+    ## cardinality = 0..1
+    opposites = {
+        ## cardinality = 1..inf
+        <trait>
+    }
+
+    ## cardinality = 0..1
+    ### Defaults to no.
+    congenital = bool
+
+    ## cardinality = 0..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    ## cardinality = 0..1
+    ## replace_scope = { this = country }
+    country = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ## replace_scope = { this = province }
+    province = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    ## replace_scope = { this = unit }
+    unit = {
+        ## cardinality = 0..inf
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+
+    ## cardinality = 0..1
+    dna_modifiers = {
+        # And don't forget the special genes!
+        TODO = TODO
+    }
+}

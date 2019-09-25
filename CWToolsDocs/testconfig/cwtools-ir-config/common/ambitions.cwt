@@ -1,0 +1,56 @@
+types = {
+	type[ambition] = {
+		path = "game/common/ambitions"
+
+		localisation = {
+			name = "$"
+			description = "$_desc"
+			tooltip = "$_tooltip"
+		}
+	}
+}
+
+## replace_scope = { this = character root = character }
+ambition = {
+	can_be_picked = {
+		## cardinality = 1..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	finished_when = {
+		## cardinality = 1..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	skip_initial_abort = bool
+
+	## cardinality = 0..1
+	abort = {
+		## cardinality = 1..inf
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	chance = single_alias_right[chance_block]
+
+	## cardinality = 0..1
+	### Defaults to no.
+	content = bool
+
+	## cardinality = 0..1
+	on_monthly = <on_action>
+
+	## cardinality = 0..1
+	on_start = <on_action>
+
+	## cardinality = 0..1
+	on_finish = <on_action>
+
+	## cardinality = 0..1
+	modifier = {
+		# TODO: Are modifiers even going to be aliases or something else like enums or types?
+		## cardinality = 0..inf
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+}

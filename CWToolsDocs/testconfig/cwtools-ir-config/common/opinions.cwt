@@ -1,0 +1,28 @@
+# WISHLIST still: add ways to ensure a type has definitions for specified hardcoded names; for example, "opinion_war" must exist as an opinion type
+# TODO: There's a single "negative_test" that uses a "months" parameter but we'll need to check if it's legacy or actually a thing
+
+types = {
+    type[opinion] = {
+        path = "game/common/opinions"
+
+        subtype[decaying] = {
+            yearly_decay = int
+        }
+
+        localisation = {
+            name = "$"
+        }
+    }
+}
+
+opinion = {
+    value = int
+
+    ## cardinality = 0..1
+    yearly_decay = float
+
+    subtype[decaying] = {
+        ## cardinality = 0..1
+        enum[minmax] = int
+    }
+}

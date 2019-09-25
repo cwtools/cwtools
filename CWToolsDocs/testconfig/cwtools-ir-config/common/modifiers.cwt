@@ -1,0 +1,38 @@
+types = {
+    type[modifier_container] = {
+        path = "game/common/modifiers"
+
+        subtype[triggered] = {
+            cancellation_trigger = {
+
+            }
+        }
+
+        localisation = {
+            name = "$"
+            description = "desc_$"
+        }
+    }
+}
+
+# TODO: Ensure all hardcoded modifiers exist
+# TODO: Maybe make it at least *show* what scope it's in based on used modifiers?
+## replace_scope = { this = any }
+modifier_container = {
+    ## cardinality = 1..inf
+    alias_name[modifier] = alias_match_left[modifier]
+
+    ## cardinality = 0..1
+    cancellation_trigger = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    subtype[triggered] = {
+        ## cardinality = 0..1
+        cancellation_effect = {
+            ## cardinality = 1..inf
+            alias_name[effect] = alias_match_left[effect]
+        }
+    }
+}

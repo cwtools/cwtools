@@ -1,0 +1,18 @@
+type = {
+    type[scripted_list] = {
+        path = "game/common/scripted_lists"
+    }
+}
+
+scripted_list = {
+    # TODO: reference to actual lists?
+    # TODO: make sure using another scripted list as base works
+    base = scalar
+    base = <scripted_list>
+
+    # Not sure what scope to use here, any?
+    conditions = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+}

@@ -1,0 +1,106 @@
+types = {
+    type[culture_group] = {
+        path = "game/common/cultures"
+
+        localisation = {
+            name = "$"
+            male_name_format = "$_malename"
+            female_name_format = "$_femalename"
+            army_name = "ARMY_NAME_$"
+            navy_name = "NAVY_NAME_$"
+            cohort_name = "COHORT_NAME_$"
+        }
+    }
+    type[culture] = {
+        path = "game/common/cultures"
+        skip_root_key = { any culture }
+
+        localisation = {
+            name = "$"
+        }
+    }
+}
+
+culture_group = {
+    color = colour_field
+
+    ## cardinality = 0..1
+    ### Defaults to no, probably.
+    use_latin_name_rules = bool
+
+    male_names = {
+        ## cardinality = 1..inf
+        localisation
+    }
+
+    female_names = {
+        ## cardinality = 1..inf
+        localisation
+    }
+
+    ## cardinality = 0..1
+    ### Family names. Format is just localisation or "masculine.feminine.plural.adjective"
+    family = {
+        ## cardinality = 1..inf
+        localisation
+        ## cardinality = 1..inf
+        ir_family_name_field
+    }
+
+    ## cardinality = 0..1
+    female_order = {
+        ## cardinality = 1..inf
+        localisation
+    }
+
+    ## cardinality = 0..1
+    nickname = {
+        ## cardinality = 1..inf
+        localisation
+    }
+
+    culture = {
+        ## cardinality = 1..inf
+        <culture> = {
+            ## cardinality = 0..1
+            male_names = {
+                ## cardinality = 1..inf
+                localisation
+            }
+
+            ## cardinality = 0..1
+            female_names = {
+                ## cardinality = 1..inf
+                localisation
+            }
+
+            ## cardinality = 0..1
+            ### Family names. Format is just localisation or "masculine.feminine.plural.adjective"
+            family = {
+                ## cardinality = 1..inf
+                localisation
+                ## cardinality = 1..inf
+                ir_family_name_field
+            }
+
+            ## cardinality = 0..1
+            nickname = {
+                ## cardinality = 1..inf
+                localisation
+            }
+        }
+    }
+
+    barbarian_names = {
+        # Need _ADJ too
+        ## cardinality = 1..inf
+        localisation
+    }
+
+    graphical_culture = enum[graphical_cultures]
+
+    ethnicities = {
+        ## cardinality = 1..inf
+        int = <ethnicity>
+    }
+}

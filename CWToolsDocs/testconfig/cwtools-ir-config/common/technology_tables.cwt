@@ -1,0 +1,18 @@
+types = {
+    type[technology_table] = {
+        path = "game/common/technology_tables"
+
+        localisation = {
+            name = "$"
+        }
+    }
+}
+
+## replace_scope = { this = country }
+technology_table = {
+    icon = <icon>
+    skill = enum[character_skills]
+
+    ## cardinality = 0..inf
+    alias_name[modifier] = alias_match_left[modifier]
+}

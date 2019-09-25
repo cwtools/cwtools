@@ -1,0 +1,1024 @@
+###does the province have the required tax income?
+alias[trigger:province_tax_income] == value_field
+
+###Is the scope character a General?
+alias[trigger:is_general] = bool
+
+###Compare the current date.
+alias[trigger:current_date] == date_field
+
+###is the character imprisoned?
+alias[trigger:prisoner] = bool
+
+###Checks if a target is in a variable list is_target_in_variable_list = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[trigger:is_target_in_local_variable_list] = replace_me
+
+###The total population of a country
+alias[trigger:country_population] == int_value_field
+
+###does the character have this many traits?
+alias[trigger:number_of_traits] == int_value_field
+
+###Is the scope character a ClanChief?
+alias[trigger:is_clan_chief] = bool
+
+###Does this country have this active omen?
+alias[trigger:has_this_omen] = <omen>
+
+###How many percent morale does this unit have???
+alias[trigger:morale_percentage] == int_value_field[0..100]
+
+###does the country have an opinion type towards another country?
+alias[trigger:has_opinion] = <opinion>
+
+###Checks
+alias[trigger:<party_type>_support] == int_value_field[0..100]
+
+###is the country an ai or not?
+alias[trigger:is_ai] = bool
+
+###check if a Unit has a specific modifier
+alias[trigger:has_unit_modifier] = <modifier_container>
+
+###does the country have the required Treasury?
+alias[trigger:treasury] == value_field
+
+###Does the character have the same culture group as the target?
+alias[trigger:has_same_culture_group_as] = scope[character]
+
+###Is the scope character a InCommand?
+alias[trigger:in_command] = bool
+
+###Checks the size of a variable list variable_list_size = { name = X target >= Y } Where X is the name of the variable Where Y is a script value or number
+alias[trigger:global_variable_list_size] = replace_me
+
+###Checks if a province has a specific trade_goods
+alias[trigger:trade_goods] = <trade_goods>
+
+###countryis in civil war ?
+alias[trigger:has_civil_war] = bool
+
+###does the province have the required num_other_religion ?
+alias[trigger:num_other_religion] == int_value_field
+
+###does the country have the required MILITARY Power level?
+alias[trigger:military_power] == int_value_field
+
+###does the character have required amount of military traits?
+alias[trigger:number_of_military_traits] == int_value_field
+
+###does the character have the required zeal skill level?
+alias[trigger:zeal] == int_value_field
+
+###does the country have the required RELIGIOUS Power level?
+alias[trigger:religious_power] == int_value_field
+
+###Checks
+alias[trigger:<technology_table>] == int_value_field
+
+###Is this a neighbour of the target province?
+alias[trigger:is_neighbor] = enum[provinces]
+
+###Is this a neighbour of the target province?
+alias[trigger:is_neighbor] = scope[province]
+
+###does the country have this many families?
+alias[trigger:num_of_families] == int_value_field
+
+###Returns true if the specified number of sub-triggers return true calc_true_if = { amount = 2 <trigger> <trigger> <trigger> }
+alias[trigger:calc_true_if] = {
+    amount == int
+
+    ## cardinality = 1..inf
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###unit is movement locked
+alias[trigger:is_movement_locked] = bool
+
+###check if a country has a specific modifier
+alias[trigger:has_country_modifier] = <modifier_container>
+
+###does the character have the required Health?
+alias[trigger:health] == value_field
+
+###if a country can pay price X
+alias[trigger:can_pay_price] = <price>
+
+###Does the character have the same culture as the target?
+alias[trigger:has_same_culture_as] = scope[character]
+
+###does the characer have an office or not?
+alias[trigger:has_any_office] = bool
+
+###Does the scoped city belong to a given named Region or the same Region as the target city Region = my_Region_name OR Region = from.capital_scope
+alias[trigger:region] = <region>
+
+###Does the scoped city belong to a given named Region or the same Region as the target city Region = my_Region_name OR Region = from.capital_scope
+alias[trigger:region] = scope[province]
+
+###if a country is a war with another country
+alias[trigger:war_with] = enum[country_tags]
+
+###if a country is a war with another country
+alias[trigger:war_with] = scope[country]
+
+###Is the country this culture group?
+alias[trigger:country_culture_group] = <culture_group>
+
+# TODO: not scalar
+###Switch on a trigger for the evaluation of another trigger with an optional fallback trigger. switch = { 	trigger = simple_assign_trigger 	case_1 = { <triggers> } 	case_2 = { <triggers> } 	case_n = { <triggers> } 	fallback = { <triggers> }
+alias[trigger:switch] = {
+    trigger = scalar
+
+    ## cardinality = 1..inf
+    scalar = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    fallback = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+}
+
+###Is the character a parent of the target character?
+alias[trigger:is_parent_of] = scope[character]
+
+###Is the scope character a Admiral?
+alias[trigger:is_admiral] = bool
+
+###does the province have the required commerce income?
+alias[trigger:province_commerce_income] == value_field
+
+###does the country have the required Max Manpower?
+alias[trigger:max_manpower] == value_field
+
+###does the country have the required ORATORY Power level?
+alias[trigger:oratory_power] == int_value_field
+
+###does the family have the required members?
+alias[trigger:num_of_members] == int_value_field
+
+###Does the character have this religion?
+alias[trigger:has_religion] = <religion>
+
+###Does the character have this religion?
+alias[trigger:has_religion] = scope[religion]
+
+# TODO: Maybe value_field?
+###number of months to planned war, or 0 if already at war
+alias[trigger:months_to_war] == int_value_field
+
+###Checks whether the specified scope target is a valid character
+alias[trigger:target_is_valid_character] = scope[character]
+
+###Is the target character alive?
+alias[trigger:is_target_alive] = scope[character]
+
+###Does the scoped country own any provinces
+alias[trigger:has_land] = bool
+
+###Checks if a culture is dominant in a province
+alias[trigger:dominant_province_culture] = <culture>
+
+###Checks if a culture is dominant in a province
+alias[trigger:dominant_province_culture] = scope[culture]
+
+###Is the character currently in the same province as the target character?
+alias[trigger:is_at_same_location] = scope[character]
+
+###is the province a capital or not?
+alias[trigger:is_capital] = bool
+
+###Can the scope character get Friends?
+alias[trigger:can_get_friends] = bool
+
+###check if a Province has a specific modifier
+alias[trigger:has_province_modifier] = <modifier_container>
+
+###is the province a Port or not?
+alias[trigger:is_port] = bool
+
+# TODO: does this work with just type ref?
+###does the character lead the specific party?
+alias[trigger:is_party_leader_of] = scope[party]
+
+###does the character have a valid Job?
+alias[trigger:has_job] = bool
+
+###Checks hapiness for population of a specified type
+alias[trigger:<pop_type>_happiness] == value_field
+
+###does the province have the required num_foreign_culture ?
+alias[trigger:num_foreign_culture] == int_value_field
+
+###Does AI for a country want to build road in this province?
+alias[trigger:ai_wants_road] = enum[country_tags]
+
+###Does AI for a country want to build road in this province?
+alias[trigger:ai_wants_road] = scope[country]
+
+###Check if a Unit is locked
+alias[trigger:is_unit_locked] = bool
+
+###Compare the date of the bookmarked game launched.
+alias[trigger:game_start_date] == date_field
+
+###Checks whether the current scope has the specified variable list set has_variable_list = name
+alias[trigger:has_variable_list] = replace_me
+
+###does the character have a specific modifier
+alias[trigger:has_character_modifier] = <modifier_container>
+
+###Does the character have this Ambition?
+alias[trigger:has_ambition] = <ambition>
+
+###Is the scope character in a tech office?
+alias[trigger:has_tech_office] = bool
+
+###The religous unity of the country
+alias[trigger:religious_unity] == value_field
+
+## TODO: Confirm it's float
+###does the country have the required Monthly Income?
+alias[trigger:has_monthly_income] == value_field
+
+###Checks whether the current scope has the specified variable list set has_variable_list = name
+alias[trigger:has_local_variable_list] = replace_me
+
+###does the country have the required number of provinces?
+alias[trigger:num_of_provinces] == int_value_field
+
+###which government a country has
+alias[trigger:government] = <government>
+
+###Can the character have this Office?
+alias[trigger:can_hold_office] = <office>
+
+###if a country is in diplomatic range with another country
+alias[trigger:in_diplomatic_range] = enum[country_tags]
+
+###if a country is in diplomatic range with another country
+alias[trigger:in_diplomatic_range] = scope[country]
+
+# TODO: Does this work with type ref?
+###is this party the biggest
+alias[trigger:biggest_party] = scope[party]
+
+###is the character old/young enough?
+alias[trigger:age] == int_value_field
+
+###Is the character a sibling of the target character?
+alias[trigger:is_sibling_of] = scope[character]
+
+###Is the character a spouse of the target character?
+alias[trigger:is_spouse_of] = scope[character]
+
+###if a country exports to another country
+alias[trigger:exports_to] = enum[country_tags]
+
+###if a country exports to another country
+alias[trigger:exports_to] = scope[country]
+
+###does the country have the required Legitimacy?
+alias[trigger:legitimacy] == int_value_field[0..100]
+
+###Returns true if the sum of weights of fulfilled sub-triggers amount to the specified sum weighted_calc_true_if = { amount = 10 5 = { <trigger> } 15 = { <trigger> } 7 = { <trigger> } }
+alias[trigger:weighted_calc_true_if] = {
+    amount == int
+
+    ## cardinality = 2..inf
+    int = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+}
+
+###checks the title importance a character has.
+alias[trigger:title_importance] == int_value_field
+
+###Check number of clan retinues in a unit
+alias[trigger:num_of_clan_retinues] == int_value_field
+
+###Checks the size of a variable list variable_list_size = { name = X target >= Y } Where X is the name of the variable Where Y is a script value or number
+alias[trigger:variable_list_size] = replace_me
+
+###Is this office empty for the country?
+alias[trigger:office_is_empty] = <office>
+
+###Is the pop this Religion?
+alias[trigger:pop_religion] = <religion>
+
+###Is the pop this Religion?
+alias[trigger:pop_religion] = scope[religion]
+
+###subunit is clan retinue
+alias[trigger:is_clan_retinue] = bool
+
+###does the country have the required War Exhaustion?
+alias[trigger:has_war_exhaustion] == int_value_field
+
+###does the country have this many characters below max loyalty?
+alias[trigger:num_characters_below_max_loyalty] == int_value_field
+
+###does the province have this ID?
+alias[trigger:province_id] == enum[provinces]
+
+## TODO: Not sure what this one even does, so I'm leaving it in a stricter variant
+###The rank w.r.t. to number of subunits compared to other units of country
+alias[trigger:unit_size_rank] == int_value_field
+
+###is the character a successor?
+alias[trigger:is_successor] = bool
+
+###Checks if a province is of a specific terrain type
+alias[trigger:terrain] = <terrain>
+
+###is the tutorial active?
+alias[trigger:is_tutorial_active] = bool
+
+###does the province has an enemy army of target?
+alias[trigger:has_enemy_army] = enum[country_tags]
+
+###does the province has an enemy army of target?
+alias[trigger:has_enemy_army] = scope[country]
+
+###does the character have the required number of loyal cohorts?
+alias[trigger:num_loyal_cohorts] == int_value_field
+
+###does the character have the required conviction for its party?
+alias[trigger:current_party_conviction] == int_value_field
+
+###does the province have an owner or not?
+alias[trigger:has_owner] = bool
+
+###does the character have required amount of personality traits?
+alias[trigger:number_of_personality_traits] == int_value_field
+
+###does the province has an enemy navy of target?
+alias[trigger:has_enemy_navy] = enum[country_tags]
+
+###does the province has an enemy navy of target?
+alias[trigger:has_enemy_navy] = scope[country]
+
+###Does the country have this religion?
+alias[trigger:religion] = <religion>
+
+###Does the country have this religion?
+alias[trigger:religion] = scope[religion]
+
+###if a country in civil war with a another country
+alias[trigger:civil_war_with] = enum[country_tags]
+
+###if a country in civil war with a another country
+alias[trigger:civil_war_with] = scope[country]
+
+###unit is Migration
+alias[trigger:is_migration] = bool
+
+###Does the character have this culture group?
+alias[trigger:has_culture_group] = <culture_group>
+
+###does the character have the required Loyalty?
+alias[trigger:loyalty] == int_value_field[0..100]
+
+###Checks
+alias[trigger:<party_type>_conviction] == int_value_field
+
+###Does the character have this Office?
+alias[trigger:has_office] = <office>
+
+###Is the pop this culture?
+alias[trigger:pop_culture] = <culture>
+
+###Is the pop this culture?
+alias[trigger:pop_culture] = scope[culture]
+
+## TODO: Do some testing, might be 0.0..1.0; POTENTIAL BUG since it's used differently in different places in script
+###does the country have the required manpower percentage?
+alias[trigger:manpower_percentage] == value_field[0.0..100.0]
+
+###Is the scope character a PrimaryHeir?
+alias[trigger:is_primary_heir] = bool
+
+###Is the pop this culture group?
+alias[trigger:pop_culture_group] = <culture_group>
+
+###does the family have the required Prestige?
+alias[trigger:prestige] == int_value_field
+
+###Checks if a target is in a variable list is_target_in_variable_list = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[trigger:is_target_in_global_variable_list] = replace_me
+
+# TODO: Confirm
+###Is the skill the highest skill of the character? True even when there are multiple skills with the same highest value.
+alias[trigger:highest_skill] = enum[character_skills]
+
+###is the country at republic or not?
+alias[trigger:is_republic] = bool
+
+## TODO: Test if it's not decimal; seems like it could be
+###does the character have the required gold?
+alias[trigger:wealth] == int_value_field
+
+###does the province have the required state_loyalty?
+alias[trigger:state_loyalty] == int_value_field[0..100]
+
+###Checks if the dominant culture in a province belongs to a certain group
+alias[trigger:province_dominant_culture_group] = <culture_group>
+
+# TODO: dafuq are those docs
+###How many percent morale does this unit have???
+alias[trigger:unit_threat] == value_field
+
+###is the province a core of target  or not?
+alias[trigger:is_core_of] = enum[country_tags]
+
+###is the province a core of target  or not?
+alias[trigger:is_core_of] = scope[country]
+
+###does the character have a specific triggered modifier
+alias[trigger:has_triggered_character_modifier] = <modifier_container.triggered>
+
+###Check number of cohorts with personal loyalty in a Uni
+alias[trigger:num_of_loyal_cohorts] == int_value_field
+
+###does the character have a valid living mother?
+alias[trigger:has_mother] = bool
+
+###is the province a sea province?
+alias[trigger:is_sea] = bool
+
+###Checks if the game has gender-equality rules
+alias[trigger:gender_rules] = bool
+
+###true if all children are false (equivalent to NOR)
+alias[trigger:all_false] = {
+    ## cardinality = 2..inf
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###How many percent strength does this unit have???
+alias[trigger:strength_percentage] == int_value_field[0..100]
+
+###Checks if the game is in iron man mode.
+alias[trigger:is_iron_man] = bool
+
+###if a country is at truce a another country
+alias[trigger:has_truce_with] = enum[country_tags]
+
+###if a country is at truce a another country
+alias[trigger:has_truce_with] = scope[country]
+
+###is the province sieged or not?
+alias[trigger:has_siege] = bool
+
+###Is the target character alive?
+alias[trigger:is_friend] = scope[character]
+
+###Does the character have the same religion as the target?
+alias[trigger:has_same_religion_as] = scope[character]
+
+###unit is in Siege
+alias[trigger:in_siege] = bool
+
+###Checks the size of a variable list variable_list_size = { name = X target >= Y } Where X is the name of the variable Where Y is a script value or number
+alias[trigger:local_variable_list_size] = replace_me
+
+###Conditionally cause an assert during read time assert_read = X, where X is yes or the string to be printed in the assert
+alias[trigger:assert_read] = yes
+
+###Conditionally cause an assert during read time assert_read = X, where X is yes or the string to be printed in the assert
+alias[trigger:assert_read] = scalar
+
+###Saves a temporary target for use during the trigger execution
+alias[trigger:add_to_temporary_list] = replace_me
+
+# TODO: Might be value_field
+###does the province have the required province_unrest?
+alias[trigger:province_unrest] == int_value_field
+
+###Checks if the game is in debug mode or not.
+alias[trigger:debug_only] = bool
+
+###Checks whether the current scope has the specified variable set has_variable = name
+alias[trigger:has_global_variable] = value[global_variable]
+
+###Is province in control range of country
+alias[trigger:control_range] = enum[country_tags]
+
+###Is province in control range of country
+alias[trigger:control_range] = scope[country]
+
+###does the country have the required Subject Loyalty?
+alias[trigger:has_subject_loyalty] == int_value_field[0..100]
+
+###Is the country a subject to any other country?
+alias[trigger:is_subject] = bool
+
+###number of Friends of character?
+alias[trigger:num_of_friends] == int_value_field
+
+###is the character alive or dead?
+alias[trigger:is_alive] = bool
+
+###subunit is clan retinue
+alias[trigger:has_personal_loyalty] = bool
+
+###Is the target province owned by this country or one of its subjects?
+alias[trigger:owns_or_subject_owns] = enum[provinces]
+
+###Is the target province owned by this country or one of its subjects?
+alias[trigger:owns_or_subject_owns] = scope[province]
+
+###Does this country have this diplomatic stance?
+alias[trigger:diplomatic_stance] = <diplomatic_stance>
+
+# TODO: Might be value_field
+###does the character have the required popularity?
+alias[trigger:popularity] == int_value_field[0..100]
+
+###does the country have an active omen or not?
+alias[trigger:has_any_omen] = bool
+
+###Evaluates the triggers if the display_triggers of preceding 'trigger_if' or 'trigger_else_if' is not mettrigger_if = { limit = { <display_triggers> } <triggers> }  trigger_else = { <triggers> }
+alias[trigger:trigger_else] = {
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###Checks population of a specified type
+alias[trigger:num_of_<pop_type>] == int_value_field
+
+###does the character have required amount of personality traits?
+alias[trigger:number_of_status_traits] == int_value_field
+
+###does the character have the required martial skill level?
+alias[trigger:martial] == int_value_field
+
+###Always the same value
+alias[trigger:always] = bool
+
+###Does the character have this culture?
+alias[trigger:has_culture] = <culture>
+
+###Does the character have this culture?
+alias[trigger:has_culture] = scope[culture]
+
+###does the country have a primary heir or not?
+alias[trigger:has_primary_heir] = bool
+
+###Is the character a close relative (Child, Parent, Sibling/Half-sibling, Nephew/Niece, Aunt/Uncle, Grandparent or Grandchild) of the target character?
+alias[trigger:is_close_relative] = scope[character]
+
+###check if a State has a specific modifier
+alias[trigger:has_state_modifier] = <modifier_container>
+
+###Is the scope character a head of a family?
+alias[trigger:is_head_of_family] = bool
+
+###is the country at war or not?
+alias[trigger:war] = bool
+
+# TODO: value_field?
+###does the country have the required Monthly Balance?
+alias[trigger:has_monthly_balance] == int_value_field
+
+###Does the country have a certain military Tradition
+alias[trigger:has_military_tradition] = <military_tradition>
+
+###Does the scope character have a nickname?
+alias[trigger:has_nickname] = bool
+
+###does the country have the required amount of ships?
+alias[trigger:num_of_ships] == int_value_field
+
+###Is the scope character a ruler?
+alias[trigger:is_ruler] = bool
+
+###does the character have the required charisma skill level?
+alias[trigger:charisma] == int_value_field
+
+###Is the scope character Mercenary?
+alias[trigger:is_mercenary] = bool
+
+###Checks if a religion is dominant in a province
+alias[trigger:dominant_province_religion] = <religion>
+
+###Checks if a religion is dominant in a province
+alias[trigger:dominant_province_religion] = scope[religion]
+
+###Evaluates the enclosed triggers if the display_triggers of the preceding `trigger_if` or `trigger_else_if` is not met and its own display_trigger of the limit is mettrigger_if = { limit = { <display_triggers> } <triggers> } trigger_else_if = { limit = { <display_triggers> } <triggers> }
+alias[trigger:trigger_else_if] = {
+    limit = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###Does the host have this DLC
+alias[trigger:has_dlc] = enum[dlcs]
+
+###Checks whether the specified socope target exists (check for not being the null object) exists = from.owner.var:cool_var.mother
+alias[trigger:exists] = scope_field
+
+###does the province have the amount of free building slots?
+alias[trigger:free_building_slots] == int_value_field
+
+###unit is cohort
+alias[trigger:is_cohort] = bool
+
+###How many sub units does this unit have?
+alias[trigger:unit_size] == int_value_field
+
+###does the country have the required Tyranny?
+alias[trigger:tyranny] == int_value_field
+
+###unit is in combat
+alias[trigger:in_combat] = bool
+
+# TODO: value_field?
+###does the character have the required Corruption?
+alias[trigger:corruption] == int_value_field[0..100]
+
+###The rank w.r.t. to number of subunits compared to other units of country
+alias[trigger:unit_size_rank_percentage] == int_value_field[0..100]
+
+# TODO: Should be [NCountry.MIN_STABILITY..NCountry.MAX_STABILITY] when we get around to that
+###does the country have the required Stability?
+alias[trigger:stability] == int_value_field[-3..3]
+
+###number of children of character?
+alias[trigger:num_of_children] == int_value_field
+
+###Is the character same Party as the target character?
+alias[trigger:is_same_party_as] = scope[character]
+
+###Checks whether the current scope has the specified variable list set has_variable_list = name
+alias[trigger:has_global_variable_list] = replace_me
+
+###which Idea a country has
+alias[trigger:idea] = <idea>
+
+###country has gender equality or not ?
+alias[trigger:gender_equality] = bool
+
+# TODO: Check if that's the case, no usage in vanilla
+###Does the country have a certain military bonus
+alias[trigger:has_military_bonus] = <military_tradition_path>
+
+###The total number of trade routes in this state
+alias[trigger:trade_routes] == int_value_field
+
+###subunit is Ship
+alias[trigger:is_ship] = bool
+
+###check if a Unit has a specific modifier
+alias[trigger:is_dominant_unit] = <unit_type>
+
+# TODO: Should be [0.0..NCharacter.MAX_FERTILITY] eventually
+###does the character have the required fertility?
+alias[trigger:fertility] == value_field[0.0..100.0]
+
+###does the country have the required NumOfPorts?
+alias[trigger:num_of_ports] == int_value_field
+
+###does the country have the required NumOfCities?
+alias[trigger:num_of_cities] == int_value_field
+
+###unit is Army
+alias[trigger:is_army] = bool
+
+###Conditionally cause an assert during run time assert_if = { limit = { X } text = Y }, where X is a trigger and Y is an optional string
+alias[trigger:assert_if] = {
+    limit = {
+        ## cardinality = 1..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+    ## cardinality = 0..1
+    text = scalar
+}
+
+###does the character have required amount of personality traits?
+alias[trigger:number_of_health_traits] == int_value_field
+
+###Is the scope character a Governor?
+alias[trigger:is_governor] = bool
+
+###Checks if a target is in a variable list is_target_in_variable_list = { name = X target = Y } Where X is the name of the variable Where Y is an event target
+alias[trigger:is_target_in_variable_list] = replace_me
+
+# TODO: might be value_field
+###does the province have the required CivilizationValue?
+alias[trigger:civilization_value] == int_value_field[0..100]
+
+###Checks whether the current scope has the specified variable set has_variable = name
+alias[trigger:has_variable] = value[variable]
+
+###is the province inhabitable or not?
+alias[trigger:is_inhabitable] = bool
+
+###which HasLaw a country has
+alias[trigger:has_law] = <law>
+
+###Can the province build a specific building?
+alias[trigger:can_build_building] = <building>
+
+###Is the pop this PopType?
+alias[trigger:pop_type] = <pop_type>
+
+###Check number of migrant cohorts in a unit
+alias[trigger:num_of_migrants] == int_value_field
+
+###if a country is allied with a another country
+alias[trigger:alliance_with] = enum[country_tags]
+
+###if a country is allied with a another country
+alias[trigger:alliance_with] = scope[country]
+
+# TODO: Might be value_field
+###size of enemy forces (1 = 1000 men) in country's lands
+alias[trigger:threat_in_owned_land] == int_value_field
+
+###Is the character currently in the target province?
+alias[trigger:is_at_location] = enum[provinces]
+
+###Is the character currently in the target province?
+alias[trigger:is_at_location] = scope[province]
+
+###if a country has an invention
+alias[trigger:invention] = <invention>
+
+###Is the country a subject of the specified type?
+alias[trigger:is_subject_type] = <subject_type>
+
+###does a country own a specific propvince
+alias[trigger:owns] = enum[provinces]
+
+###Is the scope character a PartyLeader?
+alias[trigger:is_party_leader] = bool
+
+###Is the scope character a bastard?
+alias[trigger:is_bastard] = bool
+
+# TODO: value_field?
+###does the country have the required centralization?
+alias[trigger:centralization] == int_value_field[0..100]
+
+###checks amount of supporters as heir.
+alias[trigger:num_of_supporters] == int_value_field
+
+###does the province have the required fort level?
+alias[trigger:fort_level] == int_value_field
+
+###Does the current country scope have the given support
+alias[trigger:party_support] == int_value_field
+
+###Checks if the state of a province is importing a certain trade good.
+alias[trigger:is_importing_trade_good] = <trade_goods>
+
+###is the character Scorned or dead?
+alias[trigger:is_scorned] = bool
+
+###Is the scope character adult?
+alias[trigger:is_adult] = bool
+
+###does the province have the required TotalPopulation?
+alias[trigger:total_population] == int_value_field
+
+###does the province have the required number of produced goods ?
+alias[trigger:num_goods_produced] == int_value_field
+
+###Is the province owned by the target country or one of its subjects?
+alias[trigger:owned_or_subject_owned] = enum[country_tags]
+
+###Is the province owned by the target country or one of its subjects?
+alias[trigger:owned_or_subject_owned] = scope[country]
+
+###is the character banished
+alias[trigger:is_banished] = bool
+
+###unit has a commander
+alias[trigger:has_commander] = bool
+
+###Is the scope character male?
+alias[trigger:is_male] = bool
+
+###Is the scope character  Courtier (without title / job)?
+alias[trigger:is_courtier] = bool
+
+###is the country's opinion of the target greater or equal than the value? opinion = { target = X [*value >/</>=/<= Y* or *value = { min max }*  }
+alias[trigger:opinion] = {
+    target = scope[country]
+    value == int_value_field
+}
+
+###is the country at monarchy or not?
+alias[trigger:is_monarchy] = bool
+
+###Is the scope character a previous ruler?
+alias[trigger:is_previous_ruler] = bool
+
+# TODO: value_field?
+###does the character have the required Prominence?
+alias[trigger:prominence] == int_value_field[0..100]
+
+###is the province uninhabitable?
+alias[trigger:is_uninhabitable] = bool
+
+###Is there a road to the target province?
+alias[trigger:has_road_towards] = enum[provinces]
+
+###Is there a road to the target province?
+alias[trigger:has_road_towards] = scope[province]
+
+###number of Rivals of character?
+alias[trigger:num_of_rivals] == int_value_field
+
+###Is the character same gender as the target character?
+alias[trigger:is_same_gender] = scope[character]
+
+###Does the character belong to this party?
+alias[trigger:party] = <party_type>
+
+###Is the country a subject to the specified country?
+alias[trigger:is_subject_of] = enum[country_tags]
+
+###Is the country a subject to the specified country?
+alias[trigger:is_subject_of] = scope[country]
+
+# TODO: value_field?
+###does the province have the required income?
+alias[trigger:province_income] == int_value_field
+
+###Is the scope character same family as ruler ?
+alias[trigger:from_ruler_family] = bool
+
+###does the country have the required CIVIC Power level?
+alias[trigger:civic_power] == int_value_field
+
+###Is the character a child of the target character?
+alias[trigger:is_child_of] = scope[character]
+
+###Does the scoped city belong to a given named area or the same area as the target city area = my_area_name OR area = from.capital_scope
+alias[trigger:is_in_area] = <area>
+
+###Does the scoped city belong to a given named area or the same area as the target city area = my_area_name OR area = from.capital_scope
+alias[trigger:is_in_area] = scope[province]
+
+###Does the character have this trait?
+alias[trigger:has_tech_office_of] = <technology_table>
+
+###does the character have the required finesse skill level?
+alias[trigger:finesse] == int_value_field
+
+###Is the scope character female?
+alias[trigger:is_female] = bool
+
+###Check if the scoped color is the same as another color. The right hand side can be either a hex, rgb, or hsv color,  or a named color, or another color scope.
+alias[trigger:is_color] = colour_field
+
+###Check if the scoped color is the same as another color. The right hand side can be either a hex, rgb, or hsv color,  or a named color, or another color scope.
+alias[trigger:is_color] = scope[color]
+
+###does the country have this party?
+alias[trigger:has_party] = scope[party]
+
+###Is the country this culture?
+alias[trigger:country_culture] = <culture>
+
+###Is the country this culture?
+alias[trigger:country_culture] = scope[culture]
+
+###is the country at tribal or not?
+alias[trigger:is_tribal] = bool
+
+###checks the days since last victory on the battlefield.
+alias[trigger:days_since_last_victory] == int_value_field
+
+###Does the character belong to the same family as the target character?
+alias[trigger:has_same_family] = scope[character]
+
+###Is the country an overlord to any other country?
+alias[trigger:is_overlord] = bool
+
+# TODO: Confirm target type
+###is the state's trade good surplus greater or equal than the value? trade_good_surplus = { target = X [*value >/</>=/<= Y* or *value = { min max }*  }
+alias[trigger:trade_good_surplus] = {
+    target = <trade_goods>
+    value == int_value_field
+}
+
+###if a country is a specific tag
+alias[trigger:tag] = ir_country_tag_field
+
+# TODO: check if it's not value_field[0.0..1.0] :P
+###Checks hapiness for this pop
+alias[trigger:pop_hapiness] == int_value_field[0..100]
+
+###Is the scope character married?
+alias[trigger:is_married] = bool
+
+###Checks if a province is in a state that has a specific governor_policy
+alias[trigger:governor_policy] = <governor_policy>
+
+###is the character pregnant?
+alias[trigger:is_pregnant] = bool
+
+###unit is Navy
+alias[trigger:is_navy] = bool
+
+###does the country have the required amount of cohorts?
+alias[trigger:num_of_cohorts] == value_field
+
+###Checks if a province has a specific building
+alias[trigger:has_building] = <building>
+
+# TODO: value_field?
+###does the country have the required Manpower?
+alias[trigger:manpower] == int_value_field
+
+###Evaluates the triggers if the display_triggers of the limit are met trigger_if = { limit = { <display_triggers> } <triggers> }
+alias[trigger:trigger_if] = {
+    limit = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###is the character Pretender or dead?
+alias[trigger:is_pretender] = bool
+
+###Can the scope character get rivals?
+alias[trigger:can_get_rivals] = bool
+
+###Replaces the tooltips for the enclosed triggers with a custom text custom_tooltip = { 	text = <text> 	<trigger> }
+alias[trigger:custom_tooltip] = {
+    text = localisation
+
+    ## cardinality = 1..inf
+    alias_name[trigger] = alias_match_left[trigger]
+}
+
+###Checks whether the current scope has the specified variable set has_variable = name
+alias[trigger:has_local_variable] = value[local_variable]
+
+###if a country imports from another country
+alias[trigger:imports_from] = enum[country_tags]
+
+###if a country imports from another country
+alias[trigger:imports_from] = scope[country]
+
+###Check number of days since last war
+alias[trigger:days_since_last_war] == int_value_field
+
+###Is the target character alive?
+alias[trigger:is_rival] = scope[character]
+
+###unit is moving
+alias[trigger:is_moving] = bool
+
+###is the province coastal or not?
+alias[trigger:is_coastal] = bool
+
+###Check number of days since last victory
+alias[trigger:days_since_last_unit_victory] == int_value_field
+
+###Saves a temporary target for use during the trigger execution
+alias[trigger:save_temporary_scope_as] = value_set[temporary_scope]
+
+###unit is Exiled
+alias[trigger:is_exiled] = bool
+
+###does the character have a valid living father?
+alias[trigger:has_father] = bool
+
+###Does the character have this trait?
+alias[trigger:has_trait] = <trait>
+
+###Check if the scoped color is part of the given color list
+alias[trigger:in_color_list] = <color_list>
+
+###Does the country have this amount of (type = <type> value = <val>)?
+alias[trigger:num_of_unit_type] = {
+    type = <unit_type>
+    value == int_value_field
+}
+
+###Checks if a target in in a list
+alias[trigger:is_in_list] = replace_me
+
+## scopes = country
+alias[trigger:num_of_civic_ideas] == int_value_field
+## scopes = country
+alias[trigger:num_of_oratory_ideas] == int_value_field
+## scopes = country
+alias[trigger:num_of_military_ideas] == int_value_field
+## scopes = country
+alias[trigger:num_of_religious_ideas] == int_value_field
+
+## scopes = any
+alias[trigger:<script_value>] == value_field

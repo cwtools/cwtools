@@ -1,0 +1,14 @@
+types = {
+    type[province_terrain_validation] = {
+        path = "game/common/province_terrain"
+        type_per_file = yes
+    }
+}
+
+province_terrain_validation = {
+    ## cardinality = 0..1
+    default = <terrain>
+
+    ## cardinality = 0..inf
+    enum[provinces] = <terrain>
+}

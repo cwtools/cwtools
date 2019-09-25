@@ -1,0 +1,54 @@
+# This is a hardcoded reference for value_field
+types = {
+    type[script_value] = {
+        path = "game/common/script_values"
+        path_strict = yes
+    }
+}
+
+# This is a hardcoded reference for value_field
+enums = {
+    complex_enum[static_values] = {
+        path = "game/common/script_values"
+        start_from_root = yes
+        name = {
+            enum_name = scalar
+        }
+    }
+}
+
+# This is a hardcoded reference for value_field
+single_alias[range] = {
+    ## cardinality = 2..2
+    float
+}
+
+# This is a hardcoded reference for value_field
+single_alias[formula] = {
+    ## cardinality = 1..inf
+    alias_name[arithmetic_operation] = alias_match_left[arithmetic_operation]
+}
+
+
+alias[arithmetic_operation:add] = value_field
+alias[arithmetic_operation:subtract] = value_field
+alias[arithmetic_operation:multiply] = value_field
+alias[arithmetic_operation:divide] = value_field
+alias[arithmetic_operation:modulo] = value_field
+alias[arithmetic_operation:value] = value_field
+alias[arithmetic_operation:max] = value_field
+alias[arithmetic_operation:min] = value_field
+
+alias[arithmetic_operation:round] = yes
+alias[arithmetic_operation:ceiling] = yes
+alias[arithmetic_operation:floor] = yes
+
+alias[arithmetic_operation:fixed_range] = {
+    min = value_field
+    max = value_field
+}
+
+alias[arithmetic_operation:integer_range] = {
+    min = int_value_field
+    max = int_value_field
+}

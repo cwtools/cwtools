@@ -1,0 +1,34 @@
+types = {
+    type[decision] = {
+        path = "game/decisions"
+        skip_root_key = any
+    }
+}
+
+decision = {
+    potential = {
+        ## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    allow = {
+        ## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    effect = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+    ## cardinality = 0..1
+    ai_allow = {
+        ## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## cardinality = 0..1
+    ## replace_scope = { THIS = province ROOT = province }
+    highlight = {
+        ## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    ## cardinality = 0..1
+    ai_will_do = single_alias_right[chance_block]
+}

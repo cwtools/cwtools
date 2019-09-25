@@ -1,0 +1,122 @@
+types = {
+    type[history_setup_validation] = {
+        path = "game/common"
+        path_file = "setup.txt"
+        type_per_file = yes
+    }
+}
+
+history_setup_validation = {
+    diplomacy = {
+        ## cardinality = 0..inf
+        defensive_league = {
+            ## cardinality = 2..inf
+            member = enum[country_tags]
+        }
+
+        ## cardinality = 0..inf
+        dependency = {
+            first = enum[country_tags]
+            second = enum[country_tags]
+            subject_type = <subject_type>
+        }
+
+        ## cardinality = 0..inf
+        alliance = {
+            first = enum[country_tags]
+            second = enum[country_tags]
+        }
+
+        ## cardinality = 0..inf
+        guarantee = {
+            first = enum[country_tags]
+            second = enum[country_tags]
+        }
+
+        # TODO: see if other values work or it's an immutable structure
+        ## cardinality = 0..inf
+        enum[country_tags] = {
+            enum[country_tags] = {
+                trade_access = yes
+            }
+        }
+    }
+
+    provinces = {
+        ## cardinality = 0..inf
+        enum[provinces] = {
+            ## cardinality = 0..inf
+            modifier = {
+                modifier = <modifier_container>
+            }
+
+            ## cardinality = 0..inf
+            <building> = int
+
+            ## cardinality = 0..inf
+            <pop_type> = {
+                culture = <culture>
+                religion = <religion>
+            }
+        }
+    }
+
+    road_network = {
+        ## cardinality = 0..inf
+        enum[provinces] = enum[provinces]
+    }
+
+    country = {
+        countries = {
+            # Standalone so it doesn't error because of missing things
+            BAR = {
+                government = <government>
+            }
+
+            ## cardinality = 0..inf
+            enum[country_tags] = {
+                government = <government>
+
+                ## cardinality = 0..1
+                diplomatic_stance = <diplomatic_stance>
+
+                primary_culture = <culture>
+
+                religion = <religion>
+
+                ## cardinality = 0..1
+                agressive_expansion = float
+
+                # TODO: Maybe bother with doing this through a subtype, but that's very deeply nested so not sure if worth it
+                ## cardinality = 0..1
+                ### Required for tribal gov types.
+                centralization = int
+
+                ## cardinality = 0..1
+                ### Probably only for monarchies.
+                succession = enum[succession_types]
+
+                # TODO: Make sure those match
+                ## cardinality = 0..inf
+                <law_category> = <law>
+
+                capital = enum[provinces]
+
+                ### One must match capital.
+                own_control_core = {
+                    ## cardinality = 1..inf
+                    enum[provinces]
+                }
+            }
+        }
+    }
+
+    trade = {
+        ## cardinality = 0..inf
+        route = {
+            from = enum[provinces]
+            to = enum[provinces]
+            trade_goods = <trade_goods>
+        }
+    }
+}

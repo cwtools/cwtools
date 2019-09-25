@@ -1,0 +1,100 @@
+enums = {
+    # Make sure these exist in colour lists; currently a pointless enum but waiting for the Ensured type keys rule I guess
+    enum[country_color_lists] = {
+        country_primary_colors_list
+        country_secondary_colors_list
+        country_tertiary_colors_list
+    }
+}
+
+types = {
+    type[coat_of_arms_template_list] = {
+        path = "game/common/coat_of_arms/template_lists"
+        skip_root_key = coat_of_arms_template_lists
+    }
+    type[color_list] = {
+        path = "game/common/coat_of_arms/template_lists"
+        skip_root_key = color_lists
+    }
+    type[colored_emblem_texture_list] = {
+        path = "game/common/coat_of_arms/template_lists"
+        skip_root_key = colored_emblem_texture_lists
+    }
+    type[pattern_texture_list] = {
+        path = "game/common/coat_of_arms/template_lists"
+        skip_root_key = pattern_texture_lists
+    }
+    # No examples in vanilla yet
+    # type[textured_emblem_list] = {
+    #     path = "game/common/coat_of_arms/template_lists"
+    #     skip_root_key = textured_emblem_lists ?
+    # }
+}
+
+## replace_scope = { this = country root = country }
+coat_of_arms_template_list = {
+    ## cardinality = 1..inf
+    int = <coat_of_arms_template>
+
+    ## cardinality = 0..inf
+    special_selection = {
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        ## cardinality = 1..inf
+        int = <coat_of_arms_template>
+    }
+}
+
+## replace_scope = { this = country root = country }
+color_list = {
+    ## cardinality = 1..inf
+    int = enum[named_colors]
+
+    ## cardinality = 0..inf
+    special_selection = {
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        ## cardinality = 1..inf
+        int = enum[named_colors]
+    }
+}
+
+## replace_scope = { this = country root = country }
+colored_emblem_texture_list = {
+    ## cardinality = 1..inf
+    int = filepath[gfx/coat_of_arms/colored_emblems/]
+
+    ## cardinality = 0..inf
+    special_selection = {
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        ## cardinality = 1..inf
+        int = filepath[gfx/coat_of_arms/colored_emblems/]
+    }
+}
+
+## replace_scope = { this = country root = country }
+pattern_texture_list = {
+    ## cardinality = 1..inf
+    int = filepath[gfx/coat_of_arms/patterns/]
+
+    ## cardinality = 0..inf
+    special_selection = {
+        trigger = {
+            ## cardinality = 1..inf
+            alias_name[trigger] = alias_match_left[trigger]
+        }
+
+        ## cardinality = 1..inf
+        int = filepath[gfx/coat_of_arms/patterns/]
+    }
+}
