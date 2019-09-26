@@ -4,21 +4,110 @@ open Giraffe.GiraffeViewEngine
 open CWTools.Rules
 open CWTools.Utilities.StringResource
 
+let createTableOfContents (types : string list) =
+    let createLink typeName = li [] [a [ _href ("#" + typeName) ] [ str typeName ]]
+    let links = types |> List.map createLink
+    ul [] links
+
 let fieldToText (field : NewField) =
     match field with
     | SpecificField (SpecificValue value) -> stringManager.GetStringForID value.normal
     | _ -> ""
 
-let ruleTemplate ((rule, options) : NewRule) =
+let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
+    let valueTypeField (vt : ValueType) =
+        match vt with
+        |(ValueType.Bool) -> "yes/no"
+        |(ValueType.Date) -> "date"
+        |(ValueType.Int (RulesParser.intFieldDefaultMinimum, RulesParser.intFieldDefaultMaximum)) -> "Integer"
+        |(ValueType.Int (RulesParser.intFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
+        |(ValueType.Int (min, RulesParser.intFieldDefaultMaximum)) -> sprintf "Integer above %i" min
+        |(ValueType.Int (min, max)) -> sprintf "Integer between %i and %i" min max
+        |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum && max = RulesParser.floatFieldDefaultMaximum -> "Float"
+        |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
+        |(ValueType.Float (min, max)) when max = RulesParser.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
+        |(ValueType.Float (min, max)) -> sprintf "Float between %s and %s" (min.ToString()) (max.ToString())
+        |(ValueType.Percent) -> "percentage"
+        |(ValueType.Enum enumName) ->
+            let enumDef = enums |> List.tryFind (fun e -> e.key = enumName)
+            enumDef |> Option.map (fun ed -> (ed.values |> String.concat ", "))
+                    |> Option.defaultValue ""
+        | ValueType.CK2DNA -> "ck2DNA"
+        | ValueType.CK2DNAProperty -> "ck2DNAproperty"
+        | ValueType.IRFamilyName -> "IRFamilyName"
+
+
+    match field with
+    | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
+    | ValueField (vt) -> str (valueTypeField vt)
+    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str s]
+    | _ -> str ""
+
+let replaceScopesToText (replaceScopes : ReplaceScopes) =
+    let rootText = replaceScopes.root |> Option.map (fun r -> sprintf "ROOT: %s" (r.ToString()))
+    let fromText =
+        replaceScopes.froms
+        |> Option.map (fun froms -> froms |> List.mapi (fun i s -> (String.replicate (i+1) "FROM") + ": " + (s.ToString())) |> String.concat ", ")
+    match rootText, fromText with
+    | Some rt, Some "" -> rt
+    | Some rt, Some ft -> rt + ", " + ft
+    | Some rt, None -> rt
+    | None, Some "" -> ""
+    | None, Some ft -> ft
+    | None, None -> ""
+
+let rec ruleTemplate (enums : EnumDefinition list) (indent : bool) ((rule, options) : NewRule) =
     let lhs = rule |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
-    lhs |> Option.map fieldToText
-        |> Option.map (fun t -> tr [] [td [] [str t]; td [] [str (options.description |> Option.defaultValue "")]])
-let typeBlock ((typeName : string), ((rule, options): NewRule)) =
+    let colspan = if indent then "1" else "2"
+    match rule with
+    | LeafRule (left, right) ->
+        let lhs = td [ _colspan colspan] [str (fieldToText left)]
+        let rhs = td [] [(rhsFieldToText enums right)]
+        let desc = td [] [str (options.description |> Option.defaultValue "")]
+        [(tr [] [lhs; desc; rhs])]
+    | NodeRule (left, [LeafRule(AliasField x, _), innerOptions]) ->
+        let lhs = td [_colspan colspan] [str (fieldToText left)]
+        let desc = td [] [str (options.description |> Option.defaultValue "")]
+        let scopes = options.replaceScopes |> Option.map replaceScopesToText
+        let rhsText = if scopes.IsSome then (x + " block, with scopes " + scopes.Value) else (x + " block")
+        let rhs = td [] [str rhsText]
+        [(tr [] [lhs; desc; rhs])]
+    | NodeRule (left, inner) ->
+        let desc = td [_colspan colspan] [str (options.description |> Option.defaultValue "")]
+        let rhs = td [] [strong [] [str "block, containing:"]]
+        let inners = (inner |> List.collect (ruleTemplate enums true))
+        let lhs = td [ _rowspan ((inners.Length + 1).ToString()); ] [ strong [] [str (fieldToText left)]]
+        ((tr [] ([lhs; desc; rhs]))::inners)
+
+    | LeafValueRule (left) ->
+        let lhs = td [_colspan colspan] [str (fieldToText left)]
+        let desc = td [] [str (options.description |> Option.defaultValue "")]
+        [(tr [] [lhs; desc; td [] [str ""]])]
+    | _ -> []
+    // lhs |> Option.map fieldToText
+    //     |> Option.map (fun t -> tr [] [td [] [str t]; td [] [str (options.description |> Option.defaultValue "")];])
+
+let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
     let _, rules = rule |> (function |NodeRule (l, r) -> l, r)
+    let typeName = typeDef.name
+    let tableHeader = tr [] [th [ _colspan "2"] [str "field"]; th [] [str "description"]; th [] [str "rhs"]]
+    let description =
+        options.description |> Option.map ((sprintf "Description %s") >> str)
+        |> Option.map (fun s -> div [] [s])
     div [] [
-        h2 [ _class "title" ] [ str typeName]
-        table [ _class "table"] (rules |> List.choose ruleTemplate) ]
-let rootRules (rootRules : RootRule list) =
+        h2 [ _class "title"; _id typeName] [ str typeName]
+        div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
+        div [] ([description] |> List.choose id)
+        table [ _class "table is-striped"] (tableHeader::(rules |> List.collect (ruleTemplate enums false))) ]
+
+let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
+    let typeBlocks = ((rootRules)
+        |> List.choose (function |TypeRule (name, rule) ->
+                                    let typeDef = types |> List.tryFind (fun td -> td.name = name)
+                                    typeDef |> Option.map (fun td -> typeBlock enums ((td), (rule)))
+                                    // if types |> List.contains name then Some (typeBlock (name, rule)) else None
+                                    |_ -> None))
+    let tableOfContents = createTableOfContents (types |> List.map (fun td -> td.name))
     html [] [
         meta [ _name "viewport"; _content "width=device-width, initial-scale=1"]
         head [] [
@@ -27,7 +116,7 @@ let rootRules (rootRules : RootRule list) =
             [
                 section [ _class "section"]
                  [
-                    div [ _class "container"] ((rootRules) |> List.choose (function |TypeRule (name, rule) -> Some (typeBlock (name, rule)) |_ -> None))
+                    div [ _class "container"] (tableOfContents::typeBlocks)
                 ]
             ]
     ] |> renderHtmlDocument

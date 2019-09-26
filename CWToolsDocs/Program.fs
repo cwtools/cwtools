@@ -35,7 +35,12 @@ let printTypeRule ((typeName : string), ((rule, options) : NewRule)) =
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
-    let configPath = "./testconfig"
+    let configPath =
+        match argv with
+        | [||] -> "./testconfig/"
+        | [|x|] -> x
+        | _ -> "./testconfig/"
+    // let configPath = "./testconfig"
     let rulesFiles = getConfigFiles(configPath)
     rulesFiles |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
         |> (fun f -> UtilityParser.initializeScopes f (Some []) )
@@ -47,7 +52,7 @@ let main argv =
         rulesFiles
             |> List.filter (fun (fn, ft) -> Path.GetExtension fn = ".cwt" )
             |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) scopeManager.AllScopes scopeManager.AnyScope
-    let renderedHtml = HtmlTemplates.rootRules rules
+    let renderedHtml = HtmlTemplates.rootRules rules enums types
     File.WriteAllText ("output.html", renderedHtml)
     // printfn "The rendered html document: \n\n%s\n" renderedHtml
 

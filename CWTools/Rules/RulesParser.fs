@@ -199,9 +199,14 @@ module RulesParser =
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
     let optionalMany : Options = { defaultOptions with min = 0; max = 100 }
 
-    let defaultFloat = ValueField (ValueType.Float (-1E+12M, 1E+12M))
-    let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
-
+    [<Literal>]
+    let intFieldDefaultMinimum = Int32.MinValue
+    [<Literal>]
+    let intFieldDefaultMaximum = Int32.MaxValue
+    let floatFieldDefaultMinimum = -1E+12M
+    let floatFieldDefaultMaximum = 1E+12M
+    let defaultFloat = ValueField (ValueType.Float (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
+    let defaultInt = ValueField (ValueType.Int (intFieldDefaultMinimum, intFieldDefaultMaximum))
     let private getNodeComments (clause : IClause) =
         let findComments (t : range) s (a : Child) =
                 match (s, a) with
@@ -236,8 +241,8 @@ module RulesParser =
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
             let parseDecimal (s : string) =
                 match s, Decimal.TryParse s with
-                | "inf", _ -> Some (decimal 1E+12M)
-                | "-inf", _ -> Some -(decimal 1E+12M)
+                | "inf", _ -> Some (decimal floatFieldDefaultMaximum)
+                | "-inf", _ -> Some (decimal floatFieldDefaultMinimum)
                 | _, (true, num) -> Some (num)
                 | _, (false, _) -> None
             if split.Length < 2 then None else
@@ -253,8 +258,8 @@ module RulesParser =
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
             let parseInt (s : string) =
                 match s, Int32.TryParse s with
-                | "inf", _ -> Some Int32.MaxValue
-                | "-inf", _ -> Some Int32.MinValue
+                | "inf", _ -> Some intFieldDefaultMaximum
+                | "-inf", _ -> Some intFieldDefaultMinimum
                 | _, (true, num) -> Some num
                 | _, (false, _) -> None
             if split.Length < 2 then None else
@@ -413,26 +418,26 @@ module RulesParser =
             | Some alias -> AliasField alias
             | None -> ScalarField (ScalarValue)
         | "scope_field" -> ScopeField (anyScope)
-        | "variable_field" -> VariableField (false, (-1E+12M, 1E+12M))
+        | "variable_field" -> VariableField (false, (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
         | x when x.StartsWith "variable_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> VariableField (false,(min, max))
-            | None -> VariableField (false,(-1E+12M, 1E+12M))
-        | "int_variable_field" -> VariableField (true, (decimal Int32.MinValue, decimal Int32.MaxValue))
+            | None -> VariableField (false,(floatFieldDefaultMinimum, floatFieldDefaultMaximum))
+        | "int_variable_field" -> VariableField (true, (decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
         | x when x.StartsWith "int_variable_field[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> VariableField (true,(decimal min,decimal max))
-            | None -> VariableField (true,(decimal Int32.MinValue, decimal Int32.MaxValue))
-        | "value_field" -> ValueScopeMarkerField (false, (-1E+12M, 1E+12M))
+            | None -> VariableField (true,(decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
+        | "value_field" -> ValueScopeMarkerField (false, (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
         | x when x.StartsWith "value_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (false,(min, max))
-            | None -> ValueScopeMarkerField (false,(-1E+12M, 1E+12M))
-        | "int_value_field" -> ValueScopeMarkerField (true, (decimal Int32.MinValue, decimal Int32.MaxValue))
+            | None -> ValueScopeMarkerField (false,(floatFieldDefaultMinimum, floatFieldDefaultMaximum))
+        | "int_value_field" -> ValueScopeMarkerField (true, (decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
         | x when x.StartsWith "int_value_field[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (true,(decimal min,decimal max))
-            | None -> ValueScopeMarkerField (true,(decimal Int32.MinValue, decimal Int32.MaxValue))
+            | None -> ValueScopeMarkerField (true,(decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
         | x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             | Some variable ->
