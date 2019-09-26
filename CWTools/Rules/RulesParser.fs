@@ -205,6 +205,8 @@ module RulesParser =
     let intFieldDefaultMaximum = Int32.MaxValue
     let floatFieldDefaultMinimum = -1E+12M
     let floatFieldDefaultMaximum = 1E+12M
+    [<Literal>]
+    let cardinalityDefaultMaximum = 10000
     let defaultFloat = ValueField (ValueType.Float (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
     let defaultInt = ValueField (ValueType.Int (intFieldDefaultMinimum, intFieldDefaultMaximum))
     let private getNodeComments (clause : IClause) =
@@ -328,7 +330,7 @@ module RulesParser =
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
                 try
                     match nums.[0], nums.[1] with
-                    | min, "inf" -> (int min), 10000
+                    | min, "inf" -> (int min), cardinalityDefaultMaximum
                     | min, max -> (int min), (int max)
                 with
                 | _ -> 1, 1

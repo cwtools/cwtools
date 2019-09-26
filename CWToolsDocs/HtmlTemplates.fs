@@ -9,37 +9,38 @@ let createTableOfContents (types : string list) =
     let links = types |> List.map createLink
     ul [] links
 
-let fieldToText (field : NewField) =
-    match field with
-    | SpecificField (SpecificValue value) -> stringManager.GetStringForID value.normal
-    | _ -> ""
+let valueTypeField enums (vt : ValueType) =
+    match vt with
+    |(ValueType.Bool) -> "yes/no"
+    |(ValueType.Date) -> "date"
+    |(ValueType.Int (RulesParser.intFieldDefaultMinimum, RulesParser.intFieldDefaultMaximum)) -> "Integer"
+    |(ValueType.Int (RulesParser.intFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
+    |(ValueType.Int (min, RulesParser.intFieldDefaultMaximum)) -> sprintf "Integer above %i" min
+    |(ValueType.Int (min, max)) -> sprintf "Integer between %i and %i" min max
+    |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum && max = RulesParser.floatFieldDefaultMaximum -> "Float"
+    |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
+    |(ValueType.Float (min, max)) when max = RulesParser.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
+    |(ValueType.Float (min, max)) -> sprintf "Float between %s and %s" (min.ToString()) (max.ToString())
+    |(ValueType.Percent) -> "percentage"
+    |(ValueType.Enum enumName) ->
+        let enumDef = enums |> List.tryFind (fun e -> e.key = enumName)
+        enumDef |> Option.map (fun ed -> (ed.values |> String.concat ", "))
+                |> Option.defaultValue ""
+    | ValueType.CK2DNA -> "ck2DNA"
+    | ValueType.CK2DNAProperty -> "ck2DNAproperty"
+    | ValueType.IRFamilyName -> "IRFamilyName"
 
-let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
-    let valueTypeField (vt : ValueType) =
-        match vt with
-        |(ValueType.Bool) -> "yes/no"
-        |(ValueType.Date) -> "date"
-        |(ValueType.Int (RulesParser.intFieldDefaultMinimum, RulesParser.intFieldDefaultMaximum)) -> "Integer"
-        |(ValueType.Int (RulesParser.intFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
-        |(ValueType.Int (min, RulesParser.intFieldDefaultMaximum)) -> sprintf "Integer above %i" min
-        |(ValueType.Int (min, max)) -> sprintf "Integer between %i and %i" min max
-        |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum && max = RulesParser.floatFieldDefaultMaximum -> "Float"
-        |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
-        |(ValueType.Float (min, max)) when max = RulesParser.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
-        |(ValueType.Float (min, max)) -> sprintf "Float between %s and %s" (min.ToString()) (max.ToString())
-        |(ValueType.Percent) -> "percentage"
-        |(ValueType.Enum enumName) ->
-            let enumDef = enums |> List.tryFind (fun e -> e.key = enumName)
-            enumDef |> Option.map (fun ed -> (ed.values |> String.concat ", "))
-                    |> Option.defaultValue ""
-        | ValueType.CK2DNA -> "ck2DNA"
-        | ValueType.CK2DNAProperty -> "ck2DNAproperty"
-        | ValueType.IRFamilyName -> "IRFamilyName"
-
-
+let fieldToText enums (field : NewField) =
     match field with
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
-    | ValueField (vt) -> str (valueTypeField vt)
+    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str s]
+    | ValueField (vt) -> str (valueTypeField enums vt)
+    | _ -> str ""
+
+let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
+    match field with
+    | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
+    | ValueField (vt) -> str (valueTypeField enums vt)
     | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str s]
     | _ -> str ""
 
@@ -56,33 +57,44 @@ let replaceScopesToText (replaceScopes : ReplaceScopes) =
     | None, Some ft -> ft
     | None, None -> ""
 
+let getReqCount (options : Options) =
+    match options.min, options.max with
+    | 0, 1 -> "Optional"
+    | 0, RulesParser.cardinalityDefaultMaximum -> "Optional, many"
+    | 0, x -> sprintf "Optional, up to %i" x
+    | 1, 1 -> "Required"
+    | 1, RulesParser.cardinalityDefaultMaximum -> "Required, many"
+    | 1, x -> sprintf "Required, up to %i" x
+    | x, y -> sprintf "Min %i, up to %i" x y
+
 let rec ruleTemplate (enums : EnumDefinition list) (indent : bool) ((rule, options) : NewRule) =
     let lhs = rule |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
     let colspan = if indent then "1" else "2"
+    let reqCount = td [] [str (getReqCount options)]
     match rule with
     | LeafRule (left, right) ->
-        let lhs = td [ _colspan colspan] [str (fieldToText left)]
+        let lhs = td [ _colspan colspan] [(fieldToText enums left)]
         let rhs = td [] [(rhsFieldToText enums right)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
-        [(tr [] [lhs; desc; rhs])]
+        [(tr [] [lhs; desc; reqCount; rhs])]
     | NodeRule (left, [LeafRule(AliasField x, _), innerOptions]) ->
-        let lhs = td [_colspan colspan] [str (fieldToText left)]
+        let lhs = td [_colspan colspan] [(fieldToText enums left)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
         let scopes = options.replaceScopes |> Option.map replaceScopesToText
         let rhsText = if scopes.IsSome then (x + " block, with scopes " + scopes.Value) else (x + " block")
         let rhs = td [] [str rhsText]
-        [(tr [] [lhs; desc; rhs])]
+        [(tr [] [lhs; desc; reqCount; rhs])]
     | NodeRule (left, inner) ->
         let desc = td [_colspan colspan] [str (options.description |> Option.defaultValue "")]
         let rhs = td [] [strong [] [str "block, containing:"]]
         let inners = (inner |> List.collect (ruleTemplate enums true))
-        let lhs = td [ _rowspan ((inners.Length + 1).ToString()); ] [ strong [] [str (fieldToText left)]]
-        ((tr [] ([lhs; desc; rhs]))::inners)
+        let lhs = td [ _rowspan ((inners.Length + 1).ToString()); ] [ strong [] [(fieldToText enums left)]]
+        ((tr [] ([lhs; desc; reqCount; rhs]))::inners)
 
     | LeafValueRule (left) ->
-        let lhs = td [_colspan colspan] [str (fieldToText left)]
+        let lhs = td [_colspan colspan] [(fieldToText enums left)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
-        [(tr [] [lhs; desc; td [] [str ""]])]
+        [(tr [] [lhs; desc; reqCount; td [] [str ""]])]
     | _ -> []
     // lhs |> Option.map fieldToText
     //     |> Option.map (fun t -> tr [] [td [] [str t]; td [] [str (options.description |> Option.defaultValue "")];])
@@ -90,7 +102,7 @@ let rec ruleTemplate (enums : EnumDefinition list) (indent : bool) ((rule, optio
 let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
     let _, rules = rule |> (function |NodeRule (l, r) -> l, r)
     let typeName = typeDef.name
-    let tableHeader = tr [] [th [ _colspan "2"] [str "field"]; th [] [str "description"]; th [] [str "rhs"]]
+    let tableHeader = tr [] [th [ _colspan "2"] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
     let description =
         options.description |> Option.map ((sprintf "Description %s") >> str)
         |> Option.map (fun s -> div [] [s])
