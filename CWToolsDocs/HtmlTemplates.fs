@@ -33,15 +33,20 @@ let valueTypeField enums (vt : ValueType) =
 let fieldToText enums (field : NewField) =
     match field with
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
-    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str s]
+    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str ("<"+s+">")]
     | ValueField (vt) -> str (valueTypeField enums vt)
+    | LocalisationField true -> str "Synchronised localisation key"
+    | LocalisationField false -> str "Localisation key"
     | _ -> str ""
 
 let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     match field with
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
     | ValueField (vt) -> str (valueTypeField enums vt)
-    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str s]
+    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str ("<"+s+">")]
+    | LocalisationField true -> str "Synchronised localisation key"
+    | LocalisationField false -> str "Localisation key"
+    | AliasField x -> str (x + " fields")
     | _ -> str ""
 
 let replaceScopesToText (replaceScopes : ReplaceScopes) =
@@ -67,9 +72,9 @@ let getReqCount (options : Options) =
     | 1, x -> sprintf "Required, up to %i" x
     | x, y -> sprintf "Min %i, up to %i" x y
 
-let rec ruleTemplate (enums : EnumDefinition list) (indent : bool) ((rule, options) : NewRule) =
+let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) ((rule, options) : NewRule) =
     let lhs = rule |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
-    let colspan = if indent then "1" else "2"
+    let colspan = (maxDepth - indent).ToString()
     let reqCount = td [] [str (getReqCount options)]
     match rule with
     | LeafRule (left, right) ->
@@ -87,7 +92,7 @@ let rec ruleTemplate (enums : EnumDefinition list) (indent : bool) ((rule, optio
     | NodeRule (left, inner) ->
         let desc = td [_colspan colspan] [str (options.description |> Option.defaultValue "")]
         let rhs = td [] [strong [] [str "block, containing:"]]
-        let inners = (inner |> List.collect (ruleTemplate enums true))
+        let inners = (inner |> List.collect (ruleTemplate enums maxDepth (indent + 1)))
         let lhs = td [ _rowspan ((inners.Length + 1).ToString()); ] [ strong [] [(fieldToText enums left)]]
         ((tr [] ([lhs; desc; reqCount; rhs]))::inners)
 
@@ -99,10 +104,19 @@ let rec ruleTemplate (enums : EnumDefinition list) (indent : bool) ((rule, optio
     // lhs |> Option.map fieldToText
     //     |> Option.map (fun t -> tr [] [td [] [str t]; td [] [str (options.description |> Option.defaultValue "")];])
 
+let rec getTypeBlockDepth (depth : int) ((rule, options): NewRule) =
+    match rule with
+    | NodeRule (_, []) ->
+        depth
+    | NodeRule (_, inner) ->
+        inner |> List.map (getTypeBlockDepth (depth + 1)) |> List.max
+    | _ -> depth
+
 let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
     let _, rules = rule |> (function |NodeRule (l, r) -> l, r)
+    let typeBlockDepth = getTypeBlockDepth 0 (rule, options)
     let typeName = typeDef.name
-    let tableHeader = tr [] [th [ _colspan "2"] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
+    let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
     let description =
         options.description |> Option.map ((sprintf "Description %s") >> str)
         |> Option.map (fun s -> div [] [s])
@@ -110,7 +124,7 @@ let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule,
         h2 [ _class "title"; _id typeName] [ str typeName]
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
         div [] ([description] |> List.choose id)
-        table [ _class "table is-striped"] (tableHeader::(rules |> List.collect (ruleTemplate enums false))) ]
+        table [ _class "table is-striped"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
 
 let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
     let typeBlocks = ((rootRules)
