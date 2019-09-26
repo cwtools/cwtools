@@ -100,7 +100,8 @@ let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : in
         let lhs = td [_colspan colspan] [(fieldToText enums left)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
         [(tr [] [lhs; desc; reqCount; td [] [str ""]])]
-    | _ -> []
+    | SubtypeRule(_,_, inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent)
+    // | _ -> []
     // lhs |> Option.map fieldToText
     //     |> Option.map (fun t -> tr [] [td [] [str t]; td [] [str (options.description |> Option.defaultValue "")];])
 
