@@ -4,10 +4,16 @@ open Giraffe.GiraffeViewEngine
 open CWTools.Rules
 open CWTools.Utilities.StringResource
 
-let createTableOfContents (types : string list) =
+let createTableOfContents (types : TypeDefinition list) =
+    let groupedByTopFolder = types |> List.groupBy (fun td -> td.pathOptions.paths |> List.tryHead |> Option.map (fun s -> s.Split('/').[0]) |> Option.defaultValue "")
     let createLink typeName = li [] [a [ _href ("#" + typeName) ] [ str typeName ]]
-    let links = types |> List.map createLink
-    ul [] links
+    let createForGroup (topFolder, (innerTypes : TypeDefinition list)) =
+        li [] [
+            str topFolder
+            ul [] (innerTypes |> List.sortBy (fun td -> td.name) |> List.map (fun td -> createLink td.name))
+        ]
+    let links = groupedByTopFolder |> List.map createForGroup
+    ul [_class "content"] links
 
 let valueTypeField enums (vt : ValueType) =
     match vt with
@@ -30,24 +36,88 @@ let valueTypeField enums (vt : ValueType) =
     | ValueType.CK2DNAProperty -> "ck2DNAproperty"
     | ValueType.IRFamilyName -> "IRFamilyName"
 
+let createTypeFieldLink (typeType : TypeType) =
+    match typeType with
+    | TypeType.Simple s when s.Contains "." ->
+        let splitTypes = s.Split('.', 2)
+        let firstPart = splitTypes.[0]
+        let link = a [ _href ("#"+firstPart)] [str ("<"+firstPart+">")]
+        span [] [link; (str (" of subtype "+(splitTypes.[1])))]
+    | TypeType.Simple s ->  a [ _href ("#"+s)] [str ("<"+s+">")]
+    | _ -> str ""
+
 let fieldToText enums (field : NewField) =
     match field with
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
-    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str ("<"+s+">")]
+    | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
     | LocalisationField true -> str "Synchronised localisation key"
     | LocalisationField false -> str "Localisation key"
-    | _ -> str ""
+    | FilepathField (prefix, extension) ->
+        match prefix, extension with
+        | None, None -> str "Filepath"
+        | Some prefix, None -> str (sprintf "Filepath in folder \"%s\"" prefix)
+        | None, Some extension -> str (sprintf "Filepath with extension %s" extension)
+        | Some prefix, Some extension -> str (sprintf "Filepath in folder \"%s\" with extension %s" prefix extension)
+    | IconField icon -> str (sprintf "%s icon" icon)
+    | ScalarField (ScalarValue) -> str "Scalar"
+    | ScopeField (scope) -> str (sprintf "Scope object in %O scope" scope)
+    // TODO more detail
+    | VariableField (isInt, (min, max)) ->
+        match isInt with
+        | true -> str "Integer or integer variable"
+        | false -> str "Float or float variable"
+    | VariableGetField v -> str (sprintf "A \"%s\" value" v)
+    // TODO clearer
+    | VariableSetField v -> str (sprintf "Scalar, a \"%s\" value" v)
+    | ValueScopeField _
+    | AliasValueKeysField _ ->
+        // TODO better for these
+        str ""
+    | ValueScopeMarkerField _
+    | TypeMarkerField _
+    | SubtypeField _
+    | SingleAliasField _
+    | MarkerField _
+    | AliasField _ ->
+        str ""
+    // | _ -> str ""
 
 let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     match field with
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
+    | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
-    | TypeField (TypeType.Simple s) -> a [ _href ("#"+s)] [str ("<"+s+">")]
     | LocalisationField true -> str "Synchronised localisation key"
     | LocalisationField false -> str "Localisation key"
+    | FilepathField (prefix, extension) ->
+        match prefix, extension with
+        | None, None -> str "Filepath"
+        | Some prefix, None -> str (sprintf "Filepath in folder \"%s\"" prefix)
+        | None, Some extension -> str (sprintf "Filepath with extension %s" extension)
+        | Some prefix, Some extension -> str (sprintf "Filepath in folder \"%s\" with extension %s" prefix extension)
+    | IconField icon -> str (sprintf "%s icon" icon)
+    | ScalarField (ScalarValue) -> str "Scalar"
+    | ScopeField (scope) -> str (sprintf "Scope object in %O scope" scope)
+    // TODO more detail
+    | VariableField (isInt, (min, max)) ->
+        match isInt with
+        | true -> str "Integer or integer variable"
+        | false -> str "Float or float variable"
+    | VariableGetField v -> str (sprintf "A \"%s\" value" v)
+    // TODO clearer
+    | VariableSetField v -> str (sprintf "Scalar, a \"%s\" value" v)
+    | ValueScopeField _
+    | AliasValueKeysField _ ->
+        // TODO better for these
+        str ""
+    | ValueScopeMarkerField _
+    | TypeMarkerField _
+    | SubtypeField _
+    | SingleAliasField _
+    | MarkerField _ ->
+        str ""
     | AliasField x -> str (x + " fields")
-    | _ -> str ""
 
 let replaceScopesToText (replaceScopes : ReplaceScopes) =
     let rootText = replaceScopes.root |> Option.map (fun r -> sprintf "ROOT: %s" (r.ToString()))
@@ -107,6 +177,8 @@ let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : in
 
 let rec getTypeBlockDepth (depth : int) ((rule, options): NewRule) =
     match rule with
+    | SubtypeRule (_, _, inner) ->
+        inner |> List.map (getTypeBlockDepth (depth)) |> List.max
     | NodeRule (_, []) ->
         depth
     | NodeRule (_, inner) ->
@@ -125,16 +197,16 @@ let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule,
         h2 [ _class "title"; _id typeName] [ str typeName]
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
         div [] ([description] |> List.choose id)
-        table [ _class "table is-striped"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
+        table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
 
 let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
     let typeBlocks = ((rootRules)
-        |> List.choose (function |TypeRule (name, rule) ->
-                                    let typeDef = types |> List.tryFind (fun td -> td.name = name)
-                                    typeDef |> Option.map (fun td -> typeBlock enums ((td), (rule)))
-                                    // if types |> List.contains name then Some (typeBlock (name, rule)) else None
-                                    |_ -> None))
-    let tableOfContents = createTableOfContents (types |> List.map (fun td -> td.name))
+            |> List.choose (function |TypeRule (name, rule) -> Some (name, rule) |_ -> None)
+            |> List.sortBy fst
+            |> List.choose (function (name, rule) ->
+                                        let typeDef = types |> List.tryFind (fun td -> td.name = name)
+                                        typeDef |> Option.map (fun td -> typeBlock enums ((td), (rule)))))
+    let tableOfContents = createTableOfContents types
     html [] [
         meta [ _name "viewport"; _content "width=device-width, initial-scale=1"]
         head [] [

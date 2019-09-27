@@ -34,7 +34,6 @@ let printTypeRule ((typeName : string), ((rule, options) : NewRule)) =
 
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
     let configPath =
         match argv with
         | [||] -> "./testconfig/"
