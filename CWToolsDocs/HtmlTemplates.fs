@@ -332,7 +332,13 @@ let rec getTypeBlockDepth (depth : int) ((rule, options): NewRule) =
         inner |> List.map (getTypeBlockDepth (depth + 1)) |> List.max
     | _ -> depth
 
-let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
+let getURLForPosition (rootURL : string) (repoURL : string) (pos : CWTools.Utilities.Position.range)  =
+    let path = pos.FileName
+    let adjustedPath = path.Replace(rootURL, "")
+    let lineText = sprintf "#L%i" pos.StartLine
+    sprintf "%s%s%s" repoURL adjustedPath lineText
+
+let typeBlock (enums : EnumDefinition list) (urlCreator : (CWTools.Utilities.Position.range -> string) option) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
     let _, rules = rule |> (function |NodeRule (l, r) -> l, r)
     let typeBlockDepth = getTypeBlockDepth 0 (rule, options)
     let typeName = typeDef.name
@@ -340,13 +346,19 @@ let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule,
     let description =
         options.description |> Option.map ((sprintf "Description %s") >> str)
         |> Option.map (fun s -> div [] [s])
+    let url =
+        match options.sourceFileLocation, urlCreator with
+        | Some sourceFileLocation, Some urlCreatorFun -> a [ _href (urlCreatorFun sourceFileLocation)] [str "Edit this type"]
+        | _ -> div [] []
     div [] [
         h2 [ _class "title"; _id typeName] [ str typeName]
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
         div [] ([description] |> List.choose id)
+        url
+        // a [ _href (sprintf "https://www.github.com/tboby/cwtools-stellaris-config/%A" options.sourceFileLocation) ] [str "Edit this type"]
         table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
 
-let typeBlockWT (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
+let typeBlockWT (enums : EnumDefinition list) (urlCreator : (CWTools.Utilities.Position.range -> string) option) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
     let _, rules = rule |> (function |NodeRule (l, r) -> l, r)
     let typeBlockDepth = getTypeBlockDepth 0 (rule, options)
     let typeName = typeDef.name
@@ -359,23 +371,27 @@ let typeBlockWT (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rul
     let header = sprintf "== {{anchor|%s}}%s ==" typeName typeName
     let paths = (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s"))) |> String.concat "\n"
     let description = description |> Option.defaultValue ""
+    let url =
+        match options.sourceFileLocation, urlCreator with
+        | Some sourceFileLocation, Some urlCreatorFun -> sprintf "[%s Edit this type]" (urlCreatorFun sourceFileLocation)
+        | _ -> ""
     let innerRules = (rules |> List.map (ruleTemplateWT enums typeBlockDepth 0)) |> List.map fst |> String.concat "\n|-\n| "
     let table =
         sprintf "{| class=\"wikitable\"\n%s\n|-\n| %s\n|}" tableHeader innerRules
-    sprintf "%s\n%s\n%s\n%s" header paths description table
+    sprintf "%s\n%s\n%s\n%s\n%s" header paths description url table
     // div [] [
     //     h2 [ _class "title"; _id typeName] [ str typeName]
     //     div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
     //     div [] ([description] |> List.choose id)
     //     table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
 
-let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
+let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) (urlCreator : (CWTools.Utilities.Position.range -> string) option) =
     let typeBlocks = ((rootRules)
             |> List.choose (function |TypeRule (name, rule) -> Some (name, rule) |_ -> None)
             |> List.sortBy fst
             |> List.choose (function (name, rule) ->
                                         let typeDef = types |> List.tryFind (fun td -> td.name = name)
-                                        typeDef |> Option.map (fun td -> typeBlock enums ((td), (rule)))))
+                                        typeDef |> Option.map (fun td -> typeBlock enums urlCreator ((td), (rule)))))
     let tableOfContents = createTableOfContents types
     html [] [
         meta [ _name "viewport"; _content "width=device-width, initial-scale=1"]
@@ -390,7 +406,7 @@ let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types :
             ]
     ] |> renderHtmlDocument
 
-let rootRulesWT (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
+let rootRulesWT (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) (urlCreator : (CWTools.Utilities.Position.range -> string) option) =
     let typeBlocks (typeList : TypeDefinition list) =
         ((rootRules)
             |> List.choose (function |TypeRule (name, rule) -> Some (name, rule) |_ -> None)
@@ -398,7 +414,7 @@ let rootRulesWT (rootRules : RootRule list) (enums : EnumDefinition list) (types
             |> List.sortBy fst
             |> List.choose (function (name, rule) ->
                                         let typeDef = types |> List.tryFind (fun td -> td.name = name)
-                                        typeDef |> Option.map (fun td -> typeBlockWT enums ((td), (rule)))))
+                                        typeDef |> Option.map (fun td -> typeBlockWT enums urlCreator ((td), (rule)))))
     let groupedByTopFolder = types |> List.groupBy (fun td -> td.pathOptions.paths |> List.tryHead |> Option.map (fun s -> s.Split('/').[0]) |> Option.defaultValue "")
     let printTopFolder (name, innerTypes) =
         let inner = typeBlocks innerTypes |> String.concat "\n"

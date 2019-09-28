@@ -32,6 +32,7 @@ type Options = {
     requiredScopes : Scope list
     comparison : bool
     referenceDetails : (bool * string) option
+    sourceFileLocation : range option
 }
 
 type PathOptions = {
@@ -193,7 +194,7 @@ module RulesParser =
         |"information" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None; sourceFileLocation = None }
     let requiredSingle : Options = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
@@ -323,7 +324,7 @@ module RulesParser =
         | None -> None
 
 
-    let getOptionsFromComments (parseScope) (allScopes) (anyScope) (operator : Operator) (comments : string list) =
+    let getOptionsFromComments (parseScope) (allScopes) (anyScope) (sourceFileLocation : range option) (operator : Operator) (comments : string list) =
         let min, max =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             | Some c ->
@@ -363,7 +364,8 @@ module RulesParser =
                 | Some s -> s.Substring(s.IndexOf "=" + 1).Trim()|> (fun s -> false, s) |> Some
                 | None -> None
         let comparison = operator = Operator.EqualEqual
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails }
+        let sourceFileLocation = sourceFileLocation
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails; sourceFileLocation = sourceFileLocation }
 
     let processKey parseScope anyScope =
         function
@@ -483,7 +485,8 @@ module RulesParser =
 
     let configNode (processChildConfig) (parseScope) (allScopes) (anyScope) (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
+        let sourceFileLocation = Some node.Position
+        let options = getOptionsFromComments parseScope allScopes anyScope sourceFileLocation (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         let rule =
             match key with
@@ -509,7 +512,7 @@ module RulesParser =
 
     let configValueClause processChildConfig (parseScope) (allScopes) (anyScope) (valueclause : ValueClause) (comments : string list) =
         let children = getNodeComments valueclause
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
+        let options = getOptionsFromComments parseScope allScopes anyScope (Some valueclause.Position) (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         let rule = ValueClauseRule innerRules
         NewRule(rule, options)
@@ -517,12 +520,12 @@ module RulesParser =
 
 
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None; sourceFileLocation = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None; sourceFileLocation = None }
 
     let configLeaf processChildConfig (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
-        let options = getOptionsFromComments parseScope allScopes anyScope (leaf.Operator) comments
+        let options = getOptionsFromComments parseScope allScopes anyScope (Some leaf.Position) (leaf.Operator) comments
         let rightkey = leaf.Value.ToString()
         match rightkey with
         |x when x.StartsWith("colour[") ->
@@ -543,7 +546,7 @@ module RulesParser =
             // |x when x.StartsWith "<" && x.EndsWith ">" ->
             //     TypeField (x.Trim([|'<'; '>'|]))
             // |x -> ValueField (ValueType.Enum x)
-        let options = { getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments with leafvalue = true }
+        let options = { getOptionsFromComments parseScope allScopes anyScope (Some leafvalue.Position) (Operator.Equals) comments with leafvalue = true }
         NewRule(LeafValueRule(field), options)
 
     let configRootLeaf processChildConfig (parseScope) allScopes (anyScope) (leaf : Leaf) (comments : string list) =
@@ -570,7 +573,7 @@ module RulesParser =
 
     let configRootNode processChildConfig (parseScope) allScopes (anyScope) (node : Node) (comments : string list) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) comments
+        let options = getOptionsFromComments parseScope allScopes anyScope (Some node.Position) (Operator.Equals) comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope)
         match node.Key with
         |x when x.StartsWith "alias[" ->

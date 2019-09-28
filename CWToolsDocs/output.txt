@@ -4,6 +4,7 @@ __TOC__
 == {{anchor|achievement}}achievement ==
 path: common
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\common_folder_elements.cwt#L53 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -17,6 +18,7 @@ path: common
 == {{anchor|agenda}}agenda ==
 path: common/agendas
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\agendas_and_mandates.cwt#L11 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -32,6 +34,7 @@ path: common/agendas
 == {{anchor|ai_budget}}ai_budget ==
 path: common/ai_budget
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L296 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -67,6 +70,7 @@ path: common/ai_budget
 == {{anchor|ai_personality}}ai_personality ==
 path: common/personalities
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\personalities.cwt#L47 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -180,6 +184,7 @@ path: common/personalities
 == {{anchor|ai_should_restrict_system}}ai_should_restrict_system ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L448 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -189,6 +194,7 @@ path: common/game_rules
 == {{anchor|alert}}alert ==
 path: common
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\common_folder_elements.cwt#L29 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -200,6 +206,7 @@ path: common
 == {{anchor|alert_icon}}alert_icon ==
 path: common
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\common_folder_elements.cwt#L33 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -209,6 +216,7 @@ path: common
 == {{anchor|ambient_object}}ambient_object ==
 path: common/ambient_objects
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L61 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -230,6 +238,7 @@ path: common/ambient_objects
 == {{anchor|anomaly_category}}anomaly_category ==
 path: common/anomalies
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\anomalies_and_archaeology.cwt#L31 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -283,6 +292,7 @@ path: common/anomalies
 == {{anchor|archaeological_site_type}}archaeological_site_type ==
 path: common/archaeological_site_types
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\anomalies_and_archaeology.cwt#L141 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -338,6 +348,7 @@ path: common/archaeological_site_types
 == {{anchor|are_rebels_hostile}}are_rebels_hostile ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L392 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -347,6 +358,7 @@ path: common/game_rules
 == {{anchor|army}}army ==
 path: common/armies
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\armies.cwt#L27 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -406,6 +418,7 @@ path: common/armies
 == {{anchor|artifact_action}}artifact_action ==
 path: common/artifact_action
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\anomalies_and_archaeology.cwt#L209 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -431,6 +444,7 @@ path: common/artifact_action
 == {{anchor|ascension_perk}}ascension_perk ==
 path: common/ascension_perks
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ascension_perks_and_traditions.cwt#L27 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -460,6 +474,7 @@ path: common/ascension_perks
 == {{anchor|asteroid_belt_type}}asteroid_belt_type ==
 path: common/asteroid_belts
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L115 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -471,6 +486,7 @@ path: common/asteroid_belts
 == {{anchor|attitude}}attitude ==
 path: common/attitudes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L125 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -494,6 +510,7 @@ path: common/attitudes
 == {{anchor|authority}}authority ==
 path: common/governments/authorities
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\governments.cwt#L27 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -653,6 +670,7 @@ path: common/governments/authorities
 == {{anchor|bombardment_stance}}bombardment_stance ==
 path: common/bombardment_stances
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\bombardment_stances.cwt#L10 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -688,6 +706,7 @@ path: common/bombardment_stances
 == {{anchor|buildable_pop}}buildable_pop ==
 path: common/unused
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\buildable_pops.cwt#L9 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -771,6 +790,7 @@ path: common/unused
 == {{anchor|building}}building ==
 path: common/buildings
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\buildings.cwt#L31 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -866,6 +886,7 @@ path: common/buildings
 == {{anchor|button_effect}}button_effect ==
 path: common/button_effects
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L146 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -879,6 +900,7 @@ path: common/button_effects
 == {{anchor|bypass}}bypass ==
 path: common/bypass
 Description  These can be added to megastructures
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\bypass.cwt#L16 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -940,6 +962,7 @@ Description  These can be added to megastructures
 == {{anchor|can_add_claim}}can_add_claim ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L244 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -949,6 +972,7 @@ path: common/game_rules
 == {{anchor|can_auto_migrate_pop}}can_auto_migrate_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L260 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -958,6 +982,7 @@ path: common/game_rules
 == {{anchor|can_be_hostile_towards}}can_be_hostile_towards ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L348 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -967,6 +992,7 @@ path: common/game_rules
 == {{anchor|can_colonize_outside_borders}}can_colonize_outside_borders ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L324 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -976,6 +1002,7 @@ path: common/game_rules
 == {{anchor|can_colonize_planet}}can_colonize_planet ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L320 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -985,6 +1012,7 @@ path: common/game_rules
 == {{anchor|can_colonize_with_pop}}can_colonize_with_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L332 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -994,6 +1022,7 @@ path: common/game_rules
 == {{anchor|can_declare_war}}can_declare_war ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L316 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1003,6 +1032,7 @@ path: common/game_rules
 == {{anchor|can_enter_system_by_jump}}can_enter_system_by_jump ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L472 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1012,6 +1042,7 @@ path: common/game_rules
 == {{anchor|can_generate_army_from_planet}}can_generate_army_from_planet ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L288 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1021,6 +1052,7 @@ path: common/game_rules
 == {{anchor|can_generate_army_from_species}}can_generate_army_from_species ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L300 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1030,6 +1062,7 @@ path: common/game_rules
 == {{anchor|can_generate_leader_from_pop}}can_generate_leader_from_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L276 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1039,6 +1072,7 @@ path: common/game_rules
 == {{anchor|can_generate_leader_from_species}}can_generate_leader_from_species ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L280 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1048,6 +1082,7 @@ path: common/game_rules
 == {{anchor|can_generate_military_leader_from_pop}}can_generate_military_leader_from_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L284 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1057,6 +1092,7 @@ path: common/game_rules
 == {{anchor|can_get_claim_from_lost_system}}can_get_claim_from_lost_system ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L248 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1066,6 +1102,7 @@ path: common/game_rules
 == {{anchor|can_have_piracy_risk}}can_have_piracy_risk ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L460 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1075,6 +1112,7 @@ path: common/game_rules
 == {{anchor|can_have_robot_pops}}can_have_robot_pops ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L416 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1084,6 +1122,7 @@ path: common/game_rules
 == {{anchor|can_jump_drive}}can_jump_drive ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L456 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1093,6 +1132,7 @@ path: common/game_rules
 == {{anchor|can_modify_species}}can_modify_species ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L304 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1102,6 +1142,7 @@ path: common/game_rules
 == {{anchor|can_orbital_bombard}}can_orbital_bombard ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L368 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1111,6 +1152,7 @@ path: common/game_rules
 == {{anchor|can_planet_support_orbital_station}}can_planet_support_orbital_station ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L376 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1120,6 +1162,7 @@ path: common/game_rules
 == {{anchor|can_pop_procreate}}can_pop_procreate ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L360 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1129,6 +1172,7 @@ path: common/game_rules
 == {{anchor|can_purge_pop_manually}}can_purge_pop_manually ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L424 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1138,6 +1182,7 @@ path: common/game_rules
 == {{anchor|can_release_vassal}}can_release_vassal ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L292 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1147,6 +1192,7 @@ path: common/game_rules
 == {{anchor|can_release_vassal_from_species}}can_release_vassal_from_species ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L296 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1156,6 +1202,7 @@ path: common/game_rules
 == {{anchor|can_resettle_pop}}can_resettle_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L352 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1165,6 +1212,7 @@ path: common/game_rules
 == {{anchor|can_resettle_pop_planet}}can_resettle_pop_planet ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L356 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1174,6 +1222,7 @@ path: common/game_rules
 == {{anchor|can_spawn_debris}}can_spawn_debris ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L444 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1183,6 +1232,7 @@ path: common/game_rules
 == {{anchor|can_spawn_occupation_armies}}can_spawn_occupation_armies ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L464 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1192,6 +1242,7 @@ path: common/game_rules
 == {{anchor|can_species_have_rights}}can_species_have_rights ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L412 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1201,6 +1252,7 @@ path: common/game_rules
 == {{anchor|can_starbase_repair_ships}}can_starbase_repair_ships ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L440 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1210,6 +1262,7 @@ path: common/game_rules
 == {{anchor|can_stop_purge_pop_manually}}can_stop_purge_pop_manually ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L420 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1219,6 +1272,7 @@ path: common/game_rules
 == {{anchor|can_subjugate_empires}}can_subjugate_empires ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L452 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1228,6 +1282,7 @@ path: common/game_rules
 == {{anchor|can_take_hostile_actions}}can_take_hostile_actions ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L312 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1237,6 +1292,7 @@ path: common/game_rules
 == {{anchor|can_terraform_planet}}can_terraform_planet ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L328 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1246,6 +1302,7 @@ path: common/game_rules
 == {{anchor|can_vote_in_democratic_election}}can_vote_in_democratic_election ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L272 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1255,6 +1312,7 @@ path: common/game_rules
 == {{anchor|casus_belli}}casus_belli ==
 path: common/casus_belli
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\casus_belli_and_war_goals.cwt#L33 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -1272,6 +1330,7 @@ path: common/casus_belli
 == {{anchor|civic}}civic ==
 path: common/governments/civics
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\governments.cwt#L280 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -1507,6 +1566,7 @@ path: common/governments/civics
 == {{anchor|colony_automation}}colony_automation ==
 path: common/colony_automation
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\colony.cwt#L15 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -1528,6 +1588,7 @@ path: common/colony_automation
 == {{anchor|colony_ship_rushed}}colony_ship_rushed ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L372 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1537,6 +1598,7 @@ path: common/game_rules
 == {{anchor|colony_type}}colony_type ==
 path: common/colony_type
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\colony.cwt#L40 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -1556,6 +1618,7 @@ path: common/colony_type
 == {{anchor|component_set}}component_set ==
 path: common/component_sets
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\components_consolidated.cwt#L40 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -1577,6 +1640,7 @@ path: common/component_sets
 == {{anchor|component_template}}component_template ==
 path: common/component_templates
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\components_consolidated.cwt#L64 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -1882,6 +1946,7 @@ path: common/component_templates
 == {{anchor|country_customization}}country_customization ==
 path: common/country_customization
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L167 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -1911,6 +1976,7 @@ path: common/country_customization
 == {{anchor|country_type}}country_type ==
 path: common/country_types
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\country_types.cwt#L8 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="6" | field !! description !! required !! rhs
@@ -2212,6 +2278,7 @@ path: common/country_types
 == {{anchor|decision}}decision ==
 path: common/decisions
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\decisions.cwt#L16 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -2251,6 +2318,7 @@ path: common/decisions
 == {{anchor|deposit}}deposit ==
 path: common/deposits
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\deposits_and_planetary_features.cwt#L47 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -2320,6 +2388,7 @@ path: common/deposits
 == {{anchor|deposit_category}}deposit_category ==
 path: common/deposit_categories
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\deposits_and_planetary_features.cwt#L161 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2331,6 +2400,7 @@ path: common/deposit_categories
 == {{anchor|diplo_phrase}}diplo_phrase ==
 path: common/diplo_phrases
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\diplo_phrases.cwt#L27 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -2444,6 +2514,7 @@ path: common/diplo_phrases
 == {{anchor|diplomatic_action}}diplomatic_action ==
 path: common/diplomatic_actions
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\diplo_actions.cwt#L9 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -2505,6 +2576,7 @@ path: common/diplomatic_actions
 == {{anchor|district}}district ==
 path: common/districts
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\districts.cwt#L16 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -2564,6 +2636,7 @@ path: common/districts
 == {{anchor|economic_category}}economic_category ==
 path: common/economic_categories
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\common_economic_templates.cwt#L14 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -2627,6 +2700,7 @@ path: common/economic_categories
 == {{anchor|edict}}edict ==
 path: common/edicts
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\edicts.cwt#L20 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -2664,6 +2738,7 @@ path: common/edicts
 == {{anchor|ethic_categories}}ethic_categories ==
 path: common/ethics
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ethics.cwt#L22 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2673,6 +2748,7 @@ path: common/ethics
 == {{anchor|ethos}}ethos ==
 path: common/ethics
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ethics.cwt#L26 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -2726,6 +2802,7 @@ path: common/ethics
 == {{anchor|event_chain}}event_chain ==
 path: common/event_chains
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\event_chains.cwt#L20 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -2743,6 +2820,7 @@ path: common/event_chains
 == {{anchor|fallen_empires}}fallen_empires ==
 path: common/fallen_empires
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\fallen_empires.cwt#L8 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -2758,6 +2836,7 @@ path: common/fallen_empires
 == {{anchor|fleet_uses_templates}}fleet_uses_templates ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L436 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2767,6 +2846,7 @@ path: common/game_rules
 == {{anchor|global_ship_design}}global_ship_design ==
 path: common/global_ship_designs
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\global_ship_designs.cwt#L10 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -2806,6 +2886,7 @@ path: common/global_ship_designs
 == {{anchor|government}}government ==
 path: common/governments
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\governments.cwt#L244 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -2839,6 +2920,7 @@ path: common/governments
 == {{anchor|graphical_culture}}graphical_culture ==
 path: common/graphical_culture
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\graphical_cultures.cwt#L7 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -2892,6 +2974,7 @@ path: common/graphical_culture
 == {{anchor|has_full_sensor_range}}has_full_sensor_range ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L380 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2901,6 +2984,7 @@ path: common/game_rules
 == {{anchor|is_bio_trophy}}is_bio_trophy ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L340 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2910,6 +2994,7 @@ path: common/game_rules
 == {{anchor|is_extradimensional_anchor}}is_extradimensional_anchor ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L404 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2919,6 +3004,7 @@ path: common/game_rules
 == {{anchor|is_extradimensional_portal}}is_extradimensional_portal ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L400 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2928,6 +3014,7 @@ path: common/game_rules
 == {{anchor|is_owned_pop}}is_owned_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L432 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2937,6 +3024,7 @@ path: common/game_rules
 == {{anchor|is_owner_pop}}is_owner_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L428 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2946,6 +3034,7 @@ path: common/game_rules
 == {{anchor|is_valid_rival}}is_valid_rival ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L240 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -2955,6 +3044,7 @@ path: common/game_rules
 == {{anchor|job}}job ==
 path: common/pop_jobs
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\jobs_and_social_strata.cwt#L32 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -3014,6 +3104,7 @@ path: common/pop_jobs
 == {{anchor|mandate}}mandate ==
 path: common/mandates
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\agendas_and_mandates.cwt#L23 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -3037,6 +3128,7 @@ path: common/mandates
 == {{anchor|map_mode}}map_mode ==
 path: common/map_modes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L259 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -3068,6 +3160,7 @@ path: common/map_modes
 == {{anchor|megastructure}}megastructure ==
 path: common/megastructures
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\megastructures.cwt#L32 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -3157,6 +3250,7 @@ path: common/megastructures
 == {{anchor|message_type}}message_type ==
 path: common
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\common_folder_elements.cwt#L40 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -3178,6 +3272,7 @@ path: common
 == {{anchor|name_list}}name_list ==
 path: common/name_lists
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\names_consolidated.cwt#L31 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -3393,6 +3488,7 @@ path: common/name_lists
 == {{anchor|notification_modifier}}notification_modifier ==
 path: common/notification_modifiers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\all_modifiers_consolidated.cwt#L144 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -3402,6 +3498,7 @@ path: common/notification_modifiers
 == {{anchor|observation_station_mission}}observation_station_mission ==
 path: common/observation_station_missions
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\observation_station_missions.cwt#L7 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -3435,6 +3532,7 @@ path: common/observation_station_missions
 == {{anchor|on_action}}on_action ==
 path: common/on_actions
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\on_actions.cwt#L334 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5082,6 +5180,7 @@ path: common/on_actions
 == {{anchor|opinion_modifier}}opinion_modifier ==
 path: common/opinion_modifiers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\all_modifiers_consolidated.cwt#L63 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5123,6 +5222,7 @@ path: common/opinion_modifiers
 == {{anchor|planet_class}}planet_class ==
 path: common/planet_classes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\planet_classes.cwt#L42 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5248,6 +5348,7 @@ path: common/planet_classes
 == {{anchor|planet_class_random_list}}planet_class_random_list ==
 path: common/planet_classes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\planet_classes.cwt#L171 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5261,6 +5362,7 @@ path: common/planet_classes
 == {{anchor|planet_modifier}}planet_modifier ==
 path: common/planet_modifiers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\all_modifiers_consolidated.cwt#L128 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5278,6 +5380,7 @@ path: common/planet_modifiers
 == {{anchor|policy}}policy ==
 path: common/policies
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\policies.cwt#L43 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -5319,6 +5422,7 @@ path: common/policies
 == {{anchor|pop_can_flee_to_country}}pop_can_flee_to_country ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L268 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5328,6 +5432,7 @@ path: common/game_rules
 == {{anchor|pop_can_live_on_planet}}pop_can_live_on_planet ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L264 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5337,6 +5442,7 @@ path: common/game_rules
 == {{anchor|pop_eats_energy}}pop_eats_energy ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L344 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5346,6 +5452,7 @@ path: common/game_rules
 == {{anchor|pop_faction}}pop_faction ==
 path: common/pop_faction_types
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\pop_faction.cwt#L37 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -5451,6 +5558,7 @@ path: common/pop_faction_types
 == {{anchor|pop_has_no_happiness}}pop_has_no_happiness ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L336 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5460,6 +5568,7 @@ path: common/game_rules
 == {{anchor|precursors}}precursors ==
 path: common/precursor_civilizations
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L228 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5471,6 +5580,7 @@ path: common/precursor_civilizations
 == {{anchor|random_empire_name_format}}random_empire_name_format ==
 path: common/random_names
 Description  This block contains rules for picking a specific name format
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\names_consolidated.cwt#L330 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5492,6 +5602,7 @@ Description  This block contains rules for picking a specific name format
 == {{anchor|random_empire_name_part}}random_empire_name_part ==
 path: common/random_names
 Description  Define possible parts of empire name here, such as "Glorious Empire of". When generating random name for empire, format can refer to it via <key> and pick random part.
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\names_consolidated.cwt#L317 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5507,6 +5618,7 @@ Description  Define possible parts of empire name here, such as "Glorious Empire
 == {{anchor|relic}}relic ==
 path: common/relics
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\anomalies_and_archaeology.cwt#L107 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5540,6 +5652,7 @@ path: common/relics
 == {{anchor|resource}}resource ==
 path: common/strategic_resources
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\resources.cwt#L24 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5577,6 +5690,7 @@ path: common/strategic_resources
 == {{anchor|scripted_effect}}scripted_effect ==
 path: common/scripted_effects
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\scripted_effects_and_triggers.cwt#L15 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5586,6 +5700,7 @@ path: common/scripted_effects
 == {{anchor|scripted_loc}}scripted_loc ==
 path: common/scripted_loc
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\scripted_loc.cwt#L10 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -5601,6 +5716,7 @@ path: common/scripted_loc
 == {{anchor|scripted_trigger}}scripted_trigger ==
 path: common/scripted_triggers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\scripted_effects_and_triggers.cwt#L11 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5610,6 +5726,7 @@ path: common/scripted_triggers
 == {{anchor|section_template}}section_template ==
 path: common/section_templates
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\section_templates.cwt#L8 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -5681,6 +5798,7 @@ path: common/section_templates
 == {{anchor|sector_type}}sector_type ==
 path: common/sector_types
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L238 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5708,6 +5826,7 @@ path: common/sector_types
 == {{anchor|ship_behavior}}ship_behavior ==
 path: common/ship_behaviors
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ship_behaviors.cwt#L8 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5749,6 +5868,7 @@ path: common/ship_behaviors
 == {{anchor|ship_size}}ship_size ==
 path: common/ship_sizes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ship_sizes.cwt#L24 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -5892,6 +6012,7 @@ path: common/ship_sizes
 == {{anchor|should_abduct_pop}}should_abduct_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L256 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5901,6 +6022,7 @@ path: common/game_rules
 == {{anchor|should_apply_neighbor_rival_modifier}}should_apply_neighbor_rival_modifier ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L388 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5910,6 +6032,7 @@ path: common/game_rules
 == {{anchor|should_colony_be_destroyed_on_pc_change}}should_colony_be_destroyed_on_pc_change ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L396 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5919,6 +6042,7 @@ path: common/game_rules
 == {{anchor|should_kill_growing_pop}}should_kill_growing_pop ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L364 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5928,6 +6052,7 @@ path: common/game_rules
 == {{anchor|show_notification_for_ground_combat}}show_notification_for_ground_combat ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L384 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -5937,6 +6062,7 @@ path: common/game_rules
 == {{anchor|social_strata}}social_strata ==
 path: common/pop_categories
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\jobs_and_social_strata.cwt#L114 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -5992,6 +6118,7 @@ path: common/pop_categories
 == {{anchor|solar_system_initializer}}solar_system_initializer ==
 path: common/solar_system_initializers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\solar_system_initializers.cwt#L16 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -6089,6 +6216,7 @@ path: common/solar_system_initializers
 == {{anchor|solar_system_initializer_random_list}}solar_system_initializer_random_list ==
 path: common/solar_system_initializers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\solar_system_initializers.cwt#L301 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6100,6 +6228,7 @@ path: common/solar_system_initializers
 == {{anchor|special_project}}special_project ==
 path: common/special_projects
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\special_projects.cwt#L20 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6195,6 +6324,7 @@ path: common/special_projects
 == {{anchor|species_archetype}}species_archetype ==
 path: common/species_archetypes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\species_consolidated.cwt#L66 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6212,6 +6342,7 @@ path: common/species_archetypes
 == {{anchor|species_class}}species_class ==
 path: common/species_classes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\species_consolidated.cwt#L82 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -6303,6 +6434,7 @@ path: common/species_classes
 == {{anchor|species_has_citizenship}}species_has_citizenship ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L252 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6312,6 +6444,7 @@ path: common/game_rules
 == {{anchor|species_name}}species_name ==
 path: common/species_names
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\names_consolidated.cwt#L350 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6333,6 +6466,7 @@ path: common/species_names
 == {{anchor|species_named_list}}species_named_list ==
 path: common/species_names
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\names_consolidated.cwt#L369 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6348,6 +6482,7 @@ path: common/species_names
 == {{anchor|species_rights}}species_rights ==
 path: common/species_rights
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\species_consolidated.cwt#L199 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6385,6 +6520,7 @@ path: common/species_rights
 == {{anchor|star_class}}star_class ==
 path: common/star_classes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\star_classes.cwt#L14 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6420,6 +6556,7 @@ path: common/star_classes
 == {{anchor|star_class_random_list}}star_class_random_list ==
 path: common/star_classes
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\star_classes.cwt#L44 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6433,6 +6570,7 @@ path: common/star_classes
 == {{anchor|starbase_building}}starbase_building ==
 path: common/starbase_buildings
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\starbases_consolidated.cwt#L33 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6488,6 +6626,7 @@ path: common/starbase_buildings
 == {{anchor|starbase_level}}starbase_level ==
 path: common/starbase_levels
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\starbases_consolidated.cwt#L202 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6515,6 +6654,7 @@ path: common/starbase_levels
 == {{anchor|starbase_module}}starbase_module ==
 path: common/starbase_modules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\starbases_consolidated.cwt#L119 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6572,6 +6712,7 @@ path: common/starbase_modules
 == {{anchor|starbase_type}}starbase_type ==
 path: common/starbase_types
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\starbases_consolidated.cwt#L230 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -6621,6 +6762,7 @@ path: common/starbase_types
 == {{anchor|start_screen_message}}start_screen_message ==
 path: common/start_screen_messages
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L216 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6634,6 +6776,7 @@ path: common/start_screen_messages
 == {{anchor|static_modifier}}static_modifier ==
 path: common/static_modifiers
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\all_modifiers_consolidated.cwt#L44 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6657,6 +6800,7 @@ path: common/static_modifiers
 == {{anchor|subject_can_expand}}subject_can_expand ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L308 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6666,6 +6810,7 @@ path: common/game_rules
 == {{anchor|subject_type}}subject_type ==
 path: common/subjects
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\subjects.cwt#L7 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6725,6 +6870,7 @@ path: common/subjects
 == {{anchor|system_blocks_sensors}}system_blocks_sensors ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L468 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6734,6 +6880,7 @@ path: common/game_rules
 == {{anchor|system_type}}system_type ==
 path: common/system_types
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\00_small_types_consolidated.cwt#L198 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6749,6 +6896,7 @@ path: common/system_types
 == {{anchor|technology}}technology ==
 path: common/technology
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\technologies_consolidated.cwt#L27 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -6846,6 +6994,7 @@ path: common/technology
 == {{anchor|technology_category}}technology_category ==
 path: common/technology/category
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\technologies_consolidated.cwt#L208 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6855,6 +7004,7 @@ path: common/technology/category
 == {{anchor|technology_tier}}technology_tier ==
 path: common/technology/tier
 Description  This should be a number
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\technologies_consolidated.cwt#L202 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -6864,6 +7014,7 @@ Description  This should be a number
 == {{anchor|terraform_link}}terraform_link ==
 path: common/terraform
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\terraform_links.cwt#L7 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6891,6 +7042,7 @@ path: common/terraform
 == {{anchor|tradition}}tradition ==
 path: common/traditions
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ascension_perks_and_traditions.cwt#L69 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6914,6 +7066,7 @@ path: common/traditions
 == {{anchor|tradition_category}}tradition_category ==
 path: common/tradition_categories
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\ascension_perks_and_traditions.cwt#L139 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -6931,6 +7084,7 @@ path: common/tradition_categories
 == {{anchor|trait}}trait ==
 path: common/traits
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\traits.cwt#L31 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -7046,6 +7200,7 @@ path: common/traits
 == {{anchor|war_goal}}war_goal ==
 path: common/war_goals
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\casus_belli_and_war_goals.cwt#L67 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -7091,6 +7246,7 @@ path: common/war_goals
 == {{anchor|will_anger_fallen_empire}}will_anger_fallen_empire ==
 path: common/game_rules
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\common\game_rules.cwt#L408 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -7102,6 +7258,7 @@ path: common/game_rules
 == {{anchor|event}}event ==
 path: events
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\events.cwt#L75 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="8" | field !! description !! required !! rhs
@@ -7345,6 +7502,7 @@ path: events
 == {{anchor|color_define}}color_define ==
 path: flags
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\flags\color_defines.cwt#L14 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -7378,6 +7536,7 @@ path: flags
 == {{anchor|randomizable_combo}}randomizable_combo ==
 path: flags
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\flags\color_defines.cwt#L49 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -7389,6 +7548,7 @@ path: flags
 == {{anchor|font}}font ==
 path: fonts
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\fonts\fonts.cwt#L10 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -7406,6 +7566,7 @@ path: fonts
 == {{anchor|asset_selector}}asset_selector ==
 path: gfx/portraits/asset_selectors
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\asset_selectors.cwt#L34 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -7613,6 +7774,7 @@ path: gfx/portraits/asset_selectors
 == {{anchor|light}}light ==
 path: gfx/lights
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\lights.cwt#L14 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -7672,6 +7834,7 @@ path: gfx/lights
 == {{anchor|model_animation}}model_animation ==
 path: gfx/models
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\model_entities.cwt#L355 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -7683,6 +7846,7 @@ path: gfx/models
 == {{anchor|model_entity}}model_entity ==
 path: gfx
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\model_entities.cwt#L52 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -7900,6 +8064,7 @@ path: gfx
 == {{anchor|model_mesh}}model_mesh ==
 path: gfx/models
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\model_entities.cwt#L324 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -7937,6 +8102,7 @@ path: gfx/models
 == {{anchor|particle}}particle ==
 path: gfx/particles
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\particles.cwt#L18 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -7950,6 +8116,7 @@ path: gfx/particles
 == {{anchor|particle_type}}particle_type ==
 path: gfx/particles
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\particles.cwt#L25 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="4" | field !! description !! required !! rhs
@@ -8351,6 +8518,7 @@ path: gfx/particles
 == {{anchor|pingmap}}pingmap ==
 path: gfx/pingmap
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\pingmap.cwt#L6 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -8368,6 +8536,7 @@ path: gfx/pingmap
 == {{anchor|planet_killer_animation}}planet_killer_animation ==
 path: gfx/projectiles/planet_destruction
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\projectiles.cwt#L75 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -8463,6 +8632,7 @@ path: gfx/projectiles/planet_destruction
 == {{anchor|portrait}}portrait ==
 path: gfx/portraits/portraits
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\portraits.cwt#L17 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -8482,6 +8652,7 @@ path: gfx/portraits/portraits
 == {{anchor|portrait_group}}portrait_group ==
 path: gfx/portraits/portraits
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\gfx\portraits.cwt#L30 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="5" | field !! description !! required !! rhs
@@ -8633,6 +8804,7 @@ path: gfx/portraits/portraits
 == {{anchor|projectile}}projectile ==
 path: gfx/projectiles
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\projectiles.cwt#L18 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -8696,6 +8868,7 @@ path: gfx/projectiles
 == {{anchor|bitmapfont}}bitmapfont ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\bitmapfonts.cwt#L65 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -8721,6 +8894,7 @@ path: interface
 == {{anchor|bitmapfont_override}}bitmapfont_override ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\bitmapfonts.cwt#L96 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -8744,6 +8918,7 @@ path: interface
 == {{anchor|gui_type}}gui_type ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\gui_types.cwt#L83 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -8755,6 +8930,7 @@ path: interface
 == {{anchor|piechart}}piechart ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\sprites.cwt#L153 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -8766,6 +8942,7 @@ path: interface
 == {{anchor|progressbartype}}progressbartype ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\sprites.cwt#L40 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -8799,6 +8976,7 @@ path: interface
 == {{anchor|sprite}}sprite ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\sprites.cwt#L67 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -8916,6 +9094,7 @@ path: interface
 == {{anchor|textcolors}}textcolors ==
 path: interface
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\interface\bitmapfonts.cwt#L57 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -8929,6 +9108,7 @@ path: interface
 == {{anchor|map_galaxy_setting}}map_galaxy_setting ==
 path: map/galaxy
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\map\map.cwt#L22 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -8960,6 +9140,7 @@ path: map/galaxy
 == {{anchor|map_setup_scenerio}}map_setup_scenerio ==
 path: map/setup_scenerios
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\map\map.cwt#L74 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -9073,6 +9254,7 @@ path: map/setup_scenerios
 == {{anchor|music}}music ==
 path: music
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\music\music.cwt#L18 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -9086,6 +9268,7 @@ path: music
 == {{anchor|song}}song ==
 path: music
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\music\music.cwt#L15 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -9097,6 +9280,7 @@ path: music
 == {{anchor|prescripted_country}}prescripted_country ==
 path: prescripted_countries
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\prescripted_countries\prescripted_countries.cwt#L7 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -9258,6 +9442,7 @@ path: prescripted_countries
 == {{anchor|sound}}sound ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L179 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -9275,6 +9460,7 @@ path: sound
 == {{anchor|sound_category}}sound_category ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L47 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -9304,6 +9490,7 @@ path: sound
 == {{anchor|sound_effect}}sound_effect ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L116 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="3" | field !! description !! required !! rhs
@@ -9361,6 +9548,7 @@ path: sound
 == {{anchor|sound_falloff}}sound_falloff ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L106 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -9378,6 +9566,7 @@ path: sound
 == {{anchor|sound_group}}sound_group ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L65 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="2" | field !! description !! required !! rhs
@@ -9403,6 +9592,7 @@ path: sound
 == {{anchor|sound_master_compressor}}sound_master_compressor ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L87 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs
@@ -9422,6 +9612,7 @@ path: sound
 == {{anchor|sound_music_compressor}}sound_music_compressor ==
 path: sound
 
+[https://www.github.com/tboby/cwtools-stellaris-config/edit/master\config\sound\sound.cwt#L96 Edit this type]
 {| class="wikitable"
 |-
 ! colspan="1" | field !! description !! required !! rhs

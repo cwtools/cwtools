@@ -34,11 +34,12 @@ let printTypeRule ((typeName : string), ((rule, options) : NewRule)) =
 
 [<EntryPoint>]
 let main argv =
-    let configPath =
+    let configPath, sourceRepoUrl =
         match argv with
-        | [||] -> "./testconfig/"
-        | [|x|] -> x
-        | _ -> "./testconfig/"
+        | [||] -> failwith "Expected two arguments, a path to rules, and an optional URL to the source repository"
+        | [|x|] -> x, None
+        | [|x; y|] -> x, Some y
+        | _ -> "./testconfig/", None
     // let configPath = "./testconfig"
     let rulesFiles = getConfigFiles(configPath)
     rulesFiles |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
@@ -51,10 +52,12 @@ let main argv =
         rulesFiles
             |> List.filter (fun (fn, ft) -> Path.GetExtension fn = ".cwt" )
             |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) scopeManager.AllScopes scopeManager.AnyScope
+    let urlCreator = sourceRepoUrl |> Option.map (fun sru -> HtmlTemplates.getURLForPosition configPath (sprintf "%s/edit/master" sru))
+    // let urlCreator = HtmlTemplates.getURLForPosition configPath "https://www.github.com/tboby/cwtools-stellaris-config/edit/master"
     let renderedHtml = HtmlTemplates.rootRules rules enums types
     let renderedWikitext = HtmlTemplates.rootRulesWT rules enums types
-    File.WriteAllText ("output.html", renderedHtml)
-    File.WriteAllText ("output.txt", renderedWikitext)
+    File.WriteAllText ("output.html", renderedHtml urlCreator)
+    File.WriteAllText ("output.txt", renderedWikitext urlCreator)
     // printfn "The rendered html document: \n\n%s\n" renderedHtml
 
 
