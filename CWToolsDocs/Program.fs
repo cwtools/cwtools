@@ -52,7 +52,9 @@ let main argv =
             |> List.filter (fun (fn, ft) -> Path.GetExtension fn = ".cwt" )
             |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) scopeManager.AllScopes scopeManager.AnyScope
     let renderedHtml = HtmlTemplates.rootRules rules enums types
+    let renderedWikitext = HtmlTemplates.rootRulesWT rules enums types
     File.WriteAllText ("output.html", renderedHtml)
+    File.WriteAllText ("output.txt", renderedWikitext)
     // printfn "The rendered html document: \n\n%s\n" renderedHtml
 
 
