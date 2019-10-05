@@ -253,6 +253,11 @@ module CWToolsCLI =
         |Some file ->
             File.WriteAllText(file, result)
         |None -> printf "%s" result
+        match errors.Length with
+        | 0 -> 0
+        | x -> 1
+
+
     let parse file =
         match CKParser.parseFile file with
         |Success(_,_,_) -> true, ""
@@ -294,11 +299,11 @@ module CWToolsCLI =
         let cachePath = results.TryGetResult <@ CacheFile @>
         let rulesPath = results.TryGetResult <@ RulesPath @>
         match results.GetSubCommand() with
-        | List r -> list game directory scope modFilter docsPath r
+        | List r -> list game directory scope modFilter docsPath r; 0
         | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath r
         | Directory _
-        | Serialize _ -> serialize game [{path = directory; name = "undefined"}] scope modFilter docsPath
-        | Game _ -> failwith "internal error: this code should never be reached"
+        | Serialize _ -> serialize game [{path = directory; name = "undefined"}] scope modFilter docsPath ;0
+        | Game _ -> failwith "internal error: this code should never be reached"; 1
 
         //printfn "%A" argv
-        0 // return an integer exit code
+        // return an integer exit code
