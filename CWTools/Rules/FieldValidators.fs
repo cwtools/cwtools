@@ -81,7 +81,7 @@ module internal FieldValidators =
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
-    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
+    let checkValidValue (varMap : Collections.Map<_,StringSet>) (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
         if firstCharEqualsAmp id then errors else
                 match (vt) with
                 // | ValueType.Scalar ->
@@ -132,8 +132,17 @@ module internal FieldValidators =
                         (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[1] leafornode) |>
                         (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[2] leafornode) |>
                         (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[3] leafornode)
+                | ValueType.STLNameFormat var ->
+                    match varMap.TryFind var with
+                    | Some vars ->
+                        let refs = System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>") |> Seq.cast<System.Text.RegularExpressions.Match>
+                        let refs = refs |> Seq.map (fun m -> m.Groups.[1]) |> Seq.cast<Text.RegularExpressions.Capture> |> Seq.map (fun c -> c.Value)
+                        let res = refs |> Seq.exists (vars.Contains >> not)
+                        if res then inv (ErrorCodes.CustomError (sprintf "Expecting a defined parts list of %s" var) Severity.Error) leafornode <&&&> errors else OK
+                    | None -> errors
 
-    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>)  (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
+
+    let checkValidValueNE (varMap : Collections.Map<_,StringSet>) (enumsMap : Collections.Map<_, string * Set<_, _>>)  (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
             // | ValueType.Scalar ->
@@ -177,6 +186,13 @@ module internal FieldValidators =
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[1] &&
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[2] &&
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[3]
+            | ValueType.STLNameFormat var ->
+                match varMap.TryFind var with
+                | Some vars ->
+                    let refs = System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>") |> Seq.cast<System.Text.RegularExpressions.Match>
+                    let res = refs |> Seq.map (fun m -> m.Groups.[1]) |> Seq.cast<Text.RegularExpressions.Capture> |> Seq.map (fun c -> c.Value) |> Seq.exists (vars.Contains >> not)
+                    res |> not
+                | None -> false
 
         )
         || firstCharEqualsAmp id
@@ -432,7 +448,7 @@ module internal FieldValidators =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then errors else
             match field with
             |ValueField vt ->
-                checkValidValue p.enumsMap p.localisation severity vt id key leafornode errors
+                checkValidValue p.varMap p.enumsMap p.localisation severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap severity t id key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
             |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
@@ -455,7 +471,7 @@ module internal FieldValidators =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then true else
             match field with
             |ValueField vt ->
-                checkValidValueNE p.enumsMap p.localisation severity vt id key
+                checkValidValueNE p.varMap p.enumsMap p.localisation severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap severity t id key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
             |LocalisationField synced -> true

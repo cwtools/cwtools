@@ -264,7 +264,7 @@ type RuleValidationService
         (applyToAll rules (checkCardinality startNode))
 
     and applyValueField severity (vt : CWTools.Rules.ValueType) (leaf : Leaf) =
-        FieldValidators.checkValidValue enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
+        FieldValidators.checkValidValue varMap enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
 
     and applyLeafValueRule (ctx : RuleContext) (options : Options) (rule : NewField) (leafvalue : LeafValue) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)

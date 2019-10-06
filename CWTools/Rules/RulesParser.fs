@@ -52,6 +52,7 @@ type ValueType =
 | CK2DNA
 | CK2DNAProperty
 | IRFamilyName
+| STLNameFormat of variable : string
     override x.ToString() =
         match x with
         // | Scalar -> "Scalar"
@@ -65,6 +66,7 @@ type ValueType =
         | CK2DNA -> "CK2DNA"
         | CK2DNAProperty -> "CK2DNAProperty"
         | IRFamilyName -> "IRFamilyName"
+        | STLNameFormat x -> sprintf "STLNameFormat %s" x
 
 [<Struct>]
 type SpecificValue = |SpecificValue of valuec : StringTokens
@@ -469,6 +471,11 @@ module RulesParser =
             match getSettingFromString x "alias_keys_field" with
             | Some aliasKey ->
                 AliasValueKeysField aliasKey
+            | None -> ScalarField (ScalarValue)
+        | x when x.StartsWith "stellaris_name_format" ->
+            match getSettingFromString x "stellaris_name_format" with
+            | Some aliasKey ->
+                ValueField (STLNameFormat aliasKey)
             | None -> ScalarField (ScalarValue)
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
