@@ -16,10 +16,10 @@ module Validator =
         {
             category : string
             error : string
-            position : string
+            position : CWTools.Utilities.Position.range
             severity : Severity
         }
-        override x.ToString() = x.category + ", " + x.error + ", " + x.position
+        override x.ToString() = x.category + ", " + x.error + ", " + x.position.ToString()
     type ValidationViewModelParseRow =
         {
             file : string
@@ -85,13 +85,13 @@ module Validator =
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun (s,c,n,l,e, _, _) -> {category = s.GetType().Name ; error = e; position = n.ToString(); severity = c})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun (s,c,n,l,e, _, _) -> {category = s.GetType().Name ; error = e; position = n; severity = c})
         member __.allFileList =
             game.AllFiles()
                 |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
         member val scriptedTriggerList = game.ScriptedTriggers
         member val scriptedEffectList = game.ScriptedEffects
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun (s,c,n,l,e,_,_) -> {category = s.GetType().Name ; error = e; position = n.ToString(); severity = c})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun (s,c,n,l,e,_,_) -> {category = s.GetType().Name ; error = e; position = n; severity = c})
         member val references = game.References
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
@@ -102,7 +102,7 @@ module Validator =
             rootDirectories = [ {path = dir; name = "undefined"}]
             modFilter = Some modFilter
             validation = {
-                validateVanilla = false
+                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
                 experimental = true
                 langs = langs
             }
@@ -115,7 +115,7 @@ module Validator =
             rootDirectories = [ {path = dir; name = "undefined"}]
             modFilter = Some modFilter
             validation = {
-                validateVanilla = false
+                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
                 experimental = true
                 langs = langs
             }
@@ -133,7 +133,7 @@ module Validator =
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun (s,c,n,l,e, _, _) -> {category = s.GetType().Name ; error = e; position = n.ToString(); severity = c})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun (s,c,n,l,e, _, _) -> {category = s.GetType().Name ; error = e; position = n; severity = c})
         member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun (s,c,n,l,e,_, _) -> {category = s.GetType().Name ; error = e; position = n.ToString(); severity = c})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun (s,c,n,l,e,_, _) -> {category = s.GetType().Name ; error = e; position = n; severity = c})
         member __.recompute() = game.ForceRecompute()

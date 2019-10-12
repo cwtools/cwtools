@@ -6,6 +6,10 @@
     <PaketCommand>dotnet paket</PaketCommand>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\paket-files\giraffe-fsharp\Giraffe\src\Giraffe\GiraffeViewEngine.fs">
+      <Paket>True</Paket>
+      <Link>paket-files/GiraffeViewEngine.fs</Link>
+    </Compile>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>

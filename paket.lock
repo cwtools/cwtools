@@ -96,6 +96,7 @@ NUGET
       System.Threading.Timer (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= uap10.0) (< uap10.1))
       System.Xml.ReaderWriter (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.1) (< netstandard1.2) (< win8)) (&& (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= net46) (< netstandard1.4)) (&& (>= netstandard1.0) (< portable-net45+win8+wpa81) (< wp8)) (&& (>= uap10.0) (< uap10.1))
       System.Xml.XDocument (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.1) (< netstandard1.2) (< win8)) (&& (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= netstandard1.0) (< portable-net45+win8+wpa81) (< wp8)) (&& (>= uap10.0) (< uap10.1))
+    Pastel (1.3.1)
     runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.3) - restriction: && (< monoandroid) (< net46) (>= netstandard2.0) (< xamarinios) (< xamarinmac)
     runtime.debian.9-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.3) - restriction: && (< monoandroid) (< net46) (>= netstandard2.0) (< xamarinios) (< xamarinmac)
     runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.3) - restriction: && (< monoandroid) (< net46) (>= netstandard2.0) (< xamarinios) (< xamarinmac)
@@ -616,4 +617,4 @@ NUGET
       System.Xml.ReaderWriter (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
 GITHUB
   remote: giraffe-fsharp/Giraffe
-    src/Giraffe/GiraffeViewEngine.fs (c9e135d7c26d6418ac3eb7e1f2ab5b949ad08a7d)
+    src/Giraffe/GiraffeViewEngine.fs (3d8fbb25d9404573f598c65e0913fd069d90701e)
