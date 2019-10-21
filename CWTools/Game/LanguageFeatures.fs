@@ -49,8 +49,8 @@ module LanguageFeatures =
             match (info.GetInfo)(pos, e) with
             | Some (ctx, _) ->
                 completion.Complete(pos, e, Some ctx)
-            | _ ->
-                []
+            | None ->
+                completion.Complete(pos, e, None)
         | Some e, Some completion, None ->
             completion.Complete(pos, e, None)
         | _, _, _ -> []

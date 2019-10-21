@@ -452,6 +452,26 @@ let testsv =
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
 
+        ftestCase "test root completion" <| fun () ->
+            let input =    "\n\
+                            #test\n\
+                            \n\
+                            create_starbase = {\n\
+                            owner = this \n\
+                            }\n"
+            let pos = mkPos 1 0
+            let split = input.Split('\n')
+            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
+            match CKParser.parseString filetext "test.txt" with
+            |Success(r, _, _) ->
+                let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let expected = ["create_starbase"; "create_starbase"] |> Seq.sort
+                Expect.sequenceEqual suggestions expected "Completion should match"
+            |Failure(e, _, _) -> Expect.isTrue false e
+
         testCase "test test ship_behavior" <| fun () ->
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
