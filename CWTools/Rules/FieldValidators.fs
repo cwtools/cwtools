@@ -374,9 +374,9 @@ module internal FieldValidators =
         |ValueFound -> false
         |_ -> true
 
-    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key leafornode errors =
+    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) key leafornode errors =
         let scope = ctx.scopes
-
+        if firstCharEqualsAmp id then errors else
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
@@ -387,8 +387,9 @@ module internal FieldValidators =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key =
+    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) key =
         let scope = ctx.scopes
+        if firstCharEqualsAmp id then true else
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
         |Some f, _, _ -> min <= f && max >= f
@@ -456,7 +457,7 @@ module internal FieldValidators =
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap severity v id key leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
+            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max id key leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
             |ScalarField _ -> errors
             |SpecificField (SpecificValue v) -> if id = v.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(v.normal))) severity) leafornode <&&&> errors
@@ -479,7 +480,7 @@ module internal FieldValidators =
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v id key
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max id key
             |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
             |ScalarField (_) -> true
