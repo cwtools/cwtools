@@ -17,9 +17,10 @@ open CWTools.Process
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Utilities.Utils
+open FSharp.Collections.ParallelSeq
 
 module CustomGameFunctions =
-    type GameObject = GameObject<ComputedData, Lookup>
+    type GameObject = GameObject<JominiComputedData, JominiLookup>
     let defaultContext =
         { Root = scopeManager.AnyScope; From = []; Scopes = [] }
     let noneContext =
@@ -169,10 +170,16 @@ module CustomGameFunctions =
         // eprintfn "crh %A" ts
         addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
-    let refreshConfigBeforeFirstTypesHook (lookup : Lookup) _ _ =
+    let refreshConfigBeforeFirstTypesHook (lookup : JominiLookup) (resources : IResourceAPI<JominiComputedData>) _ =
         let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
+        lookup.ScriptedEffectKeys <- (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+                                        |> List.ofSeq |> List.collect id)
+        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys }
+        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
+            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.values)
+                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
+                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
@@ -255,7 +262,7 @@ module CustomGameFunctions =
             eventTargetLinks = irEventTargetLinks
         }
 
-type CustomSettings = GameSetupSettings<Lookup>
+type CustomSettings = GameSetupSettings<JominiLookup>
 open CustomGameFunctions
 open CWTools.Localisation.Custom
 type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
@@ -285,14 +292,14 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         validation = setupSettings.validation
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
-        initialLookup = Lookup()
+        initialLookup = JominiLookup()
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
     let locCommands() = []
     let settings = {
         settings with
-            initialLookup = Lookup()
+            initialLookup = JominiLookup()
             }
     let changeScope = Scopes.createJominiChangeScope CWTools.Process.Scopes.IR.oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
@@ -312,9 +319,9 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
     }
     let scriptFolders = []
 
-    let game = GameObject<ComputedData, Lookup>.CreateGame
-                ((settings, gameFolderName, scriptFolders, Compute.computeIRData,
-                    Compute.computeIRDataUpdate,
+    let game = GameObject<JominiComputedData, JominiLookup>.CreateGame
+                ((settings, gameFolderName, scriptFolders, Compute.Jomini.computeJominiData,
+                    Compute.Jomini.computeJominiDataUpdate,
                      (CustomLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      CustomGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      CustomGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
@@ -339,7 +346,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<ComputedData> with
+    interface IGame<JominiComputedData> with
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =

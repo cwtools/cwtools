@@ -321,8 +321,8 @@ type IRGame(setupSettings : IRSettings) =
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
     }
     let game = GameObject<IRComputedData, IRLookup>.CreateGame
-                ((settings, "imperator", scriptFolders, Compute.computeIRData,
-                    Compute.computeIRDataUpdate,
+                ((settings, "imperator", scriptFolders, Compute.Jomini.computeJominiData,
+                    Compute.Jomini.computeJominiDataUpdate,
                      (IRLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
                      IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
