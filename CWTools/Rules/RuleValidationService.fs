@@ -226,7 +226,10 @@ type RuleValidationService
                 let leafcount = clause.Leaves |> Seq.filter (fun leaf -> leaf.KeyId.lower = key.lower) |> Seq.length
                 let childcount = clause.Nodes |> Seq.filter (fun child -> child.KeyId.lower = key.lower) |> Seq.length
                 let total = leafcount + childcount
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" (StringResource.stringManager.GetStringForID key.normal) opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |NodeRule(AliasField(_), _), _
@@ -234,22 +237,34 @@ type RuleValidationService
             |LeafValueRule(AliasField(_)), _ -> innerErrors
             |NodeRule(l, _), opts ->
                 let total = clause.Nodes |> Seq.filter (fun child -> FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId.lower child.Key) |> Seq.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafRule(l, r), opts ->
                 let total = clause.Leaves |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key) |> Seq.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafValueRule(l), opts ->
                 let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key) |> List.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |ValueClauseRule(_), opts ->
                 let total = clause.ValueClauses |> Seq.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing clause, expecting at least %i" opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing clause, expecting at least %i" opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many clauses, expecting at most %i" opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |_ -> innerErrors

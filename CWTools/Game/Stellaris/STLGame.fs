@@ -107,13 +107,13 @@ module STLGameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
+            {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
     let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =
             let scriptedOptions (effect : ScriptedEffect) =
-                {min = 0; max = 100; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false; referenceDetails = None}
+                {min = 0; max = 100; strictMin = true; leafvalue = false; description = Some effect.Comments; pushScope = None; replaceScopes = None; severity = None; requiredScopes = effect.Scopes; comparison = false; referenceDetails = None}
             let getAllScriptedEffects =
                 lookup.onlyScriptedEffects |> List.choose (function | :? ScriptedEffect as se -> Some se |_ -> None)
                                                 |> List.map (fun se -> AliasRule("effect", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField se.Name, ValueField(ValueType.Bool)), scriptedOptions se)))

@@ -138,3 +138,38 @@ country_event = {
         effect_alias_test = not_real
     }
 }
+
+## Cardinality test
+country_event = {
+    option = {
+        cardinality_tests_none = {
+
+        }
+        #error
+        cardinality_tests_none = {
+            test_none
+        }
+        cardinality_tests_one_min = {
+            test_one_min
+        }
+        cardinality_tests_one_min_strict = {
+            test_one_min_strict
+        }
+        #error
+        cardinality_tests_two_min = {
+            test_two_min
+        }
+        #error
+        cardinality_tests_two_min_strict = {
+            test_two_min_strict
+        }
+        cardinality_tests_two_min = {
+            test_two_min
+            test_two_min
+        }
+        cardinality_tests_two_min_strict = {
+            test_two_min_strict
+            test_two_min_strict
+        }
+    }
+}

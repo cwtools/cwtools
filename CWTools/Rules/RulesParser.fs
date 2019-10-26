@@ -24,6 +24,7 @@ type ReplaceScopes = {
 type Options = {
     min : int
     max : int
+    strictMin : bool
     leafvalue : bool
     description : string option
     pushScope : Scope option
@@ -195,7 +196,7 @@ module RulesParser =
         |"information" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let defaultOptions = { min = 0; max = 1000; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
     let requiredSingle : Options = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
@@ -326,17 +327,19 @@ module RulesParser =
 
 
     let getOptionsFromComments (parseScope) (allScopes) (anyScope) (operator : Operator) (comments : string list) =
-        let min, max =
+        let min, max, strictmin =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             | Some c ->
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
                 try
-                    match nums.[0], nums.[1] with
-                    | min, "inf" -> (int min), cardinalityDefaultMaximum
-                    | min, max -> (int min), (int max)
+                    let minText, strictMin =
+                        if nums.[0].StartsWith "~" then nums.[0].Substring(1), false else nums.[0], true
+                    match minText, nums.[1] with
+                    | min, "inf" -> (int min), cardinalityDefaultMaximum, strictMin
+                    | min, max -> (int min), (int max), strictMin
                 with
-                | _ -> 1, 1
-            | None -> 1, 1
+                | _ -> 1, 1, true
+            | None -> 1, 1, true
         let description =
             match comments |> List.tryFind (fun s -> s.StartsWith "##") with
             | Some d -> Some (d.Trim('#'))
@@ -365,7 +368,7 @@ module RulesParser =
                 | Some s -> s.Substring(s.IndexOf "=" + 1).Trim()|> (fun s -> false, s) |> Some
                 | None -> None
         let comparison = operator = Operator.EqualEqual
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails }
+        { min = min; max = max; strictMin = strictmin; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails }
 
     let processKey parseScope anyScope =
         function
@@ -524,8 +527,8 @@ module RulesParser =
 
 
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; strictMin = true; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; strictMin = true; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
 
     let configLeaf processChildConfig (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
