@@ -452,7 +452,7 @@ let testsv =
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
 
-        ftestCase "test root completion" <| fun () ->
+        testCase "test root completion" <| fun () ->
             let input =    "\n\
                             #test\n\
                             \n\

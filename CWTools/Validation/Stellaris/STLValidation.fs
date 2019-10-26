@@ -437,50 +437,66 @@ module STLValidation =
             ])
         let weaponModifiers = weaponTags |> List.map (fun l -> l.Value.ToRawString())
                                              |> List.collect weaponTagsModifierCreate
+        let econCategoryTriggeredModifierCreate (modType : string) (res : string) (node : Node) =
+            let triggeredCat = node.TagText "key"
+            seq {
+                match node.Child "modifier_types" with
+                | Some mt ->
+                        if mt.LeafValues |> Seq.exists (fun lv -> lv.Key == "mult") then
+                            yield {ActualModifier.tag = triggeredCat+res+modType+"_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                        if mt.LeafValues |> Seq.exists (fun lv -> lv.Key == "add") then
+                            yield {ActualModifier.tag = triggeredCat+res+modType+"_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                | None -> ()
+            }
 
+        let econCategoryModifierCreateGenerator (node : Node) =
+            let econCat = node.Key
+            (fun res ->
+                [
+                    match node.Child "generate_mult_modifiers" with
+                    | Some gen ->
+                        if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "cost") then
+                            yield {ActualModifier.tag = econCat+res+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                        if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "produces") then
+                            yield {tag = econCat+res+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                        if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "upkeep") then
+                            yield {tag = econCat+res+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                    | None -> ()
+                    match node.Child "generate_add_modifiers" with
+                    | Some gen ->
+                        if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "cost") then
+                            yield {ActualModifier.tag = econCat+res+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                        if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "produces") then
+                            yield {ActualModifier.tag = econCat+res+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                        if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "upkeep") then
+                            yield {ActualModifier.tag = econCat+res+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                        else ()
+                    | None -> ()
+                    yield! (node.Childs "triggered_upkeep_modifier" |> Seq.collect (econCategoryTriggeredModifierCreate "_upkeep" res))
+                    yield! (node.Childs "triggered_cost_modifier" |> Seq.collect (econCategoryTriggeredModifierCreate "_cost" res))
+                    yield! (node.Childs "triggered_produces_modifier" |> Seq.collect (econCategoryTriggeredModifierCreate "_produces" res))
+                ]
+            )
         let economicCategories = es.GlobMatchChildren("**/common/economic_categories/*.txt")
-        let costExtra = economicCategories |> Seq.collect (fun n -> n.Childs "triggered_cost_modifier" |> Seq.map (fun c -> c.TagText "key"))
-        let producesExtra = economicCategories |> Seq.collect (fun n -> n.Childs "triggered_produces_modifier" |> Seq.map (fun c -> c.TagText "key"))
-        let upkeepExtra = economicCategories |> Seq.collect (fun n -> n.Childs "triggered_upkeep_modifier" |> Seq.map (fun c -> c.TagText "key"))
-        let allCats = economicCategories |> List.map (fun f -> f.Key)
+        let baseEconCategoryModifiersCreates = economicCategories |> List.map econCategoryModifierCreateGenerator
         let stratres = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
         let srKeys = stratres |> List.map (fun f -> f.Key)
-        let resourceModifiersCreate prefix cost produces upkeep =
-            (fun k ->
-            [
-                if cost then
-                    yield {ActualModifier.tag = prefix+k+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
-                    yield {tag = prefix+k+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
-                else ()
-                if produces then
-                    yield {tag = prefix+k+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
-                    yield {tag = prefix+k+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
-                else ()
-                if upkeep then
-                    yield {tag = prefix+k+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
-                    yield {tag = prefix+k+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
-                else ()
-            ]
-            )
-        let globalEconomicModifierCreate =
-            [
-                yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate ec true true true ""))
-                yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true ""))
-                yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true ""))
-                yield! (upkeepExtra |> Seq.collect (fun ec -> resourceModifiersCreate ec true true true ""))
-            ]
         let srModifierCreate =
             (fun k ->
             [
                 yield {ActualModifier.tag = "country_resource_max_"+k+"_add"; category = modifierCategoryManager.ParseModifier() "Country" }
-                yield! (allCats |> List.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
-                yield! (costExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
-                yield! (producesExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
-                yield! (upkeepExtra |> Seq.collect (fun ec -> resourceModifiersCreate (ec + "_") true true true k))
+                yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f (k)))
+                yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f ("_"+k)))
             ])
 
-        let rModifiers = globalEconomicModifierCreate
-        let srModifiers = srKeys |> List.collect srModifierCreate
+        let srModifiers = (baseEconCategoryModifiersCreates |> List.collect (fun f -> f "")) @ (srKeys |> List.collect srModifierCreate)
 
         let pop_cats = es.GlobMatchChildren("**/common/pop_categories/*.txt") |> List.map (fun f -> f.Key)
         let popCatModifierCreate =
@@ -533,7 +549,7 @@ module STLValidation =
         let popEthicModifiers = popEthicKeys |> List.map (fun k -> { ActualModifier.tag = "pop_" + k + "_attraction_mult"; category = modifierCategoryManager.ParseModifier() "Pop"})
         let techCategoryKeys = es.GlobMatchChildren("**/common/technology/category/*.txt") |> List.map (fun s -> s.Key)
         let techCatModifiers = techCategoryKeys |> List.map (fun k -> { ActualModifier.tag = "category_"+  k + "_research_speed_mult"; category = modifierCategoryManager.ParseModifier() "Country"})
-        shipModifiers @  weaponModifiers @ rModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
+        shipModifiers @  weaponModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
                     @ districtModifiers @ popEthicModifiers @ techCatModifiers
 
     let findAllSavedEventTargets (event : Node) =
