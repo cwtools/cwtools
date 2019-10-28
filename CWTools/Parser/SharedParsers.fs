@@ -52,7 +52,7 @@ module internal SharedParsers =
     let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'|]
     let isAnyofidCharArray = isAnyOf idCharArray
     let isidchar = fun c -> isLetter c || isDigit c || isAnyofidCharArray c
-    let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'|])
+    let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'; '^'|])
     let isAnyValueChar = isAnyOf valueCharArray
     let isvaluechar = fun c -> isLetter c || isDigit c || isAnyValueChar c
 
