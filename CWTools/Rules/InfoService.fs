@@ -389,10 +389,15 @@ type InfoService
         let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule) =
             match field with
             |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+            |LeafRule (_, LocalisationField _) -> ctx, (Some o, Some ("localisation", leaf.ValueText), Some (LeafC leaf))
             |LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+            |LeafRule (LocalisationField _, _) -> ctx, (Some o, Some ("localisation", leaf.Key), Some (LeafC leaf))
             |_ -> ctx, (Some o, None, Some (LeafC leaf))
-        let fLeafValue (ctx, _) (leafvalue : LeafValue) (_, o : Options) =
-            ctx, (Some o, None, Some (LeafValueC leafvalue))
+        let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) =
+            match field with
+            |LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
+            |LeafValueRule (LocalisationField _) -> ctx, (Some o, Some ("localisation", leafvalue.Key), Some (LeafValueC leafvalue))
+            |_ -> ctx, (Some o, None, Some (LeafValueC leafvalue))
         let fComment (ctx, _) _ _ = ctx, (None, None, None)
         //TODO: Actually implement value clause
         let fValueClause (ctx, _) _ _ = ctx, (None, None, None)
@@ -444,6 +449,7 @@ type InfoService
                 let typevalue = node.TagText namefield
                 ctx, (Some options, Some (typename, typevalue), Some (NodeC node))
             | NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            | NodeRule (LocalisationField _, _) -> ctx, (Some options, Some ("localisation", node.Key), Some (NodeC node))
             | NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
             | _ -> newCtx, (Some options, None, Some (NodeC node))
 

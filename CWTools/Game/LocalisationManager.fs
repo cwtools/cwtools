@@ -49,3 +49,5 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap |> Map.toList |> List.map snd
     member __.LocalisationFileNames() : string list = localisationAPIMap |> Map.toList |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f (a.GetKeys |> List.length))
     member this.LocalisationKeys() = this.localisationKeys
+    member this.LocalisationEntries() =
+            allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList))

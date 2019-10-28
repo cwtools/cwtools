@@ -56,12 +56,19 @@ module LanguageFeatures =
         | _, _, _ -> []
 
 
-    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup) (pos : pos) (filepath : string) (filetext : string) =
+    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (localisationManager : LocalisationManager<_>) (lookup : Lookup) (lang : Lang) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
+            |Some (_, (_, Some ("localisation", tv), _)) ->
+                match localisationManager.LocalisationEntries() |> List.tryFind (fun (l, _) -> l = lang) with
+                | Some (_, entries) ->
+                    match entries |> List.tryFind (fun (k, _) -> k = tv) with
+                    | Some (_, entry) -> Some entry.position
+                    | _ -> None
+                | None -> None
             |Some (_, (_, Some (t, tv), _)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (tdi) -> if tdi.id = tv then Some tdi.range else None)
             |_ -> None
