@@ -250,12 +250,16 @@ module ProcessCore =
 
     type BaseProcess (maps : NodeTypeMap ) =
         let rec nodeWindowFun (context) (backtwo : Statement option, backone : Statement option, acc) (next : Statement) =
+            //eprintfn "%A %A %A" backtwo backone next
             match backtwo, backone, next with
             | (Some (Value (_, Clause _))), _, _
+            | (Some (Value (_))), (Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(_), Clause _, _))))), Value (_, Clause _)
             | _, (Some (Value (_, Clause _))), _ ->
                 backone, Some next, (processNodeInner context next)::acc
             | (Some (Value (_, v2))), (Some (Value (_, v1))), Value (pos, Clause sl) ->
-                None, None, (lookupVC pos context sl ([| v2 ;v1 |]))::acc
+                None, None, (lookupVC pos context sl ([| v2 ;v1 |]))::(acc |> List.skip 2)
+            // | (Some (Value (_, v2))), (Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(k), v1, _))))), Value (pos, Clause sl) ->
+            //     None, None,
             |_ -> backone, Some next, (processNodeInner context next)::acc
 
         and lookupN =
@@ -269,7 +273,8 @@ module ProcessCore =
         and lookupVC =
             (fun (pos : range) (context : LookupContext) (sl : Statement list) (keys) ->
                 let vc = ValueClause(keys, pos)
-                let children = sl |> List.map (fun e -> (processNodeInner context e))
+                //let children = sl |> List.map (fun e -> (processNodeInner context e))
+                let children = sl |> List.fold (nodeWindowFun context) (None, None, []) |> (fun (_, _, ls) -> ls |> List.rev)
                 vc.All <- children
                 ValueClauseC vc)
         and processNodeInner (c : LookupContext) statement =
@@ -280,7 +285,9 @@ module ProcessCore =
             | Comment(r, c) -> CommentC (r, c)
             | Value(pos, Value.Clause sl) -> lookupVC pos c sl [||]
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
-        member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
+        // member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
+        // member __.ProcessNode() = (fun key pos sl -> (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) (KeyValue(PosKeyValue(pos, KeyValueItem(Key(key) , Clause(sl), Operator.Equals)))))
+        member __.ProcessNode() = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) sl |> function |NodeC c -> c)
         member __.ProcessNode(entityType : EntityType) = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
 
     let baseMap = fun _ -> processNodeSimple, "", id;
