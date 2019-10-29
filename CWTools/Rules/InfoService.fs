@@ -686,6 +686,15 @@ type InfoService
                     newArr.Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel)
                     res.TryAdd(typename, newArr) |> ignore
                     res
+            |NodeRule (JominiGuiField, _) ->
+                let typename = "gui_type"
+                if res.ContainsKey(typename)
+                then res.[typename].Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel); res
+                else
+                    let newArr = ResizeArray<ReferenceDetails>()
+                    newArr.Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel)
+                    res.TryAdd(typename, newArr) |> ignore
+                    res
             | _ -> res
         let fValueClause (_) _ _ = res
         let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)

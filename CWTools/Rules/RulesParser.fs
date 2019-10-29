@@ -142,6 +142,7 @@ and NewField =
 | ValueScopeMarkerField of isInt : bool * minmax : (decimal * decimal)
 | ValueScopeField of isInt : bool * minmax : (decimal * decimal)
 | MarkerField of Marker
+| JominiGuiField
     override x.ToString() =
         match x with
         | ValueField vt -> sprintf "Field of %O" vt
@@ -502,6 +503,7 @@ module RulesParser =
                 |Some st when st.StartsWith "!" -> SubtypeRule (st.Substring(1), false, (innerRules))
                 |Some st -> SubtypeRule (st, true, (innerRules))
                 |None -> failwith (sprintf "Invalid subtype string %s" x)
+            |_ when node.KeyPrefixId.IsSome && node.ValuePrefixId.IsSome -> NodeRule(JominiGuiField, innerRules)
             |x -> NodeRule(processKey parseScope anyScope x, innerRules)
             // |"int" -> NodeRule(ValueField(ValueType.Int(Int32.MinValue, Int32.MaxValue)), innerRules)
             // |"float" -> NodeRule(ValueField(ValueType.Float(Double.MinValue, Double.MaxValue)), innerRules)
