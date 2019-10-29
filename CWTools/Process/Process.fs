@@ -40,6 +40,9 @@ type IClause =
     abstract member ValueClauses : ValueClause seq
     abstract member AllArray : Child array
     abstract member Clauses : IClause seq
+    abstract member ClauseList : IClause list
+    abstract member Tag : string -> Value option
+    abstract member TagText : string -> string
 
 
 and Leaf =
@@ -135,8 +138,8 @@ and ValueClause(keys : Value[], pos : range) =
     member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
-    member this.FirstKey = if _keys.Length > 0 then Some _keys.[0] else None
-    member this.SecondKey = if _keys.Length > 0 then Some _keys.[1] else None
+    member this.FirstKey = if _keys.Length > 0 then Some (StringResource.stringManager.GetStringForID _keys.[0].normal) else None
+    member this.SecondKey = if _keys.Length > 0 then Some (StringResource.stringManager.GetStringForID _keys.[1].normal) else None
     member __.Keys with get() = _keys
     member __.Keys with set(value) = _keys <- value
     member this.ToRaw : Statement list = this.All |>
@@ -152,7 +155,7 @@ and ValueClause(keys : Value[], pos : range) =
 
     static member Create() = ValueClause()
     interface IKeyPos with
-        member this.Key = "clause"
+        member this.Key = this.FirstKey |> Option.defaultValue "clause"
         member this.Position = this.Position
 
     interface IClause with
@@ -162,6 +165,9 @@ and ValueClause(keys : Value[], pos : range) =
         member this.ValueClauses = this.ValueClauses
         member this.AllArray = this.AllArray
         member this.Clauses = this.Clauses
+        member this.ClauseList = this.Clauses |> List.ofSeq
+        member this.TagText x = this.TagText x
+        member this.Tag x = this.Tag x
 
 
 and Node (key : string, pos : range) =
@@ -243,6 +249,9 @@ and Node (key : string, pos : range) =
         member this.ValueClauses = this.ValueClauses
         member this.AllArray = this.AllArray
         member this.Clauses = this.Clauses
+        member this.ClauseList = this.Clauses |> List.ofSeq
+        member this.TagText x = this.TagText x
+        member this.Tag x = this.Tag x
 
 module ProcessCore =
 
@@ -305,7 +314,7 @@ module ProcessCore =
         // member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
         // member __.ProcessNode() = (fun key pos sl -> (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) (KeyValue(PosKeyValue(pos, KeyValueItem(Key(key) , Clause(sl), Operator.Equals)))))
         member __.ProcessNode() = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) sl |> function |NodeC c -> c)
-        member __.ProcessNode(entityType : EntityType) = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
+        member __.ProcessNode(entityType : EntityType) = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = entityType}) sl |> function |NodeC c -> c)
 
     let baseMap = fun _ -> processNodeSimple, "", id;
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()

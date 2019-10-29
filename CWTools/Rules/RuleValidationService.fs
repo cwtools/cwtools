@@ -395,7 +395,7 @@ type RuleValidationService
         <&&>
         applyClauseField enforceCardinality options.severity newCtx rules valueclause errors
 
-    let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
+    let testSubtype (subtypes : SubTypeDefinition list) (node : IClause) =
         let results =
             subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
                      |> List.filter (fun st -> st.startsWith |> function | Some sw -> node.Key.StartsWith(sw, StringComparison.OrdinalIgnoreCase) | None -> true )

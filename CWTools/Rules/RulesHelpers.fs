@@ -10,13 +10,13 @@ open CWTools.Common
 
 let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : TypeDefinition list) (es : Entity list) =
     let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath), e.validate)
-    let getExplicitLocalisationKeys (entity : Node) (typeDef : TypeDefinition) =
+    let getExplicitLocalisationKeys (entity : IClause) (typeDef : TypeDefinition) =
         typeDef.localisation |> List.choose (fun ld -> ld.explicitField |> Option.map (fun ef -> ld.name, ef, ld.primary))
                              |> List.choose (fun (name, field, primary) -> entity.Tag field |> Option.map (fun v -> name, v.ToRawString(), primary))
     let getTypeInfo (def : TypeDefinition) =
         entities |> List.choose (fun (path, e, file, validate) -> if FieldValidators.checkPathDir def.pathOptions path file then Some (e.entity, file, validate) else None)
                  |> List.collect (fun (e, f, v) ->
-                        let inner (n : Node) =
+                        let inner (n : IClause) =
                             let rawSubtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd
                             let subtypes = rawSubtypes |> List.map (fun s -> def.name + "." + s)
                             let key =
@@ -26,21 +26,25 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : Ty
                             let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def, rawSubtypes))
                             if CWTools.Rules.FieldValidators.typekeyfilter def n.Key then result else []
                         let childres =
-                            let rec skiprootkey (srk : SkipRootKey list) (n : Node)=
+                            let rec skiprootkey (srk : SkipRootKey list) (n : IClause)=
+                                let childKey =
+                                    match n with
+                                    | :? ValueClause as vc -> vc.FirstKey |> Option.orElse (vc.SecondKey) |> Option.defaultValue "clause"
+                                    | _ -> n.Key
                                 match srk with
                                 |[] -> []
                                 |[SpecificKey key] ->
                                     //Too may levels deep
-                                    if n.Key == key then n.Children |> List.collect inner else []
+                                    if childKey == key then n.ClauseList |> List.collect inner else []
                                 |[AnyKey] ->
-                                    n.Children |> List.collect inner
+                                    n.ClauseList |> List.collect inner
                                 |MultipleKeys (keys, shouldMatch)::_ ->
-                                    if (keys |> List.exists ((==) n.Key)) <> (not shouldMatch) then n.Children |> List.collect inner else []
+                                    if (keys |> List.exists ((==) childKey)) <> (not shouldMatch) then n.ClauseList |> List.collect inner else []
                                 |(SpecificKey key)::tail ->
-                                    if n.Key == key then n.Children |> List.collect (skiprootkey tail) else []
+                                    if childKey == key then n.ClauseList |> List.collect (skiprootkey tail) else []
                                     // n.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
                                 |(AnyKey)::tail ->
-                                    n.Children |> List.collect (skiprootkey tail)
+                                    n.ClauseList |> List.collect (skiprootkey tail)
                                     // n.Children |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
                             match def.type_per_file, def.skipRootKey with
                             |true, _ ->
@@ -48,9 +52,9 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : Ty
                                 let subtypes = rawSubtypes |> List.map (fun s -> def.name + "." + s)
                                 def.name::subtypes |> List.map (fun s -> s, (v, Path.GetFileNameWithoutExtension f, e.Position, getExplicitLocalisationKeys e def, rawSubtypes))
                             |false, [] ->
-                                (e.Children |> List.collect inner)
+                                (e.Clauses |> List.ofSeq |> List.collect inner)
                             |false, srk ->
-                                e.Children |> List.collect (skiprootkey srk)
+                                e.Clauses |> List.ofSeq |> List.collect (skiprootkey srk)
                             // |false, _ ->
                         childres
                         @
