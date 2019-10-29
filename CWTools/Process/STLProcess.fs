@@ -129,8 +129,9 @@ module STLProcess =
             | LeafValueC lv ->
                 LeafValueC (LeafValue(lv.Value, lv.Position))
             | ValueClauseC vc ->
-                let newVC = ValueClause(vc.Position)
+                let newVC = ValueClause([||], vc.Position)
                 newVC.AllArray <- vc.AllArray |> Array.map mapChild
+                newVC.Keys <- vc.Keys
                 ValueClauseC newVC
             | CommentC c ->
                 CommentC c

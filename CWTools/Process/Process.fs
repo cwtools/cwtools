@@ -97,7 +97,8 @@ and LeafValue(value : Value, ?pos : range) =
 
 
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : (range * string) |LeafValueC of leafvalue : LeafValue |ValueClauseC of valueclause : ValueClause
-and ValueClause(pos : range) =
+and ValueClause(keys : Value[], pos : range) =
+    let mutable _keys = keys |> Array.map (fun v -> StringResource.stringManager.InternIdentifierToken(v.ToRawString()))
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty
     let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
@@ -107,7 +108,7 @@ and ValueClause(pos : range) =
 
     do reset()
 
-    new() = ValueClause(range.Zero)
+    new() = ValueClause([||], range.Zero)
 
     member val Position = pos
     member val Scope : Scope = scopeManager.AnyScope with get, set
@@ -134,16 +135,22 @@ and ValueClause(pos : range) =
     member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
-
+    member this.FirstKey = if _keys.Length > 0 then Some _keys.[0] else None
+    member this.SecondKey = if _keys.Length > 0 then Some _keys.[1] else None
+    member __.Keys with get() = _keys
+    member __.Keys with set(value) = _keys <- value
     member this.ToRaw : Statement list = this.All |>
-                                         List.map (function
-                                           |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))
-                                           |LeafValueC lv -> lv.ToRaw
-                                           |LeafC l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
-                                           |ValueClauseC vc -> Value(vc.Position, Value.Clause vc.ToRaw)
-                                           |CommentC (r, c) -> (Comment (r, c)))
+                                         List.collect (function
+                                           |NodeC n -> [KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))]
+                                           |LeafValueC lv -> [lv.ToRaw]
+                                           |LeafC l -> [KeyValue(PosKeyValue (l.Position, l.ToRaw))]
+                                           |ValueClauseC vc ->
+                                                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String (StringResource.stringManager.GetStringForID k.normal)))
+                                                                   |> List.ofArray
+                                                keys@[Value(vc.Position, Value.Clause vc.ToRaw)]
+                                           |CommentC (r, c) -> [(Comment (r, c))])
 
-    static member Create = ValueClause
+    static member Create() = ValueClause()
     interface IKeyPos with
         member this.Key = "clause"
         member this.Position = this.Position
@@ -202,12 +209,15 @@ and Node (key : string, pos : range) =
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
 
     member this.ToRaw : Statement list = this.All |>
-                                         List.map (function
-                                           |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))
-                                           |LeafValueC lv -> lv.ToRaw
-                                           |LeafC l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
-                                           |ValueClauseC vc -> Value(vc.Position, Value.Clause vc.ToRaw)
-                                           |CommentC c -> (Comment c))
+                                         List.collect (function
+                                           |NodeC n -> [KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))]
+                                           |LeafValueC lv -> [lv.ToRaw]
+                                           |LeafC l -> [KeyValue(PosKeyValue (l.Position, l.ToRaw))]
+                                           |ValueClauseC vc ->
+                                                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String (StringResource.stringManager.GetStringForID k.normal)))
+                                                                   |> List.ofArray
+                                                keys@[Value(vc.Position, Value.Clause vc.ToRaw)]
+                                           |CommentC c -> [(Comment c)])
 
     static member Create key = Node(key)
     interface IKeyPos with
@@ -239,16 +249,26 @@ module ProcessCore =
         |_ -> f { context with parents = n::context.parents; previous = key }
 
     type BaseProcess (maps : NodeTypeMap ) =
-        let rec lookupN =
+        let rec nodeWindowFun (context) (backtwo : Statement option, backone : Statement option, acc) (next : Statement) =
+            match backtwo, backone, next with
+            | (Some (Value (_, Clause _))), _, _
+            | _, (Some (Value (_, Clause _))), _ ->
+                backone, Some next, (processNodeInner context next)::acc
+            | (Some (Value (_, v2))), (Some (Value (_, v1))), Value (pos, Clause sl) ->
+                None, None, (lookupVC pos context sl ([| v2 ;v1 |]))::acc
+            |_ -> backone, Some next, (processNodeInner context next)::acc
+
+        and lookupN =
             (fun (key : string) (pos : range) (context : LookupContext) (sl : Statement list) ->
                 let n = Node(key, pos)
-                let children = sl |> List.map (fun e -> (processNodeInner context e))
+                // let children = sl |> List.map (fun e -> (processNodeInner context e))
+                let children = sl |> List.fold (nodeWindowFun context) (None, None, []) |> (fun (_, _, ls) -> ls |> List.rev)
                 n.All <- children
                 NodeC n
                 )
         and lookupVC =
-            (fun (pos : range) (context : LookupContext) (sl : Statement list) ->
-                let vc = ValueClause(pos)
+            (fun (pos : range) (context : LookupContext) (sl : Statement list) (keys) ->
+                let vc = ValueClause(keys, pos)
                 let children = sl |> List.map (fun e -> (processNodeInner context e))
                 vc.All <- children
                 ValueClauseC vc)
@@ -258,7 +278,7 @@ module ProcessCore =
             | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl), _))) -> lookupN k pos c sl
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
             | Comment(r, c) -> CommentC (r, c)
-            | Value(pos, Value.Clause sl) -> lookupVC pos c sl
+            | Value(pos, Value.Clause sl) -> lookupVC pos c sl [||]
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
         member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
         member __.ProcessNode(entityType : EntityType) = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
