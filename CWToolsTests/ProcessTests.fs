@@ -56,6 +56,7 @@ let emptyEmbeddedSettings = {
         localisationCommands = Legacy []
         eventTargetLinks = []
 }
+let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 
 let specificField = RulesParser.specificField
 let optionalMany = RulesParser.optionalMany
@@ -430,7 +431,7 @@ let testsv =
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let enums = [("size", ("size", ["medium"; "large"]))] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
 
-                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes)
                 let pos = mkPos 3 8
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |CompletionResponse.Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
@@ -445,7 +446,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
@@ -466,7 +467,7 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes)
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["create_starbase"; "create_starbase"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
@@ -492,7 +493,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
-                let comp = CompletionService([TypeRule ("ship_size", shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("ship_size", shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes)
                 let res = comp.Complete(pos, entity, None)
                 eprintfn "res4 %A" res
                 let suggestions = res |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort

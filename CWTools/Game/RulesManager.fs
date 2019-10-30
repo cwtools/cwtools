@@ -150,7 +150,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang))
+        let dataTypes = embeddedSettings.localisationCommands |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+
+        let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang, dataTypes))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let ruleValidationService =  (RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
