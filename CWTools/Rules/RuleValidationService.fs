@@ -298,7 +298,7 @@ type RuleValidationService
             |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf])
         <&&>
         FieldValidators.checkField p severity ctx rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
-    and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) errors =
+    and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : IClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =
             match options.pushScope with
@@ -404,7 +404,7 @@ type RuleValidationService
         res |> List.tryPick fst, res |> List.map snd
 
     let rootId = StringResource.stringManager.InternIdentifierToken "root"
-    let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : Node) =
+    let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : IClause) =
         let pushScope, subtypes = testSubtype (typedef.subtypes) node
         let startingScopeContext =
             match Option.orElse pushScope options.pushScope with
@@ -418,35 +418,39 @@ type RuleValidationService
     let validate ((path, root) : string * Node) =
         let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
         let file = Path.GetFileName path
-        let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
+        let skiprootkey (skipRootKey : SkipRootKey) (n : IClause) =
             match skipRootKey with
             |(SpecificKey key) -> n.Key == key
             |(AnyKey) -> true
             |(MultipleKeys (keys, shouldMatch)) ->
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let inner (typedefs : TypeDefinition list) (node : Node) =
-            let validateType (typedef : TypeDefinition) (n : Node) =
+        let inner (typedefs : TypeDefinition list) (node : IClause) =
+            let validateType (typedef : TypeDefinition) (n : IClause) =
                 let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)
                 //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
                 //let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
                 //match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
                 //match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
+                let filterKey =
+                    match n with
+                    | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
+                    | _ -> n.Key
                 match typerules |> List.tryHead with
                 |Some ((NodeRule ((SpecificField(SpecificValue (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
-                    if FieldValidators.typekeyfilter typedef n.Key then applyNodeRuleRoot typedef rs o n else OK
+                    if FieldValidators.typekeyfilter typedef filterKey then applyNodeRuleRoot typedef rs o n else OK
                 |_ ->
                     OK
             let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
-            let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : Node) =
+            let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : IClause) =
                 match skipRootKeyStack with
                 |[] -> if FieldValidators.typekeyfilter t n.Key then validateType t n else OK
                 |head::tail ->
                     if skiprootkey head n
-                    then n.Children <&!&> validateTypeSkipRoot t tail
+                    then n.ClauseList <&!&> validateTypeSkipRoot t tail
                     else OK
             pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
-        let res = (root.Children <&!&> inner normalTypeDefs)
+        let res = (root.Clauses |> List.ofSeq <&!&> inner normalTypeDefs)
         let rootres = (inner rootTypeDefs root)
         res <&&> rootres
 

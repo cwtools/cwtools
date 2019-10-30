@@ -114,11 +114,11 @@ type CompletionService
 
 
     // | LeafValue
-    let rec getRulePath (pos : pos) (stack : (string * int * string option * CompletionContext) list) (node : Node) =
+    let rec getRulePath (pos : pos) (stack : (string * int * string option * CompletionContext) list) (node : IClause) =
        //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
-        let countChildren (n2 : Node) (key : string) =
-            n2.Childs key |> Seq.length
-        match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
+        let countChildren (n2 : IClause) (key : string) =
+            n2.Nodes |> Seq.choose (function |c when c.Key == key -> Some c |_ -> None) |> Seq.length
+        match node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos) with
         | Some c ->
             log (sprintf "%s %A %A" c.Key c.Position pos)
             match (c.Position.StartLine = (pos.Line)) && ((c.Position.StartColumn + c.Key.Length + 1) > pos.Column) with
@@ -133,7 +133,13 @@ type CompletionService
                     |true -> (l.Key, countChildren node l.Key, Some l.Key, LeafLHS)::stack
                     |false -> (l.Key, countChildren node l.Key, Some l.ValueText, LeafRHS)::stack
                 | None ->
-                    stack
+                    match node.ClauseList |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
+                    | Some vc ->
+                        match (vc.Position.StartLine = (pos.Line)) && ((vc.Position.StartColumn + vc.Key.Length + 1) > pos.Column) with
+                        | true -> getRulePath pos ((vc.Key, countChildren node vc.Key, None, NodeLHS) :: stack) vc
+                        | false -> getRulePath pos ((vc.Key, countChildren node vc.Key, None, NodeRHS) :: stack) vc
+                    | None ->
+                        stack
                     // match node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos) with
                     // | Some lv -> (lv.Key, countChildren node lv.Key, Some lv.ValueText)::stack
                     // | None -> stack

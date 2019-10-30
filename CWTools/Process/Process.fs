@@ -30,6 +30,7 @@ module List =
 
 type IKeyPos =
     abstract member Key : string
+    abstract member KeyId : StringTokens
     abstract member Position : range
 
 type IClause =
@@ -79,6 +80,7 @@ and Leaf =
     static member Create key value = LeafC(Leaf(key, value))
     interface IKeyPos with
         member this.Key = this.Key
+        member this.KeyId = this.KeyId
         member this.Position = this.Position
 and LeafValue(value : Value, ?pos : range) =
 
@@ -96,6 +98,7 @@ and LeafValue(value : Value, ?pos : range) =
     static member Create value = LeafValue value
     interface IKeyPos with
         member this.Key = this.Key
+        member this.KeyId = this.ValueId
         member this.Position = this.Position
 
 
@@ -139,6 +142,7 @@ and ValueClause(keys : Value[], pos : range) =
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
     member this.FirstKey = if _keys.Length > 0 then Some (StringResource.stringManager.GetStringForID _keys.[0].normal) else None
+    member this.FirstKeyId = if _keys.Length > 0 then Some _keys.[0] else None
     member this.SecondKey = if _keys.Length > 0 then Some (StringResource.stringManager.GetStringForID _keys.[1].normal) else None
     member __.Keys with get() = _keys
     member __.Keys with set(value) = _keys <- value
@@ -156,6 +160,7 @@ and ValueClause(keys : Value[], pos : range) =
     static member Create() = ValueClause()
     interface IKeyPos with
         member this.Key = this.FirstKey |> Option.defaultValue "clause"
+        member this.KeyId = this.FirstKeyId |> Option.defaultValue (StringResource.stringManager.InternIdentifierToken(""))
         member this.Position = this.Position
 
     interface IClause with
@@ -241,6 +246,7 @@ and Node (key : string, pos : range) =
     static member Create key = Node(key)
     interface IKeyPos with
         member this.Key = this.Key
+        member this.KeyId = this.KeyId
         member this.Position = this.Position
     interface IClause with
         member this.Nodes = this.Nodes

@@ -13,6 +13,7 @@ open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
 open CWTools.Common.NewScope
+open CWTools.Utilities.StringResource
 
 
 type ReplaceScopes = {
@@ -147,6 +148,8 @@ and NewField =
     override x.ToString() =
         match x with
         | ValueField vt -> sprintf "Field of %O" vt
+        | ScalarField sv -> "Field of any value"
+        | SpecificField (SpecificValue sv) -> sprintf "Field of %s" (stringManager.GetStringForID sv.normal)
         | _ -> sprintf "Field of %A" x
 and RuleType =
 |NodeRule of left : NewField * rules : NewRule list
@@ -355,7 +358,7 @@ module RulesParser =
             | Some s ->
                 let rhs = s.Substring(s.IndexOf "=" + 1).Trim()
                 match rhs.StartsWith("{") && rhs.EndsWith("}") with
-                | true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.map parseScope |> List.ofArray
+                | true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.filter (fun s -> s <> "") |> Array.map parseScope |> List.ofArray
                 | false -> let scope = rhs |> parseScope in if scope = anyScope then allScopes else [scope]
             | None -> []
         let severity =
