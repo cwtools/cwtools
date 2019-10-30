@@ -19,15 +19,20 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService) (types : Ty
                         let inner (n : IClause) =
                             let rawSubtypes = ruleapplicator.TestSubType(def.subtypes, n) |> snd
                             let subtypes = rawSubtypes |> List.map (fun s -> def.name + "." + s)
+                            let filterKey =
+                                match n with
+                                | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
+                                | _ -> n.Key
                             let key =
                                 match def.nameField with
                                 |Some f -> n.TagText f
                                 |None ->
-                                    match n with
+                                   match n with
                                     | :? ValueClause as vc -> vc.SecondKey |> Option.defaultValue "clause"
                                     | _ -> n.Key
+
                             let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def, rawSubtypes))
-                            if CWTools.Rules.FieldValidators.typekeyfilter def key then result else []
+                            if CWTools.Rules.FieldValidators.typekeyfilter def filterKey then result else []
                         let childres =
                             let rec skiprootkey (srk : SkipRootKey list) (n : IClause)=
                                 let childKey =

@@ -1,0 +1,23 @@
+test = {
+    node_type = node_type_one
+    node_type = node_type_two
+    #error
+    node_type = node_type_three
+
+    node_filtered = node_filtered_one
+    node_filtered = node_filtered_two
+    #error
+    node_filtered = node_filtered_three
+
+    clause = clause_one
+    clause = clause_two
+    #error
+    clause = clause_three
+
+    clause_two_key_filtered = clause_two_key_filtered_one
+    clause_two_key_filtered = clause_two_key_filtered_two
+    #error
+    clause_two_key_filtered = clause_two_key_filtered_three
+    #error
+    clause_two_key_filtered = clause_three
+}

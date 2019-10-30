@@ -1,0 +1,35 @@
+types = {
+    type[node_type] = {
+        path = "game/common/ship_sizes"
+    }
+    ## type_key_filter = node_filtered
+    type[node_filtered] = {
+        path = "game/common/ship_sizes"
+        name_field = name
+    }
+    type[clause] = {
+        path = "game/common/ship_sizes"
+        name_field = name2
+    }
+    ## type_key_filter = clause_two_key_filtered
+    type[clause_two_key_filtered] = {
+        path = "game/common/ship_sizes"
+    }
+    type[complex_node] = {
+        path = "game/common/ship_sizes"
+    }
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    ## cardinality = 0..inf
+    node_type = <node_type>
+    ## cardinality = 0..inf
+    node_filtered = <node_filtered>
+    ## cardinality = 0..inf
+    clause = <clause>
+    ## cardinality = 0..inf
+    clause_two_key_filtered = <clause_two_key_filtered>
+}
