@@ -311,18 +311,19 @@ module internal FieldValidators =
         |None -> false
 
     let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) leafornode errors =
+        eprintfn "vgf %A" varMap
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp id then errors else
-            if values.Contains (value.Split(ampArray, 2).[0]) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
+            if values.Contains (value) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
         |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode <&&&> errors
     let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp id then true else
-            values.Contains (value.Split(ampArray, 2).[0])
+            values.Contains (value)
         |None -> false
 
     let checkFilepathField (files : Collections.Set<string>) (key : string) (prefix : string option) (extension : string option) (leafornode) errors =

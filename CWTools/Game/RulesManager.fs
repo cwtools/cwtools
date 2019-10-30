@@ -44,6 +44,8 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> = {
     refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
 }
 
+
+
 type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (resources : IResourceAPI<'T>, lookup : 'L,
      settings : RuleManagerSettings<'T, 'L>,
@@ -60,6 +62,21 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
     let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
     let mutable rulesDataGenerated = false
+
+    let expandPredefinedValues (types : Map<string, _>) (values : string list) =
+        let replaceType (value : string) =
+            let startIndex = value.IndexOf "<"
+            let endIndex = value.IndexOf ">" - 1
+            let referencedType = value.Substring(startIndex + 1, (endIndex - startIndex))
+            match types |> Map.tryFind referencedType with
+            | Some typeValues ->
+                eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
+                let res = typeValues |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2)) |> List.ofSeq
+                eprintfn "epv2 %A" res
+                res
+            | None -> [value]
+
+        values |> List.collect (fun v -> if v.Contains "<" && v.Contains ">" then replaceType v else [v])
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
         let rules, types, enums, complexenums, values =
@@ -78,7 +95,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         simpleEnums <- enums
         complexEnums <- complexenums
         tempTypes <- types
-        tempValues <- values |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
+        tempValues <- values |> Map.ofList //|> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
         rulesDataGenerated <- false
         // log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
 
@@ -136,11 +153,14 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         //let infoService = tempInfoService
         // game.InfoService <- Some tempInfoService
         if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
+        let predefValues = tempValues |> Map.map (fun k vs -> (expandPredefinedValues tempTypeMap vs) )
+                                      |> Map.toList |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
 
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempInfoService.GetDefinedVariables e))))
-                        |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) tempValues
+                        |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) predefValues
 
         lookup.varDefInfo <- results
+        eprintfn "vdi %A" results
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().SavedEventTargets |> (Option.defaultWith (fun () -> tempInfoService.GetSavedEventTargets e))))
                         |> Seq.fold (fun (acc : ResizeArray<_>) e -> acc.AddRange((e)); acc ) (new ResizeArray<_>())
         lookup.savedEventTargets <- results

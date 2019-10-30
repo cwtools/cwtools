@@ -243,6 +243,7 @@ module Scopes =
                     |(_, false), Some r -> r
                 if ampersandSplit.Length > 1
                 then
+                    if vars.Contains key then VarFound else
                     let keys = ampersandSplit.[1].Split('.')
                     let keylength = keys.Length - 1
                     let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
