@@ -135,6 +135,7 @@ and NewField =
 | AliasValueKeysField of string
 | AliasField of string
 | SingleAliasField of string
+| SingleAliasClauseField of string * string
 | SubtypeField of string * bool * NewRule list
 | VariableSetField of string
 | VariableGetField of string
@@ -536,15 +537,24 @@ module RulesParser =
         let leftfield = processKey parseScope anyScope key
         let options = getOptionsFromComments parseScope allScopes anyScope (leaf.Operator) comments
         let rightkey = leaf.Value.ToString()
-        match rightkey with
-        |x when x.StartsWith("colour[") ->
+        match key, rightkey with
+        |_, x when x.StartsWith("colour[") ->
             let colourRules =
                 match getSettingFromString x "colour" with
                 |Some "rgb" -> [rgbRule]
                 |Some "hsv" -> [hsvRule]
                 |_ -> [rgbRule; hsvRule]
             NewRule(NodeRule(leftfield, colourRules), options)
-        |x ->
+        |l, r when l.StartsWith "clause_single_alias" && r.StartsWith "single_alias_right" ->
+            match getSettingFromString l "clause_single_alias", getSettingFromString r "single_alias_right" with
+            |Some ls, Some rs ->
+                let leftfield = LeafValueRule(SingleAliasClauseField (ls, rs))
+                NewRule(leftfield, options)
+            |_ ->
+                let rightfield = processKey parseScope anyScope rightkey
+                let leafRule = LeafRule(leftfield, rightfield)
+                NewRule(leafRule, options)
+        |_, x ->
             let rightfield = processKey parseScope anyScope rightkey
             let leafRule = LeafRule(leftfield, rightfield)
             NewRule(leafRule, options)
@@ -885,6 +895,15 @@ module RulesParser =
                 | x ->
                     log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |SpecificField (SpecificValue x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
                     rule
+            /// TODO: Add clause key validation
+            | (LeafValueRule (SingleAliasClauseField (clauseKey, name)), o) ->
+                match singlealiasesmap() |> Map.tryFind name with
+                | Some (NodeRule (al, ar), ao) ->
+                    ValueClauseRule(ar), o
+                | x ->
+                    log (sprintf "Failed to find defined single alias %s when replacing single alias clause. Found %A" name x)
+                    rule
+
             | _ -> rule
         let singlealiasesmapper =
             function
