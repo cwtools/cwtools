@@ -448,8 +448,8 @@ type CompletionService
             | y when y.Length = 0 ->
                 pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
             | _ -> []
-        eprintfn "%A" path
-        eprintfn "%A" rootTypeItems
+        // eprintfn "%A" path
+        // eprintfn "%A" rootTypeItems
         let scoreForLabel (label : string) =
             if allUsedKeys |> List.contains label then 10 else 1
         (items @ rootTypeItems) |> List.map

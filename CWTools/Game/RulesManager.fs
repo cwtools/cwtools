@@ -70,9 +70,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             let referencedType = value.Substring(startIndex + 1, (endIndex - startIndex))
             match types |> Map.tryFind referencedType with
             | Some typeValues ->
-                eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
+                // eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
                 let res = typeValues |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2)) |> List.ofSeq
-                eprintfn "epv2 %A" res
+                // eprintfn "epv2 %A" res
                 res
             | None -> [value]
 
@@ -160,7 +160,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) predefValues
 
         lookup.varDefInfo <- results
-        eprintfn "vdi %A" results
+        // eprintfn "vdi %A" results
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().SavedEventTargets |> (Option.defaultWith (fun () -> tempInfoService.GetSavedEventTargets e))))
                         |> Seq.fold (fun (acc : ResizeArray<_>) e -> acc.AddRange((e)); acc ) (new ResizeArray<_>())
         lookup.savedEventTargets <- results

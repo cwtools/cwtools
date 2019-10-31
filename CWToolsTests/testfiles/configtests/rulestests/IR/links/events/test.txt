@@ -12,11 +12,15 @@ event = {
 
     }
     test_ship = simple
+    test_ship = "simple"
 
     ## Test value links
     set_test_value = test_value
 
     test_value = {
+
+    }
+    "test_value" = {
 
     }
     test_ship = test_value
