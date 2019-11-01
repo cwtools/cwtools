@@ -354,6 +354,7 @@ module internal FieldValidators =
 
     let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  (key : string) leafornode errors =
         // let key = key.Trim([|'"';' '|])
+        let key = key.Trim([|'"'|])
         let scope = ctx.scopes
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
@@ -366,8 +367,7 @@ module internal FieldValidators =
         |_ -> errors
     let checkScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  (key : string) =
         // log "scope %s %A"key ctx
-        // let key = key.Trim([|'"';' '|])
-        // eprintfn "csf %A" key
+        let key = key.Trim([|'"'|])
         let scope = ctx.scopes
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]

@@ -337,7 +337,7 @@ type RuleValidationService
         match rule with
         |ScopeField s ->
             let scope = newCtx.scopes
-            let key = node.Key
+            let key = node.Key.Trim('"')
             match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope, (stringManager.GetMetadataForID (node.KeyId.lower)).containsDoubleDollar with
             |_, true ->
                 let newCtx = { newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}

@@ -250,7 +250,7 @@ type InfoService
                 match field with
                 | NodeRule (ScopeField s, f) ->
                     let scope = newCtx.scopes
-                    let key = node.Key
+                    let key = node.Key.Trim('"')
                     let newCtx =
                         match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
@@ -449,7 +449,7 @@ type InfoService
             match field with
             | NodeRule (ScopeField s, f) ->
                 let scope = newCtx.scopes
-                let key = node.Key
+                let key = node.Key.Trim('"')
                 let newCtx =
                     match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
                     |NewScope ({Scopes = current::_} ,_) ->

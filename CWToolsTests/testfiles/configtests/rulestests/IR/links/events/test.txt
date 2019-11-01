@@ -16,11 +16,18 @@ event = {
 
     ## Test value links
     set_test_value = test_value
+    set_test_value = test_value_Two
 
     test_value = {
 
     }
     "test_value" = {
+
+    }
+    test_value_two = {
+
+    }
+    "test_value_two" = {
 
     }
     test_ship = test_value
