@@ -51,20 +51,6 @@ test = {
         float_inf_lower = -10000.0
         float_inf_lower = 10.0
 
-        predefvalue = one
-        predefvalue = two
-        predefvalue = threeten
-        predefvalue = threeeleven
-        #error
-        predefvalue = threetwelve
-        #error
-        predefvalue = three<pred_type>
-        predefvalue = four@ten
-        predefvalue = four@eleven
-        #error
-        predefvalue = four@twelve
-        #error
-        predefvalue = four@<pred_type>
 
     }
 }

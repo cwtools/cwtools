@@ -16,6 +16,10 @@ types = {
         ##type_key_filter = subtype1
         subtype[subtype1] = { }
     }
+    ## type_key_filter <> tests
+    type[pred_type] = {
+        path = "game/common/ship_sizes"
+    }
 }
 
 event = {
@@ -38,6 +42,9 @@ event = {
     subtypetest_root = value[subtype_root]
     ## cardinality = 0..inf
     subtypetest_1 = value[subtype_1]
+
+    ## cardinality = 0..inf
+    predefvalue = value[predefined]
 }
 
 skipevent = {
@@ -63,6 +70,8 @@ skipspecificevent = {
 values = {
     value[variable] = {
         my_preset_variable
+        five<pred_type>
+        six@<pred_type>
     }
 }
 

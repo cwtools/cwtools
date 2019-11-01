@@ -184,7 +184,7 @@ module Scopes =
                 // x
                 res2)
 
-    let createChangeScope (oneToOneScopes) (varPrefixFun : string -> string * bool) =
+    let createChangeScope (oneToOneScopes) (varPrefixFun : string -> string * bool) (hoi4TargetedHardcodedVariables : bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun (varLHS : bool) (skipEffect : bool) (eventTargetLinks : EffectMap) (_ : EffectMap) (_ : ScopedEffect list) (vars : StringSet) (key : string) (source : ScopeContext) ->
@@ -196,10 +196,6 @@ module Scopes =
             then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
                 let key, varOnly = varPrefixFun key
-                let ampersandSplit = key.Split([|'@'|], 2)
-                let keys = ampersandSplit.[0].Split('.')
-                let keylength = keys.Length - 1
-                let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
                 let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) (last : bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     match onetoone with
@@ -235,33 +231,55 @@ module Scopes =
                             | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
                             | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
                 let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
-                let res = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
-                let res2 =
-                    match res with
-                    |(_, _), None -> NotFound
-                    |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
-                    |(_, false), Some r -> r
-                if ampersandSplit.Length > 1
-                then
-                    if vars.Contains key then VarFound else
-                    let keys = ampersandSplit.[1].Split('.')
-                    let keylength = keys.Length - 1
-                    let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
-                    let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
-                    let tres2 =
-                        match tres with
+                // Try just the raw string first
+                let rawKeys = key.Split('.')
+                let rawKeyLength = rawKeys.Length - 1
+                let rawKeys = rawKeys |> Array.mapi (fun i k -> k, i = rawKeyLength)
+                let rawRes2 = 
+                    if hoi4TargetedHardcodedVariables then
+                        let rawRes = rawKeys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                        match rawRes with
                         |(_, _), None -> NotFound
                         |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
                         |(_, false), Some r -> r
-                    match res2, tres2 with
-                    |_, NotFound -> NotFound
-                    |_, VarNotFound s -> VarNotFound s
-                    |VarFound, _ -> VarFound
-                    |_, _ -> NotFound
-                else
-                // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
-                // x
-                res2)
+                    else NotFound
+                match rawRes2 with
+                | NotFound
+                | VarNotFound _
+                    ->
+
+                    let ampersandSplit = key.Split([|'@'|], 2)
+                    let keys = ampersandSplit.[0].Split('.')
+                    let keylength = keys.Length - 1
+                    let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
+                    let res = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                    let res2 =
+                        match res with
+                        |(_, _), None -> NotFound
+                        |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                        |(_, false), Some r -> r
+                    if ampersandSplit.Length > 1
+                    then
+                        if vars.Contains key then VarFound else
+                        let keys = ampersandSplit.[1].Split('.')
+                        let keylength = keys.Length - 1
+                        let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
+                        let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                        let tres2 =
+                            match tres with
+                            |(_, _), None -> NotFound
+                            |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                            |(_, false), Some r -> r
+                        match res2, tres2 with
+                        |_, NotFound -> NotFound
+                        |_, VarNotFound s -> VarNotFound s
+                        |VarFound, _ -> VarFound
+                        |_, _ -> NotFound
+                    else
+                    // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+                    // x
+                    res2
+                | _ -> rawRes2)
 
 
     let createLocalisationCommandValidator (locPrimaryScopes : (string * (ScopeContext * bool -> ScopeContext * bool)) list) (scopedLocEffectsMap : EffectMap) =
