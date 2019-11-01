@@ -319,6 +319,8 @@ type IRGame(setupSettings : IRSettings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> [])
+        validateLocalisation = IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> [])
     }
     let game = GameObject<IRComputedData, IRLookup>.CreateGame
                 ((settings, "imperator", scriptFolders, Compute.Jomini.computeJominiData,

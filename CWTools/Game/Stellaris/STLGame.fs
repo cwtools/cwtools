@@ -291,6 +291,8 @@ type STLGame (setupSettings : StellarisSettings) =
             refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
             refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
             refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+            processLocalisation = STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> [])
+            validateLocalisation = STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> [])
         }
 
         let game = GameObject<STLComputedData, STLLookup>.CreateGame

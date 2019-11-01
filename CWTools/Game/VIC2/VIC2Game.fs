@@ -290,6 +290,8 @@ type VIC2Game(setupSettings : VIC2Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> [])
+        validateLocalisation = VIC2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> [])
     }
     let game = GameObject<VIC2ComputedData, VIC2Lookup>.CreateGame
                 ((settings, "victoria 2", scriptFolders, Compute.computeVIC2Data,

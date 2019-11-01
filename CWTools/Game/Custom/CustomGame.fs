@@ -316,6 +316,8 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = CustomGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands)
+        validateLocalisation = CustomGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands)
     }
     let scriptFolders = []
 

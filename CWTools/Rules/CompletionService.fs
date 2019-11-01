@@ -24,7 +24,9 @@ type CompletionService
                      links : Map<string,Effect,InsensitiveStringComparer>,
                      valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
                      globalScriptVariables : string list, changeScope : ChangeScope, defaultContext : ScopeContext, anyScope, oneToOneScopes, defaultLang,
-                     dataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes)  =
+                     dataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes,
+                     processLocalisation : (Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>),
+                     validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)) =
     let aliases =
         rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                     |> List.groupBy fst
@@ -332,6 +334,8 @@ type CompletionService
             defaultLang = defaultLang
             wildcardLinks = wildCardLinks
             aliasKeyList = aliasKeyMap
+            processLocalisation = processLocalisation
+            validateLocalisation = validateLocalisation
         }
         let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
         let severity = Severity.Error

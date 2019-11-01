@@ -34,7 +34,9 @@ type InfoService
                                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                                      links : Map<string,Effect,InsensitiveStringComparer>,
                                      valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
-                                     ruleValidationService : RuleValidationService, changeScope, defaultContext, anyScope, defaultLang) =
+                                     ruleValidationService : RuleValidationService, changeScope, defaultContext, anyScope, defaultLang,
+                                     processLocalisation : (Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>),
+                                     validateLocalisation : (LocEntry -> ScopeContext -> ValidationResult)) =
     let linkMap = links
     let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect as e when e.IsWildCard -> Some e |_ -> None )
     let valueTriggerMap = valueTriggers
@@ -301,6 +303,8 @@ type InfoService
             defaultLang = defaultLang
             wildcardLinks = wildCardLinks
             aliasKeyList = aliasKeyMap
+            processLocalisation = processLocalisation
+            validateLocalisation = validateLocalisation
         }
     let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos : pos) (node : Node) (logicalpath : string) =
         let fChild (ctx, _) (node : IClause) ((field, options) : NewRule) =
@@ -866,7 +870,7 @@ type InfoService
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
                 else res
             |LeafRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced leaf.Key leaf res
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced leaf.Key leaf res
             |_ -> res
         let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
             match field with
@@ -898,7 +902,7 @@ type InfoService
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node) <&&> res
                 else res
             |NodeRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced node.Key node res
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced node.Key node res
             |_ -> res
 
         let fComment (res) _ _ = res

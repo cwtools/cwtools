@@ -60,13 +60,13 @@ let tests =
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let printed = CKPrinter.api.prettyPrintStatements (node.ToRaw)
                 Expect.equal printed file "Printing shouldn't have changed string"
-        testCase "jomini fancy clause" <| fun() ->
-            let file = File.ReadAllText "testfiles/parsertests/clause.txt"
-            match CKParser.parseString file "test" with
-            |Success(r, _, _) ->
-                //eprintfn "%A" r
-                let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                //node.All |> List.iter (eprintfn "%A")
-                let printed = CKPrinter.api.prettyPrintStatements (node.ToRaw)
-                Expect.equal printed file "Printing shouldn't have changed string"
+        // testCase "jomini fancy clause" <| fun() ->
+        //     let file = File.ReadAllText "testfiles/parsertests/clause.txt"
+        //     match CKParser.parseString file "test" with
+        //     |Success(r, _, _) ->
+        //         //eprintfn "%A" r
+        //         let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
+        //         //node.All |> List.iter (eprintfn "%A")
+        //         let printed = CKPrinter.api.prettyPrintStatements (node.ToRaw)
+        //         Expect.equal printed file "Printing shouldn't have changed string"
     ]

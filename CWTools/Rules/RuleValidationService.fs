@@ -24,7 +24,9 @@ type RuleValidationService
                                  localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                                  links : Map<string,Effect,InsensitiveStringComparer>,
                                  valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
-                                 anyScope, changeScope : ChangeScope, defaultContext : ScopeContext, defaultLang) =
+                                 anyScope, changeScope : ChangeScope, defaultContext : ScopeContext, defaultLang,
+                                 processLocalisation : (Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>),
+                                 validateLocalisation : (LocEntry -> ScopeContext -> ValidationResult)) =
 
     let mutable errorList : ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
@@ -168,6 +170,8 @@ type RuleValidationService
         defaultLang = defaultLang
         wildcardLinks = wildCardLinks
         aliasKeyList = aliasKeyMap
+        processLocalisation = processLocalisation
+        validateLocalisation = validateLocalisation
     }
 
 

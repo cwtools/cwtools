@@ -30,6 +30,8 @@ type CheckFieldParams =
         anyScope : Scope
         defaultLang : Lang
         aliasKeyList : Collections.Map<string, Collections.Set<StringToken>>
+        processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>
+        validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
     }
 
 [<RequireQualifiedAccess>]
@@ -198,15 +200,32 @@ module internal FieldValidators =
         )
         || firstCharEqualsAmp id
 
-    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
+    let checkLocalisationField (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
+                        (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
+                        scopeContext
+                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) (leafornode :IKeyPos) (errors)=
         match synced with
         |true ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
             CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
         |false ->
-            CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
-    let checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) =
+            if key.Contains("[") 
+            then
+                let entry = {
+                    CWTools.Localisation.Entry.key = "inline"
+                    CWTools.Localisation.Entry.value = None
+                    CWTools.Localisation.Entry.desc = key
+                    CWTools.Localisation.Entry.position = leafornode.Position
+                }
+                let proc = processLocalisation (defaultLang, Collections.Map.ofList ["inline", entry]) |> snd |> Map.toList |> List.head |> snd
+                eprintfn "pl %A" proc
+                validateLocalisation proc scopeContext
+            else
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
+    let checkLocalisationFieldNE (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
+                        (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
+                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) =
         match synced with
         |true ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -469,7 +488,7 @@ module internal FieldValidators =
                 checkValidValue p.varMap p.enumsMap p.localisation severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap severity t id key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
-            |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
+            |LocalisationField synced -> checkLocalisationField p.processLocalisation p.validateLocalisation ctx.scopes p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
             |FilepathField (prefix, extension) -> checkFilepathField p.files key prefix extension leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
