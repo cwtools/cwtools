@@ -101,3 +101,8 @@ country_event = {
     use_variable = FROM.fiveten
     use_variable = FROM.six@ten
 }
+
+country_event = {
+    use_variable = my_preset_variable^ten
+    use_variable = my_preset_variable?10
+}

@@ -77,6 +77,7 @@ module internal FieldValidators =
 
     // type RuleContext  = RuleContext<Scope>
     let firstCharEqualsAmp (key : StringToken) = (stringManager.GetMetadataForID key).startsWithAmp
+    let getStringMetadata (key : StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
@@ -378,9 +379,15 @@ module internal FieldValidators =
         |ValueFound -> false
         |_ -> true
 
-    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) key leafornode errors =
+    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) (key : string) leafornode errors =
         let scope = ctx.scopes
-        if firstCharEqualsAmp id then errors else
+        let metadata = getStringMetadata id
+        if metadata.startsWithAmp then errors else
+        let key =
+            match metadata.containsQuestionMark, metadata.containsHat with
+            | true, _ -> key.Split('?').[0]
+            | false, true -> key.Split('^').[0]
+            | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
@@ -391,9 +398,15 @@ module internal FieldValidators =
         // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) key =
+    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) (key : string) =
         let scope = ctx.scopes
-        if firstCharEqualsAmp id then true else
+        let metadata = getStringMetadata id
+        if metadata.startsWithAmp then true else
+        let key =
+            match metadata.containsQuestionMark, metadata.containsHat with
+            | true, _ -> key.Split('?').[0]
+            | false, true -> key.Split('^').[0]
+            | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
         |Some f, _, _ -> min <= f && max >= f
