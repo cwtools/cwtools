@@ -26,7 +26,7 @@ type FileIndex = int32
 [<Literal>]
 let columnBitCount = 9
 [<Literal>]
-let lineBitCount = 16
+let lineBitCount = 19
 
 let posBitCount = lineBitCount + columnBitCount
 let _ = assert (posBitCount <= 32)
@@ -61,7 +61,7 @@ let startLineBitCount = lineBitCount
 [<Literal>]
 let startColumnBitCount = columnBitCount
 [<Literal>]
-let heightBitCount = 15 // If necessary, could probably deduct one or two bits here without ill effect.
+let heightBitCount = 12 // If necessary, could probably deduct one or two bits here without ill effect.
 [<Literal>]
 let endColumnBitCount = columnBitCount
 [<Literal>]
@@ -75,9 +75,9 @@ let fileIndexShift   = 0
 [<Literal>]
 let startLineShift   = 14
 [<Literal>]
-let startColumnShift = 30
+let startColumnShift = 33
 [<Literal>]
-let heightShift      = 39
+let heightShift      = 42
 [<Literal>]
 let endColumnShift   = 54
 [<Literal>]
@@ -87,11 +87,11 @@ let isSyntheticShift = 63
 [<Literal>]
 let fileIndexMask =   0b0000000000000000000000000000000000000000000000000011111111111111L
 [<Literal>]
-let startLineMask =   0b0000000000000000000000000000000000111111111111111100000000000000L
+let startLineMask =   0b0000000000000000000000000000000111111111111111111100000000000000L
 [<Literal>]
-let startColumnMask = 0b0000000000000000000000000111111111000000000000000000000000000000L
+let startColumnMask = 0b0000000000000000000000111111111000000000000000000000000000000000L
 [<Literal>]
-let heightMask =      0b0000000000111111111111111000000000000000000000000000000000000000L
+let heightMask =      0b0000000000111111111111000000000000000000000000000000000000000000L
 [<Literal>]
 let endColumnMask =   0b0111111111000000000000000000000000000000000000000000000000000000L
 [<Literal>]

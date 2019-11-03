@@ -46,6 +46,7 @@ let emptyStellarisSettings (rootDirectory) = {
     embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
+    maxFileSize = None
 }
 let rec getAllFolders dirs =
     if Seq.isEmpty dirs then Seq.empty else
@@ -131,6 +132,7 @@ let perf3(b) =
             debugMode = false
         }
         embedded = FromConfig ([], [])
+        maxFileSize = None
     }
     let eu4 = CWTools.Games.EU4.EU4Game(settings) :> IGame<EU4ComputedData>
 

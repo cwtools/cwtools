@@ -198,6 +198,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = HOI4Lookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()

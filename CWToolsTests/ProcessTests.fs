@@ -46,6 +46,7 @@ let emptyStellarisSettings (rootDirectory) = {
     embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
+    maxFileSize = None
 }
 let emptyEmbeddedSettings = {
         triggers = []

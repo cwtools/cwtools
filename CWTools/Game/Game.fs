@@ -24,6 +24,7 @@ type GameSettings<'L> = {
     excludeGlobPatterns : string list option
     modFilter : string option
     initialLookup : 'L
+    maxFileSize : int option
 }
 
 type EmbeddedSetupSettings =
@@ -38,6 +39,7 @@ type GameSetupSettings<'L> = {
     scriptFolders : string list option
     excludeGlobPatterns : string list option
     modFilter : string option
+    maxFileSize : int option
 }
 
 
@@ -57,7 +59,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
         settings.embedded.cachedResourceData
             |> List.tryHead
             |> Option.map (fun (r,e) -> e.filepath.Replace("\\","/").TrimStart('.').Replace(e.logicalpath, ""))
-    let fileManager = FileManager(settings.rootDirectories, embeddedDir, scriptFolders, game, encoding, excludeGlobPatterns)
+    let fileManager = FileManager(settings.rootDirectories, embeddedDir, scriptFolders, game, encoding, excludeGlobPatterns, settings.maxFileSize |> Option.defaultValue 2)
 
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : InfoService<_> option = None

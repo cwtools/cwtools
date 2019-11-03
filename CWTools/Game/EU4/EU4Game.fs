@@ -207,6 +207,7 @@ type EU4Game(setupSettings : EU4Settings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = EU4Lookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
 

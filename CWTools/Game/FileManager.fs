@@ -38,7 +38,7 @@ module Files =
         normalisedPathLength : int
     }
 
-    type FileManager(rootDirectories : WorkspaceDirectory list, embeddedFolder : string option, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding, ignoreGlobList : string list) =
+    type FileManager(rootDirectories : WorkspaceDirectory list, embeddedFolder : string option, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding, ignoreGlobList : string list, maxFileSizeMB : int) =
         let excludeGlobTest =
             let globs = ignoreGlobList |> List.map Glob.Parse
             (fun (path : string) ->
@@ -229,7 +229,7 @@ module Files =
                 |".asset"
                 |".map" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(workspaceDir.normalisedPath) + (workspaceDir.normalisedPathLength) + 1)
-                    if (filepath |> FileInfo).Length > 2000000L then None else
+                    if (filepath |> FileInfo).Length > ((int64 maxFileSizeMB) * 1000000L) then None else
                     Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText(filepath, encoding); validate = true})
                 |".dds"
                 |".tga"
