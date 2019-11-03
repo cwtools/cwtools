@@ -10,6 +10,11 @@ country_event = {
 }
 
 country_event = {
+    set_test = test4@root
+    get_test = test4@from
+}
+
+country_event = {
     save_var = my_var
     FROM = {
         test = test

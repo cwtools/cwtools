@@ -312,19 +312,24 @@ module internal FieldValidators =
         |None -> false
 
     let checkVariableGetField (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) leafornode errors =
-        eprintfn "vgf %A" varMap
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp id then errors else
-            if values.Contains (value) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
+            if values.Contains (value)
+            then errors
+            else
+                if value.Contains("@") && values.Contains(value.Split([|'@'|]).[0]) then
+                    errors
+                else
+                    inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
         |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode <&&&> errors
     let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp id then true else
-            values.Contains (value)
+            values.Contains (value) ||(value.Contains("@") && values.Contains(value.Split([|'@'|]).[0]))
         |None -> false
 
     let checkFilepathField (files : Collections.Set<string>) (key : string) (prefix : string option) (extension : string option) (leafornode) errors =
