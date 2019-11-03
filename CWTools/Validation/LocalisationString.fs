@@ -135,8 +135,18 @@ module LocalisationString =
         keycommands <&!&> validateCommand
 
     let private getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
-
+    open CWTools.Games
     let validateLocalisationSyntax (results : Results) =
+        let createInvalid error (pos : Position option) =
+            {
+                code = "CW001"
+                severity = Severity.Error
+                range = (getRange pos.Value pos.Value)
+                keyLength = 0
+                message = error
+                data = None
+                relatedErrors = None
+            }
         results.Values |> List.ofSeq
                        |> List.filter (fun (v, _, _, _) -> not v)
-                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid [("CW001", Severity.Error, (getRange pos.Value pos.Value), 0, error, None, None)] else OK)
+                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid [createInvalid error pos] else OK)

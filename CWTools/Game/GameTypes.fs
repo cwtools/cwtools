@@ -37,7 +37,16 @@ type GraphDataRequest = string list -> string -> int -> GraphDataItem list
 
 
 type CWRelatedError = { location : range; message : string }
-type CWError = (string * Severity * range * int * string * option<string> * option<CWRelatedError>)
+type CWError = {
+    code : string
+    severity : Severity
+    range : range
+    keyLength : int
+    message : string
+    data : string option
+    relatedErrors : CWRelatedError option
+    }
+
 
 type CompletionResponse =
     |Simple of label : string * score : int option

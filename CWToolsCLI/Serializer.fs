@@ -43,7 +43,7 @@ let assemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Locatio
 
 let serialize gameDirName scriptFolders cacheDirectory = ()
 let serializeSTL folder cacheDirectory =
-    let fileManager = FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [])
+    let fileManager = FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
     let resources = ResourceManager<STLComputedData>(STL.computeSTLData computefun, STL.computeSTLDataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
@@ -60,7 +60,7 @@ let serializeSTL folder cacheDirectory =
     File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
 let serializeEU4 folder cacheDirectory =
-    let fileManager = FileManager(folder, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [])
+    let fileManager = FileManager(folder, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
     let resources = ResourceManager<EU4ComputedData>(EU4.computeEU4Data computefun, EU4.computeEU4DataUpdate computefun, Encoding.GetEncoding(1252), Encoding.UTF8).Api
@@ -76,7 +76,7 @@ let serializeEU4 folder cacheDirectory =
     let pickle = binarySerializer.Pickle data
     File.WriteAllBytes(Path.Combine(cacheDirectory, "eu4.cwb"), pickle)
 let serializeHOI4 folder cacheDirectory =
-    let fileManager = FileManager(folder, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [])
+    let fileManager = FileManager(folder, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
     let resources = ResourceManager<HOI4ComputedData>(computeHOI4Data computefun, computeHOI4DataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api

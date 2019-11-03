@@ -115,10 +115,19 @@ type ErrorCodes =
     static member ConfigRulesUnexpectedAliasKeyValue = fun key expected severity -> { ID = "CW267"; Severity = severity; Message = sprintf "Expected a %s value, got %s" key expected }
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
-
+[<CustomEqualityAttribute; NoComparisonAttribute>]
 type ValidationResult =
     | OK
     | Invalid of CWError list
+    member x.Equals(y : ValidationResult) =
+        match x, y with
+        |OK, OK -> true
+        |Invalid e1, Invalid e2 -> e1.Equals e2
+        | _ -> false
+    override x.Equals(y : obj) =
+        match y with
+        | :? ValidationResult as vr -> x.Equals vr
+        | _ -> false
 
 type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =
     member __.GlobMatch(pattern : string) =
@@ -185,7 +194,8 @@ module ValidationCore =
     let inline invData (code : ErrorCode) (l : IKeyPos) (data : option<string>) =
         let pos = l.Position
         let key = l.Key
-        code.ID, code.Severity, pos, key.Length, code.Message, data, None
+        { code = code.ID; severity = code.Severity; range = pos; keyLength = key.Length; message = code.Message; data = data; relatedErrors = None }
+        // code.ID, code.Severity, pos, key.Length, code.Message, data, None
 
     let inline inv (code : ErrorCode) (l) =
         invData code l None
@@ -193,10 +203,12 @@ module ValidationCore =
     let invLeafValue (code : ErrorCode) (lv : LeafValue) (data : option<string>) =
         let pos = lv.Position
         let value = lv.Value.ToString()
-        code.ID, code.Severity, pos, value.Length, code.Message, data, None
+        { code = code.ID; severity = code.Severity; range = pos; keyLength = value.Length; message = code.Message; data = data; relatedErrors = None }
+        // code.ID, code.Severity, pos, value.Length, code.Message, data, None
 
     let invManual (code : ErrorCode) (pos : range) (key : string) (data : string option) =
-        code.ID, code.Severity, pos, key.Length, code.Message, data, None
+        { code = code.ID; severity = code.Severity; range = pos; keyLength = key.Length; message = code.Message; data = data; relatedErrors = None }
+        // code.ID, code.Severity, pos, key.Length, code.Message, data, None
 
     let inline invCustom (l) =
         invData (ErrorCodes.CustomError "default error" Severity.Error) l None
@@ -236,8 +248,9 @@ module ValidationCore =
             | [] -> failwith "mergeErrorsInner somehow got an empty error list"
             | [res] -> res
             | head::head2::tail ->
-                let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
-                mergeErrorsInner ((e1c, e1s, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d, e1rel)::tail)
+                // let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
+                let t = { code = head.code; severity = head.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
+                mergeErrorsInner (t::tail)
         mergeErrorsInner
 
     // Parallelising something this small makes it slower!
@@ -274,16 +287,18 @@ module ValidationCore =
             |[res] -> Some res
             |_ -> Some (mergeValidationErrors "CW240" t)
         |_, OK -> None
+    let isSameObject = LanguagePrimitives.PhysicalEquality
+
+
     let lazyErrorMerge rs f defValue (errors : ValidationResult) merge =
         // let mutable state = errors
         let mutable foundOK = false
-        let mutable any = false
-        //Take every potential rule
+        let mutable any = false        //Take every potential rule
         let res =
             rs |> Seq.fold (fun es r ->
             if foundOK
             then es
-            else (let x = f r es in if x.Equals(es) then foundOK <- true; x else any <- true; x)) errors
+            else (let x = f r es in if x.Equals es then foundOK <- true; x else any <- true; x)) errors
         match foundOK, any, merge with
         |true, _, _ -> errors
         |_, false, _ -> defValue()

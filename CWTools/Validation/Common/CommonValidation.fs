@@ -137,7 +137,7 @@ module CommonValidation =
                     }
                     res |> (function
                             | OK -> OK
-                            | Invalid (inv) -> Invalid (inv |> List.map (fun (a, b, c, d, e, f, _) -> (a, b, c, d, e, f, Some message))))
+                            | Invalid (inv) -> Invalid (inv |> List.map (fun e -> { e with relatedErrors = Some message })))
                 let memoizeValidation =
                     let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
                     let memFun = validateSESpecific
