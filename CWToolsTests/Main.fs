@@ -71,7 +71,7 @@ let perf(b) =
     let stl = STLGame(settings) :> IGame<STLComputedData>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> n)
+        let errors = stl.ValidationErrors() |> List.map (fun e -> e.range)
         let testVals = stl.AllEntities()
         ()
     else ()
@@ -94,7 +94,7 @@ let perf2(b) =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> n)
+        let errors = stl.ValidationErrors() |> List.map (fun e -> e.range)
         let testVals = stl.AllEntities()
         stl.RefreshCaches()
         ()
@@ -138,8 +138,8 @@ let perf3(b) =
 
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = eu4.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> n)
-        let errors = eu4.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k, _) -> n)
+        let errors = eu4.ValidationErrors() |> List.map (fun e -> e.range)
+        let errors = eu4.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
         let testVals = eu4.AllEntities()
         eu4.RefreshCaches()
         ()
