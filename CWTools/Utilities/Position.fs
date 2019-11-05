@@ -195,9 +195,25 @@ type range(code:int64) =
     override r.Equals(obj) = match obj with :? range as r2 -> code = r2.Code | _ -> false
     override r.GetHashCode() = hash code
 
+let memoize keyFunction memFunction =
+    let dict = new System.Collections.Generic.Dictionary<_,_>()
+    fun n ->
+        match dict.TryGetValue(keyFunction(n)) with
+        | (true, v) -> v
+        | _ ->
+            let temp = memFunction(n)
+            dict.Add(keyFunction(n), temp)
+            temp
+
+
+let mkRangePath (f : string) =
+    if System.IO.Path.IsPathRooted f then try Path.GetFullPath f with _ -> f else f
+
+let mkRangePathMem = memoize id mkRangePath
 let mkRange (f : string) b e =
     // remove relative parts from full path
-    let normalizedFilePath = if System.IO.Path.IsPathRooted f then try Path.GetFullPath f with _ -> f else f
+    // let normalizedFilePath = if System.IO.Path.IsPathRooted f then try Path.GetFullPath f with _ -> f else f
+    let normalizedFilePath = mkRangePathMem f
     range (fileIndexOfFile normalizedFilePath, b, e)
 
 let mkFileIndexRange fi b e = range (fi, b, e)
