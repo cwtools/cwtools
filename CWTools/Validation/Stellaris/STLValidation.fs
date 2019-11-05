@@ -18,8 +18,8 @@ open CWTools.Common.NewScope
 
 module STLValidation =
     type S = Severity
-    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name" Severity.Error) ship)] else OK
-    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size" Severity.Error) ship)] else OK
+    let shipName (ship : Ship) = if ship.Name = "" then Invalid (Guid.NewGuid(), [(inv (ErrorCodes.CustomError "must have name" Severity.Error) ship)]) else OK
+    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid (Guid.NewGuid(), [(inv (ErrorCodes.CustomError "must have size" Severity.Error) ship)]) else OK
 
     // let validateShip : Validator<Ship>  = shipName <&> shipSize
 
@@ -42,7 +42,7 @@ module STLValidation =
                         match values with
                         | [] -> children
                         | x ->
-                            x |> List.map ((fun f -> f, f.Value.ToString()) >> (fun (l, v) -> if variables |> List.contains v then OK else Invalid [inv (ErrorCodes.UndefinedVariable v) l]))
+                            x |> List.map ((fun f -> f, f.Value.ToString()) >> (fun (l, v) -> if variables |> List.contains v then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedVariable v) l])))
                               |> List.fold (<&&>) children)
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
@@ -71,16 +71,16 @@ module STLValidation =
     //     match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
     //     |None, _ -> OK
     //     |Some _, s when s = scopeManager.AnyScope -> OK
-    //     |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+    //     |Some (c, ss), s -> if List.contains s ss then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
 
 
     // let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (modifier : string) (node) =
     //     let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
     //     match exists with
-    //     |None -> Invalid [inv (ErrorCodes.UndefinedStaticModifier modifier) node]
+    //     |None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedStaticModifier modifier) node])
     //     |Some m -> m.categories <&!&>  (checkCategoryInScope modifier scopes.CurrentScope node)
 
-    let valNotUsage (node : Node) = if (node.Values.Length + node.Children.Length) > 1 then Invalid [inv ErrorCodes.IncorrectNotUsage node] else OK
+    let valNotUsage (node : Node) = if (node.Values.Length + node.Children.Length) > 1 then Invalid (Guid.NewGuid(), [inv ErrorCodes.IncorrectNotUsage node]) else OK
 
 
     /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
@@ -100,7 +100,7 @@ module STLValidation =
             | None -> false
         let e =
             match isMTTH || isTrig || isOnce || isAlwaysNo with
-            | false -> Invalid [inv ErrorCodes.EventEveryTick event]
+            | false -> Invalid (Guid.NewGuid(), [inv ErrorCodes.EventEveryTick event])
             | true -> OK
         e
     let validateEvents : STLStructureValidator =
@@ -137,7 +137,7 @@ module STLValidation =
                     | Some trigger ->
                         trigger.Leaves <&!&> (fun l ->
                                                          if Array.contains l.Key stellarisEventPreTriggers
-                                                         then Invalid [inv (ErrorCodes.PossiblePretrigger l.Key) l]
+                                                         then Invalid (Guid.NewGuid(), [inv (ErrorCodes.PossiblePretrigger l.Key) l])
                                                          else OK)
             let popjobs = es.GlobMatchChildren "**/common/pop_jobs/*.txt"
             let popjobToError (popjob : Node) =
@@ -146,7 +146,7 @@ module STLValidation =
                     | Some possible ->
                         possible.Leaves <&!&> (fun l ->
                                                          if Array.contains l.Key stellarisPopJobPreTriggers
-                                                         then Invalid [inv (ErrorCodes.PossiblePretrigger l.Key) l]
+                                                         then Invalid (Guid.NewGuid(), [inv (ErrorCodes.PossiblePretrigger l.Key) l])
                                                          else OK)
 
             (events <&!&> eventToErrors) <&&> (popjobs <&!&> popjobToError)
@@ -157,15 +157,15 @@ module STLValidation =
                             match x.Key with
                             | "research_leader" ->
                                 match x.TagText "area" with
-                                | "" -> Invalid [inv ErrorCodes.ResearchLeaderArea x]
-                                | area2 when area <> area2 -> Invalid [inv (ErrorCodes.ResearchLeaderTech area area2) x]
+                                | "" -> Invalid (Guid.NewGuid(), [inv ErrorCodes.ResearchLeaderArea x])
+                                | area2 when area <> area2 -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ResearchLeaderTech area area2) x])
                                 | _ -> OK
                                 /// These aren't really required
                                 // <&&>
                                 // match cat, x.TagText "has_trait" with
                                 // | None, _ -> OK
-                                // | _, "" -> Invalid [inv S.Error x "This research_leader is missing required \"has_trait\""]
-                                // | Some c, t when ("leader_trait_expertise_" + c) <> t -> Invalid [inv S.Warning x "This research_leader has the wrong expertise"]
+                                // | _, "" -> Invalid (Guid.NewGuid(), [inv S.Error x "This research_leader is missing required \"has_trait\""])
+                                // | Some c, t when ("leader_trait_expertise_" + c) <> t -> Invalid (Guid.NewGuid(), [inv S.Warning x "This research_leader has the wrong expertise"])
                                 // | _ -> OK
                             | _ -> OK
                         results <&&> children)
@@ -181,7 +181,7 @@ module STLValidation =
                     let cat = node.Child "category" |> Option.bind (fun c -> c.All |> List.tryPick (function |LeafValueC lv -> Some (lv.Value.ToString()) |_ -> None))
                     let catres =
                         match cat with
-                        | None -> Invalid [inv ErrorCodes.TechCatMissing node]
+                        | None -> Invalid (Guid.NewGuid(), [inv ErrorCodes.TechCatMissing node])
                         | Some _ -> OK
                     catres <&&> valResearchLeader area cat node
             techs <&!&> inner
@@ -196,7 +196,7 @@ module STLValidation =
                             let results =
                                 match x.Key with
                                 | "effectButtonType" ->
-                                    x.Leafs "effect" <&!&> (fun e -> if List.contains (e.Value.ToRawString()) effects then OK else Invalid [inv (ErrorCodes.ButtonEffectMissing (e.Value.ToString())) e])
+                                    x.Leafs "effect" <&!&> (fun e -> if List.contains (e.Value.ToRawString()) effects then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ButtonEffectMissing (e.Value.ToString())) e]))
                                 | _ -> OK
                             results <&&> children
                                 )
@@ -216,7 +216,7 @@ module STLValidation =
                                 match x.Leafs "spriteType" |> List.ofSeq with
                                 | [] -> OK
                                 | xs ->
-                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
+                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e]))
                             results <&&> children
                                 )
             let fCombine = (<&&>)
@@ -237,7 +237,7 @@ module STLValidation =
                         let filenamefallback = filename.Replace(".lua",".shader").Replace(".tga",".dds")
                         match filenames |> List.exists (fun f -> f.EndsWith(filename, StringComparison.Ordinal ) || f.EndsWith(filenamefallback, StringComparison.Ordinal)) with
                         | true -> OK
-                        | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])
+                        | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l]))
             sprites <&!&> inner
 
 
@@ -254,7 +254,7 @@ module STLValidation =
                     match x.Childs "check_variable" |> List.ofSeq with
                     | [] -> children
                     | t ->
-                        t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node] ))
+                        t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node]) ))
                         <&&> children
                     )
         let fCombine = (<&&>)
@@ -314,8 +314,8 @@ module STLValidation =
                 let flag = if flag.Contains "@" then flag.Split('@').[0] else flag
                 //Hack due to testing files
                 if flag == "yes" || flag == "true" || flag == "test" then OK else
-                flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid [inv (ErrorCodes.UndefinedFlag flag flagType) leaf])
-                                       |> Option.defaultValue (Invalid [inv (ErrorCodes.UndefinedFlag flag flagType) leaf])
+                flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
+                                       |> Option.defaultValue (Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
             match leaf.Key with
             |"has_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
             |"has_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
@@ -374,27 +374,27 @@ module STLValidation =
             let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
             let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
             OK
-            // opts @ effects <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "effect") x])
-            // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))
+            // opts @ effects <&!&> (fun x -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "effect") x]))
+            // <&&> (triggers <&!&> (fun x -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "trigger") x])))
 
     let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
         match cat.SupportsScope scope with
         | true -> OK
-        | false -> Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (scope.ToString()) ((modifierCategoryManager.SupportedScopes cat ) |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+        | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectModifierScope modifier (scope.ToString()) ((modifierCategoryManager.SupportedScopes cat ) |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
         // match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
         // |None, _ -> OK
         // |Some _, s when s = scopeManager.AnyScope -> OK
-        // |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+        // |Some (c, ss), s -> if List.contains s ss then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
 
     let valModifier (modifiers : ActualModifier list) (scope : Scope) (leaf : Leaf) =
         match modifiers |> List.tryFind (fun m -> m.tag == leaf.Key) with
-        |None -> Invalid [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf]
+        |None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf])
         |Some m ->
             checkModifierInScope (leaf.Key) (scope) leaf m.category
-            <&&> (leaf.Value |> (function |Value.Int x when x = 0 -> Invalid [inv (ErrorCodes.ZeroModifier leaf.Key) leaf] | _ -> OK))
+            <&&> (leaf.Value |> (function |Value.Int x when x = 0 -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ZeroModifier leaf.Key) leaf]) | _ -> OK))
             // match m.categories |> List.contains (modifierCategory) with
             // |true -> OK
-            // |false -> Invalid [inv (ErrorCodes.IncorrectModifierScope (leaf.Key) (modifierCategory.ToString()) (m.categories.ToString())) leaf]
+            // |false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectModifierScope (leaf.Key) (modifierCategory.ToString()) (m.categories.ToString())) leaf])
 
 
     let valModifiers (modifiers : ActualModifier list) (node : ModifierBlock) =
@@ -641,7 +641,7 @@ module STLValidation =
                 let isWeightZero = t.Tag "weight" |> (function |Some (Value.Int 0) -> true |_ -> false)
                 let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00m) -> true |_ -> false)) |> Option.defaultValue false
                 let hasFeatureFlag = t.Has "feature_flags"
-                if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid [inv (ErrorCodes.UnusedTech (t.Key)) t]
+                if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnusedTech (t.Key)) t])
             let res = techs <&!&> inner
             // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             res
@@ -686,10 +686,10 @@ module STLValidation =
                 let template = c.TagText "template"
                 let templateFound = weaponInfo |> Map.tryFind template
                 match slotFound, templateFound with
-                | None, _ -> Invalid [inv (ErrorCodes.MissingSectionSlot section slot) c]
-                | _, None -> Invalid [inv (ErrorCodes.UnknownComponentTemplate template) c]
+                | None, _ -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingSectionSlot section slot) c])
+                | _, None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnknownComponentTemplate template) c])
                 | Some (sType, sSize), Some (tType, tSize) ->
-                    if sType == tType && sSize == tSize then OK else Invalid [inv (ErrorCodes.MismatchedComponentAndSlot slot sSize template tSize) c]
+                    if sType == tType && sSize == tSize then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MismatchedComponentAndSlot slot sSize template tSize) c])
 
             let defaultTemplates = [ "DEFAULT_COLONIZATION_SECTION"; "DEFAULT_CONSTRUCTION_SECTION"]
             let validateSection (s : Node) =
@@ -697,7 +697,7 @@ module STLValidation =
                 if defaultTemplates |> List.contains section then OK else
                     let sectionFound = sectionInfo |> Map.tryFind section
                     match sectionFound with
-                    | None -> Invalid [inv (ErrorCodes.UnknownSectionTemplate section) s]
+                    | None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnknownSectionTemplate section) s])
                     | Some smap ->
                         s.Childs "component" <&!&> validateComponent section smap
 
@@ -718,8 +718,8 @@ module STLValidation =
                 fun (x : Node) ->
                     match x.Has "class", starclasses |> List.contains (x.TagText "class") with
                     |true, true -> OK
-                    |false, _ -> Invalid [inv (ErrorCodes.CustomError "This initializer is missing a class" Severity.Error) x]
-                    |_, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x]
+                    |false, _ -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "This initializer is missing a class" Severity.Error) x])
+                    |_, false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x])
             inits <&!&> fNode
 
     let validatePlanetKillers : STLStructureValidator =
@@ -731,16 +731,16 @@ module STLValidation =
                 let key = node.TagText "key"
                 let on_action = "on_destroy_planet_with_" + key
                 let trigger = "can_destroy_planet_with_" + key
-                if List.exists ((==) on_action) onactions then OK else Invalid [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing on_action %s" key on_action)) node]
+                if List.exists ((==) on_action) onactions then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing on_action %s" key on_action)) node])
                 <&&>
-                (if List.exists ((==) trigger) scriptedtriggers then OK else Invalid [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing scripted trigger %s" key trigger)) node])
+                (if List.exists ((==) trigger) scriptedtriggers then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing scripted trigger %s" key trigger)) node]))
             planetkillers <&!&> inner
 
     let validateAnomaly210 : STLStructureValidator =
         fun _ es ->
             let anomalies = es.GlobMatchChildren("**/anomalies/*.txt")
             let fNode =
-                fun (x : Node) -> if x.Key == "anomaly" || x.Key == "anomaly_category" then Invalid [inv ((ErrorCodes.CustomError "This style of anomaly was removed with 2.1.0, please see vanilla for details") Severity.Error) x] else OK
+                fun (x : Node) -> if x.Key == "anomaly" || x.Key == "anomaly_category" then Invalid (Guid.NewGuid(), [inv ((ErrorCodes.CustomError "This style of anomaly was removed with 2.1.0, please see vanilla for details") Severity.Error) x]) else OK
             anomalies <&!&> fNode
 
 
@@ -750,9 +750,9 @@ module STLValidation =
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "limit" || x.Key == "modifier" then OK else
-                    let res = if x.Key == "if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
-                    let res2 = if x.Key == "else_if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
-                    let res3 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid [inv ErrorCodes.AmbiguousIfElse x] else OK
+                    let res = if x.Key == "if" && x.Has "else" && not(x.Has "if") then Invalid (Guid.NewGuid(), [inv ErrorCodes.DeprecatedElse x]) else OK
+                    let res2 = if x.Key == "else_if" && x.Has "else" && not(x.Has "if") then Invalid (Guid.NewGuid(), [inv ErrorCodes.DeprecatedElse x]) else OK
+                    let res3 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid (Guid.NewGuid(), [inv ErrorCodes.AmbiguousIfElse x]) else OK
                     (res <&&> res2 <&&> res3) <&&> children
                 )
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
@@ -774,7 +774,7 @@ module STLValidation =
                                 match key with
                                 |y when y == "if" -> true, None
                                 |y when y == "else" || y == "else_if" ->
-                                    false, Some (Invalid [inv ErrorCodes.IfElseOrder x])
+                                    false, Some (Invalid (Guid.NewGuid(), [inv ErrorCodes.IfElseOrder x]))
                                 |_ -> false, None
                         let _, res = nodes |> List.fold (fun (s, (r : ValidationResult option)) n -> if r.IsSome then s, r else checkNext s n) (false, None)
                         match res with |None -> children |Some r -> r <&&> children
@@ -793,7 +793,7 @@ module STLValidation =
                     |OR, k when k == "OR" -> OR, Some (inv (ErrorCodes.UnnecessaryBoolean "OR") x)
                     |_, k when k == "OR" || k == "NOR" -> OR, None
                     |_, _ -> AND, None
-            (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> Invalid)
+            (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
 
     let validateDeprecatedSetName : STLStructureValidator =
         fun _ es ->
@@ -801,7 +801,7 @@ module STLValidation =
             let fNode =
                 fun (x : Node) children ->
                     if x.Key == "set_empire_name" || x.Key == "set_planet_name" then
-                        Invalid [inv ErrorCodes.DeprecatedSetName x] <&&> children
+                        Invalid (Guid.NewGuid(), [inv ErrorCodes.DeprecatedSetName x]) <&&> children
                     else children
             effects <&!&> (foldNode2 fNode (<&&>) OK)
     let validateEconomicCatAIBudget : LookupValidator<_> =
@@ -821,5 +821,5 @@ module STLValidation =
                 if checkKey key
                 then OK
                 else
-                    Invalid [inv ((ErrorCodes.CustomError (sprintf "Economic category %s nor any of its parents have an ai_budget" econ.Key)) Severity.Warning) econ]
+                    Invalid (Guid.NewGuid(), [inv ((ErrorCodes.CustomError (sprintf "Economic category %s nor any of its parents have an ai_budget" econ.Key)) Severity.Warning) econ])
             econs <&!!&> checkEcon

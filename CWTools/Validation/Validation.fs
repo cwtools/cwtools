@@ -9,6 +9,7 @@ open CWTools.Games
 open CWTools.Process.STLProcess
 open CWTools.Process.ProcessCore
 open CWTools.Common.STLConstants
+open System
 
 
 type ErrorCode =
@@ -115,14 +116,34 @@ type ErrorCodes =
     static member ConfigRulesUnexpectedAliasKeyValue = fun key expected severity -> { ID = "CW267"; Severity = severity; Message = sprintf "Expected a %s value, got %s" key expected }
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
+
+// open System.Runtime.CompilerServices
+// [<Extension>]
+// type Utils () =
+//     [<Extension>]
+//     static member Equals(x : List<CWError>, y : List<CWError>) =
+//         let rec inner (x : List<CWError>) (y : List<CWError>) =
+//             let mutable x = x
+//             let xe = x.IsEmpty
+//             let ye = y.IsEmpty
+//             if xe && ye then true else
+//             if xe <> ye then false else
+//             let xs = x.Tail
+//             let ys = y.Tail
+//             if xs.IsEmpty <> ys.IsEmpty then false
+//             else
+//                 if x.Head = y.Head then inner xs ys
+//                 else false
+//         inner x y
+
 [<CustomEqualityAttribute; NoComparisonAttribute>]
 type ValidationResult =
     | OK
-    | Invalid of CWError list
+    | Invalid of Guid *  CWError list
     member x.Equals(y : ValidationResult) =
         match x, y with
         |OK, OK -> true
-        |Invalid e1, Invalid e2 -> e1.Equals e2
+        |Invalid (g1, e1), Invalid (g2, e2) -> g1 = g2
         | _ -> false
     override x.Equals(y : obj) =
         match y with
@@ -222,24 +243,24 @@ module ValidationCore =
     let (<&>) f1 f2 x =
         match f1 x, f2 x with
         | OK, OK -> OK
-        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
-        | Invalid e, OK | OK, Invalid e -> Invalid e
+        | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
+        | Invalid (g, e), OK | OK, Invalid (g, e) -> Invalid (g, e)
     let (<&&>) f1 f2 =
         match f1, f2 with
         | OK, OK -> OK
-        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
-        | Invalid e, OK | OK, Invalid e -> Invalid e
+        | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
+        | Invalid (g, e), OK | OK, Invalid (g, e) -> Invalid (g, e)
 
     let (<&&&>) e f =
         match f with
-        |OK -> Invalid [e]
-        |Invalid es -> Invalid (e::es)
+        |OK -> Invalid (Guid.NewGuid(), [e])
+        |Invalid (g, es) -> Invalid (Guid.NewGuid(), e::es)
     let (<&?&>) f1 f2 =
         match f1, f2 with
         |OK, OK -> OK
-        |Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
-        |Invalid e, OK -> OK
-        |OK, Invalid e -> OK
+        | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
+        |Invalid (_, e), OK -> OK
+        |OK, Invalid (_, e) -> OK
 
     let mergeValidationErrors (errorcode : string) =
         let rec mergeErrorsInner es =
@@ -277,10 +298,10 @@ module ValidationCore =
 
     let merger original news =
         match original, news with
-        |_, Invalid [] -> None
-        |_, Invalid [res] -> Some res
-        |Invalid [], Invalid es |OK, Invalid es -> Some (mergeValidationErrors "CW240" es)
-        |Invalid (head::_), Invalid es ->
+        |_, Invalid (_, []) -> None
+        |_, Invalid (_, [res]) -> Some res
+        |Invalid (_, []), Invalid (_, es) |OK, Invalid (_, es) -> Some (mergeValidationErrors "CW240" es)
+        |Invalid (_, (head::_)), Invalid (_, es) ->
             let t = List.takeWhile ((<>) head) es
             match t with
             |[] -> None

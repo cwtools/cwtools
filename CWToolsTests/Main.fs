@@ -24,6 +24,7 @@ open CWTools.Common.STLConstants
 open CWTools.Common.NewScope
 open System.Text
 open System
+open System.Diagnostics
 
 let emptyEmbeddedSettings = {
         triggers = []
@@ -146,6 +147,47 @@ let perf3(b) =
     else ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
     ()
+let perf4(b) =
+    Debugger.Launch()
+    let timer = new System.Diagnostics.Stopwatch()
+    timer.Start()
+    scopeManager.ReInit(defaultScopeInputs)
+    let configFiles = (if Directory.Exists @".\testfiles/custom/rules/" then getAllFoldersUnion ([@".\testfiles/custom/rules"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+    let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
+    let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
+    let folders = configs |> List.tryPick getFolderList
+
+    let settings = {
+        CWTools.Games.EU4.EU4Settings.rootDirectories = [{ WorkspaceDirectory.name = "Test"; path = @"./testfiles/custom/files"}]
+        modFilter = None
+        scriptFolders = folders
+        excludeGlobPatterns = None
+        validation = {
+            validateVanilla = true
+            experimental = false
+            langs = [EU4 EU4Lang.English]
+        }
+        rules = Some {
+            ruleFiles = configs
+            validateRules = true
+            debugRulesOnly = false
+            debugMode = false
+        }
+        embedded = FromConfig ([], [])
+        maxFileSize = None
+    }
+    let eu4 = CWTools.Games.EU4.EU4Game(settings) :> IGame<EU4ComputedData>
+
+    // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
+    if b then
+        let errors = eu4.ValidationErrors() |> List.map (fun e -> e.range)
+        let errors = eu4.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
+        let testVals = eu4.AllEntities()
+        eu4.RefreshCaches()
+        ()
+    else ()
+    eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+    ()
 
 
 let test() =
@@ -177,6 +219,8 @@ let main argv =
     then perf(false); 0
     elif Array.tryHead argv = Some "q"
     then perf3(true); 0
+    elif Array.tryHead argv = Some "y"
+    then perf4(true); 0
     elif Array.tryHead argv = Some "t"
     then test(); test(); 0
     else Tests.runTestsInAssembly config argv

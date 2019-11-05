@@ -18,6 +18,7 @@ open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
+open System
 
 module CustomGameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>
@@ -58,7 +59,7 @@ module CustomGameFunctions =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
 
     let updateModifiers (game : GameObject) =

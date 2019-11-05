@@ -50,21 +50,21 @@ module LocalisationString =
 
     let checkRef (hardcodedLocalisation) (lang : Lang) (keys : LocKeySet) (entry : LocEntry) (r : string) =
         match keys.Contains r with
-        | true -> if r == entry.key && not (List.contains r hardcodedLocalisation) then Invalid[invManual (ErrorCodes.RecursiveLocRef) (entry.position) entry.key None ] else OK
+        | true -> if r == entry.key && not (List.contains r hardcodedLocalisation) then Invalid (Guid.NewGuid(), [invManual (ErrorCodes.RecursiveLocRef) (entry.position) entry.key None ]) else OK
         | false ->
             match r |> seq |> Seq.exists (fun c -> Char.IsLower(c)) && not (List.contains r hardcodedLocalisation) with
-            | true -> Invalid [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ]
+            | true -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ])
             | false -> OK
 
     let validateProcessedLocalisationBase (hardcodedLocalisation) (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry>) list) =
         let validateContextResult (e : LocEntry) cr =
             match cr with
             | LocContextResult.Found _ -> OK
-            | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
-            | LocNotFoundInType (s, dataType, confident) -> Invalid [invManual (ErrorCodes.LocCommandNotInDataType e.key s dataType confident) (e.position) e.key None]
-            | LocContextResult.NewScope s -> Invalid [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %O" s) Severity.Error ) (e.position) e.key None ]
+            | LocNotFound s -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ])
+            | LocNotFoundInType (s, dataType, confident) -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandNotInDataType e.key s dataType confident) (e.position) e.key None])
+            | LocContextResult.NewScope s -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %O" s) Severity.Error ) (e.position) e.key None ])
             | LocContextResult.WrongScope (c, actual, (expected : Scope list)) ->
-                Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (e.position) e.key None]
+                Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (e.position) e.key None])
             | _ -> OK
         let validateLocMap (lang, (m : Map<string, LocEntry>)) =
             let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
@@ -73,7 +73,7 @@ module LocalisationString =
             (m |> Map.map (fun _ e -> e.scopes <&!&> validateContextResult e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
 
         let validateReplaceMe (lang, (m : Map<string, LocEntry>)) =
-            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ] else s ) OK
+            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ]) else s ) OK
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
@@ -116,7 +116,7 @@ module LocalisationString =
         let validateCommand (c : string) =
             match localisationCommandValidator (scriptedLoc @ allcommands) eventTargets setvariables startContext c with
             | LocContextResult.WrongScope (c, actual, (expected : Scope list)) ->
-                Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None]
+                Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None])
             | _ -> OK
         keycommands <&!&> validateCommand
 
@@ -130,7 +130,7 @@ module LocalisationString =
         let validateCommand (c : JominiLocCommand list) =
             match localisationCommandValidator eventtargets setvariables startContext c with
             | LocContextResult.WrongScope (c, actual, (expected : Scope list)) ->
-                Invalid [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None]
+                Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None])
             | _ -> OK
         keycommands <&!&> validateCommand
 
@@ -149,4 +149,4 @@ module LocalisationString =
             }
         results.Values |> List.ofSeq
                        |> List.filter (fun (v, _, _, _) -> not v)
-                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid [createInvalid error pos] else OK)
+                       <&!&> (fun (_, _, error, pos) -> if pos.IsSome then Invalid (Guid.NewGuid(), [createInvalid error pos]) else OK)

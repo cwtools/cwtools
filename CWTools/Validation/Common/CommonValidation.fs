@@ -16,7 +16,7 @@ module CommonValidation =
             let fNode = (fun (x : Node) children ->
                 if (x.LeafValues |> Seq.isEmpty |> not && (x.Leaves |> Seq.isEmpty |> not || x.Children |> Seq.isEmpty |> not)) |> not
                 then children
-                else Invalid [inv ErrorCodes.MixedBlock x] <&&> children
+                else Invalid (System.Guid.NewGuid(), [inv ErrorCodes.MixedBlock x]) <&&> children
                 )
             let fCombine = (<&&>)
             es.All <&!&> foldNode2 fNode fCombine OK
@@ -24,7 +24,7 @@ module CommonValidation =
         fun _ es ->
             let fNode = (fun (x : Node) children ->
                 if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1
-                 then Invalid [inv (ErrorCodes.CustomError "Reminder: NOT does not mean NOT AND" Severity.Information) x]
+                 then Invalid (System.Guid.NewGuid(), [inv (ErrorCodes.CustomError "Reminder: NOT does not mean NOT AND" Severity.Information) x])
                 else children
                 )
             let fCombine = (<&&>)
@@ -66,7 +66,7 @@ module CommonValidation =
                                  >> List.collect snd
             let res = zipped |> List.collect (fun (tn, ts) -> (groupFun ts) |> List.map (fun t -> tn, t))
             res <&!&> (fun (typename, (tdi)) ->
-                            Invalid [invManual (ErrorCodes.DuplicateTypeDef typename tdi.id) tdi.range "" None])
+                            Invalid (System.Guid.NewGuid(), [invManual (ErrorCodes.DuplicateTypeDef typename tdi.id) tdi.range "" None]))
                             //    |> List.map (fun td, ts -> )
             )
 
@@ -137,7 +137,7 @@ module CommonValidation =
                     }
                     res |> (function
                             | OK -> OK
-                            | Invalid (inv) -> Invalid (inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
                 let memoizeValidation =
                     let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
                     let memFun = validateSESpecific
