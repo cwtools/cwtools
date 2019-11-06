@@ -195,14 +195,14 @@ type range(code:int64) =
     override r.Equals(obj) = match obj with :? range as r2 -> code = r2.Code | _ -> false
     override r.GetHashCode() = hash code
 
-let memoize keyFunction memFunction =
-    let dict = new System.Collections.Generic.Dictionary<_,_>()
+let memoize (keyFunction : 'a -> 'b) (memFunction : 'a -> 'c) =
+    let dict = new System.Collections.Concurrent.ConcurrentDictionary<'b,'c>()
     fun n ->
         match dict.TryGetValue(keyFunction(n)) with
         | (true, v) -> v
         | _ ->
             let temp = memFunction(n)
-            dict.Add(keyFunction(n), temp)
+            dict.TryAdd(keyFunction(n), temp) |> ignore
             temp
 
 
