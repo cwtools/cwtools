@@ -87,3 +87,10 @@ subtypeset = {
         subtype_get_1 = value[subtype_1]
     }
 }
+
+enums = {
+    enum[test_enum] = {
+        twenty
+        twentyone
+    }
+}

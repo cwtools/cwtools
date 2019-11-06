@@ -63,7 +63,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
     let mutable rulesDataGenerated = false
 
-    let expandPredefinedValues (types : Map<string, _>) (values : string list) =
+    let expandPredefinedValues (types : Map<string, _>) (enums : Map<string, _ * list<string>>) (values : string list) =
         let replaceType (value : string) =
             let startIndex = value.IndexOf "<"
             let endIndex = value.IndexOf ">" - 1
@@ -75,8 +75,18 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 // eprintfn "epv2 %A" res
                 res
             | None -> [value]
-
+        let replaceEnum (value : string) =
+            let startIndex = value.IndexOf "enum["
+            let endIndex = value.IndexOf "]" - 1
+            let referencedEnum = value.Substring(startIndex + 5, (endIndex - (startIndex + 4)))
+            match enums |> Map.tryFind referencedEnum with
+            | Some (_, enumValues) ->
+                let res = enumValues |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2)) |> List.ofSeq
+                // eprintfn "epv2 %A" res
+                res
+            | None -> [value]
         values |> List.collect (fun v -> if v.Contains "<" && v.Contains ">" then replaceType v else [v])
+               |> List.collect (fun v -> if v.Contains "enum[" && v.Contains "]" then replaceEnum v else [v])
 
     let loadBaseConfig(rulesSettings : RulesSettings) =
         let rules, types, enums, complexenums, values =
@@ -153,7 +163,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         //let infoService = tempInfoService
         // game.InfoService <- Some tempInfoService
         if not rulesDataGenerated then resources.ForceRulesDataGenerate(); rulesDataGenerated <- true else ()
-        let predefValues = tempValues |> Map.map (fun k vs -> (expandPredefinedValues tempTypeMap vs) )
+        let predefValues = tempValues |> Map.map (fun k vs -> (expandPredefinedValues tempTypeMap lookup.enumDefs vs) )
                                       |> Map.toList |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
 
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempInfoService.GetDefinedVariables e))))
