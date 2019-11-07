@@ -31,14 +31,13 @@ module EU4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
-            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
-            @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        let extraOneToOne = (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+        processLocalisation() localisationCommands eventtargets extraOneToOne lookup.scriptedLoc definedvars
 
     let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
@@ -53,7 +52,8 @@ module EU4GameFunctions =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        let extraOneToOne = (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+        validateLocalisationCommand() localisationCommands eventtargets extraOneToOne lookup.scriptedLoc definedvars
 
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()

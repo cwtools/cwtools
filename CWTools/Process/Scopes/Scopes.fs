@@ -235,7 +235,7 @@ module Scopes =
                 let rawKeys = key.Split('.')
                 let rawKeyLength = rawKeys.Length - 1
                 let rawKeys = rawKeys |> Array.mapi (fun i k -> k, i = rawKeyLength)
-                let rawRes2 = 
+                let rawRes2 =
                     if hoi4TargetedHardcodedVariables then
                         let rawRes = rawKeys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
                         match rawRes with
@@ -283,7 +283,7 @@ module Scopes =
 
 
     let createLocalisationCommandValidator (locPrimaryScopes : (string * (ScopeContext * bool -> ScopeContext * bool)) list) (scopedLocEffectsMap : EffectMap) =
-        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (source : ScopeContext) (command : string) ->
+        fun (commands : string list) (eventtargets : string list) (setvariables : string list) (extraOneToOne : string list) (source : ScopeContext) (command : string) ->
         let keys = command.Split('.') |> List.ofArray
         let inner ((first : bool), (context : ScopeContext)) (nextKey : string) =
             let onetooneMatch() =
@@ -309,7 +309,11 @@ module Scopes =
                 |None, false, false ->
                     match setvariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
                     | true -> LocContextResult.Found (context.CurrentScope.ToString())
-                    | false -> LocNotFound (nextKey)
+                    | false ->
+                        match extraOneToOne |> List.exists (fun et -> et == nextKey) with
+                        | true -> LocContextResult.NewScope ({source with Scopes = context.Root.AnyScope::source.Scopes })
+                        | false ->
+                            LocNotFound (nextKey)
                 |None, true, false ->
                     match eventtargets |> List.exists (fun et -> et == nextKey) with
                     | true -> LocContextResult.NewScope ({source with Scopes = context.Root.AnyScope::source.Scopes })

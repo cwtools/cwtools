@@ -33,7 +33,8 @@ module HOI4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        let extraOneToOne = []
+        processLocalisation() localisationCommands eventtargets extraOneToOne lookup.scriptedLoc definedvars
     let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
@@ -47,7 +48,8 @@ module HOI4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        let extraOneToOne = []
+        validateLocalisationCommand() localisationCommands eventtargets extraOneToOne lookup.scriptedLoc definedvars
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])

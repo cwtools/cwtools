@@ -36,12 +36,14 @@ module STLGameFunctions =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
+        let extraOneToOne = []
+        processLocalisation() localisationCommands (eventtargets @ globaleventtargets) extraOneToOne lookup.scriptedLoc definedVariables
     let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
         let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
+        let extraOneToOne = []
+        validateLocalisationCommand() localisationCommands (eventtargets @ globaleventtargets) extraOneToOne lookup.scriptedLoc definedVariables
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
             let se = scopedEffects() |> List.map (fun e -> e :> Effect)
