@@ -9,6 +9,8 @@ open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
 open CWTools.Common.NewScope
 open CWTools.Process.Scopes.Scopes
+open CWTools.Process.Localisation
+open CWTools.Process.Localisation.VIC2
 module VIC2LocalisationString =
 
     let hardcodedLocalisation =
@@ -54,8 +56,8 @@ module VIC2LocalisationString =
             "GetReligionName";
             "GetReligionGroupName";
         ]
-    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes)
+    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes), []
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation() = processLocalisationBase (localisationCommandValidator()) defaultContext
-    let validateLocalisationCommand() = validateLocalisationCommandsBase (localisationCommandValidator())
+    let processLocalisation = fun commands variableCommands dynamicSettings -> processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
+    let validateLocalisationCommand = fun commands variableCommands dynamicSettings -> validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)

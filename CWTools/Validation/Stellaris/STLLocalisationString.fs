@@ -13,6 +13,8 @@ open CWTools.Utilities.Position
 open CWTools.Process.Scopes
 open CWTools.Process.Scopes.Scopes
 open CWTools.Common.NewScope
+open CWTools.Process.Localisation
+open CWTools.Process.Localisation.STL
 
 module STLLocalisationString =
 
@@ -82,11 +84,10 @@ module STLLocalisationString =
             "GetNamePluralInsult";
             "GetClassName"; // Discord reported
         ]
-    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes)
-
+    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes), []
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation() = processLocalisationBase (localisationCommandValidator()) defaultContext
-    let validateLocalisationCommand() = validateLocalisationCommandsBase (localisationCommandValidator())
+    let processLocalisation = fun commands variableCommands dynamicSettings -> processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
+    let validateLocalisationCommand = fun commands variableCommands dynamicSettings -> validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)
     // let checkCommand localisationCommandContext (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
     //     match localisationCommandContext commands eventtargets setvariables entry command with
     //     | ContextResult.Found _ -> OK

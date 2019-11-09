@@ -3,6 +3,7 @@ open CWTools.Common
 open CWTools.Localisation
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
+open CWTools.Process.Localisation
 
 
 type LocalisationManager<'T when 'T :> ComputedData>

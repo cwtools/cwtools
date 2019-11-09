@@ -31,6 +31,11 @@
     <Compile Include="Process/Scopes/Scopes.fs" />
     <Compile Include="Process/Localisation/ChangeLocScope.fs" />
     <Compile Include="Process/Localisation/HOI4LocalisationScopes.fs" />
+    <Compile Include="Process/Localisation/STLLocalisationScopes.fs" />
+    <Compile Include="Process/Localisation/EU4LocalisationScopes.fs" />
+    <Compile Include="Process/Localisation/CK2LocalisationScopes.fs" />
+    <Compile Include="Process/Localisation/IRLocalisationScopes.fs" />
+    <Compile Include="Process/Localisation/VIC2LocalisationScopes.fs" />
     <Compile Include="Process/Scopes/STLScopes.fs" />
     <Compile Include="Process/STLProcess.fs" />
     <Compile Include="Process/Scopes/EU4Scopes.fs" />

@@ -32,7 +32,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = Legacy []
+        localisationCommands = Legacy ([], [])
         eventTargetLinks = []
 }
 let emptyStellarisSettings (rootDirectory) = {

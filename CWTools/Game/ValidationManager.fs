@@ -11,6 +11,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.TryParser
 open CWTools.Process.Scopes
 open FSharp.Collections.ParallelSeq
+open CWTools.Process.Localisation
 
 type LookupFileValidator<'T when 'T :> ComputedData> = Files.FileManager -> RuleValidationService option -> Lookup -> FileValidator<'T>
 
