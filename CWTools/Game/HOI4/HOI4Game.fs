@@ -25,7 +25,9 @@ module HOI4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
+            (lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
@@ -40,7 +42,9 @@ module HOI4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
+            (lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
