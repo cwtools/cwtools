@@ -2,6 +2,7 @@ namespace CWTools.Games.HOI4
 open CWTools.Common.HOI4Constants
 open CWTools.Localisation
 open CWTools.Validation
+open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.HOI4
@@ -52,6 +53,7 @@ module HOI4GameFunctions =
         validateLocalisationCommand() localisationCommands eventtargets extraOneToOne lookup.scriptedLoc definedvars
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
+        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
 
     let updateModifiers (game : GameObject) =
