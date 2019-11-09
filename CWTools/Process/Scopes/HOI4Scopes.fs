@@ -8,7 +8,6 @@ module HOI4 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-    let defaultDesc = "Scope (/context) switch"
 
 
     let scopedEffects() =
@@ -46,25 +45,3 @@ module HOI4 =
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
     let changeScope = Scopes.createChangeScope oneToOneScopes (Scopes.simpleVarPrefixFun "var:") true
 
-    let scopedLocEffects() = [
-        ScopedEffect("controller", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("capital", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "State", EffectType.Link, defaultDesc, "", true);
-        ScopedEffect("owner", [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", Link, defaultDesc, "", true);
-    ]
-    let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect))
-
-
-    let locPrimaryScopes() =
-        let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
-        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true
-        [
-        "This", id;
-        "Root", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
-        "Prev", prev
-        "From", from; //TODO Make it actually use FROM
-        "FromFrom", from >> from;
-        "FromFromFrom", from >> from >> from;
-        "FromFromFromFrom", from >> from >> from >> from;
-        ]
-
-    let localisationCommandValidator() = Scopes.createLocalisationCommandValidator (locPrimaryScopes()) (scopedLocEffectsMap())

@@ -18,9 +18,30 @@ open System
 open CWTools.Validation.HOI4.HOI4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
+open CWTools.Process.Localisation
 
 module HOI4GameFunctions =
     type GameObject = GameObject<HOI4ComputedData, HOI4Lookup>
+    let createLocDynamicSettings(lookup : Lookup) =
+        let eventtargets =
+            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
+            @
+            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
+        let definedvars =
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
+        {
+            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
+            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+            setVariables = definedvars
+        }
     let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)

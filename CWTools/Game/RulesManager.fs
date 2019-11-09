@@ -16,7 +16,7 @@ type RulesSettings = {
 }
 
 type LocalisationEmbeddedSettings =
-| Legacy of (string * (Scope list)) list
+| Legacy of (string * (Scope list)) list * string list
 | Jomini of CWTools.Parser.DataTypeParser.JominiLocDataTypes
 
 type EmbeddedSettings = {

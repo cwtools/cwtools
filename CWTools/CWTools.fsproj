@@ -29,6 +29,8 @@
     <Compile Include="Process/Process.fs" />
     <Compile Include="Process/CK2Process.fs" />
     <Compile Include="Process/Scopes/Scopes.fs" />
+    <Compile Include="Process/Localisation/ChangeLocScope.fs" />
+    <Compile Include="Process/Localisation/HOI4LocalisationScopes.fs" />
     <Compile Include="Process/Scopes/STLScopes.fs" />
     <Compile Include="Process/STLProcess.fs" />
     <Compile Include="Process/Scopes/EU4Scopes.fs" />
