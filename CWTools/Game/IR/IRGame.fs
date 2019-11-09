@@ -22,24 +22,34 @@ open System
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Process.Localisation
+open CWTools.Process.Localisation.ChangeLocScope
 
 module IRGameFunctions =
     type GameObject = GameObject<IRComputedData, IRLookup>
-    let createLocDynamicSettings(lookup : Lookup) =
+    let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
+        let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
+        let processLocalisation() = processJominiLocalisationBase (localisationCommandValidator()) defaultContext
+        let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
+                                     |> List.distinct
+                                     |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        {
-            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
-            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-            setVariables = definedvars
-        }
-    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
-        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
+        processLocalisation() eventtargets definedvars
 
-    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
-        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
+    let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
+        let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
+        let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
+        let eventtargets =
+            lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
+                                     |> List.distinct
+                                     |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
+        let definedvars =
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+        validateLocalisationCommand() eventtargets definedvars
 
     let globalLocalisation (game : GameObject) =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
@@ -256,6 +266,10 @@ module IRGameFunctions =
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseTriggerStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.map (JominiParser.processTriggers scopeManager.ParseScopes)
                     |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in ir config"; ([]))
+        let jominiLocDataTypes =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
+                    |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
+                    |> Option.defaultValue { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 
 
         {
@@ -264,7 +278,7 @@ module IRGameFunctions =
             modifiers = irMods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
-            localisationCommands = Legacy irLocCommands
+            localisationCommands = Jomini jominiLocDataTypes
             eventTargetLinks = irEventTargetLinks
         }
 
@@ -302,12 +316,6 @@ type IRGame(setupSettings : IRSettings) =
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
-    let settings =
-            { settings with
-                embedded = { settings.embedded with localisationCommands = locSettings }
-                initialLookup = IRLookup()
-            }
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -327,8 +335,8 @@ type IRGame(setupSettings : IRSettings) =
                 ((settings, "imperator", scriptFolders, Compute.Jomini.computeJominiData,
                     Compute.Jomini.computeJominiDataUpdate,
                      (IRLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
-                     IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
+                     IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
