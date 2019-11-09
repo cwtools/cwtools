@@ -54,7 +54,8 @@ module HOI4 =
         // ScopedEffect("Heir", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Location", [Scope.Any], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("Monarch", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
-        // ScopedEffect("Owner", [Scope.Province], Scope.Country, EffectType.Both, defaultDesc, "", true);
+        ScopedEffect("capital", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "State", EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("owner", [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", Link, defaultDesc, "", true);
         // ScopedEffect("Religion", [Scope.Country; Scope.Province], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("SecondaryReligion", [Scope.Country; Scope.Province], Scope.Any, EffectType.Both, defaultDesc, "", true);
         // ScopedEffect("TradeCompany", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
@@ -74,9 +75,11 @@ module HOI4 =
 
     let locPrimaryScopes() =
         let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
+        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true
         [
         "This", id;
         "Root", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
+        "Prev", prev
         "From", from; //TODO Make it actually use FROM
         "FromFrom", from >> from;
         "FromFromFrom", from >> from >> from;

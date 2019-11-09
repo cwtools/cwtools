@@ -71,6 +71,14 @@ module HOI4GameFunctions =
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.HOI4provinces <- provinces
 
+    let updateScriptedLoc (game : GameObject) =
+        let rawLocs =
+            game.Resources.AllEntities()
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_localisation") -> Some (f.entity) |_ -> None)
+            |> List.collect (fun n -> n.Children)
+            |> List.map (fun l -> l.TagText "name")
+        game.Lookup.scriptedLoc <- rawLocs
+
     let updateScriptedEffects(rules :RootRule list) (states : string list) (countries : string list) =
         let effects =
             rules |> List.choose (function |AliasRule("effect", r) -> Some r |_ -> None)
@@ -135,6 +143,7 @@ module HOI4GameFunctions =
     let afterInit (game : GameObject) =
         updateModifiers(game)
         updateProvinces(game)
+        updateScriptedLoc(game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
         let scopeDefinitions =
