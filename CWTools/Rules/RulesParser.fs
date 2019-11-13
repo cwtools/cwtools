@@ -145,6 +145,8 @@ and NewField =
 | ValueScopeField of isInt : bool * minmax : (decimal * decimal)
 | MarkerField of Marker
 | JominiGuiField
+| IgnoreMarkerField
+| IgnoreField of field : NewField
     override x.ToString() =
         match x with
         | ValueField vt -> sprintf "Field of %O" vt
@@ -490,6 +492,7 @@ module RulesParser =
         | "colour_field" -> MarkerField Marker.ColourField
         | "ir_country_tag_field" -> MarkerField Marker.IRCountryTag
         | "ir_family_name_field" -> ValueField IRFamilyName
+        | "ignore_field" -> IgnoreMarkerField
         | x ->
             // eprintfn "ps %s" x
             SpecificField (SpecificValue (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
@@ -1006,6 +1009,23 @@ module RulesParser =
             | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
         rules |> List.collect rulesMapper
 
+    let replaceIgnoreMarkerFields (rules : RootRule list) =
+        let rec cataRule rule : NewRule list =
+            match rule with
+            | LeafRule (field, IgnoreMarkerField), o ->
+               [ NodeRule (IgnoreField field, []), o ]
+            | NodeRule (l, r), o ->
+                [NodeRule(l, r |> List.collect cataRule), o]
+            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
+            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | _ -> [rule]
+        let rulesMapper =
+            function
+            | TypeRule (name, rule) -> cataRule rule |> List.map (fun x -> TypeRule (name, x))
+            | AliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  AliasRule (name, x))
+            | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
+        rules |> List.collect rulesMapper
+
     let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
@@ -1029,7 +1049,7 @@ module RulesParser =
         let rules, types, enums, complexenums, values =
             files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope filename fileString)
               |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
-        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases |> replaceColourField
+        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases |> replaceColourField |> replaceIgnoreMarkerFields
         // File.AppendAllText ("test.test", sprintf "%O" rules)
         rules, types, enums, complexenums, values
 

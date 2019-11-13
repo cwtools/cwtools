@@ -335,6 +335,7 @@ type RuleValidationService
             |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node]))
         <&&>
         match rule with
+        |IgnoreField _ -> OK
         |ScopeField s ->
             let scope = newCtx.scopes
             let key = node.Key.Trim('"')

@@ -467,7 +467,7 @@ module internal FieldValidators =
         match aliasKeyList |> Map.tryFind aliasKey with
         | Some values -> values |> Set.contains id
         | None -> true
-    let checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) (leafornode : IKeyPos) errors =
+    let rec checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) (leafornode : IKeyPos) errors =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then errors else
             match field with
             |ValueField vt ->
@@ -488,9 +488,11 @@ module internal FieldValidators =
             |SingleAliasField (_)
             |SubtypeField (_)
             |TypeMarkerField (_)
+            |IgnoreMarkerField
             |ValueScopeMarkerField (_) -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
             |AliasValueKeysField aliasKey -> checkAliasValueKeysField p.aliasKeyList aliasKey id key severity leafornode errors
-    let checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
+            |IgnoreField field -> checkField p severity ctx field id key leafornode errors
+    let rec checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then true else
             match field with
             |ValueField vt ->
@@ -512,8 +514,10 @@ module internal FieldValidators =
             |SingleAliasField (_)
             |SubtypeField (_)
             |TypeMarkerField (_)
+            |IgnoreMarkerField
             |ValueScopeMarkerField (_) -> false
             |AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeyList aliasKey id
+            |IgnoreField field -> checkFieldNE p severity ctx field id key
 
     let checkLeftField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
         checkFieldNE p severity ctx field id key

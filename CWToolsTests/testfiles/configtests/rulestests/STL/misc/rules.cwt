@@ -32,9 +32,12 @@ alias[trigger:is_country] = bool
 alias[trigger:is_ship] = bool
 
 event = {
+    ## cardinality = 0..1
     option = {
         alias_name[effect] = alias_match_left[effect]
     }
+    ## cardinality = 0..1
+    test_ignore = ignore_field
 
 }
 
