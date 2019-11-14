@@ -157,6 +157,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         lookup.typeDefInfoForValidation <- lookup.typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (tdi) -> if tdi.validate then Some (tdi.id, tdi.range) else None))
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
+        tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
         let tempInfoService = (InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang))
 
 
