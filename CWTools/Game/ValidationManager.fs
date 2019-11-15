@@ -11,6 +11,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.TryParser
 open CWTools.Process.Scopes
 open FSharp.Collections.ParallelSeq
+open CWTools.Process.Localisation
 
 type LookupFileValidator<'T when 'T :> ComputedData> = Files.FileManager -> RuleValidationService option -> Lookup -> FileValidator<'T>
 
@@ -58,8 +59,8 @@ type ValidationManager<'T when 'T :> ComputedData>
         let oldEntities = EntitySet (resources.AllEntities())
         let newEntities = EntitySet entities
         let runValidators f (validators : (StructureValidator<'T> * string) list) =
-            (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-            @ (if not settings.experimental then [] else settings.experimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+            (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function Invalid (_ , es) -> es |_ -> []))
+            @ (if not settings.experimental then [] else settings.experimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function Invalid (_ , es) -> es |_ -> []))
         // log "Validating misc"
         let res = runValidators (fun f -> f oldEntities newEntities) validators
         // log "Validating rules"
@@ -67,22 +68,22 @@ type ValidationManager<'T when 'T :> ComputedData>
         let ruleValidate =
             (fun (e : Entity) ->
                 let res = services.ruleValidationService.Value.RuleValidateEntity e
-                let errors = res |> (function | Invalid es -> es | _ -> [])
+                let errors = res |> (function | Invalid (_, es) -> es | _ -> [])
                 addToCache e errors
                 res)
         let rres =
             if settings.useRules && services.ruleValidationService.IsSome
             then
-                entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid es -> es | _ -> [])
+                entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid (_, es) -> es | _ -> [])
             else
                 []
-        let rres = rres |> List.filter (fun (id, _, _, _, _, _, _) -> id <> "CW100")
+        let rres = rres |> List.filter (fun err -> err.code <> "CW100")
         // log "Validating files"
-        let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
+        let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function Invalid (_ , es) -> es |_ -> [])
         // log "Validating effects/triggers"
-        let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> []
-        let lfres = settings.lookupFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.fileManager services.ruleValidationService services.lookup resources newEntities) s) |> function |Invalid es -> es |_ -> []
-        let hres = if settings.experimental && (not (shallow)) then settings.heavyExperimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function |Invalid es -> es |_ -> [] else []
+        let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function Invalid (_ , es) -> es |_ -> []
+        let lfres = settings.lookupFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.fileManager services.ruleValidationService services.lookup resources newEntities) s) |> function Invalid (_ , es) -> es |_ -> []
+        let hres = if settings.experimental && (not (shallow)) then settings.heavyExperimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function Invalid (_ , es) -> es |_ -> [] else []
         let shallow = if settings.debugRulesOnly then rres else res @ fres @ lres @ lfres @ rres
         let deep = hres
         shallow, deep
@@ -101,7 +102,7 @@ type ValidationManager<'T when 'T :> ComputedData>
             else OK
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
         log (sprintf "Localisation check took %ims" timer.ElapsedMilliseconds)
-        ((vs) |> (function |Invalid es -> es |_ -> []))
+        ((vs) |> (function Invalid (_ , es) -> es |_ -> []))
 
     let createScopeContextFromReplace (rep : ReplaceScopes option) =
         match rep with

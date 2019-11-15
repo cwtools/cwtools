@@ -28,20 +28,27 @@ open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open FSharp.Collections.ParallelSeq
 open System.IO
+open CWTools.Process.Localisation
 
 module STLGameFunctions =
     type GameObject = GameObject<STLComputedData, STLLookup>
 
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
-        let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
-        let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
+    let createLocDynamicSettings(lookup : Lookup) =
+        let eventtargets = (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+                           @ (lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst)
         let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
-        let eventtargets = lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst
-        let globaleventtargets = lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst
-        let definedVariables = (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands (eventtargets @ globaleventtargets) lookup.scriptedLoc definedVariables
+        {
+            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
+            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+            setVariables = definedVariables
+        }
+    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
+        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
+
+    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
+        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
+
+
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
             let se = scopedEffects() |> List.map (fun e -> e :> Effect)
@@ -95,7 +102,7 @@ module STLGameFunctions =
         let locFileValidation = validateLocalisationFiles locfiles
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc <&&> locParseErrors |> (function |Invalid es -> es |_ -> [])
+        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc <&&> locParseErrors |> (function |Invalid (_, es) -> es |_ -> [])
 
     let updateModifiers(game : GameObject) =
         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
@@ -212,8 +219,8 @@ module STLGameFunctions =
                     |> Option.defaultWith (fun () -> eprintfn "setup.log was not found in stellaris config"; ([]))
         let stlLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> STLParser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
         let stlEventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
@@ -268,10 +275,10 @@ type STLGame (setupSettings : StellarisSettings) =
             scriptFolders = setupSettings.scriptFolders
             modFilter = setupSettings.modFilter
             initialLookup = STLLookup()
-
+            maxFileSize = setupSettings.maxFileSize
         }
         do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
-        let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
+        let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
 
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
                                        embedded = { settings.embedded with localisationCommands = locSettings }
@@ -299,8 +306,8 @@ type STLGame (setupSettings : StellarisSettings) =
                     (settings, "stellaris", scriptFolders, Compute.STL.computeSTLData,
                     Compute.STL.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
-                     STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,

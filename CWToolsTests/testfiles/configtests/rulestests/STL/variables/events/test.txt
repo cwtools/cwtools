@@ -10,6 +10,11 @@ country_event = {
 }
 
 country_event = {
+    set_test = test4@root
+    get_test = test4@from
+}
+
+country_event = {
     save_var = my_var
     FROM = {
         test = test
@@ -93,6 +98,10 @@ country_event = {
     predefvalue = four@twelve
     #error
     predefvalue = four@<pred_type>
+    #error
+    predefvalue = five@blah
+    predefvalue = five@twenty
+    predefvalue = five@twentyone
 }
 
 country_event = {

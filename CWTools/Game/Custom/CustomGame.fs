@@ -18,6 +18,9 @@ open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
+open System
+open CWTools.Process.Localisation.ChangeLocScope
+open CWTools.Process.Localisation
 
 module CustomGameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>
@@ -28,7 +31,7 @@ module CustomGameFunctions =
 
     let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-        let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
         let processLocalisation() = processJominiLocalisationBase (localisationCommandValidator()) defaultContext
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
@@ -41,7 +44,7 @@ module CustomGameFunctions =
 
     let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-        let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
             lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
@@ -58,7 +61,7 @@ module CustomGameFunctions =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
 
     let updateModifiers (game : GameObject) =
@@ -228,8 +231,8 @@ module CustomGameFunctions =
 
         let irLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> IRParser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
         let jominiLocDataTypes =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
                     |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
@@ -293,6 +296,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = JominiLookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()

@@ -46,6 +46,7 @@ let emptyStellarisSettings (rootDirectory) = {
     embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
+    maxFileSize = None
 }
 let emptyEmbeddedSettings = {
         triggers = []
@@ -53,7 +54,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = Legacy []
+        localisationCommands = Legacy ([], [])
         eventTargetLinks = []
 }
 let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
@@ -324,7 +325,7 @@ let testc =
                 let errors = apply.ApplyNodeRule(Typerules, node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_, es) -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
 
     ]
@@ -350,7 +351,7 @@ let testsv =
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.isEmpty es (sprintf "should be empty: %A" es)
+                | Invalid (_ , es)-> Expect.isEmpty es (sprintf "should be empty: %A" es)
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase fail" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -367,7 +368,7 @@ let testsv =
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 3 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal (es.Length) 3 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase min count" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -380,7 +381,7 @@ let testsv =
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal 2 (es.Length) (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal 2 (es.Length) (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase max count" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -396,7 +397,7 @@ let testsv =
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase effect in effect" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -416,7 +417,7 @@ let testsv =
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "test rhs completion" <| fun () ->
             let input =    "create_starbase = {\n\

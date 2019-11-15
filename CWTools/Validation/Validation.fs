@@ -9,6 +9,7 @@ open CWTools.Games
 open CWTools.Process.STLProcess
 open CWTools.Process.ProcessCore
 open CWTools.Common.STLConstants
+open System
 
 
 type ErrorCode =
@@ -113,12 +114,42 @@ type ErrorCodes =
         let message = if confident then message else sprintf "%s (guessed data type)" message
         { ID = "CW266"; Severity = sev; Message = message }
     static member ConfigRulesUnexpectedAliasKeyValue = fun key expected severity -> { ID = "CW267"; Severity = severity; Message = sprintf "Expected a %s value, got %s" key expected }
+    static member LocMissingQuote = fun key ->  { ID = "CW268"; Severity = Severity.Information; Message = sprintf "Localisation key %s doesn't start and end with double quotes" key}
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
+// open System.Runtime.CompilerServices
+// [<Extension>]
+// type Utils () =
+//     [<Extension>]
+//     static member Equals(x : List<CWError>, y : List<CWError>) =
+//         let rec inner (x : List<CWError>) (y : List<CWError>) =
+//             let mutable x = x
+//             let xe = x.IsEmpty
+//             let ye = y.IsEmpty
+//             if xe && ye then true else
+//             if xe <> ye then false else
+//             let xs = x.Tail
+//             let ys = y.Tail
+//             if xs.IsEmpty <> ys.IsEmpty then false
+//             else
+//                 if x.Head = y.Head then inner xs ys
+//                 else false
+//         inner x y
+
+[<CustomEqualityAttribute; NoComparisonAttribute>]
 type ValidationResult =
     | OK
-    | Invalid of CWError list
+    | Invalid of Guid *  CWError list
+    member x.Equals(y : ValidationResult) =
+        match x, y with
+        |OK, OK -> true
+        |Invalid (g1, e1), Invalid (g2, e2) -> g1 = g2
+        | _ -> false
+    override x.Equals(y : obj) =
+        match y with
+        | :? ValidationResult as vr -> x.Equals vr
+        | _ -> false
 
 type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>) list) =
     member __.GlobMatch(pattern : string) =
@@ -185,7 +216,8 @@ module ValidationCore =
     let inline invData (code : ErrorCode) (l : IKeyPos) (data : option<string>) =
         let pos = l.Position
         let key = l.Key
-        code.ID, code.Severity, pos, key.Length, code.Message, data, None
+        { code = code.ID; severity = code.Severity; range = pos; keyLength = key.Length; message = code.Message; data = data; relatedErrors = None }
+        // code.ID, code.Severity, pos, key.Length, code.Message, data, None
 
     let inline inv (code : ErrorCode) (l) =
         invData code l None
@@ -193,10 +225,12 @@ module ValidationCore =
     let invLeafValue (code : ErrorCode) (lv : LeafValue) (data : option<string>) =
         let pos = lv.Position
         let value = lv.Value.ToString()
-        code.ID, code.Severity, pos, value.Length, code.Message, data, None
+        { code = code.ID; severity = code.Severity; range = pos; keyLength = value.Length; message = code.Message; data = data; relatedErrors = None }
+        // code.ID, code.Severity, pos, value.Length, code.Message, data, None
 
     let invManual (code : ErrorCode) (pos : range) (key : string) (data : string option) =
-        code.ID, code.Severity, pos, key.Length, code.Message, data, None
+        { code = code.ID; severity = code.Severity; range = pos; keyLength = key.Length; message = code.Message; data = data; relatedErrors = None }
+        // code.ID, code.Severity, pos, key.Length, code.Message, data, None
 
     let inline invCustom (l) =
         invData (ErrorCodes.CustomError "default error" Severity.Error) l None
@@ -210,24 +244,24 @@ module ValidationCore =
     let (<&>) f1 f2 x =
         match f1 x, f2 x with
         | OK, OK -> OK
-        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
-        | Invalid e, OK | OK, Invalid e -> Invalid e
+        | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
+        | Invalid (g, e), OK | OK, Invalid (g, e) -> Invalid (g, e)
     let (<&&>) f1 f2 =
         match f1, f2 with
         | OK, OK -> OK
-        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
-        | Invalid e, OK | OK, Invalid e -> Invalid e
+        | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
+        | Invalid (g, e), OK | OK, Invalid (g, e) -> Invalid (g, e)
 
     let (<&&&>) e f =
         match f with
-        |OK -> Invalid [e]
-        |Invalid es -> Invalid (e::es)
+        |OK -> Invalid (Guid.NewGuid(), [e])
+        |Invalid (g, es) -> Invalid (Guid.NewGuid(), e::es)
     let (<&?&>) f1 f2 =
         match f1, f2 with
         |OK, OK -> OK
-        |Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
-        |Invalid e, OK -> OK
-        |OK, Invalid e -> OK
+        | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
+        |Invalid (_, e), OK -> OK
+        |OK, Invalid (_, e) -> OK
 
     let mergeValidationErrors (errorcode : string) =
         let rec mergeErrorsInner es =
@@ -236,8 +270,9 @@ module ValidationCore =
             | [] -> failwith "mergeErrorsInner somehow got an empty error list"
             | [res] -> res
             | head::head2::tail ->
-                let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
-                mergeErrorsInner ((e1c, e1s, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d, e1rel)::tail)
+                // let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
+                let t = { code = head.code; severity = head.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
+                mergeErrorsInner (t::tail)
         mergeErrorsInner
 
     // Parallelising something this small makes it slower!
@@ -264,26 +299,28 @@ module ValidationCore =
 
     let merger original news =
         match original, news with
-        |_, Invalid [] -> None
-        |_, Invalid [res] -> Some res
-        |Invalid [], Invalid es |OK, Invalid es -> Some (mergeValidationErrors "CW240" es)
-        |Invalid (head::_), Invalid es ->
+        |_, Invalid (_, []) -> None
+        |_, Invalid (_, [res]) -> Some res
+        |Invalid (_, []), Invalid (_, es) |OK, Invalid (_, es) -> Some (mergeValidationErrors "CW240" es)
+        |Invalid (_, (head::_)), Invalid (_, es) ->
             let t = List.takeWhile ((<>) head) es
             match t with
             |[] -> None
             |[res] -> Some res
             |_ -> Some (mergeValidationErrors "CW240" t)
         |_, OK -> None
+    let isSameObject = LanguagePrimitives.PhysicalEquality
+
+
     let lazyErrorMerge rs f defValue (errors : ValidationResult) merge =
         // let mutable state = errors
         let mutable foundOK = false
-        let mutable any = false
-        //Take every potential rule
+        let mutable any = false        //Take every potential rule
         let res =
             rs |> Seq.fold (fun es r ->
             if foundOK
             then es
-            else (let x = f r es in if x.Equals(es) then foundOK <- true; x else any <- true; x)) errors
+            else (let x = f r es in if x.Equals es then foundOK <- true; x else any <- true; x)) errors
         match foundOK, any, merge with
         |true, _, _ -> errors
         |_, false, _ -> defValue()

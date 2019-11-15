@@ -299,7 +299,7 @@ type RuleValidationService
         |xs ->
             match ctx.scopes.CurrentScope with
             |x when x = anyScope -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf])
+            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf]))
         <&&>
         FieldValidators.checkField p severity ctx rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
     and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : IClause) errors =
@@ -336,9 +336,10 @@ type RuleValidationService
         |xs ->
             match ctx.scopes.CurrentScope with
             |x when x = anyScope  -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node])
+            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node]))
         <&&>
         match rule with
+        |IgnoreField _ -> OK
         |ScopeField s ->
             let scope = newCtx.scopes
             let key = node.Key.Trim('"')
@@ -395,7 +396,7 @@ type RuleValidationService
         |xs ->
             match ctx.scopes.CurrentScope with
             |x when x = anyScope  -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") ("")) valueclause])
+            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") ("")) valueclause]))
         <&&>
         applyClauseField enforceCardinality options.severity newCtx rules valueclause errors
 

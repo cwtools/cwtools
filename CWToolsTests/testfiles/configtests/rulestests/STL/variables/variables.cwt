@@ -4,5 +4,6 @@ values = {
         two
         three<pred_type>
         four@<pred_type>
+        five@enum[test_enum]
     }
 }

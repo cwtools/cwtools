@@ -75,7 +75,7 @@ type CompletionService
               |> Collections.Set.toList
               |> List.map (fun icon -> icon.Replace(".dds",""))
         // let value = folder + "/" + key + ".dds"
-        // if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leafornode]
+        // if files.Contains value then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile value) leafornode])
 
 
     //////Loc Complete

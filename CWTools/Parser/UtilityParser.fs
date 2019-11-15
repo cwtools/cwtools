@@ -107,3 +107,19 @@ module UtilityParser =
             | _ -> modcats
         modifierCategoryManager.ReInit(fallbackModifierCategories)
         // fallbackScopes
+
+    let private getLocCommands (node : Node) =
+        let simple = node.Values |> List.choose (fun v -> let x = v.Value.ToRawString() in if x == "variable" then None else Some (v.Key, [scopeManager.ParseScope() (v.Value.ToRawString())]))
+        let variableCommands = node.Values |> List.choose (fun v -> let x = v.Value.ToRawString() in if x == "variable" then Some v.Key else None)
+        let complex = node.Children |> List.map (fun v -> v.Key, (v.LeafValues |> Seq.map (fun lv -> scopeManager.ParseScope() (lv.Value.ToRawString())) |> List.ofSeq))
+        (simple @ complex), variableCommands
+
+    let loadLocCommands filename fileString =
+        let parsed = CKParser.parseString fileString filename
+        match parsed with
+        |Failure(e, _, _) -> log (sprintf "loccommands file %s failed with %s" filename e); ([], [])
+        |Success(s,_,_) ->
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            root.Child "localisation_commands"
+                |> Option.map getLocCommands
+                |> Option.defaultValue ([], [])

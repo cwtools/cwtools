@@ -49,7 +49,7 @@ module internal SharedParsers =
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =[|'ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö'|]
-    let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'|]
+    let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'; '^'|]
     let isAnyofidCharArray = isAnyOf idCharArray
     let isidchar = fun c -> isLetter c || isDigit c || isAnyofidCharArray c
     let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'; '^'|])
