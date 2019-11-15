@@ -165,10 +165,13 @@ module ChangeLocScope =
                 dataTypes.dataTypes |> Map.tryFind dataType
                 |> Option.bind (fun dataTypeMap -> dataTypeMap |> Map.tryFind nextKey)
                 |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+            let rawTypeMatch() =
+                if dataTypes.dataTypes |> Map.containsKey nextKey then Some (NewDataType (nextKey, true)) else None
+
             let res =
                 match first with
                 | true ->
-                    (promoteMatch()) |> Option.orElse (globalFunctionMatch()) |> Option.orElse (savedScopedMatch())
+                    (promoteMatch()) |> Option.orElse (globalFunctionMatch()) |> Option.orElse (savedScopedMatch() |> Option.orElse (rawTypeMatch()))
                 | false ->
                     functionMatch()
             res |> Option.defaultWith (fun _ -> LocNotFoundInType (nextKey, dataType, confident))
