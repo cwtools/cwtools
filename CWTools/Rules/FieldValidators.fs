@@ -6,6 +6,7 @@ open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
 open System.IO
+open CWTools.Process.Localisation
 
 type RuleContext =
         {
@@ -210,7 +211,7 @@ module internal FieldValidators =
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
             CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
         |false ->
-            if key.Contains("[") 
+            if key.Contains("[")
             then
                 let entry = {
                     CWTools.Localisation.Entry.key = "inline"
@@ -383,9 +384,9 @@ module internal FieldValidators =
         let scope = ctx.scopes
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-        |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
+        |ScopeResult.NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
-        |WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
+        |ScopeResult.WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |ValueFound -> inv (ErrorCodes.CustomError "This is a value, but should be a scope" Severity.Error) leafornode <&&&> errors
@@ -396,9 +397,9 @@ module internal FieldValidators =
         let scope = ctx.scopes
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-        |NewScope ({Scopes = current::_} ,_) -> current = s || s = anyScope || current = anyScope
+        |ScopeResult.NewScope ({Scopes = current::_} ,_) -> current = s || s = anyScope || current = anyScope
         |NotFound _ -> false
-        |WrongScope (command, prevscope, expected) -> true
+        |ScopeResult.WrongScope (command, prevscope, expected) -> true
         |VarNotFound s -> false
         |ValueFound -> false
         |_ -> true

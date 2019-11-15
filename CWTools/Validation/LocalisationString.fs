@@ -134,6 +134,9 @@ module LocalisationString =
         let keycommands = parseLoc locentry
         let validateCommand (c : JominiLocCommand list) =
             match localisationCommandValidator eventtargets setvariables startContext c with
+            | LocNotFound s -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.InvalidLocCommand locentry.key s) (locentry.position) locentry.key None ])
+            | LocNotFoundInType (s, dataType, confident) -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandNotInDataType locentry.key s dataType confident) (locentry.position) locentry.key None])
+            | LocContextResult.NewScope s -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %O" s) Severity.Error ) (locentry.position) locentry.key None ])
             | LocContextResult.WrongScope (c, actual, (expected : Scope list)) ->
                 Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandWrongScope c (expected |> List.map (fun f -> f.ToString()) |> String.concat ", ") (actual.ToString())) (locentry.position) locentry.key None])
             | _ -> OK

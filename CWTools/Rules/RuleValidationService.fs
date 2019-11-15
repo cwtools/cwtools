@@ -1,6 +1,7 @@
 namespace CWTools.Rules
 
 open CWTools.Rules
+open CWTools.Process.Localisation
 open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Validation

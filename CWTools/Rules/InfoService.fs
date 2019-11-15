@@ -6,6 +6,7 @@ open System
 open CWTools.Utilities.Position
 open System.IO
 open CWTools.Games
+open CWTools.Process.Localisation
 open CWTools.Process
 open CWTools.Process.Scopes
 open CWTools.Validation

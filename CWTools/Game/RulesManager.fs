@@ -3,6 +3,7 @@ open CWTools.Rules
 open CWTools.Common
 open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
+open CWTools.Process.Localisation
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
 open CWTools.Rules.RulesHelpers

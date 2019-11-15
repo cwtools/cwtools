@@ -2,6 +2,7 @@ namespace CWTools.Rules
 open CWTools.Common
 open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities.Utils
+open CWTools.Process.Localisation
 open CWTools.Process
 open CWTools.Process.Scopes
 open CWTools.Process.ProcessCore
