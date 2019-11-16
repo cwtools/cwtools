@@ -59,7 +59,7 @@ module LocalisationString =
 
     let validateProcessedLocalisationBase (hardcodedLocalisation) (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry>) list) =
         let validateQuotes _ (e : LocEntry) =
-            let desc = e.desc
+            let desc = e.desc.Trim()
             if desc.StartsWith "\"" <> desc.EndsWith "\"" then Invalid (Guid.NewGuid() ,[invManual (ErrorCodes.LocMissingQuote e.key) (e.position) e.key None]) else OK
         let validateContextResult (e : LocEntry) cr =
             match cr with
