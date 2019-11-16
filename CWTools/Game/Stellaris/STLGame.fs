@@ -335,7 +335,7 @@ type STLGame (setupSettings : StellarisSettings) =
             let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/"))
             tech
 
-
+        member __.Lookup = lookup
         interface IGame<STLComputedData> with
             member __.ParserErrors() = parseErrors()
             member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d

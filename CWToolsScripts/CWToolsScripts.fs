@@ -1,5 +1,7 @@
 namespace CWToolsScripts
 open System.Text
+open CWTools.Games.Stellaris.STLLookup
+open CWTools.Utilities.StringResource
 
 
 module CWToolsScripts =
@@ -12,7 +14,7 @@ module CWToolsScripts =
     open CWTools.Parser
     open CWTools.Rules
     open CWTools.Utilities
-
+    open CWTools.Games
     type Trait =
     | Comparison
     | Bool
@@ -27,11 +29,7 @@ module CWToolsScripts =
     | Subject
     | Heritage
 
-    [<EntryPoint>]
-    let main argv =
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-
+    let generateIRFiles() =
 
         /// Previous rules
         let rulesFiles =
@@ -217,3 +215,91 @@ module CWToolsScripts =
         // File.WriteAllText("test.test", triggers |> List.choose (fun t -> t.traits) |> List.distinct |> String.concat("\n"))
         //printfn "%A" argv
         0 // return an integer exit code
+
+    let emptyStellarisSettings (rootDirectory) = {
+        CWTools.Games.GameSetupSettings.rootDirectories = [{ name = "test"; path = rootDirectory;}]
+        modFilter = None
+        validation = {
+            validateVanilla = false
+            experimental = true
+            langs = [STL STLLang.English]
+        }
+        rules = None
+        embedded = FromConfig ([], [])
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = None
+    }
+    let rec getAllFolders dirs =
+        if Seq.isEmpty dirs then Seq.empty else
+            seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
+                  yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders }
+    let getAllFoldersUnion dirs =
+        seq {
+            yield! dirs
+            yield! getAllFolders dirs
+        }
+    let getFolderList (filename : string, filetext : string) =
+        if Path.GetFileName filename = "folders.cwt"
+        then Some (filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None) |> List.ofArray |> List.filter (fun s -> s <> ""))
+        else None
+
+    let findUndefinedEffects() =
+        let configFiles = (if Directory.Exists @"C:\Users\Thomas\git\cwtools-stellaris-config\" then getAllFoldersUnion ([@"C:\Users\Thomas\git\cwtools-stellaris-config\"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+        let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
+        let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
+        let folders = configs |> List.tryPick getFolderList
+
+        let settings =
+            {
+                emptyStellarisSettings("./") with
+                    rules = Some {
+                            ruleFiles = configs
+                            validateRules = true
+                            debugRulesOnly = false
+                            debugMode = false
+                    }
+            }
+        let stl = CWTools.Games.Stellaris.STLGame(settings)
+        let lookup = stl.Lookup
+        let effects = lookup.effects |> List.map (fun e -> e.Name) |> Set.ofList
+        let triggers = lookup.triggers |> List.map (fun e -> e.Name) |> Set.ofList
+        let getEffect (rule : RootRule) =
+            match rule with
+            | AliasRule ("effect", (LeafRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | AliasRule ("effect", (NodeRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | _ -> None
+        let getTrigger (rule : RootRule) =
+            match rule with
+            | AliasRule ("trigger", (LeafRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | AliasRule ("trigger", (NodeRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | _ -> None
+        let triggerAliases = lookup.configRules |> List.choose getTrigger |> Set.ofList
+        let effectAliases = lookup.configRules |> List.choose getEffect |> Set.ofList
+        let undefinedTriggers = Set.difference triggers triggerAliases
+        let undefinedEffects = Set.difference effects effectAliases
+        if undefinedTriggers.IsEmpty
+        then ()
+        else
+            printfn "The following triggers are present in trigger_docs but not in rules"
+            undefinedTriggers |> Set.iter (fun t -> printfn "%s" t)
+        if undefinedEffects.IsEmpty
+        then ()
+        else
+            printfn "The following effects are present in trigger_docs but not in rules"
+            undefinedEffects |> Set.iter (fun t -> printfn "%s" t)
+        0
+
+
+    [<EntryPoint>]
+    let main argv =
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
+        if Array.tryHead argv = Some "ir"
+        then
+            generateIRFiles()
+        elif Array.tryHead argv = Some "unused"
+        then
+            findUndefinedEffects()
+        else
+            0
