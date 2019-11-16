@@ -174,6 +174,7 @@ type CompletionService
                                   |> List.distinctBy (fun (f, _) -> ruleToDistinctKey f)
                                   |> List.mapi (fun i (f, _) -> rulePrint i f)
                                   |> String.concat ""
+        let requiredRules = if requiredRules = "" then "\t${0}\n" else requiredRules
 
         let score = scoreFunction key
         CompletionResponse.Snippet (key, (sprintf "%s = {\n%s}" key requiredRules), description, Some score)
@@ -446,12 +447,20 @@ type CompletionService
             | _ ->
                 pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
         //TODO: Expand this to use a snippet not just the name of the type
+        let createSnippetForType (typeDef : TypeDefinition) =
+            let rootSnippets =
+                match typeDef.typeKeyFilter with
+                | Some ((keys : string list), false) -> keys
+                | _ -> [typeDef.name]
+            rootSnippets @ (typeDef.subtypes |> List.choose (fun st -> if st.typeKeyField.IsSome then (Some st.typeKeyField.Value) else None))
+            |> List.map (fun s -> createSnippetForClause (fun _ -> 1) [] None s)
+
         let rootTypeItems =
             match path with
             | [(_,_,_,CompletionContext.NodeLHS)] ->
-                pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
+                pathFilteredTypes |> List.collect createSnippetForType
             | y when y.Length = 0 ->
-                pathFilteredTypes |> List.map (fun t -> t.name |> CompletionResponse.CreateSimple )
+                pathFilteredTypes |> List.collect createSnippetForType
             | _ -> []
         // eprintfn "%A" path
         // eprintfn "%A" rootTypeItems
