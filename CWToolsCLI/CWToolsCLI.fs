@@ -209,7 +209,7 @@ module CWToolsCLI =
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope modFilter docsPath cachePath rulesPath (results : ParseResults<_>) =
-        let reporter = results.GetResult <@ ReportType @>
+        let reporter = results.TryGetResult <@ ReportType @> |> Option.defaultValue CLI
 
         let cached, cachedFiles =
             match cachePath with
