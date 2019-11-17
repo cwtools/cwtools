@@ -21,29 +21,33 @@ open CWTools.Process
 open System
 open CWTools.Games.Helpers
 open CWTools.Parser
+open CWTools.Process.Localisation
 
 module VIC2GameFunctions =
     type GameObject = GameObject<VIC2ComputedData, VIC2Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
+    let createLocDynamicSettings(lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        {
+            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
+            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+            setVariables = definedvars
+        }
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
-        let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
+        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
+
+    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
+        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
 
     let globalLocalisation (game : GameObject) =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
 
     let updateModifiers (game : GameObject) =
@@ -53,7 +57,7 @@ module VIC2GameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
+            {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -220,8 +224,8 @@ module VIC2GameFunctions =
 
         let vic2LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> VIC2Parser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
 
         let vic2EventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
@@ -267,10 +271,11 @@ type VIC2Game(setupSettings : VIC2Settings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = VIC2Lookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
     let settings =
             { settings with
                 embedded = { settings.embedded with localisationCommands = locSettings }
@@ -290,13 +295,15 @@ type VIC2Game(setupSettings : VIC2Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        validateLocalisation = VIC2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
     }
     let game = GameObject<VIC2ComputedData, VIC2Lookup>.CreateGame
                 ((settings, "victoria 2", scriptFolders, Compute.computeVIC2Data,
                     Compute.computeVIC2DataUpdate,
                      (VIC2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
-                     VIC2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     VIC2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     VIC2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
@@ -336,7 +343,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (VIC2 VIC2Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})

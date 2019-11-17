@@ -39,29 +39,39 @@ module LanguageFeatures =
         let scope = fileManager.GetScopeForPath filepath |> Option.defaultValue "unknown"
         FileWithContentResourceInput {scope = scope; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
 
+
     let completion (fileManager : FileManager) (completionService : CompletionService option) (infoService : InfoService option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
         let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
-        match (resourceManager.ManualProcessResource resource, completionService, infoService) with
-        | Some e, Some completion, Some info ->
+        match Path.GetExtension filepath ,resourceManager.ManualProcessResource resource, completionService, infoService with
+        | ".yml", _, Some completion, _ ->
+            completion.LocalisationComplete(pos, filetext)
+        | _, Some e, Some completion, Some info ->
             log (sprintf "completion %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
             | Some (ctx, _) ->
                 completion.Complete(pos, e, Some ctx)
-            | _ ->
-                []
-        | Some e, Some completion, None ->
+            | None ->
+                completion.Complete(pos, e, None)
+        | _, Some e, Some completion, None ->
             completion.Complete(pos, e, None)
-        | _, _, _ -> []
+        | _, _, _, _ -> []
 
 
-    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (lookup : Lookup) (pos : pos) (filepath : string) (filetext : string) =
+    let getInfoAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (localisationManager : LocalisationManager<_>) (lookup : Lookup) (lang : Lang) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
+            |Some (_, (_, Some ("localisation", tv), _)) ->
+                match localisationManager.LocalisationEntries() |> List.tryFind (fun (l, _) -> l = lang) with
+                | Some (_, entries) ->
+                    match entries |> List.tryFind (fun (k, _) -> k = tv) with
+                    | Some (_, entry) -> Some entry.position
+                    | _ -> None
+                | None -> None
             |Some (_, (_, Some (t, tv), _)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (tdi) -> if tdi.id = tv then Some tdi.range else None)
             |_ -> None

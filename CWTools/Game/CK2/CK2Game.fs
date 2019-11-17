@@ -23,29 +23,33 @@ open System
 open CWTools.Games.Helpers
 open CWTools.Rules
 open CWTools.Parser
+open CWTools.Process.Localisation
 
 module CK2GameFunctions =
     type GameObject = GameObject<ComputedData, CK2Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
+    let createLocDynamicSettings(lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        {
+            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
+            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+            setVariables = definedvars
+        }
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
-        let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
+        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
+
+    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
+        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
 
     let globalLocalisation (game : GameObject) =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
@@ -61,7 +65,7 @@ module CK2GameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
+            {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -114,18 +118,18 @@ module CK2GameFunctions =
                 ::((County, true), clls)::((County, false), cs)
                 ::((Barony, true), blls)::[((Barony, false), bs)] |> Map.ofList
     let createLandedTitleTypes(lookup : CK2Lookup)(map : Map<_,_>) =
-        let ells = lookup.CK2LandedTitles.[Empire, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let es = lookup.CK2LandedTitles.[Empire, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let klls = lookup.CK2LandedTitles.[Kingdom, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let ks = lookup.CK2LandedTitles.[Kingdom, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let dllns = lookup.CK2LandedTitles.[Duchy_Normal, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let dns = lookup.CK2LandedTitles.[Duchy_Normal, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let dllhs = lookup.CK2LandedTitles.[Duchy_Hired, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let dhs = lookup.CK2LandedTitles.[Duchy_Hired, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let clls = lookup.CK2LandedTitles.[County, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let cs = lookup.CK2LandedTitles.[County, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let blls = lookup.CK2LandedTitles.[Barony, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
-        let bs = lookup.CK2LandedTitles.[Barony, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [])
+        let ells = lookup.CK2LandedTitles.[Empire, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["empire"; "landless"])
+        let es = lookup.CK2LandedTitles.[Empire, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["empire"; "landed"])
+        let klls = lookup.CK2LandedTitles.[Kingdom, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["kingdom"; "landless"])
+        let ks = lookup.CK2LandedTitles.[Kingdom, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["kingdom"; "landed"])
+        let dllns = lookup.CK2LandedTitles.[Duchy_Normal, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["duchy"; "duchy_normal"; "landless"])
+        let dns = lookup.CK2LandedTitles.[Duchy_Normal, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["duchy"; "duchy_normal"; "landed"])
+        let dllhs = lookup.CK2LandedTitles.[Duchy_Hired, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["duchy"; "duchy_hired"; "landless"])
+        let dhs = lookup.CK2LandedTitles.[Duchy_Hired, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["duchy"; "duchy_hired"; "landed"])
+        let clls = lookup.CK2LandedTitles.[County, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["county"; "landless"])
+        let cs = lookup.CK2LandedTitles.[County, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["county"; "landed"])
+        let blls = lookup.CK2LandedTitles.[Barony, true] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["barony"; "landless"])
+        let bs = lookup.CK2LandedTitles.[Barony, false] |> List.map (fun e -> createTypeDefInfo false e range.Zero [] ["barony"; "landed"])
         map |> Map.add "title.empire" (es@ells)
             |> Map.add "title.kingdom" (ks@klls)
             |> Map.add "title.duchy" (dllns@dns@dllhs@dhs)
@@ -230,8 +234,8 @@ module CK2GameFunctions =
 
         let ck2LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> CK2Parser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
 
         let ck2EventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
@@ -280,11 +284,12 @@ type CK2Game(setupSettings : CK2Settings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = CK2Lookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy locCommands else Legacy l) |_ -> Legacy locCommands
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = CK2Lookup()
@@ -303,13 +308,15 @@ type CK2Game(setupSettings : CK2Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        validateLocalisation = CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
     }
     let game = GameObject.CreateGame
                 ((settings, "crusader kings ii", scriptFolders, Compute.computeCK2Data,
                     Compute.computeCK2DataUpdate,
                      (CK2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
-                     CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
@@ -348,7 +355,7 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (CK2 CK2Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})

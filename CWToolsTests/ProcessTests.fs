@@ -46,6 +46,7 @@ let emptyStellarisSettings (rootDirectory) = {
     embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
+    maxFileSize = None
 }
 let emptyEmbeddedSettings = {
         triggers = []
@@ -53,9 +54,10 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = Legacy []
+        localisationCommands = Legacy ([], [])
         eventTargetLinks = []
 }
+let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 
 let specificField = RulesParser.specificField
 let optionalMany = RulesParser.optionalMany
@@ -64,6 +66,15 @@ let requiredSingle = RulesParser.requiredSingle
 let defaultFloat = RulesParser.defaultFloat
 let defaultInt = RulesParser.defaultInt
 let parseConfig = RulesParser.parseConfig
+let dynamicSettings =
+    {
+            CWTools.Process.Localisation.LegacyLocDynamicsSettings.scriptedLocCommands = []
+            CWTools.Process.Localisation.LegacyLocDynamicsSettings.eventTargets = []
+            CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = []
+    }
+
+let processLocalisation = CWTools.Validation.Stellaris.STLLocalisationString.processLocalisation [] [] dynamicSettings
+let validateLocalisation = STLLocalisationString.validateLocalisationCommand [] [] dynamicSettings
 let createStarbase() =
     let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)
     let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
@@ -317,11 +328,11 @@ let testc =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let apply = RuleValidationService(rules, [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let apply = RuleValidationService(rules, [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let errors = apply.ApplyNodeRule(Typerules, node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_, es) -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
 
     ]
@@ -343,11 +354,11 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ("size", ["medium"; "large"])); ("module", ("module",["trafficControl"]))] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.isEmpty es (sprintf "should be empty: %A" es)
+                | Invalid (_ , es)-> Expect.isEmpty es (sprintf "should be empty: %A" es)
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase fail" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -360,11 +371,11 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = createStarbaseEnums |> Map.toSeq |> Seq.map (fun (k, (d ,s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 3 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal (es.Length) 3 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase min count" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -373,11 +384,11 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ["medium"; "large"])] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty,Map.empty, enums, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty,Map.empty, enums, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal 2 (es.Length) (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal 2 (es.Length) (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase max count" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -389,11 +400,11 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ("size", ["medium"; "large"]))] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "create_starbase effect in effect" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -409,11 +420,11 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let enums = [("size", ("size", ["medium"; "large"]))] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); createStarbaseAlias], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); createStarbaseAlias], [], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let errors = rules.ApplyNodeRule([createStarbase()], node)
                 match errors with
                 | OK -> ()
-                | Invalid es -> Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es )
+                | Invalid (_ , es)-> Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
         testCase "test rhs completion" <| fun () ->
             let input =    "create_starbase = {\n\
@@ -430,7 +441,7 @@ let testsv =
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let enums = [("size", ("size", ["medium"; "large"]))] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
 
-                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let pos = mkPos 3 8
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |CompletionResponse.Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
@@ -445,10 +456,30 @@ let testsv =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
+                Expect.sequenceEqual suggestions expected "Completion should match"
+            |Failure(e, _, _) -> Expect.isTrue false e
+
+        testCase "test root completion" <| fun () ->
+            let input =    "\n\
+                            #test\n\
+                            \n\
+                            create_starbase = {\n\
+                            owner = this \n\
+                            }\n"
+            let pos = mkPos 1 0
+            let split = input.Split('\n')
+            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
+            match CKParser.parseString filetext "test.txt" with
+            |Success(r, _, _) ->
+                let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let expected = ["create_starbase"; "create_starbase"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
 
@@ -466,13 +497,13 @@ let testsv =
             |Success(r, _, _), Success(b, _, _) ->
                 let bnode = (STLProcess.shipProcess.ProcessNode() "root" (mkZeroFile "common/ship_behaviors/test.txt") b)
                 let be = { entity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors/test.txt"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
-                let ruleapplicator = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
+                let ruleapplicator = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let typeinfo = CWTools.Rules.RulesHelpers.getTypesFromDefinitions ruleapplicator [shipBehaviorType; shipSizeType] [be] |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun s -> s.id)))) |> Map.ofSeq
                 eprintfn "%A" typeinfo
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
-                let comp = CompletionService([TypeRule ("ship_size", shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default)
+                let comp = CompletionService([TypeRule ("ship_size", shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let res = comp.Complete(pos, entity, None)
                 eprintfn "res4 %A" res
                 let suggestions = res |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
@@ -491,8 +522,8 @@ let testsv =
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap,(scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
-                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap,(scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
+                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisation, validateLocalisation)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 3 23
                 let suggestions = infoService.GetInfo (pos, entity)
@@ -517,8 +548,8 @@ let testsv =
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
-                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
+                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisation, validateLocalisation)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 9
                 let suggestions = infoService.GetInfo (pos, entity)
@@ -542,8 +573,8 @@ let testsv =
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap , (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default)
-                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default)
+                let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap , (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
+                let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisation, validateLocalisation)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 2
                 let suggestions = infoService.GetInfo (pos, entity)

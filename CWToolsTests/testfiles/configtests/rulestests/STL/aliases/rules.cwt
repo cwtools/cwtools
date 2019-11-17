@@ -22,4 +22,6 @@ event = {
     single_alias_int = single_alias_right[single_alias_int]
     ## cardinality = 0..inf
     single_alias_clause = single_alias_right[single_alias_clause]
+    ## cardinality = 0..inf
+    clause_single_alias[clauseblock] = single_alias_right[single_alias_clause]
 }

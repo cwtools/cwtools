@@ -68,12 +68,12 @@ module TryParser =
         | true, v    -> Some v
         | false, _   -> None
 
-    let parseDate   = tryParseWith System.DateTime.TryParse
-    let parseInt    = tryParseWith System.Int32.TryParse
-    let parseIntWithDecimal    =  tryParseWith (fun s -> System.Int32.TryParse(s, Globalization.NumberStyles.AllowDecimalPoint ||| Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture))
-    let parseSingle = tryParseWith System.Single.TryParse
-    let parseDouble = tryParseWith (fun s -> (System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
-    let parseDecimal = tryParseWith (fun s -> (System.Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
+    let parseDate : string -> _   = tryParseWith System.DateTime.TryParse
+    let parseInt : string -> _    = tryParseWith System.Int32.TryParse
+    let parseIntWithDecimal : string -> _    =  tryParseWith (fun s -> System.Int32.TryParse(s, Globalization.NumberStyles.AllowDecimalPoint ||| Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture))
+    let parseSingle : string -> _ = tryParseWith System.Single.TryParse
+    let parseDouble : string -> _ = tryParseWith (fun s -> (System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
+    let parseDecimal : string -> _ = tryParseWith (fun s -> (System.Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
     // etc.
 
     // active patterns for try-parsing strings
@@ -95,7 +95,15 @@ type StringMetadata =
     struct
         val startsWithAmp : bool
         val containsDoubleDollar : bool
-        new(startsWithAmp, containsDoubleDollar) = { startsWithAmp = startsWithAmp; containsDoubleDollar = containsDoubleDollar }
+        val containsQuestionMark : bool
+        val containsHat : bool
+        new(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat) =
+            {
+                startsWithAmp = startsWithAmp;
+                containsDoubleDollar = containsDoubleDollar
+                containsQuestionMark = containsQuestionMark
+                containsHat = containsHat
+            }
     end
 [<Sealed>]
 type StringResourceManager() =
@@ -130,12 +138,20 @@ type StringResourceManager() =
                 strings.[ls] <- resl;
                 ints.[lowID] <- ls;
                 ints.[stringID] <- s;
-                let startsWithAmp = ls.Length > 0 && ls.[0] = '@'
-                let first = ls.IndexOf('$')
-                let last = ls.LastIndexOf('$')
-                let containsDoubleDollar = first >= 0 && first <> last
-                metadata.[lowID] <- StringMetadata(startsWithAmp, containsDoubleDollar)
-                metadata.[stringID] <- StringMetadata(startsWithAmp, containsDoubleDollar)
+                let startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar =
+                    if ls.Length > 0
+                    then
+                        let startsWithAmp = ls.[0] = '@'
+                        let containsQuestionMark = ls.IndexOf('?') >= 0
+                        let containsHat = ls.IndexOf('^') >= 0
+                        let first = ls.IndexOf('$')
+                        let last = ls.LastIndexOf('$')
+                        let containsDoubleDollar = first >= 0 && first <> last
+                        startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar
+                    else
+                        false, false, false, false
+                metadata.[lowID] <- StringMetadata(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat)
+                metadata.[stringID] <- StringMetadata(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat)
                 res
         )
     member x.GetStringForIDs(id : StringTokens) =

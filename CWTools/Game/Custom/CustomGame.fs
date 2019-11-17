@@ -17,9 +17,13 @@ open CWTools.Process
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Utilities.Utils
+open FSharp.Collections.ParallelSeq
+open System
+open CWTools.Process.Localisation.ChangeLocScope
+open CWTools.Process.Localisation
 
 module CustomGameFunctions =
-    type GameObject = GameObject<ComputedData, Lookup>
+    type GameObject = GameObject<JominiComputedData, JominiLookup>
     let defaultContext =
         { Root = scopeManager.AnyScope; From = []; Scopes = [] }
     let noneContext =
@@ -27,7 +31,7 @@ module CustomGameFunctions =
 
     let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-        let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
         let processLocalisation() = processJominiLocalisationBase (localisationCommandValidator()) defaultContext
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
@@ -40,7 +44,7 @@ module CustomGameFunctions =
 
     let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-        let localisationCommandValidator() = Scopes.createJominiLocalisationCommandValidator dataTypes
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
         let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
             lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
@@ -57,7 +61,7 @@ module CustomGameFunctions =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
 
     let updateModifiers (game : GameObject) =
@@ -68,7 +72,7 @@ module CustomGameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
+            {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -106,7 +110,7 @@ module CustomGameFunctions =
         match lookup.typeDefInfo |> Map.tryFind "script_value" with
         | Some vs ->
             let values = vs |> List.map (fun tdi -> tdi.id)
-            values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
+            values |> List.map (fun v -> Effect(v, [scopeManager.AnyScope], EffectType.ValueTrigger))
         | None -> []
 
     let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =
@@ -169,10 +173,16 @@ module CustomGameFunctions =
         // eprintfn "crh %A" ts
         addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
-    let refreshConfigBeforeFirstTypesHook (lookup : Lookup) _ _ =
+    let refreshConfigBeforeFirstTypesHook (lookup : JominiLookup) (resources : IResourceAPI<JominiComputedData>) _ =
         let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
+        lookup.ScriptedEffectKeys <- (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+                                        |> List.ofSeq |> List.collect id)
+        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys }
+        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
+            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.values)
+                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
+                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
@@ -221,11 +231,11 @@ module CustomGameFunctions =
 
         let irLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> IRParser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
         let jominiLocDataTypes =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
-                    |> Option.bind (fun (fn, ft) -> None) //DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
+                    |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.defaultValue { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
         let irEventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
@@ -255,7 +265,7 @@ module CustomGameFunctions =
             eventTargetLinks = irEventTargetLinks
         }
 
-type CustomSettings = GameSetupSettings<Lookup>
+type CustomSettings = GameSetupSettings<JominiLookup>
 open CustomGameFunctions
 open CWTools.Localisation.Custom
 type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
@@ -285,14 +295,15 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         validation = setupSettings.validation
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
-        initialLookup = Lookup()
+        initialLookup = JominiLookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
     let locCommands() = []
     let settings = {
         settings with
-            initialLookup = Lookup()
+            initialLookup = JominiLookup()
             }
     let changeScope = Scopes.createJominiChangeScope CWTools.Process.Scopes.IR.oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
@@ -309,12 +320,14 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = CustomGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands)
+        validateLocalisation = CustomGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands)
     }
     let scriptFolders = []
 
-    let game = GameObject<ComputedData, Lookup>.CreateGame
-                ((settings, gameFolderName, scriptFolders, Compute.computeIRData,
-                    Compute.computeIRDataUpdate,
+    let game = GameObject<JominiComputedData, JominiLookup>.CreateGame
+                ((settings, gameFolderName, scriptFolders, Compute.Jomini.computeJominiData,
+                    Compute.Jomini.computeJominiDataUpdate,
                      (CustomLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
                      CustomGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
                      CustomGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
@@ -339,7 +352,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
             |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
-    interface IGame<ComputedData> with
+    interface IGame<JominiComputedData> with
         member __.ParserErrors() = parseErrors()
         member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
@@ -357,7 +370,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (Custom CustomLang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})

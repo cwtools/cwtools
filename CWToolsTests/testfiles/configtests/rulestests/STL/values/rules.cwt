@@ -13,6 +13,7 @@ types = {
         }
 
     }
+
 }
 
 ## scope = ship
@@ -46,3 +47,4 @@ alias[effect:float_no_limit] = float
 alias[effect:float_fixed_range] = float[-5.1..10.1]
 alias[effect:float_inf_upper] = float[-10..inf]
 alias[effect:float_inf_lower] = float[-inf..10]
+

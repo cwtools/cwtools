@@ -1,0 +1,148 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+
+}
+
+## scope = ship
+alias[effect:ship_only] = test
+
+## scope = country
+alias[effect:country_only] = test
+
+## scope = { ship country }
+alias[effect:ship_and_country] = test
+
+## scope = country
+alias[trigger:is_country] = bool
+
+## scope = ship
+alias[trigger:is_ship] = bool
+
+event = {
+    option = {
+        alias_name[effect] = alias_match_left[effect]
+    }
+
+}
+
+
+alias[effect:scope_field] = test
+alias[effect:scope_field] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+# alias[effect:OR] = {
+#     alias_name[effect] = alias_match_left[effect]
+# }
+alias[effect:test] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+alias[effect:uniquetesttest] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+alias[effect:if] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+alias[effect:random_list] = {
+	##cardinality = 0..inf
+	int = {
+        test = scalar
+	}
+}
+
+
+#These are not required as covered by scope_field
+alias[trigger:NOT] = {
+	## cardinality = 1..1
+	alias_name[trigger] = alias_match_left[trigger]
+}
+
+alias[trigger:NOR] = { alias_name[trigger] = alias_match_left[trigger] }
+alias[trigger:NAND] = { alias_name[trigger] = alias_match_left[trigger] }
+alias[trigger:AND] = { alias_name[trigger] = alias_match_left[trigger] }
+alias[trigger:OR] = { alias_name[trigger] = alias_match_left[trigger] }
+alias[trigger:hidden_trigger] = { alias_name[trigger] = alias_match_left[trigger] }
+
+#These are not required as covered by scope_field
+alias[effect:NOT] = {
+	## cardinality = 1..1
+	alias_name[effect] = alias_match_left[effect]
+}
+
+alias[effect:NOR] = { alias_name[effect] = alias_match_left[effect] }
+alias[effect:NAND] = { alias_name[effect] = alias_match_left[effect] }
+alias[effect:AND] = { alias_name[effect] = alias_match_left[effect] }
+alias[effect:OR] = { alias_name[effect] = alias_match_left[effect] }
+alias[effect:hidden_effect] = { alias_name[effect] = alias_match_left[effect] }
+
+#Filepath test
+alias[effect:any_file] = filepath
+alias[effect:any_file_in_folder] = filepath[common/]
+alias[effect:any_file_in_folder_with_extension] = filepath[common/,.ttf]
+
+#Dual path set_variable test
+alias[effect:dual_path_simple] = {
+    test = test
+}
+alias[effect:dual_path_simple] = {
+    test2 = test2
+}
+### Test
+## scope = any
+alias[effect:dual_path_double] = {
+    test = test
+}
+### Test
+## scope = any
+alias[effect:dual_path_double] = {
+    test2 = test2
+    test3 = test3
+}
+### Test
+## scope = any
+alias[effect:dual_path_complex] = {
+    value_set[variable] = variable_field
+}
+### Test
+## scope = any
+alias[effect:dual_path_complex] = {
+    var = value_set[variable]
+    value = variable_field
+}
+
+alias[effect:effect_alias_test] = alias_keys_field[effect]
+
+alias[effect:cardinality_tests_none] = {
+    ## cardinality = 0..0
+    test_none
+}
+alias[effect:cardinality_tests_one_min] = {
+    ## cardinality = ~1..inf
+    test_one_min
+}
+alias[effect:cardinality_tests_two_min] = {
+    ## cardinality = ~2..inf
+    test_two_min
+}
+alias[effect:cardinality_tests_one_min_strict] = {
+    ## cardinality = 1..inf
+    test_one_min_strict
+}
+alias[effect:cardinality_tests_two_min_strict] = {
+    ## cardinality = 2..inf
+    test_two_min_strict
+}

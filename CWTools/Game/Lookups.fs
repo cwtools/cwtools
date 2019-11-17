@@ -7,6 +7,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open Microsoft.FSharp.Collections.Tagged
 open Files
+open CWTools.Process.Localisation
 
 
 
@@ -77,6 +78,10 @@ type Lookup() =
     member val savedEventTargets : ResizeArray<string * range * Scope> = new ResizeArray<_> () with get, set
     member val globalScriptedVariables : string list = [] with get, set
 
+type JominiLookup() =
+    inherit Lookup()
+    member val ScriptedEffectKeys : string list = [] with get, set
+
 type CK2Lookup() =
     inherit Lookup()
     member val CK2LandedTitles : Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
@@ -96,7 +101,7 @@ type STLLookup() =
     member val STLScriptedEffectKeys : string list = [] with get, set
 
 type IRLookup() =
-    inherit Lookup()
+    inherit JominiLookup()
     member val IRprovinces : string list = [] with get, set
     member val IRcharacters : string list = [] with get, set
 

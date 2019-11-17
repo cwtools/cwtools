@@ -6,6 +6,7 @@ open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
 open System.IO
+open CWTools.Process.Localisation
 
 type RuleContext =
         {
@@ -30,6 +31,8 @@ type CheckFieldParams =
         anyScope : Scope
         defaultLang : Lang
         aliasKeyList : Collections.Map<string, Collections.Set<StringToken>>
+        processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>
+        validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
     }
 
 [<RequireQualifiedAccess>]
@@ -65,11 +68,11 @@ module internal FieldValidators =
 
     let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
         let file = leaf.ValueText.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
-        if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
+        if files.Contains file then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile file) leaf])
 
     let checkIconExists (files :Collections.Set<string>) (folder : string) (leaf : Leaf) =
         let value = folder + "/" + leaf.ValueText + ".dds"
-        if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leaf]
+        if files.Contains value then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile value) leaf])
 
 
 
@@ -77,11 +80,12 @@ module internal FieldValidators =
 
     // type RuleContext  = RuleContext<Scope>
     let firstCharEqualsAmp (key : StringToken) = (stringManager.GetMetadataForID key).startsWithAmp
+    let getStringMetadata (key : StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let quoteArray = [|'\"'|]
     let ampArray = [|'@'|]
     let trimQuote (s : string) = s.Trim(quoteArray)
-    let checkValidValue (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
+    let checkValidValue (varMap : Collections.Map<_,StringSet>) (enumsMap : Collections.Map<_, string * Set<_, _>>) (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) leafornode errors =
         if firstCharEqualsAmp id then errors else
                 match (vt) with
                 // | ValueType.Scalar ->
@@ -107,7 +111,7 @@ module internal FieldValidators =
                     | Some (desc, es) -> if es.Contains (trimQuote key) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" desc es) severity) leafornode <&&&> errors
                     | None -> inv (ErrorCodes.RulesError (sprintf "Configuration error: there are no defined values for the enum %s" e) severity) leafornode <&&&> errors
                 // | ValueType.Specific s ->
-                //     // if trimQuote key == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode]
+                //     // if trimQuote key == s then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode])
                 //     if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
                 | ValueType.Percent ->
                     if key.EndsWith("%") then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leafornode <&&&> errors
@@ -132,8 +136,17 @@ module internal FieldValidators =
                         (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[1] leafornode) |>
                         (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[2] leafornode) |>
                         (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[3] leafornode)
+                | ValueType.STLNameFormat var ->
+                    match varMap.TryFind var with
+                    | Some vars ->
+                        let refs = System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>") |> Seq.cast<System.Text.RegularExpressions.Match>
+                        let refs = refs |> Seq.map (fun m -> m.Groups.[1]) |> Seq.cast<Text.RegularExpressions.Capture> |> Seq.map (fun c -> c.Value)
+                        let res = refs |> Seq.exists (vars.Contains >> not)
+                        if res then inv (ErrorCodes.CustomError (sprintf "Expecting a defined parts list of %s" var) Severity.Error) leafornode <&&&> errors else OK
+                    | None -> errors
 
-    let checkValidValueNE (enumsMap : Collections.Map<_, string * Set<_, _>>)  (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
+
+    let checkValidValueNE (varMap : Collections.Map<_,StringSet>) (enumsMap : Collections.Map<_, string * Set<_, _>>)  (keys : (Lang * Collections.Set<string>) list) (severity : Severity) (vt : CWTools.Rules.ValueType) (id : StringToken) (key : string) =
         // if key |> firstCharEqualsAmp then true else
         (match (vt) with
             // | ValueType.Scalar ->
@@ -177,19 +190,43 @@ module internal FieldValidators =
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[1] &&
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[2] &&
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[3]
+            | ValueType.STLNameFormat var ->
+                match varMap.TryFind var with
+                | Some vars ->
+                    let refs = System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>") |> Seq.cast<System.Text.RegularExpressions.Match>
+                    let res = refs |> Seq.map (fun m -> m.Groups.[1]) |> Seq.cast<Text.RegularExpressions.Capture> |> Seq.map (fun c -> c.Value) |> Seq.exists (vars.Contains >> not)
+                    res |> not
+                | None -> false
 
         )
         || firstCharEqualsAmp id
 
-    let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) (leafornode) (errors)=
+    let checkLocalisationField (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
+                        (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
+                        scopeContext
+                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) (leafornode :IKeyPos) (errors)=
         match synced with
         |true ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
             CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
         |false ->
-            CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
-    let checkLocalisationFieldNE (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) =
+            if key.Contains("[")
+            then
+                let entry = {
+                    CWTools.Localisation.Entry.key = "inline"
+                    CWTools.Localisation.Entry.value = None
+                    CWTools.Localisation.Entry.desc = key
+                    CWTools.Localisation.Entry.position = leafornode.Position
+                }
+                let proc = processLocalisation (defaultLang, Collections.Map.ofList ["inline", entry]) |> snd |> Map.toList |> List.head |> snd
+                eprintfn "pl %A" proc
+                validateLocalisation proc scopeContext
+            else
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
+    let checkLocalisationFieldNE (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
+                        (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
+                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (key : string) =
         match synced with
         |true ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -299,14 +336,20 @@ module internal FieldValidators =
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp id then errors else
-            if values.Contains (value.Split(ampArray, 2).[0]) then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
+            if values.Contains (value)
+            then errors
+            else
+                if value.Contains("@") && values.Contains(value.Split([|'@'|]).[0]) then
+                    errors
+                else
+                    inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
         |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode <&&&> errors
     let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (id : StringToken) (key : string) =
         match varMap.TryFind varName with
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp id then true else
-            values.Contains (value.Split(ampArray, 2).[0])
+            values.Contains (value) ||(value.Contains("@") && values.Contains(value.Split([|'@'|]).[0]))
         |None -> false
 
     let checkFilepathField (files : Collections.Set<string>) (key : string) (prefix : string option) (extension : string option) (leafornode) errors =
@@ -335,52 +378,68 @@ module internal FieldValidators =
         let value = folder + "/" + key + ".dds"
         files.Contains value
 
-    let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  key leafornode errors =
+    let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  (key : string) leafornode errors =
+        // let key = key.Trim([|'"';' '|])
+        let key = key.Trim([|'"'|])
         let scope = ctx.scopes
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
+        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        |ScopeResult.NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
-        |WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
+        |ScopeResult.WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |ValueFound -> inv (ErrorCodes.CustomError "This is a value, but should be a scope" Severity.Error) leafornode <&&&> errors
         |_ -> errors
-    let checkScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  key =
+    let checkScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  (key : string) =
         // log "scope %s %A"key ctx
+        let key = key.Trim([|'"'|])
         let scope = ctx.scopes
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        |NewScope ({Scopes = current::_} ,_) -> current = s || s = anyScope || current = anyScope
+        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        |ScopeResult.NewScope ({Scopes = current::_} ,_) -> current = s || s = anyScope || current = anyScope
         |NotFound _ -> false
-        |WrongScope (command, prevscope, expected) -> true
+        |ScopeResult.WrongScope (command, prevscope, expected) -> true
         |VarNotFound s -> false
         |ValueFound -> false
         |_ -> true
 
-    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key leafornode errors =
+    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) (key : string) leafornode errors =
         let scope = ctx.scopes
-
+        let metadata = getStringMetadata id
+        if metadata.startsWithAmp then errors else
+        let key =
+            match metadata.containsQuestionMark, metadata.containsHat with
+            | true, _ -> key.Split('?').[0]
+            | false, true -> key.Split('^').[0]
+            | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         //TODO: Better error messages for scope instead of variable
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
+        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key =
+    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (id : StringToken) (key : string) =
         let scope = ctx.scopes
+        let metadata = getStringMetadata id
+        if metadata.startsWithAmp then true else
+        let key =
+            match metadata.containsQuestionMark, metadata.containsHat with
+            | true, _ -> key.Split('?').[0]
+            | false, true -> key.Split('^').[0]
+            | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
         |_, _, VarNotFound s -> false
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
-        // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
+        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        // |NotFound _ -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode])
+        // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         |_ -> false
 
     let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max key leafornode errors =
@@ -393,8 +452,8 @@ module internal FieldValidators =
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         |_, _, ValueFound -> errors
         //TODO: Better error messages for scope instead of variable
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
+        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         |_, _, NotFound _ ->
                 match enumsMap.TryFind "static_values" with
                 | Some (_, es) ->
@@ -414,9 +473,9 @@ module internal FieldValidators =
                 | Some (_, es) -> es.Contains (trimQuote key)
                 | None -> false
 
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
-        // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
-        // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
+        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        // |NotFound _ -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode])
+        // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         |_ -> false
 
     let checkAliasValueKeysField (aliasKeyList : Collections.Map<string, Collections.Set<StringToken>>) aliasKey (id : StringToken) key severity leafornode errors =
@@ -428,19 +487,19 @@ module internal FieldValidators =
         match aliasKeyList |> Map.tryFind aliasKey with
         | Some values -> values |> Set.contains id
         | None -> true
-    let checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) (leafornode : IKeyPos) errors =
+    let rec checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) (leafornode : IKeyPos) errors =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then errors else
             match field with
             |ValueField vt ->
-                checkValidValue p.enumsMap p.localisation severity vt id key leafornode errors
+                checkValidValue p.varMap p.enumsMap p.localisation severity vt id key leafornode errors
             |TypeField t -> checkTypeField p.typesMap severity t id key leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key leafornode errors
-            |LocalisationField synced -> checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
+            |LocalisationField synced -> checkLocalisationField p.processLocalisation p.validateLocalisation ctx.scopes p.localisation p.defaultLocalisation p.defaultLang synced key leafornode errors
             |FilepathField (prefix, extension) -> checkFilepathField p.files key prefix extension leafornode errors
             |IconField folder -> checkIconField p.files folder key leafornode errors
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap severity v id key leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
+            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max id key leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key leafornode errors
             |ScalarField _ -> errors
             |SpecificField (SpecificValue v) -> if id = v.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(v.normal))) severity) leafornode <&&&> errors
@@ -449,13 +508,15 @@ module internal FieldValidators =
             |SingleAliasField (_)
             |SubtypeField (_)
             |TypeMarkerField (_)
+            |IgnoreMarkerField
             |ValueScopeMarkerField (_) -> inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode <&&&> errors
             |AliasValueKeysField aliasKey -> checkAliasValueKeysField p.aliasKeyList aliasKey id key severity leafornode errors
-    let checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
+            |IgnoreField field -> checkField p severity ctx field id key leafornode errors
+    let rec checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
             if (stringManager.GetMetadataForID id).containsDoubleDollar then true else
             match field with
             |ValueField vt ->
-                checkValidValueNE p.enumsMap p.localisation severity vt id key
+                checkValidValueNE p.varMap p.enumsMap p.localisation severity vt id key
             |TypeField t -> checkTypeFieldNE p.typesMap severity t id key
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s key
             |LocalisationField synced -> true
@@ -463,7 +524,7 @@ module internal FieldValidators =
             |IconField folder -> checkIconFieldNE p.files folder key
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v id key
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
+            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max id key
             |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max key
             |TypeMarkerField (dummy, _) -> dummy = id
             |ScalarField (_) -> true
@@ -473,8 +534,10 @@ module internal FieldValidators =
             |SingleAliasField (_)
             |SubtypeField (_)
             |TypeMarkerField (_)
+            |IgnoreMarkerField
             |ValueScopeMarkerField (_) -> false
             |AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeyList aliasKey id
+            |IgnoreField field -> checkFieldNE p severity ctx field id key
 
     let checkLeftField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) id (key : string) =
         checkFieldNE p severity ctx field id key

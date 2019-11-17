@@ -14,3 +14,11 @@ tests = {
         subtype_get_1 = two
     }
 }
+
+ten = {
+
+}
+
+eleven = {
+
+}

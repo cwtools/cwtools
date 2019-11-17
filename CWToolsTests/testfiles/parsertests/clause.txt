@@ -1,0 +1,13 @@
+key = value
+label = {
+	valuea
+	valueb
+}
+types test
+{
+	values
+	values
+}
+type blah = blah2 {
+	values2 values2
+}

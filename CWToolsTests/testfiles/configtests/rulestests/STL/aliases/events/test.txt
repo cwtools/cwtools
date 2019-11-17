@@ -16,4 +16,13 @@ country_event = {
     single_alias_clause = {
 
     }
+    clauseblock blah {
+        something = blah
+        #error
+        something = blahh
+    }
+    #error
+    clauseblock blah {
+
+    }
 }

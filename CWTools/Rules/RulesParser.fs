@@ -13,6 +13,7 @@ open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
 open CWTools.Common.NewScope
+open CWTools.Utilities.StringResource
 
 
 type ReplaceScopes = {
@@ -24,6 +25,7 @@ type ReplaceScopes = {
 type Options = {
     min : int
     max : int
+    strictMin : bool
     leafvalue : bool
     description : string option
     pushScope : Scope option
@@ -52,6 +54,7 @@ type ValueType =
 | CK2DNA
 | CK2DNAProperty
 | IRFamilyName
+| STLNameFormat of variable : string
     override x.ToString() =
         match x with
         // | Scalar -> "Scalar"
@@ -65,6 +68,7 @@ type ValueType =
         | CK2DNA -> "CK2DNA"
         | CK2DNAProperty -> "CK2DNAProperty"
         | IRFamilyName -> "IRFamilyName"
+        | STLNameFormat x -> sprintf "STLNameFormat %s" x
 
 [<Struct>]
 type SpecificValue = |SpecificValue of valuec : StringTokens
@@ -132,6 +136,7 @@ and NewField =
 | AliasValueKeysField of string
 | AliasField of string
 | SingleAliasField of string
+| SingleAliasClauseField of string * string
 | SubtypeField of string * bool * NewRule list
 | VariableSetField of string
 | VariableGetField of string
@@ -139,9 +144,14 @@ and NewField =
 | ValueScopeMarkerField of isInt : bool * minmax : (decimal * decimal)
 | ValueScopeField of isInt : bool * minmax : (decimal * decimal)
 | MarkerField of Marker
+| JominiGuiField
+| IgnoreMarkerField
+| IgnoreField of field : NewField
     override x.ToString() =
         match x with
         | ValueField vt -> sprintf "Field of %O" vt
+        | ScalarField sv -> "Field of any value"
+        | SpecificField (SpecificValue sv) -> sprintf "Field of %s" (stringManager.GetStringForID sv.normal)
         | _ -> sprintf "Field of %A" x
 and RuleType =
 |NodeRule of left : NewField * rules : NewRule list
@@ -193,7 +203,7 @@ module RulesParser =
         |"information" -> Severity.Information
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let defaultOptions = { min = 0; max = 1000; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
     let requiredSingle : Options = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
@@ -324,17 +334,19 @@ module RulesParser =
 
 
     let getOptionsFromComments (parseScope) (allScopes) (anyScope) (operator : Operator) (comments : string list) =
-        let min, max =
+        let min, max, strictmin =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             | Some c ->
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
                 try
-                    match nums.[0], nums.[1] with
-                    | min, "inf" -> (int min), cardinalityDefaultMaximum
-                    | min, max -> (int min), (int max)
+                    let minText, strictMin =
+                        if nums.[0].StartsWith "~" then nums.[0].Substring(1), false else nums.[0], true
+                    match minText, nums.[1] with
+                    | min, "inf" -> (int min), cardinalityDefaultMaximum, strictMin
+                    | min, max -> (int min), (int max), strictMin
                 with
-                | _ -> 1, 1
-            | None -> 1, 1
+                | _ -> 1, 1, true
+            | None -> 1, 1, true
         let description =
             match comments |> List.tryFind (fun s -> s.StartsWith "##") with
             | Some d -> Some (d.Trim('#'))
@@ -348,7 +360,7 @@ module RulesParser =
             | Some s ->
                 let rhs = s.Substring(s.IndexOf "=" + 1).Trim()
                 match rhs.StartsWith("{") && rhs.EndsWith("}") with
-                | true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.map parseScope |> List.ofArray
+                | true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> Array.filter (fun s -> s <> "") |> Array.map parseScope |> List.ofArray
                 | false -> let scope = rhs |> parseScope in if scope = anyScope then allScopes else [scope]
             | None -> []
         let severity =
@@ -363,7 +375,7 @@ module RulesParser =
                 | Some s -> s.Substring(s.IndexOf "=" + 1).Trim()|> (fun s -> false, s) |> Some
                 | None -> None
         let comparison = operator = Operator.EqualEqual
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails }
+        { min = min; max = max; strictMin = strictmin; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails }
 
     let processKey parseScope anyScope =
         function
@@ -470,11 +482,17 @@ module RulesParser =
             | Some aliasKey ->
                 AliasValueKeysField aliasKey
             | None -> ScalarField (ScalarValue)
+        | x when x.StartsWith "stellaris_name_format" ->
+            match getSettingFromString x "stellaris_name_format" with
+            | Some aliasKey ->
+                ValueField (STLNameFormat aliasKey)
+            | None -> ScalarField (ScalarValue)
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
         | "colour_field" -> MarkerField Marker.ColourField
         | "ir_country_tag_field" -> MarkerField Marker.IRCountryTag
         | "ir_family_name_field" -> ValueField IRFamilyName
+        | "ignore_field" -> IgnoreMarkerField
         | x ->
             // eprintfn "ps %s" x
             SpecificField (SpecificValue (StringResource.stringManager.InternIdentifierToken(x.Trim([|'\"'|]))))
@@ -492,6 +510,7 @@ module RulesParser =
                 |Some st when st.StartsWith "!" -> SubtypeRule (st.Substring(1), false, (innerRules))
                 |Some st -> SubtypeRule (st, true, (innerRules))
                 |None -> failwith (sprintf "Invalid subtype string %s" x)
+            |_ when node.KeyPrefixId.IsSome && node.ValuePrefixId.IsSome -> NodeRule(JominiGuiField, innerRules)
             |x -> NodeRule(processKey parseScope anyScope x, innerRules)
             // |"int" -> NodeRule(ValueField(ValueType.Int(Int32.MinValue, Int32.MaxValue)), innerRules)
             // |"float" -> NodeRule(ValueField(ValueType.Float(Double.MinValue, Double.MaxValue)), innerRules)
@@ -517,22 +536,31 @@ module RulesParser =
 
 
 
-    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; strictMin = true; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; strictMin = true; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None }
 
     let configLeaf processChildConfig (parseScope) (allScopes) (anyScope) (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope key
         let options = getOptionsFromComments parseScope allScopes anyScope (leaf.Operator) comments
         let rightkey = leaf.Value.ToString()
-        match rightkey with
-        |x when x.StartsWith("colour[") ->
+        match key, rightkey with
+        |_, x when x.StartsWith("colour[") ->
             let colourRules =
                 match getSettingFromString x "colour" with
                 |Some "rgb" -> [rgbRule]
                 |Some "hsv" -> [hsvRule]
                 |_ -> [rgbRule; hsvRule]
             NewRule(NodeRule(leftfield, colourRules), options)
-        |x ->
+        |l, r when l.StartsWith "clause_single_alias" && r.StartsWith "single_alias_right" ->
+            match getSettingFromString l "clause_single_alias", getSettingFromString r "single_alias_right" with
+            |Some ls, Some rs ->
+                let leftfield = LeafValueRule(SingleAliasClauseField (ls, rs))
+                NewRule(leftfield, options)
+            |_ ->
+                let rightfield = processKey parseScope anyScope rightkey
+                let leafRule = LeafRule(leftfield, rightfield)
+                NewRule(leafRule, options)
+        |_, x ->
             let rightfield = processKey parseScope anyScope rightkey
             let leafRule = LeafRule(leftfield, rightfield)
             NewRule(leafRule, options)
@@ -873,6 +901,15 @@ module RulesParser =
                 | x ->
                     log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |SpecificField (SpecificValue x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
                     rule
+            /// TODO: Add clause key validation
+            | (LeafValueRule (SingleAliasClauseField (clauseKey, name)), o) ->
+                match singlealiasesmap() |> Map.tryFind name with
+                | Some (NodeRule (al, ar), ao) ->
+                    ValueClauseRule(ar), o
+                | x ->
+                    log (sprintf "Failed to find defined single alias %s when replacing single alias clause. Found %A" name x)
+                    rule
+
             | _ -> rule
         let singlealiasesmapper =
             function
@@ -972,6 +1009,23 @@ module RulesParser =
             | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
         rules |> List.collect rulesMapper
 
+    let replaceIgnoreMarkerFields (rules : RootRule list) =
+        let rec cataRule rule : NewRule list =
+            match rule with
+            | LeafRule (field, IgnoreMarkerField), o ->
+               [ NodeRule (IgnoreField field, []), o ]
+            | NodeRule (l, r), o ->
+                [NodeRule(l, r |> List.collect cataRule), o]
+            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
+            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | _ -> [rule]
+        let rulesMapper =
+            function
+            | TypeRule (name, rule) -> cataRule rule |> List.map (fun x -> TypeRule (name, x))
+            | AliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  AliasRule (name, x))
+            | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
+        rules |> List.collect rulesMapper
+
     let processConfig (parseScope) (allScopes) (anyScope) (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope)
@@ -995,7 +1049,7 @@ module RulesParser =
         let rules, types, enums, complexenums, values =
             files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope filename fileString)
               |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
-        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases |> replaceColourField
+        let rules = rules |> replaceValueMarkerFields |> replaceSingleAliases |> replaceColourField |> replaceIgnoreMarkerFields
         // File.AppendAllText ("test.test", sprintf "%O" rules)
         rules, types, enums, complexenums, values
 

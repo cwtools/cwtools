@@ -22,43 +22,39 @@ open CWTools.Games.Helpers
 open CWTools.Games.Compute.EU4
 open CWTools.Parser
 open System.IO
+open CWTools.Process.Localisation
 
 module EU4GameFunctions =
     type GameObject = GameObject<EU4ComputedData, EU4Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
+    let createLocDynamicSettings(lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
-            @
-            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
+            @
+            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+        {
+            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
+            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+            setVariables = definedvars
+        }
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
-        let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
-            @
-            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
+        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
+
+    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
+        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
 
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
@@ -78,7 +74,7 @@ module EU4GameFunctions =
         game.Lookup.EU4TrueLegacyGovernments <- legacyOnly
 
     let addModifiersWithScopes (lookup : Lookup) =
-        (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None}))))
+        (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None}))))
 
     let updateScriptedEffects(rules :RootRule list) =
         let effects =
@@ -158,8 +154,8 @@ module EU4GameFunctions =
 
         let eu4LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> EU4Parser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
 
         let eu4EventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
@@ -207,12 +203,13 @@ type EU4Game(setupSettings : EU4Settings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = EU4Lookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
 
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = EU4Lookup()
@@ -231,14 +228,16 @@ type EU4Game(setupSettings : EU4Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        validateLocalisation = EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
     }
 
     let game = GameObject.CreateGame
                 ((settings, "europa universalis iv", scriptFolders, Compute.EU4.computeEU4Data,
                     Compute.EU4.computeEU4DataUpdate,
                      (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
-                     EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
@@ -277,7 +276,7 @@ type EU4Game(setupSettings : EU4Settings) =
         member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (EU4 EU4Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})

@@ -1,6 +1,7 @@
 namespace CWTools.Rules
 
 open CWTools.Rules
+open CWTools.Process.Localisation
 open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Validation
@@ -24,7 +25,9 @@ type RuleValidationService
                                  localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                                  links : Map<string,Effect,InsensitiveStringComparer>,
                                  valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
-                                 anyScope, changeScope : ChangeScope, defaultContext : ScopeContext, defaultLang) =
+                                 anyScope, changeScope : ChangeScope, defaultContext : ScopeContext, defaultLang,
+                                 processLocalisation : (Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>),
+                                 validateLocalisation : (LocEntry -> ScopeContext -> ValidationResult)) =
 
     let mutable errorList : ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
@@ -168,6 +171,8 @@ type RuleValidationService
         defaultLang = defaultLang
         wildcardLinks = wildCardLinks
         aliasKeyList = aliasKeyMap
+        processLocalisation = processLocalisation
+        validateLocalisation = validateLocalisation
     }
 
 
@@ -226,7 +231,10 @@ type RuleValidationService
                 let leafcount = clause.Leaves |> Seq.filter (fun leaf -> leaf.KeyId.lower = key.lower) |> Seq.length
                 let childcount = clause.Nodes |> Seq.filter (fun child -> child.KeyId.lower = key.lower) |> Seq.length
                 let total = leafcount + childcount
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" (StringResource.stringManager.GetStringForID key.normal) opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" (StringResource.stringManager.GetStringForID key.normal) opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |NodeRule(AliasField(_), _), _
@@ -234,22 +242,34 @@ type RuleValidationService
             |LeafValueRule(AliasField(_)), _ -> innerErrors
             |NodeRule(l, _), opts ->
                 let total = clause.Nodes |> Seq.filter (fun child -> FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId.lower child.Key) |> Seq.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafRule(l, r), opts ->
                 let total = clause.Leaves |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key) |> Seq.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafValueRule(l), opts ->
                 let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key) |> List.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %O, expecting at least %i" l opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |ValueClauseRule(_), opts ->
                 let total = clause.ValueClauses |> Seq.length
-                if opts.min > total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing clause, expecting at least %i" opts.min) (opts.severity |> Option.defaultValue severity)) clause <&&&> innerErrors
+                if opts.min > total
+                then
+                    let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
+                    inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing clause, expecting at least %i" opts.min) minSeverity) clause <&&&> innerErrors
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many clauses, expecting at most %i" opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |_ -> innerErrors
@@ -264,7 +284,7 @@ type RuleValidationService
         (applyToAll rules (checkCardinality startNode))
 
     and applyValueField severity (vt : CWTools.Rules.ValueType) (leaf : Leaf) =
-        FieldValidators.checkValidValue enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
+        FieldValidators.checkValidValue varMap enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
 
     and applyLeafValueRule (ctx : RuleContext) (options : Options) (rule : NewField) (leafvalue : LeafValue) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
@@ -280,10 +300,10 @@ type RuleValidationService
         |xs ->
             match ctx.scopes.CurrentScope with
             |x when x = anyScope -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf])
+            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf]))
         <&&>
         FieldValidators.checkField p severity ctx rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
-    and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) errors =
+    and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : IClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =
             match options.pushScope with
@@ -317,12 +337,13 @@ type RuleValidationService
         |xs ->
             match ctx.scopes.CurrentScope with
             |x when x = anyScope  -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node])
+            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node]))
         <&&>
         match rule with
+        |IgnoreField _ -> OK
         |ScopeField s ->
             let scope = newCtx.scopes
-            let key = node.Key
+            let key = node.Key.Trim('"')
             match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope, (stringManager.GetMetadataForID (node.KeyId.lower)).containsDoubleDollar with
             |_, true ->
                 let newCtx = { newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
@@ -376,11 +397,11 @@ type RuleValidationService
         |xs ->
             match ctx.scopes.CurrentScope with
             |x when x = anyScope  -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") ("")) valueclause])
+            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") ("")) valueclause]))
         <&&>
         applyClauseField enforceCardinality options.severity newCtx rules valueclause errors
 
-    let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
+    let testSubtype (subtypes : SubTypeDefinition list) (node : IClause) =
         let results =
             subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
                      |> List.filter (fun st -> st.startsWith |> function | Some sw -> node.Key.StartsWith(sw, StringComparison.OrdinalIgnoreCase) | None -> true )
@@ -389,7 +410,7 @@ type RuleValidationService
         res |> List.tryPick fst, res |> List.map snd
 
     let rootId = StringResource.stringManager.InternIdentifierToken "root"
-    let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : Node) =
+    let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : IClause) =
         let pushScope, subtypes = testSubtype (typedef.subtypes) node
         let startingScopeContext =
             match Option.orElse pushScope options.pushScope with
@@ -403,35 +424,39 @@ type RuleValidationService
     let validate ((path, root) : string * Node) =
         let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
         let file = Path.GetFileName path
-        let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
+        let skiprootkey (skipRootKey : SkipRootKey) (n : IClause) =
             match skipRootKey with
             |(SpecificKey key) -> n.Key == key
             |(AnyKey) -> true
             |(MultipleKeys (keys, shouldMatch)) ->
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let inner (typedefs : TypeDefinition list) (node : Node) =
-            let validateType (typedef : TypeDefinition) (n : Node) =
+        let inner (typedefs : TypeDefinition list) (node : IClause) =
+            let validateType (typedef : TypeDefinition) (n : IClause) =
                 let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None)
                 //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
                 //let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
                 //match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
                 //match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
+                let filterKey =
+                    match n with
+                    | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
+                    | _ -> n.Key
                 match typerules |> List.tryHead with
                 |Some ((NodeRule ((SpecificField(SpecificValue (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
-                    if FieldValidators.typekeyfilter typedef n.Key then applyNodeRuleRoot typedef rs o n else OK
+                    if FieldValidators.typekeyfilter typedef filterKey then applyNodeRuleRoot typedef rs o n else OK
                 |_ ->
                     OK
             let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
-            let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : Node) =
+            let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : IClause) =
                 match skipRootKeyStack with
                 |[] -> if FieldValidators.typekeyfilter t n.Key then validateType t n else OK
                 |head::tail ->
                     if skiprootkey head n
-                    then n.Children <&!&> validateTypeSkipRoot t tail
+                    then n.ClauseList <&!&> validateTypeSkipRoot t tail
                     else OK
             pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
-        let res = (root.Children <&!&> inner normalTypeDefs)
+        let res = (root.Clauses |> List.ofSeq <&!&> inner normalTypeDefs)
         let rootres = (inner rootTypeDefs root)
         res <&&> rootres
 

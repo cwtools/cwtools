@@ -31,3 +31,8 @@ event = {
         }
     }
 }
+
+event = {
+    test_loc = "[Root.ruler.GetDesc]"
+    test_loc = "[Root.ruler.GetBlah]"
+}

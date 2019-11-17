@@ -50,6 +50,9 @@ event = {
             scalar = scalar
         }
     }
+
+    ## cardinality = 0..inf
+    test_loc = localisation
 }
 
 type_per_file = {

@@ -18,6 +18,7 @@ open CWTools.Process.STLProcess
 open CWTools.Localisation.STL
 open CWTools.Localisation.CK2Localisation
 open CWTools.Localisation
+open CWTools.Utilities.Position
 
 [<Tests>]
 let tests =
@@ -48,4 +49,24 @@ let tests =
             | Some value -> Expect.equal "These stone walls surround the [Root.Holder.GetHouseOfWorship] and must be overcome by any attacker." value.desc "Value had wrong value"
             | None -> Expect.isTrue false "Didn't find key"
             ()
+    ]
+
+    testList "jomini parser" [
+        testCase "jomini simple" <| fun() ->
+            let file = File.ReadAllText "testfiles/parsertests/simple.txt"
+            match CKParser.parseString file "test" with
+            |Success(r, _, _) ->
+                //eprintfn "%A" r
+                let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
+                let printed = CKPrinter.api.prettyPrintStatements (node.ToRaw)
+                Expect.equal printed file "Printing shouldn't have changed string"
+        // testCase "jomini fancy clause" <| fun() ->
+        //     let file = File.ReadAllText "testfiles/parsertests/clause.txt"
+        //     match CKParser.parseString file "test" with
+        //     |Success(r, _, _) ->
+        //         //eprintfn "%A" r
+        //         let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
+        //         //node.All |> List.iter (eprintfn "%A")
+        //         let printed = CKPrinter.api.prettyPrintStatements (node.ToRaw)
+        //         Expect.equal printed file "Printing shouldn't have changed string"
     ]

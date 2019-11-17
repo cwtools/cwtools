@@ -6,6 +6,7 @@ open System
 open CWTools.Utilities.Position
 open System.IO
 open CWTools.Games
+open CWTools.Process.Localisation
 open CWTools.Process
 open CWTools.Process.Scopes
 open CWTools.Validation
@@ -34,7 +35,9 @@ type InfoService
                                      localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>,
                                      links : Map<string,Effect,InsensitiveStringComparer>,
                                      valueTriggers : Map<string,Effect,InsensitiveStringComparer>,
-                                     ruleValidationService : RuleValidationService, changeScope, defaultContext, anyScope, defaultLang) =
+                                     ruleValidationService : RuleValidationService, changeScope, defaultContext, anyScope, defaultLang,
+                                     processLocalisation : (Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>),
+                                     validateLocalisation : (LocEntry -> ScopeContext -> ValidationResult)) =
     let linkMap = links
     let wildCardLinks = linkMap.ToList() |> List.map snd |> List.choose (function | :? ScopedEffect as e when e.IsWildCard -> Some e |_ -> None )
     let valueTriggerMap = valueTriggers
@@ -250,7 +253,7 @@ type InfoService
                 match field with
                 | NodeRule (ScopeField s, f) ->
                     let scope = newCtx.scopes
-                    let key = node.Key
+                    let key = node.Key.Trim('"')
                     let newCtx =
                         match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
                         |NewScope ({Scopes = current::_} ,_) ->
@@ -301,6 +304,8 @@ type InfoService
             defaultLang = defaultLang
             wildcardLinks = wildCardLinks
             aliasKeyList = aliasKeyMap
+            processLocalisation = processLocalisation
+            validateLocalisation = validateLocalisation
         }
     let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos : pos) (node : Node) (logicalpath : string) =
         let fChild (ctx, _) (node : IClause) ((field, options) : NewRule) =
@@ -367,32 +372,54 @@ type InfoService
                 then node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) |> Option.bind (foldAtPosSkipRoot rs o t tail acc)
                 else None
 
-        match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
-        |Some c, Some typedef ->
-            let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
-            match typerules, typedef.type_per_file with
-            |[(n, (NodeRule (l, rs), o))], false ->
-                foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
-            |[(n, (NodeRule (l, rs), o))], true ->
-                Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
+        let resultForType (child : Node option) (typedef : TypeDefinition) =
+            match child with
+            | Some c ->
+                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                match typerules, typedef.type_per_file with
+                |[(n, (NodeRule (l, rs), o))], false ->
+                    foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
+                |[(n, (NodeRule (l, rs), o))], true ->
+                    Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
+                |_ -> None
+            | None ->
+                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                match typerules with
+                | [(n, (NodeRule (l, rs), o))] ->
+                    Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
+                | _ -> None
+        typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) |> List.fold (fun acc t -> Option.orElseWith (fun () -> resultForType childMatch t) acc) None
+        // match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
+        // |Some c, Some typedef ->
+        //     let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+        //     match typerules, typedef.type_per_file with
+        //     |[(n, (NodeRule (l, rs), o))], false ->
+        //         foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
+        //     |[(n, (NodeRule (l, rs), o))], true ->
+        //         Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
 
-            |_ -> None
-        |None, Some typedef when typedef.type_per_file ->
-            let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
-            match typerules with
-            | [(n, (NodeRule (l, rs), o))] ->
-                Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
-            | _ -> None
-        |_, _ -> None
+        //     |_ -> None
+        // |None, Some typedef when typedef.type_per_file ->
+        //     let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+        //     match typerules with
+        //     | [(n, (NodeRule (l, rs), o))] ->
+        //         Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
+        //     | _ -> None
+        // |_, _ -> None
 
     let getInfoAtPos (pos : pos) (entity : Entity) =
         let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule) =
             match field with
             |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+            |LeafRule (_, LocalisationField _) -> ctx, (Some o, Some ("localisation", leaf.ValueText), Some (LeafC leaf))
             |LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+            |LeafRule (LocalisationField _, _) -> ctx, (Some o, Some ("localisation", leaf.Key), Some (LeafC leaf))
             |_ -> ctx, (Some o, None, Some (LeafC leaf))
-        let fLeafValue (ctx, _) (leafvalue : LeafValue) (_, o : Options) =
-            ctx, (Some o, None, Some (LeafValueC leafvalue))
+        let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) =
+            match field with
+            |LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
+            |LeafValueRule (LocalisationField _) -> ctx, (Some o, Some ("localisation", leafvalue.Key), Some (LeafValueC leafvalue))
+            |_ -> ctx, (Some o, None, Some (LeafValueC leafvalue))
         let fComment (ctx, _) _ _ = ctx, (None, None, None)
         //TODO: Actually implement value clause
         let fValueClause (ctx, _) _ _ = ctx, (None, None, None)
@@ -427,7 +454,7 @@ type InfoService
             match field with
             | NodeRule (ScopeField s, f) ->
                 let scope = newCtx.scopes
-                let key = node.Key
+                let key = node.Key.Trim('"')
                 let newCtx =
                     match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
                     |NewScope ({Scopes = current::_} ,_) ->
@@ -444,6 +471,7 @@ type InfoService
                 let typevalue = node.TagText namefield
                 ctx, (Some options, Some (typename, typevalue), Some (NodeC node))
             | NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            | NodeRule (LocalisationField _, _) -> ctx, (Some options, Some ("localisation", node.Key), Some (NodeC node))
             | NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
             | _ -> newCtx, (Some options, None, Some (NodeC node))
 
@@ -663,6 +691,15 @@ type InfoService
                     newArr.Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel)
                     res.TryAdd(typename, newArr) |> ignore
                     res
+            |NodeRule (JominiGuiField, _) ->
+                let typename = "gui_type"
+                if res.ContainsKey(typename)
+                then res.[typename].Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel); res
+                else
+                    let newArr = ResizeArray<ReferenceDetails>()
+                    newArr.Add(createReferenceDetails (node.Key) (node.Position) isOutgoing referenceLabel)
+                    res.TryAdd(typename, newArr) |> ignore
+                    res
             | _ -> res
         let fValueClause (_) _ _ = res
         let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
@@ -834,7 +871,7 @@ type InfoService
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
                 else res
             |LeafRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced leaf.Key leaf res
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced leaf.Key leaf res
             |_ -> res
         let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
             match field with
@@ -866,7 +903,7 @@ type InfoService
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node) <&&> res
                 else res
             |NodeRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.localisation p.defaultLocalisation p.defaultLang synced node.Key node res
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced node.Key node res
             |_ -> res
 
         let fComment (res) _ _ = res

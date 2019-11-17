@@ -13,6 +13,8 @@ open CWTools.Utilities.Position
 open CWTools.Process.Scopes
 open CWTools.Process.Scopes.Scopes
 open CWTools.Common.NewScope
+open CWTools.Process.Localisation
+open CWTools.Process.Localisation.EU4
 
 module EU4LocalisationString =
 
@@ -60,11 +62,11 @@ module EU4LocalisationString =
             "GetReligionName";
             "GetReligionGroupName";
         ]
-    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes)
+    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes), []
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation() = processLocalisationBase (localisationCommandValidator()) defaultContext
-    let validateLocalisationCommand() = validateLocalisationCommandsBase (localisationCommandValidator())
+    let processLocalisation = fun commands variableCommands dynamicSettings -> processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
+    let validateLocalisationCommand = fun commands variableCommands dynamicSettings -> validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)
 
     let checkFileEncoding (file : string) =
             use fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) in
@@ -74,7 +76,7 @@ module EU4LocalisationString =
             if (bits.[0] = byte 0xEF && bits.[1] = byte 0xBB && bits.[2] = byte 0xBF) then OK
             else
                 let pos = rangeN file 0
-                Invalid [invManual ErrorCodes.WrongEncoding pos "" None ]
+                Invalid (Guid.NewGuid(), [invManual ErrorCodes.WrongEncoding pos "" None ])
 
     let checkLocFileName (file : string) =
         let filename = Path.GetFileNameWithoutExtension file
@@ -108,12 +110,12 @@ module EU4LocalisationString =
             |_ -> false
         match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
         |_ , Some STLLang.Default -> OK
-        |_, None -> Invalid [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 1) "" None ]
-        |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 1) "" None ]
+        |_, None -> Invalid (Guid.NewGuid(), [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 1) "" None ])
+        |None, _ -> Invalid (Guid.NewGuid(), [invManual ErrorCodes.MissingLocFileLang (rangeN file 1) "" None ])
         // Removed this as only convention
-        // |Some l1, Some l2 when not (keyAtEnd filename) -> Invalid [invManual ErrorCodes.LocFileLangWrongPlace (rangeN file 1) "" None ]
+        // |Some l1, Some l2 when not (keyAtEnd filename) -> Invalid (Guid.NewGuid(), [invManual ErrorCodes.LocFileLangWrongPlace (rangeN file 1) "" None ])
         |Some l1, Some l2 when l1 = l2 -> OK
-        |Some l1, Some l2 -> Invalid [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 1) "" None ]
+        |Some l1, Some l2 -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 1) "" None ])
 
 
 

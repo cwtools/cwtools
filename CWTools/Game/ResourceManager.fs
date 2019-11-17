@@ -33,8 +33,11 @@ type EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, wit
     member __.ScriptedEffectParams : string list option = scriptedeffectparams
 type HOI4ComputedData = ComputedData
 type CK2ComputedData = ComputedData
-type IRComputedData = ComputedData
 type VIC2ComputedData = ComputedData
+type JominiComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks, savedEventTargets) =
+    inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
+    member __.ScriptedEffectParams : string list option = scriptedeffectparams
+type IRComputedData = JominiComputedData
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 // type CK2ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)

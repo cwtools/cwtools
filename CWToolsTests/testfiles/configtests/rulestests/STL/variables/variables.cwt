@@ -1,0 +1,9 @@
+values = {
+	value[predefined] = {
+        one
+        two
+        three<pred_type>
+        four@<pred_type>
+        five@enum[test_enum]
+    }
+}

@@ -21,29 +21,42 @@ open CWTools.Process
 open System
 open CWTools.Games.Helpers
 open CWTools.Parser
+open CWTools.Process.Localisation
+open CWTools.Process.Localisation.ChangeLocScope
 
 module IRGameFunctions =
     type GameObject = GameObject<IRComputedData, IRLookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
+    let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
+        let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
+        let processLocalisation() = processJominiLocalisationBase (localisationCommandValidator()) defaultContext
+        let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
+                                     |> List.distinct
+                                     |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        processLocalisation() eventtargets definedvars
 
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
+    let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
+        let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
+        let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
         let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
+            lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
+                                     |> List.distinct
+                                     |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        validateLocalisationCommand() eventtargets definedvars
 
     let globalLocalisation (game : GameObject) =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
         locParseErrors <&&>
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
 
     let updateModifiers (game : GameObject) =
@@ -53,7 +66,7 @@ module IRGameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
+            {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -234,8 +247,8 @@ module IRGameFunctions =
 
         let irLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> IRParser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
+                    |> Option.defaultValue ([], [])
 
         let irEventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
@@ -253,6 +266,10 @@ module IRGameFunctions =
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseTriggerStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.map (JominiParser.processTriggers scopeManager.ParseScopes)
                     |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in ir config"; ([]))
+        let jominiLocDataTypes =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
+                    |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
+                    |> Option.defaultValue { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 
 
         {
@@ -261,7 +278,7 @@ module IRGameFunctions =
             modifiers = irMods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
-            localisationCommands = Legacy irLocCommands
+            localisationCommands = Jomini jominiLocDataTypes
             eventTargetLinks = irEventTargetLinks
         }
 
@@ -295,16 +312,10 @@ type IRGame(setupSettings : IRSettings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = IRLookup()
-
+        maxFileSize = setupSettings.maxFileSize
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
-    let settings =
-            { settings with
-                embedded = { settings.embedded with localisationCommands = locSettings }
-                initialLookup = IRLookup()
-            }
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -319,13 +330,15 @@ type IRGame(setupSettings : IRSettings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands)
+        validateLocalisation = IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands)
     }
     let game = GameObject<IRComputedData, IRLookup>.CreateGame
-                ((settings, "imperator", scriptFolders, Compute.computeIRData,
-                    Compute.computeIRDataUpdate,
+                ((settings, "imperator", scriptFolders, Compute.Jomini.computeJominiData,
+                    Compute.Jomini.computeJominiDataUpdate,
                      (IRLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
-                     IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                     IRGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
+                     IRGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,
@@ -365,7 +378,7 @@ type IRGame(setupSettings : IRSettings) =
         member __.References() = References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (IR IRLang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})

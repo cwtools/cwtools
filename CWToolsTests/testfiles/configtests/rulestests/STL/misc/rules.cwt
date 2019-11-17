@@ -32,9 +32,12 @@ alias[trigger:is_country] = bool
 alias[trigger:is_ship] = bool
 
 event = {
+    ## cardinality = 0..1
     option = {
         alias_name[effect] = alias_match_left[effect]
     }
+    ## cardinality = 0..1
+    test_ignore = ignore_field
 
 }
 
@@ -125,3 +128,24 @@ alias[effect:dual_path_complex] = {
 }
 
 alias[effect:effect_alias_test] = alias_keys_field[effect]
+
+alias[effect:cardinality_tests_none] = {
+    ## cardinality = 0..0
+    test_none
+}
+alias[effect:cardinality_tests_one_min] = {
+    ## cardinality = ~1..inf
+    test_one_min
+}
+alias[effect:cardinality_tests_two_min] = {
+    ## cardinality = ~2..inf
+    test_two_min
+}
+alias[effect:cardinality_tests_one_min_strict] = {
+    ## cardinality = 1..inf
+    test_one_min_strict
+}
+alias[effect:cardinality_tests_two_min_strict] = {
+    ## cardinality = 2..inf
+    test_two_min_strict
+}

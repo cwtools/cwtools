@@ -1,0 +1,31 @@
+node_type_one = {
+
+}
+node_type_two = {
+
+}
+
+node_filtered = {
+    name = node_filtered_one
+}
+
+node_filtered = {
+    name = node_filtered_two
+}
+
+{
+    name2 = clause_one
+}
+
+{
+    name2 = clause_two
+}
+
+clause_two_key_filtered clause_two_key_filtered_one
+{
+
+}
+
+clause_two_key_filtered clause_two_key_filtered_two {
+
+}

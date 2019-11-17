@@ -32,7 +32,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = Legacy []
+        localisationCommands = Legacy ([], [])
         eventTargetLinks = []
 }
 let emptyStellarisSettings (rootDirectory) = {
@@ -47,6 +47,7 @@ let emptyStellarisSettings (rootDirectory) = {
     embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
+    maxFileSize = None
 }
 let emptyImperatorSettings (rootDirectory) = {
     rootDirectories = [{ name = "test"; path = rootDirectory;}]
@@ -60,6 +61,7 @@ let emptyImperatorSettings (rootDirectory) = {
     embedded = FromConfig ([], [])
     scriptFolders = None
     excludeGlobPatterns = None
+    maxFileSize = None
 }
 
 let getAllTestLocs node =
@@ -182,7 +184,7 @@ let tests =
                 // UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let stl = STLGame(settings) :> IGame<STLComputedData>
                 let parseErrors = stl.ParserErrors()
-                let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k, _) -> n)
+                let errors = stl.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
                 let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
@@ -219,7 +221,7 @@ let tests =
                 let parseErrors = stl.ParserErrors()
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
-                let errors = stl.LocalisationErrors(true, true) |> List.map (fun (c, s, n, l, f, k, _) -> n)
+                let errors = stl.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
                 let testLocKeys = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : range list), (noreq : range list), (nodekeys : range list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
@@ -228,7 +230,7 @@ let tests =
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
                 // eprintfn "%A" (stl.LocalisationErrors(true))
-                let globalLocError = stl.LocalisationErrors(true, true) |> List.filter (fun (c, s, n, l, f, k, _) -> List.contains c locErrorCodes)
+                let globalLocError = stl.LocalisationErrors(true, true) |> List.filter (fun e -> List.contains (e.code) locErrorCodes)
                 yield testCase "globalLoc" <| fun () ->
                     Expect.hasCountOf globalLocError 10u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
             ]
@@ -303,7 +305,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let settings = emptyStellarisSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let stl = STLGame(settings) :> IGame<STLComputedData>
-                let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k, _) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let errors = stl.ValidationErrors() @ (if configLoc then stl.LocalisationErrors(false, false) else []) |> List.map (fun e -> e.message, e.range) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
                 let completionTests =
                                 stl.AllEntities()
@@ -328,7 +330,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let settings = emptyImperatorSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData>
-                let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k, _) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let errors = ir.ValidationErrors() @ (if configLoc then ir.LocalisationErrors(false, false) else []) |> List.map (fun e -> e.message, e.range) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = ir.AllEntities()
                                 |> List.map (fun struct (e, _) ->
                                     e.filepath,
@@ -357,7 +359,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 let settings = emptyImperatorSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let hoi4 = CWTools.Games.HOI4.HOI4Game(settings) :> IGame<HOI4ComputedData>
-                let errors = hoi4.ValidationErrors() @ (if configLoc then hoi4.LocalisationErrors(false, false) else []) |> List.map (fun (c, s, n, l, f, k, _) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let errors = hoi4.ValidationErrors() @ (if configLoc then hoi4.LocalisationErrors(false, false) else []) |> List.map (fun e -> e.message, e.range) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
                 let testVals = hoi4.AllEntities()
                                 |> List.map (fun struct (e, _) ->
                                     e.filepath,
@@ -496,7 +498,7 @@ let embeddedTests =
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
 
         //Test serialization
-        let fileManager = FileManager([{ name = "test"; path = "./testfiles/embeddedtest/test"}], Some "", scriptFolders, "stellaris", Encoding.UTF8, [])
+        let fileManager = FileManager([{ name = "test"; path = "./testfiles/embeddedtest/test"}], Some "", scriptFolders, "stellaris", Encoding.UTF8, [], 2000000)
         let files = fileManager.AllFilesByPath()
         let resources : IResourceAPI<STLComputedData> = ResourceManager<STLComputedData>(Compute.STL.computeSTLData (fun () -> None), Compute.STL.computeSTLDataUpdate (fun () -> None), Encoding.UTF8, Encoding.GetEncoding(1252)).Api
         let entities = resources.UpdateFiles(files) |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None) |> List.map (fun (r, (struct (e, _))) -> r, e)
@@ -527,9 +529,9 @@ let embeddedTests =
 
         let stlE = STLGame(settingsE) :> IGame<STLComputedData>
         let stlNE = STLGame(settings) :> IGame<STLComputedData>
-        let eerrors = stlE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> n)
+        let eerrors = stlE.ValidationErrors() |> List.map (fun e -> e.range)
         eprintfn "%A" (stlE.ValidationErrors())
-        let neerrors = stlNE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> f, n)
+        let neerrors = stlNE.ValidationErrors() |> List.map (fun e -> e.message, e.range)
         let etestVals = stlE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let netestVals = stlNE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let einner (file, ((nodekeys : range list)) )=
@@ -571,7 +573,7 @@ let overwriteTests =
                                             rules = Some { ruleFiles = configtext; validateRules = true; debugRulesOnly = false; debugMode = false}}
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
         let stl = STLGame(settings) :> IGame<STLComputedData>
-        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k, _) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let errors = stl.ValidationErrors() |> List.map (fun e -> e.message, e.range) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let inner (file, ((nodekeys : range list)) )=
             let expected = nodekeys  //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))

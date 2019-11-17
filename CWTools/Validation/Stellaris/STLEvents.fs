@@ -228,10 +228,10 @@ module STLEventValidation =
                                                     && (Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
         let createError ((eid, e) : (string * Node), os, s, u, _, _, x) =
              let needed = Set.difference (Set.difference u (Set.union s x)) globals |> Set.toList |> String.concat ", "
-             Invalid [inv (ErrorCodes.UnsavedEventTarget (eid) needed) e]
+             Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnsavedEventTarget (eid) needed) e])
         let createWarning ((eid, e) : (string * Node), os, s, u, _, _, _) =
              let needed = Set.difference (Set.difference u s) globals |> Set.toList |> String.concat ", "
-             Invalid [inv (ErrorCodes.MaybeUnsavedEventTarget (eid) needed) e]
+             Invalid (Guid.NewGuid(), [inv (ErrorCodes.MaybeUnsavedEventTarget (eid) needed) e])
         missing <&!&> createError
         <&&>
         (maybeMissing <&!&> createWarning)
@@ -275,7 +275,7 @@ module STLEventValidation =
             let fNode = (fun (x : Node) children ->
                         match x.Key with
                         |k when eventEffectKeys |> List.exists (fun f -> f == k) ->
-                            x.Leafs "id" <&!&> (fun l -> if eventIds |> List.contains (l.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedEvent (l.Value.ToRawString())) l])
+                            x.Leafs "id" <&!&> (fun l -> if eventIds |> List.contains (l.Value.ToRawString()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedEvent (l.Value.ToRawString())) l]))
                         |_ -> OK
                         <&&> children)
             let fCombine = (<&&>)

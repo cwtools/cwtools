@@ -6,6 +6,7 @@ open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
 open CWTools.Common
 open CWTools.Games.Stellaris.STLLookup
+open System
 
 module STLLocalisationValidation =
     type S = Severity
@@ -15,14 +16,14 @@ module STLLocalisationValidation =
         match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+        | _, false -> Invalid (Guid.NewGuid(), [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)])
 
     let inline checkLocName (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string)  =
         match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | false, _, _ -> OK
         | _, true, _ -> OK
         | _, _, true -> OK
-        | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+        | _, _, false -> Invalid (Guid.NewGuid(), [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)])
 
     let inline checkLocKeysLeafOrNode (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leafornode keys l key) OK
@@ -61,14 +62,14 @@ module STLLocalisationValidation =
             match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
             | true, _ -> OK
             | _, true -> OK
-            | _, false -> Invalid [invLeafValue (ErrorCodes.MissingLocalisation key (lang)) lv (Some key)]
+            | _, false -> Invalid (Guid.NewGuid(), [invLeafValue (ErrorCodes.MissingLocalisation key (lang)) lv (Some key)])
 
     let checkLocNode (keys : Set<string>) (lang : Lang) key (node : Node) =
         if lang = STL STLLang.Default then OK else
             match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
             | true, _ -> OK
             | _, true -> OK
-            | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) node (Some key)]
+            | _, false -> Invalid (Guid.NewGuid(), [invData (ErrorCodes.MissingLocalisation key (lang)) node (Some key)])
 
     let checkLocLeafValueS (keys : (Lang * Set<string>) list) key (lv : LeafValue) =
          keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocLeafValue keys l key lv) OK

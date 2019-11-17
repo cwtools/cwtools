@@ -2,6 +2,7 @@ namespace CWTools.Games.HOI4
 open CWTools.Common.HOI4Constants
 open CWTools.Localisation
 open CWTools.Validation
+open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.HOI4
@@ -17,14 +18,17 @@ open System
 open CWTools.Validation.HOI4.HOI4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
+open CWTools.Process.Localisation
 
 module HOI4GameFunctions =
     type GameObject = GameObject<HOI4ComputedData, HOI4Lookup>
-    let processLocalisationFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
+    let createLocDynamicSettings(lookup : Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
+            (lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst)
+            @
+            (lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
         let definedvars =
@@ -33,24 +37,21 @@ module HOI4GameFunctions =
             (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
             @
             (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() localisationCommands eventtargets lookup.scriptedLoc definedvars
-    let validateLocalisationCommandFunction (localisationCommands : ((string * Scope list) list)) (lookup : Lookup) =
-        let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
-            @
-            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
-            @
-            (lookup.varDefInfo.TryFind "exiled_ruler" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() localisationCommands eventtargets lookup.scriptedLoc definedvars
+        {
+            scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [scopeManager.AnyScope])
+            eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+            setVariables = definedvars
+        }
+    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
+        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
+
+    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
+        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
+
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-        globalTypeLoc |> (function |Invalid es -> es |_ -> [])
+        game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
+        globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
 
     let updateModifiers (game : GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
@@ -66,6 +67,14 @@ module HOI4GameFunctions =
             let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.HOI4provinces <- provinces
+
+    let updateScriptedLoc (game : GameObject) =
+        let rawLocs =
+            game.Resources.AllEntities()
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_localisation") -> Some (f.entity) |_ -> None)
+            |> List.collect (fun n -> n.Children)
+            |> List.map (fun l -> l.TagText "name")
+        game.Lookup.scriptedLoc <- rawLocs
 
     let updateScriptedEffects(rules :RootRule list) (states : string list) (countries : string list) =
         let effects =
@@ -100,7 +109,7 @@ module HOI4GameFunctions =
         let modifierOptions (modifier : ActualModifier) =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
-            {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
+            {min = 0; max = 100; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = requiredScopes; comparison = false; referenceDetails = None}
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -131,6 +140,7 @@ module HOI4GameFunctions =
     let afterInit (game : GameObject) =
         updateModifiers(game)
         updateProvinces(game)
+        updateScriptedLoc(game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
         let scopeDefinitions =
@@ -148,7 +158,7 @@ module HOI4GameFunctions =
         let hoi4LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> HOI4Parser.loadLocCommands fn ft)
-                    |> Option.defaultValue []
+                    |> Option.defaultValue ([], [])
 
 
         let triggers, effects = ([], [])
@@ -198,11 +208,12 @@ type HOI4Game(setupSettings : HOI4Settings) =
         scriptFolders = setupSettings.scriptFolders
         modFilter = setupSettings.modFilter
         initialLookup = HOI4Lookup()
+        maxFileSize = setupSettings.maxFileSize
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy l -> (if l.Length = 0 then Legacy (locCommands()) else Legacy l) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = HOI4Lookup()}
@@ -220,14 +231,16 @@ type HOI4Game(setupSettings : HOI4Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+        processLocalisation = HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        validateLocalisation = HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
     }
 
     let game = GameObject.CreateGame
                 (settings, "hearts of iron iv", scriptFolders, Compute.computeHOI4Data,
                 Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
-                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy l -> l |_ -> []),
+                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
                  defaultContext,
                  noneContext,
                  Encoding.UTF8,
@@ -268,7 +281,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         member __.References() = References<HOI4ComputedData>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
         member __.Complete pos file text = completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
         member __.ScopesAtPos pos file text = scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
-        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService lookup pos file text
+        member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (HOI4 HOI4Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
