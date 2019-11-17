@@ -7,9 +7,16 @@
     <TieredCompilation>true</TieredCompilation>
     <PaketCommand>dotnet paket</PaketCommand>
 
+    <PackageVersion>0.0.4</PackageVersion>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>cwtools</ToolCommandName>
-
+    <PackageIconUrl>https://raw.githubusercontent.com/tboby/cwtools-vscode/master/docs/cwtools_logo.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/tboby/cwtools/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/tboby/cwtools</RepositoryUrl>
+    <Authors>tboby</Authors>
+    <PackageDescription>CWTools CLI as a dotnet tool</PackageDescription>
+    <Description>A library for parsing, editing, and validating Paradox Interactive script files.</Description>
+    <Title>CWTools.CLI</Title>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">

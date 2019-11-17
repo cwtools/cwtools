@@ -1,3 +1,4 @@
+open Fake.DotNet
 // --------------------------------------------------------------------------------------
 // FAKE build script
 // --------------------------------------------------------------------------------------
@@ -183,26 +184,22 @@ Core.Target.create "Pack" (fun _ ->
 
 
 Core.Target.create "PublishTool" (fun _ ->
+
+    !! "**/output/**/*.nupkg"
+    |> File.deleteAll
+
     // DotNet.pack (fun po -> { po with Configuration = Fake.DotNet.DotNet.BuildConfiguration.Release } ) "CWToolsCLI/CWToolsCLI.fsproj"
     let token =
         match Fake.Core.Environment.environVarOrDefault "NUGET_ACCESS_KEY" System.String.Empty with
         | s when not (String.IsNullOrWhiteSpace s) -> s
         | _ -> Fake.Core.UserInput.getUserPassword "NUGET token: "
-
-    NuGet.NuGet (fun p ->
-                  { p with
-                      Version = "0.0.2"
-                      Authors = ["Thomas Boby"]
-                      Project = "CWTools.CLI"
-                      Summary = "CWTools CLI as a dotnet tool"
-                      Description = "A library for parsing, editing, and validating Paradox Interactive script files."
-                      OutputPath = "./CWToolsCLI"
-                      WorkingDir = "./CWToolsCLI"
-                      AccessKey = token
-                      Publish = true })
-                  "./CWToolsCLI/cwtoolscli.nuspec"
-
+    DotNet.exec id "pack" (sprintf " ./CWToolsCLI/CWToolsCLI.fsproj -c Release -o ./CWToolsCLI/output") |> ignore
+    DotNet.exec (fun o -> { o with WorkingDirectory = "./CWToolsCLI/output"}) "nuget" (sprintf " push *.nupkg -k %s -s https://api.nuget.org/v3/index.json" token) |> ignore
   )
+    //   <projectUrl>https://github.com/tboby/cwtools</projectUrl>
+    // <licenseUrl>https://github.com/tboby/cwtools/blob/master/LICENSE</licenseUrl>
+    // <iconUrl>https://raw.githubusercontent.com/tboby/cwtools-vscode/master/docs/cwtools_logo.png</iconUrl>
+
 // --------------------------------------------------------------------------------------
 // Build order
 // --------------------------------------------------------------------------------------
