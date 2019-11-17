@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <description>@description@</description>
+    <id>@project@</id>
+    <version>@build.number@</version>
+    <authors>@authors@</authors>
+    <language>en-US</language>
+    <summary>@summary@</summary>
+    <projectUrl>https://github.com/tboby/cwtools</projectUrl>
+    <licenseUrl>https://github.com/tboby/cwtools/blob/master/LICENSE</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/tboby/cwtools-vscode/master/docs/cwtools_logo.png</iconUrl>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+  </metadata>
+</package>

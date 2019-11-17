@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <DependsOnNETStandard>true</DependsOnNETStandard>
+    <PaketCommand>dotnet paket</PaketCommand>
   </PropertyGroup>
   <ItemGroup>
     <!-- <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" /> -->

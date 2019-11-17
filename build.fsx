@@ -3,11 +3,14 @@
 // --------------------------------------------------------------------------------------
 
 #r "paket:
-source https://api.nuget.org/v3/index.json
-nuget Fake.Core.Target
-nuget Fake.DotNet.Cli
-nuget Fake.IO.FileSystem
-nuget Fake.Core.ReleaseNotes //"
+    source https://api.nuget.org/v3/index.json
+    nuget Fake.Core
+    nuget Fake.Core.Target
+    nuget Fake.Core.Environment
+    nuget Fake.Core.UserInput
+    nuget Fake.DotNet.Cli
+    nuget Fake.IO.FileSystem
+    nuget Fake.Core.ReleaseNotes //"
 #load "./.fake/build.fsx/intellisense.fsx"
 
 open Fake
@@ -16,6 +19,7 @@ open Fake.DotNet
 open Fake.IO.Globbing.Operators
 open Fake.Core.TargetOperators
 open System
+open System.Text
 
 // --------------------------------------------------------------------------------------
 // Build variables
@@ -157,6 +161,48 @@ Core.Target.create "Pack" (fun _ ->
 //         (packParameters "CWTools")
 //   )
 )
+
+
+// let packParameters name =
+//   [ //"--no-build"
+//     //"--no-restore"
+//     sprintf "/p:Title=\"%s\"" project
+//     "/p:PackageVersion=" + release.NugetVersion
+//     sprintf "/p:Authors=\"%s\"" authors
+//     sprintf "/p:Owners=\"%s\"" owners
+//     "/p:PackageRequireLicenseAcceptance=false"
+//     sprintf "/p:Description=\"%s\"" (description.Replace(",",""))
+//     sprintf "/p:PackageReleaseNotes=\"%O\"" ((Core.String.toLines release.Notes).Replace(",",""))
+//     // sprintf "/p:Copyright=\"%s\"" copyright
+//     // sprintf "/p:PackageTags=\"%s\"" tags
+//     // sprintf "/p:PackageProjectUrl=\"%s\"" projectUrl
+//     // sprintf "/p:PackageIconUrl=\"%s\"" iconUrl
+//     // sprintf "/p:PackageLicenseUrl=\"%s\"" licenceUrl
+//   ]
+//   |> String.concat " "
+
+
+Core.Target.create "PublishTool" (fun _ ->
+    // DotNet.pack (fun po -> { po with Configuration = Fake.DotNet.DotNet.BuildConfiguration.Release } ) "CWToolsCLI/CWToolsCLI.fsproj"
+    let token =
+        match Fake.Core.Environment.environVarOrDefault "NUGET_ACCESS_KEY" System.String.Empty with
+        | s when not (String.IsNullOrWhiteSpace s) -> s
+        | _ -> Fake.Core.UserInput.getUserPassword "NUGET token: "
+
+    NuGet.NuGet (fun p ->
+                  { p with
+                      Version = "0.0.2"
+                      Authors = ["Thomas Boby"]
+                      Project = "CWTools.CLI"
+                      Summary = "CWTools CLI as a dotnet tool"
+                      Description = "A library for parsing, editing, and validating Paradox Interactive script files."
+                      OutputPath = "./CWToolsCLI"
+                      WorkingDir = "./CWToolsCLI"
+                      AccessKey = token
+                      Publish = true })
+                  "./CWToolsCLI/cwtoolscli.nuspec"
+
+  )
 // --------------------------------------------------------------------------------------
 // Build order
 // --------------------------------------------------------------------------------------
@@ -168,5 +214,10 @@ Core.Target.create "Pack" (fun _ ->
 "Clean"
   ==> "Restore"
   ==> "Build"
+
+"Clean"
+  ==> "Restore"
+  ==> "Build"
+  ==> "PublishTool"
 
 Fake.Core.Target.runOrDefaultWithArguments "Build"

@@ -6,6 +6,10 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilation>true</TieredCompilation>
     <PaketCommand>dotnet paket</PaketCommand>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>cwtools</ToolCommandName>
+
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
