@@ -61,12 +61,8 @@ module CWToolsCLI =
         | Info = 4
         | All = 5
         | Localisation = 6
-    type ValidateOutputFormat =
-        | Detailed
-        | Summary
     type ValidateArgs =
         | [<MainCommand; ExactlyOnce; Last>] ValType of ValidateType
-        | OutputFormat of ValidateOutputFormat
         | ReportType of Reporter
         | OutputFile of filename:string
         | [<EqualsAssignment>] OutputHashes of filename:string option
@@ -76,9 +72,8 @@ module CWToolsCLI =
             member s.Usage =
                 match s with
                 | ValType _ -> "Which errors to output"
-                | OutputFormat _ -> "How to output validation errors"
                 | OutputFile _ -> "Output report to a file with this filename"
-                | ReportType _ -> "Report type"
+                | ReportType _ -> "Report type, CLI by default"
                 | OutputHashes _ -> "Whether to output the error hash caching file, optionally specifying the file name"
                 | IgnoreHashesFile _ -> "A file containing an error hash cache file, which will be ignored, optionall specifying the file name"
     type ParseArgs =
@@ -213,7 +208,7 @@ module CWToolsCLI =
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope modFilter docsPath cachePath rulesPath (results : ParseResults<_>) =
-        let reporter = results.TryGetResult <@ ReportType @> |> Option.defaultValue CLI
+        let reporter = results.GetResult (ReportType, CLI)
         let outputHashes = results.TryGetResult <@ OutputHashes @>
         let inputHashFile = results.TryGetResult <@ IgnoreHashesFile @>
 
@@ -255,7 +250,6 @@ module CWToolsCLI =
         let supressedErrors, newErrors =
             errors |> List.partition (function | Error e -> Set.contains e.hash hashes | ValidationViewModelRow.Parse e -> Set.contains e.hash hashes)
 
-        let outputFormat = results.TryGetResult <@ OutputFormat @> |> Option.defaultValue Detailed
         let outputFile = results.TryGetResult <@ OutputFile @>
         match reporter with
         | CSV ->
