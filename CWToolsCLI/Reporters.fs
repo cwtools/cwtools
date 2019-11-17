@@ -1,4 +1,6 @@
 namespace Reporters
+open Chiron.Builder
+open Chiron
 open CWToolsCLI.Validator
 open Pastel
 open System.Drawing
@@ -14,20 +16,26 @@ type Reporter =
 
 module Reporters =
 
-    let cliReporter (errors : ValidationViewModelRow list) =
+    let ne = Environment.NewLine
+    let cliReporter outputFile (errors : ValidationViewModelRow list) =
         let grouped = errors |> List.groupBy (fun e -> e |> function |ValidationViewModelRow.Parse(r) -> r.file |ValidationViewModelRow.Error(e) -> e.position.FileName)
                              |> List.sortBy (fun (k, _) -> k)
+        let sb = new StringBuilder()
         let printFileErrors ((file : string), (errorList : ValidationViewModelRow list)) =
-            printfn "%s, %i errors" file (errorList.Length)
+            sb.AppendLine(sprintf "%s, %i errors" file (errorList.Length)) |> ignore
             errorList
                 |> List.map (fun r -> r |>
                                         function
                                         |ValidationViewModelRow.Error(e) -> sprintf "%s: %s,%s" (e.category) (e.error) (e.position.ToShortString())
                                         |ValidationViewModelRow.Parse(e) -> sprintf "%s: %s" ("CW001") (e.error))
-                |> List.iter (fun es -> printfn "%s" (es.Pastel(Color.Red)))
+                |> List.iter (fun es -> sb.AppendLine(sprintf "%s" (es.Pastel(Color.Red))) |> ignore)
         grouped |> List.iter printFileErrors
+        match outputFile with
+        |Some file ->
+            File.WriteAllText(file, sb.ToString())
+        |None -> printf "%s" (sb.ToString())
 
-    let ne = Environment.NewLine
+
     let csvReporter outputFile (errors : ValidationViewModelRow list) =
         let result =
                 let sb = new StringBuilder()
@@ -41,5 +49,27 @@ module Reporters =
             File.WriteAllText(file, result)
         |None -> printf "%s" result
 
-    let jsonReporter outputFile (errors : ValidationViewModelRow list) =
-        ()
+    type JsonErrorReport = {
+        errors : ValidationViewModelRow list
+        errorCount : int
+        rootDirectory : string
+        }
+    type JsonErrorReport with
+        static member ToJson ( jer : JsonErrorReport) =
+            json {
+                do! Json.write "errorCount" jer.errorCount
+                do! Json.write "errors" jer.errors
+                do! Json.write "rootDirectory" jer.rootDirectory
+            }
+    let jsonReporter rootDirectory outputFile (errors : ValidationViewModelRow list) =
+        let jsonErrorReport =
+            {
+                errors = errors
+                errorCount = errors.Length
+                rootDirectory = rootDirectory
+            }
+        let outputText = jsonErrorReport |> Json.serialize |> Json.format
+        match outputFile with
+        |Some file ->
+            File.WriteAllText(file, outputText)
+        |None -> printf "%s" outputText

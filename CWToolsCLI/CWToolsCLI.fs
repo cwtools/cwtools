@@ -67,6 +67,7 @@ module CWToolsCLI =
     type ValidateArgs =
         | [<MainCommand; ExactlyOnce; Last>] ValType of ValidateType
         | OutputFormat of ValidateOutputFormat
+        | ReportType of Reporter
         | OutputFile of filename:string
     with
         interface IArgParserTemplate with
@@ -74,7 +75,8 @@ module CWToolsCLI =
                 match s with
                 | ValType _ -> "Which errors to output"
                 | OutputFormat _ -> "How to output validation errors"
-                | OutputFile _ -> "Output errors to a csv with this filename"
+                | OutputFile _ -> "Output report to a file with this filename"
+                | ReportType _ -> "Report type"
     type ParseArgs =
         | [<MainCommand; ExactlyOnce; Last>] File of string
     with
@@ -207,7 +209,7 @@ module CWToolsCLI =
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope modFilter docsPath cachePath rulesPath (results : ParseResults<_>) =
-        let reporter = Reporter.CLI
+        let reporter = results.GetResult <@ ReportType @>
 
         let cached, cachedFiles =
             match cachePath with
@@ -237,16 +239,15 @@ module CWToolsCLI =
                 // pprintfn "%A" (gameObj.validationErrorList());
                 //printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
             | _ -> failwith "Unexpected validation type"
-        eprintfn "el %A" errors.Length
         let outputFormat = results.TryGetResult <@ OutputFormat @> |> Option.defaultValue Detailed
         let outputFile = results.TryGetResult <@ OutputFile @>
         match reporter with
         | CSV ->
             csvReporter outputFile errors
         | CLI ->
-            cliReporter errors
+            cliReporter outputFile errors
         | JSON ->
-            jsonReporter outputFile errors
+            jsonReporter directory outputFile errors
         match errors.Length with
         | 0 -> 0
         | x -> 1

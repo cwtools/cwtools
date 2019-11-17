@@ -15,4 +15,5 @@ nuget FSharp.Core 4.7.0 #
 nuget System.Text.Encoding.CodePages #
 nuget Argu
 nuget Pastel
+nuget Chiron
 github giraffe-fsharp/Giraffe src/Giraffe/GiraffeViewEngine.fs

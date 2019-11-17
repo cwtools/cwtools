@@ -3,6 +3,8 @@ open CWTools.Common.STLConstants
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games.HOI4
+open Chiron.Builder
+open Chiron
 module Validator =
     open CWTools
     open CWTools.Games
@@ -20,6 +22,7 @@ module Validator =
             severity : Severity
         }
         override x.ToString() = x.category + ", " + x.error + ", " + x.position.ToString()
+
     type ValidationViewModelParseRow =
         {
             file : string
@@ -35,6 +38,23 @@ module Validator =
     type ValidationViewModelRow =
     |Error of ValidationViewModelErrorRow
     |Parse of ValidationViewModelParseRow
+        static member ToJson (r:ValidationViewModelRow) =
+            match r with
+            | Error r ->
+                json {
+                    do! Json.write "category" r.category
+                    do! Json.write "error" r.error
+                    do! Json.write "position" (r.position.ToString())
+                    do! Json.write "severity" (r.severity.ToString())
+                }
+            | Parse r ->
+                json {
+                    do! Json.write "category" "CW100"
+                    do! Json.write "error" r.error
+                    do! Json.write "position" (r.file)
+                    do! Json.write "severity" "error"
+                }
+
     type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config) =
         //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
