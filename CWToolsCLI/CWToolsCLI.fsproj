@@ -17,6 +17,7 @@
     <PackageDescription>CWTools CLI as a dotnet tool</PackageDescription>
     <Description>A library for parsing, editing, and validating Paradox Interactive script files.</Description>
     <Title>CWTools.CLI</Title>
+    <PackageId>CWTools.CLI</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
