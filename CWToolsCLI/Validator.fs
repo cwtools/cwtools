@@ -5,6 +5,7 @@ open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games.HOI4
 open Chiron.Builder
 open Chiron
+open CWTools.Utilities.Position
 module Validator =
     open CWTools
     open CWTools.Games
@@ -13,22 +14,32 @@ module Validator =
     open CWTools.Common
     open CWTools.Games.Files
 
+    type range with
+        static member ToJson (r:range) =
+            json {
+                do! Json.write "path" r.FileName
+                do! Json.write "startLine" r.StartLine
+                do! Json.write "startColumn" r.StartColumn
+                do! Json.write "endLine" r.EndLine
+                do! Json.write "endColumn" r.EndColumn
+            }
+
     [<StructuredFormatDisplay("{position}\n{category}: {error}")>]
     type ValidationViewModelErrorRow =
         {
             category : string
-            error : string
-            position : CWTools.Utilities.Position.range
+            message : string
+            position : range
             severity : Severity
         }
-        override x.ToString() = x.category + ", " + x.error + ", " + x.position.ToString()
+        override x.ToString() = x.category + ", " + x.message + ", " + x.position.ToString()
 
     type ValidationViewModelParseRow =
         {
             file : string
-            error : string
+            message : string
         }
-        override x.ToString() = x.file + "\n" + x.error + "\n"
+        override x.ToString() = x.file + "\n" + x.message + "\n"
     type ValidationViewModelFileRow =
         {
             file : string
@@ -41,16 +52,17 @@ module Validator =
         static member ToJson (r:ValidationViewModelRow) =
             match r with
             | Error r ->
+                let pos = r.position |> Json.serializeWith range.ToJson
                 json {
                     do! Json.write "category" r.category
-                    do! Json.write "error" r.error
-                    do! Json.write "position" (r.position.ToString())
+                    do! Json.write "message" r.message
+                    do! Json.write "position" pos
                     do! Json.write "severity" (r.severity.ToString())
                 }
             | Parse r ->
                 json {
                     do! Json.write "category" "CW100"
-                    do! Json.write "error" r.error
+                    do! Json.write "message" r.message
                     do! Json.write "position" (r.file)
                     do! Json.write "severity" "error"
                 }
@@ -106,14 +118,14 @@ module Validator =
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
-        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code.GetType().Name ; error = e.message; position = e.range; severity = e.severity})
+        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code.GetType().Name ; message = e.message; position = e.range; severity = e.severity})
         member __.allFileList =
             game.AllFiles()
                 |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
         member val scriptedTriggerList = game.ScriptedTriggers
         member val scriptedEffectList = game.ScriptedEffects
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code.GetType().Name ; error = e.message; position = e.range; severity = e.severity})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code.GetType().Name ; message = e.message; position = e.range; severity = e.severity})
         member val references = game.References
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
@@ -156,8 +168,8 @@ module Validator =
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
-        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; error = e.message; position = e.range; severity = e.severity})
+        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity})
         member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; error = e.message; position = e.range; severity = e.severity})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity})
         member __.recompute() = game.ForceRecompute()
