@@ -69,6 +69,8 @@ module CWToolsCLI =
         | OutputFormat of ValidateOutputFormat
         | ReportType of Reporter
         | OutputFile of filename:string
+        | [<EqualsAssignment>] OutputHashes of filename:string option
+        | [<EqualsAssignment>] IgnoreHashesFile of filename:string option
     with
         interface IArgParserTemplate with
             member s.Usage =
@@ -77,6 +79,8 @@ module CWToolsCLI =
                 | OutputFormat _ -> "How to output validation errors"
                 | OutputFile _ -> "Output report to a file with this filename"
                 | ReportType _ -> "Report type"
+                | OutputHashes _ -> "Whether to output the error hash caching file, optionally specifying the file name"
+                | IgnoreHashesFile _ -> "A file containing an error hash cache file, which will be ignored, optionall specifying the file name"
     type ParseArgs =
         | [<MainCommand; ExactlyOnce; Last>] File of string
     with
@@ -210,6 +214,8 @@ module CWToolsCLI =
 
     let validate game directory scope modFilter docsPath cachePath rulesPath (results : ParseResults<_>) =
         let reporter = results.TryGetResult <@ ReportType @> |> Option.defaultValue CLI
+        let outputHashes = results.TryGetResult <@ OutputHashes @>
+        let inputHashFile = results.TryGetResult <@ IgnoreHashesFile @>
 
         let cached, cachedFiles =
             match cachePath with
@@ -218,6 +224,13 @@ module CWToolsCLI =
                 printfn "%b" doesCacheExist
                 if doesCacheExist then Serializer.deserialize path else [], []
             |None -> [], []
+
+        let hashes =
+            match inputHashFile with
+            | None -> Set.empty
+            | Some (Some filepath) -> File.ReadAllLines filepath |> Set.ofArray
+            | Some (None) -> File.ReadAllLines "error-cache.txt" |> Set.ofArray
+
         //printfn "%A" cachedFiles
         let valType = results.GetResult <@ ValType @>
         let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, cached, cachedFiles)
@@ -239,16 +252,28 @@ module CWToolsCLI =
                 // pprintfn "%A" (gameObj.validationErrorList());
                 //printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
             | _ -> failwith "Unexpected validation type"
+        let supressedErrors, newErrors =
+            errors |> List.partition (function | Error e -> Set.contains e.hash hashes | ValidationViewModelRow.Parse e -> Set.contains e.hash hashes)
+
         let outputFormat = results.TryGetResult <@ OutputFormat @> |> Option.defaultValue Detailed
         let outputFile = results.TryGetResult <@ OutputFile @>
         match reporter with
         | CSV ->
-            csvReporter outputFile errors
+            csvReporter outputFile newErrors
         | CLI ->
-            cliReporter outputFile errors
+            cliReporter outputFile newErrors
         | JSON ->
-            jsonReporter directory outputFile errors
-        match errors.Length with
+            jsonReporter directory outputFile newErrors supressedErrors
+
+        match outputHashes with
+        | Some param ->
+            let hashes = errors |> List.map (function |Error r -> r.hash |ValidationViewModelRow.Parse r -> r.hash)
+            let hashString = String.concat (Environment.NewLine) hashes
+            match param with
+            | Some filepath -> File.WriteAllText(filepath, hashString)
+            | None -> File.WriteAllText("error-cache.txt", hashString)
+        | None -> ()
+        match newErrors.Length with
         | 0 -> 0
         | x -> 1
 

@@ -62,16 +62,18 @@ module Reporters =
     type JsonErrorReport = {
         errors : GroupedValdationViewModelRows list
         errorCount : int
+        supressedErrorCount : int
         rootDirectory : string
         }
     type JsonErrorReport with
         static member ToJson ( jer : JsonErrorReport) =
             json {
                 do! Json.write "errorCount" jer.errorCount
+                do! Json.write "supressedErrorCount" jer.supressedErrorCount
                 do! Json.write "files" jer.errors
                 do! Json.write "rootDirectory" jer.rootDirectory
             }
-    let jsonReporter rootDirectory outputFile (errors : ValidationViewModelRow list) =
+    let jsonReporter rootDirectory outputFile (errors : ValidationViewModelRow list) (supressedErrors : ValidationViewModelRow list) =
         let grouped = errors |> List.groupBy (fun e -> e |> function |ValidationViewModelRow.Parse(r) -> r.file |ValidationViewModelRow.Error(e) -> e.position.FileName)
                              |> List.map (fun (k, v) -> { file = k; errors = v })
                              |> List.sortBy (fun r -> r.file)
@@ -79,6 +81,7 @@ module Reporters =
             {
                 errors = grouped
                 errorCount = errors.Length
+                supressedErrorCount = supressedErrors.Length
                 rootDirectory = rootDirectory
             }
         let outputText = jsonErrorReport |> Json.serialize |> Json.format

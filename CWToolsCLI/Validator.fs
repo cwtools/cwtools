@@ -6,6 +6,8 @@ open CWTools.Games.HOI4
 open Chiron.Builder
 open Chiron
 open CWTools.Utilities.Position
+open System.Security.Cryptography
+open System.Text
 module Validator =
     open CWTools
     open CWTools.Games
@@ -17,7 +19,6 @@ module Validator =
     type range with
         static member ToJson (r:range) =
             json {
-                do! Json.write "path" r.FileName
                 do! Json.write "startLine" r.StartLine
                 do! Json.write "startColumn" r.StartColumn
                 do! Json.write "endLine" r.EndLine
@@ -31,6 +32,7 @@ module Validator =
             message : string
             position : range
             severity : Severity
+            hash : string
         }
         override x.ToString() = x.category + ", " + x.message + ", " + x.position.ToString()
 
@@ -38,6 +40,7 @@ module Validator =
         {
             file : string
             message : string
+            hash : string
         }
         override x.ToString() = x.file + "\n" + x.message + "\n"
     type ValidationViewModelFileRow =
@@ -58,6 +61,7 @@ module Validator =
                     do! Json.write "message" r.message
                     do! Json.write "position" pos
                     do! Json.write "severity" (r.severity.ToString())
+                    do! Json.write "hash" r.hash
                 }
             | Parse r ->
                 json {
@@ -65,7 +69,15 @@ module Validator =
                     do! Json.write "message" r.message
                     do! Json.write "position" (r.file)
                     do! Json.write "severity" "error"
+                    do! Json.write "hash" r.hash
                 }
+    let sha = SHA256.Create()
+    let createHash (path : string) (position : range) (message : string) =
+        let combined = path + (position.ToString()) + message
+        let hashed = sha.ComputeHash(Encoding.UTF8.GetBytes(combined))
+        let sb = StringBuilder()
+        let res = hashed |> Array.fold(fun (acc : StringBuilder) b -> acc.Append(b.ToString("x2"))) sb
+        res.ToString()
 
     type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config) =
         //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
@@ -118,14 +130,14 @@ module Validator =
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
-        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code.GetType().Name ; message = e.message; position = e.range; severity = e.severity})
+        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e; hash = (createHash f (range.Zero) e)})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
         member __.allFileList =
             game.AllFiles()
                 |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
         member val scriptedTriggerList = game.ScriptedTriggers
         member val scriptedEffectList = game.ScriptedEffects
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code.GetType().Name ; message = e.message; position = e.range; severity = e.severity})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
         member val references = game.References
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
@@ -168,8 +180,8 @@ module Validator =
             // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
-        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity})
+        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e;  hash = (createHash f (range.Zero) e)})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
         member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
         member __.recompute() = game.ForceRecompute()
