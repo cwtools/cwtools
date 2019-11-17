@@ -39,9 +39,11 @@ module Reporters =
     let csvReporter outputFile (errors : ValidationViewModelRow list) =
         let result =
                 let sb = new StringBuilder()
-                sb.Append("file,error") |> ignore
+                sb.Append("file,line,severity,code,message") |> ignore
                 errors
-                    |> List.iter (fun e -> e |> function |ValidationViewModelRow.Parse(r) -> sb.Append(ne).Append(r.file).Append(",\"").Append(r.message.Replace(ne, "")).Append("\"") |> ignore |Error(r) ->  sb.Append(ne).Append(r.position).Append(",").Append(r.message.Replace(ne,"")) |> ignore)
+                    |> List.iter (fun e ->
+                        e |> function |ValidationViewModelRow.Parse(r) -> sb.Append(sprintf "%s%s,%s,%s,%s,\"%s\"" ne r.file "0" "error" "CW001" (r.message.Replace(ne,""))) |> ignore
+                                        |Error(r) ->  sb.Append(sprintf "%s%s,%s,%s,%s,\"%s\"" ne r.position.FileName (r.position.StartLine.ToString()) (r.severity.ToString()) r.category (r.message.Replace(ne,"").Replace("\n",""))) |> ignore)
                 sb.ToString()
                 // List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ",\"" + r.error.Replace(System.Environment.NewLine,"") + "\"" |Error(r) -> s + ne + r.position + "," + r.error.Replace(ne, "")) "file,error" errors
         match outputFile with

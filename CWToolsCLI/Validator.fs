@@ -64,10 +64,11 @@ module Validator =
                     do! Json.write "hash" r.hash
                 }
             | Parse r ->
+                let pos = mkRange r.file pos0 pos0 |> Json.serializeWith range.ToJson
                 json {
-                    do! Json.write "category" "CW100"
+                    do! Json.write "category" "CW001"
                     do! Json.write "message" r.message
-                    do! Json.write "position" (r.file)
+                    do! Json.write "position" pos
                     do! Json.write "severity" "error"
                     do! Json.write "hash" r.hash
                 }
