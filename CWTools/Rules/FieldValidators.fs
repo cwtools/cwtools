@@ -220,7 +220,6 @@ module internal FieldValidators =
                     CWTools.Localisation.Entry.position = leafornode.Position
                 }
                 let proc = processLocalisation (defaultLang, Collections.Map.ofList ["inline", entry]) |> snd |> Map.toList |> List.head |> snd
-                eprintfn "pl %A" proc
                 validateLocalisation proc scopeContext
             else
                 CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors

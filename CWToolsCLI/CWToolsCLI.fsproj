@@ -15,6 +15,7 @@
   <ItemGroup>
     <Compile Include="Serializer.fs" />
     <Compile Include="Validator.fs" />
+    <Compile Include="Reporters.fs" />
     <Compile Include="CWToolsCLI.fs" />
     <None Include="App.config" />
     <EmbeddedResource Include="../CWTools/files/**" />

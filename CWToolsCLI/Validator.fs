@@ -115,7 +115,7 @@ module Validator =
             maxFileSize = None
         }
         let HOI4options : HOI4Settings = {
-            rootDirectories = [ {path = dir; name = "undefined"}]
+            rootDirectories = [ {path = dir; name = "game"}]
             modFilter = Some modFilter
             validation = {
                 validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -124,7 +124,7 @@ module Validator =
             }
             rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
             embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = Some HOI4Constants.scriptFolders
+            scriptFolders = None
             excludeGlobPatterns = None
             maxFileSize = Some 8
 
@@ -137,7 +137,7 @@ module Validator =
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; error = e})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code.GetType().Name ; error = e.message; position = e.range; severity = e.severity})
+        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; error = e.message; position = e.range; severity = e.severity})
         member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code.GetType().Name ; error = e.message; position = e.range; severity = e.severity})
+        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; error = e.message; position = e.range; severity = e.severity})
         member __.recompute() = game.ForceRecompute()
