@@ -1,6 +1,7 @@
 namespace CWTools.Parser
 open CWTools.Utilities.Position
 open FParsec
+open System.Globalization
 
 [<AutoOpen>]
 module Types =
@@ -51,7 +52,7 @@ module Types =
                 | QString s -> "\"" + s + "\""
                 | String s -> s
                 | Bool b -> if b then "yes" else "no"
-                | Float f -> f.ToString()
+                | Float f -> f.ToString(CultureInfo.InvariantCulture)
                 | Int i -> sprintf "%i" i
 
 
@@ -61,7 +62,7 @@ module Types =
             | QString s -> s
             | String s -> s
             | Bool b -> if b then "yes" else "no"
-            | Float f -> sprintf "%f" f
+            | Float f -> f.ToString(CultureInfo.InvariantCulture)
             | Int i -> sprintf "%i" i
     and [<CustomEquality; NoComparison; Struct>] PosKeyValue  =
         | PosKeyValue of range * KeyValueItem
