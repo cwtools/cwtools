@@ -24,9 +24,7 @@ open CWTools.Rules
 open CWTools.Validation.HOI4
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games.Compute
-open SevenZip
 open System
-open ManagedLzma.SevenZip.Writer
 
 
 let mkPickler (resolver : IPicklerResolver) =
@@ -43,10 +41,6 @@ let picklerCache = PicklerCache.FromCustomPicklerRegistry registry
 let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = picklerCache)
 let assemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
 
-
-type NullProgress() =
-    interface ICodeProgress with
-        member _.SetProgress(_, _) = ()
 
 // let compressAndWrite (input : byte array) (file : string) =
 //     use stream = new MemoryStream(input);
@@ -69,32 +63,6 @@ type NullProgress() =
 //     // use encoder = new ManagedLzma.LZMA.AsyncEncoder(ManagedLzma.LZMA.EncoderSettings())
 //     // // ManagedLzma.
 //     // encoder.EncodeAsync(stream, fileStream)
-let dictionary = 1 <<< 23
-let eos = false;
-
-let propIDs =
-            [|
-                CoderPropID.DictionarySize
-                CoderPropID.PosStateBits
-                CoderPropID.LitContextBits
-                CoderPropID.LitPosBits
-                CoderPropID.Algorithm
-                CoderPropID.NumFastBytes
-                CoderPropID.MatchFinder
-                CoderPropID.EndMarker
-            |]
-
-let properties =
-            [|
-                (int32)(dictionary) :> obj
-                (int32)(2) :> obj
-                (int32)(3) :> obj
-                (int32)(0) :> obj
-                (int32)(2) :> obj
-                (int32)(128) :> obj
-                "bt4" :> obj
-                eos :> obj
-            |]
 
 let compressAndWrite (input : byte array) (file : string) =
     use stream = new MemoryStream(input);
@@ -161,6 +129,55 @@ let serializeHOI4 folder cacheDirectory =
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
     compressAndWrite pickle (Path.Combine(cacheDirectory, "hoi4.cwb.bz2"))
+
+let serializeCK2 folder cacheDirectory =
+    let fileManager = FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [], 2)
+    let files = fileManager.AllFilesByPath()
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<CK2ComputedData>(computeCK2Data computefun, computeCK2DataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let files = resources.GetResources()
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
+                                         |_ -> None)
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
+    let pickle = binarySerializer.Pickle data
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "ck2.cwb.bz2"))
+let serializeIR folder cacheDirectory =
+    let fileManager = FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [], 2)
+    let files = fileManager.AllFilesByPath()
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<IRComputedData>(Compute.Jomini.computeJominiData computefun, Compute.Jomini.computeJominiDataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let files = resources.GetResources()
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
+                                         |_ -> None)
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
+    let pickle = binarySerializer.Pickle data
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "ir.cwb.bz2"))
+let serializeVIC2 folder cacheDirectory =
+    let fileManager = FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
+    let files = fileManager.AllFilesByPath()
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<VIC2ComputedData>(computeVIC2Data computefun, computeVIC2DataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let files = resources.GetResources()
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
+                                         |_ -> None)
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
+    let pickle = binarySerializer.Pickle data
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "vic2.cwb.bz2"))
 
 let deserialize path =
     // registry.DeclareSerializable<System.LazyHelper>()

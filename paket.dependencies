@@ -17,7 +17,5 @@ nuget Argu
 nuget Pastel
 nuget Chiron
 nuget NuGet.CommandLine
-nuget LZMA-SDK
-nuget ManagedLzma
 nuget SharpZipLib
 github giraffe-fsharp/Giraffe src/Giraffe/GiraffeViewEngine.fs

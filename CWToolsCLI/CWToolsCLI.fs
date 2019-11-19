@@ -286,6 +286,15 @@ module CWToolsCLI =
             Serializer.serializeSTL directory ""
         |Game.HOI4 ->
             Serializer.serializeHOI4 directory ""
+        |Game.IR ->
+            Serializer.serializeIR directory ""
+        |Game.CK2 ->
+            Serializer.serializeCK2 directory ""
+        |Game.EU4 ->
+            Serializer.serializeEU4 directory ""
+        |Game.VIC2 ->
+            Serializer.serializeVIC2 directory ""
+        |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
         // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
         // let files = fileManager.AllFilesByPath()
         // let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
