@@ -243,6 +243,8 @@ module CWToolsCLI =
                 ((gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse)
                 @
                 ((gameObj.validationErrorList()) |> List.map ValidationViewModelRow.Error)
+                @
+                (gameObj.localisationErrorList() |> List.map Error)
                 // printfn "%A" gameObj.parserErrorList;
                 // pprintfn "%A" (gameObj.validationErrorList());
                 //printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
