@@ -24,6 +24,9 @@ open CWTools.Rules
 open CWTools.Validation.HOI4
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games.Compute
+open SevenZip
+open System
+open ManagedLzma.SevenZip.Writer
 
 
 let mkPickler (resolver : IPicklerResolver) =
@@ -41,6 +44,70 @@ let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = pickle
 let assemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
 
 
+type NullProgress() =
+    interface ICodeProgress with
+        member _.SetProgress(_, _) = ()
+
+// let compressAndWrite (input : byte array) (file : string) =
+//     use stream = new MemoryStream(input);
+//     let encoder = SevenZip.Compression.LZMA.Encoder()
+//     use fileStream = File.Create(file)
+//     encoder.WriteCoderProperties(fileStream)
+//     for i = 0 to 7 do
+//         fileStream.WriteByte((input.Length >>> (8 * i)) |> byte)
+
+//     // fileStream.Write(BitConverter.GetBytes(input.Length), 0, 8)
+//     encoder.Code(stream, fileStream, stream.Length, -1L, NullProgress())
+//     fileStream.Flush()
+//     fileStream.Close()
+//     use encoder = ManagedLzma.SevenZip.Writer.ArchiveWriter.Create(fileStream, false)
+//     let settings = ManagedLzma.SevenZip.Writer.Lzma2EncoderSettings(ManagedLzma.LZMA2.EncoderSettings())
+//     Encode
+//     encoder.BeginEncoding()
+//     let writer = new ArchiveWriter(stream);
+//     write
+//     // use encoder = new ManagedLzma.LZMA.AsyncEncoder(ManagedLzma.LZMA.EncoderSettings())
+//     // // ManagedLzma.
+//     // encoder.EncodeAsync(stream, fileStream)
+let dictionary = 1 <<< 23
+let eos = false;
+
+let propIDs =
+            [|
+                CoderPropID.DictionarySize
+                CoderPropID.PosStateBits
+                CoderPropID.LitContextBits
+                CoderPropID.LitPosBits
+                CoderPropID.Algorithm
+                CoderPropID.NumFastBytes
+                CoderPropID.MatchFinder
+                CoderPropID.EndMarker
+            |]
+
+let properties =
+            [|
+                (int32)(dictionary) :> obj
+                (int32)(2) :> obj
+                (int32)(3) :> obj
+                (int32)(0) :> obj
+                (int32)(2) :> obj
+                (int32)(128) :> obj
+                "bt4" :> obj
+                eos :> obj
+            |]
+
+let compressAndWrite (input : byte array) (file : string) =
+    use stream = new MemoryStream(input);
+    use fileStream = File.Create(file)
+    ICSharpCode.SharpZipLib.BZip2.BZip2.Compress(stream, fileStream, true, 9)
+
+let decompress (path : string) =
+    use outStream  = new MemoryStream()
+    let bytes = File.ReadAllBytes(path)
+    use inStream = new MemoryStream(bytes)
+    ICSharpCode.SharpZipLib.BZip2.BZip2.Decompress(inStream, outStream, false)
+    outStream.ToArray()
+
 let serialize gameDirName scriptFolders cacheDirectory = ()
 let serializeSTL folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
@@ -57,7 +124,9 @@ let serializeSTL folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "stl.cwb.bz2"))
+    //File.Create()
+    //File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
 let serializeEU4 folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
@@ -74,7 +143,8 @@ let serializeEU4 folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    File.WriteAllBytes(Path.Combine(cacheDirectory, "eu4.cwb"), pickle)
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "eu4.cwb.bz2"))
+
 let serializeHOI4 folder cacheDirectory =
     let fileManager = FileManager(folder, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
@@ -90,13 +160,22 @@ let serializeHOI4 folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    File.WriteAllBytes(Path.Combine(cacheDirectory, "hoi4.cwb"), pickle)
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "hoi4.cwb.bz2"))
 
 let deserialize path =
     // registry.DeclareSerializable<System.LazyHelper>()
     // registry.DeclareSerializable<Lazy>()
-    match File.Exists path with
-    |true ->
+    match File.Exists path, Path.GetExtension path with
+    |true, ".bz2" ->
+        let cacheFile = decompress path
+        // let cacheFile = File.ReadAllBytes(path)
+        // let cacheFile = Assembly.GetEntryAssembly().GetManifestResourceStream("Main.files.pickled.cwb")
+        //                 |> (fun f -> use ms = new MemoryStream() in f.CopyTo(ms); ms.ToArray())
+        let cached = binarySerializer.UnPickle<CachedResourceData> cacheFile
+        fileIndexTable <- cached.fileIndexTable
+        StringResource.stringManager <- cached.stringResourceManager
+        cached.resources, cached.files
+    |true, _ ->
         let cacheFile = File.ReadAllBytes(path)
         // let cacheFile = Assembly.GetEntryAssembly().GetManifestResourceStream("Main.files.pickled.cwb")
         //                 |> (fun f -> use ms = new MemoryStream() in f.CopyTo(ms); ms.ToArray())
@@ -104,7 +183,7 @@ let deserialize path =
         fileIndexTable <- cached.fileIndexTable
         StringResource.stringManager <- cached.stringResourceManager
         cached.resources, cached.files
-    |false -> [], []
+    |false, _ -> failwithf "Cache file %s was specified but does not exist" path
 
 // let deserializeEU4 path =
 //     let cacheFile = File.ReadAllBytes(path)

@@ -4,3 +4,6 @@ FSharpPlus
 FsPickler
 Pastel
 Chiron
+LZMA-SDK
+ManagedLzma
+SharpZipLib
