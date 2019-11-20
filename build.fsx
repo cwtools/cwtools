@@ -189,11 +189,11 @@ Core.Target.create "PublishTool" (fun _ ->
     |> File.deleteAll
 
     // DotNet.pack (fun po -> { po with Configuration = Fake.DotNet.DotNet.BuildConfiguration.Release } ) "CWToolsCLI/CWToolsCLI.fsproj"
+    DotNet.exec id "pack" (sprintf " ./CWToolsCLI/CWToolsCLI.fsproj -c Release -o ./CWToolsCLI/output") |> ignore
     let token =
         match Fake.Core.Environment.environVarOrDefault "NUGET_ACCESS_KEY" System.String.Empty with
         | s when not (String.IsNullOrWhiteSpace s) -> s
         | _ -> Fake.Core.UserInput.getUserPassword "NUGET token: "
-    DotNet.exec id "pack" (sprintf " ./CWToolsCLI/CWToolsCLI.fsproj -c Release -o ./CWToolsCLI/output") |> ignore
     DotNet.exec (fun o -> { o with WorkingDirectory = "./CWToolsCLI/output"}) "nuget" (sprintf " push *.nupkg -k %s -s https://api.nuget.org/v3/index.json" token) |> ignore
   )
     //   <projectUrl>https://github.com/tboby/cwtools</projectUrl>
