@@ -240,6 +240,7 @@ module VIC2GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy vic2LocCommands
             eventTargetLinks = vic2EventTargetLinks
+            cachedRuleMetadata = None
         }
 type VIC2Settings = GameSetupSettings<VIC2Lookup>
 open VIC2GameFunctions
@@ -355,3 +356,4 @@ type VIC2Game(setupSettings : VIC2Settings) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None //getFastTrigger fileManager game.ResourceManager file text
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
+        member __.GetEmbeddedMetadata() = getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

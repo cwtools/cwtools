@@ -47,6 +47,14 @@ type CWError = {
     relatedErrors : CWRelatedError option
     }
 
+type CachedRuleMetadata = {
+    typeDefs : Map<string,list<TypeDefInfo>>
+    enumDefs : Map<string,string * list<string>>
+    varDefs : Map<string,list<string * range>>
+    loc : (Lang * Set<string>) list
+    files : Set<string>
+}
+
 
 type CompletionResponse =
     |Simple of label : string * score : int option
@@ -80,6 +88,7 @@ type IGame =
     abstract ScriptedEffects : unit -> Effect list
     abstract StaticModifiers : unit -> StaticModifier list
     abstract ScopesAtPos : pos -> string -> string -> ScopeContext option
+    abstract GetEmbeddedMetadata : unit -> CachedRuleMetadata
 
 type IGame<'T when 'T :> ComputedData> =
     inherit IGame

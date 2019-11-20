@@ -234,6 +234,7 @@ module STLGameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy stlLocCommands
             eventTargetLinks = stlEventTargetLinks
+            cachedRuleMetadata = None
         }
 
 
@@ -366,3 +367,4 @@ type STLGame (setupSettings : StellarisSettings) =
             member __.GetPossibleCodeEdits file text = getPreTriggerPossible fileManager game.ResourceManager file text
             member __.GetCodeEdits file text = getFastTrigger fileManager game.ResourceManager file text
             member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
+            member __.GetEmbeddedMetadata() = getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

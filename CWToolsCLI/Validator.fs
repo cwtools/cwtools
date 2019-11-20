@@ -104,6 +104,7 @@ module Validator =
                 cachedResourceData = []
                 localisationCommands = Legacy ([], [])
                 eventTargetLinks = []
+                cachedRuleMetadata = None
             }
             scriptFolders = None
             excludeGlobPatterns = None
@@ -126,6 +127,7 @@ module Validator =
                 effects = []
                 localisationCommands = Legacy ([], [])
                 eventTargetLinks = []
+                cachedRuleMetadata = None
             }
             scriptFolders = None
             excludeGlobPatterns = None
@@ -146,103 +148,9 @@ module Validator =
         member val references = game.References
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
-    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cached, cachedFiles) =
-        let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
-        let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
-        let STLoptions : StellarisSettings = {
-            rootDirectories = [ {path = dir; name = "undefined"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = None
-        }
-        let HOI4options : HOI4Settings = {
-            rootDirectories = [ {path = dir; name = "game"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = Some 8
 
-        }
-        let EU4options : EU4Settings = {
-            rootDirectories = [ {path = dir; name = "game"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = Some 8
-        }
-        let CK2options : CK2Settings = {
-            rootDirectories = [ {path = dir; name = "game"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = Some 8
-        }
-        let VIC2options : VIC2Settings = {
-            rootDirectories = [ {path = dir; name = "game"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = Some 8
-        }
-        let Customoptions : CustomSettings = {
-            rootDirectories = [ {path = dir; name = "game"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-            embedded = FromConfig (cachedFiles, cached)
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = Some 8
-        }
-        let game =
-            match game with
-            |Game.HOI4 -> HOI4Game(HOI4options) :> IGame
-            |Game.STL -> STLGame(STLoptions) :> IGame
-            |Game.EU4 -> EU4Game(EU4options) :> IGame
-            |Game.CK2 -> CK2Game(CK2options) :> IGame
-            |Game.VIC2 -> VIC2Game(VIC2options) :> IGame
-            |Game.Custom -> CustomGame(Customoptions, "") :> IGame
-            // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
+    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cached, cachedFiles) =
+        let game = Serializer.loadGame (dir, scope, modFilter, config, game, cached, cachedFiles)
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e;  hash = (createHash f (range.Zero) e)})

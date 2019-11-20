@@ -239,6 +239,22 @@ module LanguageFeatures =
                 None
         |_ -> None
 
+// type CachedRuleMetadata = {
+//     typeDefs : Map<string,list<TypeDefInfo>>
+//     enumDefs : Map<string,string * list<string>>
+//     varDefs : Map<string,list<string * range>>
+//     loc : (Lang * Set<string>) list
+//     files : Set<string>
+// }
+    let getEmbeddedMetadata (lookup : Lookup) (localisation : LocalisationManager<_>) (resources : ResourceManager<_>) =
+        {
+            typeDefs = lookup.typeDefInfo
+            enumDefs = lookup.enumDefs
+            varDefs = lookup.varDefInfo
+            loc = localisation.LocalisationKeys()
+            files = resources.Api.GetFileNames() |> Set.ofList
+        }
+
 
     let graphEventDataForFiles (referenceManager : References<_>) (resourceManager : ResourceManager<_>) (lookup : Lookup) (files : string list) (sourceType : string) (depth : int) : GraphDataItem list =
         let sourceTypes = lookup.typeDefs |> List.tryPick (fun td -> if td.name = sourceType then Some (sourceType::td.graphRelatedTypes) else None)

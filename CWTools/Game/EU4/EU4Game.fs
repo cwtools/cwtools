@@ -170,6 +170,7 @@ module EU4GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy eu4LocCommands
             eventTargetLinks = eu4EventTargetLinks
+            cachedRuleMetadata = None
         }
 
 type EU4Settings = GameSetupSettings<EU4Lookup>
@@ -288,3 +289,4 @@ type EU4Game(setupSettings : EU4Settings) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
+        member __.GetEmbeddedMetadata() = getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

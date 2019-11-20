@@ -20,6 +20,7 @@ type LocalisationEmbeddedSettings =
 | Legacy of (string * (Scope list)) list * string list
 | Jomini of CWTools.Parser.DataTypeParser.JominiLocDataTypes
 
+
 type EmbeddedSettings = {
     triggers : DocEffect list
     effects : DocEffect list
@@ -28,6 +29,7 @@ type EmbeddedSettings = {
     cachedResourceData : (Resource * Entity) list
     localisationCommands : LocalisationEmbeddedSettings
     eventTargetLinks : EventTargetLink list
+    cachedRuleMetadata : CachedRuleMetadata option
 }
 
 type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> = {
@@ -55,6 +57,57 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
      localisation : LocalisationManager<'T>,
      embeddedSettings : EmbeddedSettings,
      debugMode : bool) =
+
+    let addEmbeddedTypeDefData =
+        match embeddedSettings.cachedRuleMetadata with
+        | None -> id
+        | Some md ->
+            fun (newMap : Map<string,list<TypeDefInfo>>) ->
+                Map.fold (fun s k v ->
+                    match Map.tryFind k s with
+                    | Some v' -> Map.add k (v@v') s
+                    | None -> Map.add k v s) newMap md.typeDefs
+
+    let addEmbeddedEnumDefData =
+        match embeddedSettings.cachedRuleMetadata with
+        | None -> id
+        | Some md ->
+            fun (newMap : Map<string,string * list<string>>) ->
+                Map.fold (fun s k (d, v) ->
+                    match Map.tryFind k s with
+                    | Some (d', v') -> Map.add k (d, v@v') s
+                    | None -> Map.add k (d, v) s) newMap md.enumDefs
+
+    let addEmbeddedVarDefData =
+        match embeddedSettings.cachedRuleMetadata with
+        | None -> id
+        | Some md ->
+            fun (newMap : Map<string,list<string * range>>) ->
+                Map.fold (fun s k v ->
+                    match Map.tryFind k s with
+                    | Some v' -> Map.add k (v@v') s
+                    | None -> Map.add k v s) newMap md.varDefs
+
+    let addEmbeddedLoc =
+        match embeddedSettings.cachedRuleMetadata with
+        | None -> id
+        | Some md ->
+            fun (newList : (Lang * Set<string>) list) ->
+                let newMap = newList |> Map.ofList
+                let embeddedMap = md.loc |> Map.ofList
+                let res =
+                    Map.fold (fun s k v ->
+                    match Map.tryFind k s with
+                    | Some v' -> Map.add k (Set.union v  v') s
+                    | None -> Map.add k v s) newMap embeddedMap
+                res |> Map.toList
+
+    let addEmbeddedFiles =
+        match embeddedSettings.cachedRuleMetadata with
+        | None -> id
+        | Some md ->
+            fun (newSet : Set<string>) -> Set.union newSet md.files
+
 
     let mutable tempEffects = []
     let mutable tempTriggers = []
@@ -125,25 +178,27 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
         let allEnums = simpleEnums @ complexEnumDefs// @ [modifierEnums] @ [{ key = "provinces"; description = "provinces"; values = lookup.CK2provinces}]
 
-        lookup.enumDefs <- allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
+        let newEnumDefs = allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
+        lookup.enumDefs <- addEmbeddedEnumDefData newEnumDefs
 
         settings.refreshConfigBeforeFirstTypesHook lookup resources embeddedSettings
 
         tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
 
         /// First pass type defs
-        let loc = localisation.localisationKeys
+        let loc = addEmbeddedLoc (localisation.localisationKeys)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let files = resources.GetFileNames() |> Set.ofList
+        let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofList)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
         let refreshTypeInfo() =
             let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
             let typeDefInfo = getTypesFromDefinitions tempRuleValidationService tempTypes allentities
-            lookup.typeDefInfo <- typeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
-            tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
-            tempTypeMap
+            let newTypeDefInfo = typeDefInfo
+            lookup.typeDefInfo <- addEmbeddedTypeDefData newTypeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
+            let newTypeMap = lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
+            newTypeMap
         let timer = System.Diagnostics.Stopwatch()
         timer.Start()
         let mutable i = 0
@@ -173,7 +228,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().Definedvariables |> (Option.defaultWith (fun () -> tempInfoService.GetDefinedVariables e))))
                         |> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) predefValues
 
-        lookup.varDefInfo <- results
+        lookup.varDefInfo <- addEmbeddedVarDefData results
         // eprintfn "vdi %A" results
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().SavedEventTargets |> (Option.defaultWith (fun () -> tempInfoService.GetSavedEventTargets e))))
                         |> Seq.fold (fun (acc : ResizeArray<_>) e -> acc.AddRange((e)); acc ) (new ResizeArray<_>())
@@ -182,6 +237,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         settings.refreshConfigAfterVarDefHook lookup resources embeddedSettings
 
         let varMap = lookup.varDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s))) |> Map.ofSeq
+
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let dataTypes = embeddedSettings.localisationCommands |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }

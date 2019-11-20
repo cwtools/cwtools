@@ -84,12 +84,12 @@ module CWToolsCLI =
                 match s with
                 |File _ -> "file to parse"
     type SerializeArgs =
-        | [<MainCommand; ExactlyOnce; Last>] Parse of bool
+        | [<MainCommand; ExactlyOnce; Last>] Shallow of bool
     with
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
-                |Parse _ -> "hack"
+                |Shallow _ -> "A shallow cache for CLI"
     type Arguments =
         | [<Inherit>]Directory of path : string
         | [<Inherit>]Game of Game
@@ -280,21 +280,26 @@ module CWToolsCLI =
         |Failure(msg,_,_) -> false, msg
 
 
-    let serialize game directory scope modFilter docsPath =
-        match game with
-        |Game.STL ->
-            Serializer.serializeSTL directory ""
-        |Game.HOI4 ->
-            Serializer.serializeHOI4 directory ""
-        |Game.IR ->
-            Serializer.serializeIR directory ""
-        |Game.CK2 ->
-            Serializer.serializeCK2 directory ""
-        |Game.EU4 ->
-            Serializer.serializeEU4 directory ""
-        |Game.VIC2 ->
-            Serializer.serializeVIC2 directory ""
-        |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
+    let serialize game directory scope modFilter cachePath rulesPath  (results : ParseResults<_>) =
+        let shallow = results.TryGetResult <@ Shallow @> |> Option.defaultValue false
+        match shallow with
+        | true ->
+            Serializer.serializeMetadata (directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, "")
+        | false ->
+            match game with
+            |Game.STL ->
+                Serializer.serializeSTL ([{path = directory; name = "undefined"}]) ""
+            |Game.HOI4 ->
+                Serializer.serializeHOI4 ([{path = directory; name = "undefined"}]) ""
+            |Game.IR ->
+                Serializer.serializeIR ([{path = directory; name = "undefined"}]) ""
+            |Game.CK2 ->
+                Serializer.serializeCK2 ([{path = directory; name = "undefined"}]) ""
+            |Game.EU4 ->
+                Serializer.serializeEU4 ([{path = directory; name = "undefined"}]) ""
+            |Game.VIC2 ->
+                Serializer.serializeVIC2 ([{path = directory; name = "undefined"}]) ""
+            |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
         // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
         // let files = fileManager.AllFilesByPath()
         // let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
@@ -326,8 +331,8 @@ module CWToolsCLI =
         match results.GetSubCommand() with
         | List r -> list game directory scope modFilter docsPath r; 0
         | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath r
+        | Serialize r -> serialize game directory scope modFilter cachePath rulesPath r ;0
         | Directory _
-        | Serialize _ -> serialize game [{path = directory; name = "undefined"}] scope modFilter docsPath ;0
         | Game _ -> failwith "internal error: this code should never be reached"; 1
 
         //printfn "%A" argv

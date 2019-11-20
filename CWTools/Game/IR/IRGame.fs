@@ -280,6 +280,7 @@ module IRGameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Jomini jominiLocDataTypes
             eventTargetLinks = irEventTargetLinks
+            cachedRuleMetadata = None
         }
 
 type IRSettings = GameSetupSettings<IRLookup>
@@ -390,3 +391,4 @@ type IRGame(setupSettings : IRSettings) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
+        member __.GetEmbeddedMetadata() = getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

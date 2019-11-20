@@ -56,6 +56,7 @@ let emptyEmbeddedSettings = {
         cachedResourceData = []
         localisationCommands = Legacy ([], [])
         eventTargetLinks = []
+        cachedRuleMetadata = None
 }
 let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 

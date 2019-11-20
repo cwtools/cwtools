@@ -252,6 +252,7 @@ module CK2GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy ck2LocCommands
             eventTargetLinks = ck2EventTargetLinks
+            cachedRuleMetadata = None
         }
 
 type CK2Settings = GameSetupSettings<CK2Lookup>
@@ -367,3 +368,4 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.GetPossibleCodeEdits file text = []
         member __.GetCodeEdits file text = None
         member __.GetEventGraphData : GraphDataRequest = (fun files gameType depth -> graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
+        member __.GetEmbeddedMetadata() = getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

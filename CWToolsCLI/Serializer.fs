@@ -25,6 +25,11 @@ open CWTools.Validation.HOI4
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games.Compute
 open System
+open CWTools.Games.HOI4
+open CWTools.Games.Stellaris
+open CWTools.Games.CK2
+open CWTools.Games.VIC2
+open CWTools.Games.Custom
 
 
 let mkPickler (resolver : IPicklerResolver) =
@@ -201,6 +206,112 @@ let deserialize path =
         StringResource.stringManager <- cached.stringResourceManager
         cached.resources, cached.files
     |false, _ -> failwithf "Cache file %s was specified but does not exist" path
+
+
+let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cached, cachedFiles) =
+    let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
+    let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
+    let STLoptions : StellarisSettings = {
+        rootDirectories = [ {path = dir; name = "undefined"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
+        embedded = FromConfig (cachedFiles, cached)
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = None
+    }
+    let HOI4options : HOI4Settings = {
+        rootDirectories = [ {path = dir; name = "game"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        embedded = FromConfig (cachedFiles, cached)
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+
+    }
+    let EU4options : EU4Settings = {
+        rootDirectories = [ {path = dir; name = "game"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        embedded = FromConfig (cachedFiles, cached)
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+    }
+    let CK2options : CK2Settings = {
+        rootDirectories = [ {path = dir; name = "game"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        embedded = FromConfig (cachedFiles, cached)
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+    }
+    let VIC2options : VIC2Settings = {
+        rootDirectories = [ {path = dir; name = "game"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        embedded = FromConfig (cachedFiles, cached)
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+    }
+    let Customoptions : CustomSettings = {
+        rootDirectories = [ {path = dir; name = "game"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        embedded = FromConfig (cachedFiles, cached)
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+    }
+    let game =
+        match game with
+        |Game.HOI4 -> HOI4Game(HOI4options) :> IGame
+        |Game.STL -> STLGame(STLoptions) :> IGame
+        |Game.EU4 -> EU4Game(EU4options) :> IGame
+        |Game.CK2 -> CK2Game(CK2options) :> IGame
+        |Game.VIC2 -> VIC2Game(VIC2options) :> IGame
+        |Game.Custom -> CustomGame(Customoptions, "") :> IGame
+    game
+
+let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cacheDirectory) =
+    let game = loadGame (dir, scope, modFilter, config, game, [], [])
+    let data = game.GetEmbeddedMetadata()
+    let pickle = binarySerializer.Pickle data
+    compressAndWrite pickle (Path.Combine(cacheDirectory, "hoi4.cwv.bz2"))
+
 
 // let deserializeEU4 path =
 //     let cacheFile = File.ReadAllBytes(path)
