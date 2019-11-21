@@ -295,23 +295,24 @@ module CWToolsCLI =
 
     let serialize game directory scope modFilter cachePath rulesPath  (results : ParseResults<_>) =
         let cacheType = results.TryGetResult <@ OutputCacheType @> |> Option.defaultValue CacheTypes.Full
+        let outputCacheFileName = results.TryGetResult <@ OutputCacheFile @>
         match cacheType with
         | CacheTypes.Metadata ->
-            Serializer.serializeMetadata (directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, "")
+            Serializer.serializeMetadata (directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, outputCacheFileName)
         | CacheTypes.Full ->
             match game with
             |Game.STL ->
-                Serializer.serializeSTL ([{path = directory; name = "undefined"}]) ""
+                Serializer.serializeSTL ([{path = directory; name = "undefined"}]) outputCacheFileName
             |Game.HOI4 ->
-                Serializer.serializeHOI4 ([{path = directory; name = "undefined"}]) ""
+                Serializer.serializeHOI4 ([{path = directory; name = "undefined"}]) outputCacheFileName
             |Game.IR ->
-                Serializer.serializeIR ([{path = directory; name = "undefined"}]) ""
+                Serializer.serializeIR ([{path = directory; name = "undefined"}]) outputCacheFileName
             |Game.CK2 ->
-                Serializer.serializeCK2 ([{path = directory; name = "undefined"}]) ""
+                Serializer.serializeCK2 ([{path = directory; name = "undefined"}]) outputCacheFileName
             |Game.EU4 ->
-                Serializer.serializeEU4 ([{path = directory; name = "undefined"}]) ""
+                Serializer.serializeEU4 ([{path = directory; name = "undefined"}]) outputCacheFileName
             |Game.VIC2 ->
-                Serializer.serializeVIC2 ([{path = directory; name = "undefined"}]) ""
+                Serializer.serializeVIC2 ([{path = directory; name = "undefined"}]) outputCacheFileName
             |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
         // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
         // let files = fileManager.AllFilesByPath()

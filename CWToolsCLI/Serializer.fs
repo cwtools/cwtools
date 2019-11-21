@@ -83,7 +83,7 @@ let decompress (path : string) =
     outStream.ToArray()
 
 let serialize gameDirName scriptFolders cacheDirectory = ()
-let serializeSTL folder cacheDirectory =
+let serializeSTL folder outputFileName =
     let fileManager = FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -98,11 +98,12 @@ let serializeSTL folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "stl.cwb.bz2"))
+    let filename = outputFileName |> Option.defaultValue "stl.cwb.bz2"
+    compressAndWrite pickle (filename)
     //File.Create()
     //File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
-let serializeEU4 folder cacheDirectory =
+let serializeEU4 folder outputFileName =
     let fileManager = FileManager(folder, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -117,9 +118,10 @@ let serializeEU4 folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "eu4.cwb.bz2"))
+    let filename = outputFileName |> Option.defaultValue "eu4.cwb.bz2"
+    compressAndWrite pickle (filename)
 
-let serializeHOI4 folder cacheDirectory =
+let serializeHOI4 folder outputFileName =
     let fileManager = FileManager(folder, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -134,9 +136,10 @@ let serializeHOI4 folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "hoi4.cwb.bz2"))
+    let filename = outputFileName |> Option.defaultValue "hoi4.cwb.bz2"
+    compressAndWrite pickle (filename)
 
-let serializeCK2 folder cacheDirectory =
+let serializeCK2 folder outputFileName =
     let fileManager = FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -151,8 +154,10 @@ let serializeCK2 folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "ck2.cwb.bz2"))
-let serializeIR folder cacheDirectory =
+    let filename = outputFileName |> Option.defaultValue "ck2.cwb.bz2"
+    compressAndWrite pickle (filename)
+
+let serializeIR folder outputFileName =
     let fileManager = FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -167,8 +172,10 @@ let serializeIR folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "ir.cwb.bz2"))
-let serializeVIC2 folder cacheDirectory =
+    let filename = outputFileName |> Option.defaultValue "ir.cwb.bz2"
+    compressAndWrite pickle (filename)
+
+let serializeVIC2 folder outputFileName =
     let fileManager = FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -183,7 +190,8 @@ let serializeVIC2 folder cacheDirectory =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "vic2.cwb.bz2"))
+    let filename = outputFileName |> Option.defaultValue "vic2.cwb.bz2"
+    compressAndWrite pickle (filename)
 
 let deserialize path =
     // registry.DeclareSerializable<System.LazyHelper>()
@@ -230,7 +238,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -244,7 +252,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -259,7 +267,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -273,7 +281,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -287,7 +295,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -301,7 +309,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -315,7 +323,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -332,11 +340,17 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
         |Game.Custom -> CustomGame(Customoptions, "") :> IGame
     game
 
-let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cacheDirectory) =
-    let game = loadGame (dir, scope, modFilter, config, game, FromConfig ([], []))
-    let data = game.GetEmbeddedMetadata()
+let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, config, game : Game, outputFileName) =
+    let gameObj = loadGame (dir, scope, modFilter, config, game, FromConfig ([], []))
+    let data = gameObj.GetEmbeddedMetadata()
     let pickle = binarySerializer.Pickle data
-    compressAndWrite pickle (Path.Combine(cacheDirectory, "hoi4.cwv.bz2"))
+    let filename =
+        match outputFileName with
+        | Some name -> name
+        | None ->
+            let gameName = game |> function |Game.CK2 -> "ck2" |Game.HOI4 -> "hoi4" |Game.EU4 -> "eu4" |Game.STL -> "stl" |Game.VIC2 -> "vic2" |Game.IR -> "ir" |Game.Custom -> "custom"
+            sprintf "%s.cwv.bz2" gameName
+    compressAndWrite pickle (filename)
 
 
 // let deserializeEU4 path =

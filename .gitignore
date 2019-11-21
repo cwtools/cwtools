@@ -74,3 +74,5 @@ dotnetcore
 .ionide/
 .paket/
 .fake-cli/
+*.bz2
+*.cwv
