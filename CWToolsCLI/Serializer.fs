@@ -30,6 +30,7 @@ open CWTools.Games.Stellaris
 open CWTools.Games.CK2
 open CWTools.Games.VIC2
 open CWTools.Games.Custom
+open CWTools.Games.IR
 
 
 let mkPickler (resolver : IPicklerResolver) =
@@ -306,6 +307,20 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
         excludeGlobPatterns = None
         maxFileSize = Some 8
     }
+    let IRoptions : IRSettings = {
+        rootDirectories = [ {path = dir; name = "game"}]
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
+        embedded = embedded
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+    }
     let game =
         match game with
         |Game.HOI4 -> HOI4Game(HOI4options) :> IGame
@@ -313,6 +328,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
         |Game.EU4 -> EU4Game(EU4options) :> IGame
         |Game.CK2 -> CK2Game(CK2options) :> IGame
         |Game.VIC2 -> VIC2Game(VIC2options) :> IGame
+        |Game.IR -> IRGame(IRoptions) :> IGame
         |Game.Custom -> CustomGame(Customoptions, "") :> IGame
     game
 

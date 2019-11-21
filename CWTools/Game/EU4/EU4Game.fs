@@ -138,7 +138,7 @@ module EU4GameFunctions =
         updateModifiers(game)
         updateLegacyGovernments(game)
 
-    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
@@ -171,7 +171,7 @@ module EU4GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy eu4LocCommands
             eventTargetLinks = eu4EventTargetLinks
-            cachedRuleMetadata = None
+            cachedRuleMetadata = cachedRuleMetadata
         }
 
 type EU4Settings = GameSetupSettings<EU4Lookup>
@@ -193,7 +193,9 @@ type EU4Game(setupSettings : EU4Settings) =
     let embeddedSettings =
         match setupSettings.embedded with
         | FromConfig (ef, crd) ->
-            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) None
+        | Metadata cmd ->
+            createEmbeddedSettings [] [] (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) (Some cmd)
         | ManualSettings e -> e
 
     let settings = {

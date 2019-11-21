@@ -232,7 +232,7 @@ module IRGameFunctions =
         // game.LocalisationManager.UpdateAllLocalisation()
 
 
-    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
@@ -280,7 +280,7 @@ module IRGameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Jomini jominiLocDataTypes
             eventTargetLinks = irEventTargetLinks
-            cachedRuleMetadata = None
+            cachedRuleMetadata = cachedRuleMetadata
         }
 
 type IRSettings = GameSetupSettings<IRLookup>
@@ -301,7 +301,9 @@ type IRGame(setupSettings : IRSettings) =
     let embeddedSettings =
         match setupSettings.embedded with
         | FromConfig (ef, crd) ->
-            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) None
+        | Metadata cmd ->
+            createEmbeddedSettings [] [] (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) (Some cmd)
         | ManualSettings e -> e
 
     let settings = {

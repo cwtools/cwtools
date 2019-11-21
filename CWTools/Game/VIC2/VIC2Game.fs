@@ -209,7 +209,7 @@ module VIC2GameFunctions =
         // game.LocalisationManager.UpdateAllLocalisation()
 
 
-    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
@@ -240,7 +240,7 @@ module VIC2GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy vic2LocCommands
             eventTargetLinks = vic2EventTargetLinks
-            cachedRuleMetadata = None
+            cachedRuleMetadata = cachedRuleMetadata
         }
 type VIC2Settings = GameSetupSettings<VIC2Lookup>
 open VIC2GameFunctions
@@ -260,7 +260,9 @@ type VIC2Game(setupSettings : VIC2Settings) =
     let embeddedSettings =
         match setupSettings.embedded with
         | FromConfig (ef, crd) ->
-            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) None
+        | Metadata cmd ->
+            createEmbeddedSettings [] [] (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) (Some cmd)
         | ManualSettings e -> e
 
     let settings = {
