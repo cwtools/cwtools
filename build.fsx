@@ -182,14 +182,16 @@ Core.Target.create "Pack" (fun _ ->
 //   ]
 //   |> String.concat " "
 
-
-Core.Target.create "PublishTool" (fun _ ->
-
+Core.Target.create "PackageTool" (fun _ ->
     !! "**/output/**/*.nupkg"
     |> File.deleteAll
 
     // DotNet.pack (fun po -> { po with Configuration = Fake.DotNet.DotNet.BuildConfiguration.Release } ) "CWToolsCLI/CWToolsCLI.fsproj"
     DotNet.exec id "pack" (sprintf " ./CWToolsCLI/CWToolsCLI.fsproj -c Release -o ./CWToolsCLI/output") |> ignore
+)
+
+Core.Target.create "PublishTool" (fun _ ->
+
     let token =
         match Fake.Core.Environment.environVarOrDefault "NUGET_ACCESS_KEY" System.String.Empty with
         | s when not (String.IsNullOrWhiteSpace s) -> s
@@ -215,6 +217,7 @@ Core.Target.create "PublishTool" (fun _ ->
 "Clean"
   ==> "Restore"
   ==> "Build"
+  ==> "PackageTool"
   ==> "PublishTool"
 
 Fake.Core.Target.runOrDefaultWithArguments "Build"
