@@ -23,6 +23,7 @@ open CWTools.Process.Localisation
 module HOI4GameFunctions =
     type GameObject = GameObject<HOI4ComputedData, HOI4Lookup>
     let createLocDynamicSettings(lookup : Lookup) =
+        //eprintfn "clds %A" (lookup.enumDefs.TryFind "country_tags")
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
@@ -74,6 +75,7 @@ module HOI4GameFunctions =
             |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_localisation") -> Some (f.entity) |_ -> None)
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
+        game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
         game.Lookup.scriptedLoc <- rawLocs
 
     let updateScriptedEffects(rules :RootRule list) (states : string list) (countries : string list) =
@@ -142,7 +144,7 @@ module HOI4GameFunctions =
         updateProvinces(game)
         updateScriptedLoc(game)
 
-    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) =
+    let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) (cachedRuleMetadata : CachedRuleMetadata option) =
         let scopeDefinitions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs) )
@@ -176,7 +178,7 @@ module HOI4GameFunctions =
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy hoi4LocCommands
             eventTargetLinks = eventTargetLinks
-            cachedRuleMetadata = None
+            cachedRuleMetadata = cachedRuleMetadata
         }
 
 type HOI4Settings = GameSetupSettings<HOI4Lookup>
@@ -197,7 +199,9 @@ type HOI4Game(setupSettings : HOI4Settings) =
     let embeddedSettings =
         match setupSettings.embedded with
         | FromConfig (ef, crd) ->
-            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue [])
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) None
+        | Metadata cmd ->
+            createEmbeddedSettings [] [] (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) (Some cmd)
         | ManualSettings e -> e
 
     let settings = {

@@ -29,6 +29,7 @@ type GameSettings<'L> = {
 
 type EmbeddedSetupSettings =
     | FromConfig of embeddedFiles : (string * string) list * cachedResourceData : (Resource * Entity) list
+    | Metadata of cachedRuleMetadata : CachedRuleMetadata
     | ManualSettings of EmbeddedSettings
 
 type GameSetupSettings<'L> = {
@@ -71,13 +72,27 @@ type GameObject<'T, 'L when 'T :> ComputedData
     let lookup = settings.initialLookup
     let localisationManager = LocalisationManager<'T>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
+    let addEmbeddedLoc =
+        match settings.embedded.cachedRuleMetadata with
+        | None -> id
+        | Some md ->
+            fun (newList : (Lang * Set<string>) list) ->
+                let newMap = newList |> Map.ofList
+                let embeddedMap = md.loc |> Map.ofList
+                let res =
+                    Map.fold (fun s k v ->
+                    match Map.tryFind k s with
+                    | Some v' -> Map.add k (Set.union v  v') s
+                    | None -> Map.add k v s) newMap embeddedMap
+                res |> Map.toList
+    
     let validationServices() =
         {
             resources = resourceManager.Api
             lookup = lookup
             ruleValidationService = ruleValidationService
             infoService = infoService
-            localisationKeys = localisationManager.LocalisationKeys
+            localisationKeys = (fun _ -> addEmbeddedLoc (localisationManager.LocalisationKeys()))
             fileManager = fileManager
         }
     let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())

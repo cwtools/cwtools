@@ -149,8 +149,8 @@ module Validator =
         member __.entities() = game.AllEntities()
         member __.recompute() = game.ForceRecompute()
 
-    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cached, cachedFiles) =
-        let game = Serializer.loadGame (dir, scope, modFilter, config, game, cached, cachedFiles)
+    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded) =
+        let game = Serializer.loadGame (dir, scope, modFilter, config, game, embedded)
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e;  hash = (createHash f (range.Zero) e)})

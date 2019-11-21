@@ -56,6 +56,7 @@ module CK2GameFunctions =
             |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some (f.entity) |_ -> None)
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
+        game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
         game.Lookup.scriptedLoc <- rawLocs
 
     let updateModifiers (game : GameObject) =

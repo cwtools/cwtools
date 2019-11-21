@@ -253,6 +253,7 @@ module LanguageFeatures =
             varDefs = lookup.varDefInfo
             loc = localisation.LocalisationKeys()
             files = resources.Api.GetFileNames() |> Set.ofList
+            scriptedLoc = lookup.scriptedLoc
         }
 
 

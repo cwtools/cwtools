@@ -83,19 +83,25 @@ module CWToolsCLI =
             member s.Usage =
                 match s with
                 |File _ -> "file to parse"
+    type CacheTypes =
+        | Full = 1
+        | Metadata = 2
     type SerializeArgs =
-        | [<MainCommand; ExactlyOnce; Last>] Shallow of bool
+        | [<MainCommand; ExactlyOnce; Last>] OutputCacheType of CacheTypes
+        | OutputCacheFile of filename : string
     with
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
-                |Shallow _ -> "A shallow cache for CLI"
+                | OutputCacheType _ -> "Which cache file to generate"
+                | OutputCacheFile _ -> "Filename to save the cache file to"
     type Arguments =
         | [<Inherit>]Directory of path : string
         | [<Inherit>]Game of Game
         | [<Inherit>]Scope of FilesScope
         | [<Inherit>]ModFilter of string
         | [<Inherit>]CacheFile of path : string
+        | [<Inherit>]CacheType of cacheType : CacheTypes
         | [<Inherit>]RulesPath of path : string
         | DocsPath of string
         | [<CustomCommandLine("validate")>] Validate of ParseResults<ValidateArgs>
@@ -118,6 +124,7 @@ module CWToolsCLI =
                 | Serialize _ -> "created serialized files for embedding"
                 | CacheFile _ -> "path to the cache file"
                 | RulesPath _ -> "path to the cwt rules"
+                | CacheType _ -> "type of cache file"
 
 
     let getEffectsAndTriggers docsPath =
@@ -207,19 +214,25 @@ module CWToolsCLI =
 
         | _ -> failwith "Unexpected list type"
 
-    let validate game directory scope modFilter docsPath cachePath rulesPath (results : ParseResults<_>) =
+    let validate game directory scope modFilter docsPath cachePath rulesPath cacheType (results : ParseResults<ValidateArgs>) =
         let reporter = results.GetResult (ReportType, CLI)
         let outputHashes = results.TryGetResult <@ OutputHashes @>
         let inputHashFile = results.TryGetResult <@ IgnoreHashesFile @>
 
-        let cached, cachedFiles =
-            match cachePath with
-            |Some path ->
-                let doesCacheExist = File.Exists path
-                printfn "%b" doesCacheExist
-                if doesCacheExist then Serializer.deserialize path else [], []
-            |None -> [], []
-
+        let embedded =
+            match cacheType with
+            | CacheTypes.Full ->
+                let cached, cachedFiles =
+                    match cachePath with
+                    |Some path ->
+                        Serializer.deserialize path
+                    |None -> [], []
+                FromConfig(cachedFiles, cached)
+            | CacheTypes.Metadata ->
+                match cachePath with
+                | Some path ->
+                    Metadata (Serializer.deserializeMetadata path)
+                | None -> FromConfig([], [])
         let hashes =
             match inputHashFile with
             | None -> Set.empty
@@ -228,7 +241,7 @@ module CWToolsCLI =
 
         //printfn "%A" cachedFiles
         let valType = results.GetResult <@ ValType @>
-        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, cached, cachedFiles)
+        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, embedded)
         let errors =
             match valType with
             | ValidateType.ParseErrors -> (gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse
@@ -281,11 +294,11 @@ module CWToolsCLI =
 
 
     let serialize game directory scope modFilter cachePath rulesPath  (results : ParseResults<_>) =
-        let shallow = results.TryGetResult <@ Shallow @> |> Option.defaultValue false
-        match shallow with
-        | true ->
+        let cacheType = results.TryGetResult <@ OutputCacheType @> |> Option.defaultValue CacheTypes.Full
+        match cacheType with
+        | CacheTypes.Metadata ->
             Serializer.serializeMetadata (directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, "")
-        | false ->
+        | CacheTypes.Full ->
             match game with
             |Game.STL ->
                 Serializer.serializeSTL ([{path = directory; name = "undefined"}]) ""
@@ -328,9 +341,10 @@ module CWToolsCLI =
         let docsPath = results.TryGetResult <@ DocsPath @>
         let cachePath = results.TryGetResult <@ CacheFile @>
         let rulesPath = results.TryGetResult <@ RulesPath @>
+        let cacheType = results.TryGetResult <@ CacheType @> |> Option.defaultValue CacheTypes.Full
         match results.GetSubCommand() with
         | List r -> list game directory scope modFilter docsPath r; 0
-        | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath r
+        | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath cacheType r
         | Serialize r -> serialize game directory scope modFilter cachePath rulesPath r ;0
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"; 1

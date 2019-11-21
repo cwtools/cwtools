@@ -207,8 +207,18 @@ let deserialize path =
         cached.resources, cached.files
     |false, _ -> failwithf "Cache file %s was specified but does not exist" path
 
+let deserializeMetadata path =
+    match File.Exists path, Path.GetExtension path with
+    | true, ".bz2" ->
+        let cacheFile = decompress path
+        binarySerializer.UnPickle<CachedRuleMetadata> cacheFile
+    | true, _ ->
+        let cacheFile = File.ReadAllBytes(path)
+        binarySerializer.UnPickle<CachedRuleMetadata> cacheFile
+    | false, _ -> failwithf "Cache file %s was specified but does not exist" path
 
-let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cached, cachedFiles) =
+
+let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded : EmbeddedSetupSettings) =
     let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
     let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
     let STLoptions : StellarisSettings = {
@@ -220,7 +230,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             langs = langs
         }
         rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-        embedded = FromConfig (cachedFiles, cached)
+        embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
         maxFileSize = None
@@ -234,7 +244,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             langs = langs
         }
         rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-        embedded = FromConfig (cachedFiles, cached)
+        embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
         maxFileSize = Some 8
@@ -249,7 +259,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             langs = langs
         }
         rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-        embedded = FromConfig (cachedFiles, cached)
+        embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
         maxFileSize = Some 8
@@ -263,7 +273,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             langs = langs
         }
         rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-        embedded = FromConfig (cachedFiles, cached)
+        embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
         maxFileSize = Some 8
@@ -277,7 +287,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             langs = langs
         }
         rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-        embedded = FromConfig (cachedFiles, cached)
+        embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
         maxFileSize = Some 8
@@ -291,7 +301,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
             langs = langs
         }
         rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = false; debugMode = false }
-        embedded = FromConfig (cachedFiles, cached)
+        embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
         maxFileSize = Some 8
@@ -307,7 +317,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
     game
 
 let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, config, game : Game, cacheDirectory) =
-    let game = loadGame (dir, scope, modFilter, config, game, [], [])
+    let game = loadGame (dir, scope, modFilter, config, game, FromConfig ([], []))
     let data = game.GetEmbeddedMetadata()
     let pickle = binarySerializer.Pickle data
     compressAndWrite pickle (Path.Combine(cacheDirectory, "hoi4.cwv.bz2"))
