@@ -168,9 +168,11 @@ module CWToolsCLI =
                 //["./config.cwt", File.ReadAllText("./config.cwt")]
             |_, false -> []
         configs
-    let list game directory scope modFilter docsPath (results : ParseResults<ListArgs>) =
-        let triggers, effects = getEffectsAndTriggers docsPath
-        let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory, None))
+    let list game directory scope modFilter docsPath rulesPath (results : ParseResults<ListArgs>) =
+        //let triggers, effects = getEffectsAndTriggers docsPath
+
+        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath), game, FromConfig([],[]))
+        //let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory, None))
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -178,8 +180,8 @@ module CWToolsCLI =
             match sortOrder with
             | None
             | Some ListSort.Path ->
-                let files = gameObj.allFileList |> List.map (sprintf "%O")
-                File.WriteAllLines("files.csv", files)
+                let files = gameObj.allFileList |> List.map (fun s -> s.file.Replace(directory, ""))
+                File.WriteAllLines("cwtools-files.csv", files)
                 //gameObj.allFileList |> List.iter (fun f -> printfn "%O" f)
             | _ -> failwith "Unexpected sort order"
         | ListTypes.Triggers ->
@@ -192,24 +194,24 @@ module CWToolsCLI =
             printfn "%A" t
         | ListTypes.Localisation -> ()
             //printfn "%A" loc.GetKeys
-        | ListTypes.Technology ->
-            (gameObj.references().Technologies) |> List.map fst |> List.iter (printfn "%A")
-        | ListTypes.Types ->
-            gameObj.recompute()
-            let referencedTypes = gameObj.entities() |> List.choose (fun struct(e,l) -> l.Force().Referencedtypes)
-            // printfn "%A" referencedTypes
-            let combinedReferences = referencedTypes |> List.fold (fun s m -> merge s m (fun _ (a,b) -> a @ b)) Map.empty
-                                        |> Map.map (fun _ vs -> vs |> List.map (fun v -> v.name))
-            let types = gameObj.references().TypeMapInfo |> Map.map (fun _ vs -> vs |> List.map (fun t -> t.id))
-            let events = types |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
-            let eventReferences = combinedReferences |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
-            // eventReferences |> List.iter (printfn "%s")
-            let unused = List.except eventReferences events
-            unused |> List.iter (printfn "%s")
-            let files = events |> List.map (sprintf "%A")
-            File.WriteAllLines("file1.csv", files)
-            let files = eventReferences |> List.map (sprintf "%A")
-            File.WriteAllLines("file2.csv", files)
+        // | ListTypes.Technology ->
+        //     (gameObj.references().Technologies) |> List.map fst |> List.iter (printfn "%A")
+        // | ListTypes.Types ->
+        //     gameObj.recompute()
+        //     let referencedTypes = gameObj.entities() |> List.choose (fun struct(e,l) -> l.Force().Referencedtypes)
+        //     // printfn "%A" referencedTypes
+        //     let combinedReferences = referencedTypes |> List.fold (fun s m -> merge s m (fun _ (a,b) -> a @ b)) Map.empty
+        //                                 |> Map.map (fun _ vs -> vs |> List.map (fun v -> v.name))
+        //     let types = gameObj.references().TypeMapInfo |> Map.map (fun _ vs -> vs |> List.map (fun t -> t.id))
+        //     let events = types |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
+        //     let eventReferences = combinedReferences |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
+        //     // eventReferences |> List.iter (printfn "%s")
+        //     let unused = List.except eventReferences events
+        //     unused |> List.iter (printfn "%s")
+        //     let files = events |> List.map (sprintf "%A")
+        //     File.WriteAllLines("file1.csv", files)
+        //     let files = eventReferences |> List.map (sprintf "%A")
+        //     File.WriteAllLines("file2.csv", files)
 
 
         | _ -> failwith "Unexpected list type"
@@ -344,7 +346,7 @@ module CWToolsCLI =
         let rulesPath = results.TryGetResult <@ RulesPath @>
         let cacheType = results.TryGetResult <@ CacheType @> |> Option.defaultValue CacheTypes.Full
         match results.GetSubCommand() with
-        | List r -> list game directory scope modFilter docsPath r; 0
+        | List r -> list game directory scope modFilter docsPath rulesPath r; 0
         | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath cacheType r
         | Serialize r -> serialize game directory scope modFilter cachePath rulesPath r ;0
         | Directory _

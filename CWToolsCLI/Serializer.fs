@@ -227,7 +227,7 @@ let deserializeMetadata path =
     | false, _ -> failwithf "Cache file %s was specified but does not exist" path
 
 
-let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded : EmbeddedSetupSettings) =
+let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded : EmbeddedSetupSettings) =
     let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
     let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
     let STLoptions : StellarisSettings = {
@@ -329,7 +329,7 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
         excludeGlobPatterns = None
         maxFileSize = Some 8
     }
-    let game =
+    let game : IGame =
         match game with
         |Game.HOI4 -> HOI4Game(HOI4options) :> IGame
         |Game.STL -> STLGame(STLoptions) :> IGame
@@ -343,6 +343,12 @@ let loadGame (dir : string, scope : FilesScope, modFilter : string, config, game
 let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, config, game : Game, outputFileName) =
     let gameObj = loadGame (dir, scope, modFilter, config, game, FromConfig ([], []))
     let data = gameObj.GetEmbeddedMetadata()
+    let fileListFiles =
+        match File.Exists (Path.Combine(dir, "cwtools-files.csv")) with
+        | true ->
+            File.ReadAllLines(Path.Combine(dir, "cwtools-files.csv")) |> Set.ofArray
+        | false -> Set.empty
+    let data = { data with files = Set.union data.files fileListFiles }
     let pickle = binarySerializer.Pickle data
     let filename =
         match outputFileName with

@@ -84,70 +84,70 @@ module Validator =
         let res = hashed |> Array.fold(fun (acc : StringBuilder) b -> acc.Append(b.ToString("x2"))) sb
         res.ToString()
 
-    type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config) =
-        //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
-        let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
-        let STLoptions : StellarisSettings = {
-            rootDirectories = [ {path = dir; name = "undefined"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = false
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = ManualSettings {
-                triggers = triggers
-                effects = effects
-                modifiers = []
-                embeddedFiles = []
-                cachedResourceData = []
-                localisationCommands = Legacy ([], [])
-                eventTargetLinks = []
-                cachedRuleMetadata = None
-            }
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = None
-        }
-        let HOI4options : HOI4Settings = {
-            rootDirectories = [ {path = dir; name = "undefined"}]
-            modFilter = Some modFilter
-            validation = {
-                validateVanilla = false
-                experimental = true
-                langs = langs
-            }
-            rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
-            embedded = ManualSettings {
-                modifiers = []
-                embeddedFiles = []
-                cachedResourceData = []
-                triggers = []
-                effects = []
-                localisationCommands = Legacy ([], [])
-                eventTargetLinks = []
-                cachedRuleMetadata = None
-            }
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = None
-        }
-        let game = STLGame(STLoptions) :> IGame<STLComputedData>
-            // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
-        let parserErrors = game.ParserErrors
-        member val folders = game.Folders
-        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e; hash = (createHash f (range.Zero) e)})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
-        member __.allFileList =
-            game.AllFiles()
-                |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
-        member val scriptedTriggerList = game.ScriptedTriggers
-        member val scriptedEffectList = game.ScriptedEffects
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
-        member val references = game.References
-        member __.entities() = game.AllEntities()
-        member __.recompute() = game.ForceRecompute()
+    // type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config) =
+    //     //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
+    //     let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
+    //     let STLoptions : StellarisSettings = {
+    //         rootDirectories = [ {path = dir; name = "undefined"}]
+    //         modFilter = Some modFilter
+    //         validation = {
+    //             validateVanilla = false
+    //             experimental = true
+    //             langs = langs
+    //         }
+    //         rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
+    //         embedded = ManualSettings {
+    //             triggers = triggers
+    //             effects = effects
+    //             modifiers = []
+    //             embeddedFiles = []
+    //             cachedResourceData = []
+    //             localisationCommands = Legacy ([], [])
+    //             eventTargetLinks = []
+    //             cachedRuleMetadata = None
+    //         }
+    //         scriptFolders = None
+    //         excludeGlobPatterns = None
+    //         maxFileSize = None
+    //     }
+    //     let HOI4options : HOI4Settings = {
+    //         rootDirectories = [ {path = dir; name = "undefined"}]
+    //         modFilter = Some modFilter
+    //         validation = {
+    //             validateVanilla = false
+    //             experimental = true
+    //             langs = langs
+    //         }
+    //         rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = false; debugMode = false }
+    //         embedded = ManualSettings {
+    //             modifiers = []
+    //             embeddedFiles = []
+    //             cachedResourceData = []
+    //             triggers = []
+    //             effects = []
+    //             localisationCommands = Legacy ([], [])
+    //             eventTargetLinks = []
+    //             cachedRuleMetadata = None
+    //         }
+    //         scriptFolders = None
+    //         excludeGlobPatterns = None
+    //         maxFileSize = None
+    //     }
+    //     let game = STLGame(STLoptions) :> IGame<STLComputedData>
+    //         // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
+    //     let parserErrors = game.ParserErrors
+    //     member val folders = game.Folders
+    //     member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e; hash = (createHash f (range.Zero) e)})
+    //     member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
+    //     member __.allFileList =
+    //         game.AllFiles()
+    //             |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
+    //     member val scriptedTriggerList = game.ScriptedTriggers
+    //     member val scriptedEffectList = game.ScriptedEffects
+    //     member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
+    //     member val references = game.References
+    //     member __.entities() = game.AllEntities()
+    //     member __.recompute() = game.ForceRecompute()
 
     type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded) =
         let game = Serializer.loadGame (dir, scope, modFilter, config, game, embedded)
@@ -158,3 +158,5 @@ module Validator =
         member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
         member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
         member __.recompute() = game.ForceRecompute()
+        member val scriptedTriggerList = game.ScriptedTriggers
+        member val scriptedEffectList = game.ScriptedEffects
