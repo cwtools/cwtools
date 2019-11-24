@@ -78,14 +78,18 @@ type ValidationManager<'T when 'T :> ComputedData>
             else
                 []
         let rres = rres |> List.filter (fun err -> err.code <> "CW100")
-        // log "Validating files"
-        let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function Invalid (_ , es) -> es |_ -> [])
-        // log "Validating effects/triggers"
-        let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function Invalid (_ , es) -> es |_ -> []
-        let lfres = settings.lookupFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.fileManager services.ruleValidationService services.lookup resources newEntities) s) |> function Invalid (_ , es) -> es |_ -> []
-        let hres = if settings.experimental && (not (shallow)) then settings.heavyExperimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function Invalid (_ , es) -> es |_ -> [] else []
-        let shallow = if settings.debugRulesOnly then rres else res @ fres @ lres @ lfres @ rres
-        let deep = hres
+        let shallow, deep =
+            if settings.debugRulesOnly
+            then rres, []
+            else
+
+            // log "Validating files"
+            let fres = settings.fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function Invalid (_ , es) -> es |_ -> [])
+            // log "Validating effects/triggers"
+            let lres = settings.lookupValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function Invalid (_ , es) -> es |_ -> []
+            let lfres = settings.lookupFileValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.fileManager services.ruleValidationService services.lookup resources newEntities) s) |> function Invalid (_ , es) -> es |_ -> []
+            let hres = if settings.experimental && (not (shallow)) then settings.heavyExperimentalValidators <&!&> (fun (v, s) -> duration (fun _ -> v services.lookup oldEntities newEntities) s) |> function Invalid (_ , es) -> es |_ -> [] else []
+            res @ fres @ lres @ lfres @ rres, hres
         shallow, deep
 
     let validateLocalisation (entities : struct (Entity * Lazy<'T>) list) =

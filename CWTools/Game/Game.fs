@@ -72,32 +72,33 @@ type GameObject<'T, 'L when 'T :> ComputedData
     let lookup = settings.initialLookup
     let localisationManager = LocalisationManager<'T>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)
     let debugMode = settings.rules |> Option.map (fun r -> r.debugMode) |> Option.defaultValue false
-    let addEmbeddedLoc =
+    let addEmbeddedLoc langs =
         match settings.embedded.cachedRuleMetadata with
         | None -> id
         | Some md ->
             fun (newList : (Lang * Set<string>) list) ->
                 let newMap = newList |> Map.ofList
-                let embeddedMap = md.loc |> Map.ofList
+                let oldList = md.loc |> List.filter (fun (l, _) -> List.contains l langs)
+                let embeddedMap = oldList |> Map.ofList
                 let res =
                     Map.fold (fun s k v ->
                     match Map.tryFind k s with
                     | Some v' -> Map.add k (Set.union v  v') s
                     | None -> Map.add k v s) newMap embeddedMap
                 res |> Map.toList
-    
+
     let validationServices() =
         {
             resources = resourceManager.Api
             lookup = lookup
             ruleValidationService = ruleValidationService
             infoService = infoService
-            localisationKeys = (fun _ -> addEmbeddedLoc (localisationManager.LocalisationKeys()))
+            localisationKeys = (fun _ -> addEmbeddedLoc (settings.validation.langs) (localisationManager.LocalisationKeys()))
             fileManager = fileManager
         }
     let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
 
-    let rulesManager = RulesManager<'T, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, debugMode)
+    let rulesManager = RulesManager<'T, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, settings.validation.langs, debugMode)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
     // let mutable localisationErrors : CWError list option = None
     // let mutable localisationKeys = []

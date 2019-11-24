@@ -56,6 +56,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
      settings : RuleManagerSettings<'T, 'L>,
      localisation : LocalisationManager<'T>,
      embeddedSettings : EmbeddedSettings,
+     languages : Lang list,
      debugMode : bool) =
 
     let addEmbeddedTypeDefData =
@@ -88,13 +89,14 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     | Some v' -> Map.add k (v@v') s
                     | None -> Map.add k v s) newMap md.varDefs
 
-    let addEmbeddedLoc =
+    let addEmbeddedLoc (langs) =
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
             fun (newList : (Lang * Set<string>) list) ->
                 let newMap = newList |> Map.ofList
-                let embeddedMap = md.loc |> Map.ofList
+                let oldList = md.loc |> List.filter (fun (l, _) -> List.contains l langs)
+                let embeddedMap = oldList |> Map.ofList
                 let res =
                     Map.fold (fun s k v ->
                     match Map.tryFind k s with
@@ -186,7 +188,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
 
         /// First pass type defs
-        let loc = addEmbeddedLoc (localisation.localisationKeys)
+        let loc = addEmbeddedLoc languages (localisation.localisationKeys)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofList)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

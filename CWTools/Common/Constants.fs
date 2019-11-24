@@ -20,6 +20,15 @@ type Lang =
     |Custom of CustomLang
     override x.ToString() = x |> function |CK2 c -> c.ToString() | STL s -> s.ToString() |HOI4 s -> s.ToString() |EU4 s -> s.ToString() |IR s -> s.ToString() |VIC2 s -> s.ToString() |Custom s -> s.ToString()
 
+module LangHelpers =
+    let allCK2Langs = [CK2 CK2Lang.English; CK2 CK2Lang.French; CK2 CK2Lang.German; CK2 CK2Lang.Spanish; CK2 CK2Lang.Russian]
+    let allSTLLangs = [STL STLLang.English; STL STLLang.French; STL STLLang.German; STL STLLang.Spanish; STL STLLang.Russian; STL STLLang.Polish;STL STLLang.Braz_Por; STL STLLang.Chinese]
+    let allHOI4Langs = [HOI4 HOI4Lang.English; HOI4 HOI4Lang.French; HOI4 HOI4Lang.German; HOI4 HOI4Lang.Spanish; HOI4 HOI4Lang.Russian; HOI4 HOI4Lang.Polish;HOI4 HOI4Lang.Braz_Por]
+    let allEU4Langs = [EU4 EU4Lang.English; EU4 EU4Lang.French; EU4 EU4Lang.German; EU4 EU4Lang.Spanish]
+    let allIRLangs = [IR IRLang.English; IR IRLang.French; IR IRLang.German; IR IRLang.Spanish; IR IRLang.Russian; IR IRLang.Chinese]
+    let allVIC2Langs = [VIC2 VIC2Lang.English; VIC2 VIC2Lang.French; VIC2 VIC2Lang.German; VIC2 VIC2Lang.Spanish]
+    let allCustomLangs = [Custom CustomLang.English; Custom CustomLang.French; Custom CustomLang.German; Custom CustomLang.Spanish; Custom CustomLang.Russian; Custom CustomLang.Polish;Custom CustomLang.Braz_Por; Custom CustomLang.Chinese]
+
 type RawEffect =
     {
         name : string

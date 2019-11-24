@@ -217,19 +217,37 @@ let deserialize path =
     |false, _ -> failwithf "Cache file %s was specified but does not exist" path
 
 let deserializeMetadata path =
-    match File.Exists path, Path.GetExtension path with
-    | true, ".bz2" ->
-        let cacheFile = decompress path
-        binarySerializer.UnPickle<CachedRuleMetadata> cacheFile
-    | true, _ ->
-        let cacheFile = File.ReadAllBytes(path)
-        binarySerializer.UnPickle<CachedRuleMetadata> cacheFile
-    | false, _ -> failwithf "Cache file %s was specified but does not exist" path
+    let metadata =
+        match File.Exists path, Path.GetExtension path with
+        | true, ".bz2" ->
+            let cacheFile = decompress path
+            binarySerializer.UnPickle<CachedRuleMetadata> cacheFile
+        | true, _ ->
+            let cacheFile = File.ReadAllBytes(path)
+            binarySerializer.UnPickle<CachedRuleMetadata> cacheFile
+        | false, _ -> failwithf "Cache file %s was specified but does not exist" path
+    {
+        metadata with
+            varDefs = metadata.varDefs |> Map.map (fun k v -> v |> List.map (fun (s, _) -> (s, range.Zero)))
+            typeDefs = metadata.typeDefs |> Map.map (fun k v -> v |> List.map (fun t -> {t with range = range.Zero; validate = false}))
+    }
 
 
-let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded : EmbeddedSetupSettings) =
-    let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
-    let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
+let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded : EmbeddedSetupSettings, langSetting) =
+    // let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
+    let langs =
+        match langSetting, game with
+        | Some ls, _ -> ls
+        | _, Game.STL -> LangHelpers.allSTLLangs
+        | _, Game.EU4 -> LangHelpers.allEU4Langs
+        | _, Game.HOI4 -> LangHelpers.allHOI4Langs
+        | _, Game.IR -> LangHelpers.allIRLangs
+        | _, Game.VIC2 -> LangHelpers.allVIC2Langs
+        | _, Game.CK2 -> LangHelpers.allCK2Langs
+        | _, Game.Custom -> LangHelpers.allCustomLangs
+        | _ -> failwith "No languages specified"
+    eprintfn "%A" langs
+    // let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
     let STLoptions : StellarisSettings = {
         rootDirectories = [ {path = dir; name = "undefined"}]
         modFilter = Some modFilter
@@ -238,7 +256,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
             experimental = true
             langs = langs
         }
-        rules = Some { ruleFiles = config; validateRules = false; debugRulesOnly = true; debugMode = false }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
         embedded = embedded
         scriptFolders = None
         excludeGlobPatterns = None
@@ -341,7 +359,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
     game
 
 let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, config, game : Game, outputFileName) =
-    let gameObj = loadGame (dir, scope, modFilter, config, game, FromConfig ([], []))
+    let gameObj = loadGame (dir, scope, modFilter, config, game, FromConfig ([], []), None)
     let data = gameObj.GetEmbeddedMetadata()
     let fileListFiles =
         match File.Exists (Path.Combine(dir, "cwtools-files.csv")) with

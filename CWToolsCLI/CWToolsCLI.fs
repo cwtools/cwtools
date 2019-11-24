@@ -34,6 +34,67 @@ module CWToolsCLI =
                 if code = ErrorCode.HelpText then
                     printfn "%s" msg ; exit 0
                 else eprintfn "%s" msg ; exit 1
+// type CustomLang = |English = 0 |French = 1 |German = 2 |Spanish = 3 |Russian = 4 |Polish = 5 |Braz_Por = 6 |Chinese = 7 |Default = 8
+
+    type LanguageArg =
+        | English
+        | French
+        | German
+        | Spanish
+        | Russian
+        | Polish
+        | BrazPor
+        | SimpChinese
+    let parseLanguageArg (game : Game) (lang : LanguageArg) =
+        match game, lang with
+        | Game.Custom, English -> Some (Custom CustomLang.English)
+        | Game.Custom, French -> Some (Custom CustomLang.French)
+        | Game.Custom, German -> Some (Custom CustomLang.German)
+        | Game.Custom, Spanish -> Some (Custom CustomLang.Spanish)
+        | Game.Custom, Russian -> Some (Custom CustomLang.Russian)
+        | Game.Custom, Polish -> Some (Custom CustomLang.Polish)
+        | Game.Custom, BrazPor -> Some (Custom CustomLang.Braz_Por)
+        | Game.Custom, SimpChinese -> Some (Custom CustomLang.Chinese)
+        | Game.STL, English -> Some (STL STLLang.English)
+        | Game.STL, French -> Some (STL STLLang.French)
+        | Game.STL, German -> Some (STL STLLang.German)
+        | Game.STL, Spanish -> Some (STL STLLang.Spanish)
+        | Game.STL, Russian -> Some (STL STLLang.Russian)
+        | Game.STL, Polish -> Some (STL STLLang.Polish)
+        | Game.STL, BrazPor -> Some (STL STLLang.Braz_Por)
+        | Game.STL, SimpChinese -> Some (STL STLLang.Chinese)
+        | Game.HOI4, English -> Some (HOI4 HOI4Lang.English)
+        | Game.HOI4, French -> Some (HOI4 HOI4Lang.French)
+        | Game.HOI4, German -> Some (HOI4 HOI4Lang.German)
+        | Game.HOI4, Spanish -> Some (HOI4 HOI4Lang.Spanish)
+        | Game.HOI4, Russian -> Some (HOI4 HOI4Lang.Russian)
+        | Game.HOI4, Polish -> Some (HOI4 HOI4Lang.Polish)
+        | Game.HOI4, BrazPor -> Some (HOI4 HOI4Lang.Braz_Por)
+        | Game.HOI4, _ -> None
+        | Game.EU4, English -> Some (EU4 EU4Lang.English)
+        | Game.EU4, French -> Some (EU4 EU4Lang.French)
+        | Game.EU4, German -> Some (EU4 EU4Lang.German)
+        | Game.EU4, Spanish -> Some (EU4 EU4Lang.Spanish)
+        | Game.EU4, _ -> None
+        | Game.VIC2, English -> Some (VIC2 VIC2Lang.English)
+        | Game.VIC2, French -> Some (VIC2 VIC2Lang.French)
+        | Game.VIC2, German -> Some (VIC2 VIC2Lang.German)
+        | Game.VIC2, Spanish -> Some (VIC2 VIC2Lang.Spanish)
+        | Game.VIC2, _ -> None
+        | Game.CK2, English -> Some (CK2 CK2Lang.English)
+        | Game.CK2, French -> Some (CK2 CK2Lang.French)
+        | Game.CK2, German -> Some (CK2 CK2Lang.German)
+        | Game.CK2, Spanish -> Some (CK2 CK2Lang.Spanish)
+        | Game.CK2, Russian -> Some (CK2 CK2Lang.Russian)
+        | Game.CK2, _ -> None
+        | Game.IR, English -> Some (IR IRLang.English)
+        | Game.IR, French -> Some (IR IRLang.French)
+        | Game.IR, German -> Some (IR IRLang.German)
+        | Game.IR, Spanish -> Some (IR IRLang.Spanish)
+        | Game.IR, SimpChinese -> Some (IR IRLang.Chinese)
+        | Game.IR, Russian -> Some (IR IRLang.Russian)
+        | Game.IR, _ -> None
+        | _ -> None
 
     type ListTypes =
         | Folders = 1
@@ -67,6 +128,7 @@ module CWToolsCLI =
         | OutputFile of filename:string
         | [<EqualsAssignment>] OutputHashes of filename:string option
         | [<EqualsAssignment>] IgnoreHashesFile of filename:string option
+        | Languages of LanguageArg list
     with
         interface IArgParserTemplate with
             member s.Usage =
@@ -76,6 +138,7 @@ module CWToolsCLI =
                 | ReportType _ -> "Report type, CLI by default"
                 | OutputHashes _ -> "Whether to output the error hash caching file, optionally specifying the file name"
                 | IgnoreHashesFile _ -> "A file containing an error hash cache file, which will be ignored, optionall specifying the file name"
+                | Languages _ -> "A list of languages to validate (default all)"
     type ParseArgs =
         | [<MainCommand; ExactlyOnce; Last>] File of string
     with
@@ -171,7 +234,7 @@ module CWToolsCLI =
     let list game directory scope modFilter docsPath rulesPath (results : ParseResults<ListArgs>) =
         //let triggers, effects = getEffectsAndTriggers docsPath
 
-        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath), game, FromConfig([],[]))
+        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath), game, FromConfig([],[]), None)
         //let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory, None))
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
@@ -220,7 +283,18 @@ module CWToolsCLI =
         let reporter = results.GetResult (ReportType, CLI)
         let outputHashes = results.TryGetResult <@ OutputHashes @>
         let inputHashFile = results.TryGetResult <@ IgnoreHashesFile @>
-
+        let langs = results.TryGetResult <@ Languages @> |> Option.map (List.choose (parseLanguageArg game))
+        let langs =
+            match langs, game with
+            | Some l, _ -> Some l
+            | None, Game.STL -> Some [STL STLLang.English]
+            | None, Game.EU4 -> Some [EU4 EU4Lang.English]
+            | None, Game.HOI4 -> Some [HOI4 HOI4Lang.English]
+            | None, Game.CK2 -> Some [CK2 CK2Lang.English]
+            | None, Game.VIC2 -> Some [VIC2 VIC2Lang.English]
+            | None, Game.IR -> Some [IR IRLang.English]
+            | None, Game.Custom -> Some [Custom CustomLang.English]
+            | _ -> None
         let embedded =
             match cacheType with
             | CacheTypes.Full ->
@@ -243,7 +317,7 @@ module CWToolsCLI =
 
         //printfn "%A" cachedFiles
         let valType = results.GetResult <@ ValType @>
-        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, embedded)
+        let gameObj = ErrorGame(directory, scope, modFilter, getConfigFiles(Some directory, rulesPath),game, embedded, langs)
         let errors =
             match valType with
             | ValidateType.ParseErrors -> (gameObj.parserErrorList) |> List.map ValidationViewModelRow.Parse
