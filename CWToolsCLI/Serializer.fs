@@ -100,6 +100,7 @@ let serializeSTL folder outputFileName =
     let pickle = binarySerializer.Pickle data
     let filename = outputFileName |> Option.defaultValue "stl.cwb.bz2"
     compressAndWrite pickle (filename)
+    filename
     //File.Create()
     //File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
@@ -120,6 +121,7 @@ let serializeEU4 folder outputFileName =
     let pickle = binarySerializer.Pickle data
     let filename = outputFileName |> Option.defaultValue "eu4.cwb.bz2"
     compressAndWrite pickle (filename)
+    filename
 
 let serializeHOI4 folder outputFileName =
     let fileManager = FileManager(folder, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
@@ -138,6 +140,7 @@ let serializeHOI4 folder outputFileName =
     let pickle = binarySerializer.Pickle data
     let filename = outputFileName |> Option.defaultValue "hoi4.cwb.bz2"
     compressAndWrite pickle (filename)
+    filename
 
 let serializeCK2 folder outputFileName =
     let fileManager = FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [], 2)
@@ -156,6 +159,7 @@ let serializeCK2 folder outputFileName =
     let pickle = binarySerializer.Pickle data
     let filename = outputFileName |> Option.defaultValue "ck2.cwb.bz2"
     compressAndWrite pickle (filename)
+    filename
 
 let serializeIR folder outputFileName =
     let fileManager = FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [], 2)
@@ -174,6 +178,7 @@ let serializeIR folder outputFileName =
     let pickle = binarySerializer.Pickle data
     let filename = outputFileName |> Option.defaultValue "ir.cwb.bz2"
     compressAndWrite pickle (filename)
+    filename
 
 let serializeVIC2 folder outputFileName =
     let fileManager = FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
@@ -192,6 +197,7 @@ let serializeVIC2 folder outputFileName =
     let pickle = binarySerializer.Pickle data
     let filename = outputFileName |> Option.defaultValue "vic2.cwb.bz2"
     compressAndWrite pickle (filename)
+    filename
 
 let deserialize path =
     // registry.DeclareSerializable<System.LazyHelper>()
@@ -375,6 +381,7 @@ let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, con
             let gameName = game |> function |Game.CK2 -> "ck2" |Game.HOI4 -> "hoi4" |Game.EU4 -> "eu4" |Game.STL -> "stl" |Game.VIC2 -> "vic2" |Game.IR -> "ir" |Game.Custom -> "custom"
             sprintf "%s.cwv.bz2" gameName
     compressAndWrite pickle (filename)
+    eprintfn "Metadata cache file created at %s, relative to CWD" filename
 
 
 // let deserializeEU4 path =
