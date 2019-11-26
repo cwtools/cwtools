@@ -54,7 +54,12 @@ module LocalisationString =
         | true -> if r == entry.key && not (List.contains r hardcodedLocalisation) then Invalid (Guid.NewGuid(), [invManual (ErrorCodes.RecursiveLocRef) (entry.position) entry.key None ]) else OK
         | false ->
             match r |> seq |> Seq.exists (fun c -> Char.IsLower(c)) && not (List.contains r hardcodedLocalisation) with
-            | true -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ])
+            | true ->
+                let firstSpace = r.IndexOf ' '
+                let lastSpace = r.LastIndexOf ' '
+                if firstSpace <> -1 && lastSpace <> -1 && firstSpace <> lastSpace
+                then OK
+                else Invalid (Guid.NewGuid(), [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ])
             | false -> OK
 
     let validateProcessedLocalisationBase (hardcodedLocalisation) (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry>) list) =
