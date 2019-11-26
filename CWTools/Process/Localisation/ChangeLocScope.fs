@@ -69,7 +69,9 @@ module ChangeLocScope =
 
     let createLegacyLocalisationCommandValidator (staticSettings : LegacyLocStaticSettings) =
         fun (dynamicSettings : LegacyLocDynamicsSettings) (source : ScopeContext) (command : string) ->
+            let command = if staticSettings.questionMarkVariable then command.TrimStart([|'?'|]) else command
             let keys = command.Split('.') |> List.ofArray
+
             let inner ((first : bool), (inVariable : bool), (context : ScopeContext)) (nextKey : string) =
                 let onetooneMatch() =
                     staticSettings.locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
