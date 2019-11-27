@@ -114,7 +114,7 @@ type ErrorCodes =
         let message = if confident then message else sprintf "%s (guessed data type)" message
         { ID = "CW266"; Severity = sev; Message = message }
     static member ConfigRulesUnexpectedAliasKeyValue = fun key expected severity -> { ID = "CW267"; Severity = severity; Message = sprintf "Expected a %s value, got %s" key expected }
-    static member LocMissingQuote = fun key ->  { ID = "CW268"; Severity = Severity.Information; Message = sprintf "Localisation key %s doesn't start and end with double quotes" key}
+    static member LocMissingQuote = fun key ->  { ID = "CW268"; Severity = Severity.Warning; Message = sprintf "Localisation key %s doesn't start and end with double quotes" key}
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
