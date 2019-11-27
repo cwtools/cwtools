@@ -246,13 +246,13 @@ module CustomGameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "effects.log")
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseEffectStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.map (JominiParser.processEffects (scopeManager.ParseScopes))
-                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in ir config"; ([]))
+                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in custom config"; ([]))
 
         let irTriggers =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "triggers.log")
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseTriggerStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.map (JominiParser.processTriggers scopeManager.ParseScopes)
-                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in ir config"; ([]))
+                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in custom config"; ([]))
 
 
         {

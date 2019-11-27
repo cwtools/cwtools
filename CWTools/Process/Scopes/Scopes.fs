@@ -161,13 +161,12 @@ module Scopes =
         (fun (varLHS : bool) (skipEffect : bool) (eventTargetLinks : EffectMap) (_ : EffectMap) (_ : ScopedEffect list) (vars : StringSet) (key : string) (source : ScopeContext) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
             if
-                key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
-                || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
+                key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
                 || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
             then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
             else
                 let key, varOnly = varPrefixFun key
-                let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) (last : bool) =
+                let inner ((context : ScopeContext), (first : bool)) (nextKey : string) (last : bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     match onetoone with
                     | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])
@@ -179,8 +178,9 @@ module Scopes =
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)
                         // if skipEffect then (context, false), NotFound else
-                        match eventTargetLinkMatch with
-                        | None ->
+                        match first && nextKey.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase), eventTargetLinkMatch with
+                        | true, _ -> (context, true), NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
+                        | _, None ->
                             if last && (vars.Contains nextKey)
                             then
                                 (context, false), VarFound
@@ -190,10 +190,10 @@ module Scopes =
                                     (context, false), VarNotFound nextKey
                                 else
                                     (context, false), NotFound
-                        | Some e ->
+                        | _, Some e ->
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope
-                            let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
+                            let exact = possibleScopes |> List.exists currentScope.IsOfScope
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
                             | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren)
@@ -201,14 +201,14 @@ module Scopes =
                             | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
                             | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
                             | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
-                let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
+                let inner2 = fun a b l -> inner a b l |> (fun ((c, _), d) -> (c, false), Some d)
                 // Try just the raw string first
                 let rawKeys = key.Split('.')
                 let rawKeyLength = rawKeys.Length - 1
                 let rawKeys = rawKeys |> Array.mapi (fun i k -> k, i = rawKeyLength)
                 let rawRes2 =
                     if hoi4TargetedHardcodedVariables then
-                        let rawRes = rawKeys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                        let rawRes = rawKeys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, true), None)// |> snd |> Option.defaultValue (NotFound)
                         match rawRes with
                         |(_, _), None -> NotFound
                         |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
@@ -235,7 +235,7 @@ module Scopes =
                         let keys = ampersandSplit.[1].Split('.')
                         let keylength = keys.Length - 1
                         let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
-                        let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                        let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, true), None)// |> snd |> Option.defaultValue (NotFound)
                         let tres2 =
                             match tres with
                             |(_, _), None -> NotFound
