@@ -69,7 +69,13 @@ module ChangeLocScope =
 
     let createLegacyLocalisationCommandValidator (staticSettings : LegacyLocStaticSettings) =
         fun (dynamicSettings : LegacyLocDynamicsSettings) (source : ScopeContext) (command : string) ->
-            let command = if staticSettings.questionMarkVariable then command.TrimStart([|'?'|]) else command
+            let command, res =
+                if staticSettings.questionMarkVariable
+                then
+                    if command.StartsWith("?", StringComparison.OrdinalIgnoreCase) && command.TrimStart([|'?'|]) |> CWTools.Utilities.TryParser.parseIntWithDecimal |> (fun s -> s.IsSome)
+                    then command, Some (LocContextResult.Found "number")
+                    else command.TrimStart([|'?'|]), None
+                else command, None
             let keys = command.Split('.') |> List.ofArray
 
             let inner ((first : bool), (inVariable : bool), (context : ScopeContext)) (nextKey : string) =
@@ -126,7 +132,7 @@ module ChangeLocScope =
                 // | LocContextResult.Found endContext -> inner (false, endContext) nextKey
                 | LocContextResult.Found endContext -> LocContextResult.LocNotFound nextKey //inner (false, endContext) nextKey
                 | res -> res
-            keys |> List.fold locKeyFolder (LocContextResult.Start source)
+            res |> Option.defaultWith (fun () -> keys |> List.fold locKeyFolder (LocContextResult.Start source))
 
     // type LocContext
     let createJominiLocalisationCommandValidator (dataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes) =
