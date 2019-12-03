@@ -50,3 +50,14 @@ country_event = {
         }
     }
 }
+
+##Check hoi4 var stuff
+country_event = {
+    option = {
+        check_variable = test_question_mark?10
+        set_variable = {
+            var = test_question_mark?50
+            value = 5
+        }
+    }
+}

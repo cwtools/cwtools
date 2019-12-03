@@ -710,7 +710,10 @@ type InfoService
         // res
 
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
-        let getVariableFromString (v : string) (s : string) = if v = "variable" then s.Split('@').[0].Split('.') |> Array.last else s.Split('@').[0]
+        let getVariableFromString (v : string) (s : string) =
+            if v = "variable"
+            then s.Split('@').[0].Split('.') |> Array.last |> (fun s -> s.Split('?').[0])
+            else s.Split('@').[0]
         let fLeaf (res : Collections.Map<string, ResizeArray<(string * range)>>) (leaf : Leaf) ((field, _) : NewRule) =
             match field with
             |LeafRule (_, VariableSetField v) ->

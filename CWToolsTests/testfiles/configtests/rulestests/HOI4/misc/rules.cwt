@@ -74,3 +74,8 @@ alias[effect:dual_path_complex] = {
     var = value_set[variable]
     value = variable_field
 }
+alias[effect:set_variable] = {
+    var = value_set[variable]
+    value = variable_field
+}
+alias[effect:check_variable] = variable_field
