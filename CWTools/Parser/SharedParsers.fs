@@ -115,6 +115,7 @@ module internal SharedParsers =
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
     let hsv = strSkip "hsv" >>. hsvI .>> ws
+    let hsvC = strSkip "HSV" >>. hsvI .>> ws
     let rgbI = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (opt (parseWithPosition valueI .>> ws))
                 (fun a b c d ->
                 match (a, b, c, d) with
@@ -125,6 +126,7 @@ module internal SharedParsers =
     let rgb3 = clause (pipe3 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
     let rgb4 = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
     let rgb = strSkip "rgb" >>. rgbI .>> ws
+    let rgbC = strSkip "RGB" >>. rgbI .>> ws
 
     let metaprograming = pipe3 (pstring "@\\[") ( metaprogrammingCharSnippet) (ch ']') (fun a b c -> ( a + b + string c)) |>> String
     // Complex types
@@ -167,7 +169,9 @@ module internal SharedParsers =
             | _ ->
                 match stream.PeekString 3, stream.PeekString 2 with
                 | "rgb", _ -> rgb stream
+                | "RGB", _ -> rgbC stream
                 | "hsv", _ -> hsv stream
+                | "HSV", _ -> hsvC stream
                 | "yes", _ -> byP stream
                 | _, "no" -> bnP stream
                 | "@\\[", _ -> mpP stream
