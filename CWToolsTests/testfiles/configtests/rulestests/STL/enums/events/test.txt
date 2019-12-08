@@ -24,4 +24,11 @@ event = {
     specific_path = stest4
     #error
     specific_path = stest5
+
+    quoted_singlefile = "one"
+    quoted_singlefile = "two"
+    #error
+    quoted_singlefile = "three"
+    #error
+    quoted_singlefile = one
 }

@@ -360,13 +360,13 @@ type CompletionService
             | [(key, count, None, NodeLHS)] ->
                 expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
             | [(key, count, None, NodeRHS)] ->
-                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
+                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key) -> Some (l, rs, o) | _ -> None) with
                 | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules [] scopeContext)
             | [(key, count, Some _, LeafLHS)] ->
                 expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
             | [(key, count, Some value, LeafRHS)] ->
-                match expandedRules |> List.choose (function | (LeafRule (l, r), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, r, o) | _ -> None) with
+                match expandedRules |> List.choose (function | (LeafRule (l, r), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key) -> Some (l, r, o) | _ -> None) with
                 | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     //log "%s %A" key fs
@@ -374,7 +374,7 @@ type CompletionService
                     //log "res %A" res
                     res
             | (key, count, _, NodeRHS)::rest ->
-                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key).lower key -> Some (l, rs, o) | _ -> None) with
+                match expandedRules |> List.choose (function | (NodeRule (l, rs), o) when FieldValidators.checkFieldByKey p severity ctx l (StringResource.stringManager.InternIdentifierToken key) -> Some (l, rs, o) | _ -> None) with
                 | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
             | (key, count, _, t)::rest ->

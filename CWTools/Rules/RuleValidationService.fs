@@ -174,6 +174,8 @@ type RuleValidationService
         processLocalisation = processLocalisation
         validateLocalisation = validateLocalisation
     }
+    let checkQuotes (quoted : bool) (optionRequiredQuotes : bool) =
+        quoted || (not optionRequiredQuotes)
 
 
     let rec applyClauseField (enforceCardinality : bool) (nodeSeverity : Severity option) (ctx : RuleContext) (rules : NewRule list) (startNode : IClause) errors =
@@ -195,31 +197,36 @@ type RuleValidationService
         //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
         //         |x -> [||])
         // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules } sprintfn "%s is unexpected in %s"
+            // match quoted, optionRequiredQuotes with
+            // | true, _ -> true
+            // | false, true -> false
+            // | _ -> true
+
         let valueFun innerErrors (leaf : Leaf) =
             let key = leaf.Key
-            let keyId = leaf.KeyId.lower
+            let keyIds = leaf.KeyId
             let createDefault() = if enforceCardinality && ((leaf.Key.[0] <> '@')) then inv (ErrorCodes.ConfigRulesUnexpectedPropertyNode (sprintf "%s is unexpected in %s" key startNode.Key) severity) leaf <&&&> innerErrors else innerErrors
-            let found, value = leafSpecificDict.TryGetValue (keyId)
+            let found, value = leafSpecificDict.TryGetValue (keyIds.lower)
             let rs =
                 if found
                 then seq { yield! value; yield! leafrules }
                 else upcast leafrules
-            rs |> Seq.filter (function |LeafRule (l, r), o -> FieldValidators.checkLeftField p Severity.Error ctx l keyId key |_ -> false)
+            rs |> Seq.filter (function |LeafRule (l, r), o -> checkQuotes (leaf.KeyId.quoted) (o.keyRequiredQuotes) && FieldValidators.checkLeftField p Severity.Error ctx l keyIds |_ -> false)
                           |> (fun rs -> lazyErrorMerge rs (fun (LeafRule (l, r), o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
         let nodeFun innerErrors (node : Node) =
             let key = node.Key
-            let keyId = node.KeyId.lower
+            let keyIds = node.KeyId
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyLeaf (sprintf "%s is unexpected in %s" key startNode.Key) severity) node <&&&> innerErrors else innerErrors
-            let found, value = nodeSpecificDict.TryGetValue (keyId)
+            let found, value = nodeSpecificDict.TryGetValue (keyIds.lower)
             let rs =
                 if found
                 then seq { yield! value; yield! noderules }
                 else upcast noderules
-            rs |> Seq.filter (function |NodeRule (l, rs), o -> FieldValidators.checkLeftField p Severity.Error ctx l keyId key |_ -> false)
+            rs |> Seq.filter (function |NodeRule (l, rs), o -> checkQuotes (node.KeyId.quoted) (o.keyRequiredQuotes) && FieldValidators.checkLeftField p Severity.Error ctx l keyIds |_ -> false)
                           |> (fun rs -> lazyErrorMerge rs (fun (NodeRule (l, r), o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
         let leafValueFun innerErrors (leafvalue : LeafValue) =
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyLeafValue (sprintf "%s is unexpected in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
-            leafvaluerules |> Seq.filter (function |LeafValueRule l, o -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key |_ -> false)
+            leafvaluerules |> Seq.filter (function |LeafValueRule l, o -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId |_ -> false)
                           |> (fun rs -> lazyErrorMerge rs (fun (LeafValueRule l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
         let valueClauseFun innerErrors (valueclause : ValueClause) =
             let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyValueClause (sprintf "Unexpected clause in %s" startNode.Key) severity) valueclause <&&&> innerErrors else innerErrors
@@ -241,7 +248,7 @@ type RuleValidationService
             |LeafRule(AliasField(_), _), _
             |LeafValueRule(AliasField(_)), _ -> innerErrors
             |NodeRule(l, _), opts ->
-                let total = clause.Nodes |> Seq.filter (fun child -> FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId.lower child.Key) |> Seq.length
+                let total = clause.Nodes |> Seq.filter (fun child -> FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId) |> Seq.length
                 if opts.min > total
                 then
                     let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
@@ -249,7 +256,7 @@ type RuleValidationService
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %O, expecting at most %i" l opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafRule(l, r), opts ->
-                let total = clause.Leaves |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key) |> Seq.length
+                let total = clause.Leaves |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId) |> Seq.length
                 if opts.min > total
                 then
                     let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
@@ -257,7 +264,7 @@ type RuleValidationService
                 else if opts.max < total then inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %O %O, expecting at most %i" l r opts.max) Severity.Warning) clause <&&&> innerErrors
                 else innerErrors
             |LeafValueRule(l), opts ->
-                let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId.lower leafvalue.Key) |> List.length
+                let total = clause.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId) |> List.length
                 if opts.min > total
                 then
                     let minSeverity = if opts.strictMin then (opts.severity |> Option.defaultValue severity) else Severity.Warning
@@ -284,16 +291,17 @@ type RuleValidationService
         (applyToAll rules (checkCardinality startNode))
 
     and applyValueField severity (vt : CWTools.Rules.ValueType) (leaf : Leaf) =
-        FieldValidators.checkValidValue varMap enumsMap localisation severity vt (leaf.ValueId.lower) (leaf.ValueText) leaf
+        FieldValidators.checkValidValue varMap enumsMap localisation severity vt (leaf.ValueId) leaf
 
     and applyLeafValueRule (ctx : RuleContext) (options : Options) (rule : NewField) (leafvalue : LeafValue) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         // let errors = OK
-        FieldValidators.checkField p severity ctx rule (leafvalue.ValueId.lower) (leafvalue.ValueText) (leafvalue) errors
+        FieldValidators.checkField p severity ctx rule (leafvalue.ValueId) (leafvalue) errors
+        <&&>
+        (if checkQuotes leafvalue.ValueId.quoted options.valueRequiredQuotes then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "This value is expected to be quoted" Severity.Error) leafvalue] ))
 
     and applyLeafRule (ctx : RuleContext) (options : Options) (rule : NewField) (leaf : Leaf) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
-
         // let errors = OK
         (match options.requiredScopes with
         |[] -> OK
@@ -302,7 +310,9 @@ type RuleValidationService
             |x when x = anyScope -> OK
             |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (leaf.Key)) leaf]))
         <&&>
-        FieldValidators.checkField p severity ctx rule (leaf.ValueId.lower) (leaf.ValueText) (leaf) errors
+        (if checkQuotes leaf.ValueId.quoted options.valueRequiredQuotes then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "This value is expected to be quoted" Severity.Error) leaf] ))
+        <&&>
+        FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
     and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : IClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =

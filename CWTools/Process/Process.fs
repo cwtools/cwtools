@@ -61,13 +61,13 @@ and Leaf =
         with get () = this._valueId
     member this.Value
         with get () = this._value
-        and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+        and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
     member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value, this.Operator)
     new(key : string, value : Value, pos : range, op : Operator) =
         {
             KeyId = StringResource.stringManager.InternIdentifierToken(key);
-            _valueId = StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+            _valueId = StringResource.stringManager.InternIdentifierToken(value.ToString())
             _value = value;
             Position = pos;
             Operator = op
@@ -84,12 +84,12 @@ and Leaf =
         member this.Position = this.Position
 and LeafValue(value : Value, ?pos : range) =
 
-    member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToRawString()) with get, set
+    member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToString()) with get, set
     member val private _value = value with get, set
     // val mutable private _value : Value = value
     member this.Value
         with get () = this._value
-        and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToRawString())
+        and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
     member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
 
     member this.Key = StringResource.stringManager.GetStringForID(this.ValueId.normal)
@@ -104,7 +104,7 @@ and LeafValue(value : Value, ?pos : range) =
 
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : (range * string) |LeafValueC of leafvalue : LeafValue |ValueClauseC of valueclause : ValueClause
 and ValueClause(keys : Value[], pos : range) =
-    let mutable _keys = keys |> Array.map (fun v -> StringResource.stringManager.InternIdentifierToken(v.ToRawString()))
+    let mutable _keys = keys |> Array.map (fun v -> StringResource.stringManager.InternIdentifierToken(v.ToString()))
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty
     let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )

@@ -337,13 +337,13 @@ type InfoService
 
             match childMatch, leafMatch, leafValueMatch with
             |Some c, _, _ ->
-                match expandedrules |> List.tryPick (function |(NodeRule (l, rs), o) when FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId.lower c.Key -> Some (l, rs, o) |_ -> None) with
+                match expandedrules |> List.tryPick (function |(NodeRule (l, rs), o) when FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId -> Some (l, rs, o) |_ -> None) with
                 | None ->
                         // log "fallback match %s %A" (node.Key) expandedrules
                         Some (NodeC c, (field, options))
                 | Some (l, rs, o) -> Some (NodeC c, ((NodeRule (l, rs)), o))
             |_, Some leaf, _ ->
-                match expandedrules |> List.tryPick (function |(LeafRule (l, r), o) when FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId.lower leaf.Key -> Some (l, r, o) |_ -> None) with
+                match expandedrules |> List.tryPick (function |(LeafRule (l, r), o) when FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId -> Some (l, r, o) |_ -> None) with
                 |None ->
                     Some (LeafC leaf, (field, options))
                 |Some (l, rs, o) -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
@@ -504,28 +504,28 @@ type InfoService
                 match child with
                 | NodeC c ->
                     let key = c.Key
-                    let keyId = c.KeyId.lower
-                    let found, value = nodeSpecificDict.TryGetValue keyId
+                    let keyId = c.KeyId
+                    let found, value = nodeSpecificDict.TryGetValue keyId.lower
                     let rs =
                         if found
                         then seq { yield! value; yield! noderules }
                         else upcast noderules
-                    rs |> Seq.choose (function |NodeRule (l, rs), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None) |_ -> None)
+                    rs |> Seq.choose (function |NodeRule (l, rs), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some (NodeC c, ((NodeRule (l, rs)), o)) else None) |_ -> None)
                 | ValueClauseC vc ->
                     valueclauserules |> Seq.choose (function |ValueClauseRule rs, o -> Some (ValueClauseC vc, ((ValueClauseRule (rs)), o)) |_ -> None)
                 | LeafC leaf ->
                     let key = leaf.Key
-                    let keyId = leaf.KeyId.lower
-                    let found, value = leafSpecificDict.TryGetValue keyId
+                    let keyId = leaf.KeyId
+                    let found, value = leafSpecificDict.TryGetValue keyId.lower
                     let rs =
                         if found
                         then seq { yield! value; yield! leafrules }
                         else upcast leafrules
-                    rs |> Seq.choose (function |LeafRule (l, r), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None) |_ -> None)
+                    rs |> Seq.choose (function |LeafRule (l, r), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None) |_ -> None)
                 | LeafValueC leafvalue ->
                     let key = leafvalue.Key
-                    let keyId = leafvalue.ValueId.lower
-                    leafvaluerules |> Seq.choose (function |LeafValueRule lv, o -> (if FieldValidators.checkLeftField p Severity.Error ctx lv keyId key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None) |_ -> None)
+                    let keyId = leafvalue.ValueId
+                    leafvaluerules |> Seq.choose (function |LeafValueRule lv, o -> (if FieldValidators.checkLeftField p Severity.Error ctx lv keyId then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None) |_ -> None)
                 | CommentC _ -> Seq.empty
             node.AllArray |> Seq.collect inner
 
@@ -874,7 +874,7 @@ type InfoService
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
                 else res
             |LeafRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced leaf.Key leaf res
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced leaf.KeyId leaf res
             |_ -> res
         let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
             match field with
@@ -906,7 +906,7 @@ type InfoService
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node) <&&> res
                 else res
             |NodeRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced node.Key node res
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced node.KeyId node res
             |_ -> res
 
         let fComment (res) _ _ = res

@@ -89,7 +89,9 @@ type StringTokens =
     struct
         val lower: StringLowerToken
         val normal: StringToken
-        new(lower, normal) = { lower = lower; normal = normal }
+        /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
+        val quoted : bool
+        new(lower, normal, quoted) = { lower = lower; normal = normal; quoted = quoted }
     end
 type StringMetadata =
     struct
@@ -111,19 +113,23 @@ type StringResourceManager() =
     let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
     let metadata = new System.Collections.Generic.Dictionary<StringToken, StringMetadata>(1024)
     let mutable i = 0
+    // let mutable j = 0
     let monitor = Object()
     member x.InternIdentifierToken(s) =
+        // j <- j + 1
+        // eprintfn "%A" j
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
         if ok then res else
         lock monitor (fun () ->
-            let ls = s.ToLower()
+            let ls = s.ToLower().Trim('"')
+            let quoted = s.StartsWith "\"" && s.EndsWith "\""
             let lok = strings.TryGetValue(ls, &res)
             if lok
             then
                 let stringID = i
                 i <- i + 1
-                let resn = StringTokens(res.lower, stringID)
+                let resn = StringTokens(res.lower, stringID, quoted)
                 strings.[s] <- resn;
                 ints.[stringID] <- s
                 metadata.[stringID] <- metadata.[res.lower]
@@ -132,8 +138,9 @@ type StringResourceManager() =
                 let stringID = i
                 let lowID = i + 1
                 i <- i + 2
-                let res = StringTokens(lowID, stringID)
-                let resl = StringTokens(lowID, lowID)
+                // eprintfn "%A" i
+                let res = StringTokens(lowID, stringID, quoted)
+                let resl = StringTokens(lowID, lowID, false)
                 strings.[s] <- res;
                 strings.[ls] <- resl;
                 ints.[lowID] <- ls;
@@ -147,6 +154,7 @@ type StringResourceManager() =
                         let first = ls.IndexOf('$')
                         let last = ls.LastIndexOf('$')
                         let containsDoubleDollar = first >= 0 && first <> last
+                        // let quoted =
                         startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar
                     else
                         false, false, false, false
