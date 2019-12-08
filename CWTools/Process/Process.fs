@@ -55,14 +55,14 @@ and Leaf =
     val mutable Operator : Operator
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal)
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim [|'"'|]
         and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
     member this.ValueId
         with get () = this._valueId
     member this.Value
         with get () = this._value
         and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
-    member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
+    member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim [|'"'|]
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value, this.Operator)
     new(key : string, value : Value, pos : range, op : Operator) =
         {
@@ -90,9 +90,9 @@ and LeafValue(value : Value, ?pos : range) =
     member this.Value
         with get () = this._value
         and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
-    member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal)
+    member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim [|'"'|]
 
-    member this.Key = StringResource.stringManager.GetStringForID(this.ValueId.normal)
+    member this.Key = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim [|'"'|]
     member val Position = defaultArg pos range.Zero
     member this.ToRaw = Value(this.Position, this._value)
     static member Create value = LeafValue value
@@ -190,7 +190,7 @@ and Node (key : string, pos : range) =
     member val KeyId = StringResource.stringManager.InternIdentifierToken(key) with get, set
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal)
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim [|'"'|]
         and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member val Position = pos

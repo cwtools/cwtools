@@ -209,7 +209,7 @@ module internal FieldValidators =
                         (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
                         scopeContext
                         (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (ids : StringTokens) (leafornode :IKeyPos) (errors)=
-        let key = getOriginalKey ids
+        let key = trimQuote (getOriginalKey ids)
         match synced with
         |true ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -231,7 +231,7 @@ module internal FieldValidators =
     let checkLocalisationFieldNE (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
                         (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
                         (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (ids : StringTokens) =
-        let key = getOriginalKey ids
+        let key = trimQuote (getOriginalKey ids)
         match synced with
         |true ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
@@ -383,11 +383,11 @@ module internal FieldValidators =
             files.Contains file || files.Contains file2
 
     let checkIconField (files :Collections.Set<string>) (folder : string) (ids : StringTokens) (leafornode) errors =
-        let key = getOriginalKey ids
+        let key = trimQuote (getOriginalKey ids)
         let value = folder + "/" + key + ".dds"
         if files.Contains value then errors else inv (ErrorCodes.MissingFile value) leafornode <&&&> errors
     let checkIconFieldNE (files :Collections.Set<string>) (folder : string) (ids : StringTokens) =
-        let key = getOriginalKey ids
+        let key = trimQuote (getOriginalKey ids)
         let value = folder + "/" + key + ".dds"
         files.Contains value
 
