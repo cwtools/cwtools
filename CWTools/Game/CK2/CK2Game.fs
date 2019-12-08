@@ -260,7 +260,7 @@ type CK2Settings = GameSetupSettings<CK2Lookup>
 open CK2GameFunctions
 type CK2Game(setupSettings : CK2Settings) =
     let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect"]
+        validators = [ validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = false

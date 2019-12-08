@@ -271,7 +271,7 @@ open CustomGameFunctions
 open CWTools.Localisation.Custom
 type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
     let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect"]
+        validators = [ validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = false

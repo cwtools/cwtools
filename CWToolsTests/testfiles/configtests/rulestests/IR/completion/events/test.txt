@@ -24,9 +24,8 @@ event = {
 }
 
 #@ 3 event
-#error (mixed)
 event = {
-    #@! 3 event 
+    #@! 3 event
     without_alias = {
 
     }

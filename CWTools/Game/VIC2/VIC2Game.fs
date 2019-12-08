@@ -246,7 +246,7 @@ type VIC2Settings = GameSetupSettings<VIC2Lookup>
 open VIC2GameFunctions
 type VIC2Game(setupSettings : VIC2Settings) =
     let validationSettings = {
-        validators = [ validateMixedBlocks, "mixed"; validateIfWithNoEffect, "ifnoeffect"]
+        validators = [ validateIfWithNoEffect, "ifnoeffect"]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = false
