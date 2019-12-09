@@ -309,7 +309,7 @@ type CompletionService
             |NewField.ValueField v -> FieldValidators.getValidValues v |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.TypeField (TypeType.Simple t) -> types.TryFind(t) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.TypeField (TypeType.Complex (p,t,s)) -> types.TryFind(t) |>  Option.map (fun ns -> List.map (fun n ->  p + n + s) ns) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
-            |NewField.LocalisationField s ->
+            |NewField.LocalisationField (s, _) ->
                 match s, value.Contains "[" with
                 |false, true -> (allPossibles |> List.map CompletionResponse.CreateSimple)
                 |true, _ -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple

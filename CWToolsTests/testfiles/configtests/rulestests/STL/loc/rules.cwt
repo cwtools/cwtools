@@ -53,6 +53,8 @@ event = {
 
     ## cardinality = 0..inf
     test_loc = localisation
+    ## cardinality = 0..inf
+    test_loc_inline = localisation_inline
 }
 
 type_per_file = {

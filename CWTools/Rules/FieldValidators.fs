@@ -135,10 +135,10 @@ module internal FieldValidators =
                     if (parts.Length <> 4) then
                         inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a family names value, got %s" key) severity) leafornode <&&&> errors
                     else
-                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[0] leafornode errors) |>
-                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[1] leafornode) |>
-                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[2] leafornode) |>
-                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[3] leafornode)
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[0] leafornode errors) |>
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode) |>
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode) |>
+                        (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
                 | ValueType.STLNameFormat var ->
                     match varMap.TryFind var with
                     | Some vars ->
@@ -190,10 +190,10 @@ module internal FieldValidators =
             | ValueType.IRFamilyName ->
                 let parts = key.Split([|'.'|])
                 (parts.Length = 4) &&
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[0] &&
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[1] &&
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[2] &&
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts.[3]
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[0] &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[1] &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[2] &&
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[3]
             | ValueType.STLNameFormat var ->
                 match varMap.TryFind var with
                 | Some vars ->
@@ -208,14 +208,15 @@ module internal FieldValidators =
     let checkLocalisationField (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
                         (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
                         scopeContext
-                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (ids : StringTokens) (leafornode :IKeyPos) (errors)=
+                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (isInline : bool) (ids : StringTokens) (leafornode :IKeyPos) (errors)=
         let key = trimQuote (getOriginalKey ids)
-        match synced with
-        |true ->
+        match synced, isInline with
+        |true, false ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) key errors
-        |false ->
+            CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys (defaultLang) ids key errors
+        |false, true -> CWTools.Validation.LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
+        |false, false ->
             if key.Contains("[")
             then
                 let entry = {
@@ -227,18 +228,21 @@ module internal FieldValidators =
                 let proc = processLocalisation (defaultLang, Collections.Map.ofList ["inline", entry]) |> snd |> Map.toList |> List.head |> snd
                 validateLocalisation proc scopeContext
             else
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
+                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
+        | _ -> errors
     let checkLocalisationFieldNE (processLocalisation : Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
                         (validateLocalisation : (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult))
-                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (ids : StringTokens) =
+                        (keys : (Lang * Collections.Set<string>) list) (defaultKeys : Collections.Set<string>) defaultLang (synced : bool) (isInline : bool) (ids : StringTokens) =
         let key = trimQuote (getOriginalKey ids)
-        match synced with
-        |true ->
+        match synced, isInline with
+        |true, false ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.LocalisationValidation.checkLocNameNE defaultKeys (defaultLang) key
-        |false ->
-            CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys key
+            CWTools.Validation.LocalisationValidation.checkLocNameNE defaultKeys (defaultLang) ids key
+        |false, true -> CWTools.Validation.LocalisationValidation.checkLocKeysInlineLeafOrNodeNE keys ids key
+        |false, false ->
+            CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids key
+        | _ -> false
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -515,7 +519,7 @@ module internal FieldValidators =
                 checkValidValue p.varMap p.enumsMap p.localisation severity vt keyIDs leafornode errors
             |TypeField t -> checkTypeField p.typesMap severity t keyIDs leafornode errors
             |ScopeField s -> checkScopeField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s keyIDs leafornode errors
-            |LocalisationField synced -> checkLocalisationField p.processLocalisation p.validateLocalisation ctx.scopes p.localisation p.defaultLocalisation p.defaultLang synced keyIDs leafornode errors
+            |LocalisationField (synced, isInline) -> checkLocalisationField p.processLocalisation p.validateLocalisation ctx.scopes p.localisation p.defaultLocalisation p.defaultLang synced isInline keyIDs leafornode errors
             |FilepathField (prefix, extension) -> checkFilepathField p.files keyIDs prefix extension leafornode errors
             |IconField folder -> checkIconField p.files folder keyIDs leafornode errors
             |VariableSetField v -> errors
@@ -540,7 +544,7 @@ module internal FieldValidators =
                 checkValidValueNE p.varMap p.enumsMap p.localisation severity vt keyIDs
             |TypeField t -> checkTypeFieldNE p.typesMap severity t keyIDs
             |ScopeField s -> checkScopeFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx s keyIDs
-            |LocalisationField synced -> true
+            |LocalisationField (synced, isInline) -> true
             |FilepathField (prefix, extension) -> checkFilepathFieldNE p.files keyIDs prefix extension
             |IconField folder -> checkIconFieldNE p.files folder keyIDs
             |VariableSetField v -> true

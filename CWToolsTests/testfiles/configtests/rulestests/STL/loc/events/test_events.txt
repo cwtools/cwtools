@@ -35,4 +35,8 @@ event = {
 event = {
     test_loc = "[Root.ruler.GetDesc]"
     test_loc = "[Root.ruler.GetBlah]"
+    #error
+    test_loc_inline = "my_ship"
+    test_loc_inline = "Test"
+    test_loc_inline = "Test Loc"
 }

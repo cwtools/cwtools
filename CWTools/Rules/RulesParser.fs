@@ -131,7 +131,7 @@ and NewField =
 /// This is only used internally to match type definitions
 | TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition
 | ScopeField of Scope
-| LocalisationField of synced : bool
+| LocalisationField of synced : bool * isInline : bool
 | FilepathField of prefix : string option * extension : string option
 | IconField of string
 /// The keys of an alias rule
@@ -384,8 +384,9 @@ module RulesParser =
         | "scalar" -> ScalarField ScalarValue
         | "bool" -> ValueField ValueType.Bool
         | "percentage_field" -> ValueField ValueType.Percent
-        | "localisation" -> LocalisationField false
-        | "localisation_synced" -> LocalisationField true
+        | "localisation" -> LocalisationField (false, false)
+        | "localisation_synced" -> LocalisationField (true, false)
+        | "localisation_inline" -> LocalisationField (false, true)
         | "filepath" -> FilepathField (None, None)
         | x when x.StartsWith "filepath[" ->
             match getSettingFromString x "filepath" with

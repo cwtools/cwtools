@@ -873,8 +873,8 @@ type InfoService
                 if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf) <&&> res
                 else res
-            |LeafRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced leaf.KeyId leaf res
+            |LeafRule (LocalisationField (synced, isInline), _) ->
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced isInline leaf.KeyId leaf res
             |_ -> res
         let fLeafValue (res : ValidationResult) (leafvalue : LeafValue) (field, _) =
             match field with
@@ -905,8 +905,8 @@ type InfoService
                 if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value))
                 then (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node) <&&> res
                 else res
-            |NodeRule (LocalisationField synced, _) ->
-                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced node.KeyId node res
+            |NodeRule (LocalisationField (synced, isInline), _) ->
+                FieldValidators.checkLocalisationField p.processLocalisation p.validateLocalisation defaultContext p.localisation p.defaultLocalisation p.defaultLang synced isInline node.KeyId node res
             |_ -> res
 
         let fComment (res) _ _ = res
