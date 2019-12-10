@@ -1,29 +1,13 @@
-on: [push]
+on:
+  release:
+    types: [published]
 
-name: cwtools
+name: cwtools-cli-release
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.100
-    - name: Set chmod
-      run: chmod +x ./build.sh
-    - name: Test
-      run: /bin/sh ./build.sh Test
-
   release:
     name: Release tool
     runs-on: ubuntu-latest
-    on:
-      release:
-        types: [published]
 
     steps:
     - uses: actions/checkout@v1

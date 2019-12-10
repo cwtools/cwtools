@@ -1,0 +1,19 @@
+on: [push]
+
+name: cwtools
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: Set chmod
+      run: chmod +x ./build.sh
+    - name: Test
+      run: /bin/sh ./build.sh Test
