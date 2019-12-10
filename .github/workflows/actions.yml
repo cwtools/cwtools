@@ -1,0 +1,14 @@
+on: [push]
+
+name: cwtools
+
+jobs:
+  test:
+    name: Test
+    runs-on: mcr.microsoft.com/dotnet/core/sdk:3.0
+    steps:
+      - uses: actions/checkout@master
+      - name: Set chmod
+        run: chmod +x ./build.sh
+      - name: Test
+        run: /bin/sh ./build.sh Test
