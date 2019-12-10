@@ -26,7 +26,7 @@ open CWTools.Utilities
         | _, false -> false
     let inline checkLocKeyInlineN (leaf : ^a) (keys : Set<string>) (lang : Lang) errors (ids : StringTokens) key  =
         match ids.quoted, Set.contains key keys with
-        | true, true -> invData (ErrorCodes.CustomError "Localisation keys should not be quoted, this can cause unpredictable behaviour" Severity.Warning) leaf (Some key) <&&&> errors
+        | true, true -> invData (ErrorCodes.LocalisationKeyInInline key) leaf (Some key) <&&&> errors
         | true, false -> errors
         | false, true -> errors
         | false, false -> invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key) <&&&> errors
