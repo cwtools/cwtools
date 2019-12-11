@@ -53,6 +53,7 @@ type ValueType =
 | Int of minmaxi: (int*int)
 | Percent
 | Date
+| DateTime
 | CK2DNA
 | CK2DNAProperty
 | IRFamilyName
@@ -67,6 +68,7 @@ type ValueType =
         | Int (min, max) -> sprintf "Int with min %i and max %i" min max
         | Percent -> "Percent"
         | Date -> "Date"
+        | DateTime -> "DateTime"
         | CK2DNA -> "CK2DNA"
         | CK2DNAProperty -> "CK2DNAProperty"
         | IRFamilyName -> "IRFamilyName"
@@ -401,6 +403,7 @@ module RulesParser =
                     FilepathField (Some setting, None)
             | None -> FilepathField (None, None)
         | "date_field" -> ValueField Date
+        | "datetime_field" -> ValueField DateTime
         | x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (TypeType.Simple (x.Trim([|'<'; '>'|])))
         | x when x.Contains "<" && x.Contains ">" ->

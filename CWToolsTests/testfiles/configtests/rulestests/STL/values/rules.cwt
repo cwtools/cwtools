@@ -48,3 +48,6 @@ alias[effect:float_fixed_range] = float[-5.1..10.1]
 alias[effect:float_inf_upper] = float[-10..inf]
 alias[effect:float_inf_lower] = float[-inf..10]
 
+alias[effect:date] = date_field
+alias[effect:datetime] = datetime_field
+

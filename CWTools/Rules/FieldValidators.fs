@@ -122,6 +122,23 @@ module internal FieldValidators =
                     let parts = key.Split([|'.'|])
                     let ok = (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
                     if ok then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode <&&&> errors
+                | ValueType.DateTime ->
+                    let parts = key.Split([|'.'|])
+                    let ok =
+                        match parts.Length with
+                        | 3 -> (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+                        | 4 ->
+                            (parts.Length = 4)
+                            && parts.[0].Length <= 4
+                            && Int32.TryParse(parts.[0]) |> fst
+                            && Int32.TryParse(parts.[1]) |> fst
+                            && Int32.Parse(parts.[1]) <= 12
+                            && Int32.TryParse(parts.[2]) |> fst
+                            && Int32.Parse(parts.[2]) <= 31
+                            && Int32.TryParse(parts.[3]) |> fst
+                            && Int32.Parse(parts.[3]) <= 24
+                        | _ -> false
+                    if ok then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity) leafornode <&&&> errors
                 | ValueType.CK2DNA ->
                     if key.Length = 11 && key |> Seq.forall (Char.IsLetter)
                     then errors
@@ -183,6 +200,22 @@ module internal FieldValidators =
             | ValueType.Date ->
                 let parts = key.Split([|'.'|])
                 (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+            | ValueType.DateTime ->
+                let parts = key.Split([|'.'|])
+                match parts.Length with
+                | 3 -> (parts.Length = 3) && parts.[0].Length <= 4 && Int32.TryParse(parts.[0]) |> fst && Int32.TryParse(parts.[1]) |> fst && Int32.Parse(parts.[1]) <= 12 && Int32.TryParse(parts.[2]) |> fst && Int32.Parse(parts.[2]) <= 31
+                | 4 ->
+                    (parts.Length = 4)
+                    && parts.[0].Length <= 4
+                    && Int32.TryParse(parts.[0]) |> fst
+                    && Int32.TryParse(parts.[1]) |> fst
+                    && Int32.Parse(parts.[1]) <= 12
+                    && Int32.TryParse(parts.[2]) |> fst
+                    && Int32.Parse(parts.[2]) <= 31
+                    && Int32.TryParse(parts.[3]) |> fst
+                    && Int32.Parse(parts.[3]) <= 24
+                | _ -> false
+
             | ValueType.CK2DNA ->
                 key.Length = 11 && key |> Seq.forall (Char.IsLetter)
             | ValueType.CK2DNAProperty ->

@@ -51,6 +51,24 @@ test = {
         float_inf_lower = -10000.0
         float_inf_lower = 10.0
 
+        #error
+        date = 10
+        #error
+        date = 1000.13.30
+        #error
+        date = 1000.12.35
+        date = 1000.12.30
+
+        #error
+        datetime = 10
+        #error
+        datetime = 1000.13.30
+        #error
+        datetime = 1000.12.35
+        datetime = 1000.12.30
+        #error
+        datetime = 1000.12.30.50
+        datetime = 1000.12.30.15
 
     }
 }
