@@ -29,6 +29,14 @@ module Files =
         path : string
         name : string
     }
+    type ZippedDirectory = {
+        path : string
+        name : string
+        files : (string * string) list
+    }
+    type WorkspaceDirectoryInput =
+    | WD of WorkspaceDirectory
+    | ZD of ZippedDirectory
 
     type ExpandedWorkspaceDirectory = {
         path : string
@@ -38,7 +46,10 @@ module Files =
         normalisedPathLength : int
     }
 
-    type FileManager(rootDirectories : WorkspaceDirectory list, embeddedFolder : string option, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding, ignoreGlobList : string list, maxFileSizeMB : int) =
+    type FileManager(inputDirectories : WorkspaceDirectoryInput list, embeddedFolder : string option, scriptFolders : string list, gameDirName : string, encoding : System.Text.Encoding, ignoreGlobList : string list, maxFileSizeMB : int) =
+        let rootDirectories, zippedDirectories =
+            inputDirectories |> List.choose (function | WD wd -> Some wd |_ -> None),
+            inputDirectories |> List.choose (function | ZD zd -> Some zd |_ -> None)
 
 
         let getAllFoldersUnion dirs =
@@ -163,6 +174,34 @@ module Files =
                     [ for s in scriptFolders do if pathContains s then let i = pathIndex s in yield i, path.Substring(i) else () ]
                 if matches.IsEmpty then path else matches |> List.minBy fst |> snd
 
+        let fileToResourceInput (normalisedPath : string) normalisedPathLength (scope, filepath : string) (fileLength : int64) (fileTextThunk : unit -> string) =
+            match Path.GetExtension(filepath) with
+            |".txt"
+            |".gui"
+            |".gfx"
+            |".sfx"
+            |".asset"
+            |".map" ->
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + (normalisedPathLength) + 1)
+                if fileLength > ((int64 maxFileSizeMB) * 1000000L) then None else
+                Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = fileTextThunk(); validate = true})
+            |".dds"
+            |".tga"
+            |".shader"
+            |".lua"
+            |".png"
+            |".mesh"
+            |".ttf"
+            |".otf"
+            |".wav" ->
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + (normalisedPathLength) + 1)
+                Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
+            |".yml"
+            |".csv" ->
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + (normalisedPathLength) + 1)
+                Some (FileWithContentResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath; filetext = fileTextThunk(); validate = true})
+            |_ -> None
+//File.ReadAllText(filepath, encoding
         let allFilesByPath (workspaceDir : ExpandedWorkspaceDirectory) =
             let excludeGlobTest =
                 let globs = ignoreGlobList |> List.map Glob.Parse
@@ -178,35 +217,13 @@ module Files =
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
                         |> List.distinct
                         |> List.filter (fun (_, f) -> f |> excludeGlobTest |> not)
-            let fileToResourceInput (scope, filepath : string) =
-                match Path.GetExtension(filepath) with
-                |".txt"
-                |".gui"
-                |".gfx"
-                |".sfx"
-                |".asset"
-                |".map" ->
-                    let rootedpath = filepath.Substring(filepath.IndexOf(workspaceDir.normalisedPath) + (workspaceDir.normalisedPathLength) + 1)
-                    if (filepath |> FileInfo).Length > ((int64 maxFileSizeMB) * 1000000L) then None else
-                    Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText(filepath, encoding); validate = true})
-                |".dds"
-                |".tga"
-                |".shader"
-                |".lua"
-                |".png"
-                |".mesh"
-                |".ttf"
-                |".otf"
-                |".wav" ->
-                    let rootedpath = filepath.Substring(filepath.IndexOf(workspaceDir.normalisedPath) + (workspaceDir.normalisedPathLength) + 1)
-                    Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
-                |".yml"
-                |".csv" ->
-                    let rootedpath = filepath.Substring(filepath.IndexOf(workspaceDir.normalisedPath) + (workspaceDir.normalisedPathLength) + 1)
-                    Some (FileWithContentResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath; filetext = File.ReadAllText(filepath, encoding); validate = true})
-                |_ -> None
-            let allFiles = duration (fun _ -> PSeq.map getAllFiles (allFoldersInWorkspaceDir workspaceDir) |> PSeq.collect id |> PSeq.choose fileToResourceInput |> List.ofSeq ) "Load files"
+            let allFiles = duration (fun _ -> PSeq.map getAllFiles (allFoldersInWorkspaceDir workspaceDir)
+                                                |> PSeq.collect id
+                                                |> PSeq.choose (fun (scope, fn) -> (fileToResourceInput (workspaceDir.normalisedPath) (workspaceDir.normalisedPathLength) (scope,fn) (fn |> FileInfo).Length (fun _ -> File.ReadAllText(fn, encoding) )))
+                                                |> List.ofSeq ) "Load files"
             allFiles
+        let allFilesInZips =
+            zippedDirectories |> List.collect (fun c -> c.files |> List.choose (fun (fn, ft) -> fileToResourceInput "" -1 (c.name, fn) 0L (fun _ -> ft)))
 
         let doesWorkspaceContainVanillaDirectory = rootDirectories |> List.exists isVanillaDirectory
 
@@ -218,7 +235,7 @@ module Files =
                                             if index >= 0 then Some (rd.name)
                                             else None)
 
-        member __.AllFilesByPath() = expandedRootDirectories |> List.collect allFilesByPath
+        member __.AllFilesByPath() = (expandedRootDirectories |> List.collect allFilesByPath) @ allFilesInZips
         member __.AllFolders() = expandedRootDirectories |> List.collect allFoldersInWorkspaceDir |> List.map (fun f -> f.name, f.path)
         member __.ShouldUseEmbedded = not doesWorkspaceContainVanillaDirectory
         member __.ConvertPathToLogicalPath(path : string) = convertPathToLogicalPath path

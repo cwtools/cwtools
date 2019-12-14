@@ -35,7 +35,7 @@ open CWTools.Common.NewScope
 
 
 let emptyStellarisSettings (rootDirectory) = {
-    rootDirectories = [{ name = "test"; path = rootDirectory;}]
+    rootDirectories = [WD { name = "test"; path = rootDirectory;}]
     modFilter = None
     validation = {
         validateVanilla = false

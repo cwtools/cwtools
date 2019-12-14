@@ -16,7 +16,7 @@ type ValidationSettings = {
 }
 
 type GameSettings<'L> = {
-    rootDirectories : WorkspaceDirectory list
+    rootDirectories : WorkspaceDirectoryInput list
     embedded : EmbeddedSettings
     validation : ValidationSettings
     rules : RulesSettings option
@@ -33,7 +33,7 @@ type EmbeddedSetupSettings =
     | ManualSettings of EmbeddedSettings
 
 type GameSetupSettings<'L> = {
-    rootDirectories : WorkspaceDirectory list
+    rootDirectories : WorkspaceDirectoryInput list
     embedded : EmbeddedSetupSettings
     validation : ValidationSettings
     rules : RulesSettings option
@@ -61,7 +61,6 @@ type GameObject<'T, 'L when 'T :> ComputedData
             |> List.tryHead
             |> Option.map (fun (r,e) -> e.filepath.Replace("\\","/").TrimStart('.').Replace(e.logicalpath, ""))
     let fileManager = FileManager(settings.rootDirectories, embeddedDir, scriptFolders, game, encoding, excludeGlobPatterns, settings.maxFileSize |> Option.defaultValue 2)
-
     // let computeEU4Data (e : Entity) = EU4ComputedData()
     // let mutable infoService : InfoService<_> option = None
     // let mutable completionService : CompletionService<_> option = None

@@ -37,7 +37,7 @@ let emptyEmbeddedSettings = {
         cachedRuleMetadata = None
 }
 let emptyStellarisSettings (rootDirectory) = {
-    rootDirectories = [{ name = "test"; path = rootDirectory;}]
+    rootDirectories = [WD { name = "test"; path = rootDirectory;}]
     modFilter = None
     validation = {
         validateVanilla = false
@@ -118,7 +118,7 @@ let perf3(b) =
     let folders = configs |> List.tryPick getFolderList
 
     let settings = {
-        CWTools.Games.EU4.EU4Settings.rootDirectories = [{ WorkspaceDirectory.name = "Europa Universalis IV"; path = @"D:\Games\Steam\steamapps\common\Europa Universalis IV"}]
+        CWTools.Games.EU4.EU4Settings.rootDirectories = [WD { WorkspaceDirectory.name = "Europa Universalis IV"; path = @"D:\Games\Steam\steamapps\common\Europa Universalis IV"}]
         modFilter = None
         scriptFolders = folders
         excludeGlobPatterns = None
@@ -159,7 +159,7 @@ let perf4(b) =
     let folders = configs |> List.tryPick getFolderList
 
     let settings = {
-        CWTools.Games.EU4.EU4Settings.rootDirectories = [{ WorkspaceDirectory.name = "Test"; path = @"./testfiles/custom/files"}]
+        CWTools.Games.EU4.EU4Settings.rootDirectories = [WD { WorkspaceDirectory.name = "Test"; path = @"./testfiles/custom/files"}]
         modFilter = None
         scriptFolders = folders
         excludeGlobPatterns = None

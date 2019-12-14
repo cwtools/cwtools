@@ -61,7 +61,7 @@ type Lookup() =
     member val onlyScriptedEffects : Effect list = [] with get, set
     member val onlyScriptedTriggers : Effect list = [] with get, set
 
-    member val rootFolders : WorkspaceDirectory list = [] with get, set
+    member val rootFolders : WorkspaceDirectoryInput list = [] with get, set
     member val staticModifiers : StaticModifier list = [] with get, set
     member val coreModifiers : ActualModifier list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
