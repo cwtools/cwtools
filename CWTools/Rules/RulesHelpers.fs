@@ -134,6 +134,8 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
         // log "%A %A" complexenum.name values
         { key = complexenum.name; values = values; description = complexenum.description }
     complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq
+                 |> List.fold (fun acc e -> if Map.containsKey e.key acc then Map.add e.key { e with values = e.values @ (acc.[e.key].values) } acc else Map.add e.key e acc ) Map.empty
+                 |> Map.toList |> List.map snd
 
 let getDefinedVariables (infoService : InfoService) (es : Entity list) =
     // let results = es |> List.toSeq |> PSeq.fold (fun c e -> infoService.GetDefinedVariables(c,e)) (Collections.Map.empty)//|> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Collections.Map.empty

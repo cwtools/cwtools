@@ -149,3 +149,28 @@ alias[effect:cardinality_tests_two_min_strict] = {
     ## cardinality = 2..inf
     test_two_min_strict
 }
+
+alias[effect:multiple_enum] = enum[multiple]
+
+enums = {
+    complex_enum[multiple] = {
+        path = "game/common"
+        path_file = "test.txt"
+        start_from_root = yes
+        name = {
+            first = {
+                enum_name
+            }
+        }
+    }
+    complex_enum[multiple] = {
+        path = "game/common"
+        path_file = "test.txt"
+        start_from_root = yes
+        name = {
+            second = {
+                enum_name
+            }
+        }
+    }
+}

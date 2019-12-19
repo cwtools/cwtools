@@ -180,3 +180,12 @@ country_event = {
         blah
     }
 }
+
+country_event = {
+    option = {
+        multiple_enum = a
+        multiple_enum = b
+        multiple_enum = c
+        multiple_enum = d
+    }
+}
