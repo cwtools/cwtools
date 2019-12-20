@@ -379,17 +379,17 @@ module CWToolsCLI =
             let filename =
                 match game with
                 |Game.STL ->
-                    Serializer.serializeSTL ([{path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeSTL ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.HOI4 ->
-                    Serializer.serializeHOI4 ([{path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeHOI4 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.IR ->
-                    Serializer.serializeIR ([{path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeIR ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.CK2 ->
-                    Serializer.serializeCK2 ([{path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeCK2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.EU4 ->
-                    Serializer.serializeEU4 ([{path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeEU4 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.VIC2 ->
-                    Serializer.serializeVIC2 ([{path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeVIC2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
             eprintfn "Full cache file created at %s, relative to CWD" filename
         // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)

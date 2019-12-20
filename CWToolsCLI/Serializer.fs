@@ -255,7 +255,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
     eprintfn "%A" langs
     // let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
     let STLoptions : StellarisSettings = {
-        rootDirectories = [ {path = dir; name = "undefined"}]
+        rootDirectories = [ WD {path = dir; name = "undefined"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -269,7 +269,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         maxFileSize = None
     }
     let HOI4options : HOI4Settings = {
-        rootDirectories = [ {path = dir; name = "game"}]
+        rootDirectories = [ WD {path = dir; name = "game"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -284,7 +284,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
 
     }
     let EU4options : EU4Settings = {
-        rootDirectories = [ {path = dir; name = "game"}]
+        rootDirectories = [ WD {path = dir; name = "game"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -298,7 +298,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         maxFileSize = Some 8
     }
     let CK2options : CK2Settings = {
-        rootDirectories = [ {path = dir; name = "game"}]
+        rootDirectories = [ WD {path = dir; name = "game"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -312,7 +312,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         maxFileSize = Some 8
     }
     let VIC2options : VIC2Settings = {
-        rootDirectories = [ {path = dir; name = "game"}]
+        rootDirectories = [ WD {path = dir; name = "game"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -326,7 +326,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         maxFileSize = Some 8
     }
     let Customoptions : CustomSettings = {
-        rootDirectories = [ {path = dir; name = "game"}]
+        rootDirectories = [ WD {path = dir; name = "game"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
@@ -340,7 +340,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         maxFileSize = Some 8
     }
     let IRoptions : IRSettings = {
-        rootDirectories = [ {path = dir; name = "game"}]
+        rootDirectories = [ WD {path = dir; name = "game"}]
         modFilter = Some modFilter
         validation = {
             validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
