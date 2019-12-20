@@ -387,7 +387,11 @@ module internal FieldValidators =
                 if value.Contains("@") && values.Contains(value.Split([|'@'|]).[0]) then
                     errors
                 else
-                    inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
+                    if values.ToList() |> List.exists (fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
+                    then
+                        errors
+                    else
+                        inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName value) (min Severity.Warning severity)) leafornode <&&&> errors
         |None -> inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected defined value of %s, got %s" varName key) (min Severity.Warning severity)) leafornode <&&&> errors
     let checkVariableGetFieldNE (varMap : Collections.Map<_,StringSet>) severity (varName : string) (ids : StringTokens) =
         let key = getLowerKey ids
@@ -395,7 +399,7 @@ module internal FieldValidators =
         |Some values ->
             let value = trimQuote key
             if firstCharEqualsAmp ids.lower then true else
-            values.Contains (value) ||(value.Contains("@") && values.Contains(value.Split([|'@'|]).[0]))
+            values.Contains (value) ||(value.Contains("@") && values.Contains(value.Split([|'@'|]).[0])) ||values.ToList() |> List.exists (fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
         |None -> false
 
     let checkFilepathField (files : Collections.Set<string>) (ids : StringTokens) (prefix : string option) (extension : string option) (leafornode) errors =
