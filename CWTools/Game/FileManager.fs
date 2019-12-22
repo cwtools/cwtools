@@ -223,7 +223,10 @@ module Files =
                                                 |> List.ofSeq ) "Load files"
             allFiles
         let allFilesInZips =
-            zippedDirectories |> List.collect (fun c -> c.files |> List.choose (fun (fn, ft) -> fileToResourceInput "" -1 (c.name, fn) 0L (fun _ -> ft)))
+            let zippedDirToResourceInputs (zd : ZippedDirectory) =
+                let normalisedPath = zd.path.Replace("\\","/").TrimStart('.')
+                zd.files |> List.choose (fun (fn, ft) -> fileToResourceInput normalisedPath normalisedPath.Length (zd.name, fn) 0L (fun _ -> ft))
+            zippedDirectories |> List.collect zippedDirToResourceInputs
 
         let doesWorkspaceContainVanillaDirectory = rootDirectories |> List.exists isVanillaDirectory
 

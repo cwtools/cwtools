@@ -381,13 +381,13 @@ module CWToolsCLI =
                 |Game.STL ->
                     Serializer.serializeSTL ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.HOI4 ->
-                    Serializer.serializeHOI4 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeHOI4 ({path = directory; name = "undefined"}) outputCacheFileName
                 |Game.IR ->
                     Serializer.serializeIR ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.CK2 ->
                     Serializer.serializeCK2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.EU4 ->
-                    Serializer.serializeEU4 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeEU4 ({path = directory; name = "undefined"}) outputCacheFileName
                 |Game.VIC2 ->
                     Serializer.serializeVIC2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
