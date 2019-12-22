@@ -131,9 +131,9 @@ module Files =
             | None -> expanded
 
         do
-            logNormal ("Workspace roots:")
-            rootDirectories |> List.iter (fun rd -> logNormal (sprintf "root %s, exists: %b" rd.path (Directory.Exists rd.path)))
-            logNormal (sprintf "embedded folder %A" embeddedFolder)
+            logInfo ("Workspace roots:")
+            rootDirectories |> List.iter (fun rd -> logInfo (sprintf "root %s, exists: %b" rd.path (Directory.Exists rd.path)))
+            logInfo (sprintf "embedded folder %A" embeddedFolder)
             expandedRootDirectories |> List.iter (fun rd -> log (sprintf "normalised %s" rd.normalisedPath))
 
 

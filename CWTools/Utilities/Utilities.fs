@@ -33,6 +33,7 @@ module Utils =
     |Verbose
 
 
+    /// For the default logger only
     let mutable loglevel = Silent
 
     let logInner level message =
@@ -43,9 +44,16 @@ module Utils =
         |_, _ -> ()
         // |Verbose -> logWith logger format
 
-    let logVerbose message = logInner Verbose message
-    let logNormal message = logInner Normal message
-    let log = logVerbose
+    let private defaultLogVerbose message = logInner Verbose message
+    let private defaultLogNormal message = logInner Normal message
+    let private defaultLogAll message = Printf.eprintfn "%s: %s" (System.DateTime.Now.ToString("HH:mm:ss")) message
+
+    let mutable logDiag = defaultLogVerbose
+    let mutable logInfo = defaultLogNormal
+    let mutable logWarning = defaultLogNormal
+    let mutable logError = defaultLogAll
+
+    let log m = logInfo m
 
     let duration f s =
         let timer = new System.Diagnostics.Stopwatch()

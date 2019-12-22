@@ -116,7 +116,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
                 let resource, _ = this.Resources.UpdateFile(resourceInput)
                 match resource with
                 | FileWithContentResource (_, r) -> this.LocalisationManager.UpdateLocalisationFile r
-                | _ -> logNormal (sprintf "Localisation file failed to parse %s" filepath)
+                | _ -> logWarning (sprintf "Localisation file failed to parse %s" filepath)
                 // let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities()))
                 let ges = globalLocalisation(this)
                 // this.LocalisationManager.localisationErrors <- Some les
