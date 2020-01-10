@@ -108,6 +108,7 @@ type SubTypeDefinition = {
     startsWith : string option
     pushScope : Scope option
     localisation : TypeLocalisation list
+    onlyIfNot : string list
 }
 and TypeDefinition = {
     name : string
@@ -692,9 +693,24 @@ module RulesParser =
                     match comments |> List.tryFind (fun s -> s.Contains "starts_with") with
                     |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
                     |None -> None
+                let onlyIfNot =
+                    match comments |> List.tryFind (fun s -> s.Contains "only_if_not") with
+                    |Some c ->
+                        let valid = c.Contains "="
+                        if valid
+                        then
+                            let rhs = c.Substring(c.IndexOf "=" + 1).Trim()
+                            let values =
+                                match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                                |true -> rhs.Trim('{','}') |> (fun s -> s.Split([|' '|])) |> List.ofArray
+                                |false -> [rhs]
+                            values
+                        else []
+                    |None -> []
+
                 let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope))
                 match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = []; startsWith = startsWith; displayName = displayName; abbreviation = abbreviation }
+                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = []; startsWith = startsWith; displayName = displayName; abbreviation = abbreviation; onlyIfNot = onlyIfNot }
                 |None -> None
             |_ -> None
         let getSkipRootKey (node : Node) =
