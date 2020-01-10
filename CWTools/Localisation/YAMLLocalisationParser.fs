@@ -33,7 +33,7 @@ module YAMLLocalisationParser =
     let value = digit .>> spaces <?> "version"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
 
-    let entry = pipe5 (getPosition) (key) (opt value) (desc .>> spaces) (getPosition) (fun s k v d e -> {key = k; value = v; desc = d; position = getRange s e}) <?> "entry"
+    let entry = pipe5 (getPosition) (key) (opt value) (desc) (getPosition .>> spaces) (fun s k v d e -> {key = k; value = v; desc = d; position = getRange s e}) <?> "entry"
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
     let file = spaces >>. many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 
