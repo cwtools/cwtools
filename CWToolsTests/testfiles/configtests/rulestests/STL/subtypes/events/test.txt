@@ -12,4 +12,9 @@ event = {
 
     #error
     subtype_invalid_per_file = test
+
+    subtype_three = blessing_none
+    subtype_three = blessing_no
+    #error
+    subtype_three = blessing_yes
 }

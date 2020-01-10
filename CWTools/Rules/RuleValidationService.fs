@@ -415,9 +415,15 @@ type RuleValidationService
         let results =
             subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
                      |> List.filter (fun st -> st.startsWith |> function | Some sw -> node.Key.StartsWith(sw, StringComparison.OrdinalIgnoreCase) | None -> true )
-                    |> List.map (fun s -> s.name, s.pushScope, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node OK)
-        let res = results |> List.choose (fun (s, ps, res) -> res |> function |Invalid _ -> None |OK -> Some (ps, s))
-        res |> List.tryPick fst, res |> List.map snd
+                    |> List.map (fun s -> s, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node OK)
+        let res = results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some (s))
+        let allSubtypes = res |> List.map (fun s -> s.name)
+        let checkOnlyNotIf (s : SubTypeDefinition) = s.onlyIfNot |> List.exists (fun s2 -> List.contains s2 allSubtypes) |> not
+        eprintfn "ts %A %A %A" allSubtypes node.Key res
+        let res = res |> List.filter checkOnlyNotIf
+        let firstPushScope = res |> List.tryPick (fun s -> s.pushScope)
+        firstPushScope, res |> List.map (fun s -> s.name)
+        // res |> List.tryPick fst, res |> List.map snd
 
     let rootId = StringResource.stringManager.InternIdentifierToken "root"
     let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : IClause) =

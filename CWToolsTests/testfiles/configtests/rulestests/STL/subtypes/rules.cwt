@@ -8,6 +8,10 @@ types = {
         subtype[sb_two] = {
             blessing = yes
         }
+        ## only_if_not = { sb_two }
+        subtype[sb_three] = {
+
+        }
     }
     type[event] = {
         path = "game/events"
@@ -36,6 +40,8 @@ event = {
     subtype_two = <ship_size.sb_two>
     ## cardinality = 0..inf
     subtype_both = <ship_size>
+    ## cardinality = 0..inf
+    subtype_three = <ship_size.sb_three>
 
     ## cardinality = 0..inf
     subtype_file = <per_file>
