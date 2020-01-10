@@ -65,10 +65,11 @@ module LocalisationString =
     let validateProcessedLocalisationBase (hardcodedLocalisation) (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry>) list) =
         let validateQuotes _ (e : LocEntry) =
             let desc = e.desc.Trim()
-            let lastHash = desc.LastIndexOf "#"
+            // let lastHash = desc.LastIndexOf "#"
             let lastQuote = desc.LastIndexOf "\""
+            let firstHashAfterQuote = if lastQuote = -1 then desc.IndexOf "#" else (desc.Substring(lastQuote).IndexOf "#") + lastQuote
             let desc =
-                match lastHash, lastQuote with
+                match firstHashAfterQuote, lastQuote with
                 | -1, _
                 | _, -1 -> desc
                 | h, q when h > q -> desc.Substring(0, h).Trim()
