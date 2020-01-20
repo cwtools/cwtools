@@ -21,6 +21,7 @@ module YAMLLocalisationParser =
     }
     let inline isLocValueChar (c: char) =
         isAsciiLetter c || (c >= '\u0020' && c <= '\u007E') ||  (c >= '\u00A0' && c <= '\u024F') ||  (c >= '\u0401' && c <= '\u045F') || (c >= '\u0490' && c <= '\u0491') || (c >= '\u2013' && c <= '\u2044')
+        || (c >= '\u4E00' && c <= '\u9FFF') || (c >= '\uFE30' && c <= '\uFE4F') || (c >= '\u3000' && c <= '\u303F') || (c >= '\uFF00' && c <= '\uFFEF')
 
     //let key = charsTillString ":" true 1000 .>> spaces <?> "key"
     let key = many1Satisfy ( (=) ':' >> not ) .>> pchar ':' .>> spaces <?> "key"
