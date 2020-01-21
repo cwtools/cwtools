@@ -782,7 +782,7 @@ module STLValidation =
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
 
     type BoolState = | AND | OR
-    let validateRedundantAND : STLStructureValidator =
+    let validateRedundantAND : StructureValidator<_> =
         fun _ es ->
             let effects = (es.AllEffects)
             let triggers = (es.AllTriggers)
