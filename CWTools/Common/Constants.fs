@@ -66,7 +66,7 @@ module rec NewScope =
         let invalidScope = Scope(1uy)
         let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]; isSubscopeOf = []}
         let parseScope() =
-            if not initialized then eprintfn "Error: parseScope was used without initializing scopes" else ()
+            if not initialized then CWTools.Utilities.Utils.logError "Error: parseScope was used without initializing scopes" else ()
             (fun (x : string) ->
             let found, value = dict.TryGetValue (x.ToLower())
             if found
@@ -140,7 +140,7 @@ module rec NewScope =
         let invalidModifier = ModifierCategory(1uy)
         let invalidModifierInput = { ModifierCategoryInput.name = "Invalid"; internalID = None; scopes = []}
         let parseModifierCategory() =
-            if not initialized then eprintfn "Error: parseModifierCategory was used without initializing modifier categories" else ()
+            if not initialized then CWTools.Utilities.Utils.logError "Error: parseModifierCategory was used without initializing modifier categories" else ()
             (fun (x : string) ->
             let found, value = dict.TryGetValue (x.ToLower())
             if found

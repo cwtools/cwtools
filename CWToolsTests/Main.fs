@@ -25,6 +25,15 @@ open CWTools.Common.NewScope
 open System.Text
 open System
 open System.Diagnostics
+open Expecto.Logging
+open Expecto.Logging.Message
+
+let logger = Log.create "MyTests"
+CWTools.Utilities.Utils.logDiag <- logger.logSimple << (event LogLevel.Verbose)
+CWTools.Utilities.Utils.logInfo <- logger.logSimple << (event LogLevel.Info)
+CWTools.Utilities.Utils.logWarning <- logger.logSimple << (event LogLevel.Warn)
+CWTools.Utilities.Utils.logError <- logger.logSimple << (event LogLevel.Error)
+
 
 let emptyEmbeddedSettings = {
         triggers = []

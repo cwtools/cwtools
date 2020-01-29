@@ -212,12 +212,12 @@ module STLGameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "trigger_docs.log")
                     |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
-                    |> Option.defaultWith (fun () -> eprintfn "trigger_docs.log was not found in stellaris config"; ([], []))
+                    |> Option.defaultWith (fun () -> Utils.logError "trigger_docs.log was not found in stellaris config"; ([], []))
         let modifiers =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
                     |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
-                    |> Option.defaultWith (fun () -> eprintfn "setup.log was not found in stellaris config"; ([]))
+                    |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; ([]))
         let stlLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
@@ -281,7 +281,7 @@ type STLGame (setupSettings : StellarisSettings) =
             initialLookup = STLLookup()
             maxFileSize = setupSettings.maxFileSize
         }
-        do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
+        do if scopeManager.Initialized |> not then Utils.logError (sprintf "%A has no scopes" (settings.rootDirectories |> List.head)) else ()
         let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
 
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }

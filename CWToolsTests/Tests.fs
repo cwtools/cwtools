@@ -1,6 +1,8 @@
 module Tests
 
 open Expecto
+open Expecto.Logging
+open Expecto.Logging.Message
 open CWTools.Games
 open FParsec
 open CWTools.Common
@@ -26,6 +28,9 @@ open MBrace.FsPickler
 open System.Text
 open CWTools.Parser.CKPrinter
 open CWTools.Common.NewScope
+open CWTools.Utilities.Utils
+
+
 let emptyEmbeddedSettings = {
         triggers = []
         effects = []
@@ -189,7 +194,7 @@ let tests =
                 let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
-                eprintfn "%A" (entities |> List.head |> (fun struct (e, _)  -> printKeyValueList (e.entity.ToRaw) 0))
+                logInfo (sprintf "%A" (entities |> List.head |> (fun struct (e, _)  -> printKeyValueList (e.entity.ToRaw) 0)))
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 yield testCase ("parse2") <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
@@ -280,7 +285,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             | true, _ ->
                 Expect.hasCountOf (labels) 0u ((=) text) (sprintf "Completion shouldn't contain value %s at %A in %s" text pos filename)
             | false, true ->
-                eprintfn "ct %A" compRes
+                logInfo (sprintf "ct %A" compRes)
                 Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s" pos filename)
             | false, false ->
                 Expect.contains labels text (sprintf "Incorrect completion values at %A in %s, %A" pos filename labels)
@@ -531,7 +536,7 @@ let embeddedTests =
         let stlE = STLGame(settingsE) :> IGame<STLComputedData>
         let stlNE = STLGame(settings) :> IGame<STLComputedData>
         let eerrors = stlE.ValidationErrors() |> List.map (fun e -> e.range)
-        eprintfn "%A" (stlE.ValidationErrors())
+        // eprintfn "%A" (stlE.ValidationErrors())
         let neerrors = stlNE.ValidationErrors() |> List.map (fun e -> e.message, e.range)
         let etestVals = stlE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let netestVals = stlNE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
