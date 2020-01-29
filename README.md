@@ -2,6 +2,8 @@
 A library for parsing, editing, and validating Paradox Interactive script files.  
 Supports all modern Paradox Interactive games, and targets .net standard 2.0.
 
+Considering contributing? [Start here!](https://github.com/tboby/cwtools/wiki/Contributing)
+
 ## Projects that use CW Tools
 #### [Stellaris tech tree](http://www.draconas.co.uk/stellaristech): https://github.com/draconas1/stellaris-tech-tree
 An interactive tech tree visualiser that uses CW Tools to parse the vanilla tech files, and extract localisation.
