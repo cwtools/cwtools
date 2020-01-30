@@ -51,8 +51,8 @@ let fieldToText enums (field : NewField) =
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
     | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
-    | LocalisationField true -> str "Synchronised localisation key"
-    | LocalisationField false -> str "Localisation key"
+    | LocalisationField (true, false) -> str "Synchronised localisation key"
+    | LocalisationField (false, false) -> str "Localisation key"
     | FilepathField (prefix, extension) ->
         match prefix, extension with
         | None, None -> str "Filepath"
@@ -88,8 +88,8 @@ let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
     | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
-    | LocalisationField true -> str "Synchronised localisation key"
-    | LocalisationField false -> str "Localisation key"
+    | LocalisationField (true, false) -> str "Synchronised localisation key"
+    | LocalisationField (false, false) -> str "Localisation key"
     | FilepathField (prefix, extension) ->
         match prefix, extension with
         | None, None -> str "Filepath"

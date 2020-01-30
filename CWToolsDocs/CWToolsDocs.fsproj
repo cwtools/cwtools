@@ -8,14 +8,14 @@
   <ItemGroup>
     <Compile Include="..\paket-files\giraffe-fsharp\Giraffe\src\Giraffe\GiraffeViewEngine.fs">
       <Paket>True</Paket>
-      <Link>paket-files/GiraffeViewEngine.fs</Link>
+      <Link>GiraffeViewEngine.fs</Link>
     </Compile>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GiraffeViewEngine.fs" />
+    <!-- <Compile Include="GiraffeViewEngine.fs" /> -->
     <Compile Include="HtmlTemplates.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
