@@ -2,7 +2,7 @@ namespace CWToolsScripts
 open System.Text
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Utilities.StringResource
-
+open CWTools.Games.Files
 
 module CWToolsScripts =
     open System
@@ -215,9 +215,9 @@ module CWToolsScripts =
         // File.WriteAllText("test.test", triggers |> List.choose (fun t -> t.traits) |> List.distinct |> String.concat("\n"))
         //printfn "%A" argv
         0 // return an integer exit code
-
+    
     let emptyStellarisSettings (rootDirectory) = {
-        CWTools.Games.GameSetupSettings.rootDirectories = [{ name = "test"; path = rootDirectory;}]
+        CWTools.Games.GameSetupSettings.rootDirectories = [{ name = "test"; path = rootDirectory;}] |> List.map WD
         modFilter = None
         validation = {
             validateVanilla = false
