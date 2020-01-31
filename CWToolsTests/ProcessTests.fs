@@ -67,15 +67,16 @@ let requiredSingle = RulesParser.requiredSingle
 let defaultFloat = RulesParser.defaultFloat
 let defaultInt = RulesParser.defaultInt
 let parseConfig = RulesParser.parseConfig
-let dynamicSettings =
+let dynamicSettings (_) =
     {
             CWTools.Process.Localisation.LegacyLocDynamicsSettings.scriptedLocCommands = []
             CWTools.Process.Localisation.LegacyLocDynamicsSettings.eventTargets = []
             CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = []
     }
 
-let processLocalisation = CWTools.Validation.Stellaris.STLLocalisationString.processLocalisation [] [] dynamicSettings
-let validateLocalisation = STLLocalisationString.validateLocalisationCommand [] [] dynamicSettings
+let processLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [])  (STLLookup())) |> fst
+let validateLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [])  (STLLookup())) |> snd
+
 let createStarbase() =
     let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)
     let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)

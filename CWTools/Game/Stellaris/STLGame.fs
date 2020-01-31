@@ -42,12 +42,6 @@ module STLGameFunctions =
             eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
             setVariables = definedVariables
         }
-    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
-        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
-
-    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
-        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
-
 
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
@@ -288,6 +282,10 @@ type STLGame (setupSettings : StellarisSettings) =
                                        embedded = { settings.embedded with localisationCommands = locSettings }
                                        initialLookup = STLLookup()}
 
+        let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v) -> (c, v)| _ -> ([], [])
+        let processLocalisationFunction lookup = (createLocalisationFunctions STL.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
+        let validationLocalisationCommandFunction lookup = (createLocalisationFunctions STL.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
+
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules
@@ -302,16 +300,16 @@ type STLGame (setupSettings : StellarisSettings) =
             refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
             refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
             refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-            processLocalisation = STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
-            validateLocalisation = STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+            processLocalisation = processLocalisationFunction
+            validateLocalisation = validationLocalisationCommandFunction
         }
 
         let game = GameObject<STLComputedData, STLLookup>.CreateGame
                     (settings, "stellaris", scriptFolders, Compute.STL.computeSTLData,
                     Compute.STL.computeSTLDataUpdate,
                      (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     STLGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
-                     STLGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     processLocalisationFunction,
+                     validationLocalisationCommandFunction,
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,

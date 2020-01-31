@@ -114,3 +114,18 @@ module Helpers =
             let definedvars =
                 (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars
+
+
+    let createLocalisationFunctions locStaticSettings createLocDynamicSettings (commands, variableCommands) =
+        fun (lookup : Lookup) ->
+            let localisationCommandValidator commands variableCommands =
+                createLegacyLocalisationCommandValidator (locStaticSettings commands variableCommands)
+            let processLocalisation =
+                fun commands variableCommands dynamicSettings ->
+                    processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
+            let validateLocalisationCommand =
+                fun commands variableCommands dynamicSettings ->
+                    validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)
+
+            processLocalisation commands variableCommands (createLocDynamicSettings(lookup)),
+            validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))

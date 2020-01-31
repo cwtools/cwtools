@@ -45,12 +45,6 @@ module EU4GameFunctions =
             setVariables = definedvars
         }
 
-    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
-        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
-
-    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
-        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
-
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&>
@@ -219,6 +213,11 @@ type EU4Game(setupSettings : EU4Settings) =
                         initialLookup = EU4Lookup()
                         }
 
+
+    let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v) -> (c, v)| _ -> ([], [])
+    let processLocalisationFunction lookup = (createLocalisationFunctions EU4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
+    let validationLocalisationCommandFunction lookup = (createLocalisationFunctions EU4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
+
     let rulesManagerSettings = {
         rulesSettings = settings.rules
         parseScope = scopeManager.ParseScope()
@@ -232,16 +231,16 @@ type EU4Game(setupSettings : EU4Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-        processLocalisation = EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
-        validateLocalisation = EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        processLocalisation = processLocalisationFunction
+        validateLocalisation = validationLocalisationCommandFunction
     }
 
     let game = GameObject.CreateGame
                 ((settings, "europa universalis iv", scriptFolders, Compute.EU4.computeEU4Data,
                     Compute.EU4.computeEU4DataUpdate,
                      (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     EU4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
-                     EU4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     processLocalisationFunction,
+                     validationLocalisationCommandFunction,
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,

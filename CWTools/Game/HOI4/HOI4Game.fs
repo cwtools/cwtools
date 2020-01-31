@@ -43,11 +43,6 @@ module HOI4GameFunctions =
             eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
             setVariables = definedvars
         }
-    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
-        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
-
-    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
-        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
 
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
@@ -223,6 +218,11 @@ type HOI4Game(setupSettings : HOI4Settings) =
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = HOI4Lookup()}
 
+
+    let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v) -> (c, v)| _ -> ([], [])
+    let processLocalisationFunction lookup = (createLocalisationFunctions HOI4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
+    let validationLocalisationCommandFunction lookup = (createLocalisationFunctions HOI4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
+
     let rulesManagerSettings = {
         rulesSettings = settings.rules
         parseScope = scopeManager.ParseScope()
@@ -236,16 +236,16 @@ type HOI4Game(setupSettings : HOI4Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-        processLocalisation = HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
-        validateLocalisation = HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        processLocalisation = processLocalisationFunction
+        validateLocalisation = validationLocalisationCommandFunction
     }
 
     let game = GameObject.CreateGame
                 (settings, "hearts of iron iv", scriptFolders, Compute.computeHOI4Data,
                 Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
-                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                 processLocalisationFunction,
+                 validationLocalisationCommandFunction,
                  defaultContext,
                  noneContext,
                  Encoding.UTF8,

@@ -25,8 +25,6 @@ module STLLocalisationString =
         ]
 
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-    let processLocalisation = fun commands variableCommands dynamicSettings -> processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
-    let validateLocalisationCommand = fun commands variableCommands dynamicSettings -> validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)
     // let checkCommand localisationCommandContext (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
     //     match localisationCommandContext commands eventtargets setvariables entry command with
     //     | ContextResult.Found _ -> OK
