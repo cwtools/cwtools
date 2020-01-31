@@ -44,12 +44,6 @@
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
     <Compile Include="Rules/RulesParser.fs" />
-    <Compile Include="Parser/EU4Parser.fs" />
-    <Compile Include="Parser/HOI4Parser.fs" />
-    <Compile Include="Parser/STLParser.fs" />
-    <Compile Include="Parser/CK2Parser.fs" />
-    <Compile Include="Parser/IRParser.fs" />
-    <Compile Include="Parser/VIC2Parser.fs" />
     <Compile Include="Parser/UtilityParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />
