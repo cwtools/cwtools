@@ -43,6 +43,7 @@
     <Compile Include="Process/Scopes/CK2Scopes.fs" />
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
+    <Compile Include="Rules/RulesTypes.fs" />
     <Compile Include="Rules/RulesParser.fs" />
     <Compile Include="Parser/UtilityParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
