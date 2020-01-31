@@ -87,7 +87,7 @@ module DataTypeParser =
             functions : Map<string,string>
             promotes : Map<string,string>
         }
-    let convToDataTypes (promotes : (string * string) list) (functions : (string * string) list) (dataTypes : (string * (string * string) list) list) =
+    let private convToDataTypes (promotes : (string * string) list) (functions : (string * string) list) (dataTypes : (string * (string * string) list) list) =
         let customMapOfList (input : (string * string) list) =
             let folder (acc : Map<string, string>) (key, value) =
                 match Map.tryFind key acc, value with
@@ -104,12 +104,12 @@ module DataTypeParser =
         { promotes = promoteMap; functions = functionMap; dataTypes = dataTypeMap; dataTypeNames = names } |> (fun f -> eprintfn "%A" f; f)
 
     let private idChar = letter <|> digit <|> anyOf ['_'; '['; ']'; ':']
-    let line = many1Chars idChar .>> ws .>> skipString "->" .>> ws .>>. many1Chars idChar .>> ws
-    let promotes = pstring "Global Promotes =" >>. ws >>. between (skipChar '{' .>> ws) (skipChar '}' .>> ws) (many line)
-    let functions = pstring "Global Functions =" >>. ws >>. between (skipChar '{' .>> ws) (skipChar '}' .>> ws) (many line)
-    let dataType = many1Chars idChar .>> ws .>>. (between (skipString "= {" .>> ws) (skipChar '}' .>> ws) (many line))
-    let types = pstring "Types =" >>. ws >>. between (skipChar '{' .>> ws) (skipChar '}' .>> ws) (many dataType)
-    let dataTypeDump = promotes .>>. functions .>>. types .>> eof |>> (fun ((a,b),c) -> convToDataTypes a b c)
+    let private line = many1Chars idChar .>> ws .>> skipString "->" .>> ws .>>. many1Chars idChar .>> ws
+    let private promotes = pstring "Global Promotes =" >>. ws >>. between (skipChar '{' .>> ws) (skipChar '}' .>> ws) (many line)
+    let private functions = pstring "Global Functions =" >>. ws >>. between (skipChar '{' .>> ws) (skipChar '}' .>> ws) (many line)
+    let private dataType = many1Chars idChar .>> ws .>>. (between (skipString "= {" .>> ws) (skipChar '}' .>> ws) (many line))
+    let private types = pstring "Types =" >>. ws >>. between (skipChar '{' .>> ws) (skipChar '}' .>> ws) (many dataType)
+    let private dataTypeDump = promotes .>>. functions .>>. types .>> eof |>> (fun ((a,b),c) -> convToDataTypes a b c)
 
     let parseDataTypesFile filepath = runParserOnFile dataTypeDump () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseDataTypesFileRes filepath = parseDataTypesFile filepath |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })

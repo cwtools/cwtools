@@ -8,7 +8,7 @@ open CWTools.Common.NewScope
 open CWTools.Utilities
 
 module UtilityParser =
-    let parseLink (anyScope) (parseScope) (allScopes) (node : Node) =
+    let private parseLink (anyScope) (parseScope) (allScopes) (node : Node) =
         let name = node.Key
         let desc = node.TagText "desc"
         let inputScopes =
@@ -48,7 +48,7 @@ module UtilityParser =
                 |> Option.map (fun l -> l.Children |> List.map (parseLink anyScope parseScope allScopes))
                 |> Option.defaultValue []
 
-    let parseScopeDef (node : Node) =
+    let private parseScopeDef (node : Node) =
         let name = node.Key
         let aliases = node.Child "aliases" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq)
                                           |> Option.defaultValue []
@@ -57,7 +57,7 @@ module UtilityParser =
         { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases; NewScope.ScopeInput.isSubscopeOf = subscopes }
 
 
-    let loadScopeDefinitions filename fileString =
+    let private loadScopeDefinitions filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
         | Failure(e, _, _) -> log (sprintf "scopedefinitions file %s failed with %s" filename e); ([])
@@ -78,7 +78,7 @@ module UtilityParser =
             | _ -> scopes
         scopeManager.ReInit(fallbackScopes)
 
-    let parseModCatDef (node : Node) =
+    let private parseModCatDef (node : Node) =
         let name = node.Key
         let internalID = node.TagText "internal_id" |> TryParser.parseInt
         let scopes = node.Child "supported_scopes" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText |> scopeManager.ParseScope()) |> List.ofSeq)
@@ -86,7 +86,7 @@ module UtilityParser =
         { NewScope.ModifierCategoryInput.name = name; NewScope.ModifierCategoryInput.internalID = internalID; NewScope.ModifierCategoryInput.scopes = scopes }
 
 
-    let loadModCatDefinitions filename fileString =
+    let private loadModCatDefinitions filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
         | Failure(e, _, _) -> log (sprintf "modifiercategorydefinitions file %s failed with %s" filename e); ([])

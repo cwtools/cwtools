@@ -159,7 +159,7 @@ module HOI4GameFunctions =
                     |> Option.defaultValue []
         let hoi4LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> HOI4Parser.loadLocCommands fn ft)
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
                     |> Option.defaultValue ([], [])
 
 
