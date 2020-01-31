@@ -29,7 +29,7 @@ module CKPrinter =
     and private printKeyValueList kvl depth =
         kvl |> List.fold (fun acc kv -> printKeyValue acc kv depth) ("", false, -1, -1)
             |> (fun (res, leadingNewline, _, _) -> if leadingNewline then res + "\n" else res)
-    let private printTopLevelKeyValueList kvl =
+    let printTopLevelKeyValueList kvl =
         kvl |> List.fold (fun acc kv ->
             match kv with
             | KeyValue (PosKeyValue(_, KeyValueItem(_, Clause _, _))) as x ->

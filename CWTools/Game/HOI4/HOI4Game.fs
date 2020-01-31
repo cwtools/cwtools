@@ -90,7 +90,7 @@ module HOI4GameFunctions =
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "State"), EffectType.Link, defaultDesc, "", true));
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "Country"), EffectType.Link, defaultDesc, "", true));
-        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
     let updateScriptedTriggers(rules :RootRule list) states countries =
@@ -105,7 +105,7 @@ module HOI4GameFunctions =
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "State"), EffectType.Link, defaultDesc, "", true));
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "Country"), EffectType.Link, defaultDesc, "", true));
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
     let addModifiersWithScopes (lookup : Lookup) =
         let modifierOptions (modifier : ActualModifier) =
@@ -168,7 +168,7 @@ module HOI4GameFunctions =
         let eventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
-                    |> Option.defaultValue (CWTools.Process.Scopes.HOI4.scopedEffects() |> List.map SimpleLink)
+                    |> Option.defaultValue ([])
 
         {
             triggers = triggers
