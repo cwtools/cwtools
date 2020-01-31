@@ -21,21 +21,24 @@ type LocContextResult =
 //     | Start of startDataType : string
 //     | NotFound of key : string * context : string
 
-[<Struct>]
-type LocEntry = {
-    key : string
-    value : char option
-    desc : string
-    position : range
-    scopes : LocContextResult list
-    refs : string list
-}
 type JominiLocCommandParam =
     |Commands of JominiLocCommand list
     |Param of string
 and JominiLocCommand =
     |Command of string * JominiLocCommandParam list
 
+
+[<Struct>]
+type LocEntry = {
+    key : string
+    value : char option
+    desc : string
+    position : range
+    refs : string list
+    commands : string list
+    jominiCommands : JominiLocCommand list list
+    scopes : LocContextResult list
+}
 type LegacyLocDynamicsSettings = {
     /// Terminal, scope specific, scripted loc, name and required scopes
     scriptedLocCommands : (string * Scope list) list

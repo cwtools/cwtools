@@ -100,32 +100,45 @@ module LocalisationString =
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
-    let processLocalisationBase localisationCommandValidator (defaultContext : ScopeContext) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry>=
-        // let lang = api |> fst
-        // let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
-        // let all = api |> snd
+    let processLocalisationBase localisationCommandValidator (defaultContext : ScopeContext) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry> =
         let extractResult =
             function
             |Success (v, _, _) -> v
             |Failure _ -> []
-        let parseLoc (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Command s -> Some s |_ -> None)
-        let parseLocRef (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
-        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator defaultContext s) }))
-        result
+        let processEntry (m : Entry) =
+            let locElements = parseLocString m.desc "" |> extractResult
+            let commands = locElements |> List.choose (function |Command s -> Some s |_ -> None)
+            {
+                LocEntry.key = m.key;
+                value = m.value;
+                desc = m.desc;
+                position = m.position;
+                refs = locElements |> List.choose (function |Ref s -> Some s |_ -> None)
+                commands = commands
+                jominiCommands = []
+                scopes = commands |> List.map (fun s -> localisationCommandValidator defaultContext s)
+            }
+        api |> (fun (lang, entries) -> lang, entries |> Map.map (fun _ entry -> processEntry entry))
 
     let processJominiLocalisationBase localisationCommandValidator (defaultContext : ScopeContext) (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry>=
-        // let lang = api |> fst
-        // let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
-        // let all = api |> snd
-        // let commands = commands |> List.map fst
         let extractResult =
             function
             |Success (v, _, _) -> v
             |Failure (e, _, _) -> eprintfn "%A" e; []
-        let parseLoc (e : Entry) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function |JominiCommand s -> Some s |_ -> None)
-        let parseLocRef (e : Entry) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
-        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandValidator eventtargets setvariables defaultContext s) }))
-        result
+        let processEntry (m : Entry) =
+            let locElements = parseJominiLocString m.desc "" |> extractResult
+            let commands = locElements |> List.choose (function |JominiCommand s -> Some s |_ -> None)
+            {
+                LocEntry.key = m.key;
+                value = m.value;
+                desc = m.desc;
+                position = m.position;
+                refs = locElements |> List.choose (function |Ref s -> Some s |_ -> None)
+                commands = []
+                jominiCommands = commands
+                scopes = commands |> List.map (fun s -> localisationCommandValidator eventtargets setvariables defaultContext s)
+            }
+        api |> (fun (lang, entries) -> lang, entries |> Map.map (fun _ entry -> processEntry entry))
 
     let validateLocalisationCommandsBase localisationCommandValidator (locentry : LocEntry) (startContext : ScopeContext)  =
         let extractResult =
