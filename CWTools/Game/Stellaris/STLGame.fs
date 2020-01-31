@@ -225,7 +225,7 @@ module STLGameFunctions =
         let stlEventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
-                    |> Option.defaultValue (CWTools.Process.Scopes.STL.scopedEffects() |> List.map SimpleLink)
+                    |> Option.defaultValue ([])
 
         {
             triggers = triggers

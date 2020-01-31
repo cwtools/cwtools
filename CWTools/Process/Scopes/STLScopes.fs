@@ -9,90 +9,6 @@ module STL =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 
-//         COUNTRY:
-// space_owner
-// overlord
-// defender
-// attacker
-// owner
-// controller
-// planet_owner
-// last_created_country
-// last_refugee_country
-
-// LEADER:
-// leader
-// last_created_leader
-// ruler
-// heir
-
-// GALACTIC_OBJECT:
-// solar_system
-// last_created_system
-
-// PLANET:
-// planet
-// capital_scope
-// orbit
-// home_planet
-// star
-
-// SHIP:
-// last_created_ship
-
-// FLEET:
-// spaceport
-// mining_station
-// research_station
-// last_created_fleet
-// fleet
-
-// POP:
-// pop
-// last_created_pop
-
-// AMBIENT_OBJECT:
-// last_created_ambient_object
-
-// ARMY:
-// last_created_army
-
-// TILE:
-// tile
-// orbital_deposit_tile
-// best_tile_for_pop
-
-// SPECIES:
-// owner_species
-// last_created_species
-// species
-
-// POP_FACTION:
-// pop_faction
-// last_created_pop_faction
-
-// SECTOR:
-// core_sector
-// sector
-
-// LEADER:
-
-// ALLIANCE:
-// alliance
-
-// RELATIVE SCOPES:
-// root
-// from
-// prev
-// prevprev
-// prevprevprev
-// prevprevprevprev
-// fromfrom
-// fromfromfrom
-// fromfromfromfrom
-// this
-// event_target:
-// parameter:
     let defaultDesc = "Scope (/context) switch"
     let scopedEffects() = [
         ScopedEffect("space_owner", [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
@@ -151,33 +67,6 @@ module STL =
 
 
     ]
-// any/every/random_ship
-// any/every/random_pop
-// any/every/random_owned_ship
-// any/every/random_owned_planet
-// any/every/random_controlled_planet
-// any/every/random_war_defender
-// any/every/random_war_attacker
-// any/every/random_planet
-// any/every/random_planet_within_border
-// any/every/random_ambient_object
-// any/every/random_system_ambient_object
-// any/every/random_mining_station
-// any/every/random_research_station
-// any/every/random_spaceport
-// any/every/random_system_planet
-// any/every/random_neighboring_tile
-// any/every/random_tile
-// any/every/random_neighbor_system
-// any/every/random_moon
-// any/every/random_system_in_cluster
-// any/every/random_owned_leader
-// any/every/random_sector
-// any/every/random_owned_fleet
-// any/every/random_fleet_in_system
-// any/every/random_pop_faction
-// any/every/random_playable_country
-// any/every/random_subject
     let effectInnerScopes() =[
         //These are from blackninja9939
         "any_ship",  scopeManager.ParseScope() "Ship";

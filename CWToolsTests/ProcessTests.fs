@@ -603,7 +603,7 @@ let testsv =
 let testsConfig =
     testList "full config" [
         testCase "basic" <| fun () ->
-            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ["./testfiles/configtests/config/test.cwt", File.ReadAllText "./testfiles/configtests/config/test.cwt"]
             let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
             let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
 
@@ -628,7 +628,7 @@ let testsConfig =
             Expect.sequenceEqual suggestions expected "Completion should match"
 
         testCase "basic with config load" <| fun () ->
-            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ["./testfiles/configtests/config/test.cwt", File.ReadAllText "./testfiles/configtests/config/test.cwt"]
             let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
             let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
             let folder = "./testfiles/configtests/completiontests"
@@ -650,7 +650,7 @@ let testsConfig =
             Expect.sequenceEqual suggestions expected "Completion should match"
 
         testCase "shipsize prerequisits" <| fun () ->
-            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ["./testfiles/configtests/config/test.cwt", File.ReadAllText "./testfiles/configtests/config/test.cwt"]
             let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
             let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
             let folder = "./testfiles/configtests/completiontests"
@@ -672,7 +672,7 @@ let testsConfig =
             Expect.sequenceEqual suggestions expected "Completion should match"
 
         testCase "shipsize enum" <| fun () ->
-            let configtext = ["./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"]
+            let configtext = ["./testfiles/configtests/config/test.cwt", File.ReadAllText "./testfiles/configtests/config/test.cwt"]
             let configtext = ("./testfiles/validationtests/trigger_docs.log", File.ReadAllText "./testfiles/validationtests/trigger_docs.log")::configtext
             let configtext = ("./testfiles/validationtests/setup.log", File.ReadAllText "./testfiles/validationtests/setup.log")::configtext
             let folder = "./testfiles/configtests/completiontests"

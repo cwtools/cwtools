@@ -414,8 +414,8 @@ let folderTests =
         testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false 1 "en-GB"
         // testFolder "./testfiles/validationtests/weighttests" "weights" false "" false false "en-GB"
         testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false 1 "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false 1 "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false 1 "ru-RU"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/config/" false false 1 "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/config/" false false 1 "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]
