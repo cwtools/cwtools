@@ -21,45 +21,6 @@ module CK2LocalisationString =
             "prov"
         ]
 
-
-    let commands =
-        [
-            "GetAreaName";
-            "GetAdjective";
-            "GetAdm";
-            "GetCapitalName";
-            "GetDip";
-            "GetFlagshipName";
-            "GetGroupName";
-            "GetHerHim";
-            "GetHerHimCap";
-            "GetHerHis";
-            "GetHerHisCap";
-            "GetHerselfHimself";
-            "GetHerselfHimselfCap";
-            "GetSheHe";
-            "GetSheHeCap";
-            "GetMil";
-            "GetName";
-            "GetTitle";
-            "GetTradeGoodsName";
-            "GetWomanMan";
-            "GetYear";
-            "GovernmentName";
-            "GetXEDip";
-            "GetErEreDip";
-            "GetDateText";
-            "GetDate";
-            "GetYear";
-            "GetMonth";
-            "GetReligiousSchool";
-            "GetCultureName";
-            "GetCultureGroupName";
-            "GetReligionName";
-            "GetReligionGroupName";
-        ]
-    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes), []
-
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
     let processLocalisation = fun commands variableCommands dynamicSettings -> processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
     let validateLocalisationCommand = fun commands variableCommands dynamicSettings -> validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)

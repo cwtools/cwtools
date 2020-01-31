@@ -24,67 +24,6 @@ module STLLocalisationString =
             "playername"
         ]
 
-
-    let commands =
-        [
-            "GetAdj";
-            "GetAllianceName";
-            "GetFleetName";
-            "GetHomeWorldName";
-            "GetLeaderName";
-            "GetName";
-            "GetNamePlural";
-            "GetPlanetMoon";
-            "GetPopFactionName";
-            "GetRandomSpeciesSound";
-            "GetRegnalName";
-            "GetRulerName";
-            "GetRulerTitle";
-            "GetSpeciesAdj";
-            "GetSpeciesClass";
-            "GetSpeciesClassPlural";
-            "GetSpeciesMouthName";
-            "GetSpeciesName";
-            "GetSpeciesNameCompliment";
-            "GetSpeciesNameInsult";
-            "GetSpeciesNamePlural";
-            "GetSpeciesNamePluralCompliment";
-            "GetSpeciesNamePluralInsult";
-            "GetSpeciesOrganName";
-            "GetSpeciesSpawnNamePlural";
-            "GetStarName";
-            "GetHerHim";
-            "GetSheHe";
-            "GetSheHeCap";
-            "GetHerHis";
-            "GetHerHisCap";
-            "LastKilledCountryName";
-            "GetSpeciesSpawnName"; //Vanilla usage
-            "GetHeirTitle"; //Vanilla usage
-            "GetHeirName"; //Vanilla usage
-            "GetAdjective"; //Vanilla usage
-            "GetSpeciesClassName"; //Vanilla usage
-            "GetHimHer"; //Vanilla usage
-            "GetNumPlayerFleetsGoneMIA"; //Vanilla usage
-            "GetNumPlayerWormholeStationsDestroyed"; //Vanilla usage;
-            "StarName";
-            "GetTitle"; // STNH
-            "GetLeaderTitle"; // STNH
-            "GetHisHer"; // STNH
-            "GetMidGameDate"; // STNH
-            "GetPersonalityName"; // STNH
-            "GetSpeciesPlural"; // STNH
-            "GetHisHerCap"; // STNH
-            "MainDefender";
-            "MainAttacker";
-            "GetOwnerName";
-            "GetControllerName";
-            "GetCountry";
-            "GetPlanetMoonCap";
-            "GetNamePluralInsult";
-            "GetClassName"; // Discord reported
-        ]
-    let locCommands() = commands |> List.map (fun c -> c, scopeManager.AllScopes), []
     let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
     let processLocalisation = fun commands variableCommands dynamicSettings -> processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
     let validateLocalisationCommand = fun commands variableCommands dynamicSettings -> validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)

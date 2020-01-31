@@ -213,7 +213,7 @@ type EU4Game(setupSettings : EU4Settings) =
 
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy ([],[]) else Legacy (l, v)) |_ -> Legacy ([],[])
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = EU4Lookup()

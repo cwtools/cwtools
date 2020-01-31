@@ -282,7 +282,7 @@ type STLGame (setupSettings : StellarisSettings) =
             maxFileSize = setupSettings.maxFileSize
         }
         do if scopeManager.Initialized |> not then Utils.logError (sprintf "%A has no scopes" (settings.rootDirectories |> List.head)) else ()
-        let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
+        let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy ([],[]) else Legacy (l, v)) |_ -> Legacy ([],[])
 
         let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
                                        embedded = { settings.embedded with localisationCommands = locSettings }

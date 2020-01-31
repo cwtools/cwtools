@@ -27,29 +27,30 @@ module LocalisationString =
     | Chars of string
     let valueChars = many1Satisfy ( isNoneOf ['$'; '['; ']'; '#'] )
 
-    let dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
-    let dollarColour = pchar '|' .>> dollarChars
-    let commandChars = many1Satisfy (isNoneOf [']'; '|'])
-    let commandFormat = pchar '|' .>> commandChars
-    let ref = between (skipChar '$') (skipChar '$') (dollarChars .>> optional dollarColour |>> Ref)
-    let command = between (skipChar '[') (skipChar ']') ((commandChars) .>> optional commandFormat |>> Command )
-    let locStringParser = many (valueChars |>> Chars <|> ref <|> command) .>> eof
+    let private dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
+    let private dollarColour = pchar '|' .>> dollarChars
+    let private commandChars = many1Satisfy (isNoneOf [']'; '|'])
+    let private commandFormat = pchar '|' .>> commandChars
+    let private ref = between (skipChar '$') (skipChar '$') (dollarChars .>> optional dollarColour |>> Ref)
+    let private command = between (skipChar '[') (skipChar ']') ((commandChars) .>> optional commandFormat |>> Command )
+    let private locStringParser = many (valueChars |>> Chars <|> ref <|> command) .>> eof
 
-    let jominiCommand, jominiCommandImpl = createParserForwardedToRef()
-    let simpleParam = chSkip '\'' >>. many1Satisfy ( isNoneOf ['.'; '\'']) .>> chSkip '\'' .>> ws |>> JominiLocCommandParam.Param// <!> "Param"
-    let simpleCommands = ((sepBy1 (jominiCommand) (chSkip '.')) |>> JominiLocCommandParam.Commands)// <!> "Commands"
-    let segment = many1Satisfy ( isNoneOf ['.'; '('; '|'; ']'; ')'; ' '; ',']) .>> ws |>> (fun k -> JominiLocCommand.Command (k, [])) //<!> "segment" //<!> "segment"
-    let pParams = sepBy1 (simpleParam <|> simpleCommands) (chSkip ',')// <!> "pParams"//<!> "pParams"
-    let pFunction = (many1Satisfy ( isNoneOf ['.'; ']'; '('; ')']) ) .>> (chSkip '(' ) .>>.  (pParams) .>> chSkip ')' |>> (fun (key, cs) -> JominiLocCommand.Command (key, cs))// <!> "function"
+    let private jominiCommand, jominiCommandImpl = createParserForwardedToRef()
+    let private simpleParam = chSkip '\'' >>. many1Satisfy ( isNoneOf ['.'; '\'']) .>> chSkip '\'' .>> ws |>> JominiLocCommandParam.Param// <!> "Param"
+    let private simpleCommands = ((sepBy1 (jominiCommand) (chSkip '.')) |>> JominiLocCommandParam.Commands)// <!> "Commands"
+    let private segment = many1Satisfy ( isNoneOf ['.'; '('; '|'; ']'; ')'; ' '; ',']) .>> ws |>> (fun k -> JominiLocCommand.Command (k, [])) //<!> "segment" //<!> "segment"
+    let private pParams = sepBy1 (simpleParam <|> simpleCommands) (chSkip ',')// <!> "pParams"//<!> "pParams"
+    let private pFunction = (many1Satisfy ( isNoneOf ['.'; ']'; '('; ')']) ) .>> (chSkip '(' ) .>>.  (pParams) .>> chSkip ')' |>> (fun (key, cs) -> JominiLocCommand.Command (key, cs))// <!> "function"
     // let pFunction = many1Satisfy ( isNoneOf ['.'; ']']) .>> ch '(' .>> ws .>>. sepBy1 (sepBy1 jominiCommand (ch '.')) (ch ',') .>> ch ')' |>> (fun (key, cs) -> JominiLocCommand.Command (key, cs)) <?> "function"
     jominiCommandImpl := ((attempt pFunction) <|> segment)// <!> "command"
-    let jominiCommandWrapper = between (skipChar '[' .>> ws) (skipChar ']' .>> ws) ((sepBy1 jominiCommand (ch '.')) .>> optional commandFormat |>> JominiCommand )
-    let jominiLocStringParser = many ((valueChars |>> Chars <|> ref <|> (jominiCommandWrapper)) .>> optional (ch '#' .>> restOfLine false .>> ws) ) .>> eof
+    let private jominiCommandWrapper = between (skipChar '[' .>> ws) (skipChar ']' .>> ws) ((sepBy1 jominiCommand (ch '.')) .>> optional commandFormat |>> JominiCommand )
+    let private jominiLocStringParser = many ((valueChars |>> Chars <|> ref <|> (jominiCommandWrapper)) .>> optional (ch '#' .>> restOfLine false .>> ws) ) .>> eof
 
-    let parseLocString fileString filename = runParserOnString locStringParser () filename fileString
-    let parseJominiLocString fileString filename = runParserOnString jominiLocStringParser () filename fileString
+    let private parseLocString fileString filename = runParserOnString locStringParser () filename fileString
+    let private parseJominiLocString fileString filename = runParserOnString jominiLocStringParser () filename fileString
 
-    let checkRef (hardcodedLocalisation) (lang : Lang) (keys : LocKeySet) (entry : LocEntry) (r : string) =
+    /// Check that reference loc key `r` is defined and is not recursive, else return an error
+    let private checkRef (hardcodedLocalisation) (lang : Lang) (keys : LocKeySet) (entry : LocEntry) (r : string) =
         match keys.Contains r with
         | true -> if r == entry.key && not (List.contains r hardcodedLocalisation) then Invalid (Guid.NewGuid(), [invManual (ErrorCodes.RecursiveLocRef) (entry.position) entry.key None ]) else OK
         | false ->
@@ -61,7 +62,8 @@ module LocalisationString =
                 then OK
                 else Invalid (Guid.NewGuid(), [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ])
             | false -> OK
-
+    /// Given a set of localisation APIs, validates them.
+    /// Checks quotes, localisation command chains, localisation references
     let validateProcessedLocalisationBase (hardcodedLocalisation) (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry>) list) =
         let validateQuotes _ (e : LocEntry) =
             let desc = e.desc.Trim()
