@@ -15,7 +15,6 @@ open CWTools.Process.Scopes.VIC2
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.VIC2.VIC2LocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open System
@@ -272,7 +271,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy ([],[]) else Legacy (l, v)) |_ -> Legacy ([],[])
     let settings =
             { settings with
                 embedded = { settings.embedded with localisationCommands = locSettings }

@@ -15,7 +15,6 @@ open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
 open System
-open CWTools.Validation.HOI4.HOI4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Process.Localisation

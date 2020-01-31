@@ -15,7 +15,6 @@ open CWTools.Process.Scopes.IR
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.IR.IRLocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open System

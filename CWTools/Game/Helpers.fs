@@ -100,6 +100,17 @@ module Helpers =
     open CWTools.Process.Localisation.ChangeLocScope
     open CWTools.Validation.LocalisationString
     open CWTools.Process.Scopes.Scopes
+    open CWTools.Process.Localisation
+    open CWTools.Validation
+
+    let hardcodedLocalisation =
+        [
+            "playername";
+            "prov"
+        ]
+
+    let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
+
     let createJominiLocalisationFunctions (jominiLocDataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes option) =
         fun (lookup : Lookup) ->
             let dataTypes = jominiLocDataTypes |> Option.defaultValue { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }

@@ -18,15 +18,6 @@ open CWTools.Process.Localisation.EU4
 
 module EU4LocalisationString =
 
-
-    let hardcodedLocalisation =
-        [
-            "playername";
-            "prov"
-        ]
-
-    let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
-
     let checkFileEncoding (file : string) =
             use fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) in
             let bits = Array.zeroCreate 3

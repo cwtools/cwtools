@@ -15,7 +15,6 @@ open CWTools.Process.Scopes.CK2
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.CK2.CK2LocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.ProcessCore

@@ -18,13 +18,6 @@ open CWTools.Process.Localisation.STL
 
 module STLLocalisationString =
 
-
-    let hardcodedLocalisation =
-        [
-            "playername"
-        ]
-
-    let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
     // let checkCommand localisationCommandContext (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
     //     match localisationCommandContext commands eventtargets setvariables entry command with
     //     | ContextResult.Found _ -> OK
