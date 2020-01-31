@@ -120,7 +120,7 @@ module LocalisationString =
             }
         api |> (fun (lang, entries) -> lang, entries |> Map.map (fun _ entry -> processEntry entry))
 
-    let processJominiLocalisationBase localisationCommandValidator (defaultContext : ScopeContext) (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry>=
+    let processJominiLocalisationBase localisationCommandValidator (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (api : (Lang * Map<string, Entry>)) : Lang * Map<string,LocEntry>=
         let extractResult =
             function
             |Success (v, _, _) -> v
@@ -136,17 +136,18 @@ module LocalisationString =
                 refs = locElements |> List.choose (function |Ref s -> Some s |_ -> None)
                 commands = []
                 jominiCommands = commands
-                scopes = commands |> List.map (fun s -> localisationCommandValidator eventtargets setvariables defaultContext s)
+                scopes = commands |> List.map (fun s -> localisationCommandValidator eventtargets setvariables s)
             }
         api |> (fun (lang, entries) -> lang, entries |> Map.map (fun _ entry -> processEntry entry))
 
     let validateLocalisationCommandsBase localisationCommandValidator (locentry : LocEntry) (startContext : ScopeContext)  =
-        let extractResult =
-            function
-            | Success (v, _, _) -> v
-            | Failure _ -> []
-        let parseLoc (e : LocEntry) = parseLocString e.desc "" |> extractResult |> List.choose (function | Command s -> Some s | _ -> None)
-        let keycommands = parseLoc locentry
+        // let extractResult =
+        //     function
+        //     | Success (v, _, _) -> v
+        //     | Failure _ -> []
+        // let parseLoc (e : LocEntry) = parseLocString e.desc "" |> extractResult |> List.choose (function | Command s -> Some s | _ -> None)
+        // let keycommands = parseLoc locentry
+        let keycommands = locentry.commands
         let validateCommand (c : string) =
             match localisationCommandValidator startContext c with
             | LocContextResult.WrongScope (c, actual, (expected : Scope list)) ->
@@ -155,14 +156,15 @@ module LocalisationString =
         keycommands <&!&> validateCommand
 
     let validateJominiLocalisationCommandsBase localisationCommandValidator (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (locentry : LocEntry) (startContext : ScopeContext)  =
-        let extractResult =
-            function
-            | Success (v, _, _) -> v
-            | Failure _ -> []
-        let parseLoc (e : LocEntry) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function | JominiCommand s -> Some s | _ -> None)
-        let keycommands = parseLoc locentry
+        // let extractResult =
+        //     function
+        //     | Success (v, _, _) -> v
+        //     | Failure _ -> []
+        // let parseLoc (e : LocEntry) = parseJominiLocString e.desc "" |> extractResult |> List.choose (function | JominiCommand s -> Some s | _ -> None)
+        // let keycommands = parseLoc locentry
+        let keycommands = locentry.jominiCommands
         let validateCommand (c : JominiLocCommand list) =
-            match localisationCommandValidator eventtargets setvariables startContext c with
+            match localisationCommandValidator startContext eventtargets setvariables c with
             | LocNotFound s -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.InvalidLocCommand locentry.key s) (locentry.position) locentry.key None ])
             | LocNotFoundInType (s, dataType, confident) -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.LocCommandNotInDataType locentry.key s dataType confident) (locentry.position) locentry.key None])
             | LocContextResult.NewScope s -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.CustomError (sprintf "Localisation command does not end in a command but ends in scope %O" s) Severity.Error ) (locentry.position) locentry.key None ])

@@ -96,3 +96,21 @@ module Helpers =
             explicitLocalisation = explicitLocalisation
             subtypes = subtypes
         }
+
+    open CWTools.Process.Localisation.ChangeLocScope
+    open CWTools.Validation.LocalisationString
+    open CWTools.Process.Scopes.Scopes
+    let createJominiLocalisationFunctions (jominiLocDataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes option) =
+        fun (lookup : Lookup) ->
+            let dataTypes = jominiLocDataTypes |> Option.defaultValue { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+            let localisationCommandValidator = createJominiLocalisationCommandValidator dataTypes
+            let validateLocalisationCommand = validateJominiLocalisationCommandsBase localisationCommandValidator
+            let localisationCommandValidatorDefaultContext = localisationCommandValidator defaultContext
+            let processLocalisation = processJominiLocalisationBase localisationCommandValidatorDefaultContext
+            let eventtargets =
+                lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
+                                         |> List.distinct
+                                         |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
+            let definedvars =
+                (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars

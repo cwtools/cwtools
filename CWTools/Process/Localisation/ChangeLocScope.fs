@@ -139,7 +139,7 @@ module ChangeLocScope =
 
     // type LocContext
     let createJominiLocalisationCommandValidator (dataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes) =
-        fun (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (source : ScopeContext) (command : JominiLocCommand list) ->
+        fun (source : ScopeContext) (eventtargets : Collections.Map<string, Scope list>) (setvariables : string list) (command : JominiLocCommand list) ->
         // let keys = command.Split('.') |> List.ofArray
         // let keys =
         //     match
