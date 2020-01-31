@@ -217,7 +217,7 @@ module CWToolsScripts =
         0 // return an integer exit code
     
     let emptyStellarisSettings (rootDirectory) = {
-        CWTools.Games.GameSetupSettings.rootDirectories = [{ name = "test"; path = rootDirectory;}] |> List.map WD
+        CWTools.Games.GameSetupSettings.rootDirectories = [WD { name = "test"; path = rootDirectory;}]
         modFilter = None
         validation = {
             validateVanilla = false

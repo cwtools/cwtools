@@ -17,24 +17,26 @@ let createTableOfContents (types : TypeDefinition list) =
 
 let valueTypeField enums (vt : ValueType) =
     match vt with
-    |(ValueType.Bool) -> "yes/no"
-    |(ValueType.Date) -> "date"
-    |(ValueType.Int (RulesParser.intFieldDefaultMinimum, RulesParser.intFieldDefaultMaximum)) -> "Integer"
-    |(ValueType.Int (RulesParser.intFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
-    |(ValueType.Int (min, RulesParser.intFieldDefaultMaximum)) -> sprintf "Integer above %i" min
-    |(ValueType.Int (min, max)) -> sprintf "Integer between %i and %i" min max
-    |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum && max = RulesParser.floatFieldDefaultMaximum -> "Float"
-    |(ValueType.Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
-    |(ValueType.Float (min, max)) when max = RulesParser.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
-    |(ValueType.Float (min, max)) -> sprintf "Float between %s and %s" (min.ToString()) (max.ToString())
-    |(ValueType.Percent) -> "percentage"
-    |(ValueType.Enum enumName) ->
+    |(Bool) -> "yes/no"
+    |(DateTime)
+    |(Date) -> "Date with YYYY.MM.dd format, starting from 1.1.1"
+    |(Int (RulesParser.intFieldDefaultMinimum, RulesParser.intFieldDefaultMaximum)) -> "Integer"
+    |(Int (RulesParser.intFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
+    |(Int (min, RulesParser.intFieldDefaultMaximum)) -> sprintf "Integer above %i" min
+    |(Int (min, max)) -> sprintf "Integer between %i and %i" min max
+    |(Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum && max = RulesParser.floatFieldDefaultMaximum -> "Float"
+    |(Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
+    |(Float (min, max)) when max = RulesParser.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
+    |(Float (min, max)) -> sprintf "Float between %s and %s" (min.ToString()) (max.ToString())
+    |(Percent) -> "percentage"
+    |(Enum enumName) ->
         let enumDef = enums |> List.tryFind (fun e -> e.key = enumName)
         enumDef |> Option.map (fun ed -> (ed.values |> String.concat ", "))
                 |> Option.defaultValue ""
-    | ValueType.CK2DNA -> "ck2DNA"
-    | ValueType.CK2DNAProperty -> "ck2DNAproperty"
-    | ValueType.IRFamilyName -> "IRFamilyName"
+    | CK2DNA -> "ck2DNA"
+    | CK2DNAProperty -> "ck2DNAproperty"
+    | IRFamilyName -> "IRFamilyName"
+    | STLNameFormat(_) -> vt.ToString()
 
 let createTypeFieldLink (typeType : TypeType) =
     match typeType with
@@ -51,8 +53,11 @@ let fieldToText enums (field : NewField) =
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
     | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
-    | LocalisationField (true, false) -> str "Synchronised localisation key"
-    | LocalisationField (false, false) -> str "Localisation key"
+    | LocalisationField (synced, isInline) ->
+        match synced, isInline with
+        | (true, false) -> str "Synchronised localisation key"
+        | (false, false) -> str "Localisation key"
+        | (_, true) -> str  "Inline localisation key"
     | FilepathField (prefix, extension) ->
         match prefix, extension with
         | None, None -> str "Filepath"
@@ -63,13 +68,14 @@ let fieldToText enums (field : NewField) =
     | ScalarField (ScalarValue) -> str "Scalar"
     | ScopeField (scope) -> str (sprintf "Scope object in %O scope" scope)
     // TODO more detail
-    | VariableField (isInt, (min, max)) ->
+    | VariableField (isInt, (_, _)) ->
         match isInt with
         | true -> str "Integer or integer variable"
         | false -> str "Float or float variable"
     | VariableGetField v -> str (sprintf "A \"%s\" value" v)
     // TODO clearer
     | VariableSetField v -> str (sprintf "Scalar, a \"%s\" value" v)
+    | SingleAliasClauseField (_) -> str ""
     | ValueScopeField _
     | AliasValueKeysField _ ->
         // TODO better for these
@@ -79,8 +85,12 @@ let fieldToText enums (field : NewField) =
     | SubtypeField _
     | SingleAliasField _
     | MarkerField _
+    | JominiGuiField _
     | AliasField _ ->
         str ""
+    | IgnoreField _ 
+    | IgnoreMarkerField _
+        -> str (field.ToString())
     // | _ -> str ""
 
 let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
@@ -88,8 +98,11 @@ let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
     | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
-    | LocalisationField (true, false) -> str "Synchronised localisation key"
-    | LocalisationField (false, false) -> str "Localisation key"
+    | LocalisationField (synced, isInline) ->
+        match synced, isInline with
+        | (true, false) -> str "Synchronised localisation key"
+        | (false, false) -> str "Localisation key"
+        | (_, true) -> str  "Inline localisation key"
     | FilepathField (prefix, extension) ->
         match prefix, extension with
         | None, None -> str "Filepath"
@@ -100,13 +113,14 @@ let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     | ScalarField (ScalarValue) -> str "Scalar"
     | ScopeField (scope) -> str (sprintf "Scope object in %O scope" scope)
     // TODO more detail
-    | VariableField (isInt, (min, max)) ->
+    | VariableField (isInt, (_, _)) ->
         match isInt with
         | true -> str "Integer or integer variable"
         | false -> str "Float or float variable"
     | VariableGetField v -> str (sprintf "A \"%s\" value" v)
     // TODO clearer
     | VariableSetField v -> str (sprintf "Scalar, a \"%s\" value" v)
+    | SingleAliasClauseField (_) -> str ""
     | ValueScopeField _
     | AliasValueKeysField _ ->
         // TODO better for these
@@ -115,9 +129,13 @@ let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     | TypeMarkerField _
     | SubtypeField _
     | SingleAliasField _
+    | JominiGuiField _
     | MarkerField _ ->
         str ""
     | AliasField x -> str (x + " fields")
+    | IgnoreField _ 
+    | IgnoreMarkerField _
+        -> str (field.ToString())
 
 let replaceScopesToText (replaceScopes : ReplaceScopes) =
     let rootText = replaceScopes.root |> Option.map (fun r -> sprintf "ROOT: %s" (r.ToString()))
@@ -170,12 +188,14 @@ let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : in
         let lhs = td [_colspan colspan] [(fieldToText enums left)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
         [(tr [] [lhs; desc; reqCount; td [] [str ""]])]
+    | ValueClauseRule (inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent)
     | SubtypeRule(_,_, inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent)
+    
     // | _ -> []
     // lhs |> Option.map fieldToText
     //     |> Option.map (fun t -> tr [] [td [] [str t]; td [] [str (options.description |> Option.defaultValue "")];])
 
-let rec getTypeBlockDepth (depth : int) ((rule, options): NewRule) =
+let rec getTypeBlockDepth (depth : int) ((rule, _): NewRule) =
     match rule with
     | SubtypeRule (_, _, inner) ->
         inner |> List.map (getTypeBlockDepth (depth)) |> List.max
@@ -186,7 +206,7 @@ let rec getTypeBlockDepth (depth : int) ((rule, options): NewRule) =
     | _ -> depth
 
 let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
-    let _, rules = rule |> (function |NodeRule (l, r) -> l, r)
+    let _, rules = rule |> (function | NodeRule (l, r) -> l, r)
     let typeBlockDepth = getTypeBlockDepth 0 (rule, options)
     let typeName = typeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
