@@ -15,7 +15,6 @@ open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
 open System
-open CWTools.Validation.HOI4.HOI4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Process.Localisation
@@ -43,11 +42,6 @@ module HOI4GameFunctions =
             eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
             setVariables = definedvars
         }
-    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
-        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
-
-    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
-        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
 
     let globalLocalisation (game : GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
@@ -90,7 +84,7 @@ module HOI4GameFunctions =
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Effect, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "State"), EffectType.Link, defaultDesc, "", true));
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "Country"), EffectType.Link, defaultDesc, "", true));
-        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToEffect  |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
 
     let updateScriptedTriggers(rules :RootRule list) states countries =
@@ -105,7 +99,7 @@ module HOI4GameFunctions =
             DocEffect(name, o.requiredScopes, o.pushScope, EffectType.Trigger, o.description |> Option.defaultValue "", "")
         let stateEffects =  states |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "State"), EffectType.Link, defaultDesc, "", true));
         let countryEffects =  countries |> List.map (fun p -> ScopedEffect(p, scopeManager.AllScopes, Some (scopeManager.ParseScope() "Country"), EffectType.Link, defaultDesc, "", true));
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect)) @ (scopedEffects() |> List.map (fun e -> e :> Effect))
+        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
         @ (stateEffects |> List.map (fun e -> e :> Effect)) @ (countryEffects |> List.map (fun e -> e :> Effect))
     let addModifiersWithScopes (lookup : Lookup) =
         let modifierOptions (modifier : ActualModifier) =
@@ -155,11 +149,11 @@ module HOI4GameFunctions =
 
         let hoi4Mods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-                    |> Option.map (fun (fn, ft) -> HOI4Parser.loadModifiers fn ft)
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
                     |> Option.defaultValue []
         let hoi4LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-                    |> Option.map (fun (fn, ft) -> HOI4Parser.loadLocCommands fn ft)
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
                     |> Option.defaultValue ([], [])
 
 
@@ -168,7 +162,7 @@ module HOI4GameFunctions =
         let eventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
-                    |> Option.defaultValue (CWTools.Process.Scopes.HOI4.scopedEffects() |> List.map SimpleLink)
+                    |> Option.defaultValue ([])
 
         {
             triggers = triggers
@@ -218,10 +212,15 @@ type HOI4Game(setupSettings : HOI4Settings) =
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy ([], []) else Legacy (l, v)) |_ -> Legacy ([], [])
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = HOI4Lookup()}
+
+
+    let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v) -> (c, v)| _ -> ([], [])
+    let processLocalisationFunction lookup = (createLocalisationFunctions HOI4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
+    let validationLocalisationCommandFunction lookup = (createLocalisationFunctions HOI4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -236,16 +235,16 @@ type HOI4Game(setupSettings : HOI4Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-        processLocalisation = HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
-        validateLocalisation = HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        processLocalisation = processLocalisationFunction
+        validateLocalisation = validationLocalisationCommandFunction
     }
 
     let game = GameObject.CreateGame
                 (settings, "hearts of iron iv", scriptFolders, Compute.computeHOI4Data,
                 Compute.computeHOI4DataUpdate,
                  (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                 HOI4GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
-                 HOI4GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                 processLocalisationFunction,
+                 validationLocalisationCommandFunction,
                  defaultContext,
                  noneContext,
                  Encoding.UTF8,

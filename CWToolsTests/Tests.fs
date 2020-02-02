@@ -194,7 +194,7 @@ let tests =
                 let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
-                logInfo (sprintf "%A" (entities |> List.head |> (fun struct (e, _)  -> printKeyValueList (e.entity.ToRaw) 0)))
+                logInfo (sprintf "%A" (entities |> List.head |> (fun struct (e, _)  -> api.prettyPrintStatements (e.entity.ToRaw))))
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 yield testCase ("parse2") <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
@@ -414,8 +414,8 @@ let folderTests =
         testFolder "./testfiles/validationtests/eventtests" "events" true false "./testfiles/stellarisconfig" false false 1 "en-GB"
         // testFolder "./testfiles/validationtests/weighttests" "weights" false "" false false "en-GB"
         testFolder "./testfiles/multiplemodtests" "multiple" true true "./testfiles/multiplemodtests/test.cwt" false false 1 "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false 1 "en-GB"
-        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/test.cwt" false false 1 "ru-RU"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/config/" false false 1 "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true true "./testfiles/configtests/config/" false false 1 "ru-RU"
         // yield! testSubdirectories "./testfiles/configtests/rulestests"
         // testFolder "./testfiles/configtests/rulestests" "detailedconfigrules" true "./testfiles/configtests/rulestests/rules.cwt" true "en-GB"
     ]

@@ -83,7 +83,7 @@ namespace CWToolsCSTests
 
             //Output
             var output = processed.ToRaw;
-            Console.WriteLine(CKPrinter.printKeyValueList(output, 0));
+            Console.WriteLine(CKPrinter.api.prettyPrintStatements.Invoke(output));
             PrintfModule
                 .PrintFormatLine(
                     new PrintfFormat<FSharpFunc<FSharpList<Statement>, Unit>, TextWriter, Unit, Unit, FSharpList<Statement>>("%A"))

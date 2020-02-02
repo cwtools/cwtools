@@ -24,35 +24,6 @@ open CWTools.Process.Localisation
 
 module CustomGameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>
-    let defaultContext =
-        { Root = scopeManager.AnyScope; From = []; Scopes = [] }
-    let noneContext =
-        { Root = scopeManager.InvalidScope; From = []; Scopes = [scopeManager.InvalidScope] }
-
-    let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
-        let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
-        let processLocalisation() = processJominiLocalisationBase (localisationCommandValidator()) defaultContext
-        let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
-        let eventtargets =
-            lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
-                                     |> List.distinct
-                                     |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        processLocalisation() eventtargets definedvars
-
-    let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
-        let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-        let localisationCommandValidator() = createJominiLocalisationCommandValidator dataTypes
-        let validateLocalisationCommand() = validateJominiLocalisationCommandsBase (localisationCommandValidator())
-        let eventtargets =
-            lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
-                                     |> List.distinct
-                                     |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-        validateLocalisationCommand() eventtargets definedvars
 
     let globalLocalisation (game : GameObject) =
         let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase []
@@ -226,7 +197,7 @@ module CustomGameFunctions =
 
         let irMods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-                    |> Option.map (fun (fn, ft) -> IRParser.loadModifiers fn ft)
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
                     |> Option.defaultValue []
 
         let irLocCommands =
@@ -310,21 +281,25 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
             }
     let changeScope = Scopes.createJominiChangeScope CWTools.Process.Scopes.IR.oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")
 
+    let jominiLocDataTypes = settings.embedded.localisationCommands |> function | Jomini dts -> Some dts | _ -> None
+    let processLocalisationFunction lookup = (createJominiLocalisationFunctions jominiLocDataTypes lookup) |> fst
+    let validationLocalisationCommandFunction lookup = createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
+
     let rulesManagerSettings = {
         rulesSettings = settings.rules
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
         changeScope = changeScope
-        defaultContext = defaultContext
+        defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
         defaultLang = Custom CustomLang.English
         oneToOneScopesNames = CWTools.Process.Scopes.IR.oneToOneScopesNames
         loadConfigRulesHook = loadConfigRulesHook
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-        processLocalisation = CustomGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands)
-        validateLocalisation = CustomGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands)
+        processLocalisation = processLocalisationFunction
+        validateLocalisation = validationLocalisationCommandFunction
     }
     let scriptFolders = []
 
@@ -332,10 +307,10 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
                 ((settings, gameFolderName, scriptFolders, Compute.Jomini.computeJominiData,
                     Compute.Jomini.computeJominiDataUpdate,
                      (CustomLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     CustomGameFunctions.processLocalisationFunction (settings.embedded.localisationCommands),
-                     CustomGameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands),
-                     defaultContext,
-                     noneContext,
+                     processLocalisationFunction,
+                     validationLocalisationCommandFunction,
+                     CWTools.Process.Scopes.Scopes.defaultContext,
+                     CWTools.Process.Scopes.Scopes.noneContext,
                      Encoding.UTF8,
                      Encoding.GetEncoding(1252),
                      validationSettings,

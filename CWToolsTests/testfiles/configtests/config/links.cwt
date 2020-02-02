@@ -1,0 +1,194 @@
+links = {
+	space_owner = {
+		inputscopes = { Ship Fleet System Planet }
+		output_scope = Country
+	}
+	overlord = {
+		inputscopes = { Country }
+		output_scope = Country
+	}
+	defender = {
+		inputscopes = { War }
+		output_scope = Country
+	}
+	attacker = {
+		inputscopes = { War }
+		output_scope = Country
+	}
+	owner = {
+		inputscopes = { Species Ship Pop Fleet Planet PopFaction Sector Leader Country Starbase System }
+		output_scope = Country
+	}
+	controller = {
+		inputscopes = { Planet Starbase }
+		output_scope = Country
+	}
+	planet_owner = {
+		inputscopes = { Planet }
+		output_scope = Country
+	}
+	last_created_country = {
+		inputscopes = { allScopes }
+		output_scope = Country
+	}
+	last_refugee_country = {
+		inputscopes = { allScopes }
+		output_scope = Country
+	}
+	leader = {
+		inputscopes = { Ship Planet Country PopFaction Fleet Sector Army }
+		output_scope = Leader
+	}
+	last_created_leader = {
+		inputscopes = { allScopes }
+		output_scope = Leader
+	}
+	solar_system = {
+		inputscopes = { allScopes }
+		output_scope = System
+	}
+	last_created_system = {
+		inputscopes = { allScopes }
+		output_scope = System
+	}
+	planet = {
+		inputscopes = { Pop Planet System Army Megastructure }
+		output_scope = Planet
+	}
+	capital_scope = {
+		inputscopes = { Country Sector }
+		output_scope = Planet
+	}
+	orbit = {
+		inputscopes = { Fleet Ship Megastructure Army }
+		output_scope = Planet
+	}
+	home_planet = {
+		inputscopes = { Country Species Pop Planet }
+		output_scope = Planet
+	}
+	last_created_ship = {
+		inputscopes = { allScopes }
+		output_scope = Ship
+	}
+	mining_station = {
+		inputscopes = { Planet }
+		output_scope = Fleet
+	}
+	research_station = {
+		inputscopes = { Planet }
+		output_scope = Fleet
+	}
+	last_created_fleet = {
+		inputscopes = { allScopes }
+		output_scope = Fleet
+	}
+	fleet = {
+		inputscopes = { Ship Starbase Leader Army }
+		output_scope = Fleet
+	}
+	pop = {
+		inputscopes = { Pop }
+		output_scope = Pop
+	}
+	last_created_pop = {
+		inputscopes = { allScopes }
+		output_scope = Pop
+	}
+	last_created_ambient_object = {
+		inputscopes = { allScopes }
+		output_scope = AmbientObject
+	}
+	last_created_army = {
+		inputscopes = { allScopes }
+		output_scope = Army
+	}
+	owner_species = {
+		inputscopes = { Species Ship Pop Fleet Planet PopFaction Sector Leader Country Starbase System }
+		output_scope = Species
+	}
+	last_created_species = {
+		inputscopes = { allScopes }
+		output_scope = Species
+	}
+	species = {
+		inputscopes = { Country Ship Leader Pop Army }
+		output_scope = Species
+	}
+	pop_faction = {
+		inputscopes = { Pop Leader }
+		output_scope = PopFaction
+	}
+	last_created_pop_faction = {
+		inputscopes = { allScopes }
+		output_scope = PopFaction
+	}
+	default_pop_faction = {
+		inputscopes = { allScopes }
+		output_scope = PopFaction
+	}
+	sector = {
+		inputscopes = { Planet System Leader }
+		output_scope = Sector
+	}
+	core_sector = {
+		inputscopes = { Country }
+		output_scope = Sector
+	}
+	ruler = {
+		inputscopes = { Country Planet }
+		output_scope = Leader
+	}
+	heir = {
+		inputscopes = { Country Planet }
+		output_scope = Leader
+	}
+	alliance = {
+		inputscopes = { Country }
+		output_scope = Alliance
+	}
+	star = {
+		inputscopes = { Planet Ship Fleet System }
+		output_scope = Planet
+	}
+	last_created_design = {
+		inputscopes = { allScopes }
+		output_scope = Design
+	}
+	starbase = {
+		inputscopes = { System Planet Star Ship Fleet }
+		output_scope = Starbase
+	}
+	capital_star = {
+		inputscopes = { Country }
+		output_scope = Planet
+	}
+	no_scope = {
+		inputscopes = { allScopes }
+		output_scope = Any
+	}
+	megastructure = {
+		inputscopes = { allScopes }
+		output_scope = Megastructure
+	}
+	owner_main_species = {
+		inputscopes = { Species Ship Pop Fleet Planet PopFaction Sector Leader Country Starbase System }
+		output_scope = Species
+	}
+	system_star = {
+		inputscopes = { System }
+		output_scope = Planet
+	}
+	observation_outpost_owner = {
+		inputscopes = { allScopes }
+		output_scope = Country
+	}
+	branch_office_owner = {
+		inputscopes = { Planet }
+		output_scope = Country
+	}
+	archaeological_site = {
+		inputscopes = { allScopes }
+		output_scope = archaeological_site
+	}
+}

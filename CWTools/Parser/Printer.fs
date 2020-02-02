@@ -12,11 +12,11 @@ module CKPrinter =
         List.map printOne is |> List.fold (+) ""
 
 
-    let rec printValue v depth =
+    let rec private printValue v depth =
         match v with
         | Clause kvl -> "{\n" + printKeyValueList kvl (depth + 1) + tabs (depth) + "}"
         | x -> x.ToString() + ""
-    and printKeyValue (acc, leadingNewline, prevStart, prevEnd) kv depth =
+    and private printKeyValue (acc, leadingNewline, prevStart, prevEnd) kv depth =
         match kv with
         | Comment (r, c) ->
             if r.StartLine = prevStart && r.StartLine = prevEnd || (not leadingNewline)
@@ -26,7 +26,7 @@ module CKPrinter =
             acc + (if leadingNewline then "\n" else "") + (tabs depth) + key.ToString() + " " + operatorToString op + " " + (printValue v depth), true, r.StartLine, r.EndLine
         | Value (r, v) ->
             acc + (if leadingNewline then "\n" else "") + (tabs depth) + (printValue v depth), true, r.StartLine, r.EndLine
-    and printKeyValueList kvl depth =
+    and private printKeyValueList kvl depth =
         kvl |> List.fold (fun acc kv -> printKeyValue acc kv depth) ("", false, -1, -1)
             |> (fun (res, leadingNewline, _, _) -> if leadingNewline then res + "\n" else res)
     let printTopLevelKeyValueList kvl =
@@ -46,10 +46,10 @@ module CKPrinter =
         //     | x -> printKeyValue x 0, false
         // ) |> List.fold (fun (acc, start) (nextString, newline) -> if newline && (not start) then acc + nextString + "\n", false else acc + nextString, false) ("", true)
         // |> fst
-    let prettyPrint ef =
+    let private prettyPrint ef =
         let (ParsedFile sl) = ef
         printKeyValueList sl 0
-    let prettyPrintResult =
+    let private prettyPrintResult =
         function
         | Success (v,_,_) ->
             let (ParsedFile ev) = v

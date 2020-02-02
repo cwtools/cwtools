@@ -15,7 +15,6 @@ open CWTools.Process.Scopes.CK2
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.CK2.CK2LocalisationString
 open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.ProcessCore
@@ -37,12 +36,6 @@ module CK2GameFunctions =
             eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
             setVariables = definedvars
         }
-
-    let processLocalisationFunction (commands, variableCommands) (lookup : Lookup) =
-        processLocalisation commands variableCommands (createLocDynamicSettings(lookup))
-
-    let validateLocalisationCommandFunction (commands, variableCommands) (lookup : Lookup) =
-        validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))
 
     let globalLocalisation (game : GameObject) =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
@@ -230,7 +223,7 @@ module CK2GameFunctions =
 
         let ck2Mods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-                    |> Option.map (fun (fn, ft) -> CK2Parser.loadModifiers fn ft)
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
                     |> Option.defaultValue []
 
         let ck2LocCommands =
@@ -293,11 +286,16 @@ type CK2Game(setupSettings : CK2Settings) =
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy (locCommands()) else Legacy (l, v)) |_ -> Legacy (locCommands())
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy ([],[]) else Legacy (l, v)) |_ -> Legacy ([],[])
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = CK2Lookup()
                         }
+
+    let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v) -> (c, v)| _ -> ([], [])
+    let processLocalisationFunction lookup = (createLocalisationFunctions CK2.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
+    let validationLocalisationCommandFunction lookup = (createLocalisationFunctions CK2.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
+
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
@@ -312,15 +310,15 @@ type CK2Game(setupSettings : CK2Settings) =
         refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
         refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
         refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-        processLocalisation = CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
-        validateLocalisation = CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], []))
+        processLocalisation = processLocalisationFunction
+        validateLocalisation = validationLocalisationCommandFunction
     }
     let game = GameObject.CreateGame
                 ((settings, "crusader kings ii", scriptFolders, Compute.computeCK2Data,
                     Compute.computeCK2DataUpdate,
                      (CK2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
-                     CK2GameFunctions.processLocalisationFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
-                     CK2GameFunctions.validateLocalisationCommandFunction (settings.embedded.localisationCommands |> function |Legacy (c, v) -> c, v |_ -> ([], [])),
+                     processLocalisationFunction,
+                     validationLocalisationCommandFunction,
                      defaultContext,
                      noneContext,
                      Encoding.UTF8,

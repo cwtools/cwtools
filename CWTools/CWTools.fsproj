@@ -43,13 +43,8 @@
     <Compile Include="Process/Scopes/CK2Scopes.fs" />
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
+    <Compile Include="Rules/RulesTypes.fs" />
     <Compile Include="Rules/RulesParser.fs" />
-    <Compile Include="Parser/EU4Parser.fs" />
-    <Compile Include="Parser/HOI4Parser.fs" />
-    <Compile Include="Parser/STLParser.fs" />
-    <Compile Include="Parser/CK2Parser.fs" />
-    <Compile Include="Parser/IRParser.fs" />
-    <Compile Include="Parser/VIC2Parser.fs" />
     <Compile Include="Parser/UtilityParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />
@@ -80,11 +75,7 @@
     <Compile Include="Validation/EU4/EU4LocalisationString.fs" />
     <Compile Include="Validation/EU4/EU4LocalisationValidation.fs" />
     <Compile Include="Validation/EU4/EU4Validation.fs" />
-    <Compile Include="Validation/CK2/CK2LocalisationValidation.fs" />
-    <Compile Include="Validation/IR/IRLocalisationValidation.fs" />
     <Compile Include="Validation/VIC2/VIC2Validation.fs" />
-    <Compile Include="Validation/VIC2/VIC2LocalisationValidation.fs" />
-    <Compile Include="Validation/HOI4/HOI4LocalisationValidation.fs" />
     <Compile Include="Validation/HOI4/HOI4Validation.fs" />
     <Compile Include="Game/Game.fs" />
     <Compile Include="Game/Helpers.fs" />

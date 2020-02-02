@@ -96,3 +96,47 @@ module Helpers =
             explicitLocalisation = explicitLocalisation
             subtypes = subtypes
         }
+
+    open CWTools.Process.Localisation.ChangeLocScope
+    open CWTools.Validation.LocalisationString
+    open CWTools.Process.Scopes.Scopes
+    open CWTools.Process.Localisation
+    open CWTools.Validation
+
+    let hardcodedLocalisation =
+        [
+            "playername";
+            "prov"
+        ]
+
+    let validateProcessedLocalisation : ((Lang * LocKeySet) list -> (Lang * Map<string,LocEntry>) list -> ValidationResult) = validateProcessedLocalisationBase hardcodedLocalisation
+
+    let createJominiLocalisationFunctions (jominiLocDataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes option) =
+        fun (lookup : Lookup) ->
+            let dataTypes = jominiLocDataTypes |> Option.defaultValue { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+            let localisationCommandValidator = createJominiLocalisationCommandValidator dataTypes
+            let validateLocalisationCommand = validateJominiLocalisationCommandsBase localisationCommandValidator
+            let localisationCommandValidatorDefaultContext = localisationCommandValidator defaultContext
+            let processLocalisation = processJominiLocalisationBase localisationCommandValidatorDefaultContext
+            let eventtargets =
+                lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
+                                         |> List.distinct
+                                         |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
+            let definedvars =
+                (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars
+
+
+    let createLocalisationFunctions locStaticSettings createLocDynamicSettings (commands, variableCommands) =
+        fun (lookup : Lookup) ->
+            let localisationCommandValidator commands variableCommands =
+                createLegacyLocalisationCommandValidator (locStaticSettings commands variableCommands)
+            let processLocalisation =
+                fun commands variableCommands dynamicSettings ->
+                    processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext
+            let validateLocalisationCommand =
+                fun commands variableCommands dynamicSettings ->
+                    validateLocalisationCommandsBase (localisationCommandValidator commands variableCommands dynamicSettings)
+
+            processLocalisation commands variableCommands (createLocDynamicSettings(lookup)),
+            validateLocalisationCommand commands variableCommands (createLocDynamicSettings(lookup))

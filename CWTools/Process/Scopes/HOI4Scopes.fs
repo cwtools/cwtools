@@ -12,16 +12,6 @@ module HOI4 =
 
 
 
-    let scopedEffects() =
-        [
-            ScopedEffect("owner", [scopeManager.ParseScope() "UnitLeader"; scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", Link, defaultDesc, "", true);
-            ScopedEffect("controller", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("capital", [scopeManager.ParseScope() "State"], scopeManager.ParseScope() "State", EffectType.Link, defaultDesc, "", true);
-            ScopedEffect("global", scopeManager.AllScopes, scopeManager.ParseScope() "InvalidScope", EffectType.Link, defaultDesc, "", true);
-            // ScopedEffect("emperor", allScopes, scopeManager.ParseScope() "Country", EffectType.Both, defaultDesc, "", true);
-        ]
-
-
     let oneToOneScopes =
         let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, (false, true)
         let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, (false, true)
