@@ -157,11 +157,11 @@ let getMinText (options: Options) =
 
 let getReqCount (options : Options) =
     match options.min, options.max with
-    | 0, 1 -> getMinText(options)
-    | 0, RulesParserConstants.CardinalityDefaultMaximum -> sprintf "%s, many" (getMinText(options))
-    | 0, x -> sprintf "%s, up to %i" (getMinText(options)) x
+    | 0, 1
     | 1, 1 -> getMinText(options)
+    | 0, RulesParserConstants.CardinalityDefaultMaximum
     | 1, RulesParserConstants.CardinalityDefaultMaximum -> sprintf "%s, many" (getMinText(options))
+    | 0, x
     | 1, x -> sprintf "%s, up to %i" (getMinText(options)) x
     | x, y -> (sprintf "%s min %i, up to %i"(getMinText(options)) x y).TrimStart()
 
@@ -210,13 +210,14 @@ let rec getTypeBlockDepth (depth : int) ((rule, _): NewRule) =
         inner |> List.map (getTypeBlockDepth (depth + 1)) |> List.max
     | _ -> depth
 
-let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =
+let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =  
     let rules = ruleType |> (function
         | NodeRule (_, r) -> r
         | SubtypeRule(_, _, r) -> r
         | ValueClauseRule (r) -> r
         | LeafValueRule(_)
         | LeafRule (_) -> [] )
+
     let typeBlockDepth = getTypeBlockDepth 0 (ruleType, options)
     let typeName = typeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
@@ -226,6 +227,7 @@ let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleT
     div [] [
         h2 [ _class "title"; _id typeName] [ str typeName]
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
+        div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
         div [] ([description] |> List.choose id)
         table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
 

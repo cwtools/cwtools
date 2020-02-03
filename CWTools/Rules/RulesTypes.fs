@@ -159,6 +159,7 @@ and RuleType =
         | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
         | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
         | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
+
 and NewRule = RuleType * Options
 
 type RootRule =
