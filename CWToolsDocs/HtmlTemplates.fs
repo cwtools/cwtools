@@ -20,13 +20,13 @@ let valueTypeField enums (vt : ValueType) =
     |(Bool) -> "yes/no"
     |(DateTime)
     |(Date) -> "Date with YYYY.MM.dd format, starting from 1.1.1"
-    |(Int (RulesParser.intFieldDefaultMinimum, RulesParser.intFieldDefaultMaximum)) -> "Integer"
-    |(Int (RulesParser.intFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
-    |(Int (min, RulesParser.intFieldDefaultMaximum)) -> sprintf "Integer above %i" min
+    |(Int (RulesParserConstants.IntFieldDefaultMinimum, RulesParserConstants.IntFieldDefaultMaximum)) -> "Integer"
+    |(Int (RulesParserConstants.IntFieldDefaultMinimum, max)) -> sprintf "Integer below %i" max
+    |(Int (min, RulesParserConstants.IntFieldDefaultMaximum)) -> sprintf "Integer above %i" min
     |(Int (min, max)) -> sprintf "Integer between %i and %i" min max
-    |(Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum && max = RulesParser.floatFieldDefaultMaximum -> "Float"
-    |(Float (min, max)) when min = RulesParser.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
-    |(Float (min, max)) when max = RulesParser.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
+    |(Float (min, max)) when min = RulesParserConstants.floatFieldDefaultMinimum && max = RulesParserConstants.floatFieldDefaultMaximum -> "Float"
+    |(Float (min, max)) when min = RulesParserConstants.floatFieldDefaultMinimum -> sprintf "Float below %s" (max.ToString())
+    |(Float (min, max)) when max = RulesParserConstants.floatFieldDefaultMaximum -> sprintf "Float above %s" (min.ToString())
     |(Float (min, max)) -> sprintf "Float between %s and %s" (min.ToString()) (max.ToString())
     |(Percent) -> "percentage"
     |(Enum enumName) ->
@@ -86,11 +86,10 @@ let fieldToText enums (field : NewField) =
     | SingleAliasField _
     | MarkerField _
     | JominiGuiField _
-    | AliasField _ ->
-        str ""
+    | AliasField _ 
     | IgnoreField _ 
-    | IgnoreMarkerField _
-        -> str (field.ToString())
+    | IgnoreMarkerField _ ->
+        str ""
     // | _ -> str ""
 
 let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
@@ -135,7 +134,7 @@ let rhsFieldToText (enums : EnumDefinition list) (field : NewField) =
     | AliasField x -> str (x + " fields")
     | IgnoreField _ 
     | IgnoreMarkerField _
-        -> str (field.ToString())
+        -> str ""
 
 let replaceScopesToText (replaceScopes : ReplaceScopes) =
     let rootText = replaceScopes.root |> Option.map (fun r -> sprintf "ROOT: %s" (r.ToString()))
@@ -153,10 +152,10 @@ let replaceScopesToText (replaceScopes : ReplaceScopes) =
 let getReqCount (options : Options) =
     match options.min, options.max with
     | 0, 1 -> "Optional"
-    | 0, RulesParser.cardinalityDefaultMaximum -> "Optional, many"
+    | 0, RulesParserConstants.CardinalityDefaultMaximum -> "Optional, many"
     | 0, x -> sprintf "Optional, up to %i" x
     | 1, 1 -> "Required"
-    | 1, RulesParser.cardinalityDefaultMaximum -> "Required, many"
+    | 1, RulesParserConstants.CardinalityDefaultMaximum -> "Required, many"
     | 1, x -> sprintf "Required, up to %i" x
     | x, y -> sprintf "Min %i, up to %i" x y
 
@@ -205,9 +204,14 @@ let rec getTypeBlockDepth (depth : int) ((rule, _): NewRule) =
         inner |> List.map (getTypeBlockDepth (depth + 1)) |> List.max
     | _ -> depth
 
-let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((rule, options): NewRule)) =
-    let _, rules = rule |> (function | NodeRule (l, r) -> l, r)
-    let typeBlockDepth = getTypeBlockDepth 0 (rule, options)
+let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =
+    let rules = ruleType |> (function
+        | NodeRule (_, r) -> r
+        | SubtypeRule(_, _, r) -> r
+        | ValueClauseRule (r) -> r
+        | LeafValueRule(_)
+        | LeafRule (_) -> [] )
+    let typeBlockDepth = getTypeBlockDepth 0 (ruleType, options)
     let typeName = typeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
     let description =

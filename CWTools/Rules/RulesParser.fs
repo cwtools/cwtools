@@ -12,10 +12,7 @@ open CWTools.Process
 open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
-open CWTools.Common.NewScope
-open CWTools.Utilities.StringResource
 open CWTools.Rules
-
 
 module private RulesParserImpl =
     let internal specificField x = SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x))
@@ -28,23 +25,15 @@ module private RulesParserImpl =
         |"hint" -> Severity.Hint
         |s -> failwithf "Invalid severity %s" s
     let defaultOptions = { min = 0; max = 1000; strictMin = true; leafvalue = false; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None; keyRequiredQuotes = false; valueRequiredQuotes = false }
+    let defaultFloat = ValueField (ValueType.Float (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+    let defaultInt = ValueField (ValueType.Int (RulesParserConstants.IntFieldDefaultMinimum, RulesParserConstants.IntFieldDefaultMaximum))   
 
-    [<Literal>]
-    let intFieldDefaultMinimum = Int32.MinValue
-    [<Literal>]
-    let intFieldDefaultMaximum = Int32.MaxValue
-    let floatFieldDefaultMinimum = -1E+12M
-    let floatFieldDefaultMaximum = 1E+12M
-    [<Literal>]
-    let private cardinalityDefaultMaximum = 10000
-    let defaultFloat = ValueField (ValueType.Float (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
-    let defaultInt = ValueField (ValueType.Int (intFieldDefaultMinimum, intFieldDefaultMaximum))
     let private getNodeComments (clause : IClause) =
         let findComments (t : range) s (a : Child) =
                 match (s, a) with
                 | ((b, c), _) when b -> (b, c)
                 | ((_, c), CommentC (_, nc)) when nc.StartsWith("#") -> (false, nc::c)
-                | ((_, c), CommentC (_, nc)) -> (false, c)
+                | ((_, c), CommentC (_, _)) -> (false, c)
                 | ((_, c), NodeC n) when n.Position.Code = t.Code -> (true, c)
                 | ((_, c), LeafC v) when v.Position.Code = t.Code -> (true, c)
                 | ((_, c), LeafValueC v) when v.Position.Code = t.Code -> (true, c)
@@ -73,8 +62,8 @@ module private RulesParserImpl =
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
             let parseDecimal (s : string) =
                 match s, Decimal.TryParse s with
-                | "inf", _ -> Some (decimal floatFieldDefaultMaximum)
-                | "-inf", _ -> Some (decimal floatFieldDefaultMinimum)
+                | "inf", _ -> Some (decimal RulesParserConstants.floatFieldDefaultMaximum)
+                | "-inf", _ -> Some (decimal RulesParserConstants.floatFieldDefaultMinimum)
                 | _, (true, num) -> Some (num)
                 | _, (false, _) -> None
             if split.Length < 2 then None else
@@ -90,8 +79,8 @@ module private RulesParserImpl =
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
             let parseInt (s : string) =
                 match s, Int32.TryParse s with
-                | "inf", _ -> Some intFieldDefaultMaximum
-                | "-inf", _ -> Some intFieldDefaultMinimum
+                | "inf", _ -> Some RulesParserConstants.IntFieldDefaultMaximum
+                | "-inf", _ -> Some RulesParserConstants.IntFieldDefaultMinimum
                 | _, (true, num) -> Some num
                 | _, (false, _) -> None
             if split.Length < 2 then None else
@@ -162,7 +151,7 @@ module private RulesParserImpl =
                     let minText, strictMin =
                         if nums.[0].StartsWith "~" then nums.[0].Substring(1), false else nums.[0], true
                     match minText, nums.[1] with
-                    | min, "inf" -> (int min), cardinalityDefaultMaximum, strictMin
+                    | min, "inf" -> (int min), RulesParserConstants.CardinalityDefaultMaximum, strictMin
                     | min, max -> (int min), (int max), strictMin
                 with
                 | _ -> 1, 1, true
@@ -254,26 +243,26 @@ module private RulesParserImpl =
             | Some alias -> AliasField alias
             | None -> ScalarField (ScalarValue)
         | "scope_field" -> ScopeField (anyScope)
-        | "variable_field" -> VariableField (false, (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
+        | "variable_field" -> VariableField (false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | x when x.StartsWith "variable_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> VariableField (false,(min, max))
-            | None -> VariableField (false,(floatFieldDefaultMinimum, floatFieldDefaultMaximum))
-        | "int_variable_field" -> VariableField (true, (decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
+            | None -> VariableField (false,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+        | "int_variable_field" -> VariableField (true, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | x when x.StartsWith "int_variable_field[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> VariableField (true,(decimal min,decimal max))
-            | None -> VariableField (true,(decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
-        | "value_field" -> ValueScopeMarkerField (false, (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
+            | None -> VariableField (true,(decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
+        | "value_field" -> ValueScopeMarkerField (false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | x when x.StartsWith "value_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (false,(min, max))
-            | None -> ValueScopeMarkerField (false,(floatFieldDefaultMinimum, floatFieldDefaultMaximum))
-        | "int_value_field" -> ValueScopeMarkerField (true, (decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
+            | None -> ValueScopeMarkerField (false,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+        | "int_value_field" -> ValueScopeMarkerField (true, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | x when x.StartsWith "int_value_field[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (true,(decimal min,decimal max))
-            | None -> ValueScopeMarkerField (true,(decimal intFieldDefaultMinimum, decimal intFieldDefaultMaximum))
+            | None -> ValueScopeMarkerField (true,(decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | x when x.StartsWith "value_set[" ->
             match getSettingFromString x "value_set" with
             | Some variable ->
@@ -367,7 +356,7 @@ module private RulesParserImpl =
                 let rightfield = processKey parseScope anyScope (rightkey.Trim('"'))
                 let leafRule = LeafRule(leftfield, rightfield)
                 NewRule(leafRule, options)
-        |_, x ->
+        |_, _ ->
             let rightfield = processKey parseScope anyScope (rightkey.Trim('"'))
             let leafRule = LeafRule(leftfield, rightfield)
             NewRule(leafRule, options)
@@ -864,8 +853,8 @@ module RulesParser =
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }
     let optionalMany : Options = { defaultOptions with min = 0; max = 100 }
-    let defaultFloat = ValueField (ValueType.Float (floatFieldDefaultMinimum, floatFieldDefaultMaximum))
-    let defaultInt = ValueField (ValueType.Int (intFieldDefaultMinimum, intFieldDefaultMaximum))
+    let defaultFloat = ValueField (ValueType.Float (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+    let defaultInt = ValueField (ValueType.Int (RulesParserConstants.IntFieldDefaultMinimum, RulesParserConstants.IntFieldDefaultMaximum))
 
     let parseConfig (parseScope) (allScopes) (anyScope) filename fileString =
         //log "parse"

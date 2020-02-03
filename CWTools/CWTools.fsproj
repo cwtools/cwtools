@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -43,6 +43,7 @@
     <Compile Include="Process/Scopes/CK2Scopes.fs" />
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
+    <Compile Include="Rules/RulesParserConstants.fs" />
     <Compile Include="Rules/RulesTypes.fs" />
     <Compile Include="Rules/RulesParser.fs" />
     <Compile Include="Parser/UtilityParser.fs" />
