@@ -6,17 +6,20 @@
     <PaketCommand>dotnet paket</PaketCommand>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\paket-files\giraffe-fsharp\Giraffe\src\Giraffe\GiraffeViewEngine.fs">
+    <Compile Include="../paket-files/giraffe-fsharp/Giraffe/src/Giraffe/GiraffeViewEngine.fs">
       <Paket>True</Paket>
       <Link>GiraffeViewEngine.fs</Link>
     </Compile>
-    <ProjectReference Include="..\CWTools\CWTools.fsproj">
+    <ProjectReference Include="../CWTools/CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="./testconfig/**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlTemplates.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <Import Project="../.paket/Paket.Restore.targets" />
 </Project>
