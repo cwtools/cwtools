@@ -17,16 +17,16 @@ let getAllFoldersUnion dirs =
 
 
 let getConfigFiles(rulesDir : string) =
-    let configFiles = (if Directory.Exists rulesDir then getAllFoldersUnion ([rulesDir] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
-    let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
+    let configFiles = (if Directory.Exists rulesDir then getAllFoldersUnion ([rulesDir] |> Seq.ofList) else Seq.empty)
+                      |> Seq.collect (Directory.EnumerateFiles)
+                      |> List.ofSeq
+                      |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs =
-        match true, configFiles.Length > 0 with
-        |false, _ -> []
-        |_, true ->
-            configFiles |> List.map (fun f -> f, File.ReadAllText(f))
-            //["./config.cwt", File.ReadAllText("./config.cwt")]
-        |_, false -> []
+        match configFiles.Length > 0 with
+        | true -> configFiles |> List.map (fun f -> f, File.ReadAllText(f)) //["./config.cwt", File.ReadAllText("./config.cwt")]          
+        | false -> []
     configs
+    
 open CWTools.Rules
 let printTypeRule ((typeName : string), ((rule, options) : NewRule)) =
 
@@ -41,15 +41,15 @@ let main argv =
         | _ -> "./testconfig/"
     // let configPath = "./testconfig"
     let rulesFiles = getConfigFiles(configPath)
-    rulesFiles |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
+    rulesFiles |> List.tryFind (fun (fileName, _) -> Path.GetFileName fileName = "scopes.cwt")
         |> (fun f -> UtilityParser.initializeScopes f (Some []) )
 
-    rulesFiles |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
+    rulesFiles |> List.tryFind (fun (fileName, _) -> Path.GetFileName fileName = "modifier_categories.cwt")
         |> (fun f -> UtilityParser.initializeModifierCategories f (Some []) )
 
     let rules, types, enums, complexenums, values =
         rulesFiles
-            |> List.filter (fun (fn, ft) -> Path.GetExtension fn = ".cwt" )
+            |> List.filter (fun (fileName, ft) -> Path.GetExtension fileName = ".cwt" )
             |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) scopeManager.AllScopes scopeManager.AnyScope
     let renderedHtml = HtmlTemplates.rootRules rules enums types
     File.WriteAllText ("output.html", renderedHtml)
