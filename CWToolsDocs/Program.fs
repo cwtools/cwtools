@@ -17,10 +17,8 @@ let getAllFoldersUnion dirs =
 
 
 let getConfigFiles(rulesDir : string) =
-    let configFiles = (if Directory.Exists rulesDir then getAllFoldersUnion ([rulesDir] |> Seq.ofList) else Seq.empty)
-                      |> Seq.collect (Directory.EnumerateFiles)
-                      |> List.ofSeq
-                      |> List.filter (fun f -> Path.GetExtension f = ".cwt")
+    let configFiles = (if Directory.Exists rulesDir then getAllFoldersUnion ([rulesDir] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+    let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs =
         match configFiles.Length > 0 with
         | true -> configFiles |> List.map (fun f -> f, File.ReadAllText(f)) //["./config.cwt", File.ReadAllText("./config.cwt")]          

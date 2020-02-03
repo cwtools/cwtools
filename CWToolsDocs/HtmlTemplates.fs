@@ -36,7 +36,7 @@ let valueTypeField enums (vt : ValueType) =
     | CK2DNA -> "ck2DNA"
     | CK2DNAProperty -> "ck2DNAproperty"
     | IRFamilyName -> "IRFamilyName"
-    | STLNameFormat(_) -> vt.ToString()
+    | STLNameFormat(_) -> "STLNameFormat"
 
 let createTypeFieldLink (typeType : TypeType) =
     match typeType with
@@ -149,15 +149,21 @@ let replaceScopesToText (replaceScopes : ReplaceScopes) =
     | None, Some ft -> ft
     | None, None -> ""
 
+let getMinText (options: Options) =
+    match options.min, options.strictMin with
+    | 0, _ -> "Optional"
+    | _, true -> "Required"
+    | _, false -> "Recommended"
+
 let getReqCount (options : Options) =
     match options.min, options.max with
-    | 0, 1 -> "Optional"
-    | 0, RulesParserConstants.CardinalityDefaultMaximum -> "Optional, many"
-    | 0, x -> sprintf "Optional, up to %i" x
-    | 1, 1 -> "Required"
-    | 1, RulesParserConstants.CardinalityDefaultMaximum -> "Required, many"
-    | 1, x -> sprintf "Required, up to %i" x
-    | x, y -> sprintf "Min %i, up to %i" x y
+    | 0, 1 -> getMinText(options)
+    | 0, RulesParserConstants.CardinalityDefaultMaximum -> sprintf "%s, many" (getMinText(options))
+    | 0, x -> sprintf "%s, up to %i" (getMinText(options)) x
+    | 1, 1 -> getMinText(options)
+    | 1, RulesParserConstants.CardinalityDefaultMaximum -> sprintf "%s, many" (getMinText(options))
+    | 1, x -> sprintf "%s, up to %i" (getMinText(options)) x
+    | x, y -> (sprintf "%s min %i, up to %i"(getMinText(options)) x y).TrimStart()
 
 let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) ((rule, options) : NewRule) =
     let lhs = rule |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
