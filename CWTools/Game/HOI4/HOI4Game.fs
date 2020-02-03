@@ -179,7 +179,7 @@ type HOI4Settings = GameSetupSettings<HOI4Lookup>
 open HOI4GameFunctions
 type HOI4Game(setupSettings : HOI4Settings) =
     let validationSettings = {
-        validators = [ validateIfWithNoEffect, "ifnoeffect"; CWTools.Validation.Stellaris.STLValidation.validateRedundantANDWithNOT, "AND"; ]
+        validators = [ validateIfWithNoEffect, "ifnoeffect"; validateRedundantANDWithNOT, "AND"; ]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = setupSettings.validation.experimental

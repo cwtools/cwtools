@@ -781,31 +781,7 @@ module STLValidation =
                 )
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
 
-    type BoolState = | AND | OR
-    let validateRedundantAND : StructureValidator<_> =
-        fun _ es ->
-            let effects = (es.AllEffects)
-            let triggers = (es.AllTriggers)
-            let fNode =
-                fun (last : BoolState) (x : Node) ->
-                    match last, x.Key with
-                    |AND, k when k == "AND" -> AND, Some (inv (ErrorCodes.UnnecessaryBoolean "AND") x)
-                    |OR, k when k == "OR" -> OR, Some (inv (ErrorCodes.UnnecessaryBoolean "OR") x)
-                    |_, k when k == "OR" || k == "NOR" -> OR, None
-                    |_, _ -> AND, None
-            (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
-    let validateRedundantANDWithNOT : StructureValidator<_> =
-        fun _ es ->
-            let effects = (es.AllEffects)
-            let triggers = (es.AllTriggers)
-            let fNode =
-                fun (last : BoolState) (x : Node) ->
-                    match last, x.Key with
-                    |AND, k when k == "AND" -> AND, Some (inv (ErrorCodes.UnnecessaryBoolean "AND") x)
-                    |OR, k when k == "OR" -> OR, Some (inv (ErrorCodes.UnnecessaryBoolean "OR") x)
-                    |_, k when k == "OR" || k == "NOR" || k == "NOT" -> OR, None
-                    |_, _ -> AND, None
-            (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
+
 
     let validateDeprecatedSetName : STLStructureValidator =
         fun _ es ->
