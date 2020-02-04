@@ -166,7 +166,6 @@ let getReqCount (options : Options) =
     | x, y -> (sprintf "%s min %i, up to %i"(getMinText(options)) x y).TrimStart()
 
 let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) ((ruleType, options) : NewRule) =
-    let lhs = ruleType |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
     let colspan = (maxDepth - indent).ToString()
     let reqCount = td [] [str (getReqCount options)]
     match ruleType with
@@ -222,24 +221,13 @@ let extractRulesFromRuleType (ruleType: RuleType) : NewRule list =
 
 let subTypeBlock (enums: EnumDefinition list) ((subTypeDef : SubTypeDefinition)) =
     
-    let generateSubTypeTable (ruleType, options) =
-        let rules = extractRulesFromRuleType ruleType
+    let typeBlockDepth = subTypeDef.rules |> List.map (getTypeBlockDepth 0) |> List.max
 
-        let typeBlockDepth = getTypeBlockDepth 0 (ruleType, options)
-        let subTypeName = subTypeDef.name
-        let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
-        let description =
-            options.description |> Option.map ((sprintf "Description %s") >> str)
-            |> Option.map (fun s -> div [] [s])
-        div [] [
-            h2 [ _class "title"; _id subTypeName] [ str subTypeName]
-            // div [] (subTypeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
-            // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
-            div [] ([description] |> List.choose id)
-            table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0 ))) ]
-
-    let tables = subTypeDef.rules |> List.map generateSubTypeTable
-    tables
+    let subTypeName = subTypeDef.name
+    let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
+    div [] [
+        h3 [ _class "subtitle"; _id subTypeName; _style "margin-bottom:0.3em !important; margin-top:1em" ] [ (sprintf "subtype %s" subTypeName) |> str]
+        table [ _class "table is-striped is-fullwidth"] (tableHeader::(subTypeDef.rules |> List.collect (ruleTemplate enums typeBlockDepth 0 ))) ]
 
 let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =  
     let rules = extractRulesFromRuleType ruleType
@@ -248,16 +236,24 @@ let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleT
     let typeName = typeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
 
-    let subTypeTables = typeDef.subtypes |> List.collect (subTypeBlock enums)
+    let subTypeTables = typeDef.subtypes |> List.map (subTypeBlock enums)
+
+    let subTypeHtmlToggler = "this.parentNode.querySelector('div.subtypes-detail').hidden = !this.parentNode.querySelector('div.subtypes-detail').hidden; 
+                              this.querySelector('span.toggler').innerText = this.parentNode.querySelector('div.subtypes-detail').hidden ? '(+) ' : '(-) ';"
 
     let description =
         options.description |> Option.map ((sprintf "Description %s") >> str)
         |> Option.map (fun s -> div [] [s])
     div [] [
         h2 [ _class "title"; _id typeName] [ str typeName]
+        if subTypeTables.Length > 0 
+            then 
+                div [_class "tile is-parent";] [
+                    div [_class "table-container tile is-vertical notification";] [
+                        h4 [ _class "title is-4"; _style "cursor:pointer"; _id typeName; _onclick subTypeHtmlToggler] [ span [ _class "toggler"] [str "(+) "]; str "Subtypes"] 
+                        div [_class "subtypes-detail" ; _hidden] subTypeTables  ] ]
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
-        // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
-        div [] subTypeTables
+        // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))        
         div [] ([description] |> List.choose id)
         table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
 
