@@ -48,9 +48,11 @@ let createTypeFieldLink (typeType : TypeType) =
     | TypeType.Simple s ->  a [ _href ("#"+s)] [str ("<"+s+">")]
     | _ -> str ""
 
-let fieldToText enums (field : NewField) =
+let fieldToText (enums : EnumDefinition list) (field : NewField) (postFix : string option) =
     match field with
-    | SpecificField (SpecificValue value) -> str (stringManager.GetStringForID value.normal)
+    | SpecificField (SpecificValue value) -> str (match postFix with 
+                                                    | None -> stringManager.GetStringForID value.normal 
+                                                    | Some x -> sprintf "%s of subtype %s" (stringManager.GetStringForID value.normal) x )
     | TypeField tt -> createTypeFieldLink tt
     | ValueField (vt) -> str (valueTypeField enums vt)
     | LocalisationField (synced, isInline) ->
@@ -165,17 +167,23 @@ let getReqCount (options : Options) =
     | 1, x -> sprintf "%s, up to %i" (getMinText(options)) x
     | x, y -> (sprintf "%s min %i, up to %i"(getMinText(options)) x y).TrimStart()
 
-let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) ((ruleType, options) : NewRule) =
+let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) (_lshPostfix : string option) ((ruleType, options) : NewRule ) =
     let colspan = (maxDepth - indent).ToString()
     let reqCount = td [] [str (getReqCount options)]
+
+    let _lshPostfix = match ruleType 
+                        |> (function |SubtypeRule (displayname, _, _)  ->  Some displayname | _ -> None) with
+                            | Some x -> Some x
+                            | None -> _lshPostfix
+
     match ruleType with
     | LeafRule (left, right) ->
-        let lhs = td [ _colspan colspan] [(fieldToText enums left)]
+        let lhs = td [ _colspan colspan] [(fieldToText enums left _lshPostfix)]
         let rhs = td [] [(rhsFieldToText enums right)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
         [(tr [] [lhs; desc; reqCount; rhs])]
     | NodeRule (left, [LeafRule(AliasField x, _), innerOptions]) ->
-        let lhs = td [_colspan colspan] [(fieldToText enums left)]
+        let lhs = td [_colspan colspan] [(fieldToText enums left _lshPostfix)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
         let scopes = options.replaceScopes |> Option.map replaceScopesToText
         let rhsText = if scopes.IsSome then (x + " block, with scopes " + scopes.Value) else (x + " block")
@@ -184,16 +192,16 @@ let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : in
     | NodeRule (left, inner) ->
         let desc = td [_colspan colspan] [str (options.description |> Option.defaultValue "")]
         let rhs = td [] [strong [] [str "block, containing:"]]
-        let inners = (inner |> List.collect (ruleTemplate enums maxDepth (indent + 1)))
-        let lhs = td [ _rowspan ((inners.Length + 1).ToString()); ] [ strong [] [(fieldToText enums left)]]
+        let inners = (inner |> List.collect (ruleTemplate enums maxDepth (indent + 1) _lshPostfix))
+        let lhs = td [ _rowspan ((inners.Length + 1).ToString()); ] [ strong [] [(fieldToText enums left _lshPostfix)]]
         ((tr [] ([lhs; desc; reqCount; rhs]))::inners)
 
     | LeafValueRule (left) ->
-        let lhs = td [_colspan colspan] [(fieldToText enums left)]
+        let lhs = td [_colspan colspan] [(fieldToText enums left _lshPostfix)]
         let desc = td [] [str (options.description |> Option.defaultValue "")]
         [(tr [] [lhs; desc; reqCount; td [] [str ""]])]
-    | ValueClauseRule (inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent)
-    | SubtypeRule(_,_, inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent)
+    | ValueClauseRule (inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent _lshPostfix)
+    | SubtypeRule(_,_, inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent _lshPostfix)
     
     // | _ -> []
     // lhs |> Option.map fieldToText
@@ -219,15 +227,14 @@ let extractRulesFromRuleType (ruleType: RuleType) : NewRule list =
     rules
 
 
-let subTypeBlock (enums: EnumDefinition list) ((subTypeDef : SubTypeDefinition)) =
-    
+let subTypeBlock (enums: EnumDefinition list) ((subTypeDef : SubTypeDefinition)) =   
     let typeBlockDepth = subTypeDef.rules |> List.map (getTypeBlockDepth 0) |> List.max
 
     let subTypeName = subTypeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
     div [] [
         h3 [ _class "subtitle"; _id subTypeName; _style "margin-bottom:0.3em !important; margin-top:1em" ] [ (sprintf "subtype %s" subTypeName) |> str]
-        table [ _class "table is-striped is-fullwidth"] (tableHeader::(subTypeDef.rules |> List.collect (ruleTemplate enums typeBlockDepth 0 ))) ]
+        table [ _class "table is-striped is-fullwidth"] (tableHeader::(subTypeDef.rules |> List.collect (ruleTemplate enums typeBlockDepth 0 None))) ]
 
 let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =  
     let rules = extractRulesFromRuleType ruleType
@@ -255,7 +262,7 @@ let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleT
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
         // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))        
         div [] ([description] |> List.choose id)
-        table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
+        table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0 None))) ]
 
 
 let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
