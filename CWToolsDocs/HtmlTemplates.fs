@@ -171,10 +171,11 @@ let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : in
     let colspan = (maxDepth - indent).ToString()
     let reqCount = td [] [str (getReqCount options)]
 
-    let _lshPostfix = match ruleType 
-                        |> (function |SubtypeRule (displayname, _, _)  ->  Some displayname | _ -> None) with
-                            | Some x -> Some x
-                            | None -> _lshPostfix
+    let _lshPostfix =
+        let displayName = ruleType |> (function |SubtypeRule (displayname, _, _)  ->  Some displayname | _ -> None) 
+        match displayName with
+        | Some x -> Some x
+        | None -> _lshPostfix
 
     match ruleType with
     | LeafRule (left, right) ->
@@ -228,7 +229,10 @@ let extractRulesFromRuleType (ruleType: RuleType) : NewRule list =
 
 
 let subTypeBlock (enums: EnumDefinition list) ((subTypeDef : SubTypeDefinition)) =   
-    let typeBlockDepth = subTypeDef.rules |> List.map (getTypeBlockDepth 0) |> List.max
+    let typeBlockDepth =
+        match subTypeDef.rules |> List.map (getTypeBlockDepth 0) with
+        | [] -> 0
+        | x -> List.max x
 
     let subTypeName = subTypeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
