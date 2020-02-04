@@ -165,11 +165,11 @@ let getReqCount (options : Options) =
     | 1, x -> sprintf "%s, up to %i" (getMinText(options)) x
     | x, y -> (sprintf "%s min %i, up to %i"(getMinText(options)) x y).TrimStart()
 
-let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) ((rule, options) : NewRule) =
-    let lhs = rule |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
+let rec ruleTemplate (enums : EnumDefinition list) (maxDepth : int) (indent : int) ((ruleType, options) : NewRule) =
+    let lhs = ruleType |> (function |NodeRule (left, _) -> Some left |LeafRule (left, _) -> Some left |LeafValueRule left -> Some left |ValueClauseRule _ -> None |SubtypeRule _ -> None)
     let colspan = (maxDepth - indent).ToString()
     let reqCount = td [] [str (getReqCount options)]
-    match rule with
+    match ruleType with
     | LeafRule (left, right) ->
         let lhs = td [ _colspan colspan] [(fieldToText enums left)]
         let rhs = td [] [(rhsFieldToText enums right)]
@@ -210,26 +210,57 @@ let rec getTypeBlockDepth (depth : int) ((rule, _): NewRule) =
         inner |> List.map (getTypeBlockDepth (depth + 1)) |> List.max
     | _ -> depth
 
-let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =  
+let extractRulesFromRuleType (ruleType: RuleType) : NewRule list =
     let rules = ruleType |> (function
         | NodeRule (_, r) -> r
         | SubtypeRule(_, _, r) -> r
         | ValueClauseRule (r) -> r
         | LeafValueRule(_)
         | LeafRule (_) -> [] )
+    rules
+
+
+let subTypeBlock (enums: EnumDefinition list) ((subTypeDef : SubTypeDefinition)) =
+    
+    let generateSubTypeTable (ruleType, options) =
+        let rules = extractRulesFromRuleType ruleType
+
+        let typeBlockDepth = getTypeBlockDepth 0 (ruleType, options)
+        let subTypeName = subTypeDef.name
+        let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
+        let description =
+            options.description |> Option.map ((sprintf "Description %s") >> str)
+            |> Option.map (fun s -> div [] [s])
+        div [] [
+            h2 [ _class "title"; _id subTypeName] [ str subTypeName]
+            // div [] (subTypeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
+            // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
+            div [] ([description] |> List.choose id)
+            table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0 ))) ]
+
+    let tables = subTypeDef.rules |> List.map generateSubTypeTable
+    tables
+
+let typeBlock (enums : EnumDefinition list) ((typeDef : TypeDefinition), ((ruleType, options): NewRule)) =  
+    let rules = extractRulesFromRuleType ruleType
 
     let typeBlockDepth = getTypeBlockDepth 0 (ruleType, options)
     let typeName = typeDef.name
     let tableHeader = tr [] [th [ _colspan (typeBlockDepth.ToString())] [str "field"]; th [] [str "description"]; th [] [str "required"] ;th [] [str "rhs"]]
+
+    let subTypeTables = typeDef.subtypes |> List.collect (subTypeBlock enums)
+
     let description =
         options.description |> Option.map ((sprintf "Description %s") >> str)
         |> Option.map (fun s -> div [] [s])
     div [] [
         h2 [ _class "title"; _id typeName] [ str typeName]
         div [] (typeDef.pathOptions.paths |> List.map ((sprintf "path: %s") >> str))
-        div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
+        // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
+        div [] subTypeTables
         div [] ([description] |> List.choose id)
         table [ _class "table is-striped is-fullwidth"] (tableHeader::(rules |> List.collect (ruleTemplate enums typeBlockDepth 0))) ]
+
 
 let rootRules (rootRules : RootRule list) (enums : EnumDefinition list) (types : TypeDefinition list) =
     let typeBlocks = ((rootRules)
