@@ -24,9 +24,9 @@ let mask64 m n = (pown64 n) <<< m
 type FileIndex = int32
 
 [<Literal>]
-let columnBitCount = 9
+let columnBitCount = 11
 [<Literal>]
-let lineBitCount = 19
+let lineBitCount = 21
 
 let posBitCount = lineBitCount + columnBitCount
 let _ = assert (posBitCount <= 32)
@@ -55,55 +55,55 @@ type pos(code:int32) =
     override p.ToString() = sprintf "(%d,%d)" p.Line p.Column
 
 [<Literal>]
-let fileIndexBitCount = 14
+let fileIndexBitCount = 16
 [<Literal>]
 let startLineBitCount = lineBitCount
 [<Literal>]
 let startColumnBitCount = columnBitCount
 [<Literal>]
-let heightBitCount = 12 // If necessary, could probably deduct one or two bits here without ill effect.
+let heightBitCount = 20 // If necessary, could probably deduct one or two bits here without ill effect.
 [<Literal>]
 let endColumnBitCount = columnBitCount
 [<Literal>]
 let isSyntheticBitCount = 1
 #if DEBUG
-let _ = assert (fileIndexBitCount + startLineBitCount + startColumnBitCount + heightBitCount + endColumnBitCount + isSyntheticBitCount = 64)
+let _ = assert (fileIndexBitCount + startLineBitCount + startColumnBitCount + heightBitCount + endColumnBitCount + isSyntheticBitCount = 64 + 16)
 #endif
 
 [<Literal>]
 let fileIndexShift   = 0
 [<Literal>]
-let startLineShift   = 14
+let startLineShift   = 0
 [<Literal>]
-let startColumnShift = 33
+let startColumnShift = 21
 [<Literal>]
-let heightShift      = 42
+let heightShift      = 32
 [<Literal>]
-let endColumnShift   = 54
+let endColumnShift   = 52
 [<Literal>]
 let isSyntheticShift = 63
 
 
 [<Literal>]
-let fileIndexMask =   0b0000000000000000000000000000000000000000000000000011111111111111L
+let fileIndexMask =   0b0000000000000000000000000000000000000000000000000000000000000000L
 [<Literal>]
-let startLineMask =   0b0000000000000000000000000000000111111111111111111100000000000000L
+let startLineMask =   0b0000000000000000000000000000000000000000000111111111111111111111L
 [<Literal>]
-let startColumnMask = 0b0000000000000000000000111111111000000000000000000000000000000000L
+let startColumnMask = 0b0000000000000000000000000000000011111111111000000000000000000000L
 [<Literal>]
-let heightMask =      0b0000000000111111111111000000000000000000000000000000000000000000L
+let heightMask =      0b0000000000001111111111111111111100000000000000000000000000000000L
 [<Literal>]
-let endColumnMask =   0b0111111111000000000000000000000000000000000000000000000000000000L
+let endColumnMask =   0b0111111111110000000000000000000000000000000000000000000000000000L
 [<Literal>]
 let isSyntheticMask = 0b1000000000000000000000000000000000000000000000000000000000000000L
 
 #if DEBUG
-let _ = assert (startLineShift   = fileIndexShift   + fileIndexBitCount)
+// let _ = assert (startLineShift   = fileIndexShift   + fileIndexBitCount)
 let _ = assert (startColumnShift = startLineShift   + startLineBitCount)
 let _ = assert (heightShift      = startColumnShift + startColumnBitCount)
 let _ = assert (endColumnShift   = heightShift      + heightBitCount)
 let _ = assert (isSyntheticShift = endColumnShift   + endColumnBitCount)
-let _ = assert (fileIndexMask =   mask64 0 fileIndexBitCount)
+// let _ = assert (fileIndexMask =   mask64 0 fileIndexBitCount)
 let _ = assert (startLineMask =   mask64 startLineShift   startLineBitCount)
 let _ = assert (startColumnMask = mask64 startColumnShift startColumnBitCount)
 let _ = assert (heightMask =      mask64 heightShift      heightBitCount)
@@ -153,14 +153,13 @@ let mkPos l c = pos (l, c)
 #else
 [<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {FileName} IsSynthetic={IsSynthetic}")>]
 #endif
-type range(code:int64) =
-    static member Zero = range(0L)
+type range(code:int64, fidx:int16) =
+    static member Zero = range(0L, 0s)
     new (fidx, bl, bc, el, ec) =
-        range(  int64 fidx
-                ||| (int64 bl        <<< startLineShift)
+        range(  (int64 bl        <<< startLineShift)
                 ||| (int64 bc        <<< startColumnShift)
                 ||| (int64 (el-bl)   <<< heightShift)
-                ||| (int64 ec        <<< endColumnShift) )
+                ||| (int64 ec        <<< endColumnShift), int16 fidx )
 
     new (fidx, b:pos, e:pos) = range(fidx, b.Line, b.Column, e.Line, e.Column)
 
@@ -171,7 +170,7 @@ type range(code:int64) =
     member r.IsSynthetic = int32((code &&& isSyntheticMask) >>> isSyntheticShift) <> 0
     member r.Start = pos (r.StartLine, r.StartColumn)
     member r.End = pos (r.EndLine, r.EndColumn)
-    member r.FileIndex = int32(code &&& fileIndexMask)
+    member r.FileIndex = int32(fidx)
     member m.StartRange = range (m.FileIndex, m.Start, m.Start)
     member m.EndRange = range (m.FileIndex, m.End, m.End)
     member r.FileName = fileOfFileIndex r.FileIndex
@@ -188,7 +187,7 @@ type range(code:int64) =
         with e ->
             e.ToString()
 #endif
-    member r.MakeSynthetic() = range(code ||| isSyntheticMask)
+    member r.MakeSynthetic() = range(code ||| isSyntheticMask, fidx)
     override r.ToString() = sprintf "%s (%d,%d--%d,%d) IsSynthetic=%b" r.FileName r.StartLine r.StartColumn r.EndLine r.EndColumn r.IsSynthetic
     member r.ToShortString() = sprintf "(%d,%d--%d,%d)" r.StartLine r.StartColumn r.EndLine r.EndColumn
     member r.Code = code
