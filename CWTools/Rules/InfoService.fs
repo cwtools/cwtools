@@ -409,16 +409,19 @@ type InfoService
 
     let getInfoAtPos (pos : pos) (entity : Entity) =
         let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule) =
-            match field with
-            |LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
-            |LeafRule (_, LocalisationField _) -> ctx, (Some o, Some ("localisation", leaf.ValueText), Some (LeafC leaf))
-            |LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
-            |LeafRule (LocalisationField _, _) -> ctx, (Some o, Some ("localisation", leaf.Key), Some (LeafC leaf))
+            match o.typeHint, field with
+            | Some (t, true), _ -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+            | Some (t, false), _ -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+            | _, LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+            | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some ("localisation", leaf.ValueText), Some (LeafC leaf))
+            | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+            | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some ("localisation", leaf.Key), Some (LeafC leaf))
             |_ -> ctx, (Some o, None, Some (LeafC leaf))
         let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) =
-            match field with
-            |LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
-            |LeafValueRule (LocalisationField _) -> ctx, (Some o, Some ("localisation", leafvalue.Key), Some (LeafValueC leafvalue))
+            match o.typeHint, field with
+            |Some (t, true), _ -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
+            |_, LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
+            |_, LeafValueRule (LocalisationField _) -> ctx, (Some o, Some ("localisation", leafvalue.Key), Some (LeafValueC leafvalue))
             |_ -> ctx, (Some o, None, Some (LeafValueC leafvalue))
         let fComment (ctx, _) _ _ = ctx, (None, None, None)
         //TODO: Actually implement value clause
@@ -451,8 +454,9 @@ type InfoService
                         if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
                         then {ctx with scopes = {ctx.scopes with Scopes = anyScope::ctx.scopes.Scopes}}
                         else ctx
-            match field with
-            | NodeRule (ScopeField s, f) ->
+            match options.typeHint, field with
+            | Some (t, true), _ -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            | _, NodeRule (ScopeField s, f) ->
                 let scope = newCtx.scopes
                 let key = node.Key.Trim('"')
                 let newCtx =
@@ -465,14 +469,14 @@ type InfoService
                         {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
                     |_ -> newCtx
                 newCtx, (Some options, None, Some (NodeC node))
-            | NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
+            | _, NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
                 ctx, (Some options, Some (typename, node.Key), Some (NodeC node))
-            | NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
+            | _, NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
                 let typevalue = node.TagText namefield
                 ctx, (Some options, Some (typename, typevalue), Some (NodeC node))
-            | NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
-            | NodeRule (LocalisationField _, _) -> ctx, (Some options, Some ("localisation", node.Key), Some (NodeC node))
-            | NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
+            | _, NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            | _, NodeRule (LocalisationField _, _) -> ctx, (Some options, Some ("localisation", node.Key), Some (NodeC node))
+            | _, NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
             | _ -> newCtx, (Some options, None, Some (NodeC node))
 
         let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")

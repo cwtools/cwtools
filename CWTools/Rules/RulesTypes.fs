@@ -24,6 +24,7 @@ type Options = {
     referenceDetails : (bool * string) option
     keyRequiredQuotes : bool
     valueRequiredQuotes : bool
+    typeHint : (string * bool) option
 }
 
 type PathOptions = {
