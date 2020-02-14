@@ -141,11 +141,14 @@ module CWToolsCLI =
                 | Languages _ -> "A list of languages to validate (default all)"
     type ParseArgs =
         | [<MainCommand; ExactlyOnce; Last>] File of string
+        | ParseOutputFile of filename:string
+
     with
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
                 |File _ -> "file to parse"
+                |ParseOutputFile _ -> "file to output to"
     type CacheTypes =
         | Full = 1
         | Metadata = 2
@@ -363,10 +366,14 @@ module CWToolsCLI =
         | x -> 1
 
 
-    let parse file =
-        match CKParser.parseFile file with
-        |Success(_,_,_) -> true, ""
-        |Failure(msg,_,_) -> false, msg
+    let parse (results : ParseResults<ParseArgs>) =
+        let file = results.GetResult <@ File @>
+        let outputFile = results.TryGetResult <@ ParseOutputFile @>
+        let success, filetext = newParse file
+        match outputFile with
+        |Some file ->
+            File.WriteAllText(file, filetext); 0
+        |None -> printf "%s" (filetext); 1
 
 
     let serialize game directory scope modFilter cachePath rulesPath  (results : ParseResults<_>) =
@@ -427,6 +434,7 @@ module CWToolsCLI =
         | Serialize r -> serialize game directory scope modFilter cachePath rulesPath r ;0
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"; 1
+        | Parse r -> parse r
 
         //printfn "%A" argv
         // return an integer exit code

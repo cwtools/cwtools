@@ -7,12 +7,23 @@ open System.Drawing
 open System.IO
 open System.Text
 open System
-
+open CWTools.Parser
 
 type Reporter =
 | CLI
 | CSV
 | JSON
+
+module Json =
+    let writeNested key (toJson : _ -> Json<unit>) value : Json<unit> =
+      fun json ->
+        let inner = snd (toJson value json)
+        Json.write key inner json
+
+    let fold (f: _ -> Json<_>) xs : Json<unit> =
+         fun json ->
+            JsonResult.Value (), List.fold (fun json x ->
+                snd ((f x) json)) json xs
 
 module Reporters =
 
@@ -43,7 +54,7 @@ module Reporters =
                 errors
                     |> List.iter (fun e ->
                         e |> function |ValidationViewModelRow.Parse(r) -> sb.Append(sprintf "%s%s,%s,%s,%s,\"%s\"" ne r.file "0" "error" "CW001" (r.message.Replace(ne,""))) |> ignore
-                                        |Error(r) ->  sb.Append(sprintf "%s%s,%s,%s,%s,\"%s\"" ne r.position.FileName (r.position.StartLine.ToString()) (r.severity.ToString()) r.category (r.message.Replace(ne,"").Replace("\n",""))) |> ignore)
+                                      |Error(r) ->  sb.Append(sprintf "%s%s,%s,%s,%s,\"%s\"" ne r.position.FileName (r.position.StartLine.ToString()) (r.severity.ToString()) r.category (r.message.Replace(ne,"").Replace("\n",""))) |> ignore)
                 sb.ToString()
                 // List.fold (fun s e -> e |> function |ValidationViewModelRow.Parse(r) -> s + ne + r.file + ",\"" + r.error.Replace(System.Environment.NewLine,"") + "\"" |Error(r) -> s + ne + r.position + "," + r.error.Replace(ne, "")) "file,error" errors
         match outputFile with
@@ -91,3 +102,56 @@ module Reporters =
         |Some file ->
             File.WriteAllText(file, outputText)
         |None -> printf "%s" outputText
+
+    type Value with
+        static member ToJson (v : Value) =
+                    match v with
+                    | String s -> Json.write "value" s
+                    | QString s -> Json.write "value" ("\""+s+"\"")
+                    | Bool b -> Json.write "value" b
+                    | Int i -> Json.write "value" i
+                    | Float f -> Json.write "value" f
+                    | Clause c -> Json.fold (fun x -> Json.writeNested "value" Statement.ToJson x) c
+                    //Json.Optic.set Aether.Optics.id_ (Chiron.Array (c |> List.map (fun c -> Json.writeNested "value" Statement.ToJson c )))
+
+    and Statement with
+        static member ToJson ( s : Statement) =
+            match s with
+            | Comment (_, c) -> Json.write "comment" c
+            | Value (_, v) -> Json.writeNested "value" Value.ToJson v
+            | KeyValue kvi -> Json.writeNested "keyvalue" PosKeyValue.ToJson kvi
+    and KeyValueItem with
+        static member ToJson ( kvi : KeyValueItem ) =
+            let k, v, o = kvi |> function | KeyValueItem (k, v, o) -> k, v, o
+            let key = k |> function | Key k -> k
+            json {
+                do! Json.write "key" key
+                do! Json.write "operator" (operatorToString o)
+                do! Json.writeNested "value" Value.ToJson v
+            }
+    and PosKeyValue with
+        static member ToJson ( pkv : PosKeyValue ) =
+            let (r, kv) = pkv |> function | PosKeyValue (r, kv) -> r, kv
+            json {
+                //do! Json.write "range" r
+                do! Json.writeNested "kv" KeyValueItem.ToJson kv
+            }
+    let listToJsonWith serialize lst =
+        Json.Array <| List.map serialize lst
+
+    type StatementList = {
+        statements : Statement list
+    } with
+        static member ToJson (statements : StatementList) =
+            Json.write "statements" (listToJsonWith (fun s -> Json.serializeWith Statement.ToJson s) statements.statements)
+
+    
+    open FParsec
+
+    let newParse file =
+        match CKParser.parseFile file with
+        |Success(s,_,_) -> 
+            let outputText = { statements = s } |> Json.serialize |> Json.format
+            //let outputText = s |> Json.serializeWith (fun ss -> Json.fold (fun x -> Statement.ToJson x) ss ) |> Json.format
+            true, outputText
+        |Failure(msg,_,_) -> false, msg
