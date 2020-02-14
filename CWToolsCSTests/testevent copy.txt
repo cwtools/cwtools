@@ -2,4 +2,6 @@
 country_event = {
         id = test.1
     desc = "test description"
+    bool = yes
+    num = 5.1
 }

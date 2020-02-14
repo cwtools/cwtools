@@ -102,6 +102,8 @@ module Reporters =
         |Some file ->
             File.WriteAllText(file, outputText)
         |None -> printf "%s" outputText
+    let listToJsonWith serialize lst =
+        Json.Array <| List.map serialize lst
 
     type Value with
         static member ToJson (v : Value) =
@@ -111,7 +113,8 @@ module Reporters =
                     | Bool b -> Json.write "value" b
                     | Int i -> Json.write "value" i
                     | Float f -> Json.write "value" f
-                    | Clause c -> Json.fold (fun x -> Json.writeNested "value" Statement.ToJson x) c
+                    // | Clause c -> Json.fold (fun x -> Json.writeNested "value" Statement.ToJson x) c
+                    | Clause c -> Json.write "statements" (listToJsonWith (fun s -> Json.serializeWith Statement.ToJson s) c)
                     //Json.Optic.set Aether.Optics.id_ (Chiron.Array (c |> List.map (fun c -> Json.writeNested "value" Statement.ToJson c )))
 
     and Statement with
@@ -119,7 +122,8 @@ module Reporters =
             match s with
             | Comment (_, c) -> Json.write "comment" c
             | Value (_, v) -> Json.writeNested "value" Value.ToJson v
-            | KeyValue kvi -> Json.writeNested "keyvalue" PosKeyValue.ToJson kvi
+            // | KeyValue kvi -> Json.writeNested "keyvalue" PosKeyValue.ToJson kvi
+            | KeyValue kvi -> PosKeyValue.ToJson kvi
     and KeyValueItem with
         static member ToJson ( kvi : KeyValueItem ) =
             let k, v, o = kvi |> function | KeyValueItem (k, v, o) -> k, v, o
@@ -127,17 +131,16 @@ module Reporters =
             json {
                 do! Json.write "key" key
                 do! Json.write "operator" (operatorToString o)
-                do! Json.writeNested "value" Value.ToJson v
+                do! Value.ToJson v
             }
     and PosKeyValue with
         static member ToJson ( pkv : PosKeyValue ) =
             let (r, kv) = pkv |> function | PosKeyValue (r, kv) -> r, kv
-            json {
-                //do! Json.write "range" r
-                do! Json.writeNested "kv" KeyValueItem.ToJson kv
-            }
-    let listToJsonWith serialize lst =
-        Json.Array <| List.map serialize lst
+            KeyValueItem.ToJson kv
+            // json {
+            //     //do! Json.write "range" r
+            //     do! Json.writeNested "kv" KeyValueItem.ToJson kv
+            // }
 
     type StatementList = {
         statements : Statement list
