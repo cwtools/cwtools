@@ -3,6 +3,8 @@ open System.Text
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Utilities.StringResource
 open CWTools.Games.Files
+open FSharp.Data
+open FSharp.Data.JsonExtensions
 
 module CWToolsScripts =
     open System
@@ -53,7 +55,6 @@ module CWToolsScripts =
             |> List.choose
                 (function |AliasRule ("effect", (LeafRule(SpecificField (SpecificValue(x)),_), _)) -> Some (StringResource.stringManager.GetStringForIDs x)
                           |AliasRule ("effect", (NodeRule(SpecificField (SpecificValue(x)),_), _)) -> Some (StringResource.stringManager.GetStringForIDs x) |_ -> None)
-
 
         let triggers = JominiParser.parseTriggerFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/triggers.log"
                         |> List.filter (fun t -> List.contains t.name oldTriggers |> not)
@@ -215,7 +216,7 @@ module CWToolsScripts =
         // File.WriteAllText("test.test", triggers |> List.choose (fun t -> t.traits) |> List.distinct |> String.concat("\n"))
         //printfn "%A" argv
         0 // return an integer exit code
-    
+
     let emptyStellarisSettings (rootDirectory) = {
         CWTools.Games.GameSetupSettings.rootDirectories = [WD { name = "test"; path = rootDirectory;}]
         modFilter = None
@@ -223,6 +224,20 @@ module CWToolsScripts =
             validateVanilla = false
             experimental = true
             langs = [STL STLLang.English]
+        }
+        rules = None
+        embedded = FromConfig ([], [])
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = None
+    }
+    let emptyHOI4Settings (rootDirectory) = {
+        CWTools.Games.GameSetupSettings.rootDirectories = [WD { name = "test"; path = rootDirectory;}]
+        modFilter = None
+        validation = {
+            validateVanilla = false
+            experimental = true
+            langs = [HOI4 HOI4Lang.English]
         }
         rules = None
         embedded = FromConfig ([], [])
@@ -290,6 +305,114 @@ module CWToolsScripts =
             undefinedEffects |> Set.iter (fun t -> printfn "%s" t)
         0
 
+    let parseEffect ((effectName, effectInner) : (string * JsonValue)) =
+        let desc = effectInner?description
+        let scopes = effectInner?supported_scope
+        let targets = effectInner?supported_target
+        { RawEffect.name = effectName
+          desc = desc.AsString()
+          usage = ""
+          scopes = scopes.AsArray() |> List.ofArray |> List.map (fun j -> j.AsString())
+          targets = targets.AsArray() |> List.ofArray |> List.map (fun j -> j.AsString())
+          traits = None
+          }
+    let parseScriptDocsJson (path : string) =
+        let value = JsonValue.Load path
+        let effects =
+            match value?effects with
+            | JsonValue.Record es -> es |> Array.map parseEffect |> List.ofArray
+            | _ -> []
+        let triggers =
+            match value?triggers with
+            | JsonValue.Record ts -> ts |> Array.map parseEffect |> List.ofArray
+            | _ -> []
+        effects, triggers
+
+    let tinner =
+            """{
+	alias_name[effect] = alias_match_left[effect]
+}
+"""
+    let tout (triggers : RawEffect list) =
+            triggers |> List.map (fun t ->
+                            let scopes = t.scopes |> List.map (fun s -> s.ToString()) |> String.concat " "
+                            let scopes = if scopes = "" then "" else "## scopes = { " + scopes + " }\n"
+                            let any = t.name.StartsWith("any_")
+                            let rhs = if any then tinner else "replace_me"
+                            let safeDesc = t.desc.Replace("\n","")
+                            sprintf "###%s\n%salias[trigger:%s] = %s\n\r" safeDesc scopes t.name rhs)
+                    |> String.concat("")
+
+    let einner =
+            """{
+    ## cardinality = 0..1
+	limit = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	alias_name[effect] = alias_match_left[effect]
+}
+"""
+    let eout (effects : RawEffect list) =
+        effects |> List.map (fun t ->
+                            let scopes = t.scopes |> List.map (fun s -> s.ToString()) |> String.concat " "
+                            let scopes = if scopes = "" then "" else "## scopes = { " + scopes + " }\n"
+                            let every = t.name.StartsWith("every_") || t.name.StartsWith("random_")
+                            let rhs = if every then einner else "replace_me"
+                            let safeDesc = t.desc.Replace("\n","")
+                            sprintf "###%s\n%salias[effect:%s] = %s\n\r" safeDesc scopes t.name rhs)
+                    |> String.concat("")
+
+
+    let findUndefinedEffectsHOI4() =
+        let configFiles = (if Directory.Exists @"C:\Users\Thomas\git\cwtools-hoi4-config\" then getAllFoldersUnion ([@"C:\Users\Thomas\git\cwtools-hoi4-config\"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+        let configFiles2 = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
+        let configs = configFiles2 |> List.map (fun f -> f, File.ReadAllText(f))
+        let folders = configs |> List.tryPick getFolderList
+
+        let settings =
+            {
+                emptyHOI4Settings("./") with
+                    rules = Some {
+                            ruleFiles = configs
+                            validateRules = true
+                            debugRulesOnly = false
+                            debugMode = false
+                    }
+            }
+        let hoi4 = CWTools.Games.HOI4.HOI4Game(settings)
+        let lookup = hoi4.Lookup
+        let effects, triggers = configFiles |> Seq.find (fun f -> Path.GetFileName f = "script_documentation.json") |> parseScriptDocsJson
+        let effectsNames = effects |> List.map (fun e -> e.name) |> Set.ofList
+        let triggersNames = triggers |> List.map (fun e -> e.name) |> Set.ofList
+        let getEffect (rule : RootRule) =
+            match rule with
+            | AliasRule ("effect", (LeafRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | AliasRule ("effect", (NodeRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | _ -> None
+        let getTrigger (rule : RootRule) =
+            match rule with
+            | AliasRule ("trigger", (LeafRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | AliasRule ("trigger", (NodeRule(SpecificField(SpecificValue vc), _), _)) -> Some (stringManager.GetStringForIDs vc)
+            | _ -> None
+        let triggerAliases = lookup.configRules |> List.choose getTrigger |> Set.ofList
+        let effectAliases = lookup.configRules |> List.choose getEffect |> Set.ofList
+        let undefinedTriggers = Set.difference triggersNames triggerAliases
+        let undefinedEffects = Set.difference effectsNames effectAliases
+        if undefinedTriggers.IsEmpty
+        then ()
+        else
+            printfn "The following triggers are present in trigger_docs but not in rules"
+            undefinedTriggers |> Set.iter (fun t -> printfn "%s" t)
+            let res = triggers |> List.filter (fun t -> Set.contains t.name undefinedTriggers) |> tout
+            File.WriteAllText(@"C:\Users\Thomas\git\cwtools-hoi4-config\\Config\triggers_new.cwt", res)
+        if undefinedEffects.IsEmpty
+        then ()
+        else
+            printfn "The following effects are present in trigger_docs but not in rules"
+            undefinedEffects |> Set.iter (fun t -> printfn "%s" t)
+            let res = effects |> List.filter (fun t -> Set.contains t.name undefinedEffects) |> eout
+            File.WriteAllText(@"C:\Users\Thomas\git\cwtools-hoi4-config\\Config\effects_new.cwt", res)
+        0
 
     [<EntryPoint>]
     let main argv =
@@ -298,8 +421,11 @@ module CWToolsScripts =
         if Array.tryHead argv = Some "ir"
         then
             generateIRFiles()
-        elif Array.tryHead argv = Some "unused"
+        elif Array.tryHead argv = Some "unusedstl"
         then
             findUndefinedEffects()
+        elif Array.tryHead argv = Some "unusedhoi4"
+        then
+            findUndefinedEffectsHOI4()
         else
             0
