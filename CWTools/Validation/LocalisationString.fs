@@ -96,7 +96,7 @@ module LocalisationString =
 
 
         let validateReplaceMe (lang, (m : Map<string, LocEntry>)) =
-            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ]) else s ) OK
+            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" || v.desc == "\"TODO_CD\"" then s <&&> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ]) else s ) OK
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
