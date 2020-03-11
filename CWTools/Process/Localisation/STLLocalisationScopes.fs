@@ -25,6 +25,7 @@ module STL =
         ScopedEffect("home_planet", [scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Species"; scopeManager.ParseScope() "Planet"], scopeManager.ParseScope() "Planet", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("overlord", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("space_owner", [scopeManager.ParseScope() "Ship"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Planet"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("federation", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Federation", EffectType.Link, defaultDesc, "", true);
     ]
     let scopedLocEffectsMap() = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects() |> List.map (fun se -> se.Name, se :> Effect))
 
