@@ -76,3 +76,6 @@ dotnetcore
 .fake-cli/
 *.bz2
 *.cwv
+
+.fake
+.ionide
