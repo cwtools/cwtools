@@ -1,0 +1,8 @@
+tasks:
+  - init: echo "Replace me with a build script for the project."
+    command: echo "Replace me with something that should run on every start, or just
+      remove me entirely."
+image: gitpod/workspace-dotnet
+vscode:
+  extensions:
+    - Ionide.Ionide-fsharp@4.6.2:yBkAE6j7z7gJ5WEcyMjEOg==
