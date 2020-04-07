@@ -21,7 +21,7 @@ module STLConstants =
         "Species",["species"]
         "Pop Faction",["popfaction"; "pop_faction"]
         "Sector",["sector"]
-        "Alliance",["alliance"]
+        "Federation",["alliance"; "federation"; "Alliance"]
         "War",["war"]
         "Megastructure",["megastructure"]
         "Design",["design"]
@@ -60,6 +60,7 @@ module STLConstants =
         "PlanetClass", Some 131072, ["planet"; "pop"; "country"]
         "Starbase", Some 262144, ["starbase";"country"]
         "Resource", Some 524288, ["country";"galacticobject";"planet";"pop";"starbase";"leader";"ship"]
+		"Federation", Some 4194304, ["federation"]
     ]
 
     let defaultModifiersInputs() =
