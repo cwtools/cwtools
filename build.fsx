@@ -152,7 +152,7 @@ Core.Target.create "Pack" (fun _ ->
     let name = System.IO.Path.GetFileName path
     DotNet.exec id "pack" (
       sprintf
-        "\"%s\" -o ../bin %s"
+        "\"%s\" -o ./bin %s"
         //"pack \"%s\" -c Debug  -o ../bin %s"
         proj  (packParameters name)) |> ignore
   )
