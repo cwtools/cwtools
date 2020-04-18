@@ -88,6 +88,8 @@
     <Compile Include="Game/VIC2/VIC2Game.fs" />
     <Compile Include="Game/Custom/CustomGame.fs" />
     <Compile Include="CSharp/Extensions.fs" />
+    <Compile Include="CSharp/Parsers.fs" />
+    <Compile Include="CSharp/Helpers.fs" />
     <Compile Include="ExtensionPoints/StatementVisitor.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />

@@ -196,7 +196,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
         let refreshTypeInfo() =
             let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
-            let typeDefInfo = getTypesFromDefinitions tempRuleValidationService tempTypes allentities
+            let typeDefInfo = getTypesFromDefinitions (Some tempRuleValidationService) tempTypes allentities
             let newTypeDefInfo = typeDefInfo
             lookup.typeDefInfo <- addEmbeddedTypeDefData newTypeDefInfo// |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
             let newTypeMap = lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
