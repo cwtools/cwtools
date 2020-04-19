@@ -1,4 +1,4 @@
-## New in 0.4.0-alpha (Released 2020/04/18)
+## New in 0.4.0-alpha2 (Released 2020/04/18)
 * Update to newer features
 ## New in 0.3.0 (Released 2019/01/15)
 * Update to newer features
