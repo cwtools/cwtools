@@ -5,6 +5,7 @@ open System.Collections.Generic
 open System.Runtime.CompilerServices
 open FParsec.CharParsers
 
+
 [<Extension>]
 type Extensions =
     /// Filter to just Nodes
@@ -24,4 +25,4 @@ type Extensions =
     static member inline GetResult(obj : ParserResult<_,_>) = obj |> function |Success(s, _, _) -> s |_ -> null
     /// Retrieve error message or null (if success)
     [<Extension>]
-    static member inline GetError(obj : ParserResult<_,_>) = obj |> function |Failure(e, _, _) -> e |_ -> null
+    static member inline GetError(obj : ParserResult<_,_>) = obj |> function |Failure(m, e, _) -> { Filename = e.Position.StreamName; Line = e.Position.Line; Column = e.Position.Column; ErrorMessage = m } |_ -> Operators.Unchecked.defaultof<ParserError>

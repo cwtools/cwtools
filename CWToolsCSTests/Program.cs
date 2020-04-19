@@ -65,15 +65,18 @@ namespace CWToolsCSTests
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             //Parse event file
-            var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
+            // var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
+            var text = File.ReadAllText("./testevent.txt");
+            var parsed = CWTools.CSharp.Parsers.ParseScriptFile("testevent.txt", text);
 
             var eventFile = parsed.GetResult();
 
             //"Process" result into nicer format
-            var processed = CK2Process.processEventFile(eventFile);
+            // var processed = CK2Process.processEventFile(eventFile);
+            var processed = CWTools.CSharp.Parsers.ProcessStatements("testevent.txt", "./testevent.txt", eventFile);
 
             //Find interesting event
-            var myEvent = processed.Events.FirstOrDefault(x => x.ID == "test.1");
+            var myEvent = processed.Nodes.FirstOrDefault(x => x.TagText("id") == "test.1");
 
             //Add is_triggered_only = true
             var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), FSharpOption<range>.None);
