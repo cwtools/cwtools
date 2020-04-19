@@ -18,4 +18,5 @@ nuget Pastel
 nuget Chiron
 nuget NuGet.CommandLine
 nuget SharpZipLib
+nuget CWTools 0.4.0-alpha
 github giraffe-fsharp/Giraffe src/Giraffe/GiraffeViewEngine.fs
