@@ -1,3 +1,5 @@
+## New in 0.4.0-alpha3 (Released 2020/04/20)
+* Add better pretty printer api
 ## New in 0.4.0-alpha2 (Released 2020/04/18)
 * Update to newer features
 ## New in 0.3.0 (Released 2019/01/15)
