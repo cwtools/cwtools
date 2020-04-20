@@ -58,7 +58,7 @@ let tests =
             |Success(r, _, _) ->
                 //eprintfn "%A" r
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let printed = CKPrinter.api.prettyPrintStatements (node.ToRaw)
+                let printed = CKPrinter.api.prettyPrintStatement (node.ToRaw)
                 Expect.equal printed file "Printing shouldn't have changed string"
         // testCase "jomini fancy clause" <| fun() ->
         //     let file = File.ReadAllText "testfiles/parsertests/clause.txt"

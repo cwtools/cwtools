@@ -194,7 +194,7 @@ let tests =
                 let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
-                logInfo (sprintf "%A" (entities |> List.head |> (fun struct (e, _)  -> api.prettyPrintStatements (e.entity.ToRaw))))
+                logInfo (sprintf "%A" (entities |> List.head |> (fun struct (e, _)  -> api.prettyPrintStatement (e.entity.ToRaw))))
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 yield testCase ("parse2") <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
