@@ -63,7 +63,7 @@ and Leaf =
         with get () = this._value
         and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
     member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim [|'"'|]
-    member this.ToRaw = KeyValueItem(Key(this.Key), this.Value, this.Operator)
+    member this.ToRaw = KeyValue(PosKeyValue(this.Position, KeyValueItem(Key(this.Key), this.Value, this.Operator)))
     new(key : string, value : Value, pos : range, op : Operator) =
         {
             KeyId = StringResource.stringManager.InternIdentifierToken(key);
@@ -148,9 +148,9 @@ and ValueClause(keys : Value[], pos : range) =
     member __.Keys with set(value) = _keys <- value
     member this.ToRaw : Statement list = this.All |>
                                          List.collect (function
-                                           |NodeC n -> [KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))]
+                                           |NodeC n -> [n.ToRaw]
                                            |LeafValueC lv -> [lv.ToRaw]
-                                           |LeafC l -> [KeyValue(PosKeyValue (l.Position, l.ToRaw))]
+                                           |LeafC l -> [l.ToRaw]
                                            |ValueClauseC vc ->
                                                 let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String (StringResource.stringManager.GetStringForID k.normal)))
                                                                    |> List.ofArray
@@ -232,16 +232,18 @@ and Node (key : string, pos : range) =
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
 
-    member this.ToRaw : Statement list = this.All |>
-                                         List.collect (function
-                                           |NodeC n -> [KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw, Operator.Equals)))]
-                                           |LeafValueC lv -> [lv.ToRaw]
-                                           |LeafC l -> [KeyValue(PosKeyValue (l.Position, l.ToRaw))]
-                                           |ValueClauseC vc ->
-                                                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String (StringResource.stringManager.GetStringForID k.normal)))
-                                                                   |> List.ofArray
-                                                keys@[Value(vc.Position, Value.Clause vc.ToRaw)]
-                                           |CommentC c -> [(Comment c)])
+    member this.ToRaw : Statement =
+        let children = this.All |>
+                                 List.collect (function
+                                   |NodeC n -> [n.ToRaw]
+                                   |LeafValueC lv -> [lv.ToRaw]
+                                   |LeafC l -> [l.ToRaw]
+                                   |ValueClauseC vc ->
+                                        let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String (StringResource.stringManager.GetStringForID k.normal)))
+                                                           |> List.ofArray
+                                        keys@[Value(vc.Position, Value.Clause vc.ToRaw)]
+                                   |CommentC c -> [(Comment c)])
+        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key this.Key, Clause children, Operator.Equals)))
 
     static member Create key = Node(key)
     interface IKeyPos with

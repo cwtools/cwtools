@@ -66,6 +66,15 @@ namespace CWToolsCSTests
 
             //Parse event file
             // var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
+            var text2 = File.ReadAllText("./testevent2.txt");
+            var parsed2 = CWTools.CSharp.Parsers.ParseScriptFile("testevent2.txt", text2);
+
+            var eventFile2 = parsed2.GetError();
+            Console.WriteLine(eventFile2.ErrorMessage);
+
+
+            //Parse event file
+            // var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
             var text = File.ReadAllText("./testevent.txt");
             var parsed = CWTools.CSharp.Parsers.ParseScriptFile("testevent.txt", text);
 
@@ -86,11 +95,15 @@ namespace CWToolsCSTests
 
             //Output
             var output = processed.ToRaw;
-            Console.WriteLine(CKPrinter.api.prettyPrintStatements.Invoke(output));
+            Console.WriteLine(CKPrinter.api.prettyPrintStatement.Invoke(output));
+            Console.WriteLine(output.PrettyPrint());
             PrintfModule
                 .PrintFormatLine(
-                    new PrintfFormat<FSharpFunc<FSharpList<Statement>, Unit>, TextWriter, Unit, Unit, FSharpList<Statement>>("%A"))
+                    new PrintfFormat<FSharpFunc<Statement, Unit>, TextWriter, Unit, Unit, Statement>("%A"))
                 .Invoke(output);
+
+            var test = processed.Nodes.FirstOrDefault().ToRaw;
+            Console.WriteLine(CKPrinter.api.prettyPrintStatement.Invoke(test));
         }
     }
 }

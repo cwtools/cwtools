@@ -23,7 +23,7 @@ module CK2Process =
 
     type ArtifactFile(key, pos) =
         inherit Node("artifacts", range.Zero)
-        member this.Slots = this.Child "slots" |> (function |Some c -> c.ToRaw | _ -> [])
+        member this.Slots = this.Child "slots" |> (function |Some c -> [c.ToRaw] | _ -> [])
         member __.Weapons = base.All |> List.choose (function |NodeC n when n.Key <> "slots" -> Some n |_ -> None)
 
     // let maps =

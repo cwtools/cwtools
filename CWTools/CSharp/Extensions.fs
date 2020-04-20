@@ -26,3 +26,5 @@ type Extensions =
     /// Retrieve error message or null (if success)
     [<Extension>]
     static member inline GetError(obj : ParserResult<_,_>) = obj |> function |Failure(m, e, _) -> { Filename = e.Position.StreamName; Line = e.Position.Line; Column = e.Position.Column; ErrorMessage = m } |_ -> Operators.Unchecked.defaultof<ParserError>
+    [<Extension>]
+    static member inline PrettyPrint(obj : Statement) = obj |> CWTools.Parser.CKPrinter.api.prettyPrintStatement

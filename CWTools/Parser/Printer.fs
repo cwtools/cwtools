@@ -60,5 +60,6 @@ module CKPrinter =
         {
         prettyPrintFile = prettyPrint
         prettyPrintStatements = (fun f -> printKeyValueList f 0)
+        prettyPrintStatement = (fun f -> printKeyValueList [f] 0)
         prettyPrintFileResult = prettyPrintResult
         }

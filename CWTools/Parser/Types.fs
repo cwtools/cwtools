@@ -103,6 +103,7 @@ module Types =
     type ParseString = string -> string -> ParserResult<ParsedFile, unit>
     type PrettyPrintFile = ParsedFile -> string
     type PrettyPrintStatements = Statement list -> string
+    type PrettyPrintStatement = Statement -> string
     type PrettyPrintFileResult = ParserResult<ParsedFile, unit> -> string
 
     type ParserAPI =
@@ -115,6 +116,7 @@ module Types =
         {
             prettyPrintFile : PrettyPrintFile
             prettyPrintStatements : PrettyPrintStatements
+            prettyPrintStatement : PrettyPrintStatement
             prettyPrintFileResult : PrettyPrintFileResult
         }
 
