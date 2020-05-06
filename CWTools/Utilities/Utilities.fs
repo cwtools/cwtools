@@ -3,6 +3,7 @@ open System
 open System.Collections.Generic
 open CWTools.Utilities.Position
 open System.Globalization
+open System.IO
 
 module Utils =
 
@@ -69,6 +70,16 @@ module Utils =
         for i = 1 to n do
             x <- f x
         x
+
+    let getAllFoldersUnion dirs =
+        let rec getAllFolders depth dirs =
+            if Seq.isEmpty dirs || depth > 20 then Seq.empty else
+                seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
+                      yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders (depth + 1) }
+        seq {
+            yield! dirs
+            yield! getAllFolders 0 dirs
+        }
 
 module TryParser =
     // convenient, functional TryParse wrappers returning option<'a>

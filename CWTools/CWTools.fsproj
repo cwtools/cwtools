@@ -47,6 +47,7 @@
     <Compile Include="Rules/RulesTypes.fs" />
     <Compile Include="Rules/RulesParser.fs" />
     <Compile Include="Parser/UtilityParser.fs" />
+    <Compile Include="Rules/RulesLoader.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/FileManager.fs" />
     <Compile Include="Game/CachedFileManager.fs" />

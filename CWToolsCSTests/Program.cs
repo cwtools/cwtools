@@ -104,6 +104,20 @@ namespace CWToolsCSTests
 
             var test = processed.Nodes.FirstOrDefault().ToRaw;
             Console.WriteLine(CKPrinter.api.prettyPrintStatement.Invoke(test));
+
+            var folders = CWTools.Utilities.Utils.getAllFoldersUnion(new List<string> {@"C:\Users\Thomas\Git\cwtools-stellaris-config"});
+            var files = folders.SelectMany(folder => Directory.EnumerateFiles(folder))
+                                    .Where(f => Path.GetExtension(f) == ".cwt" || Path.GetExtension(f) == ".log")
+                                    .Select(f => Tuple.Create(f, File.ReadAllText(f)));
+
+            var (rules, types, enums, complexenums, values) = CWTools.CSharp.Helpers.LoadAndInitializeFromConfigFiles(files, CWTools.Common.Game.STL);
+            var typeInfo = Helpers.GetTypesInFile("events/testevent.txt", processed, types);
+            PrintfModule
+                .PrintFormatLine(
+                    new PrintfFormat<FSharpFunc<IReadOnlyDictionary<string, IReadOnlyCollection<CWTools.Common.NewScope.TypeDefInfo>>, Unit>, TextWriter, Unit, Unit, IReadOnlyDictionary<string, IReadOnlyCollection<CWTools.Common.NewScope.TypeDefInfo>>>("%A"))
+                .Invoke(typeInfo);
+            Console.WriteLine(typeInfo.ToString());
+
         }
     }
 }

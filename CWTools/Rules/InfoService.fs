@@ -406,6 +406,95 @@ type InfoService
         //         Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC node) ((NodeRule (TypeMarkerField (node.KeyId.lower, typedef), rs), o)))
         //     | _ -> None
         // |_, _ -> None
+    let getNodeAtPos (pos : pos) (entity : Entity) =
+        let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule) =
+            ctx, Some (LeafC leaf)
+            // match o.typeHint, field with
+            // | Some (t, true), _ -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+            // | Some (t, false), _ -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+            // | _, LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
+            // | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some ("localisation", leaf.ValueText), Some (LeafC leaf))
+            // | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
+            // | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some ("localisation", leaf.Key), Some (LeafC leaf))
+            // |_ -> ctx, (Some o, None, Some (LeafC leaf))
+        let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) = ctx, Some (LeafValueC leafvalue)
+            // match o.typeHint, field with
+            // |Some (t, true), _ -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
+            // |_, LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
+            // |_, LeafValueRule (LocalisationField _) -> ctx, (Some o, Some ("localisation", leafvalue.Key), Some (LeafValueC leafvalue))
+            // |_ -> ctx, (Some o, None, Some (LeafValueC leafvalue))
+        let fComment (ctx, _) c _ = ctx, Some (CommentC c)
+        //TODO: Actually implement value clause
+        let fValueClause (ctx, _) valueClause _ = ctx, Some (ValueClauseC valueClause)
+        let fNode (ctx, _) (node : Node) ((field, options) : NewRule) =
+            // let anyScope = ( ^a : (static member AnyScope : ^a) ())
+            // log "info fnode inner %s %A %A %A" (node.Key) options field ctx
+            let newCtx =
+                match options.pushScope with
+                |Some ps ->
+                    {ctx with RuleContext.scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                |None ->
+                    match options.replaceScopes with
+                    |Some rs ->
+                        let newctx =
+                            match rs.this, rs.froms with
+                            |Some this, Some froms ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                            |Some this, None ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                            |None, Some froms ->
+                                {ctx with scopes = {ctx.scopes with From = froms}}
+                            |None, None ->
+                                ctx
+                        match rs.root with
+                        |Some root ->
+                            {newctx with scopes = {newctx.scopes with Root = root}}
+                        |None -> newctx
+                    |None ->
+                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                        then {ctx with scopes = {ctx.scopes with Scopes = anyScope::ctx.scopes.Scopes}}
+                        else ctx
+            newCtx, (Some (NodeC node))
+            // match options.typeHint, field with
+            // | Some (t, true), _ -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            // | _, NodeRule (ScopeField s, f) ->
+            //     let scope = newCtx.scopes
+            //     let key = node.Key.Trim('"')
+            //     let newCtx =
+            //         match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+            //         |NewScope ({Scopes = current::_} ,_) ->
+            //             // log "cs %A %A %A" s node.Key current
+            //             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
+            //         |VarFound ->
+            //             // log "cs %A %A %A" s node.Key current
+            //             {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
+            //         |_ -> newCtx
+            //     newCtx, (Some options, None, Some (NodeC node))
+            // | _, NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
+            //     ctx, (Some options, Some (typename, node.Key), Some (NodeC node))
+            // | _, NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
+            //     let typevalue = node.TagText namefield
+            //     ctx, (Some options, Some (typename, typevalue), Some (NodeC node))
+            // | _, NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            // | _, NodeRule (LocalisationField _, _) -> ctx, (Some options, Some ("localisation", node.Key), Some (NodeC node))
+            // | _, NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
+            // | _ -> newCtx, (Some options, None, Some (NodeC node))
+
+        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
+        let file = Path.GetFileName entity.logicalpath
+        let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+        // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
+        let ctx =
+            match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
+            |Some c, Some typedef ->
+                let pushScope, subtypes = ruleValidationService.TestSubType (typedef.subtypes, c)
+                match pushScope with
+                |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
+                |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
+            |_, _ -> { subtypes = []; scopes = defaultContext; warningOnly = false }
+
+        let ctx = ctx, (None)
+        foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx (pos) (entity.entity) (entity.logicalpath)
 
     let getInfoAtPos (pos : pos) (entity : Entity) =
         let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule) =
@@ -924,6 +1013,7 @@ type InfoService
 
     //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
     member __.GetInfo(pos : pos, entity : Entity) = (getInfoAtPos pos entity ) |> Option.map (fun (p,e) -> p.scopes, e)
+    member __.GetNode(pos : pos, entity : Entity) = (getNodeAtPos pos entity) |> Option.map (fun (p, n) -> n)
     member __.GetReferencedTypes(entity : Entity) = singleFold (getTypesInEntity()) entity
     member __.GetDefinedVariables(entity : Entity) = singleFold getDefVarInEntity entity
     member __.GetSavedEventTargets(entity : Entity) = getSavedScopesInEntityFolder entity

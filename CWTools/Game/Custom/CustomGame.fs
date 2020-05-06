@@ -192,8 +192,8 @@ module CustomGameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
                             |> (fun f -> UtilityParser.initializeScopes f (Some []) )
 
-            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-                |> (fun f -> UtilityParser.initializeModifierCategories f (Some []) )
+        configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
+            |> (fun f -> UtilityParser.initializeModifierCategories f (Some []) )
 
         let irMods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")

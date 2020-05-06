@@ -52,15 +52,6 @@ module Files =
             inputDirectories |> List.choose (function | ZD zd -> Some zd |_ -> None)
 
 
-        let getAllFoldersUnion dirs =
-            let rec getAllFolders depth dirs =
-                if Seq.isEmpty dirs || depth > 20 then Seq.empty else
-                    seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
-                          yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders (depth + 1) }
-            seq {
-                yield! dirs
-                yield! getAllFolders 0 dirs
-            }
 
         let allDirsBelowRoot (workspaceDir : WorkspaceDirectory) = if Directory.Exists workspaceDir.path then getAllFoldersUnion [workspaceDir.path] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
 
