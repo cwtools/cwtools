@@ -1,5 +1,9 @@
 namespace = test
 
+an_event = {
+
+}
+
 country_event = {
     option = {
         #error
@@ -134,6 +138,7 @@ country_event = {
 country_event = {
     option = {
         effect_alias_test = dual_path_complex
+        effect_alias_test = prefix_an_event_suffix
         #error
         effect_alias_test = not_real
     }
@@ -189,3 +194,4 @@ country_event = {
         multiple_enum = d
     }
 }
+

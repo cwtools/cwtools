@@ -128,6 +128,7 @@ alias[effect:dual_path_complex] = {
 }
 
 alias[effect:effect_alias_test] = alias_keys_field[effect]
+alias[effect:prefix_<event>_suffix] = scalar
 
 alias[effect:cardinality_tests_none] = {
     ## cardinality = 0..0

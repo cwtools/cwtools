@@ -43,8 +43,33 @@ type CompletionService
     let defaultKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
     let localisationKeys = localisation |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some (l, ks))
 
+    let ruleToCompletionListHelper =
+        function
+        | LeafRule (SpecificField (SpecificValue x), _), _ -> [x.lower]
+        | NodeRule (SpecificField (SpecificValue x), _), _ -> [x.lower]
+        | LeafRule (NewField.TypeField (TypeType.Simple t), _), _ ->
+            types.TryFind(t)
+            |> Option.map (fun s -> s |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower)) |> Option.defaultValue []
+        | NodeRule (NewField.TypeField (TypeType.Simple t), _), _ ->
+            types.TryFind(t)
+            |> Option.map (fun s -> s |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower)) |> Option.defaultValue []
+        | LeafRule (NewField.TypeField (TypeType.Complex (p,t,suff)), _), _ ->
+            types.TryFind(t)
+            |> Option.map (fun s -> s |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken (p + s + suff)).lower)) |> Option.defaultValue []
+        | NodeRule (NewField.TypeField (TypeType.Complex (p,t,suff)), _), _ ->
+            types.TryFind(t)
+            |> Option.map (fun s -> s |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken (p + s + suff)).lower)) |> Option.defaultValue []
+        | LeafRule (NewField.ValueField (Enum e), _), _ ->
+            enums.TryFind(e)
+            |> Option.map (fun (_, s) -> s.ToList() |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower)) |> Option.defaultValue []
+        | NodeRule (NewField.ValueField (Enum e), _), _ ->
+            enums.TryFind(e)
+            |> Option.map (fun (_, s) -> s.ToList() |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower)) |> Option.defaultValue []
+        | _ -> []
+
+
     let aliasKeyMap =
-        aliases |> Map.toList |> List.map (fun (key, rules) -> key, (rules |> List.choose (function | LeafRule (SpecificField (SpecificValue x), _), _ -> Some x.lower | NodeRule (SpecificField (SpecificValue x), _), _ -> Some x.lower | _ -> None)))
+        aliases |> Map.toList |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
                 |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
                 |> Map.ofList
 
