@@ -220,6 +220,10 @@ module STLGameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
                     |> Option.defaultValue ([])
+        let featureSettings =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
+                    |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
+                    |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
 
         {
             triggers = triggers
@@ -230,6 +234,7 @@ module STLGameFunctions =
             localisationCommands = Legacy stlLocCommands
             eventTargetLinks = stlEventTargetLinks
             cachedRuleMetadata = cachedRuleMetadata
+            featureSettings = featureSettings
         }
 
 

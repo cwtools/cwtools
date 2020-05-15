@@ -57,6 +57,7 @@ let emptyEmbeddedSettings = {
         localisationCommands = Legacy ([], [])
         eventTargetLinks = []
         cachedRuleMetadata = None
+        featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default
 }
 let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 

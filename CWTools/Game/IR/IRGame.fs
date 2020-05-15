@@ -286,6 +286,10 @@ module IRGameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
                     |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.defaultValue { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
+        let featureSettings =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
+                    |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
+                    |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
 
 
         {
@@ -297,6 +301,7 @@ module IRGameFunctions =
             localisationCommands = Jomini jominiLocDataTypes
             eventTargetLinks = irEventTargetLinks
             cachedRuleMetadata = cachedRuleMetadata
+            featureSettings = featureSettings
         }
 
 type IRSettings = GameSetupSettings<IRLookup>

@@ -156,6 +156,10 @@ module EU4GameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
                     |> Option.defaultValue (CWTools.Process.Scopes.EU4.scopedEffects() |> List.map SimpleLink)
+        let featureSettings =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
+                    |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
+                    |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
 
         {
             triggers = triggers
@@ -166,6 +170,7 @@ module EU4GameFunctions =
             localisationCommands = Legacy eu4LocCommands
             eventTargetLinks = eu4EventTargetLinks
             cachedRuleMetadata = cachedRuleMetadata
+            featureSettings = featureSettings
         }
 
 type EU4Settings = GameSetupSettings<EU4Lookup>

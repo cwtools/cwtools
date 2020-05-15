@@ -9,6 +9,7 @@ open CWTools.Utilities.Utils
 open CWTools.Rules.RulesHelpers
 open System.IO
 open CWTools.Common.NewScope
+open CWTools.Parser.UtilityParser
 type RulesSettings = {
     ruleFiles : (string * string) list
     validateRules : bool
@@ -20,7 +21,6 @@ type LocalisationEmbeddedSettings =
 | Legacy of (string * (Scope list)) list * string list
 | Jomini of CWTools.Parser.DataTypeParser.JominiLocDataTypes
 
-
 type EmbeddedSettings = {
     triggers : DocEffect list
     effects : DocEffect list
@@ -30,6 +30,7 @@ type EmbeddedSettings = {
     localisationCommands : LocalisationEmbeddedSettings
     eventTargetLinks : EventTargetLink list
     cachedRuleMetadata : CachedRuleMetadata option
+    featureSettings : FeatureSettings
 }
 
 type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> = {

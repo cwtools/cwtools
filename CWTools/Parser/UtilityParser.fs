@@ -133,3 +133,49 @@ module UtilityParser =
             root.Child "modifiers"
                 |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {ActualModifier.tag = l.Key; category = modifierCategoryManager.ParseModifier() (l.Value.ToRawString())}))
                 |> Option.defaultValue []
+
+    type ListMergeOptimisationDefinition = {
+        StartingKey : string
+        ConnectingKeys : string list
+        TargetKey : string
+        SupportedValues : string list
+    }
+
+    type FeatureSettings = {
+        ListMergeOptimisations : ListMergeOptimisationDefinition list
+    }
+    with
+        static member Default =
+            {
+                ListMergeOptimisations = []
+            }
+
+
+    let private supportedValues = [ "ROOT"; "FROM"; "FROMFROM"; ]
+    let private loadListMergeOptimisation (node : Node) =
+        let targetKey = node.Key
+        let innerKeys = node.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq
+        match innerKeys with
+        | []
+        | [_] ->
+            log (sprintf "list merge optimisation %s is too short" targetKey)
+            None
+        | head::tail ->
+            Some { StartingKey = head; ConnectingKeys = tail; TargetKey = targetKey; SupportedValues = supportedValues }
+
+    let loadSettingsFile filename fileString =
+        let parsed = CKParser.parseString fileString filename
+        match parsed with
+        |Failure(e, _, _) ->
+            log (sprintf "settings file %s failed with %s" filename e);
+            None
+        |Success(s,_,_) ->
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let listMergeOptimisations =
+                root.Child "list_merge_optimisations"
+                |> Option.map (fun ms ->  ms.Children |> List.choose loadListMergeOptimisation)
+                |> Option.defaultValue []
+            Some
+                {
+                    ListMergeOptimisations = listMergeOptimisations
+                }

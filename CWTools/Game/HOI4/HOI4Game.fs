@@ -163,6 +163,10 @@ module HOI4GameFunctions =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
                     |> Option.defaultValue ([])
+        let featureSettings =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
+                    |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
+                    |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
 
         {
             triggers = triggers
@@ -173,13 +177,23 @@ module HOI4GameFunctions =
             localisationCommands = Legacy hoi4LocCommands
             eventTargetLinks = eventTargetLinks
             cachedRuleMetadata = cachedRuleMetadata
+            featureSettings = featureSettings
         }
 
 type HOI4Settings = GameSetupSettings<HOI4Lookup>
 open HOI4GameFunctions
 type HOI4Game(setupSettings : HOI4Settings) =
+    let embeddedSettings =
+        match setupSettings.embedded with
+        | FromConfig (ef, crd) ->
+            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) None
+        | Metadata cmd ->
+            createEmbeddedSettings [] [] (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) (Some cmd)
+        | ManualSettings e -> e
+
     let validationSettings = {
-        validators = [ validateIfWithNoEffect, "ifnoeffect"; validateRedundantANDWithNOT, "AND"; validateOptimisations, "opt" ]
+        validators = [ validateIfWithNoEffect, "ifnoeffect"; validateRedundantANDWithNOT, "AND";
+                        validateOptimisations embeddedSettings.featureSettings.ListMergeOptimisations, "opt" ]
         experimentalValidators = []
         heavyExperimentalValidators = []
         experimental = setupSettings.validation.experimental
@@ -190,13 +204,6 @@ type HOI4Game(setupSettings : HOI4Settings) =
         debugRulesOnly = false
         localisationValidators = []
     }
-    let embeddedSettings =
-        match setupSettings.embedded with
-        | FromConfig (ef, crd) ->
-            createEmbeddedSettings ef crd (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) None
-        | Metadata cmd ->
-            createEmbeddedSettings [] [] (setupSettings.rules |> Option.map (fun r -> r.ruleFiles) |> Option.defaultValue []) (Some cmd)
-        | ManualSettings e -> e
 
     let settings = {
         rootDirectories = setupSettings.rootDirectories

@@ -182,39 +182,40 @@ module CommonValidation =
             (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
 
     open CWTools.Utilities
-    let intern x = (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken x).lower
-    let retrieveString x = CWTools.Utilities.StringResource.stringManager.GetStringForID x
-    let startMap =
-        [
-            intern "any_state", ([intern "is_controlled_by"], [intern "ROOT"; intern "FROM"; intern "FROMFROM"], "any_controlled_state")
-            intern "every_state", ([intern "limit"; intern "is_controlled_by"], [intern "ROOT"; intern "FROM"; intern "FROMFROM"], "every_controlled_state")
-        ] |> Map.ofList
-    let validateOptimisations : StructureValidator<_> =
-        fun _ es ->
-            let triggers = (es.AllTriggers)
-            let fNode =
-                fun (last : (StringLowerToken list * StringLowerToken list * string * Node) option) (x : Node) ->
-                    match last, Map.tryFind x.KeyId.lower startMap with
-                    | None, None -> None, None
-                    | None, Some ([inner], targets, merged) ->
-                        match x.TagById inner with
-                        | Some rhs ->
-                            if targets |> List.contains rhs.lower
-                            then None, Some (inv (ErrorCodes.OptimisationMergeList (retrieveString inner) merged) x)
-                            else None, None
-                        | None -> Some ([inner], targets, merged, x), None
-                    | None, Some (inners, targets, merged) -> Some (inners, targets, merged, x), None
-                    | Some ([], _, _, _), _ -> None, None
-                    | Some ([inner], targets, merged, source), _ ->
-                        if x.KeyId.lower = inner
-                        then None, Some (inv (ErrorCodes.OptimisationMergeList (retrieveString inner) merged) source)
-                        else None, None
-                    | Some ([inner;inner2], targets, merged, source), _ ->
-                        if x.KeyId.lower = inner && x.HasById inner2
-                        then None, Some (inv (ErrorCodes.OptimisationMergeList (retrieveString inner) merged) source)
-                        else None, None
-                    | Some (inner::inners, targets, merged, source), _ ->
-                        if x.KeyId.lower = inner
-                        then Some (inners, targets, merged, source), None
-                        else None, None
-            (triggers) <&!&> (foldNodeWithState fNode None >> (fun e -> Invalid (Guid.NewGuid(), e)))
+    let private intern x = (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken x).lower
+    let private retrieveString x = CWTools.Utilities.StringResource.stringManager.GetStringForID x
+    let validateOptimisations =
+        fun (settings : UtilityParser.ListMergeOptimisationDefinition list) ->
+            let createItem (def : UtilityParser.ListMergeOptimisationDefinition) =
+                intern (def.StartingKey), ((def.ConnectingKeys |> List.map intern), (def.SupportedValues |> List.map intern), def.TargetKey)
+            let startMap = settings |> List.map createItem |> Map.ofList
+            let res : StructureValidator<_> =
+                fun _ es ->
+                    let triggers = (es.AllTriggers)
+                    let fNode =
+                        fun (last : (StringLowerToken list * StringLowerToken list * string * Node) option) (x : Node) ->
+                            match last, Map.tryFind x.KeyId.lower startMap with
+                            | None, None -> None, None
+                            | None, Some ([inner], targets, merged) ->
+                                match x.TagById inner with
+                                | Some rhs ->
+                                    if targets |> List.contains rhs.lower
+                                    then None, Some (inv (ErrorCodes.OptimisationMergeList (retrieveString inner) merged) x)
+                                    else None, None
+                                | None -> Some ([inner], targets, merged, x), None
+                            | None, Some (inners, targets, merged) -> Some (inners, targets, merged, x), None
+                            | Some ([], _, _, _), _ -> None, None
+                            | Some ([inner], targets, merged, source), _ ->
+                                if x.KeyId.lower = inner
+                                then None, Some (inv (ErrorCodes.OptimisationMergeList (retrieveString inner) merged) source)
+                                else None, None
+                            | Some ([inner;inner2], targets, merged, source), _ ->
+                                if x.KeyId.lower = inner && x.HasById inner2
+                                then None, Some (inv (ErrorCodes.OptimisationMergeList (retrieveString inner) merged) source)
+                                else None, None
+                            | Some (inner::inners, targets, merged, source), _ ->
+                                if x.KeyId.lower = inner
+                                then Some (inners, targets, merged, source), None
+                                else None, None
+                    (triggers) <&!&> (foldNodeWithState fNode None >> (fun e -> Invalid (Guid.NewGuid(), e)))
+            res

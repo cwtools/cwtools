@@ -44,6 +44,7 @@ let emptyEmbeddedSettings = {
         localisationCommands = Legacy ([], [])
         eventTargetLinks = []
         cachedRuleMetadata = None
+        featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default
 }
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectories = [WD { name = "test"; path = rootDirectory;}]
