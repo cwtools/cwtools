@@ -1,0 +1,16 @@
+types = {
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+event = {
+    option = {
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+
+}
+
+alias[trigger:any_state] = { alias_name[trigger] = alias_match_left[trigger] }
+alias[trigger:is_controlled_by] = scalar
+alias[trigger:is_controlled_by] = { }

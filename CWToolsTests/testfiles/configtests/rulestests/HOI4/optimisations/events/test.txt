@@ -1,0 +1,17 @@
+namespace = test
+
+##Test optimisation detection
+country_event = {
+    option = {
+        #error
+        any_state = {
+            is_controlled_by = ROOT
+        }
+        #error
+        any_state = {
+            is_controlled_by = {
+
+            }
+        }
+    }
+}

@@ -180,3 +180,36 @@ module CommonValidation =
                     |_, k when k == "OR" || k == "NOT" -> OR, None
                     |_, _ -> AND, None
             (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
+
+    let intern x = (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken x).lower
+    let startMap =
+        [
+            intern "any_state", ([intern "is_controlled_by"], [intern "ROOT"; intern "FROM"; intern "FROMFROM"])
+            intern "every_state", ([intern "limit"; intern "is_controlled_by"], [intern "ROOT"; intern "FROM"; intern "FROMFROM"])
+        ] |> Map.ofList
+    let validateOptimisations : StructureValidator<_> =
+        fun _ es ->
+            let triggers = (es.AllTriggers)
+            let fNode =
+                fun (last : CWTools.Utilities.StringLowerToken list option) (x : Node) ->
+                    match last, Map.tryFind x.KeyId.lower startMap with
+                    | None, None -> None, None
+                    | None, Some ([inner], _) ->
+                        if x.HasById inner
+                        then None, Some (inv (ErrorCodes.CustomError "optimisation" Severity.Error) x)
+                        else Some [inner], None
+                    | None, Some (inners, _) -> Some inners, None
+                    | Some [], _ -> None, None
+                    | Some [inner], _ ->
+                        if x.KeyId.lower = inner
+                        then None, Some (inv (ErrorCodes.CustomError "optimisation" Severity.Error) x)
+                        else None, None
+                    | Some [inner;inner2], _ ->
+                        if x.KeyId.lower = inner && x.HasById inner2
+                        then None, Some (inv (ErrorCodes.CustomError "optimisation" Severity.Error) x)
+                        else None, None
+                    | Some (inner::inners), _ ->
+                        if x.KeyId.lower = inner
+                        then Some inners, None
+                        else None, None
+            (triggers) <&!&> (foldNodeWithState fNode None >> (fun e -> Invalid (Guid.NewGuid(), e)))

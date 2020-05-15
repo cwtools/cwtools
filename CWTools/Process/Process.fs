@@ -177,6 +177,7 @@ and ValueClause(keys : Value[], pos : range) =
 
 and Node (key : string, pos : range) =
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
+    let bothFindId (x : StringLowerToken) = function |NodeC n when n.KeyId.lower = x -> true |LeafC l when l.KeyId.lower = x -> true |_ -> false
     let mutable all : Child array = Array.empty
     let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
     let reset() =
@@ -187,7 +188,7 @@ and Node (key : string, pos : range) =
 
     new(key : string) = Node(key, range.Zero)
 
-    member val KeyId = StringResource.stringManager.InternIdentifierToken(key) with get, set
+    member val KeyId : StringTokens = StringResource.stringManager.InternIdentifierToken(key) with get, set
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim [|'"'|]
@@ -223,6 +224,7 @@ and Node (key : string, pos : range) =
     member this.ValueClauses = all |> Seq.choose(function |ValueClauseC vc -> Some vc |_ -> None)
     member this.Clauses = all |> Seq.choose(function |ValueClauseC vc -> Some (vc :> IClause) |NodeC n -> Some (n :> IClause) |_ -> None)
     member this.Has x = all |> (Seq.exists (bothFind x))
+    member this.HasById x = all |> (Seq.exists (bothFindId x))
     member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key == x -> Some l.Value |_ -> None)
     member __.Leafs x = leaves() |> Array.choose (function |l when l.Key == x -> Some l |_ -> None) |> Array.toSeq
     member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq
