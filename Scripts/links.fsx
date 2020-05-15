@@ -1,3 +1,4 @@
+open System.Text
 #r @"C:\Users\Thomas\.nuget\packages\dotnet.glob\2.0.3\lib\netstandard1.1\DotNet.Glob.dll"
 #r @"C:\Users\Thomas\.nuget\packages\fparsec\1.0.4-rc3\lib\netstandard1.6\FParsec.dll"
 #r @"C:\Users\Thomas\.nuget\packages\fparsec\1.0.4-rc3\lib\netstandard1.6\FParsecCS.dll"
@@ -5,10 +6,6 @@
 #r @"C:\Users\Thomas\.nuget\packages\fsharp.data\3.0.0-beta\lib\netstandard2.0\FSharp.Data.dll"
 #r @"C:\Users\Thomas\.nuget\packages\fsharpx.collections\1.17.0\lib\net40\FSharpx.Collections.dll"
 #r @"C:\Users\Thomas\.nuget\packages\netstandard.library\2.0.3\build\netstandard2.0\ref\Microsoft.Win32.Primitives.dll"
-#r @"C:\Users\Thomas\.nuget\packages\newtonsoft.json.fsharp\3.2.2\lib\net40\Newtonsoft.Json.FSharp.dll"
-#r @"C:\Users\Thomas\.nuget\packages\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll"
-#r @"C:\Users\Thomas\.nuget\packages\nodatime\1.4.5\lib\net35-Client\NodaTime.dll"
-#r @"C:\Users\Thomas\.nuget\packages\sandwych.quickgraph.core\1.0.0\lib\netstandard2.0\Sandwych.QuickGraph.Core.dll"
 #r @"C:\Users\Thomas\.nuget\packages\netstandard.library\2.0.3\build\netstandard2.0\ref\System.AppContext.dll"
 #r @"C:\Users\Thomas\.nuget\packages\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Collections.Concurrent.dll"
 #r @"C:\Users\Thomas\.nuget\packages\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Collections.NonGeneric.dll"
@@ -133,6 +130,7 @@ open System.Security.Cryptography
 
 open CWTools.Parser
 open FParsec
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 // let triggers, effects = DocsParser.parseDocsFilesRes @"C:\Users\Thomas\git\cwtools\CWToolsTests\testfiles\validationtests\trigger_docs_2.1.0.txt"
 let links = JominiParser.parseLinksFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/event_targets.log"
@@ -172,7 +170,7 @@ let links = JominiParser.parseLinksFilesRes @"C:\Users\Thomas\git\cwtools/Script
 // File.WriteAllText("triggers.cwt", tout)
 // File.WriteAllText("effects.cwt", eout)
 
-let createLink (n,(d : string),r,w,i,(o : string list option)) =
+let createLink (n,(d : string),r,w,i,(o : string list option),g) =
     match r with
     | Some _ ->
         let input =
@@ -186,10 +184,14 @@ let createLink (n,(d : string),r,w,i,(o : string list option)) =
             match o with
             | None -> None
             | Some oi -> Some ("output_scope = " + (oi |> List.head))
-        let start = Some (n + " = {\n\t" + "desc = " + d)
-        let fromData = Some "from_data = yes"
-        let dataSource = Some ( "data_source = <" + n + ">")
-        ([start; fromData; dataSource; input; output]
+        let start = Some (n + " = {\n\t" + "desc = \"" + d + "\"")
+        let fromData = g |> Option.map (fun _ -> "from_data = yes")
+        let dataSource = g |> Option.map (fun _ -> ( "data_source = <" + n + ">"))
+        let prefix =
+            match g with
+            | None -> None
+            | Some _ -> Some (sprintf "prefix = %s:" n)
+        ([start; fromData; dataSource; prefix; input; output]
         |> List.choose id
         |> String.concat ("\n\t")) + "\n}"
     | None ->
@@ -204,8 +206,14 @@ let createLink (n,(d : string),r,w,i,(o : string list option)) =
             match o with
             | None -> None
             | Some oi -> Some ("output_scope = " + (oi |> List.head))
-        let start = Some (n + " = {\n\t" + "desc = " + d)
-        ([start; input; output;]
+        let start = Some (n + " = {\n\t" + "desc = \"" + d + "\"")
+        let fromData = g |> Option.map (fun _ -> "from_data = yes")
+        let dataSource = g |> Option.map (fun _ -> ( "data_source = <" + n + ">"))
+        // let prefix =
+        //     match g with
+        //     | None -> None
+        //     | Some _ -> Some (sprintf "prefix = %s:" n)
+        ([start; fromData; dataSource; input; output;]
         |> List.choose id
         |> String.concat ("\n\t")) + "\n}"
 

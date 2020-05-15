@@ -33,6 +33,10 @@ module DocsParser =
     let parseDocsStream file = runParserOnStream twoDocs () "docFile" file (System.Text.Encoding.GetEncoding(1252))
 
 module JominiParser =
+    let pipe6 p1 p2 p3 p4 p5 p6 f =
+        pipe4 p1 p2 p3 (tuple3 p4 p5 p6)
+          (fun x1 x2 x3 (x4, x5, x6) -> f x1 x2 x3 x4 x5 x6)
+
     let private idChar = letter <|> digit <|> anyOf ['_']
     let private isvaluechar = SharedParsers.isvaluechar
     let private header = skipCharsTillString "Event Target Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
@@ -40,14 +44,15 @@ module JominiParser =
     let private name = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>>. restOfLine false .>> SharedParsers.ws <?> "name"
     let private reqData = pstring "Requires Data: yes" .>> SharedParsers.ws <?> "requires data"
     let private wildCard = pstring "Wild Card: yes" .>> SharedParsers.ws <?> "wildcard"
+    let private globalLink = pstring "Global Link: yes" .>> SharedParsers.ws <?> "globallink"
     let private inscopes = pstring "Input Scopes: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
     let private outscopes = pstring "Output Scopes: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ",") .>> newline .>> SharedParsers.ws
-    let private link = pipe5 name (opt reqData) (opt wildCard) (opt inscopes) (opt outscopes) (fun (n, d) r w i o -> n,d,r,w,i,o)
+    let private link = pipe6 name (opt reqData) (opt wildCard) (opt globalLink) (opt inscopes) (opt outscopes) (fun (n, d) r w g i o -> n,d,r,w,i,o,g)
     let private footer = pstring "Event Targets Saved from Code:" .>> many1Chars anyChar .>> eof
     let private linkFile = SharedParsers.ws >>. header >>. spacer >>. many (attempt (link .>> spacer)) .>> footer
 
     let parseLinksFile filepath = runParserOnFile linkFile () filepath (System.Text.Encoding.GetEncoding(1252))
-    let parseLinksFilesRes filepath = parseLinksFile filepath |> (function |Success(p, _, _) -> p |_ -> [])
+    let parseLinksFilesRes filepath = parseLinksFile filepath |> (function |Success(p, _, _) -> p |Failure(e, _, _) -> failwith e)
 
     let private triggerheader = skipCharsTillString "Trigger Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
     let private effectheader = skipCharsTillString "Effect Documentation:" true 2000 .>> SharedParsers.ws <?> "header"
