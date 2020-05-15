@@ -7,6 +7,9 @@ country_event = {
         any_state = {
             is_controlled_by = ROOT
         }
+        any_state = {
+            is_controlled_by = THIS
+        }
         #error
         any_state = {
             is_controlled_by = {

@@ -226,6 +226,7 @@ and Node (key : string, pos : range) =
     member this.Has x = all |> (Seq.exists (bothFind x))
     member this.HasById x = all |> (Seq.exists (bothFindId x))
     member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key == x -> Some l.Value |_ -> None)
+    member __.TagById x = leaves() |> Array.tryPick (function |l when l.KeyId.lower = x -> Some l.ValueId |_ -> None)
     member __.Leafs x = leaves() |> Array.choose (function |l when l.Key == x -> Some l |_ -> None) |> Array.toSeq
     member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
