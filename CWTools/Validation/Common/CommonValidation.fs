@@ -191,7 +191,7 @@ module CommonValidation =
             let startMap = settings |> List.map createItem |> Map.ofList
             let res : StructureValidator<_> =
                 fun _ es ->
-                    let triggers = (es.AllTriggers)
+                    let triggers = (es.AllTriggers) @ (es.AllEffects)
                     let fNode =
                         fun (last : (StringLowerToken list * StringLowerToken list * string * Node) option) (x : Node) ->
                             match last, Map.tryFind x.KeyId.lower startMap with
