@@ -10,7 +10,7 @@ module HOI4Constants =
         "Air", ["air"]
     ]
     let defaultScopeInputs =
-        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []})
+        defaultScopes |> List.map (fun (n, s) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = []; dataTypeName = None})
 
     let defaultModifiers = [
         "State", None, ["any"]

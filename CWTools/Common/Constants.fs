@@ -52,6 +52,7 @@ module rec NewScope =
         name : string
         aliases : string list
         isSubscopeOf : string list
+        dataTypeName : string option
     }
     type ScopeWrapper = byte
 
@@ -61,10 +62,11 @@ module rec NewScope =
         let mutable reverseDict = Dictionary<Scope, ScopeInput>()
         let mutable complexEquality = false
         let mutable matchesSet = Set<Scope * Scope>(Seq.empty)
+        let mutable dataTypeMap = Map<Scope, string>(Seq.empty)
         let anyScope = Scope(0uy)
-        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"; "none"]; isSubscopeOf = [] }
+        let anyScopeInput = { ScopeInput.name = "Any"; aliases = ["any"; "all"; "no_scope"; "none"]; isSubscopeOf = []; dataTypeName = None }
         let invalidScope = Scope(1uy)
-        let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]; isSubscopeOf = []}
+        let invalidScopeInput = { ScopeInput.name = "Invalid"; aliases = ["invalid_scope"]; isSubscopeOf = []; dataTypeName = None}
         let parseScope() =
             if not initialized then CWTools.Utilities.Utils.logError "Error: parseScope was used without initializing scopes" else ()
             (fun (x : string) ->
@@ -91,6 +93,10 @@ module rec NewScope =
                 nextByte <- nextByte + 1uy
                 newScope.aliases |> List.iter (fun s -> dict.Add(s, Scope(newID)))
                 reverseDict.Add(Scope(newID), newScope)
+                match newScope.dataTypeName with
+                | Some dtn ->
+                    dataTypeMap <- dataTypeMap |> Map.add (Scope(newID)) dtn
+                | None -> ()
             scopes |> List.iter addScope
             let addScopeSubset (newScope : ScopeInput) =
                 newScope.isSubscopeOf |> List.iter (fun ss -> matchesSet <- (Set.add (parseScope() (newScope.aliases |> List.head), parseScope() ss) matchesSet))
@@ -120,6 +126,8 @@ module rec NewScope =
                 | _, x, _
                 | _, _, x when x = anyScope -> true
                 | _, x, y -> x = y
+        member this.DataTypeForScope(scope : Scope) =
+            Map.tryFind scope dataTypeMap |> Option.defaultValue (scope.ToString())
         member this.Initialized = initialized
     let scopeManager = ScopeManager()
 

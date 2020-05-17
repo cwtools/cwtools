@@ -18,7 +18,7 @@ module CK2Constants =
         "Wonder", ["wonder"], []
     ]
     let defaultScopeInputs =
-        defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss })
+        defaultScopes |> List.map (fun (n, s, ss) -> { NewScope.ScopeInput.name = n; NewScope.ScopeInput.aliases = s; NewScope.ScopeInput.isSubscopeOf = ss; dataTypeName = None })
 
     let defaultModifiers = [
         "Character", None, ["character"]

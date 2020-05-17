@@ -54,7 +54,8 @@ module UtilityParser =
                                           |> Option.defaultValue []
         let subscopes = node.Child "is_subscope_of" |> Option.map (fun c -> c.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq)
                                           |> Option.defaultValue []
-        { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases; NewScope.ScopeInput.isSubscopeOf = subscopes }
+        let dataTypeName = if node.Has "data_type_name" then Some (node.TagText "data_type_name") else None
+        { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases; NewScope.ScopeInput.isSubscopeOf = subscopes; dataTypeName = dataTypeName }
 
 
     let private loadScopeDefinitions filename fileString =
