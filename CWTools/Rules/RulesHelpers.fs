@@ -27,6 +27,10 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService option) (typ
                                 match n with
                                 | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
                                 | _ -> n.Key
+                            let prefixKey =
+                                match n with
+                                | :? Node as n -> n.KeyPrefix
+                                | _ -> None
                             let key =
                                 match def.nameField with
                                 |Some f -> n.TagText f
@@ -36,7 +40,7 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService option) (typ
                                     | _ -> n.Key
 
                             let result = def.name::subtypes |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def, rawSubtypes))
-                            if CWTools.Rules.FieldValidators.typekeyfilter def filterKey then result else []
+                            if CWTools.Rules.FieldValidators.typekeyfilter def filterKey prefixKey then result else []
                         let childres =
                             let rec skiprootkey (srk : SkipRootKey list) (n : IClause)=
                                 let childKey =

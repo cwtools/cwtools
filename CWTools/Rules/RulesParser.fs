@@ -539,6 +539,7 @@ module private RulesParserImpl =
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let type_per_file = node.TagText "type_per_file" == "yes"
+            let key_prefix = if node.Has "type_key_prefix" then Some (node.TagText "type_key_prefix") else None
             let pathOptions = getPathOptions node
             let startsWith = if node.Has "starts_with" then Some (node.TagText "starts_with") else None
             let skiprootkey = getSkipRootKey node
@@ -596,7 +597,8 @@ module private RulesParserImpl =
                     localisation = localisation;
                     startsWith = startsWith;
                     unique = unique;
-                    graphRelatedTypes = graphData
+                    graphRelatedTypes = graphData;
+                    keyPrefix = key_prefix
                     }
             |None -> None
         |_ -> None

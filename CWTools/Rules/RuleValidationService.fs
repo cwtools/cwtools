@@ -481,15 +481,23 @@ type RuleValidationService
                     match n with
                     | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
                     | _ -> n.Key
+                let prefixKey =
+                    match n with
+                    | :? Node as n -> n.KeyPrefix
+                    | _ -> None
                 match typerules |> List.tryHead with
                 |Some ((NodeRule ((SpecificField(SpecificValue (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
-                    if FieldValidators.typekeyfilter typedef filterKey then applyNodeRuleRoot typedef rs o n else OK
+                    if FieldValidators.typekeyfilter typedef filterKey prefixKey then applyNodeRuleRoot typedef rs o n else OK
                 |_ ->
                     OK
             let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
             let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (n : IClause) =
+                let prefixKey =
+                    match n with
+                    | :? Node as n -> n.KeyPrefix
+                    | _ -> None
                 match skipRootKeyStack with
-                |[] -> if FieldValidators.typekeyfilter t n.Key then validateType t n else OK
+                |[] -> if FieldValidators.typekeyfilter t n.Key prefixKey then validateType t n else OK
                 |head::tail ->
                     if skiprootkey head n
                     then n.ClauseList <&!&> validateTypeSkipRoot t tail

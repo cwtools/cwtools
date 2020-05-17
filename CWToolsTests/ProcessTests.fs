@@ -59,7 +59,7 @@ let emptyEmbeddedSettings = {
         cachedRuleMetadata = None
         featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default
 }
-let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
+let emptyDataTypes = { DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.confidentFunctions = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 
 let specificField = RulesParser.specificField
 let optionalMany = RulesParser.optionalMany
@@ -112,6 +112,7 @@ let createStarbaseTypeDef =
         startsWith = None
         unique = false
         graphRelatedTypes = []
+        keyPrefix = None
     }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -225,6 +226,7 @@ let shipBehaviorType =
         startsWith = None
         unique = false
         graphRelatedTypes = []
+        keyPrefix = None
     }
 let shipSizeType =
     {
@@ -246,6 +248,7 @@ let shipSizeType =
         startsWith = None
         unique = false
         graphRelatedTypes = []
+        keyPrefix = None
     }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

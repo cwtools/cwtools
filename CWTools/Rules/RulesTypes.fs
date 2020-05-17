@@ -109,6 +109,7 @@ and TypeDefinition = {
     skipRootKey : SkipRootKey list
     startsWith : string option
     type_per_file : bool
+    keyPrefix : string option
     warningOnly : bool
     unique : bool
     localisation : TypeLocalisation list

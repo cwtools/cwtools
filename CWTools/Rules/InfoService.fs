@@ -388,7 +388,7 @@ type InfoService
         let rec foldAtPosSkipRoot rs o (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
             match skipRootKeyStack with
             |[] ->
-                if FieldValidators.typekeyfilter t n.Key
+                if FieldValidators.typekeyfilter t n.Key n.KeyPrefix
                 then Some (singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc (NodeC n) ((NodeRule (TypeMarkerField (n.KeyId.lower, t), rs), o)))
                 else None
             |head::tail ->
@@ -666,7 +666,7 @@ type InfoService
         let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
         let rec infoServiceSkipRoot rs o (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
             match skipRootKeyStack with
-            |[] -> if FieldValidators.typekeyfilter t n.Key then infoServiceNode t rs o acc n else acc
+            |[] -> if FieldValidators.typekeyfilter t n.Key n.KeyPrefix then infoServiceNode t rs o acc n else acc
             |head::tail ->
                 if skiprootkey head n
                 then n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t tail) acc

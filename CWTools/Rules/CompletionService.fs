@@ -455,7 +455,8 @@ type CompletionService
             |_, true, [] ->
                 getCompletionFromPath scoreFunction typerules ([t.name, 1, None, NodeRHS]) scopeContext
             |[], false, (head, c, _, _)::tail ->
-                if FieldValidators.typekeyfilter t head
+                //TODO: Handle key prefix
+                if FieldValidators.typekeyfilter t head None
                 then
                     getCompletionFromPath scoreFunction typerules ((t.name, c, None, NodeRHS)::tail) scopeContext else []
             |head::tail, false, (pathhead, _, _,_)::pathtail ->

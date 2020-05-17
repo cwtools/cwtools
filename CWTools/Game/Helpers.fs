@@ -118,10 +118,14 @@ module Helpers =
             let validateLocalisationCommand = validateJominiLocalisationCommandsBase localisationCommandValidator
             let localisationCommandValidatorDefaultContext = localisationCommandValidator defaultContext
             let processLocalisation = processJominiLocalisationBase localisationCommandValidatorDefaultContext
+            let definedEventTargets =
+                (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             let eventtargets =
                 lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
                                          |> List.distinct
                                          |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
+            let eventtargets =
+                definedEventTargets |> List.fold (fun oldMap et -> oldMap |> Map.add et [scopeManager.AnyScope]) eventtargets
             let definedvars =
                 (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars

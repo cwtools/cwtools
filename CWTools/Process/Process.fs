@@ -199,13 +199,13 @@ and Node (key : string, pos : range) =
 
     member val KeyPrefixId : StringTokens option = None with get, set
     member this.KeyPrefix
-        with get () = this.KeyPrefixId |> Option.map (fun pkid -> StringResource.stringManager.GetStringForID(pkid.normal)) |> Option.defaultValue ""
-        and set (value) = this.KeyPrefixId <- Some (StringResource.stringManager.InternIdentifierToken(value))
+        with get () = this.KeyPrefixId |> Option.map (fun pkid -> StringResource.stringManager.GetStringForID(pkid.normal))// |> Option.defaultValue ""
+        and set (value) = this.KeyPrefixId <- value |> Option.map(fun value -> (StringResource.stringManager.InternIdentifierToken(value)))
 
     member val ValuePrefixId : StringTokens option = None with get, set
     member this.ValuePrefix
-        with get () = this.ValuePrefixId |> Option.map (fun pkid -> StringResource.stringManager.GetStringForID(pkid.normal)) |> Option.defaultValue ""
-        and set (value) = this.ValuePrefixId <- Some (StringResource.stringManager.InternIdentifierToken(value))
+        with get () = this.ValuePrefixId |> Option.map (fun pkid -> StringResource.stringManager.GetStringForID(pkid.normal))// |> Option.defaultValue ""
+        and set (value) = this.ValuePrefixId <- value |> Option.map(fun value -> (StringResource.stringManager.InternIdentifierToken(value)))
 
     member this.IsComplex = this.KeyPrefixId.IsSome || this.ValuePrefixId.IsSome
 
@@ -293,9 +293,13 @@ module ProcessCore =
                 None, None, (lookupVC pos context sl ([| v2 ;v1 |]))::(acc |> List.skip 2)
             | (Some (Value (_, v2))), (Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(k), v1, _))))), Value (pos, Clause sl) ->
                 let (NodeC node) = lookupN k pos context sl
-                node.KeyPrefix <- v2.ToRawString()
-                node.ValuePrefix <- v1.ToRawString()
+                node.KeyPrefix <- Some (v2.ToRawString())
+                node.ValuePrefix <- Some (v1.ToRawString())
                 None, None, (NodeC node)::(acc |> List.skip 2)
+            | _, (Some (Value (pos, v2))), (KeyValue (PosKeyValue(pos2, KeyValueItem(Key(k), Clause sl, _)))) when pos.StartLine = pos2.StartLine ->
+                let (NodeC node) = lookupN k pos2 context sl
+                node.KeyPrefix <- Some (v2.ToRawString())
+                None, None, (NodeC node)::(acc |> List.skip 1)
             //     None, None,
             |_ -> backone, Some next, (processNodeInner context next)::acc
 
