@@ -113,7 +113,7 @@ module Helpers =
 
     let createJominiLocalisationFunctions (jominiLocDataTypes : CWTools.Parser.DataTypeParser.JominiLocDataTypes option) =
         fun (lookup : Lookup) ->
-            let dataTypes = jominiLocDataTypes |> Option.defaultValue { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
+            let dataTypes = jominiLocDataTypes |> Option.defaultValue { promotes = Map.empty; confidentFunctions = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
             let localisationCommandValidator = createJominiLocalisationCommandValidator dataTypes
             let validateLocalisationCommand = validateJominiLocalisationCommandsBase localisationCommandValidator
             let localisationCommandValidatorDefaultContext = localisationCommandValidator defaultContext

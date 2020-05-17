@@ -157,16 +157,19 @@ module ChangeLocScope =
                     |> Option.map (fun ets ->
                                             let scope, confident =
                                                 match ets with
-                                                | [x] when x = scopeManager.AnyScope -> "Country", false
+                                                | [x] when x = scopeManager.AnyScope -> "Character", false
                                                 | [x] -> convScopeToDataType x, true
                                                 | [x; y] when x = scopeManager.AnyScope -> convScopeToDataType y, true
                                                 | x::y::_ when x = scopeManager.AnyScope -> convScopeToDataType y, false
                                                 | x::_ -> convScopeToDataType x, false
-                                                | _ -> "Country", false
+                                                | _ -> "Character", false
                                             NewDataType ((scope, confident)))
             let promoteMatch() =
                 dataTypes.promotes |> Map.tryFind nextKey
-                |> Option.orElse (dataTypes.promotes |> Map.tryFind (nextKey.ToUpperInvariant()))
+                |> Option.orElse (dataTypes.promotes |> Map.tryFind (nextKey))
+                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+            let globalFunctionConfidentMatch() =
+                dataTypes.confidentFunctions |> Map.tryFind nextKey
                 |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
             let globalFunctionMatch() =
                 dataTypes.functions |> Map.tryFind nextKey
@@ -181,7 +184,7 @@ module ChangeLocScope =
             let res =
                 match first with
                 | true ->
-                    (promoteMatch()) |> Option.orElse (globalFunctionMatch()) |> Option.orElse (savedScopedMatch() |> Option.orElse (rawTypeMatch()))
+                    (globalFunctionConfidentMatch() |> Option.orElse (savedScopedMatch()) |> Option.orElse (promoteMatch()) |> Option.orElse (globalFunctionMatch()) |> Option.orElse (rawTypeMatch()))
                 | false ->
                     functionMatch()
             res |> Option.defaultWith (fun _ -> LocNotFoundInType (nextKey, dataType, confident))

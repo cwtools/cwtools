@@ -90,6 +90,7 @@ module DataTypeParser =
             dataTypes : Map<string,Map<string,string>>
             dataTypeNames : Set<string>
             functions : Map<string,string>
+            confidentFunctions : Map<string, string>
             promotes : Map<string,string>
         }
     let private convToDataTypes (promotes : (string * string) list) (functions : (string * string) list) (dataTypes : (string * (string * string) list) list) =
@@ -103,10 +104,11 @@ module DataTypeParser =
             input |> List.fold folder Map.empty
         let promoteMap = customMapOfList promotes
         // TODO: Remove this hack
+        let confidentFunctionMap = functions |> List.choose (fun (k, v) -> if v = "[unregistered]" then None else Some (k, v) ) |> Map.ofList
         let functionMap = functions |> List.map (fun (k, v) -> k, if v = "[unregistered]" then "Character" else v ) |> Map.ofList
         let dataTypeMap = Map.ofList (dataTypes |> List.map (fun (k, v) -> k, customMapOfList v))
         let names = dataTypes |> List.map fst |> Set.ofList
-        { promotes = promoteMap; functions = functionMap; dataTypes = dataTypeMap; dataTypeNames = names } |> (fun f -> eprintfn "%A" f; f)
+        { promotes = promoteMap; confidentFunctions = confidentFunctionMap; functions = functionMap; dataTypes = dataTypeMap; dataTypeNames = names } |> (fun f -> eprintfn "%A" f; f)
 
     let private idChar = letter <|> digit <|> anyOf ['_'; '['; ']'; ':']
     let private line = many1Chars idChar .>> ws .>> skipString "->" .>> ws .>>. many1Chars idChar .>> ws
@@ -117,6 +119,6 @@ module DataTypeParser =
     let private dataTypeDump = promotes .>>. functions .>>. types .>> eof |>> (fun ((a,b),c) -> convToDataTypes a b c)
 
     let parseDataTypesFile filepath = runParserOnFile dataTypeDump () filepath (System.Text.Encoding.GetEncoding(1252))
-    let parseDataTypesFileRes filepath = parseDataTypesFile filepath |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })
+    let parseDataTypesFileRes filepath = parseDataTypesFile filepath |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; confidentFunctions = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })
     let parseDataTypesStream file = runParserOnStream dataTypeDump () "" file (System.Text.Encoding.GetEncoding(1252))
-    let parseDataTypesStreamRes file = parseDataTypesStream file |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })
+    let parseDataTypesStreamRes file = parseDataTypesStream file |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; confidentFunctions = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })
