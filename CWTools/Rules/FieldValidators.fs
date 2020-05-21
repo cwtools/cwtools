@@ -460,7 +460,7 @@ module internal FieldValidators =
         |ValueFound -> false
         |_ -> true
 
-    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (ids : StringTokens) leafornode errors =
+    let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt is32Bit min max (ids : StringTokens) leafornode errors =
         let scope = ctx.scopes
         let key = getOriginalKey ids
         let metadata = getStringMetadata ids.lower
@@ -472,7 +472,8 @@ module internal FieldValidators =
             | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-        |Some f, _, _ when min <= f && max >= f -> errors
+        |Some f, _, _ when min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) -> errors
+        |Some f, _, _ when min <= f && max >= f -> inv (ErrorCodes.ConfigRulesVariableTooSmall) leafornode <&&&> errors
         |_, _, VarFound -> errors
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         //TODO: Better error messages for scope instead of variable
@@ -480,7 +481,7 @@ module internal FieldValidators =
         // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
-    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (ids : StringTokens) =
+    let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt is32Bit min max (ids : StringTokens) =
         let scope = ctx.scopes
         let metadata = getStringMetadata ids.lower
         let key = getOriginalKey ids
@@ -492,7 +493,7 @@ module internal FieldValidators =
             | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
-        |Some f, _, _ -> min <= f && max >= f
+        |Some f, _, _ -> min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3)))
         |_, _, VarFound -> true
         |_, _, VarNotFound s -> false
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
@@ -561,7 +562,7 @@ module internal FieldValidators =
             |IconField folder -> checkIconField p.files folder keyIDs leafornode errors
             |VariableSetField v -> errors
             |VariableGetField v -> checkVariableGetField p.varMap severity v keyIDs leafornode errors
-            |VariableField (isInt, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max keyIDs leafornode errors
+            |VariableField (isInt, is32Bit, (min, max)) -> checkVariableField p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt is32Bit min max keyIDs leafornode errors
             |ValueScopeField (isInt, (min, max)) -> checkValueScopeField p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max keyIDs leafornode errors
             |ScalarField _ -> errors
             |SpecificField (SpecificValue v) -> if keyIDs.lower = v.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(v.normal))) severity) leafornode <&&&> errors
@@ -586,7 +587,7 @@ module internal FieldValidators =
             |IconField folder -> checkIconFieldNE p.files folder keyIDs
             |VariableSetField v -> true
             |VariableGetField v -> checkVariableGetFieldNE p.varMap severity v keyIDs
-            |VariableField (isInt, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max keyIDs
+            |VariableField (isInt, is32Bit, (min, max))-> checkVariableFieldNE p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt is32Bit min max keyIDs
             |ValueScopeField (isInt, (min, max))-> checkValueScopeFieldNE p.enumsMap p.linkMap p.valueTriggerMap p.wildcardLinks p.varSet p.changeScope p.anyScope ctx isInt min max keyIDs
             |TypeMarkerField (dummy, _) -> dummy = keyIDs.lower
             |ScalarField (_) -> true

@@ -39,6 +39,9 @@ event = {
     use_variable = variable_field
 
     ## cardinality = 0..inf
+    use_variable_32 = variable_field_32
+
+    ## cardinality = 0..inf
     subtypetest_root = value[subtype_root]
     ## cardinality = 0..inf
     subtypetest_1 = value[subtype_1]

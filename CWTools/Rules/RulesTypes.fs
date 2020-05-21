@@ -135,7 +135,7 @@ and NewField =
 | SubtypeField of string * bool * NewRule list
 | VariableSetField of string
 | VariableGetField of string
-| VariableField of isInt : bool * minmax : (decimal * decimal)
+| VariableField of isInt : bool * is32Bit : bool * minmax : (decimal * decimal)
 | ValueScopeMarkerField of isInt : bool * minmax : (decimal * decimal)
 | ValueScopeField of isInt : bool * minmax : (decimal * decimal)
 | MarkerField of Marker

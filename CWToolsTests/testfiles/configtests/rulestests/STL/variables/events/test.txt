@@ -120,3 +120,12 @@ country_event = {
     use_variable = my_preset_variable^ten
     use_variable = my_preset_variable?10
 }
+
+country_event = {
+    use_variable_32 = 10.001
+    use_variable = 10.001
+
+    use_variable = 10.0001
+    #error
+    use_variable_32 = 10.0001
+}

@@ -243,16 +243,26 @@ module private RulesParserImpl =
             | Some alias -> AliasField alias
             | None -> ScalarField (ScalarValue)
         | "scope_field" -> ScopeField (anyScope)
-        | "variable_field" -> VariableField (false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+        | "variable_field" -> VariableField (false, false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | x when x.StartsWith "variable_field[" ->
             match getFloatSettingFromString x with
-            | Some (min, max) -> VariableField (false,(min, max))
-            | None -> VariableField (false,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
-        | "int_variable_field" -> VariableField (true, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
+            | Some (min, max) -> VariableField (false, false,(min, max))
+            | None -> VariableField (false, false,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+        | "int_variable_field" -> VariableField (true, false, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | x when x.StartsWith "int_variable_field[" ->
             match getIntSettingFromString x with
-            | Some (min, max) -> VariableField (true,(decimal min,decimal max))
-            | None -> VariableField (true,(decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
+            | Some (min, max) -> VariableField (true, false,(decimal min,decimal max))
+            | None -> VariableField (true, false, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
+        | "variable_field_32" -> VariableField (false, true, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+        | x when x.StartsWith "variable_field_32[" ->
+            match getFloatSettingFromString x with
+            | Some (min, max) -> VariableField (false, true,(min, max))
+            | None -> VariableField (false, true,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
+        | "int_variable_field_32" -> VariableField (true, true, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
+        | x when x.StartsWith "int_variable_field_32[" ->
+            match getIntSettingFromString x with
+            | Some (min, max) -> VariableField (true, true,(decimal min,decimal max))
+            | None -> VariableField (true, true,(decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | "value_field" -> ValueScopeMarkerField (false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | x when x.StartsWith "value_field[" ->
             match getFloatSettingFromString x with
