@@ -120,6 +120,7 @@ type ErrorCodes =
     static member LocMissingQuote = fun key ->  { ID = "CW268"; Severity = Severity.Warning; Message = sprintf "Localisation key %s doesn't start and end with double quotes" key }
     static member OptimisationMergeList = fun inner target -> { ID = "CW269"; Severity = Severity.Hint; Message = sprintf "Optimise by merging this with %s by using %s" inner target }
     static member ConfigRulesVariableTooSmall = { ID = "CW270"; Severity = Severity.Warning; Message = "Value too small, only 3 decimal places are supported in this context" }
+    static member ConfigRulesVariableIntOnly = { ID = "CW271"; Severity = Severity.Warning; Message = "Expected an integer" }
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 

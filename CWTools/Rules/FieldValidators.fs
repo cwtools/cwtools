@@ -472,8 +472,9 @@ module internal FieldValidators =
             | _ -> key
         match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-        |Some f, _, _ when min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) -> errors
+        |Some f, _, _ when (not isInt) && min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) -> errors
         |Some f, _, _ when min <= f && max >= f -> inv (ErrorCodes.ConfigRulesVariableTooSmall) leafornode <&&&> errors
+        |Some f, _, _ when isInt -> inv (ErrorCodes.ConfigRulesVariableIntOnly) leafornode <&&&> errors
         |_, _, VarFound -> errors
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         //TODO: Better error messages for scope instead of variable
