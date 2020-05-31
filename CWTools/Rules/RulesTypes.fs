@@ -10,22 +10,42 @@ type ReplaceScopes = {
     froms : Scope list option
     prevs : Scope list option
 }
-type Options = {
-    min : int
-    max : int
-    strictMin : bool
-    leafvalue : bool
-    description : string option
-    pushScope : Scope option
-    replaceScopes : ReplaceScopes option
-    severity : Severity option
-    requiredScopes : Scope list
-    comparison : bool
-    referenceDetails : (bool * string) option
-    keyRequiredQuotes : bool
-    valueRequiredQuotes : bool
-    typeHint : (string * bool) option
-}
+type Options =
+    {
+        min : int
+        max : int
+        strictMin : bool
+        leafvalue : bool
+        description : string option
+        pushScope : Scope option
+        replaceScopes : ReplaceScopes option
+        severity : Severity option
+        requiredScopes : Scope list
+        comparison : bool
+        referenceDetails : (bool * string) option
+        keyRequiredQuotes : bool
+        valueRequiredQuotes : bool
+        typeHint : (string * bool) option
+        errorIfMatched : string option
+    }
+    static member DefaultOptions =
+        {
+            min = 0
+            max = 1000
+            strictMin = true
+            leafvalue = false
+            description = None
+            pushScope = None
+            replaceScopes = None
+            severity = None
+            requiredScopes = []
+            comparison = false
+            referenceDetails = None
+            keyRequiredQuotes = false
+            valueRequiredQuotes = false
+            typeHint = None
+            errorIfMatched = None
+        }
 
 type PathOptions = {
     paths : string list
