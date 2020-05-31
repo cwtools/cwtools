@@ -26,7 +26,7 @@ type Options =
         keyRequiredQuotes : bool
         valueRequiredQuotes : bool
         typeHint : (string * bool) option
-        errorIfMatched : string option
+        errorIfOnlyMatch : string option
     }
     static member DefaultOptions =
         {
@@ -44,7 +44,7 @@ type Options =
             keyRequiredQuotes = false
             valueRequiredQuotes = false
             typeHint = None
-            errorIfMatched = None
+            errorIfOnlyMatch = None
         }
 
 type PathOptions = {

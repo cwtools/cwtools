@@ -61,3 +61,12 @@ country_event = {
         }
     }
 }
+
+##Error if matched
+country_event = {
+    option = {
+        yes_only = no
+        #error
+        yes_only = yes
+    }
+}

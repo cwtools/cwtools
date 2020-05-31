@@ -79,3 +79,7 @@ alias[effect:set_variable] = {
     value = variable_field
 }
 alias[effect:check_variable] = variable_field
+
+alias[effect:yes_only] = no
+## error_if_only_match = Test error
+alias[effect:yes_only] = yes

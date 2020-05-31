@@ -337,7 +337,16 @@ type RuleValidationService
         <&&>
         (if checkQuotes leaf.ValueId.quoted options.valueRequiredQuotes then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "This value is expected to be quoted" Severity.Error) leaf] ))
         <&&>
-        FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
+        (if options.errorIfOnlyMatch.IsSome
+        then
+            let res = FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
+            eprintfn "eif %A %A" leaf.Key (res = errors)
+            if res = errors
+            then inv (ErrorCodes.CustomError options.errorIfOnlyMatch.Value Severity.Error) leaf <&&&> errors
+            else res
+        else
+            FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
+            )
     and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : IClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =
