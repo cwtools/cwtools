@@ -19,11 +19,11 @@
     <Title>CWTools.CLI</Title>
     <PackageId>CWTools.CLI</PackageId>
   </PropertyGroup>
-  <!-- <ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>
-  </ItemGroup> -->
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Serializer.fs" />
     <Compile Include="Validator.fs" />
