@@ -340,9 +340,8 @@ type RuleValidationService
         (if options.errorIfOnlyMatch.IsSome
         then
             let res = FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
-            eprintfn "eif %A %A" leaf.Key (res = errors)
             if res = errors
-            then inv (ErrorCodes.CustomError options.errorIfOnlyMatch.Value Severity.Error) leaf <&&&> errors
+            then inv (ErrorCodes.CustomError options.errorIfOnlyMatch.Value severity) leaf <&&&> errors
             else res
         else
             FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors

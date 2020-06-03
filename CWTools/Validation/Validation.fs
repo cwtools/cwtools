@@ -277,7 +277,7 @@ module ValidationCore =
             | [res] -> res
             | head::head2::tail ->
                 // let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
-                let t = { code = head.code; severity = head.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
+                let t = { code = head.code; severity = max head.severity head2.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
                 mergeErrorsInner (t::tail)
         mergeErrorsInner
 
