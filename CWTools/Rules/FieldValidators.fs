@@ -316,11 +316,12 @@ module internal FieldValidators =
                         //     Some (value.Substring(0, si))
                         // | fi, si ->
                         //     Some (value.Substring(p.Length, (si - p.Length)))
-                    match value.StartsWith(p, StringComparison.OrdinalIgnoreCase), value.EndsWith(s, StringComparison.OrdinalIgnoreCase) with
-                        | _, false -> None
-                        | false, _ -> None
-                        | true, true ->
-                            Some (value.Substring(p.Length, (value.Length - p.Length - s.Length)))
+                        match value.StartsWith(p, StringComparison.OrdinalIgnoreCase), value.EndsWith(s, StringComparison.OrdinalIgnoreCase), (value.Length - p.Length - s.Length) with
+                        | _, false, _ -> None
+                        | false, _, _ -> None
+                        | _ , _, n when n <= 0 -> None
+                        | true, true, n ->
+                            Some (value.Substring(p.Length, n))
                 // eprintfn "ct %s %A %A" value newvalue typetype
                 newvalue |> Option.map (values.Contains) |> Option.defaultValue false
             if found
@@ -357,11 +358,12 @@ module internal FieldValidators =
                     //     Some (value.Substring(0, si))
                     // | fi, si ->
                     //     Some (value.Substring(p.Length, (si - p.Length)))
-                    match value.StartsWith(p, StringComparison.OrdinalIgnoreCase), value.EndsWith(s, StringComparison.OrdinalIgnoreCase) with
-                    | _, false -> None
-                    | false, _ -> None
-                    | true, true ->
-                        Some (value.Substring(p.Length, (value.Length - p.Length - s.Length)))
+                    match value.StartsWith(p, StringComparison.OrdinalIgnoreCase), value.EndsWith(s, StringComparison.OrdinalIgnoreCase), (value.Length - p.Length - s.Length) with
+                    | _, false, _ -> None
+                    | false, _, _ -> None
+                    | _ , _, n when n <= 0 -> None
+                    | true, true, n ->
+                        Some (value.Substring(p.Length, n))
 
             value |> Option.map (values.Contains) |> Option.defaultValue false
             // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
