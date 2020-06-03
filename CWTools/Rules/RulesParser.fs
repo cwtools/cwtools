@@ -561,6 +561,7 @@ module private RulesParserImpl =
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
             let unique = node.TagText "unique" == "yes"
+            let shouldBeReferenced = node.TagText "should_be_used" == "yes"
             let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
             let subtypelocalisations = node.Child "localisation" |> Option.map (fun l -> l.Children |> List.choose parseSubTypeLocalisation) |> Option.defaultValue []
             let subtypes = subtypes |> List.map (fun st -> let loc = subtypelocalisations |> List.filter (fun (stl, _) -> stl = st.name) |> List.collect snd in {st with localisation = loc})
@@ -612,6 +613,7 @@ module private RulesParserImpl =
                     localisation = localisation;
                     startsWith = startsWith;
                     unique = unique;
+                    shouldBeReferenced = shouldBeReferenced;
                     graphRelatedTypes = graphData;
                     keyPrefix = key_prefix
                     }

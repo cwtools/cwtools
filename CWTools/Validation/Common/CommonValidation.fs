@@ -181,6 +181,35 @@ module CommonValidation =
                     |_, _ -> AND, None
             (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
 
+    let validateUnusuedTypes : LookupValidator<_> =
+        let merge (a : Map<'a, 'b>) (b : Map<'a, 'b>) (f : 'a -> 'b * 'b -> 'b) =
+            Map.fold (fun s k v ->
+                match Map.tryFind k s with
+                | Some v' -> Map.add k (f k (v, v')) s
+                | None -> Map.add k v s) a b
+
+        fun l os _ ->
+            let typesToCheck = l.typeDefs |> List.filter (fun t -> t.shouldBeReferenced) |> List.map (fun t -> t.name)
+            let typeInfos = l.typeDefInfo |> Map.filter (fun typename _ -> typesToCheck |> List.contains typename)
+                                          |> Map.toList
+            let allReferences =
+                os.AllWithData |> List.choose (fun (_, lazydata) -> lazydata.Force().Referencedtypes)
+                |> Seq.fold (fun a b -> merge a b (fun _ (l1, l2) -> l1@l2)) Map.empty
+
+            let checkTypeDef (refs : string list) (typedef : TypeDefInfo) =
+                match List.contains typedef.id refs with
+                | true -> None
+                | false -> Some (invManual (ErrorCodes.CustomError "This type should be used" Severity.Error) typedef.range typedef.id None)
+            let checkType ((typename : string), (typedefs : TypeDefInfo list)) =
+                match allReferences |> Map.tryFind typename with
+                | None -> failwith "no refernences?" //inv (ErrorCodes.CustomError "This type should be used" Severity.Error)
+                | Some refs ->
+                    typedefs |> List.choose (checkTypeDef (refs |> List.map (fun r -> r.name)))
+
+            match typeInfos |> List.collect checkType with
+            | [] -> OK
+            | errors -> Invalid (Guid.NewGuid(), errors)
+
     open CWTools.Utilities
     let private intern x = (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken x).lower
     let private retrieveString x = CWTools.Utilities.StringResource.stringManager.GetStringForID x

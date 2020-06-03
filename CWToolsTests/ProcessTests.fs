@@ -113,6 +113,7 @@ let createStarbaseTypeDef =
         unique = false
         graphRelatedTypes = []
         keyPrefix = None
+        shouldBeReferenced = false
     }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
@@ -225,6 +226,7 @@ let shipBehaviorType =
         localisation = []
         startsWith = None
         unique = false
+        shouldBeReferenced = false
         graphRelatedTypes = []
         keyPrefix = None
     }
@@ -247,6 +249,7 @@ let shipSizeType =
         localisation = []
         startsWith = None
         unique = false
+        shouldBeReferenced = false
         graphRelatedTypes = []
         keyPrefix = None
     }

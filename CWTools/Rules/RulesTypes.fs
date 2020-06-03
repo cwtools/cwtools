@@ -132,6 +132,7 @@ and TypeDefinition = {
     keyPrefix : string option
     warningOnly : bool
     unique : bool
+    shouldBeReferenced : bool
     localisation : TypeLocalisation list
     graphRelatedTypes : string list
 }
