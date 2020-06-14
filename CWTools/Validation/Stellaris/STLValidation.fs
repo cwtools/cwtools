@@ -689,7 +689,9 @@ module STLValidation =
                 | None, _ -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingSectionSlot section slot) c])
                 | _, None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnknownComponentTemplate template) c])
                 | Some (sType, sSize), Some (tType, tSize) ->
-                    if sType == tType && sSize == tSize then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MismatchedComponentAndSlot slot sSize template tSize) c])
+                    OK
+                    // TODO: Rewrite this
+                    // if sType == tType && sSize == tSize then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MismatchedComponentAndSlot slot sSize template tSize) c])
 
             let defaultTemplates = [ "DEFAULT_COLONIZATION_SECTION"; "DEFAULT_CONSTRUCTION_SECTION"]
             let validateSection (s : Node) =
