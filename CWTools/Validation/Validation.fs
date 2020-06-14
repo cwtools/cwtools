@@ -121,6 +121,7 @@ type ErrorCodes =
     static member OptimisationMergeList = fun inner target -> { ID = "CW269"; Severity = Severity.Hint; Message = sprintf "Optimise by merging this with %s by using %s" inner target }
     static member ConfigRulesVariableTooSmall = { ID = "CW270"; Severity = Severity.Warning; Message = "Value too small, only 3 decimal places are supported in this context" }
     static member ConfigRulesVariableIntOnly = { ID = "CW271"; Severity = Severity.Warning; Message = "Expected an integer" }
+    static member FromRulesCustomError = fun error severity -> { ID = "CW272"; Severity = severity; Message = error}
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
@@ -276,9 +277,13 @@ module ValidationCore =
             | [] -> failwith "mergeErrorsInner somehow got an empty error list"
             | [res] -> res
             | head::head2::tail ->
-                // let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
-                let t = { code = head.code; severity = max head.severity head2.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
-                mergeErrorsInner (t::tail)
+                match head.code, head2.code with
+                |"CW272", _ -> head
+                |_, "CW272" -> head2
+                | _ ->
+                    // let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
+                    let t = { code = head.code; severity = max head.severity head2.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
+                    mergeErrorsInner (t::tail)
         mergeErrorsInner
 
     // Parallelising something this small makes it slower!
