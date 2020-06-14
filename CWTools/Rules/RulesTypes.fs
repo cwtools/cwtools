@@ -168,6 +168,8 @@ and NewField =
         | ValueField vt -> sprintf "Field of %O" vt
         | ScalarField sv -> "Field of any value"
         | SpecificField (SpecificValue sv) -> sprintf "Field of %s" (stringManager.GetStringForID sv.normal)
+        | VariableGetField sv -> sprintf "Field of \"%s\" value" sv
+        | VariableField (isint, is32bit, (min, max)) -> sprintf "Field of defined variable or number between %O and %O" min max
         | _ -> sprintf "Field of %A" x
 and RuleType =
 |NodeRule of left : NewField * rules : NewRule list
