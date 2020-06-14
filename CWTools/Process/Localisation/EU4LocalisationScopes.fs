@@ -27,6 +27,8 @@ module EU4 =
         ScopedEffect("Province", [scopeManager.AnyScope], scopeManager.ParseScope() "Province", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("Overlord", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Country", EffectType.Link, defaultDesc, "", true);
         ScopedEffect("Consort", [scopeManager.ParseScope() "Country";], scopeManager.ParseScope() "Consort", EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("NativeCulture", [scopeManager.ParseScope() "Province"], scopeManager.ParseScope() "Culture", EffectType.Link, defaultDesc, "", true);
+        ScopedEffect("OriginalReligion", [scopeManager.ParseScope() "Province"], scopeManager.ParseScope() "Religion", EffectType.Link, defaultDesc, "", true);
 
 
         // ScopedEffect("GetCult", [Scope.Country], Scope.Any, EffectType.Both, defaultDesc, "", true);
