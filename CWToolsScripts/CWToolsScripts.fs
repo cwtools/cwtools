@@ -413,7 +413,35 @@ module CWToolsScripts =
             let res = effects |> List.filter (fun t -> Set.contains t.name undefinedEffects) |> eout
             File.WriteAllText(@"C:\Users\Thomas\git\cwtools-hoi4-config\\Config\effects_new.cwt", res)
         0
+    open FSharp.Data
+    open FSharp.Data.JsonExtensions
+    let generateHOI4Modifiers() =
+        let docs = File.ReadAllText(@"C:\Users\Thomas\git\cwtools-hoi4-config\Config\script_documentation.json")
+        let json = JsonValue.Parse docs
+        let modifiers = json?modifiers
+        let mutable modifierList = []
+        for modifier in modifiers do
+            let mutable scopeList = []
+            for scope in modifier?categories do
+                scopeList <- scope.AsString()::scopeList
+            modifierList <- (modifier?name.AsString(), scopeList)::modifierList
+        let modifierList = modifierList |> List.map (fun (k, ls) -> k, ls |> Seq.map (fun s -> s.Replace("_","")) |>  String.concat "_")
+        // let modifiers = modifiers |> Seq.map (fun m -> m?name.AsString(), m?categories |> Seq.map (fun s -> s.AsString()))
+        //eprintfn "%A" (modifierList |> List.groupBy snd |> List.map (fun (k, g) -> k, g |> List.length))
+        let modifierCategories = modifierList |> List.map snd |> List.distinct
+        let modifierCategoriesFile =
+            """modifierCategories = {
+                """
+        let modifierCategoryTemplate =
+            """ = {
 
+            }
+            """
+        let t = Printf.TextWriterFormat<string->unit>(modifierCategoryTemplate)
+        let modifierCategoryFile = modifierCategoriesFile :: modifierCategories |> List.map (fun s -> s + modifierCategoryTemplate) |> String.concat ""
+        let modifiersFile = modifierList |> List.map (fun (k, vs) -> sprintf "")
+        eprintfn "%A" modifierCategoryFile
+        0
     [<EntryPoint>]
     let main argv =
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -427,5 +455,8 @@ module CWToolsScripts =
         elif Array.tryHead argv = Some "unusedhoi4"
         then
             findUndefinedEffectsHOI4()
+        elif Array.tryHead argv = Some "hoi4modifiers"
+        then
+            generateHOI4Modifiers()
         else
             0
