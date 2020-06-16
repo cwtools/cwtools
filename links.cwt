@@ -12,6 +12,7 @@ value = {
 	desc =  eventtarget_link_desc_value
 	output_scope = value
 }
+
 yes = {
 	desc =  eventtarget_link_desc_yes
 	output_scope = bool
