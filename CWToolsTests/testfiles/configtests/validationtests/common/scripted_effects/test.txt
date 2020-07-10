@@ -34,3 +34,18 @@ test_scripted_effect_params = {
     #error
     set_ship_flag = $test_rhs$
 }
+
+test_scripted_effect_optional_params = {
+    set_country_flag = $optional_param|test_flag$
+}
+
+test_scripted_effect_not_optional_params = {
+    #error
+    set_country_flag = $not_optional_param$
+}
+
+test_scripted_effect_several_params = {
+    #error
+    set_country_flag = $not_optional_param$
+    set_country_flag = $optional_param|test_flag$
+}

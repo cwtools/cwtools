@@ -52,6 +52,28 @@ country_event = {
             test_lhs = blah
             test_rhs = blah
         }
+        test_scripted_effect_optional_params = yes
+        test_scripted_effect_optional_params = {
+            optional_param = param_flag
+        }
+        test_scripted_effect_not_optional_params = {
+            not_optional_param = param_flag
+        }
+        #error
+        test_scripted_effect_not_optional_params = yes
+        test_scripted_effect_several_params = {
+            optional_param = param_flag
+            not_optional_param = param_flag
+        }
+        test_scripted_effect_several_params = {
+            not_optional_param = param_flag
+        }
+        #error
+        test_scripted_effect_several_params = {
+            optional_param = param_flag
+        }
+        #error
+        test_scripted_effect_several_params = yes
 
 
     }

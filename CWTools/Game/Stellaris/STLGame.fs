@@ -168,7 +168,7 @@ module STLGameFunctions =
         rulesWithEmbeddedScopes
 
     let refreshConfigBeforeFirstTypesHook (lookup : STLLookup) (resources : IResourceAPI<STLComputedData>) (embeddedSettings : EmbeddedSettings)  =
-        lookup.STLScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+        lookup.STLScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.STL.getScriptedEffectParamsEntity e))))
                                             |> List.ofSeq |> List.collect id)
         let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys }
         let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
