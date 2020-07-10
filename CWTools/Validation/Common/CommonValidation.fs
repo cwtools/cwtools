@@ -136,7 +136,13 @@ module CommonValidation =
                         location = callSite
                         message = sprintf "This call of scripted effect %s results in an error" name
                     }
-                    res |> (function
+                    let requiredParams = CWTools.Games.Compute.STL.getScriptedEffectParams  rootNode |> List.filter (fun (_, optional) -> not optional) |> List.map fst
+                    let usedParams = seParams |> List.map fst
+                    let missingParams = List.except requiredParams usedParams
+                    let newError = if List.length missingParams > 0
+                        then Invalid (System.Guid.NewGuid(), [inv (ErrorCodes.CustomError "Some non optional parameters are not supplied" Severity.Error) node])
+                        else OK
+                    (res <&&> newError) |> (function
                             | OK -> OK
                             | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
                 let memoizeValidation =
