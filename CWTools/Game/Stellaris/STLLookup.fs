@@ -14,7 +14,7 @@ module STLLookup =
         member __.Setflags : (FlagType * string) list = setflags
         member __.Savedeventtargets : string list = savedeventtargets
         member __.Hastechs : string list = hastechs
-        member __.ScriptedEffectParams : string list option = scriptedeffectparams
+        member __.ScriptedEffectParams : (string * bool) list option = scriptedeffectparams
 
     let getChildrenWithComments (root : Node) =
         let findComment t s (a : Child) =
