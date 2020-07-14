@@ -268,3 +268,6 @@ alias[effect:<scripted_effect>] = {
 	## cardinality = 1..inf
 	enum[scripted_effect_params] = scope_field
 }
+
+###Scripted effects called by "scripted_effect_name = yes" shouldn't throw an error
+alias[effect:<scripted_effect>] = yes
