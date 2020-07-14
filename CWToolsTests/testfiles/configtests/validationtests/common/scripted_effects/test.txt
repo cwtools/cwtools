@@ -48,7 +48,6 @@ test_scripted_effect_not_optional_params_supplied = {
 }
 
 test_scripted_effect_not_optional_params_not_supplied = {
-    #error
     set_name = $not_optional_param$
 }
 
@@ -58,7 +57,6 @@ test_scripted_effect_several_params_all_supplied = {
 }
 
 test_scripted_effect_several_params_optional_supplied = {
-    #error
     set_name = $not_optional_param$
     set_name = $optional_param|test_flag$
 }
@@ -69,7 +67,6 @@ test_scripted_effect_several_params_non_optional_supplied = {
 }
 
 test_scripted_effect_several_params_none_supplied = {
-    #error
     set_name = $not_optional_param$
     set_name = $optional_param|test_flag$
 }
