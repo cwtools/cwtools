@@ -138,7 +138,7 @@ module CommonValidation =
                     }
                     let requiredParams = CWTools.Games.Compute.STL.getScriptedEffectParams  rootNode |> List.filter (fun (_, optional) -> not optional) |> List.map fst
                     let usedParams = seParams |> Option.defaultValue [] |> List.map fst
-                    let missingParams = List.except requiredParams usedParams
+                    let missingParams = List.except usedParams requiredParams
                     let newError = if missingParams.Length > 0 then Invalid (System.Guid.NewGuid(), [inv (ErrorCodes.CustomError "Some non optional parameters are not supplied" Severity.Error) node]) else OK
                     (res <&&> newError) |> (function
                             | OK -> OK
