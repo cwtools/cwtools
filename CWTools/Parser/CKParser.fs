@@ -34,9 +34,6 @@ open Types
                 temp
 
     let parseString fileString filename = runParserOnString SharedParsers.all () filename fileString
-        // let inner = (fun (file, name) -> runParserOnString all () name file)
-        // let hash = (fun (file, name) -> file.GetHashCode(), name)
-        // (memoize hash inner) (fileString, filename)
     let parseEventString fileString fileName =
         let inner = (fun (file, name) -> runParserOnString SharedParsers.alle () name file)
         let hash = (fun (file, name) -> file.GetHashCode(), name)
