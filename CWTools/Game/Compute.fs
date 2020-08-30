@@ -95,6 +95,22 @@ module STL =
     open CWTools.Common.STLConstants
     open CWTools.Validation.Stellaris
 
+    let getScriptedEffectParams (node : Node) =
+        let getDollarText (s : string) (acc) =
+            s.Split('$') |> Array.mapi (fun i s -> i, s) |> Array.fold (fun acc (i, s) ->
+                if i % 2 = 1 then (s.Split('|').[0], s.Contains("|"))::acc else acc
+            ) acc
+        let fNode = (fun (x:Node) acc ->
+            let nodeRes = getDollarText x.Key acc
+            x.Values |> List.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes
+            )
+        node |> (foldNode7 fNode) |> List.ofSeq
+
+    let getScriptedEffectParamsEntity (e : Entity) =
+        if (e.logicalpath.StartsWith("common/scripted_effects", StringComparison.OrdinalIgnoreCase)
+                    || e.logicalpath.StartsWith("common/scripted_triggers", StringComparison.OrdinalIgnoreCase))
+                then getScriptedEffectParams (e.entity) else []
+
     let getAllTechPrereqs (e : Entity) =
         let fNode = (fun (x : Node) acc ->
                             match x with
@@ -180,7 +196,7 @@ module STL =
         // let definedvariable = (if infoService().IsSome then Some ((infoService().Value.GetDefinedVariables )(e)) else None)
         // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         let hastechs = getAllTechPrereqs e
-        let scriptedeffectparams = Some (EU4.getScriptedEffectParamsEntity e)
+        let scriptedeffectparams = Some (getScriptedEffectParamsEntity e)
         let referencedtypes = referencedtypes |> Option.map (fun r -> r |>  List.ofSeq |> List.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value))) Map.empty )
         let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
         STLComputedData(eventIds, setvariables, setflags, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams, savedEventTargets)
