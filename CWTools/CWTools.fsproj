@@ -14,6 +14,7 @@
     <Compile Include="Common/EU4Constants.fs" />
     <Compile Include="Common/HOI4Constants.fs" />
     <Compile Include="Common/CK2Constants.fs" />
+    <Compile Include="Common/CK3Constants.fs" />
     <Compile Include="Common/IRConstants.fs" />
     <Compile Include="Common/VIC2Constants.fs" />
     <Compile Include="Parser/Types.fs" />
@@ -41,6 +42,7 @@
     <Compile Include="Process/Scopes/EU4Scopes.fs" />
     <Compile Include="Process/Scopes/HOI4Scopes.fs" />
     <Compile Include="Process/Scopes/CK2Scopes.fs" />
+    <Compile Include="Process/Scopes/CK3Scopes.fs" />
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
     <Compile Include="Rules/RulesParserConstants.fs" />
@@ -87,6 +89,7 @@
     <Compile Include="Game/CK2/CK2Game.fs" />
     <Compile Include="Game/IR/IRGame.fs" />
     <Compile Include="Game/VIC2/VIC2Game.fs" />
+    <Compile Include="Game/CK3/CK3Game.fs" />
     <Compile Include="Game/Custom/CustomGame.fs" />
     <Compile Include="CSharp/Parsers.fs" />
     <Compile Include="CSharp/Helpers.fs" />

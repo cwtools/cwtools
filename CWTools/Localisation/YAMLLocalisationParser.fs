@@ -232,3 +232,21 @@ module Custom =
         YAMLLocalisationService ( files, keyToLanguage, Custom )
     let CustomLocalisationServiceFromFolder (folder : string) =
         YAMLLocalisationService ({ folder =  folder; gameName = "Custom"; keyToLanguage = keyToLanguage; gameToLang = Custom })
+
+module CK3 =
+    open YAMLLocalisationParser
+    let private keyToLanguage =
+        function
+        |"l_english" -> Some CK3Lang.English
+        |"l_french" -> Some CK3Lang.French
+        |"l_german" -> Some CK3Lang.German
+        |"l_spanish" -> Some CK3Lang.Spanish
+        |"l_simp_chinese" -> Some CK3Lang.Chinese
+        |"l_russian" -> Some CK3Lang.Russian
+        |"l_korean" -> Some CK3Lang.Korean
+        |_ -> None
+
+    let CK3LocalisationService (files : (string * string) list) =
+        YAMLLocalisationService ( files, keyToLanguage, CK3 )
+    let CK3LocalisationServiceFromFolder (folder : string) =
+        YAMLLocalisationService ({ folder =  folder; gameName = "CK3"; keyToLanguage = keyToLanguage; gameToLang = CK3 })

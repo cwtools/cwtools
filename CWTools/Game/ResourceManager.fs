@@ -38,6 +38,7 @@ type JominiComputedData(referencedtypes, definedvariable, scriptedeffectparams, 
     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
     member __.ScriptedEffectParams : string list option = scriptedeffectparams
 type IRComputedData = JominiComputedData
+type CK3ComputedData = JominiComputedData
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 // type CK2ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
