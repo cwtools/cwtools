@@ -18,16 +18,13 @@ type ScopeContext =
     member this.GetFrom i =
          if this.From.Length >= i then (this.From.Item (i - 1)) else this.Root.AnyScope
 
-
-
-
 type ScopeResult =
-    | NewScope of newScope : ScopeContext * ignoreKeys : string list
-    | WrongScope of command : string * scope : Scope * expected : Scope list
+    | NewScope of newScope : ScopeContext * ignoreKeys : string list * refHint : ReferenceHint option
+    | WrongScope of command : string * scope : Scope * expected : Scope list * refHint : ReferenceHint option
     | NotFound
     | VarFound
     | VarNotFound of var : string
-    | ValueFound
+    | ValueFound of refHint : ReferenceHint option
 
 type ChangeScope = bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> StringSet -> string -> ScopeContext -> ScopeResult
 
@@ -65,7 +62,7 @@ module Scopes =
                 key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
                 || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
                 || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
-            then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
+            then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [], None)
             else
                 let key, varOnly = varPrefixFun key
                 let beforeAmp, afterAmp, hasAmp =
@@ -80,7 +77,7 @@ module Scopes =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     // eprintfn "o2o %A" onetoone
                     match onetoone with
-                    | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])
+                    | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [], None)
                     | None ->
                         // let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
                         // let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
@@ -99,11 +96,12 @@ module Scopes =
                                 let possibleScopes = e.Scopes
                                 let currentScope = context.CurrentScope
                                 let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
+                                let refHint = e |> function | :? ScopedEffect as se -> se.RefHint |_ -> None
                                 match context.CurrentScope, possibleScopes, exact with
-                                | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound
+                                | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound (refHint)
                                 | _, [], _ -> (context, false), NotFound
-                                | _, _, true -> (context, false), ValueFound
-                                | current, ss, false -> (context, false), WrongScope (nextKey, current, ss)
+                                | _, _, true -> (context, false), ValueFound (refHint)
+                                | current, ss, false -> (context, false), WrongScope (nextKey, current, ss, refHint)
                             else
                                 (context, false), NotFound
                         | None, _ ->
@@ -120,30 +118,31 @@ module Scopes =
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope
                             let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
+                            let refHint = e |> function | :? ScopedEffect as se -> se.RefHint |_ -> None
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
-                            | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren)
+                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren, refHint)
+                            | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren, refHint)
                             | _, [], _, _ -> (context, false), NotFound
-                            | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
-                            | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
-                            | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
+                            | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren, refHint)
+                            | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren, refHint)
+                            | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss, refHint)
                 let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
-                let res = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                let res = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i, rh)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
                 let res2 =
                     match res with
                     |(_, _), None -> NotFound
-                    |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                    |(_, true), Some r -> r |> function |NewScope (x, i, rh) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i, rh) |x -> x
                     |(_, false), Some r -> r
                 if hasAmp
                 then
                     let keys = afterAmp.Split('.')
                     let keylength = keys.Length - 1
                     let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
-                    let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+                    let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i, rh)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
                     let tres2 =
                         match tres with
                         |(_, _), None -> NotFound
-                        |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                        |(_, true), Some r -> r |> function |NewScope (x, i, rh) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i, rh) |x -> x
                         |(_, false), Some r -> r
                     match res2, tres2 with
                     |_, NotFound -> NotFound
@@ -163,13 +162,13 @@ module Scopes =
             if
                 key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
                 || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
-            then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
+            then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [], None)
             else
                 let key, varOnly = varPrefixFun key
                 let inner ((context : ScopeContext), (first : bool, changed : bool)) (nextKey : string) (last : bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     match onetoone with
-                    | Some (_, f) -> f (context, (first, false)), NewScope (f (context, (false, false)) |> fst, [])
+                    | Some (_, f) -> f (context, (first, false)), NewScope (f (context, (false, false)) |> fst, [], None)
                     | None ->
                         // let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope  -> Some e |_ -> None)
                         // let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
@@ -179,7 +178,7 @@ module Scopes =
                         //             |> List.tryFind (fun e -> e.Name == nextKey)
                         // if skipEffect then (context, false), NotFound else
                         match first && nextKey.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase), eventTargetLinkMatch with
-                        | true, _ -> (context, (true, true)), NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [])
+                        | true, _ -> (context, (true, true)), NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [], None)
                         | _, None ->
                             if last && (vars.Contains nextKey)
                             then
@@ -195,12 +194,12 @@ module Scopes =
                             let currentScope = context.CurrentScope
                             let exact = possibleScopes |> List.exists currentScope.IsOfScope
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, (false, true)), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
-                            | x, _, _, false when x = source.Root.AnyScope-> (context, (false, false)), NewScope (context, e.IgnoreChildren)
+                            | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, (false, true)), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren, None)
+                            | x, _, _, false when x = source.Root.AnyScope-> (context, (false, false)), NewScope (context, e.IgnoreChildren, None)
                             | _, [], _, _ -> (context, (false, false)), NotFound
-                            | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, (false, true)), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren)
-                            | _, _, true, false -> (context, (false, false)), NewScope (context, e.IgnoreChildren)
-                            | current, ss, false, _ -> (context, (false, false)), WrongScope (nextKey, current, ss)
+                            | _, _, true, true -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, (false, true)), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren, None)
+                            | _, _, true, false -> (context, (false, false)), NewScope (context, e.IgnoreChildren, None)
+                            | current, ss, false, _ -> (context, (false, false)), WrongScope (nextKey, current, ss, None)
                 let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
                 // Try just the raw string first
                 let rawKeys = key.Split('.')
@@ -208,10 +207,10 @@ module Scopes =
                 let rawKeys = rawKeys |> Array.mapi (fun i k -> k, i = rawKeyLength)
                 let rawRes2 =
                     if hoi4TargetedHardcodedVariables then
-                        let rawRes = rawKeys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, (true, false)), None)// |> snd |> Option.defaultValue (NotFound)
+                        let rawRes = rawKeys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i, _)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, (true, false)), None)// |> snd |> Option.defaultValue (NotFound)
                         match rawRes with
                         |(_, _), None -> NotFound
-                        |(_, (_, true)), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                        |(_, (_, true)), Some r -> r |> function |NewScope (x, i, _) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i, None) |x -> x
                         |(_, (_, false)), Some r -> r
                     else NotFound
                 match rawRes2 with
@@ -223,11 +222,11 @@ module Scopes =
                     let keys = ampersandSplit.[0].Split('.')
                     let keylength = keys.Length - 1
                     let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
-                    let res = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, (true, false)), None)// |> snd |> Option.defaultValue (NotFound)
+                    let res = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i, _)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, (true, false)), None)// |> snd |> Option.defaultValue (NotFound)
                     let res2 =
                         match res with
                         |(_, _), None -> NotFound
-                        |(_, (_, true)), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                        |(_, (_, true)), Some r -> r |> function |NewScope (x, i, _) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i, None) |x -> x
                         |(_, (_, false)), Some r -> r
                     if ampersandSplit.Length > 1
                     then
@@ -235,11 +234,11 @@ module Scopes =
                         let keys = ampersandSplit.[1].Split('.')
                         let keylength = keys.Length - 1
                         let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
-                        let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, (true, false)), None)// |> snd |> Option.defaultValue (NotFound)
+                        let tres = keys |> Array.fold (fun ((c,b), r) (k, l) -> match r with |None -> inner2 (c, b) k l |Some (NewScope (x, i, _)) -> inner2 (x, b) k l |Some x -> (c,b), Some x) ((source, (true, false)), None)// |> snd |> Option.defaultValue (NotFound)
                         let tres2 =
                             match tres with
                             |(_, _), None -> NotFound
-                            |(_, (_, true)), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
+                            |(_, (_, true)), Some r -> r |> function |NewScope (x, i, _) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i, None) |x -> x
                             |(_, (_, false)), Some r -> r
                         match res2, tres2 with
                         |_, NotFound -> NotFound

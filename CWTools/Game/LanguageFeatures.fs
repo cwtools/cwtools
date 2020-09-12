@@ -65,14 +65,14 @@ module LanguageFeatures =
         |Some e, Some info ->
             log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
-            |Some (_, (_, Some ("localisation", tv), _)) ->
+            |Some (_, (_, Some (LocRef(tv)), _)) ->
                 match localisationManager.LocalisationEntries() |> List.tryFind (fun (l, _) -> l = lang) with
                 | Some (_, entries) ->
                     match entries |> List.tryFind (fun (k, _) -> k = tv) with
                     | Some (_, entry) -> Some entry.position
                     | _ -> None
                 | None -> None
-            |Some (_, (_, Some (t, tv), _)) ->
+            |Some (_, (_, Some (TypeRef(t, tv)), _)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (tdi) -> if tdi.id = tv then Some tdi.range else None)
             |_ -> None
         |_, _ -> None
@@ -83,7 +83,7 @@ module LanguageFeatures =
         |Some e, Some info ->
             log (sprintf "findRefs %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
             match (info.GetInfo)(pos, e) with
-            |Some (_,( _, Some ((t : string), tv), _)) ->
+            |Some (_,( _, Some (TypeRef((t : string), tv)), _)) ->
                 //log "tv %A %A" t tv
                 let t = t.Split('.').[0]
                 resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else let contains, value = ((info.GetReferencedTypes) e).TryGetValue t in if contains then Some (value |> List.ofSeq) else None)
@@ -118,7 +118,7 @@ module LanguageFeatures =
                 |> Option.defaultValue (None, None, None)
             let (tv, t, locs) =
                 match typeInfo with
-                | Some (t, tv) ->
+                | Some (TypeRef(t, tv)) ->
                     let splitType = t.Split '.'
                     let typename = splitType.[0]
                     let subtype = if splitType.Length > 1 then splitType.[1] else ""
@@ -137,6 +137,7 @@ module LanguageFeatures =
                             tv, t, locs |> List.choose (fun l -> if l.explicitField.IsNone then Some { key = l.name; value = (l.prefix + tv + l.suffix) } else None)
                     | None -> "", "", []
                 | None -> "", "", []
+                | _ -> "", "", []
             Some {
                 name = tv
                 typename = t

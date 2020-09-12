@@ -481,6 +481,11 @@ type EffectType =
     | Link
     | ValueTrigger
 
+    type ReferenceHint =
+    | TypeRef of typeName : string * typeValue : string
+    | LocRef of locKey : string
+    | EnumRef of enumName : string
+
 type Effect internal (name, scopes, effectType) =
     member val Name: string = name
     member val Scopes: Scope list = scopes
@@ -575,7 +580,8 @@ type ScopedEffect(name,
                   ignoreChildren,
                   scopeonlynoteffect,
                   isValue,
-                  isWildCard) =
+                  isWildCard,
+                  refHint) =
     inherit DocEffect(name, scopes, inner, effectType, desc, usage)
     member val IsScopeChange: bool = isScopeChange
     member val IgnoreChildren: string list = ignoreChildren
@@ -584,6 +590,7 @@ type ScopedEffect(name,
     member val IsValueScope: bool = isValue
     /// If this scoped effect is a prefix that should accept anything afterwards
     member val IsWildCard: bool = isWildCard
+    member val RefHint : ReferenceHint option = refHint
 
     new(de: DocEffect, inner, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
         ScopedEffect
@@ -597,19 +604,20 @@ type ScopedEffect(name,
              ignoreChildren,
              scopeonlynoteffect,
              isValue,
-             false)
+             false,
+             None)
 
     new(de: DocEffect, inner) =
-        ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, true, [], false, false, false)
+        ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, true, [], false, false, false, None)
 
-    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue) =
-        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false)
-
-    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue, refHint) =
+        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false, refHint)
 
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false)
+        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
+
+    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+        ScopedEffect(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
 
 
 type TitleType =

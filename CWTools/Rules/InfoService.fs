@@ -280,7 +280,7 @@ type InfoService
                     let key = node.Key.Trim('"')
                     let newCtx =
                         match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
-                        |NewScope ({Scopes = current::_} ,_) ->
+                        |NewScope ({Scopes = current::_} ,_, _) ->
                             // log "cs %A %A %A" s node.Key current
                             {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
                         |VarFound ->
@@ -521,20 +521,28 @@ type InfoService
         foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx (pos) (entity.entity) (entity.logicalpath)
 
     let getInfoAtPos (pos : pos) (entity : Entity) =
-        let fLeaf (ctx, _) (leaf : Leaf) ((field, o) : NewRule) =
+        let changeScopeInner key scope =
+            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+            | ValueFound rh -> rh
+            | WrongScope (_, _, _, rh) -> rh
+            | NewScope (_, _, rh) -> rh
+            | _ -> None
+        let fLeaf ((ctx : RuleContext), _) (leaf : Leaf) ((field, o) : NewRule) =
             match o.typeHint, field with
-            | Some (t, true), _ -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
-            | Some (t, false), _ -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
-            | _, LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leaf.ValueText), Some (LeafC leaf))
-            | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some ("localisation", leaf.ValueText), Some (LeafC leaf))
-            | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (t, leaf.Key), Some (LeafC leaf))
-            | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some ("localisation", leaf.Key), Some (LeafC leaf))
+            | Some (t, true), _ -> ctx, (Some o, Some (TypeRef(t, leaf.Key)), Some (LeafC leaf))
+            | Some (t, false), _ -> ctx, (Some o, Some (TypeRef(t, leaf.ValueText)), Some (LeafC leaf))
+            | _, LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (TypeRef(t, leaf.ValueText)), Some (LeafC leaf))
+            | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some (LocRef(leaf.ValueText)), Some (LeafC leaf))
+            | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (TypeRef(t, leaf.Key)), Some (LeafC leaf))
+            | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some (LocRef(leaf.Key)), Some (LeafC leaf))
+            | _, LeafRule (_, ScopeField _) -> ctx, (Some o, changeScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (ScopeField _, _) -> ctx, (Some o, changeScopeInner leaf.Key ctx.scopes, Some (LeafC leaf))
             |_ -> ctx, (Some o, None, Some (LeafC leaf))
         let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) =
             match o.typeHint, field with
-            |Some (t, true), _ -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
-            |_, LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (t, leafvalue.Key), Some (LeafValueC leafvalue))
-            |_, LeafValueRule (LocalisationField _) -> ctx, (Some o, Some ("localisation", leafvalue.Key), Some (LeafValueC leafvalue))
+            |Some (t, true), _ -> ctx, (Some o, Some (TypeRef(t, leafvalue.Key)), Some (LeafValueC leafvalue))
+            |_, LeafValueRule (TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (TypeRef(t, leafvalue.Key)), Some (LeafValueC leafvalue))
+            |_, LeafValueRule (LocalisationField _) -> ctx, (Some o, Some (LocRef(leafvalue.Key)), Some (LeafValueC leafvalue))
             |_ -> ctx, (Some o, None, Some (LeafValueC leafvalue))
         let fComment (ctx, _) _ _ = ctx, (None, None, None)
         //TODO: Actually implement value clause
@@ -568,27 +576,29 @@ type InfoService
                         then {ctx with scopes = {ctx.scopes with Scopes = anyScope::ctx.scopes.Scopes}}
                         else ctx
             match options.typeHint, field with
-            | Some (t, true), _ -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
+            | Some (t, true), _ -> ctx, (Some options, Some (TypeRef(t, node.Key)), Some (NodeC node))
             | _, NodeRule (ScopeField s, f) ->
                 let scope = newCtx.scopes
                 let key = node.Key.Trim('"')
-                let newCtx =
+                let newCtx, rh =
                     match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
-                    |NewScope ({Scopes = current::_} ,_) ->
+                    |NewScope ({Scopes = current::_} ,_, rh) ->
                         // log "cs %A %A %A" s node.Key current
-                        {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
+                        {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}, rh
                     |VarFound ->
                         // log "cs %A %A %A" s node.Key current
-                        {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
-                    |_ -> newCtx
+                        {newCtx with scopes = {newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}, None
+                    |ValueFound rh -> newCtx, rh
+                    |WrongScope (_, _, _, rh) -> newCtx, rh
+                    |_ -> newCtx, None
                 newCtx, (Some options, None, Some (NodeC node))
             | _, NodeRule (TypeMarkerField (_, { name = typename; nameField = None }), _) ->
-                ctx, (Some options, Some (typename, node.Key), Some (NodeC node))
+                ctx, (Some options, Some (TypeRef(typename, node.Key)), Some (NodeC node))
             | _, NodeRule (TypeMarkerField (_, { name = typename; nameField = Some namefield }), _) ->
                 let typevalue = node.TagText namefield
-                ctx, (Some options, Some (typename, typevalue), Some (NodeC node))
-            | _, NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (t, node.Key), Some (NodeC node))
-            | _, NodeRule (LocalisationField _, _) -> ctx, (Some options, Some ("localisation", node.Key), Some (NodeC node))
+                ctx, (Some options, Some (TypeRef(typename, typevalue)), Some (NodeC node))
+            | _, NodeRule (TypeField (TypeType.Simple t), _) -> ctx, (Some options, Some (TypeRef(t, node.Key)), Some (NodeC node))
+            | _, NodeRule (LocalisationField _, _) -> ctx, (Some options, Some (LocRef(node.Key)), Some (NodeC node))
             | _, NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
             | _ -> newCtx, (Some options, None, Some (NodeC node))
 

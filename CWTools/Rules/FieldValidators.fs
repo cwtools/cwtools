@@ -441,12 +441,12 @@ module internal FieldValidators =
         let scope = ctx.scopes
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-        |ScopeResult.NewScope ({Scopes = current::_} ,_) -> if current.IsOfScope(s) || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
+        |ScopeResult.NewScope ({Scopes = current::_} ,_, _) -> if current.IsOfScope(s) || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
-        |ScopeResult.WrongScope (command, prevscope, expected) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
+        |ScopeResult.WrongScope (command, prevscope, expected, _) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
-        |ValueFound -> inv (ErrorCodes.CustomError "This is a value, but should be a scope" Severity.Error) leafornode <&&&> errors
+        |ValueFound _ -> inv (ErrorCodes.CustomError "This is a value, but should be a scope" Severity.Error) leafornode <&&&> errors
         |_ -> errors
     let checkScopeFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  (ids : StringTokens) =
         // log "scope %s %A"key ctx
@@ -455,11 +455,11 @@ module internal FieldValidators =
         let scope = ctx.scopes
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-        |ScopeResult.NewScope ({Scopes = current::_} ,_) -> current.IsOfScope(s) || s = anyScope || current = anyScope
+        |ScopeResult.NewScope ({Scopes = current::_} ,_, _) -> current.IsOfScope(s) || s = anyScope || current = anyScope
         |NotFound _ -> false
-        |ScopeResult.WrongScope (command, prevscope, expected) -> true
+        |ScopeResult.WrongScope (command, prevscope, expected, _) -> true
         |VarNotFound s -> false
-        |ValueFound -> false
+        |ValueFound _ -> false
         |_ -> true
 
     let checkVariableField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt is32Bit min max (ids : StringTokens) leafornode errors =
@@ -513,7 +513,7 @@ module internal FieldValidators =
         |Some f, _, _ when min <= f && max >= f -> errors
         |_, _, VarFound -> errors
         |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
-        |_, _, ValueFound -> errors
+        |_, _, ValueFound _ -> errors
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
@@ -531,7 +531,7 @@ module internal FieldValidators =
         |Some f, _, _ -> min <= f && max >= f
         |_, _, VarFound -> true
         |_, _, VarNotFound s -> false
-        |_, _, ValueFound -> true
+        |_, _, ValueFound _ -> true
         |_, _, NotFound ->
                 match enumsMap.TryFind "static_values" with
                 | Some (_, es) -> es.Contains (trimQuote key)

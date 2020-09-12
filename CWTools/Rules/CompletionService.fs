@@ -251,9 +251,9 @@ type CompletionService
                          |> String.concat "."
                          |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
                 match changeScopeRes with
-                | NewScope (newscope, _) ->
+                | NewScope (newscope, _, _) ->
                     scopeCompletionList |> List.map (fun (l, r) -> createSnippetForClauseWithCustomScopeReq newscope r innerRules description l)
-                | ValueFound
+                | ValueFound _
                 | VarFound
                 | VarNotFound _
                 | WrongScope _
