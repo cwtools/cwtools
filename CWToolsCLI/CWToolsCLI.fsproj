@@ -7,7 +7,7 @@
     <TieredCompilation>true</TieredCompilation>
     <PaketCommand>dotnet paket</PaketCommand>
 
-    <PackageVersion>0.0.14</PackageVersion>
+    <PackageVersion>0.0.15</PackageVersion>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>cwtools</ToolCommandName>
     <PackageIconUrl>https://raw.githubusercontent.com/tboby/cwtools-vscode/master/docs/cwtools_logo.png</PackageIconUrl>
