@@ -45,6 +45,7 @@ module CWToolsCLI =
         | Polish
         | BrazPor
         | SimpChinese
+        | Korean
     let parseLanguageArg (game : Game) (lang : LanguageArg) =
         match game, lang with
         | Game.Custom, English -> Some (Custom CustomLang.English)
@@ -94,7 +95,15 @@ module CWToolsCLI =
         | Game.IR, SimpChinese -> Some (IR IRLang.Chinese)
         | Game.IR, Russian -> Some (IR IRLang.Russian)
         | Game.IR, _ -> None
+        | Game.CK3, English -> Some (CK3 CK3Lang.English)
+        | Game.CK3, French -> Some (CK3 CK3Lang.French)
+        | Game.CK3, German -> Some (CK3 CK3Lang.German)
+        | Game.CK3, Spanish -> Some (CK3 CK3Lang.Spanish)
+        | Game.CK3, SimpChinese -> Some (CK3 CK3Lang.Chinese)
+        | Game.CK3, Russian -> Some (CK3 CK3Lang.Russian)
+        | Game.CK3, Korean -> Some (CK3 CK3Lang.Korean)
         | _ -> None
+
 
     type ListTypes =
         | Folders = 1
@@ -293,6 +302,7 @@ module CWToolsCLI =
             | None, Game.CK2 -> Some [CK2 CK2Lang.English]
             | None, Game.VIC2 -> Some [VIC2 VIC2Lang.English]
             | None, Game.IR -> Some [IR IRLang.English]
+            | None, Game.CK3 -> Some [CK3 CK3Lang.English]
             | None, Game.Custom -> Some [Custom CustomLang.English]
             | _ -> None
         let embedded =
@@ -390,6 +400,8 @@ module CWToolsCLI =
                     Serializer.serializeEU4 ({path = directory; name = "undefined"}) outputCacheFileName
                 |Game.VIC2 ->
                     Serializer.serializeVIC2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                |Game.CK3 ->
+                    Serializer.serializeCK3 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
                 |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
             eprintfn "Full cache file created at %s, relative to CWD" filename
         // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)

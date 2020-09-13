@@ -28,6 +28,7 @@ open System
 open CWTools.Games.HOI4
 open CWTools.Games.Stellaris
 open CWTools.Games.CK2
+open CWTools.Games.CK3
 open CWTools.Games.VIC2
 open CWTools.Games.Custom
 open CWTools.Games.IR
@@ -207,6 +208,25 @@ let serializeIR folder outputFileName =
     compressAndWrite pickle (filename)
     filename
 
+let serializeCK3 folder outputFileName =
+    let fileManager = FileManager(folder, Some "", CK3Constants.scriptFolders, "crusader kings iii", Encoding.UTF8, [], 2)
+    let files = fileManager.AllFilesByPath()
+    let computefun : unit -> InfoService option = (fun () -> (None))
+    let resources = ResourceManager<CK3ComputedData>(Compute.Jomini.computeJominiData computefun, Compute.Jomini.computeJominiDataUpdate computefun, Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
+    let files = resources.GetResources()
+                |> List.choose (function |FileResource (_, r) -> Some (r.logicalpath, "")
+                                         |FileWithContentResource (_, r) -> Some (r.logicalpath, r.filetext)
+                                         |_ -> None)
+    let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
+    let pickle = binarySerializer.Pickle data
+    let filename = outputFileName |> Option.defaultValue "ck3.cwb.bz2"
+    compressAndWrite pickle (filename)
+    filename
+
 let serializeVIC2 folder outputFileName =
     let fileManager = FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
@@ -277,6 +297,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         | _, Game.IR -> LangHelpers.allIRLangs
         | _, Game.VIC2 -> LangHelpers.allVIC2Langs
         | _, Game.CK2 -> LangHelpers.allCK2Langs
+        | _, Game.CK3 -> LangHelpers.allCK3Langs
         | _, Game.Custom -> LangHelpers.allCustomLangs
         | _ -> failwith "No languages specified"
     eprintfn "%A" langs
@@ -381,6 +402,20 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         excludeGlobPatterns = None
         maxFileSize = Some 8
     }
+    let CK3options : CK3Settings = {
+        rootDirectories = folders
+        modFilter = Some modFilter
+        validation = {
+            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+            experimental = true
+            langs = langs
+        }
+        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
+        embedded = embedded
+        scriptFolders = None
+        excludeGlobPatterns = None
+        maxFileSize = Some 8
+    }
     let game : IGame =
         match game with
         |Game.HOI4 -> HOI4Game(HOI4options) :> IGame
@@ -389,6 +424,7 @@ let loadGame<'T when 'T :> ComputedData> (dir : string, scope : FilesScope, modF
         |Game.CK2 -> CK2Game(CK2options) :> IGame
         |Game.VIC2 -> VIC2Game(VIC2options) :> IGame
         |Game.IR -> IRGame(IRoptions) :> IGame
+        |Game.CK3 -> CK3Game(CK3options) :> IGame
         |Game.Custom -> CustomGame(Customoptions, "") :> IGame
     game
 
@@ -406,7 +442,7 @@ let serializeMetadata (dir : string, scope : FilesScope, modFilter : string, con
         match outputFileName with
         | Some name -> name
         | None ->
-            let gameName = game |> function |Game.CK2 -> "ck2" |Game.HOI4 -> "hoi4" |Game.EU4 -> "eu4" |Game.STL -> "stl" |Game.VIC2 -> "vic2" |Game.IR -> "ir" |Game.Custom -> "custom"
+            let gameName = game |> function |Game.CK2 -> "ck2" |Game.HOI4 -> "hoi4" |Game.EU4 -> "eu4" |Game.STL -> "stl" |Game.VIC2 -> "vic2" |Game.IR -> "ir" |Game.CK3 -> "ck3" |Game.Custom -> "custom"
             sprintf "%s.cwv.bz2" gameName
     compressAndWrite pickle (filename)
     eprintfn "Metadata cache file created at %s, relative to CWD" filename

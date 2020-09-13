@@ -48,6 +48,9 @@ module CK3Constants =
     let scriptFolders = [
         "common";
         "events";
+        "gfx";
+        "gui";
         "localization";
-        "map_data";
+        "history";
+        "map_data"
     ]
