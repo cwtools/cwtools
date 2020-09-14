@@ -74,6 +74,9 @@ module LanguageFeatures =
                 | None -> None
             |Some (_, (_, Some (TypeRef(t, tv)), _)) ->
                 lookup.typeDefInfo.[t] |> List.tryPick (fun (tdi) -> if tdi.id = tv then Some tdi.range else None)
+            |Some (_, (_, Some (EnumRef (enumName, enumValue)), _)) ->
+                let enumValues = lookup.enumDefs.[enumName] |> snd
+                enumValues |> List.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
             |_ -> None
         |_, _ -> None
 
@@ -250,7 +253,7 @@ module LanguageFeatures =
     let getEmbeddedMetadata (lookup : Lookup) (localisation : LocalisationManager<_>) (resources : ResourceManager<_>) =
         {
             typeDefs = lookup.typeDefInfo
-            enumDefs = lookup.enumDefs
+            enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> List.map fst)
             varDefs = lookup.varDefInfo
             loc = localisation.LocalisationKeys()
             files = resources.Api.GetFileNames() |> Set.ofList

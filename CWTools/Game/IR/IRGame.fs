@@ -208,13 +208,17 @@ module IRGameFunctions =
         addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup : IRLookup) _ _ =
-        let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
-        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.IRprovinces}
-        let charEnums = { key = "character_ids"; description = "character_ids"; values = lookup.IRcharacters}
+        let modifierEnums =
+            { key = "modifiers";
+              values = lookup.coreModifiers |> List.map (fun m -> m.tag);
+              description = "Modifiers";
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.IRprovinces; valuesWithRange = lookup.IRprovinces |> List.map (fun x -> x, None)}
+        let charEnums = { key = "character_ids"; description = "character_ids"; values = lookup.IRcharacters; valuesWithRange = lookup.IRcharacters |> List.map (fun x -> x, None)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
-                            |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
-                            |> Map.add charEnums.key (charEnums.description, charEnums.values)
+            lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
+                            |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.valuesWithRange)
+                            |> Map.add charEnums.key (charEnums.description, charEnums.valuesWithRange)
 
     let refreshConfigAfterFirstTypesHook (lookup : IRLookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-

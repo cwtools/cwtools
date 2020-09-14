@@ -95,7 +95,7 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
                 let isScalar = key == "scalar" || key == "enum_name" || key = "name"
                 // log (sprintf "gecee2 %A %A %A" enumtreeNode.Key node.Key isScalar)
 
-                let enumnameRes = if key == "enum_name" then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else []
+                let enumnameRes = if key == "enum_name" then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|]), Some n.Position) else []
                 let innerRes =
                     if isScalar
                     then node.Children |> List.collect (inner enumtreeNode)
@@ -112,7 +112,7 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
             // |[] -> []
         let leafValueRes =
             if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText == "enum_name")
-            then node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim([|'\"'|])) |> List.ofSeq
+            then node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim([|'\"'|]), Some lv.Position) |> List.ofSeq
             else []
         let leafRes =
             match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText == "enum_name") with
@@ -120,16 +120,16 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
                 let k = leaf.Key
                 // log (sprintf "gecel %A %A" k node.Leaves)
                 if k == "scalar"
-                then node.Leaves |> Seq.map (fun l -> l.ValueText.Trim([|'\"'|])) |> List.ofSeq
-                else node.TagsText (k) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
+                then node.Leaves |> Seq.map (fun l -> l.ValueText.Trim([|'\"'|]), Some l.Position) |> List.ofSeq
+                else node.TagsText (k) |> Seq.map (fun k -> k.Trim([|'\"'|]), None) |> List.ofSeq
             |None ->
                 match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
                 |Some leaf ->
                     let vt = leaf.ValueText
                     // log (sprintf "gecel %A %A" vt node.Leaves)
                     if vt == "scalar"
-                    then node.Leaves |> Seq.map (fun l -> l.Key.Trim([|'\"'|])) |> List.ofSeq
-                    else node.Leaves |> Seq.choose(fun l -> if l.ValueText == vt then Some (l.Key.Trim([|'\"'|])) else None) |> List.ofSeq
+                    then node.Leaves |> Seq.map (fun l -> l.Key.Trim([|'\"'|]), Some l.Position) |> List.ofSeq
+                    else node.Leaves |> Seq.choose(fun l -> if l.ValueText == vt then Some (l.Key.Trim([|'\"'|]), Some l.Position) else None) |> List.ofSeq
                 |None -> []
         childRes @ leafValueRes @ leafRes
     let innerStart (enumtree : Node) (node : Node) = inner enumtree node
@@ -145,9 +145,9 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
                                                 else None)
                               |> List.collect (fun e -> if complexenum.start_from_root then innerStart complexenum.nameTree e else  e.Children |> List.collect (innerStart complexenum.nameTree))
         // log "%A %A" complexenum.name values
-        { key = complexenum.name; values = values; description = complexenum.description }
+        { key = complexenum.name; values = values |> List.map fst; description = complexenum.description; valuesWithRange = values }
     complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq
-                 |> List.fold (fun acc e -> if Map.containsKey e.key acc then Map.add e.key { e with values = e.values @ (acc.[e.key].values) } acc else Map.add e.key e acc ) Map.empty
+                 |> List.fold (fun acc e -> if Map.containsKey e.key acc then Map.add e.key { e with values = e.values @ (acc.[e.key].values); valuesWithRange = e.valuesWithRange @ (acc.[e.key].valuesWithRange) } acc else Map.add e.key e acc ) Map.empty
                  |> Map.toList |> List.map snd
 
 let getDefinedVariables (infoService : InfoService) (es : Entity list) =

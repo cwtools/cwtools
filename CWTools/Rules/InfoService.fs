@@ -527,6 +527,20 @@ type InfoService
             | WrongScope (_, _, _, rh) -> rh
             | NewScope (_, _, rh) -> rh
             | _ -> None
+        let changeValueScopeInner key scope =
+            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+            | ValueFound rh -> rh
+            | WrongScope (_, _, _, rh) -> rh
+            | NewScope (_, _, rh) -> rh
+            | _ ->
+                match Map.tryFind "static_values" enums with
+                | Some (_, ss) ->
+                    if ss.Contains key
+                    then
+                        Some (EnumRef("static_values", key))
+                    else
+                        None
+                | None -> None
         let fLeaf ((ctx : RuleContext), _) (leaf : Leaf) ((field, o) : NewRule) =
             match o.typeHint, field with
             | Some (t, true), _ -> ctx, (Some o, Some (TypeRef(t, leaf.Key)), Some (LeafC leaf))
@@ -535,10 +549,10 @@ type InfoService
             | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some (LocRef(leaf.ValueText)), Some (LeafC leaf))
             | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (TypeRef(t, leaf.Key)), Some (LeafC leaf))
             | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some (LocRef(leaf.Key)), Some (LeafC leaf))
-            | _, LeafRule (_, ScopeField _)
-            | _, LeafRule (_, ValueScopeField _) -> ctx, (Some o, changeScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))
-            | _, LeafRule (ScopeField _, _)
-            | _, LeafRule (ValueScopeField _, _) -> ctx, (Some o, changeScopeInner leaf.Key ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (_, ScopeField _) -> ctx, (Some o, changeScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (_, ValueScopeField _) -> ctx, (Some o, changeValueScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (ScopeField _, _) -> ctx, (Some o, changeScopeInner leaf.Key ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (ValueScopeField _, _) -> ctx, (Some o, changeValueScopeInner leaf.Key ctx.scopes, Some (LeafC leaf))
             |_ -> ctx, (Some o, None, Some (LeafC leaf))
         let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) =
             match o.typeHint, field with

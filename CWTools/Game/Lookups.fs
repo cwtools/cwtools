@@ -74,7 +74,7 @@ type Lookup() =
     member val configRules : RootRule list = [] with get, set
     member val typeDefs : TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)
-    member val enumDefs : Collections.Map<string, string * string list> = Map.empty with get, set
+    member val enumDefs : Collections.Map<string, string * (string * range option) list> = Map.empty with get, set
     member val typeDefInfo : Collections.Map<string, TypeDefInfo list> = Map.empty with get, set
     member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set

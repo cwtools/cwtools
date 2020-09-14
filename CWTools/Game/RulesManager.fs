@@ -74,11 +74,15 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap : Map<string,string * list<string>>) ->
-                Map.fold (fun s k (d, v) ->
-                    match Map.tryFind k s with
-                    | Some (d', v') -> Map.add k (d, v@v') s
-                    | None -> Map.add k (d, v) s) newMap md.enumDefs
+            fun (newMap : Map<string,string * list<string * option<range>>>) ->
+                let mdAdjusted = md.enumDefs |> Map.map (fun _ (s, sl) -> s, (sl |> List.map (fun x -> x, None)))
+                let res =
+                    Map.fold (fun s k (d, v) ->
+                        match Map.tryFind k s with
+                        | Some (d', v') -> Map.add k (d, v@v') s
+                        | None -> Map.add k (d, v) s) newMap mdAdjusted
+                res
+                // res |> Map.map (fun _ (s, sl) -> s, (sl |> List.map (fun x -> x, None)))
 
     let addEmbeddedVarDefData =
         match embeddedSettings.cachedRuleMetadata with
@@ -122,7 +126,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let mutable tempEnumMap = [("", ("", StringSet.Empty(InsensitiveStringComparer())))] |> Map.ofList
     let mutable rulesDataGenerated = false
 
-    let expandPredefinedValues (types : Map<string, _>) (enums : Map<string, _ * list<string>>) (values : string list) =
+    let expandPredefinedValues (types : Map<string, _>) (enums : Map<string, _ * list<string * option<range>>>) (values : string list) =
         let replaceType (value : string) =
             let startIndex = value.IndexOf "<"
             let endIndex = value.IndexOf ">" - 1
@@ -140,7 +144,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             let referencedEnum = value.Substring(startIndex + 5, (endIndex - (startIndex + 4)))
             match enums |> Map.tryFind referencedEnum with
             | Some (_, enumValues) ->
-                let res = enumValues |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2)) |> List.ofSeq
+                let res = enumValues |> Seq.map (fst >> (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2))) |> List.ofSeq
                 // eprintfn "epv2 %A" res
                 res
             | None -> [value]
@@ -181,12 +185,12 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
         let allEnums = simpleEnums @ complexEnumDefs// @ [modifierEnums] @ [{ key = "provinces"; description = "provinces"; values = lookup.CK2provinces}]
 
-        let newEnumDefs = allEnums |> List.map (fun e -> (e.key, (e.description, e.values))) |> Map.ofList
+        let newEnumDefs = allEnums |> List.map (fun e -> (e.key, (e.description, e.valuesWithRange))) |> Map.ofList
         lookup.enumDefs <- addEmbeddedEnumDefData newEnumDefs
 
         settings.refreshConfigBeforeFirstTypesHook lookup resources embeddedSettings
 
-        tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
+        tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst)))) |> Map.ofSeq
 
         /// First pass type defs
         let loc = addEmbeddedLoc languages (localisation.localisationKeys)

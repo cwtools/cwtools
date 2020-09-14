@@ -636,14 +636,14 @@ module private RulesParserImpl =
         match node.Key with
         | x when x.StartsWith("enum") ->
             let enumname = getSettingFromString node.Key "enum"
-            let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString().Trim([|'\"'|]))
+            let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString().Trim([|'\"'|]), None)
             match enumname with
             | Some en ->
                 let description =
                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
                     | Some d -> (d.Trim('#'))
                     | None -> en
-                Some ({key = en; values = values; description = description})
+                Some ({key = en; values = values |> List.map fst; description = description; valuesWithRange = values})
             | None -> None
         | _ -> None
 

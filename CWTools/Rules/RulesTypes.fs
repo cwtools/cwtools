@@ -202,7 +202,9 @@ type EnumDefinition = {
         key : string
         description : string
         values : string list
+        valuesWithRange : (string * CWTools.Utilities.Position.range option) list
     }
+
 type ComplexEnumDef = {
     name : string
     description : string

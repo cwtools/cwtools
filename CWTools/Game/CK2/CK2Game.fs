@@ -183,11 +183,15 @@ module CK2GameFunctions =
         rules @ addModifiersWithScopes lookup
 
     let refreshConfigBeforeFirstTypesHook (lookup : CK2Lookup) _ _ =
-        let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
-        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.CK2provinces}
+        let modifierEnums =
+            { key = "modifiers";
+              values = lookup.coreModifiers |> List.map (fun m -> m.tag);
+              description = "Modifiers";
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.CK2provinces; valuesWithRange = lookup.CK2provinces |> List.map (fun x -> x, None)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
-                            |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
+            lookup.enumDefs |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
+                            |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.valuesWithRange)
 
     let refreshConfigAfterFirstTypesHook (lookup : CK2Lookup) _ (embeddedSettings : EmbeddedSettings) =
         lookup.typeDefInfo <-

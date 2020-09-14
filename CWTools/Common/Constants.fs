@@ -485,7 +485,7 @@ type EffectType =
     type ReferenceHint =
     | TypeRef of typeName : string * typeValue : string
     | LocRef of locKey : string
-    | EnumRef of enumName : string
+    | EnumRef of enumName : string * enumValue : string
 
 type Effect internal (name, scopes, effectType, refHint) =
     member val Name: string = name

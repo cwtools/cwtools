@@ -170,11 +170,12 @@ module STLGameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup : STLLookup) (resources : IResourceAPI<STLComputedData>) (embeddedSettings : EmbeddedSettings)  =
         lookup.STLScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
                                             |> List.ofSeq |> List.collect id)
-        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys }
-        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
+        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys; valuesWithRange = lookup.STLScriptedEffectKeys |> List.map (fun x -> x, None) }
+        let parmasDValues = lookup.STLScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = parmasDValues; valuesWithRange = parmasDValues |> List.map (fun x -> x, None)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.values)
-                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
+            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
+                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
 
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =

@@ -30,7 +30,7 @@ module HOI4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
-            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
+            (lookup.enumDefs.TryFind "country_tags" |> Option.map (fun x -> (snd x) |> List.map fst) |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
@@ -114,16 +114,16 @@ module HOI4GameFunctions =
         rules @ addModifiersWithScopes lookup
 
     let refreshConfigBeforeFirstTypesHook (lookup : HOI4Lookup) _ _ =
-        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.HOI4provinces}
+        let provinceEnums = { key = "provinces"; description = "provinces"; values = lookup.HOI4provinces; valuesWithRange = lookup.HOI4provinces |> List.map (fun x -> x, None)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.values)
+            lookup.enumDefs |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.valuesWithRange)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embeddedSettings : EmbeddedSettings) =
         let states = lookup.typeDefInfo.TryFind "state"
                             |> Option.map (fun sl -> sl |> List.map (fun tdi -> tdi.id))
                             |> Option.defaultValue []
         let countries = lookup.enumDefs.TryFind "country_tag"
-                            |> Option.map snd
+                            |> Option.map (fun x -> (snd x) |> List.map fst)
                             |> Option.defaultValue []
         let ts = updateScriptedTriggers lookup.configRules states countries
         let es = updateScriptedEffects lookup.configRules states countries

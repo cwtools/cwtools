@@ -32,7 +32,7 @@ module EU4GameFunctions =
             @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
-            (lookup.enumDefs.TryFind "country_tags" |> Option.map snd |> Option.defaultValue [])
+            (lookup.enumDefs.TryFind "country_tags" |> Option.map (fun x -> (snd x) |> List.map fst) |> Option.defaultValue [])
         let definedvars =
             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
             @
@@ -108,15 +108,20 @@ module EU4GameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup : EU4Lookup) (resources : IResourceAPI<EU4ComputedData>) _ =
         lookup.EU4ScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
                                             |> List.ofSeq |> List.collect id)
-        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys }
-        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
-        let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
-        let legacyGovEnums = { key = "hardcoded_legacy_only_governments"; values = lookup.EU4TrueLegacyGovernments; description = "Legacy only government"}
+        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.EU4ScriptedEffectKeys; valuesWithRange = lookup.EU4ScriptedEffectKeys |> List.map (fun x -> x, None) }
+        let paramsDValues = lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = paramsDValues; valuesWithRange = paramsDValues |> List.map (fun x -> x, None)}
+        let modifierEnums =
+            { key = "modifiers";
+              values = lookup.coreModifiers |> List.map (fun m -> m.tag);
+              description = "Modifiers";
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+        let legacyGovEnums = { key = "hardcoded_legacy_only_governments"; values = lookup.EU4TrueLegacyGovernments; description = "Legacy only government"; valuesWithRange = lookup.EU4TrueLegacyGovernments |> List.map (fun x -> x, None)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.values)
-                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
-                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
-                            |> Map.add legacyGovEnums.key (legacyGovEnums.description, legacyGovEnums.values)
+            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
+                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
+                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
+                            |> Map.add legacyGovEnums.key (legacyGovEnums.description, legacyGovEnums.valuesWithRange)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embeddedSettings : EmbeddedSettings) =
         lookup.typeDefInfo <-

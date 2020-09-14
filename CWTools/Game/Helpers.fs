@@ -22,7 +22,7 @@ module Helpers =
         | x when x.StartsWith "enum[" ->
             let enum = CWTools.Rules.RulesParser.getSettingFromString x "enum"
             match enum |> Option.bind (fun x -> Map.tryFind x lookup.enumDefs) with
-            | Some (_, vs) -> (vs |> List.map (fun x -> x, None))
+            | Some (_, vs) -> (vs |> List.map (fun (x, _) -> x, None))
             | None ->
                 log (sprintf "Link %s refers to undefined enum %A" link.name enum)
                 []

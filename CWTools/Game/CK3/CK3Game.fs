@@ -145,15 +145,20 @@ module CK3GameFunctions =
         addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup : JominiLookup) (resources : IResourceAPI<JominiComputedData>) _ =
-        let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.tag); description = "Modifiers" }
+        let modifierEnums =
+            { key = "modifiers";
+              values = lookup.coreModifiers |> List.map (fun m -> m.tag);
+              description = "Modifiers";
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
         lookup.ScriptedEffectKeys <- (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
                                         |> List.ofSeq |> List.collect id)
-        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys }
-        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)}
+        let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.ScriptedEffectKeys; valuesWithRange = lookup.ScriptedEffectKeys |> List.map (fun x -> x, None) }
+        let paramsDValues = lookup.ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+        let scriptedEffectParmasD =  { key = "scripted_effect_params_dollar"; description = "Scripted effect parameter"; values = paramsDValues; valuesWithRange = paramsDValues |> List.map (fun x -> x, None)}
         lookup.enumDefs <-
-            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.values)
-                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.values)
-                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.values)
+            lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
+                            |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
+                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
