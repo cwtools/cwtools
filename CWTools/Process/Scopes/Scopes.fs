@@ -96,7 +96,7 @@ module Scopes =
                                 let possibleScopes = e.Scopes
                                 let currentScope = context.CurrentScope
                                 let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
-                                let refHint = e |> function | :? ScopedEffect as se -> se.RefHint |_ -> None
+                                let refHint = e.RefHint
                                 match context.CurrentScope, possibleScopes, exact with
                                 | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound (refHint)
                                 | _, [], _ -> (context, false), NotFound
@@ -118,7 +118,7 @@ module Scopes =
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope
                             let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
-                            let refHint = e |> function | :? ScopedEffect as se -> se.RefHint |_ -> None
+                            let refHint = e.RefHint
                             match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
                             | x, _, _, true when x = source.Root.AnyScope -> ({context with Scopes = applyTargetScope e.Target context.Scopes}, true), NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}, e.IgnoreChildren, refHint)
                             | x, _, _, false when x = source.Root.AnyScope-> (context, false), NewScope (context, e.IgnoreChildren, refHint)

@@ -81,7 +81,7 @@ module CK3GameFunctions =
         match lookup.typeDefInfo |> Map.tryFind "script_value" with
         | Some vs ->
             let values = vs |> List.map (fun tdi -> tdi.id)
-            values |> List.map (fun v -> Effect(v, [scopeManager.AnyScope], EffectType.ValueTrigger))
+            values |> List.map (fun v -> Effect(v, [scopeManager.AnyScope], EffectType.ValueTrigger, Some (TypeRef("script_value", v))))
         | None -> []
 
     let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =

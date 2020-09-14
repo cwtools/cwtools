@@ -535,8 +535,10 @@ type InfoService
             | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some (LocRef(leaf.ValueText)), Some (LeafC leaf))
             | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (TypeRef(t, leaf.Key)), Some (LeafC leaf))
             | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some (LocRef(leaf.Key)), Some (LeafC leaf))
-            | _, LeafRule (_, ScopeField _) -> ctx, (Some o, changeScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))
-            | _, LeafRule (ScopeField _, _) -> ctx, (Some o, changeScopeInner leaf.Key ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (_, ScopeField _)
+            | _, LeafRule (_, ValueScopeField _) -> ctx, (Some o, changeScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))
+            | _, LeafRule (ScopeField _, _)
+            | _, LeafRule (ValueScopeField _, _) -> ctx, (Some o, changeScopeInner leaf.Key ctx.scopes, Some (LeafC leaf))
             |_ -> ctx, (Some o, None, Some (LeafC leaf))
         let fLeafValue (ctx, _) (leafvalue : LeafValue) (field, o : Options) =
             match o.typeHint, field with

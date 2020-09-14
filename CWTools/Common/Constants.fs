@@ -487,11 +487,13 @@ type EffectType =
     | LocRef of locKey : string
     | EnumRef of enumName : string
 
-type Effect internal (name, scopes, effectType) =
+type Effect internal (name, scopes, effectType, refHint) =
     member val Name: string = name
     member val Scopes: Scope list = scopes
     member this.ScopesSet = this.Scopes |> Set.ofList
     member val Type: EffectType = effectType
+    member val RefHint : ReferenceHint option = refHint
+
 
     override x.Equals(y) =
         match y with
@@ -516,6 +518,7 @@ type Effect internal (name, scopes, effectType) =
                      + yobj.GetType().ToString())
 
     override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
+    new (name, scopes, effectType) = Effect(name, scopes, effectType, None)
 
 type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
@@ -538,8 +541,8 @@ type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, use
             | :? Effect as y -> x.Name.CompareTo(y.Name)
             | _ -> invalidArg "yobj" "cannot compare values of different types"
 
-type DocEffect(name, scopes, target, effectType, desc, usage) =
-    inherit Effect(name, scopes, effectType)
+type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
+    inherit Effect(name, scopes, effectType, refHint)
     member val Desc: string = desc
     member val Usage: string = usage
     member val Target: Scope option = target
@@ -570,6 +573,7 @@ type DocEffect(name, scopes, target, effectType, desc, usage) =
             |> List.tryHead
 
         DocEffect(rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
+    new(name, scopes, target, effectType, desc, usage) = DocEffect(name, scopes, target, effectType, desc, usage, None)
 
 type ScopedEffect(name,
                   scopes,
@@ -583,7 +587,7 @@ type ScopedEffect(name,
                   isValue,
                   isWildCard,
                   refHint) =
-    inherit DocEffect(name, scopes, inner, effectType, desc, usage)
+    inherit DocEffect(name, scopes, inner, effectType, desc, usage, refHint)
     member val IsScopeChange: bool = isScopeChange
     member val IgnoreChildren: string list = ignoreChildren
     member val ScopeOnlyNotEffect: bool = scopeonlynoteffect
@@ -591,7 +595,6 @@ type ScopedEffect(name,
     member val IsValueScope: bool = isValue
     /// If this scoped effect is a prefix that should accept anything afterwards
     member val IsWildCard: bool = isWildCard
-    member val RefHint : ReferenceHint option = refHint
 
     new(de: DocEffect, inner, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
         ScopedEffect
