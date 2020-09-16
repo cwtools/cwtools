@@ -208,7 +208,7 @@ module CK3GameFunctions =
         let irLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-                    |> Option.defaultValue ([], [])
+                    |> Option.defaultValue ([], [], [])
         let jominiLocDataTypes =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
                     |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))

@@ -155,7 +155,7 @@ module EU4GameFunctions =
         let eu4LocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-                    |> Option.defaultValue ([], [])
+                    |> Option.defaultValue ([], [], [])
 
         let eu4EventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
@@ -217,14 +217,14 @@ type EU4Game(setupSettings : EU4Settings) =
 
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
 
-    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v) -> (if l.Length = 0 then Legacy ([],[]) else Legacy (l, v)) |_ -> Legacy ([],[])
+    let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v, links) -> (if l.Length = 0 then Legacy ([],[], []) else Legacy (l, v, links)) |_ -> Legacy ([],[], [])
     let settings = { settings with
                         embedded = { settings.embedded with localisationCommands = locSettings }
                         initialLookup = EU4Lookup()
                         }
 
 
-    let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v) -> (c, v)| _ -> ([], [])
+    let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v, links) -> (c, v, links)| _ -> ([], [], [])
     let processLocalisationFunction lookup = (createLocalisationFunctions EU4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
     let validationLocalisationCommandFunction lookup = (createLocalisationFunctions EU4.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
 

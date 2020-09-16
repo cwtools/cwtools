@@ -131,10 +131,10 @@ module Helpers =
             processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars
 
 
-    let createLocalisationFunctions locStaticSettings createLocDynamicSettings (commands, variableCommands) =
+    let createLocalisationFunctions locStaticSettings createLocDynamicSettings (commands, variableCommands, localisationLinks) =
         fun (lookup : Lookup) ->
             let localisationCommandValidator commands variableCommands =
-                createLegacyLocalisationCommandValidator (locStaticSettings commands variableCommands)
+                createLegacyLocalisationCommandValidator (locStaticSettings commands variableCommands localisationLinks)
             let processLocalisation =
                 fun commands variableCommands dynamicSettings ->
                     processLocalisationBase (localisationCommandValidator commands variableCommands dynamicSettings) defaultContext

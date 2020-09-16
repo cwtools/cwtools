@@ -54,7 +54,7 @@ let emptyEmbeddedSettings = {
         modifiers = []
         embeddedFiles = []
         cachedResourceData = []
-        localisationCommands = Legacy ([], [])
+        localisationCommands = Legacy ([], [], [])
         eventTargetLinks = []
         cachedRuleMetadata = None
         featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default
@@ -75,8 +75,8 @@ let dynamicSettings (_) =
             CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = []
     }
 
-let processLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [])  (STLLookup())) |> fst
-let validateLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [])  (STLLookup())) |> snd
+let processLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [], [])  (STLLookup())) |> fst
+let validateLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [], [])  (STLLookup())) |> snd
 
 let createStarbase() =
     let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)

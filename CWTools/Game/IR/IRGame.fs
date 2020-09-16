@@ -268,7 +268,7 @@ module IRGameFunctions =
         let irLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-                    |> Option.defaultValue ([], [])
+                    |> Option.defaultValue ([], [], [])
 
         let irEventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")

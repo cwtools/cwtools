@@ -115,15 +115,29 @@ module UtilityParser =
         let complex = node.Children |> List.map (fun v -> v.Key, (v.LeafValues |> Seq.map (fun lv -> scopeManager.ParseScope() (lv.Value.ToRawString())) |> List.ofSeq))
         (simple @ complex), variableCommands
 
+    let private getLocLinks (node : Node) =
+        node.Children
+            |> List.choose (fun v ->
+                            let t = (v.Child "input_scopes") |> Option.map (fun n -> n.LeafValues |> Seq.map (fun lv -> scopeManager.ParseScope() lv.ValueText) |> List.ofSeq)
+                            t |> Option.map (fun inputs ->
+                                                v.Key,
+                                                inputs,
+                                                scopeManager.ParseScope() (v.TagText "output_scope")))
     let loadLocCommands filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        |Failure(e, _, _) -> log (sprintf "loccommands file %s failed with %s" filename e); ([], [])
+        |Failure(e, _, _) -> log (sprintf "loccommands file %s failed with %s" filename e); ([], [], [])
         |Success(s,_,_) ->
             let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
-            root.Child "localisation_commands"
+            let a, b =
+                root.Child "localisation_commands"
                 |> Option.map getLocCommands
                 |> Option.defaultValue ([], [])
+            let c =
+                root.Child "localisation_links"
+                |> Option.map getLocLinks
+                |> Option.defaultValue []
+            a, b, c
 
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename

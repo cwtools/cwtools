@@ -69,14 +69,23 @@ module EU4 =
         "FromFromFrom", from >> from >> from;
         "FromFromFromFrom", from >> from >> from >> from;
         ]
-    let locStaticSettings commands variableCommands =
+    let locStaticSettings commands variableCommands (localisationLinks : (string * Scope list * Scope) list) =
+        let scopedLocEffects =
+                localisationLinks |> List.map (fun (key, inputs, outputs) ->
+                    ScopedEffect(key, inputs, outputs, EffectType.Link, defaultDesc, "", true))
+        let scopedLocEffectsMap =
+            if localisationLinks |> List.isEmpty
+            then scopedLocEffectsMap()
+            else
+                EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects|> List.map (fun se -> se.Name, se :> Effect))
         {
             questionMarkVariable = true
             usesVariableCommands = false
             parameterVariables = true
             locPrimaryScopes = locPrimaryScopes()
-            scopedLocEffectsMap = scopedLocEffectsMap()
+            scopedLocEffectsMap = scopedLocEffectsMap
             commands = commands
             variableCommands = variableCommands
         }
-    let localisationCommandValidator commands variableCommands = createLegacyLocalisationCommandValidator (locStaticSettings commands variableCommands)
+
+    // let localisationCommandValidator commands variableCommands = createLegacyLocalisationCommandValidator (locStaticSettings commands variableCommands)
