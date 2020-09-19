@@ -234,6 +234,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = HOI4 HOI4Lang.Default

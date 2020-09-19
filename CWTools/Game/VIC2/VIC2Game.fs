@@ -296,6 +296,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = VIC2 VIC2Lang.English

@@ -354,6 +354,7 @@ type IRGame(setupSettings : IRSettings) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = IR IRLang.English

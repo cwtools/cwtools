@@ -57,27 +57,37 @@ module UtilityParser =
         let dataTypeName = if node.Has "data_type_name" then Some (node.TagText "data_type_name") else None
         { NewScope.ScopeInput.name = name; NewScope.ScopeInput.aliases = aliases; NewScope.ScopeInput.isSubscopeOf = subscopes; dataTypeName = dataTypeName }
 
+    let private parseScopeGroupDef (node : Node) =
+        let name = node.Key
+        let scopes = node.LeafValues |> Seq.map (fun lv -> lv.ValueText) |> List.ofSeq
+        name, scopes
 
     let private loadScopeDefinitions filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        | Failure(e, _, _) -> log (sprintf "scopedefinitions file %s failed with %s" filename e); ([])
+        | Failure(e, _, _) -> log (sprintf "scopedefinitions file %s failed with %s" filename e); ([], [])
         | Success(s,_,_) ->
             let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
-            root.Child "scopes"
+            let scopes =
+                root.Child "scopes"
                 |> Option.map (fun c -> c.Children |> List.map parseScopeDef)
                 |> Option.defaultValue []
+            let scope_groups =
+                root.Child "scope_groups"
+                |> Option.map (fun c -> c.Children |> List.map parseScopeGroupDef)
+                |> Option.defaultValue []
+            scopes, scope_groups
 
     let initializeScopes configFile fallbackScopes =
-        let scopes =
+        let scopes, scope_groups =
             match configFile with
             | Some (filename, fileString) -> loadScopeDefinitions filename fileString
-            | None -> []
+            | None -> [], []
         let fallbackScopes =
             match scopes, fallbackScopes with
             | [], Some fallbackScopes -> fallbackScopes
             | _ -> scopes
-        scopeManager.ReInit(fallbackScopes)
+        scopeManager.ReInit(fallbackScopes, scope_groups)
 
     let private parseModCatDef (node : Node) =
         let name = node.Key

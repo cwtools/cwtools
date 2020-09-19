@@ -300,6 +300,7 @@ type CustomGame(setupSettings : CustomSettings, gameFolderName : string) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
         defaultLang = Custom CustomLang.English

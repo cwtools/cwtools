@@ -79,7 +79,7 @@ let processLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWT
 let validateLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [], [])  (STLLookup())) |> snd
 
 let createStarbase() =
-    let owner = NewRule (LeafRule(specificField "owner", ScopeField (scopeManager.AnyScope)), requiredSingle)
+    let owner = NewRule (LeafRule(specificField "owner", ScopeField [(scopeManager.AnyScope)]), requiredSingle)
     let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
     let moduleR = NewRule (LeafRule(specificField "module", ValueField(ValueType.Enum "module")), optionalMany)
     let building = NewRule (LeafRule(specificField "building", ValueField(ValueType.Enum "building")), optionalMany)
@@ -327,7 +327,7 @@ let testc =
                           ## cardinality = 0..1\n\
                           effect = effect\n\
                           }"
-            let rules, types, enums, _, _ = parseConfig (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.ParseScope() "Any") "" config
+            let rules, types, enums, _, _ = parseConfig (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.ParseScope() "Any") (scopeManager.ScopeGroups) "" config
             let Typerules = rules |> List.choose (function |TypeRule (_, rs) -> Some (rs) |_ -> None)
             let input =    "create_starbase = {\n\
                             owner = this \n\
@@ -346,7 +346,7 @@ let testc =
 
     ]
 
-let leftScope() = RootRule.AliasRule("effect", (NodeRule((ScopeField (scopeManager.ParseScope() "Any")), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany))
+let leftScope() = RootRule.AliasRule("effect", (NodeRule((ScopeField [(scopeManager.ParseScope() "Any")]), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany))
 let eopEffect() = RootRule.AliasRule("effect", (NodeRule((SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken "every_owned_planet"))), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} ))
 let logEffect() = RootRule.AliasRule("effect", (LeafRule((NewField.SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken "log"))), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} ))
 

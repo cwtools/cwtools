@@ -311,6 +311,7 @@ type CK2Game(setupSettings : CK2Settings) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = CK2 CK2Lang.Default

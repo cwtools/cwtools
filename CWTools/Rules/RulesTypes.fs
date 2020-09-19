@@ -144,7 +144,7 @@ and NewField =
 | TypeField of TypeType
 /// This is only used internally to match type definitions
 | TypeMarkerField of dummyKey : StringLowerToken * typedef : TypeDefinition
-| ScopeField of Scope
+| ScopeField of Scope list
 | LocalisationField of synced : bool * isInline : bool
 | FilepathField of prefix : string option * extension : string option
 | IconField of string

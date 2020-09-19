@@ -434,6 +434,8 @@ module internal FieldValidators =
         let value = folder + "/" + key + ".dds"
         files.Contains value
 
+    let private checkAnyScopesMatch anyScope (scopes : Scope list) (currentScope : Scope) =
+        (currentScope = anyScope) || (List.exists (fun s -> currentScope.IsOfScope(s) || s = anyScope) scopes)
     let checkScopeField (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) (s)  (ids : StringTokens) leafornode errors =
         // let key = key.Trim([|'"';' '|])
         let key = getOriginalKey ids
@@ -441,7 +443,10 @@ module internal FieldValidators =
         let scope = ctx.scopes
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-        |ScopeResult.NewScope ({Scopes = current::_} ,_, _) -> if current.IsOfScope(s) || s = anyScope || current = anyScope then errors else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
+        |ScopeResult.NewScope ({Scopes = current::_} ,_, _) ->
+            if checkAnyScopesMatch anyScope s current
+            then errors
+            else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
         |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
         |ScopeResult.WrongScope (command, prevscope, expected, _) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
         |VarFound -> errors
@@ -455,7 +460,7 @@ module internal FieldValidators =
         let scope = ctx.scopes
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-        |ScopeResult.NewScope ({Scopes = current::_} ,_, _) -> current.IsOfScope(s) || s = anyScope || current = anyScope
+        |ScopeResult.NewScope ({Scopes = current::_} ,_, _) -> checkAnyScopesMatch anyScope s current
         |NotFound _ -> false
         |ScopeResult.WrongScope (command, prevscope, expected, _) -> true
         |VarNotFound s -> false

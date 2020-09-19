@@ -16,7 +16,7 @@ type Helpers =
             configs
                 |> List.ofSeq
                 |> List.filter (fun (fn, ft) -> Path.GetExtension fn == ".cwt" )
-                |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope)
+                |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
         rules, types, enums, complexenums, values
 
     static member GetTypesInFile (filepath : string) (node : Node) (types : TypeDefinition list) =
@@ -33,4 +33,3 @@ type Helpers =
                    |> Map.map (fun _ v -> v :> IReadOnlyCollection<_>)
                    :> IReadOnlyDictionary<_,_>
 
-                   

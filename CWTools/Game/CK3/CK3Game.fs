@@ -300,6 +300,7 @@ type CK3Game(setupSettings : CK3Settings) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
         defaultLang = CK3 CK3Lang.English

@@ -200,6 +200,7 @@ module rec NewScope =
         let mutable initialized = false
         let mutable dict = Dictionary<string, Scope>()
         let mutable reverseDict = Dictionary<Scope, ScopeInput>()
+        let mutable groupDict = Map<string, Scope list>(Seq.empty)
         let mutable complexEquality = false
         let mutable matchesSet = Set<Scope * Scope>(Seq.empty)
         let mutable dataTypeMap = Map<Scope, string>(Seq.empty)
@@ -231,7 +232,7 @@ module rec NewScope =
                     log (sprintf "Unexpected scope %O" x)
                     anyScope)
 
-        let init (scopes: ScopeInput list) =
+        let init (scopes: ScopeInput list, scopeGroups : (string * string list) list) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
             dict <- Dictionary<string, Scope>()
@@ -265,6 +266,9 @@ module rec NewScope =
             scopes |> List.iter addScopeSubset
             if Set.isEmpty matchesSet then () else complexEquality <- true
 
+            groupDict <- scopeGroups |> List.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
+                        |> Map.ofList
+
         member this.GetName(scope: Scope) =
             let found, value = reverseDict.TryGetValue scope
             if found then
@@ -277,13 +281,14 @@ module rec NewScope =
         member this.AnyScope = anyScope
         member this.InvalidScope = invalidScope
         member this.ParseScope = parseScope
+        member this.ScopeGroups = groupDict
 
         member this.ParseScopes =
             function
             | "all" -> this.AllScopes
             | x -> [ this.ParseScope () x ]
 
-        member this.ReInit(scopes: ScopeInput list) = init (scopes)
+        member this.ReInit(scopes: ScopeInput list, scopeGroups : (string * string list) list) = init (scopes, scopeGroups)
 
         member this.MatchesScope (source: Scope) (target: Scope) =
             if not complexEquality then

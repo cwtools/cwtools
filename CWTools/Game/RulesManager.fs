@@ -38,6 +38,7 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> = {
     parseScope : string -> Scope
     allScopes : Scope list
     anyScope : Scope
+    scopeGroups : Collections.Map<string, Scope list>
     changeScope : ChangeScope
     defaultContext : ScopeContext
     defaultLang : Lang
@@ -155,7 +156,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let rules, types, enums, complexenums, values =
             rulesSettings.ruleFiles
                 |> List.filter (fun (fn, ft) -> Path.GetExtension fn == ".cwt" )
-                |> CWTools.Rules.RulesParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope
+                |> CWTools.Rules.RulesParser.parseConfigs settings.parseScope settings.allScopes settings.anyScope settings.scopeGroups
         // tempEffects <- updateScriptedEffects game rules
         // effects <- tempEffects
         // tempTriggers <- updateScriptedTriggers game rules

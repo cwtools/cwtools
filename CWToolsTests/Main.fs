@@ -94,7 +94,7 @@ let perf2(b) =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    scopeManager.ReInit(defaultScopeInputs)
+    scopeManager.ReInit(defaultScopeInputs, [])
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
@@ -121,7 +121,7 @@ let getFolderList (filename : string, filetext : string) =
 let perf3(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    scopeManager.ReInit(defaultScopeInputs)
+    scopeManager.ReInit(defaultScopeInputs, [])
     let configFiles = (if Directory.Exists @"C:\Users\Thomas\git\cwtools-eu4-config\" then getAllFoldersUnion ([@"C:\Users\Thomas\git\cwtools-eu4-config\"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
@@ -162,7 +162,7 @@ let perf4(b) =
     Debugger.Launch()
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    scopeManager.ReInit(defaultScopeInputs)
+    scopeManager.ReInit(defaultScopeInputs, [])
     let configFiles = (if Directory.Exists @".\testfiles/custom/rules/" then getAllFoldersUnion ([@".\testfiles/custom/rules"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))

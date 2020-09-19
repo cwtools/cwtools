@@ -233,6 +233,7 @@ type EU4Game(setupSettings : EU4Settings) =
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
+        scopeGroups = scopeManager.ScopeGroups
         changeScope = changeScope
         defaultContext = defaultContext
         defaultLang = EU4 EU4Lang.Default
