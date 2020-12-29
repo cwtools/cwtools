@@ -98,7 +98,6 @@ module STL =
     let getAllTechPrereqs (e : Entity) =
         let fNode = (fun (x : Node) acc ->
                             match x with
-                            | :? TriggerBlock as e -> e :> Node ::acc
                             |_ -> acc
                                 )
         let nodes = e.entity.Children |> List.collect (foldNode7 fNode)

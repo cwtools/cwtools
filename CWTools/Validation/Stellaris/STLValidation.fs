@@ -261,7 +261,6 @@ module STLValidation =
         fun os es ->
             let ftNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? TriggerBlock as x) -> x::acc
                     | _ -> acc
                     )
             let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)

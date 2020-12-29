@@ -211,9 +211,6 @@ module STLProcess =
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
     type EffectBlock(key, pos) = inherit Node(key, pos)
-    type TriggerBlock(key, pos) =
-        inherit Node(key, pos)
-        member val InEffectBlock : bool = false with get, set
     let filterOptionToEffects (o : Node) =
         let newO = EffectBlock(o.Key, o.Position)
         newO.AllChildren <- (o.AllChildren |> Seq.choose copyChild |> ResizeArray<Child>)
