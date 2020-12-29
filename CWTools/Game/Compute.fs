@@ -112,7 +112,6 @@ module STL =
         let withRulesData = infoService().IsSome
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (fun ee -> if ee.Has "id" then Some (ee.TagText "id") else None) else []
         // let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
-        let setvariables = STLValidation.getEntitySetVariables e
         let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
@@ -125,7 +124,7 @@ module STL =
         let scriptedeffectparams = Some (EU4.getScriptedEffectParamsEntity e)
         let referencedtypes = referencedtypes |> Option.map (fun r -> r |>  List.ofSeq |> List.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value))) Map.empty )
         let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
-        STLComputedData(eventIds, setvariables, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams, savedEventTargets)
+        STLComputedData(eventIds, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams, savedEventTargets)
 
     let computeSTLDataUpdate (infoService : unit -> InfoService option) (e : Entity) (data : STLComputedData) =
         let withRulesData = infoService().IsSome

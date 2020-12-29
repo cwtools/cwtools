@@ -222,52 +222,6 @@ module STLValidation =
                         | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l]))
             sprites <&!&> inner
 
-
-
-    let findAllSetVariables (node : Node) =
-        let keys = ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]
-        let fNode = (fun (x : Node) acc ->
-                    x.Children |> List.fold (fun a n -> if List.contains (n.Key) keys then n.TagText "which" :: a else a) acc
-                     )
-        foldNode7 fNode node |> List.ofSeq
-
-    let  validateUsedVariables (variables : string list) (node : Node) =
-        let fNode = (fun (x : Node) children ->
-                    match x.Childs "check_variable" |> List.ofSeq with
-                    | [] -> children
-                    | t ->
-                        t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node]) ))
-                        <&&> children
-                    )
-        let fCombine = (<&&>)
-        foldNode2 fNode fCombine OK node
-
-    let getEntitySetVariables (e : Entity) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
-        let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        effects @ opts |> List.collect findAllSetVariables
-
-    let valVariables : STLStructureValidator =
-        fun os es ->
-            let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | _ -> acc
-                    )
-            let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
-            let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setvariables)
-            //let defVars = effects @ opts |> List.collect findAllSetVariables
-            triggers <&!!&> (validateUsedVariables defVars)
-
     let addGeneratedModifiers (modifiers : ActualModifier list) (es : STLEntitySet) : ActualModifier list =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)
