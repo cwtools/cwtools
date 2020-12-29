@@ -77,8 +77,6 @@ module STLGameFunctions =
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
         game.Lookup.scriptedLoc <- rawLocs
-    let updateDefinedVariables(game : GameObject) =
-        game.Lookup.definedScriptVariables <- (game.Resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().Setvariables)
 
     let afterUpdateFile (game : GameObject<STLComputedData,STLLookup>) (filepath : string) =
         match filepath with
@@ -87,7 +85,6 @@ module STLGameFunctions =
         |x when x.Contains("scripted_loc") -> updateScriptedLoc(game)
         |x when x.Contains("static_modifiers") -> updateStaticodifiers(game)
         |_ -> ()
-        updateDefinedVariables(game)
 
     let globalLocalisation (game : GameObject) =
         let locfiles =  game.Resources.GetResources()
@@ -191,7 +188,6 @@ module STLGameFunctions =
             game.Lookup.allCoreLinks <- game.Lookup.triggers @ es @ game.Lookup.eventTargetLinks
             updateStaticodifiers(game)
             updateScriptedLoc(game)
-            updateDefinedVariables(game)
             updateModifiers(game)
             updateTechnologies(game)
 

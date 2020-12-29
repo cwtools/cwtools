@@ -260,27 +260,6 @@ module STLValidation =
         let fCombine = (<&&>)
         foldNode2 fNode fCombine OK node
 
-    let getDefinedScriptVariables (es : STLEntitySet) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? TriggerBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
-        let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        //effects @ opts |> List.collect findAllSetVariables
-        es.AllEffects |> List.collect findAllSetVariables
-
     let getEntitySetVariables (e : Entity) =
         let fNode = (fun (x : Node) acc ->
                     match x with
@@ -307,51 +286,6 @@ module STLValidation =
             let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setvariables)
             //let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!!&> (validateUsedVariables defVars)
-
-    let hasFlagMap =
-        fun (flags : Collections.Map<FlagType, string list>) (leaf : Leaf) ->
-            let validate (flag : string) (flagType : FlagType) =
-                let flag = if flag.Contains "@" then flag.Split('@').[0] else flag
-                //Hack due to testing files
-                if flag == "yes" || flag == "true" || flag == "test" then OK else
-                flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
-                                       |> Option.defaultValue (Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
-            match leaf.Key with
-            |"has_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
-            |"has_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
-            |"has_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
-            |"has_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
-            |"has_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
-            |"has_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
-            |"has_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
-            |"has_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
-            |"has_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
-            |"has_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
-            |"has_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
-            |"has_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
-            |"has_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
-            |"remove_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
-            |"remove_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
-            |"remove_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
-            |"remove_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
-            |"remove_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
-            |"remove_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
-            |"remove_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
-            |"remove_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
-            |"remove_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
-            |"remove_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
-            |"remove_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
-            |"remove_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
-            |"remove_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
-            |_ -> OK
-
-    let validateUsedFlags (flags : Collections.Map<FlagType, string list>) (node : Node) =
-        let fNode = (fun (x : Node) children ->
-                        (x.Values <&!&> hasFlagMap flags) <&&> children
-                    )
-        let fCombine = (<&&>)
-        foldNode2 fNode fCombine OK node
-
 
     let valTest : STLStructureValidator =
         fun os es ->
