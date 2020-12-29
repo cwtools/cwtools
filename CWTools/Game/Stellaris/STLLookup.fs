@@ -7,11 +7,10 @@ module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
 
 
-    type STLComputedData(eventids, setvariables, savedeventtargets, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams, savedEventTargets) =
+    type STLComputedData(eventids, setvariables, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams, savedEventTargets) =
         inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
         member __.Eventids : string list = eventids
         member __.Setvariables : string list = setvariables
-        member __.Savedeventtargets : string list = savedeventtargets
         member __.Hastechs : string list = hastechs
         member __.ScriptedEffectParams : string list option = scriptedeffectparams
 

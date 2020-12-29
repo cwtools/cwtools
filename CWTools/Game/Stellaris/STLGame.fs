@@ -176,7 +176,6 @@ module STLGameFunctions =
 
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
-        lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
@@ -249,7 +248,7 @@ type STLGame (setupSettings : StellarisSettings) =
         heavyExperimentalValidators = [getEventChains, "event chains"]
         experimental = setupSettings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-        lookupValidators = [valAllModifiers, "mods"; valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget"]
+        lookupValidators = [valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget"]
         lookupFileValidators = [valScriptedEffectParams, "scripted_effects"]
         useRules = setupSettings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = setupSettings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false

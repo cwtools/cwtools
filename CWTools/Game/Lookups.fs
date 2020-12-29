@@ -79,7 +79,6 @@ type Lookup() =
     member val typeDefInfoForValidation : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val varDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set
     member val savedEventTargets : ResizeArray<string * range * Scope> = new ResizeArray<_> () with get, set
-    member val globalScriptedVariables : string list = [] with get, set
 
 type JominiLookup() =
     inherit Lookup()
