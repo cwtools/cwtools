@@ -203,11 +203,17 @@ module STLGameFunctions =
                     |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
                     |> Option.defaultWith (fun () -> Utils.logError "trigger_docs.log was not found in stellaris config"; ([], []))
-        let modifiers =
+        let stlSetupModifiers =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
                     |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
                     |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; ([]))
+
+        let stlRulesMods =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
+                    |> Option.defaultValue []
+
         let stlLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
@@ -224,7 +230,7 @@ module STLGameFunctions =
         {
             triggers = triggers
             effects = effects
-            modifiers = modifiers
+            modifiers = stlSetupModifiers @ stlRulesMods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy stlLocCommands
