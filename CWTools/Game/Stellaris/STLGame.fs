@@ -45,8 +45,8 @@ module STLGameFunctions =
 
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
-            let se = scopedEffects() |> List.map (fun e -> e :> Effect)
-            let vt = game.Settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
+            let se = game.Lookup.triggers
+            let vt = game.Settings.embedded.triggers |> List.map (fun e -> e :> Effect)
             se @ vt
         let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
         game.Lookup.onlyScriptedTriggers <- sts
@@ -54,8 +54,8 @@ module STLGameFunctions =
 
     let updateScriptedEffects (game : GameObject) =
         let vanillaEffects =
-            let se = scopedEffects() |> List.map (fun e -> e :> Effect)
-            let ve = game.Settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
+            let se = game.Lookup.effects
+            let ve = game.Settings.embedded.effects |> List.map (fun e -> e :> Effect)
             se @ ve
         let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
         game.Lookup.onlyScriptedEffects <- ses
