@@ -232,6 +232,9 @@ module STLValidation =
                 // {tag = "shipsize_"+k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Starbase" }
                 {tag = "shipsize_"+k+"_hull_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 {tag = "shipsize_"+k+"_hull_add"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_evasion_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_disengage_chance_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_tracking_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 // {tag = "shipsize_"+k+"_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 // {tag = "shipsize_"+k+"_evasion_addt"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 // {tag = "shipsize_"+k+"_disengage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
