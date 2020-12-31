@@ -192,7 +192,7 @@ module private RulesParserImpl =
 
         { min = min; max = max; strictMin = strictmin; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails; keyRequiredQuotes = keyRequiredQuotes; valueRequiredQuotes = valueRequiredQuotes; typeHint = None; errorIfOnlyMatch = errorIfMatched }
 
-    let private processKey parseScope anyScope scopeGroup =
+    let internal processKey parseScope anyScope scopeGroup =
         function
         | "scalar" -> ScalarField ScalarValue
         | "bool" -> ValueField ValueType.Bool
@@ -876,6 +876,7 @@ module RulesParser =
     let defaultOptions = defaultOptions
     let specificField = specificField
     let internal getSettingFromString = getSettingFromString
+    let processTagAsField = processKey
     let requiredSingle : Options = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle : Options = { defaultOptions with min = 0; max = 1 }

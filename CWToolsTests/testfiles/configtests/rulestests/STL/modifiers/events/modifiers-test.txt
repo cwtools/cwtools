@@ -1,0 +1,15 @@
+ship_event = {
+    option = {
+        ship_size_test = ship_one
+    }
+    modifiers = {
+        ship_only_simple = 1
+        ship_only_type_ship_one_suffix = 1
+        #error
+        ship_only_type_<ship_size>_suffix = 3
+        #error
+        not_ship_type_<ship_size>_suffix = 2
+        #error
+        not_ship_type_ship_one_suffix = 2
+    }
+}

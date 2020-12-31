@@ -164,3 +164,28 @@ let getEntitiesWithoutTypes (types : TypeDefinition list) (es : Entity list) =
         let checkPathDir = (fun a b c -> FieldValidators.checkPathDir c a b)
         if types |> List.exists (fun t -> checkPathDir dir file t.pathOptions) then None else Some entity.logicalpath
     es |> List.choose checkEntity
+
+let expandPredefinedValues (types : Map<string, _>) (enums : Map<string, _ * list<string * option<CWTools.Utilities.Position.range>>>) (values : string list) =
+    let replaceType (value : string) =
+        let startIndex = value.IndexOf "<"
+        let endIndex = value.IndexOf ">" - 1
+        let referencedType = value.Substring(startIndex + 1, (endIndex - startIndex))
+        match types |> Map.tryFind referencedType with
+        | Some typeValues ->
+            eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
+            let res = typeValues |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2)) |> List.ofSeq
+            eprintfn "epv2 %A" res
+            res
+        | None -> [value]
+    let replaceEnum (value : string) =
+        let startIndex = value.IndexOf "enum["
+        let endIndex = value.IndexOf "]" - 1
+        let referencedEnum = value.Substring(startIndex + 5, (endIndex - (startIndex + 4)))
+        match enums |> Map.tryFind referencedEnum with
+        | Some (_, enumValues) ->
+            let res = enumValues |> Seq.map (fst >> (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2))) |> List.ofSeq
+            // eprintfn "epv2 %A" res
+            res
+        | None -> [value]
+    values |> List.collect (fun v -> if v.Contains "<" && v.Contains ">" then replaceType v else [v])
+           |> List.collect (fun v -> if v.Contains "enum[" && v.Contains "]" then replaceEnum v else [v])

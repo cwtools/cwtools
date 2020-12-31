@@ -1,0 +1,54 @@
+modifier_categories = {
+    Pop = {
+        internal_id = 2
+        supported_scopes = { pop planet galacticobject country }
+    }
+    Science = {
+        internal_id = 64
+        supported_scopes = { ship country }
+    }
+    Country = {
+        internal_id = 256
+        supported_scopes = { country }
+    }
+    Army = {
+        internal_id = 512
+        supported_scopes = { army planet country }
+    }
+    Leader = {
+        internal_id = 1024
+        supported_scopes = { leader country }
+    }
+    Planet = {
+        internal_id = 2048
+        supported_scopes = { planet galacticobject country }
+    }
+    PopFaction = {
+        internal_id = 8192
+        supported_scopes = { popfaction country }
+    }
+    ShipSize = {
+        internal_id = 16496
+        supported_scopes = { ship starbase country }
+    }
+    Ship = {
+        internal_id = 16508
+        supported_scopes = { ship starbase fleet country }
+    }
+    Megastructure = {
+        internal_id = 65536
+        supported_scopes = { megastructure country }
+    }
+    PlanetClass = {
+        internal_id = 131072
+        supported_scopes = { planet pop country }
+    }
+    Starbase = {
+        internal_id = 262144
+        supported_scopes = { starbase country }
+    }
+    Resource = {
+        internal_id = 524288
+        supported_scopes = { country planet ship pop leader }
+    }
+}

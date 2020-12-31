@@ -1,0 +1,61 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+
+    type[ship_size] = {
+        path = "game/common/ship_sizes"
+    }
+
+}
+
+## scope = ship
+alias[effect:ship_only] = test
+
+## scope = country
+alias[effect:country_only] = test
+
+## scope = { ship country }
+alias[effect:ship_and_country] = test
+
+## scope = country
+alias[trigger:is_country] = bool
+
+## scope = ship
+alias[trigger:is_ship] = bool
+
+alias[effect:ship_size_test] = <ship_size>
+
+event = {
+    option = {
+        alias_name[effect] = alias_match_left[effect]
+    }
+    modifiers = {
+        alias_name[modifier] = alias_match_left[modifier]
+    }
+}
+
+alias[effect:int_no_limit] = int
+alias[effect:int_fixed_range] = int[-5..10]
+alias[effect:int_inf_upper] = int[-10..inf]
+alias[effect:int_inf_lower] = int[-inf..10]
+
+alias[effect:float_no_limit] = float
+alias[effect:float_fixed_range] = float[-5.1..10.1]
+alias[effect:float_inf_upper] = float[-10..inf]
+alias[effect:float_inf_lower] = float[-inf..10]
+
+alias[effect:date] = date_field
+alias[effect:datetime] = datetime_field
+

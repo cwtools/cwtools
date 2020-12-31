@@ -1,0 +1,5 @@
+modifiers = {
+    ship_only_simple = ship
+    ship_only_type_<ship_size>_suffix = ship
+    not_ship_type_<ship_size>_suffix = country
+}
