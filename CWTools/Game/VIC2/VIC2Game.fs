@@ -51,8 +51,9 @@ module VIC2GameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes;  }
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
         lookup.coreModifiers
-            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
     let updateScriptedTriggers (lookup : VIC2Lookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
         let vanillaTriggers =

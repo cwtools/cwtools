@@ -107,15 +107,8 @@ module STLGameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
-        let typeMap = lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, Utils.StringSet.Create(Utils.InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
-        let expandModifier (modifier : ActualModifier) =
-            let expanded =  RulesHelpers.expandPredefinedValues (typeMap) (lookup.enumDefs) [modifier.tag]
-            expanded |> List.map (fun e ->  { ActualModifier.tag = e; category = modifier.category })
-        // let expandedModifiers = game.Settings.embedded.modifiers |> List.collect expandModifier
-        eprintfn "amws %A %A %A" (lookup.rootFolders) (lookup.coreModifiers) (typeMap)
         let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
         lookup.coreModifiers
-            //|> List.collect expandModifier
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
     let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =

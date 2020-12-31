@@ -69,7 +69,9 @@ module EU4GameFunctions =
         game.Lookup.EU4TrueLegacyGovernments <- legacyOnly
 
     let addModifiersWithScopes (lookup : Lookup) =
-        (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(CWTools.Rules.RulesParser.specificField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), Options.DefaultOptions))))
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+        lookup.coreModifiers
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), Options.DefaultOptions)))
 
     let updateScriptedEffects(rules :RootRule list) =
         let effects =
