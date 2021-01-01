@@ -48,15 +48,18 @@ module STL =
         "Actor", id;
         "Third_party", id;
         ]
-    let locStaticSettings commands variableCommands (localisationLinks : (string * Scope list * Scope) list) =
+    let locStaticSettings commands variableCommands (localisationLinks : (string * Scope list * Scope) list, scopeLinks : EventTargetLink list) =
         let scopedLocEffects =
                 localisationLinks |> List.map (fun (key, inputs, outputs) ->
                     ScopedEffect(key, inputs, outputs, EffectType.Link, defaultDesc, "", true))
+        let eventTargetLinks =
+            scopeLinks |> List.choose (function |EventTargetLink.SimpleLink se -> Some se |_ -> None)
         let scopedLocEffectsMap =
             if localisationLinks |> List.isEmpty
             then scopedLocEffectsMap()
             else
-                EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects|> List.map (fun se -> se.Name, se :> Effect))
+                let locLinks = (scopedLocEffects @ eventTargetLinks) |> List.map (fun se -> se.Name, se :> Effect)
+                EffectMap.FromList(InsensitiveStringComparer(), locLinks)
         {
             questionMarkVariable = true
             usesVariableCommands = false

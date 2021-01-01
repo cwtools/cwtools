@@ -44,7 +44,7 @@ module CWToolsScripts =
 
         let rules, types, enums, complexenums, values =
                     rulesFiles
-                        |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope)
+                        |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
         let oldTriggers =
             rules
             |> List.choose

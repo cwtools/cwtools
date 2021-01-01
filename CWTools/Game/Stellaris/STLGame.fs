@@ -290,7 +290,7 @@ type STLGame (setupSettings : StellarisSettings) =
                                        embedded = { settings.embedded with localisationCommands = locSettings }
                                        initialLookup = STLLookup()}
 
-        let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v, links) -> (c, v, links)| _ -> ([], [], [])
+        let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v, links) -> (c, v, (links, settings.embedded.eventTargetLinks))| _ -> ([], [], ([], []))
         let processLocalisationFunction lookup = (createLocalisationFunctions STL.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> fst
         let validationLocalisationCommandFunction lookup = (createLocalisationFunctions STL.locStaticSettings createLocDynamicSettings legacyLocDataTypes  lookup) |> snd
 
