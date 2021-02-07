@@ -1,0 +1,79 @@
+
+scopes = {
+    Country = {
+        aliases = { country }
+    }
+    Leader = {
+        aliases = { leader }
+    }
+    System = {
+        aliases = { galacticobject system galactic_object }
+    }
+    Planet = {
+        aliases = { planet }
+    }
+    Ship = {
+        aliases = { ship }
+    }
+    Fleet = {
+        aliases = { fleet }
+    }
+    Pop = {
+        aliases = { pop }
+    }
+    "Ambient Object" = {
+        aliases = { ambientobject ambient_object }
+    }
+    Army = {
+        aliases = { army }
+    }
+    Species = {
+        aliases = { species }
+    }
+    "Pop Faction" = {
+        aliases = { popfaction pop_faction }
+    }
+    Sector = {
+        aliases = { sector }
+    }
+    Alliance = {
+        aliases = { alliance }
+    }
+    War = {
+        aliases = { war }
+    }
+    Megastructure = {
+        aliases = { megastructure }
+    }
+    Design = {
+        aliases = { design }
+    }
+    Starbase = {
+        aliases = { starbase }
+    }
+    Star = {
+        aliases = { star }
+    }
+    Deposit = {
+        aliases = { deposit }
+    }
+	"Archaeological Site" = {
+		aliases = { "archaeologicalsite" "archaeological_site" }
+	}
+    Federation = {
+        aliases = { federation }
+    }
+    Tile = {
+        aliases = { tile }
+    }
+}
+
+scope_groups = {
+    celestial_coordinate = {
+        planet ship fleet system ambient_object megastructure starbase archaeological_site
+        deposit pop army country leader
+    }
+    spatial_object = {
+        planet ship fleet system ambient_object megastructure starbase archaeological_site
+    }
+}
