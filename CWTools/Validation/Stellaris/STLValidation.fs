@@ -65,24 +65,6 @@ module STLValidation =
                     )
             //x |> List.fold (<&&>) OK
 
-
-
-    // let inline checkCategoryInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
-    //     match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
-    //     |None, _ -> OK
-    //     |Some _, s when s = scopeManager.AnyScope -> OK
-    //     |Some (c, ss), s -> if List.contains s ss then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
-
-
-    // let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext<Scope>) (modifier : string) (node) =
-    //     let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
-    //     match exists with
-    //     |None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedStaticModifier modifier) node])
-    //     |Some m -> m.categories <&!&>  (checkCategoryInScope modifier scopes.CurrentScope node)
-
-    let valNotUsage (node : Node) = if (node.Values.Length + node.Children.Length) > 1 then Invalid (Guid.NewGuid(), [inv ErrorCodes.IncorrectNotUsage node]) else OK
-
-
     /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
     /// Not mandatory, but performance reasons, suggested by Caligula
     /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
@@ -240,178 +222,6 @@ module STLValidation =
                         | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l]))
             sprites <&!&> inner
 
-
-
-    let findAllSetVariables (node : Node) =
-        let keys = ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]
-        let fNode = (fun (x : Node) acc ->
-                    x.Children |> List.fold (fun a n -> if List.contains (n.Key) keys then n.TagText "which" :: a else a) acc
-                     )
-        foldNode7 fNode node |> List.ofSeq
-
-    let  validateUsedVariables (variables : string list) (node : Node) =
-        let fNode = (fun (x : Node) children ->
-                    match x.Childs "check_variable" |> List.ofSeq with
-                    | [] -> children
-                    | t ->
-                        t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node]) ))
-                        <&&> children
-                    )
-        let fCombine = (<&&>)
-        foldNode2 fNode fCombine OK node
-
-    let getDefinedScriptVariables (es : STLEntitySet) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? TriggerBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
-        let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        //effects @ opts |> List.collect findAllSetVariables
-        es.AllEffects |> List.collect findAllSetVariables
-
-    let getEntitySetVariables (e : Entity) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
-        let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        effects @ opts |> List.collect findAllSetVariables
-
-    let valVariables : STLStructureValidator =
-        fun os es ->
-            let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? TriggerBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-            let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
-            let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setvariables)
-            //let defVars = effects @ opts |> List.collect findAllSetVariables
-            triggers <&!!&> (validateUsedVariables defVars)
-
-    let hasFlagMap =
-        fun (flags : Collections.Map<FlagType, string list>) (leaf : Leaf) ->
-            let validate (flag : string) (flagType : FlagType) =
-                let flag = if flag.Contains "@" then flag.Split('@').[0] else flag
-                //Hack due to testing files
-                if flag == "yes" || flag == "true" || flag == "test" then OK else
-                flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
-                                       |> Option.defaultValue (Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
-            match leaf.Key with
-            |"has_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
-            |"has_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
-            |"has_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
-            |"has_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
-            |"has_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
-            |"has_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
-            |"has_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
-            |"has_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
-            |"has_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
-            |"has_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
-            |"has_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
-            |"has_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
-            |"has_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
-            |"remove_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
-            |"remove_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
-            |"remove_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
-            |"remove_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
-            |"remove_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
-            |"remove_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
-            |"remove_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
-            |"remove_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
-            |"remove_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
-            |"remove_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
-            |"remove_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
-            |"remove_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
-            |"remove_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
-            |_ -> OK
-
-    let validateUsedFlags (flags : Collections.Map<FlagType, string list>) (node : Node) =
-        let fNode = (fun (x : Node) children ->
-                        (x.Values <&!&> hasFlagMap flags) <&&> children
-                    )
-        let fCombine = (<&&>)
-        foldNode2 fNode fCombine OK node
-
-
-    let valTest : STLStructureValidator =
-        fun os es ->
-            let fNode = (fun (x : Node) acc ->
-                        match x with
-                        | (:? EffectBlock as x) -> x::acc
-                        | _ -> acc
-                        )
-            let ftNode = (fun (x : Node) acc ->
-                        match x with
-                        | (:? TriggerBlock as x) -> x::acc
-                        | _ -> acc
-                        )
-            let foNode = (fun (x : Node) acc ->
-                        match x with
-                        | (:? Option as x) -> x::acc
-                        | _ -> acc
-                        )
-            let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
-            let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-            let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
-            OK
-            // opts @ effects <&!&> (fun x -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "effect") x]))
-            // <&&> (triggers <&!&> (fun x -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "trigger") x])))
-
-    let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
-        match cat.SupportsScope scope with
-        | true -> OK
-        | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectModifierScope modifier (scope.ToString()) ((modifierCategoryManager.SupportedScopes cat ) |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
-        // match List.tryFind (fun (c, _) -> c = cat) (categoryScopeList()), scope with
-        // |None, _ -> OK
-        // |Some _, s when s = scopeManager.AnyScope -> OK
-        // |Some (c, ss), s -> if List.contains s ss then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node])
-
-    let valModifier (modifiers : ActualModifier list) (scope : Scope) (leaf : Leaf) =
-        match modifiers |> List.tryFind (fun m -> m.tag == leaf.Key) with
-        |None -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf])
-        |Some m ->
-            checkModifierInScope (leaf.Key) (scope) leaf m.category
-            <&&> (leaf.Value |> (function |Value.Int x when x = 0 -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ZeroModifier leaf.Key) leaf]) | _ -> OK))
-            // match m.categories |> List.contains (modifierCategory) with
-            // |true -> OK
-            // |false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.IncorrectModifierScope (leaf.Key) (modifierCategory.ToString()) (m.categories.ToString())) leaf])
-
-
-    let valModifiers (modifiers : ActualModifier list) (node : ModifierBlock) =
-        let filteredModifierKeys = ["description"; "key"]
-        let filtered = node.Values |> List.filter (fun f -> not (filteredModifierKeys |> List.exists (fun k -> k == f.Key)))
-        filtered <&!&> valModifier modifiers node.Scope
-    let valAllModifiers : LookupValidator<_> =
-        (fun lu _ es ->
-            let modifiers = lu.coreModifiers
-            let fNode = (fun (x : Node) children ->
-                match x with
-                | (:? ModifierBlock as x) -> valModifiers modifiers x
-                | _ -> OK
-                <&&> children)
-            let fCombine = (<&&>)
-            es.All <&!!&> foldNode2 fNode fCombine OK)
-
     let addGeneratedModifiers (modifiers : ActualModifier list) (es : STLEntitySet) : ActualModifier list =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)
@@ -422,6 +232,9 @@ module STLValidation =
                 // {tag = "shipsize_"+k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Starbase" }
                 {tag = "shipsize_"+k+"_hull_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 {tag = "shipsize_"+k+"_hull_add"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_evasion_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_disengage_chance_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {tag = "shipsize_"+k+"_tracking_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 // {tag = "shipsize_"+k+"_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 // {tag = "shipsize_"+k+"_evasion_addt"; category = modifierCategoryManager.ParseModifier() "Ship" }
                 // {tag = "shipsize_"+k+"_disengage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
@@ -551,30 +364,6 @@ module STLValidation =
         let techCatModifiers = techCategoryKeys |> List.map (fun k -> { ActualModifier.tag = "category_"+  k + "_research_speed_mult"; category = modifierCategoryManager.ParseModifier() "Country"})
         shipModifiers @  weaponModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
                     @ districtModifiers @ popEthicModifiers @ techCatModifiers
-
-    let findAllSavedEventTargets (event : Node) =
-        let fNode = (fun (x : Node) children ->
-                        let inner (leaf : Leaf) = if leaf.Key == "save_event_target_as" || leaf.Key == "save_global_event_target_as" then Some (leaf.Value.ToRawString()) else None
-                        (x.Values |> List.choose inner) @ children
-                        )
-        let fCombine = (@)
-        event |> (foldNode2 fNode fCombine [])
-
-    let findAllSavedEventTargetsInEntity (e : Entity) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
-        let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        effects @ opts |> List.collect findAllSavedEventTargets
-
 
     let getTechnologies (es : STLEntitySet) =
         let techs = es.AllOfTypeChildren EntityType.Technology

@@ -271,47 +271,6 @@ let shipSizeType =
 let effectMap = Microsoft.FSharp.Collections.Tagged.Map<string,Effect,InsensitiveStringComparer>.Create(InsensitiveStringComparer(), [])
 
 [<Tests>]
-let tests =
-    ptestList "process stl" [
-        testCase "option" <| fun () ->
-            let input =    "country_event = {\
-                            option = {\
-                                any_planet = {\
-                                    if = {\
-                                        limit = {\
-                                            test = -1.0
-                                        }}}}}"
-            match CKParser.parseString input "test" with
-            |Success(r, _, _) ->
-                let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let event = node.Children |> List.head
-                let option = event.Children |> List.head
-                let anyplanet = option.Children |> List.head
-                let ifblock = anyplanet.Children |> List.head
-                let limit = ifblock.Children |> List.head
-                let num = limit.Leaves |> Seq.head
-                let value = num.Value |> (function |Value.Float f when f = -1.0M -> Some f |_ -> None)
-                Expect.isTrue (event :? STLProcess.Event) "event not right type"
-                Expect.isTrue (option :? STLProcess.Option) "option not right type"
-                Expect.isTrue (limit :? TriggerBlock) "node not right type"
-                Expect.isTrue (value.IsSome) (sprintf "value is wrong type %A" num.ToRaw)
-        testCase "eventdesctrigger" <| fun () ->
-            let input =    "planet_event = {\
-                            desc = {\
-                                trigger = {\
-                                        }}}"
-            match CKParser.parseString input "test" with
-            |Success(r, _, _) ->
-                let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let event = node.Children |> List.head
-                let desc = event.Children |> List.head
-                let trigger = desc.Children |> List.head
-                Expect.isTrue (event :? STLProcess.Event) "event not right type"
-                Expect.isTrue (trigger :? TriggerBlock) (sprintf "trigger not right type, actual type %A" (trigger.GetType()))
-
-    ]
-
-[<Tests>]
 let testc =
     testList "config parse" [
         testCase "simple parse" <| fun () ->

@@ -157,9 +157,10 @@ module private RulesParserImpl =
                 | _ -> 1, 1, true
             | None -> 1, 1, true
         let description =
-            match comments |> List.tryFind (fun s -> s.StartsWith "##") with
-            | Some d -> Some (d.Trim('#'))
-            | None -> None
+            match comments |> List.filter (fun s -> s.StartsWith "##") with
+            | [] -> None
+            | [x] -> Some (x.Trim('#'))
+            | xs -> Some (xs |> List.map (fun x -> x.Trim('#')) |> String.concat (Environment.NewLine))
         let pushScope =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
             | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some

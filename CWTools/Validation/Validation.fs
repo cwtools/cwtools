@@ -173,27 +173,9 @@ type EntitySet<'T when 'T :> ComputedData>(entities : struct (Entity * Lazy<'T>)
     member __.All = entities |> List.map (fun struct (es, _) -> es.entity)
     member __.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
     member this.AllEffects=
-        let fNode = (fun (x : Node) acc ->
-                        match x with
-                        | :? EffectBlock as e -> e::acc
-                        | :? Option as e -> e.AsEffectBlock::acc
-                        |_ -> acc
-                            )
         entities |> List.collect (fun struct (_, d) -> d.Force().EffectBlocks |> Option.defaultValue [])
     member this.AllTriggers=
-        let fNode = (fun (x : Node) acc ->
-                        match x with
-                        | :? TriggerBlock as e -> e::acc
-                        |_ -> acc
-                            )
         entities |> List.collect (fun struct (_, d) -> d.Force().TriggerBlocks |> Option.defaultValue [])
-    member this.AllModifiers=
-        let fNode = (fun (x : Node) acc ->
-                        match x with
-                        | :? WeightModifierBlock as e -> e::acc
-                        |_ -> acc
-                            )
-        this.All |> List.collect (foldNode7 fNode)
 
     member __.AddOrGetCached id generator =
         entities |> List.collect (fun struct (e, d) ->

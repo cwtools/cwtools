@@ -45,8 +45,8 @@ module STLGameFunctions =
 
     let updateScriptedTriggers (game : GameObject) =
         let vanillaTriggers =
-            let se = scopedEffects() |> List.map (fun e -> e :> Effect)
-            let vt = game.Settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
+            let se = game.Lookup.triggers
+            let vt = game.Settings.embedded.triggers |> List.map (fun e -> e :> Effect)
             se @ vt
         let sts, ts = STLLookup.updateScriptedTriggers game.Resources vanillaTriggers
         game.Lookup.onlyScriptedTriggers <- sts
@@ -54,8 +54,8 @@ module STLGameFunctions =
 
     let updateScriptedEffects (game : GameObject) =
         let vanillaEffects =
-            let se = scopedEffects() |> List.map (fun e -> e :> Effect)
-            let ve = game.Settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
+            let se = game.Lookup.effects
+            let ve = game.Settings.embedded.effects |> List.map (fun e -> e :> Effect)
             se @ ve
         let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
         game.Lookup.onlyScriptedEffects <- ses
@@ -77,8 +77,6 @@ module STLGameFunctions =
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
         game.Lookup.scriptedLoc <- rawLocs
-    let updateDefinedVariables(game : GameObject) =
-        game.Lookup.definedScriptVariables <- (game.Resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().Setvariables)
 
     let afterUpdateFile (game : GameObject<STLComputedData,STLLookup>) (filepath : string) =
         match filepath with
@@ -87,7 +85,6 @@ module STLGameFunctions =
         |x when x.Contains("scripted_loc") -> updateScriptedLoc(game)
         |x when x.Contains("static_modifiers") -> updateStaticodifiers(game)
         |_ -> ()
-        updateDefinedVariables(game)
 
     let globalLocalisation (game : GameObject) =
         let locfiles =  game.Resources.GetResources()
@@ -179,7 +176,6 @@ module STLGameFunctions =
 
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
-        lookup.globalScriptedVariables <- (EntitySet (resources.AllEntities())).GlobMatch "**/common/scripted_variables/*.txt" |> List.collect STLValidation.getDefinedVariables
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
@@ -191,7 +187,6 @@ module STLGameFunctions =
             game.Lookup.allCoreLinks <- game.Lookup.triggers @ es @ game.Lookup.eventTargetLinks
             updateStaticodifiers(game)
             updateScriptedLoc(game)
-            updateDefinedVariables(game)
             updateModifiers(game)
             updateTechnologies(game)
 
@@ -208,11 +203,17 @@ module STLGameFunctions =
                     |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
                     |> Option.defaultWith (fun () -> Utils.logError "trigger_docs.log was not found in stellaris config"; ([], []))
-        let modifiers =
+        let stlSetupModifiers =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
                     |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
                     |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; ([]))
+
+        let stlRulesMods =
+            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
+                    |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
+                    |> Option.defaultValue []
+
         let stlLocCommands =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
@@ -229,7 +230,7 @@ module STLGameFunctions =
         {
             triggers = triggers
             effects = effects
-            modifiers = modifiers
+            modifiers = stlSetupModifiers @ stlRulesMods
             embeddedFiles = embeddedFiles
             cachedResourceData = cachedResourceData
             localisationCommands = Legacy stlLocCommands
@@ -244,7 +245,7 @@ type StellarisSettings = GameSetupSettings<STLLookup>
 open STLGameFunctions
 type STLGame (setupSettings : StellarisSettings) =
     let validationSettings = {
-        validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
+        validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valEventCalls, "event";
                             validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateSolarSystemInitializers, "solar";
                              validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantANDWithNOR, "AND"; valMegastructureGraphics, "megastructure";
                             valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"; validatePreTriggers, "pre";
@@ -253,7 +254,7 @@ type STLGame (setupSettings : StellarisSettings) =
         heavyExperimentalValidators = [getEventChains, "event chains"]
         experimental = setupSettings.validation.experimental
         fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-        lookupValidators = [valAllModifiers, "mods"; valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget"]
+        lookupValidators = [valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget"]
         lookupFileValidators = [valScriptedEffectParams, "scripted_effects"]
         useRules = setupSettings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = setupSettings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
