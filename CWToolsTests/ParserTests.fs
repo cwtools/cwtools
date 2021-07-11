@@ -62,4 +62,18 @@ let tests =
 
                   Expect.equal printed file "Printing shouldn't have changed string"
 
-              | _ -> failwith "Parsing unsuccessul." ]
+              | _ -> failwith "Parsing unsuccessul." ] |> ignore
+        
+    ftestList
+        "stellaris docs"
+        [
+            ftestCase "modifiers"
+            <| fun () ->
+                let file =
+                    "testfiles/parsertests/stellarisnewdocs/modifiers.log"
+                let res = StellarisModifierParser.parseLogsFile file
+                match res with
+                | Success(r, _, _) ->
+                    Expect.hasLength r 4639 "Expected 4639 items"
+                | Failure(e, _, _) -> failwithf "Parsing failed %A" e
+        ]

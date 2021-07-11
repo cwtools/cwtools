@@ -122,3 +122,31 @@ module DataTypeParser =
     let parseDataTypesFileRes filepath = parseDataTypesFile filepath |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; confidentFunctions = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })
     let parseDataTypesStream file = runParserOnStream dataTypeDump () "" file (System.Text.Encoding.GetEncoding(1252))
     let parseDataTypesStreamRes file = parseDataTypesStream file |> (function |Success(p, _, _) -> p | Failure(e, _, _)  -> CWTools.Utilities.Utils.log (sprintf "datatype parse failed with %A" e);  { promotes = Map.empty; confidentFunctions = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty })
+
+module StellarisModifierParser =
+    
+
+    let private isvaluechar = SharedParsers.isvaluechar
+    let private str s = pstring s .>> SharedParsers.ws <?> ("string " + s)
+    let private pre = skipCharsTillString "Static Modifier #" true 100
+    let private num = pre >>. pint64 .>> SharedParsers.ws |>> int
+    let private tag = skipString "tag = " >>. many1Satisfy isvaluechar .>> SharedParsers.ws
+    let private name = str "name = " >>. restOfLine true //manyCharsTill valuechar newline .>> ws
+
+    let private modifierHeader = skipCharsTillString "Printing Modifier Definitions:" true 20000000 .>> SharedParsers.ws <?> "modifier header"
+
+    let private mtag = skipCharsTillString "- " true 500 >>. many1CharsTill (satisfy isvaluechar) (pchar ',') .>> SharedParsers.ws
+    let private categories = skipString "Category: " >>. sepBy (manyChars (noneOf ("," + "\r\n"))) (pstring ", ") .>> newline .>> SharedParsers.ws
+    let private modifier = pipe2 mtag categories (fun t c -> {|tag = t; categories = c|} )
+
+//    let private footer = many1Chars anyChar
+
+    let private logFile = SharedParsers.ws >>. modifierHeader >>. many1 (attempt modifier) .>> eof
+
+
+    let toDocEffect<'a when 'a : comparison> effectType parseScope (x : RawEffect) = DocEffect(x, effectType, parseScope)
+
+    let parseLogsFile filepath = runParserOnFile logFile () filepath (System.Text.Encoding.GetEncoding(1252))
+    let parseLogsStream file = runParserOnStream logFile () "logFile" file (System.Text.Encoding.GetEncoding(1252))
+//    let processLogs ((s: RawStaticModifier list), (m : RawModifier list)) =
+//        m |> List.map (fun rm -> { ActualModifier.tag = rm.tag; category = modifierCategoryManager.GetCategoryFromID rm.category})
