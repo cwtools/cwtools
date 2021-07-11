@@ -14,14 +14,15 @@ module DocsParser =
     let private name = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>>. restOfLine false .>> SharedParsers.ws <?> "name"
     let private usage = charsTillString "Supported scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
     let private usageC = charsTillString "Supported Scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
-    let private scope = many1Satisfy ((fun c -> isvaluechar c || c = '?' || c = '(' || c = ')')) .>> many spaces1 <?> "scope"
-    let private scopes = manyTill scope (skipString "Supported targets:" .>> skipManySatisfy (fun c -> c = ' ')) <?> "scopes"
-    let private scopesC = manyTill scope (skipString "Supported Targets:" .>> skipManySatisfy (fun c -> c = ' ')) <?> "scopes"
+    let private scope = many1Satisfy ((fun c -> isvaluechar c || c = '?' || c = '(' || c = ')')) .>> many (anyOf [' '; '\t']) <?> "scope"
     let private target = many1Satisfy isvaluechar .>> many (skipChar ' ') <?> "target"
     let private targets = manyTill target newline .>> SharedParsers.ws <?> "targets"
-    let private doc =  pipe4 name (attempt usage <|> usageC)  (attempt scopes <|> scopesC)  targets (fun (n, d) u s t  -> {name = n; desc = d; traits = None; usage = u; scopes = s; targets = []}) <?> "doc"
+    let private scopesWithoutTarget = manyTill scope newline |>> (fun x -> (x, [])) .>> SharedParsers.ws <?> "scopes"
+    let private scopes = manyTill scope (newline .>>. skipString "Supported targets:" .>> skipManySatisfy (fun c -> c = ' ')) .>>. targets <?> "scopes"
+    let private scopesC = manyTill scope (newline .>>. skipString "Supported Targets:" .>> skipManySatisfy (fun c -> c = ' ')) .>>. targets <?> "scopes"
+    let private doc =  pipe3 name (attempt usage <|> usageC) (attempt scopes <|> attempt scopesC <|> scopesWithoutTarget) (fun (n, d) u (s, t)  -> {name = n; desc = d; traits = None; usage = u; scopes = s; targets = []}) <?> "doc"
     let private footer : Parser<unit, unit> = skipString "=================" .>> SharedParsers.ws
-    let private docFile = SharedParsers.ws >>. header >>. many doc //.>> footer
+    let private docFile = SharedParsers.ws >>. header >>. many doc .>> footer
 
     let private twoDocs = docFile .>>. docFile
 

@@ -64,10 +64,10 @@ let tests =
 
               | _ -> failwith "Parsing unsuccessul." ] |> ignore
         
-    ftestList
+    testList
         "stellaris docs"
         [
-            ftestCase "modifiers"
+            testCase "modifiers"
             <| fun () ->
                 let file =
                     "testfiles/parsertests/stellarisnewdocs/modifiers.log"
@@ -75,5 +75,14 @@ let tests =
                 match res with
                 | Success(r, _, _) ->
                     Expect.hasLength r 4639 "Expected 4639 items"
+                | Failure(e, _, _) -> failwithf "Parsing failed %A" e
+                
+            testCase "triggers"
+            <| fun () ->
+                let file =
+                    "testfiles/parsertests/stellarisnewdocs/trigger_docs.log"
+                let res = DocsParser.parseDocsFile file
+                match res with
+                | Success(_) -> ()
                 | Failure(e, _, _) -> failwithf "Parsing failed %A" e
         ]
