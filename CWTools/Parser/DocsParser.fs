@@ -148,5 +148,9 @@ module StellarisModifierParser =
 
     let parseLogsFile filepath = runParserOnFile logFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseLogsStream file = runParserOnStream logFile () "logFile" file (System.Text.Encoding.GetEncoding(1252))
-//    let processLogs ((s: RawStaticModifier list), (m : RawModifier list)) =
-//        m |> List.map (fun rm -> { ActualModifier.tag = rm.tag; category = modifierCategoryManager.GetCategoryFromID rm.category})
+    let processLogs ((m : {|categories: string list; tag: string|} list)) =
+        m |> List.collect (fun rm ->
+            rm.categories
+            |> List.map (fun cm ->
+                { ActualModifier.tag = rm.tag; category = modifierCategoryManager.ParseModifier() cm}
+                ))

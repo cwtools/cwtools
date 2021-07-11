@@ -204,8 +204,17 @@ module STLGameFunctions =
                     |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
                     |> Option.defaultWith (fun () -> Utils.logError "trigger_docs.log was not found in stellaris config"; ([], []))
+                    
+        
         let stlSetupModifiers =
-            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
+            if configs |> List.exists (fun (fn, _) -> Path.GetFileName fn = "modifiers.log")
+            then
+                configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.log")
+                    |> Option.map (fun (fn, ft) -> StellarisModifierParser.parseLogsFile fn)
+                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (StellarisModifierParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
+                    |> Option.defaultWith (fun () -> Utils.logError "modifiers.log was not found in stellaris config"; ([]))
+            else
+                configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
                     |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
                     |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; ([]))
