@@ -1,0 +1,284 @@
+[16:41:17][game_application.cpp:1925]: 
+== LOCALIZATION DOCUMENTATION ==
+This is a list of all hardcoded scoped localization commands in the game. It does not include scripted locs (see game/customizable_localization).
+In most cases, it is also possible to get the value of variables: [Scope.my_variable].
+There are also several unscoped commands: GetDate, GetMidGameDate, GetLateGameDate, GetYear, LastKilledCountryName.
+A single opening square bracket '[' will begin a scoped localization statement.
+Two consecutive opening square brackets '[[' will escape it, making a single square bracket show up in text instead, i.e. '[[example]' in loc will display as '[example]' in-game.
+
+
+--Country--
+Promotions:
+ Capital
+ Ruler
+ Heir
+ Species
+ Federation
+Properties
+ GetName
+ GetAdj
+ GetAdjective
+ GetSpeciesName
+ GetSpeciesAdj
+ GetSpeciesNamePlural
+ GetSpeciesClass
+ GetSpeciesClassPlural
+ GetAllianceName
+ GetRulerName
+ GetRulerTitle
+ GetHeirName
+ GetHeirTitle
+ GetPersonalityName
+ GetSpeciesNameInsult
+ GetSpeciesNamePluralInsult
+ GetSpeciesNameCompliment
+ GetSpeciesNamePluralCompliment
+ GetSpeciesSpawnName
+ GetSpeciesSpawnNamePlural
+ GetSpeciesOrganName
+ GetSpeciesOrganNamePlural
+ GetSpeciesMouthName
+ GetSpeciesHandName
+ GetSpeciesHandNamePlural
+ GetSpeciesEarName
+ GetSpeciesEarNamePlural
+ GetSpeciesToothName
+ GetSpeciesToothNamePlural
+ GetSpeciesFossilName
+ GetSpeciesFossilNamePlural
+ GetRandomSpeciesSound
+ GetHomeWorldName
+ GetLastLostRelic
+ GetLastReceivedRelic
+ GetGovernmentName
+ GetRealName
+ GetCountryType
+
+--Planet--
+Promotions:
+ Owner
+ System
+ MoonOf
+ Sector
+Properties
+ GetName
+ GetAdj
+ GetStarName
+ GetPlanetMoon
+ GetPlanetMoonCap
+ GetNebula
+ GetOwnerName
+ GetControllerName
+ GetClassName
+ GetClassAdj
+
+--Ship (and Starbase)--
+Promotions:
+ Owner
+ Fleet
+Properties
+ GetName
+ GetNebula
+ GetFleetName
+ GetLeaderName
+ GetStarName
+ GetShipSizeName
+ GetShipSizeNamePlural
+ GetDesignName
+
+--Pop--
+Promotions:
+ Planet
+ Faction
+ Species
+Properties
+ GetName
+ GetSpeciesName
+ GetSpeciesNamePlural
+ GetSpeciesAdj
+
+--System--
+Promotions:
+ Owner
+ Sector
+Properties
+ GetName
+ GetAdj
+ GetNebula
+ GetClassName
+
+--Fleet--
+Promotions:
+ Owner
+ Leader
+ System
+Properties
+ GetName
+ GetFleetName
+ GetLeaderName
+ GetStarName
+ GetRulerName
+ GetAdj
+
+--Leader--
+Promotions:
+ Owner
+ Species
+Properties
+ GetName
+ GetRegnalName
+ GetPopFactionName
+ GetSubjectPronoun
+ GetSheHe
+ GetHeShe
+ GetSubjectPronounCap
+ GetSheHeCap
+ GetHeSheCap
+ GetObjectPronoun
+ GetHerHim
+ GetHimHer
+ GetPossPronoun
+ GetHerHis
+ GetHisHer
+ GetPossPronounCap
+ GetHerHisCap
+ GetHisHerCap
+ GetReflexivePronoun
+ GetHerselfHimself
+ GetHimselfHerself
+ GetRulerTitle
+ GetTitle
+ GetRulerName
+ GetFirstName
+ GetFirstNameFull
+ GetSecondName
+ GetAge
+
+--Army--
+Promotions:
+ Owner
+ Planet
+ Leader
+Properties
+ GetName
+ GetRulerName
+
+--Ambient Object--
+Promotions:
+Properties
+ GetName
+ GetStarName
+ GetNebula
+
+--Species--
+Promotions:
+Properties
+ GetName
+ GetAdj
+ GetNamePlural
+ GetClass
+ GetClassPlural
+ GetNameInsult
+ GetNamePluralInsult
+ GetNameCompliment
+ GetNamePluralCompliment
+ GetSpawnName
+ GetSpawnNamePlural
+ GetOrganName
+ GetOrganNamePlural
+ GetMouthName
+ GetHandName
+ GetHandNamePlural
+ GetEarName
+ GetEarNamePlural
+ GetToothName
+ GetToothNamePlural
+ GetFossilName
+ GetFossilNamePlural
+ GetRandomSpeciesSound
+
+--War--
+Promotions:
+ MainDefender
+ MainAttacker
+Properties
+ GetName
+ GetNumPlayerFleetsGoneMIA
+
+--Pop Faction--
+Promotions:
+ Owner
+ Leader
+Properties
+ GetName
+
+--Archaeological Site--
+Promotions:
+ Planet
+ AmbientObject
+ Fleet
+ Ship
+ GalacticObject
+Properties
+
+--Federation--
+Promotions:
+ Leader
+Properties
+ GetName
+
+--First Contact--
+Promotions:
+ Leader
+ Owner
+ ContactCountry
+ System
+Properties
+ GetName
+
+--Espionage Operation--
+Promotions:
+ SpyNetwork
+ Target
+ Owner
+ Leader
+Properties
+ GetName
+
+--Espionage Asset--
+Promotions:
+Properties
+ GetName
+
+--Spy Network--
+Promotions:
+ Target
+ Owner
+ Leader
+Properties
+
+--Deposit--
+Promotions:
+ Planet
+Properties
+ GetName
+
+--Megastructure--
+Promotions:
+ Owner
+ System
+ Planet
+Properties
+ GetName
+
+--Sector--
+Promotions:
+ Owner
+ Capital
+ Leader
+Properties
+ GetName
+ GetFocus
+ GetType
+
+=================

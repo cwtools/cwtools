@@ -1,0 +1,152 @@
+[16:41:17][game_application.cpp:1910]: 
+== SCOPE DOCUMENTATION ==
+These work as context switches (links) in triggers and effects (e.g. 'owner = { <triggers/effects> }'), or as targets of triggers and effects (e.g. 'is_owned_by = from'). Dot scoping (e.g. root.owner.capital_scope) is allowed.
+Complete list of scope changes:
+
+target - Scopes from a spy network to its target country, or from an espionage operation to its target (can be various objects, as set in common/espionage_operation_types).
+
+orbit - Scopes to the planet the current object is in orbit of. Works on ships, fleets, starbases, armies (when in military transports) and moons (scopes to the planet that a moon orbits).
+
+planet - Scopes from an object to the planet it is on. Works from army, megastructure, deposit and arc site scopes.
+
+star - Scopes from an object to the primary star (planet scope) of the system it is in. Works on all objects visible in star system view.
+
+branch_office_owner - Scopes from a planet to the owner of a branch office.
+
+pop - Scopes from an army to the pop that spawned it.
+
+species - Scopes from a country, leader, pop, army or (colonist) ship to its species.
+
+assembling_species - Scopes from a planet to the species currently being assembled on it.
+
+built_species - Scopes from a country to its built species.
+
+declining_species - Scopes from a planet to the species currently declining on it.
+
+fleet - Scopes from a ship, starbase or leader to its fleet, or from an army to the fleet its army transport is part of.
+
+from - Scopes to the ROOT of the previous event, or the preset hardcoded FROM scope.
+
+this - Scopes to the current scope.
+
+root - Scopes to the original scope of this context, e.g. the country of a country_event.
+
+prev - Scopes to the previous scope, e.g. owner = { capital_scope = { is_owned_by = prev } } would refer to the owner of the capital here (and always be true).
+
+capital_scope - Scopes from an empire to its capital planet.
+
+owner - Scopes to the owner of the current object. Works on any object that could be construed as being owned by a country (incl. planets, ships, fleets, leaders, pops, solar systems, pop factions, megastructures, first contacts, spy networks, espionage operations, armies, starbases, deposits, sectors, arc sites)
+
+controller - Scopes from a planet (or starbase) to the empire controlling it (not necessarily the owner: a country occupying a planet is its controller).
+
+fromfrom - Scopes to the FROM of the FROM scope (ROOT of two events ago, or the preset hardcoded FROMFROM scope).
+
+prevprev - Scopes back to two scope changes ago, e.g. planet = { owner = { any_owned_planet = { is_same_value = prevprev } } } would be checking if the owner of the planet owns any planet that is the same as the planet you are starting in (which would always be true).
+
+prevprevprev - Scopes back to three scope changes ago (the PREV of PREVPREV).
+
+prevprevprevprev - Scopes back to four scope changes ago (the PREV of PREVPREVPREV).
+
+home_planet - Scopes to a species' home planet (also works from country, pop and leader; scopes to that object's species's home planet).
+
+last_created_fleet - Scopes to the last fleet that was created anywhere in the game.
+
+owner_main_species - Scopes to the main species of the owner of the current object. Works in every scope that 'owner' would work in.
+
+last_created_country - Scopes to the last country that was created anywhere in the game.
+
+last_created_species - Scopes to the last species that was created anywhere in the game.
+
+alliance - Scopes from a country to the federation it is a member of.
+
+overlord - Scopes from a country to its overlord.
+
+federation - Scopes from a country to the federation it is a member of.
+
+research_station - Scopes from a planet to the research station in orbit of it.
+
+mining_station - Scopes from a planet to the mining station in orbit of it.
+
+last_created_pop - Scopes to the last pop that was created anywhere in the game.
+
+last_created_system - Scopes to the last fleet that was created anywhere in the game.
+
+planet_owner - Scopes from an object to the owner of the planet it is on. Works from army, megastructure, deposit and arc site scopes.
+
+last_created_ambient_object - Scopes to the last ambient object that was created anywhere in the game.
+
+last_created_ship - Scopes to the last ship that was created anywhere in the game.
+
+orbital_station - Scopes from a planet to the station (mining station, research station, observation outpost) orbiting it.
+
+last_created_leader - Scopes to the last leader that was created anywhere in the game.
+
+owner_species - Scopes to the main species of the owner of the current object. Works in every scope that 'owner' would work in.
+
+fromfromfrom - Scopes to the FROM of the FROMFROM scope (ROOT of three events ago, or the preset hardcoded FROMFROMFROM scope)
+
+last_created_army - Scopes to the last army that was created anywhere in the game.
+
+envoy_location_country - Scopes from an envoy to the empire it is appointed to.
+
+contact_country - Scopes from a first contact site to the country that the owner of the site is seeking to establish communications with.
+
+sector_capital - Scopes from a sector to its capital planet.
+
+observation_outpost_owner - Scopes from a planet to the owner of the observation outpost in orbit of it.
+
+observation_outpost - Scopes from a planet to the observation outpost in orbit of it.
+
+federation_leader - Scopes from a federation to the empire leading it.
+
+associated_federation - Scopes from a country to the federation it is an associate of.
+
+sector - Scopes from an object to the sector it is in. Works on all objects visible objects visible in star system view, plus star systems themselves and leaders (scopes to the sector the leader is currently located in, not necessarily the one they are assigned to as a governor).
+
+pop_faction - Scopes from a pop or leader to its pop faction.
+
+last_created_pop_faction - Scopes to the last pop faction that was created anywhere in the game.
+
+unhappiest_pop - Scopes from a country or planet to its unhappiest pop.
+
+heir - Scopes to the heir of a country (or the heir of the object's owner).
+
+fromfromfromfrom - Scopes to the FROM of the FROMFROMFROM scope (ROOT of four events ago, or the preset hardcoded FROMFROMFROMFROM scope)
+
+last_refugee_country - Scopes to the last country from which a pop fled to escape purge (via on_pop_displaced).
+
+starbase - Scopes from a solar system or planet to that system's starbase. Alternatively, scopes from a fleet or ship that is a starbase to its matching starbase scope.
+
+capital_star - Scopes from an empire to the primary star (planet scope) of its capital's system.
+
+system_star - Scopes from an object to the primary star (planet scope) of the system it is in. Works on all objects visible in star system view.
+
+no_scope - Sets the scope to no scope (empty scope used for certain generalized behavior).
+
+archaeological_site - Scopes from an object (e.g. planet) in star system view to the arc site in the same location.
+
+excavator_fleet - Scopes from an arc site to the fleet whose leader is currently investigating it.
+
+reverse_first_contact - Scopes from a first contact site to the equivalent one that the contact_country has on the site's owner.
+
+spynetwork - Scopes from an espionage operation or spymaster envoy to its spy network.
+
+growing_species - Scopes from a planet to the species currently growing (not assembling) on it.
+
+galactic_emperor - Scopes to the ruling empire of the Galactic Imperium.
+
+galactic_custodian - Scopes to the Custodian empire of the Galactic Community.
+
+attacker - Scopes from a war to its main attacker.
+
+defender - Scopes from a war to its main defender.
+
+leader - Scopes from an object to its leader, e.g. country->ruler, fleet->admiral/scientist, sector->governor, army->general, arc site->scientist...
+
+solar_system - Scopes from an object to the solar system it is in. Works on all objects visible in star system view.
+
+space_owner - Scopes from an object to the owner of the space it is in. Works on all objects visible in star system view.
+
+ruler - Scopes to the ruler of a country (or the ruler of the object's owner).
+
+=================

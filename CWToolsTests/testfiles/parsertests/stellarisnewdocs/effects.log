@@ -1,0 +1,3259 @@
+[16:41:17][game_application.cpp:1898]: 
+== EFFECT DOCUMENTATION ==
+tooltip - Just a tooltip
+Supported Scopes: all
+
+win - The scoped country wins the game
+win = yes
+Supported Scopes: country
+
+hidden_effect - Prevents enclosed effects from being displayed in tooltip
+hidden_effect = { <effects> }
+Supported Scopes: all
+
+custom_tooltip - Displays a specific localization string in tooltip
+custom_tooltip = <string>
+Supported Scopes: all
+
+if - Executes enclosed effects if limit criteria are met
+if = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+end_all_treaties_with - Ends all treaties with the target
+end_all_treaties_with = <target>
+Supported Scopes: country
+
+random_list - Picks one random set of effects from a list, influenced by relative weight
+random_list = { 50 = { <effects> } 20 = { <effects> } 30 = { <effects> } 999 = { <effects> } }
+Supported Scopes: all
+
+locked_random_list - Picks one random set of effects from a list, influenced by relative weight once per event scope
+locked_random_list = { 50 = { <effects> } 20 = { <effects> } 30 = { <effects> } 999 = { <effects> } }
+Supported Scopes: all
+
+remove_deposit - Remove resource deposit on the scoped planet or deposit, does not fire on_cleared if used on a blocker
+remove_deposit = <key/yes>
+Supported Scopes: planet deposit
+
+set_owner - Instantly sets the owner of the scoped planet/fleet/army/starbase to target country
+set_owner = <target>
+Supported Scopes: megastructure planet fleet leader army starbase
+
+unemploy_pop - Fires scoped pop from its job
+unemploy_pop = yes
+Supported Scopes: pop
+
+check_planet_employment - Immediately runs a job evaluation on the planet, firing and employing pops as needed
+check_planet_employment = yes
+Supported Scopes: planet
+
+change_species_portrait - Changes the portrait of the species in scope.
+change_species_portrait = <key or species event target>
+Supported Scopes: species
+
+clear_pop_category - Resets category of a pop
+clear_pop_category = yes
+Supported Scopes: pop
+
+add_random_non_blocker_deposit - Adds random non-blocker resource deposit to the scoped planet
+add_random_non_blocker_deposit = yes
+Supported Scopes: planet
+
+remove_last_built_building - Removes last built building from the scoped planet
+remove_last_built_building = yes
+Supported Scopes: planet
+
+remove_all_buildings - Removes all buildings from the scoped planet
+remove_all_buildings = yes
+Supported Scopes: planet
+
+give_technology - Instantly gives a specific tech to the scoped country
+give_technology = { tech = tech_desert_colonization message = yes }
+Supported Scopes: country
+
+add_building - Begins construction of a specific building on the scoped planet
+add_building = <key>
+Supported Scopes: planet
+
+add_planet_devastation - Instantly adds devastation to scoped planet
+add_planet_devastation = 5
+Supported Scopes: planet
+
+create_half_species - Creates a new pop from a half-species on the planet
+create_half_species = { species_one = <target> species_two = <target> }
+Supported Scopes: all
+
+calculate_modifier - Forces target planet or country to calculate its internal modifier
+calculate_modifier = yes
+Supported Scopes: planet
+
+establish_branch_office - Establish branch office on scoped planet for target country
+establish_branch_office = <target>
+Supported Scopes: planet
+
+close_branch_office - Close branch office on scoped planet
+close_branch_office = yes
+Supported Scopes: planet
+
+clear_blockers - Removes all blockers from the scoped planet
+clear_blockers = yes
+Supported Scopes: planet
+
+set_built_species - Changes the built species of the scoped object
+set_built_species = <target>
+Supported Scopes: country
+
+set_first_contact_flag - Sets an arbitrarily-named flag on the scoped first contact site
+set_first_contact_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: first_contact
+
+set_federation_flag - Sets an arbitrarily-named flag on the scoped federation
+set_federation_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: federation
+
+set_country_flag - Sets an arbitrarily-named flag on the scoped country
+set_country_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: country
+
+set_planet_flag - Sets an arbitrarily-named flag on the scoped planet
+set_planet_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: planet
+
+set_fleet_flag - Sets an arbitrarily-named flag on the scoped fleet
+set_fleet_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: fleet
+
+set_ship_flag - Sets an arbitrarily-named flag on the scoped ship
+set_ship_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: ship
+
+remove_first_contact_flag - Removes a flag from the scoped first contact site
+remove_first_contact_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: first_contact
+
+remove_federation_flag - Removes a flag from the scoped federation
+remove_federation_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: federation
+
+remove_country_flag - Removes a flag from the scoped country
+remove_country_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: country
+
+remove_planet_flag - Removes a flag from the scoped planet
+remove_planet_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: planet
+
+remove_fleet_flag - Removes a flag from the scoped fleet
+remove_fleet_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: fleet
+
+remove_ship_flag - Removes a flag from the scoped ship
+remove_ship_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: ship
+
+every_owned_ship - Iterate through each ship in the fleet or owned by the country - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_ship = { limit = { <triggers> } <effects> }
+Supported Scopes: country fleet
+
+random_owned_ship - Iterate through each ship in the fleet or owned by the country - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_ship = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country fleet
+
+create_species - Creates a new species
+create_species = {
+	name = <string>
+	plural = <string>
+	class = <species class key>
+	portrait = <random/portrait id>
+	homeworld = <target>
+	traits = { <specific/random traits> }
+	sapient = <Y/N, determines if species is pre-sapient>
+	is_mod = <Y/N, determines if species is a modification of another>
+	immortal = <Y/N, determines if species leaders are immortal>
+}
+Supported Scopes: all
+
+create_country - Creates a new country
+create_country = {
+	name = <string/random>
+	adjective = <string>
+	contact_rule = <string>
+ type = <key>
+	auto_delete = <bool>
+	name_list = <key>
+	ship_prefix = <string>
+	authority = <key>
+	civics = random / { civic = <key> civic = random }
+	species = <target>
+	flag = <random / { icon = { category = <key> file = <filename.dds> } background = { category = <key> file = <filename.dds> } colors = { <key> <key> } }
+	ethos = <random / { ethic = <key> ethic = <key> }>
+	restrictions = { <restrictions, see "common\governments\readme_requirements.txt"> }
+	effect = { <effects executed on country> }
+}
+Supported Scopes: all
+
+create_fleet - Creates a new fleet
+create_fleet = { name = <string> effect = { <create_ship, set_owner, set_location etc effects go here> } } 
+Supported Scopes: all
+
+create_army - Creates a new army
+create_army = {
+	name = <string>
+	owner = <target>
+	species = <target>/random
+	type = <key>
+}
+Supported Scopes: planet
+
+modify_army - Modifies army with parameters:
+modify_army = {
+	name = <string>
+	owner = <target>
+	species = <target>/random
+	type = <key>
+}
+Supported Scopes: army
+
+set_location - Sets the fleet/ambient object's location, can be fine-tuned
+set_location = <target>
+set_location = {
+	target = <target>
+	distance = <int/random>
+	angle = <int/random>
+	direction = <in_system/out_system>
+}
+Supported Scopes: fleet ambient_object
+
+create_ship - Creates a new ship
+create_ship = {
+	name = <string/random>
+	design = <ship design key/target, or use random_existing_design>
+	random_existing_design = <ship size key>
+	graphical_culture = <graphical culture key>
+	prefix = <Y/N, determines if ship name should use owner country prefix>
+	colonizer_species = <species, default: fleet owner founder species>
+}
+Supported Scopes: fleet starbase
+
+create_pop - Creates a new pop on the scoped planet
+create_pop = {
+	species = <target / key>
+ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet
+
+create_colony - Creates a colony on the scoped planet
+create_colony = {
+	owner = <target>
+	species = <target / key>
+	ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet
+
+set_capital - Sets the scoped planet to be the capital of its owner country
+set_capital = yes
+Supported Scopes: planet
+
+change_pc - Changes the class of the scoped planet
+change_pc = <class/random list>
+change_pc = { class = <class/random list> inherit_entity = yes }
+Supported Scopes: planet
+
+set_star_class - Sets the star's star class, affecting system and galactic map graphics and potentially modifiers. Also changes the planet class of the system's primary star.
+set_star_class = <star class>
+Supported Scopes: galactic_object
+
+random_country - Iterate through all countries - executes the enclosed effects on one of them for which the limit triggers return true
+random_country = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+random_pop - Executes enclosed effects on a random pop that meets the limit criteria. Warning: deprecated, use random_owned_pop
+random_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+
+kill_pop - Instantly destroys the scoped pop
+kill_pop = yes
+Supported Scopes: pop
+
+destroy_colony - Destroys the colony on the scoped planet
+destroy_colony = yes
+Supported Scopes: planet
+
+add_experience - Adds a sum of experience points to the scoped leader
+add_experience = 200
+Supported Scopes: leader
+
+set_ring - Adds or removes a planetary ring around the scoped planet
+set_ring = no
+Supported Scopes: planet
+
+create_mining_station - Creates a mining station in orbit of the scoped planet
+create_mining_station = { owner = <target> }
+Supported Scopes: planet
+
+create_research_station - Creates a research station in orbit of the scoped planet
+create_research_station = { owner = <target> }
+Supported Scopes: planet
+
+set_pop_flag - Sets an arbitrarily-named flag on the scoped pop
+set_pop_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: pop
+
+remove_pop_flag - Removes a flag from the scoped pop
+remove_pop_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: pop
+
+every_owned_pop - Iterate through all owned pops - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country pop_faction sector
+
+set_name - Sets the name of the scoped country/planet/ship/fleet/leader/army/system/pop faction
+set_name = <string>
+Supported Scopes: megastructure planet country ship fleet galactic_object leader army pop_faction federation
+
+set_adjective - Sets the adjective of the scoped country
+set_adjective = <string>
+Supported Scopes: country
+
+set_ship_prefix - Sets the ship prefix of the scoped country
+set_ship_prefix = <string>
+Supported Scopes: country
+
+add_modifier - Adds a specific modifier to the scoped object for a set duration
+add_modifier = {
+	modifier = <key>
+	days/months/years = <int, -1 (default) means it never expires>
+	multiplier = <float>/<variable> (optional)
+	clear_on_owner_change = yes (optional: default no; clears modifier if planet/system/megastructure's owner changes)
+}
+Supported Scopes: megastructure planet country ship pop fleet galactic_object pop_faction federation spy_network espionage_operation
+
+reduce_hp - Reduces the hull points of the scoped ship by a specific amount
+reduce_hp = 120
+Supported Scopes: ship
+
+reduce_hp_percent - Reduces the hull points of the scoped ship by a relative amount
+reduce_hp_percent = 0.25
+Supported Scopes: ship
+
+repair_ship - Restores all hull points to the scoped ship
+repair_ship = yes
+Supported Scopes: ship
+
+set_surveyed - Sets the planet or system as un/surveyed by target country
+set_surveyed = { surveyed = yes surveyor = <target> }
+Supported Scopes: planet galactic_object
+
+destroy_country - Destroys the scoped country
+destroy_country = yes
+Supported Scopes: country
+
+set_variable - Sets or creates an arbitrarily-named variable with a specific value in the current scope
+set_variable = { which = <string> value = <float>/<variable>/<scope> / value = { scope = <scope> variable = <variable> } }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+clear_variable - Clears a previously-set variable from the game.
+clear_variable = <string>
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+round_variable - Rounds a previously-set variable to the closest integer.
+round_variable = <string>
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+floor_variable - Rounds a previously-set variable down to the previous integer.
+floor_variable = <string>
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+ceiling_variable - Rounds a previously-set variable up to the next integer.
+ceiling_variable = <string>
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+export_modifier_to_variable - Exports the value of a specified modifier in the current scope to a specified variable.
+export_modifier_to_variable = { modifier = pop_growth_speed_reduction variable = <string> }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction
+
+export_trigger_value_to_variable - Exports the value of a trigger to a specified variable (so for num_pops, it'll export the number of pops).
+export_trigger_value_to_variable = {
+	trigger = pop_produces_resource
+	parameters = { resource = energy } (optional: specify extra parameters for triggers with { }
+	variable = <string> (this example will print the amount of energy the pop produces to a variable)
+	rounded = yes (default: no)
+}
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+export_resource_stockpile_to_variable - Exports the value of the current country's stockpile of the specified resource to a variable.
+export_resource_stockpile_to_variable = { resource = energy variable = <string> }
+Supported Scopes: country
+
+export_resource_income_to_variable - Exports the value of the current country's monthly income of the specified resource to a variable.
+export_resource_income_to_variable = { resource = energy variable = <string> }
+Supported Scopes: country
+
+remove_global_flag - Removes a global flag
+remove_global_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: all
+
+set_global_flag - Sets an arbitrarily-named global flag
+set_global_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: all
+
+change_variable - Increments a previously-set variable by a specific amount
+change_variable = { which = <string> value = <float>/<variable>/<scope> / value = { scope = <scope> variable = <variable> } }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+every_galaxy_pop - Executes enclosed effects for every pop in the game that meet the limit criteria
+every_galaxy_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+every_country - Iterate through all countries - executes the enclosed effects on all of them for which the limit triggers return true
+every_country = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+every_playable_country - Iterate through all playable countries - executes the enclosed effects on all of them for which the limit triggers return true
+every_playable_country = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_playable_country - Iterate through all playable countries - executes the enclosed effects on one of them for which the limit triggers return true
+random_playable_country = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+set_event_locked - Silently disables the scoped fleet to prevent player action, remember to unlock at the end of the event
+set_event_locked = no
+Supported Scopes: fleet
+
+clear_orders - Clears all fleet orders from the scoped fleet
+clear_orders = yes
+Supported Scopes: fleet
+
+order_forced_return - Forces scoped fleet to retreat to friendly territory
+order_forced_return = yes
+Supported Scopes: fleet
+
+declare_war - Declares war between the scoped country and target country
+declare_war = {
+	target = <target country>
+	name = <optional war name>
+	attacker_war_goal = <war goal>
+}
+Supported Scopes: country
+
+set_star_flag - Sets an arbitrarily-named flag on the scoped system
+set_star_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: galactic_object
+
+remove_star_flag - Removes a flag from the scoped system
+remove_star_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: galactic_object
+
+set_spawn_system_batch - Optimizes the calls for spawn_system effect.
+Spawn system should be located in a block between Begin and End.
+Begin: set_spawn_system_batch = begin
+End: set_spawn_system_batch = end
+Supported Scopes: all
+
+spawn_system - Spawns a new system at a position relative to the scoped system/planet/ship.
+spawn_system = { min_jumps = <value> max_jumps = <value> min_distance = <int 0-100> max_distance = <int 0-100> initializer = <key for pre-defined system> hyperlane=<yes/no> is_discovered=<yes/no>}
+Supported Scopes: megastructure planet ship fleet galactic_object starbase no_scope
+
+dismantle - Dismantles the scoped orbital station (fleet)
+dismantle = yes
+Supported Scopes: fleet
+
+set_advisor_active - Enables or disables the VIR window pop-in
+set_advisor_active = no
+Supported Scopes: country
+
+save_event_target_as - Saves the current scope as an arbitrarily-named target to be referenced later in the (unbroken) event chain
+save_event_target_as = <string>
+Supported Scopes: all
+
+save_global_event_target_as - Saves the current scope as an arbitrarily-named target to be referenced later, accessible globally until cleared
+save_global_event_target_as = <string>
+Supported Scopes: all
+
+clear_global_event_target - Deletes the specified saved global target reference
+clear_global_event_target = <string>
+Supported Scopes: all
+
+clear_global_event_targets - Deletes all saved global target references
+clear_global_event_targets = yes
+Supported Scopes: all
+
+break - Prevents execution of subsequent effects in the same effect block, used with if-statements
+break = yes
+Supported Scopes: all
+
+set_tutorial_level - Changes the scoped country's tutorial level (0 none, 1 limited, 2 full)
+set_tutorial_level = 0
+Supported Scopes: country
+
+begin_event_chain - Starts a situation log event chain for target country
+begin_event_chain = { event_chain = <key> target = <target> }
+Supported Scopes: all
+
+end_event_chain - Ends a specific situation log event chain for the scoped country
+end_event_chain = <key>
+Supported Scopes: country
+
+queue_actions - Adds actions to the scoped fleet's action queue
+queue_actions = { repeat = { <fleet actions> } }
+Supported Scopes: fleet
+
+clear_fleet_actions - Clears all queued fleet actions for target fleet
+clear_fleet_actions = <target>
+Supported Scopes: fleet
+
+destroy_fleet - Destroys the target fleet (with death graphics)
+destroy_fleet = <target>
+destroy_fleet = {
+	target=<target>
+	kill_leader=<yes/no> #default yes
+	destroy_template=<yes/no> #default no
+}
+Supported Scopes: all
+
+destroy_and_spawn_debris_for - Sets the current ship or fleet to be destroyed and spawn a debris project for the specified country.
+destroy_and_spawn_debris_for = from
+Supported Scopes: ship fleet
+
+create_ambient_object - Creates a new ambient object
+create_ambient_object = { type = <key> location = <target> }
+For VFX use:
+create_ambient_object = {
+	type = <key>
+	scale = <float>
+	location = <target>
+	use_3d_location = <bool, use 3D entity or 2D coordinate of the location entity as base>
+	entity_offset = {
+		min = <int>
+		max = <int>
+	}
+	entity_offset_angle = {
+		min = <int>
+		max = <int>
+	}
+	entity_offset_height = {
+		min = <int>
+		max = <int>
+	}
+ entity_face_object = star/FROM/etc
+ entity_scale_to_size = yes/no
+	play_animation_once = yes/no
+	target = <target>
+	duration = <int, days>
+}
+Supported Scopes: all
+
+destroy_ambient_object - Destroys target ambient object
+destroy_ambient_object = <target>
+Supported Scopes: all
+
+add_trait - Adds a specific trait to the scoped leader
+add_trait = <trait>
+Supported Scopes: leader
+
+remove_trait - Removes a specific trait from the scoped leader
+remove_trait = <key>
+Supported Scopes: leader
+
+modify_species - Creates a new, modified species based on an already-extant species
+modify_species = {
+	species = <target> # species to modify
+	base = <target>/auto/none # new base species; default: auto (uses species)
+	add_trait = <key> # optional, can specify multiple
+	remove_trait = <key> # optional, can specify multiple
+	ideal_planet_class = <target or pc_name> # optional
+	change_scoped_species = yes/no # modify scoped pops/planet/leader/country; default: yes
+	portrait = <target or portrait name> # optional
+	effect = { SCOPE_SPECIES } # optional effect to run on the resulting new species, is executed after any handling of change_scoped_species
+}
+Supported Scopes: planet country pop leader species
+
+add_opinion_modifier - Adds a specific opinion modifier for the scoped country towards target country
+add_opinion_modifier = { modifier = <key> who = <target> }
+Supported Scopes: country
+
+establish_contact - Establishes first contact between the scoped country and target country at the set location
+establish_contact = { who = <target> location = <target> }
+Supported Scopes: country
+
+set_hostile - Sets the target country as hostile. This will work on countries you don't have comms with, unlike set_faction_hostility.
+set_hostile = from
+Supported Scopes: country
+
+set_faction_hostility - Sets the aggro state of the scoped faction-type country
+set_faction_hostility = { target = country set_hostile = yes set_neutral = no set_friendly = no }
+Supported Scopes: country
+
+set_market_leader - Set scoped country as the current Galactic Market leader. set_market_leader = <yes/no> 
+Supported Scopes: country
+
+random_system_planet - Iterate through each planet in the current system - executes the enclosed effects on one of them for which the limit triggers return true
+random_system_planet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+add_event_chain_counter - Increments (or decrements with negative values) an event chain counter for the scoped country by a specific amount
+add_event_chain_counter = { event_chain = <key> counter = <key> amount = <int>/<variable> }
+
+Supported Scopes: country
+
+add_anomaly - Adds a specific anomaly category to the scoped planet
+add_anomaly = {
+	category = <key>
+	target = target:country }
+Supported Scopes: all
+
+set_disable_at_health - Sets the scoped ship to become disabled at a certain hull point percentage
+set_disable_at_health = <0-1 float>
+Supported Scopes: ship
+
+remove_building - Removes a specific building from the scoped planet
+remove_building = <key>
+Supported Scopes: planet
+
+change_planet_size - Increases or reduces the size of the scoped planet by a specified amount
+change_planet_size = <+/- int>
+Supported Scopes: planet
+
+every_deposit - Iterate through each deposit on the planet - executes the enclosed effects on all of them for which the limit triggers return true
+every_deposit = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+
+random_deposit - Iterate through each deposit on the planet - executes the enclosed effects on one of them for which the limit triggers return true
+random_deposit = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet
+
+set_policy_cooldown - Sets the specified policy group to have a cooldown as if the policy had just been changed.
+set_policy_cooldown = <policy group e.g. diplomatic_stance>
+Supported Scopes: planet country ship pop
+
+create_point_of_interest - Creates a point of interest for the scoped country at a specific location, associated with an event chain
+create_point_of_interest = { id = <key> name = <string> desc = <string> event_chain = <key> location = <target> }
+Supported Scopes: planet country ship pop
+
+remove_point_of_interest - Removes a specific point of interest from the scoped country's situation log
+remove_point_of_interest = <key>
+Supported Scopes: country
+
+set_relation_flag - Sets a relation flag for the scoped country towards target country
+set_relation_flag = {
+	who = <target>
+	flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+}
+Supported Scopes: country
+
+remove_relation_flag - Removes a specific relation flag towards target country from the scoped country
+remove_relation_flag = {
+	who = <target>
+	flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+}
+Supported Scopes: country
+
+random_moon - Iterate through each moon of the planet - executes the enclosed effects on one of them for which the limit triggers return true
+random_moon = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet
+
+every_moon - Iterate through each moon of the planet - executes the enclosed effects on all of them for which the limit triggers return true
+every_moon = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+
+kill_leader - Kills the scoped leader or leader of the scoped country/fleet/ship/planet/army
+kill_leader = { type = general type = scientist etc. }
+kill_leader = {
+	type = <key, optional, if left out will kill scoped leader> 
+	show_notification = <yes/no> heir = <yes, optional, if added to type = ruler, will kill heir instead>
+	fire = yes (default: no; if yes, fires on_leader_fired instead of on_leader_death
+}
+Supported Scopes: planet country ship fleet leader army
+
+assign_leader - Assigns target leader to the scoped country/fleet/army/pop faction/sector
+assign_leader = <target>
+Supported Scopes: country fleet army pop_faction sector
+
+country_add_ethic - Adds a specific ethic to the scoped country
+country_add_ethic = <key>
+Supported Scopes: country
+
+country_remove_ethic - Removes a specific ethic from the scoped country
+country_remove_ethic = <key>
+Supported Scopes: country
+
+set_timed_first_contact_flag - Sets an arbitrarily-named flag on the scoped first contact site for a set duration
+set_timed_first_contact_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: first_contact
+
+set_timed_federation_flag - Sets an arbitrarily-named flag on the scoped federation for a set duration
+set_timed_federation_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: federation
+
+set_timed_country_flag - Sets an arbitrarily-named flag on the scoped country for a set duration
+set_timed_country_flag = { 
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: country
+
+set_timed_fleet_flag - Sets an arbitrarily-named flag on the scoped fleet for a set duration
+set_timed_fleet_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: fleet
+
+set_timed_global_flag - Sets an arbitrarily-named global flag for a set duration
+set_timed_global_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: all
+
+set_timed_planet_flag - Sets an arbitrarily-named flag on the scoped planet for a set duration
+set_timed_planet_flag = { 
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: planet
+
+set_timed_pop_flag - Sets an arbitrarily-named flag on the scoped pop for a set duration
+set_timed_pop_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: pop
+
+set_timed_relation_flag - Sets an arbitrarily-named flag for the scoped country towards target country for a set duration
+set_timed_relation_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	who = <target>
+	days/months/years = <int>
+}
+Supported Scopes: country
+
+set_timed_ship_flag - Sets an arbitrarily-named flag on the scoped ship for a set duration
+set_timed_ship_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: ship
+
+set_timed_star_flag - Sets an arbitrarily-named flag on the scoped system for a set duration
+set_timed_star_flag = { 
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+
+Supported Scopes: galactic_object
+
+every_planet_within_border - Iterate through each planet within the current empire's borders - executes the enclosed effects on all of them for which the limit triggers return true
+every_planet_within_border = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+every_rim_system - Iterate through all rim systems - executes the enclosed effects on all of them for which the limit triggers return true
+every_rim_system = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_rim_system - Iterate through all rim systems - executes the enclosed effects on one of them for which the limit triggers return true
+random_rim_system = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+remove_modifier - Removes a specific modifier from the scope object
+remove_modifier = <key>
+Supported Scopes: megastructure planet country ship pop fleet galactic_object pop_faction federation spy_network espionage_operation
+
+add_ship_design - Adds a specific ship design to the scoped country
+add_ship_design = <target>
+Supported Scopes: country
+
+add_mission_progress - Adds or subtracts progress to/from the scoped observation post's current mission
+add_mission_progress = <+/- float>
+Supported Scopes: fleet
+
+create_army_transport - Creates a new army in a new transport ship
+create_army_transport = {
+	ship_name = <string>
+	graphical_culture = <key>
+	army_name = <string>
+	army_type = <key>
+	species = <target>
+}
+Supported Scopes: fleet
+
+switch - Executes the first appropriate effect set for a specific trigger
+switch = {
+	trigger = <trigger>
+	<corresponding key/bool/int> = { <effect> }
+	<corresponding key/bool/int> > (less/greater than appear 'reversed') { <effect> }
+	default = { <effect> }
+}
+Supported Scopes: all
+
+set_pop_faction - Sets the scoped pop to belong to a specific pop faction
+set_pop_faction = <target>
+Supported Scopes: pop
+
+set_graphical_culture - Sets the scoped object's graphical culture
+set_graphical_culture = <key>
+Supported Scopes: megastructure country
+
+set_formation_scale - Scales the scoped fleet's formation's ship spacing, above and below 1.0
+set_formation_scale = <float>
+Supported Scopes: fleet
+
+set_controller - Instantly sets the planet/fleet's controller to target country
+set_controller = <target>
+Supported Scopes: planet fleet
+
+force_faction_evaluation - Forces target pop to immediately evaluate their attraction to various pop factions
+force_faction_evaluation = yes
+Supported Scopes: pop
+
+enable_faction_of_type - Forces scoped country to evaluate whether to create a specific faction type immediately, rather than monthly
+enable_faction_of_type = <key>
+Supported Scopes: country
+
+clear_uncharted_space - Clears uncharted space from the galaxy map for the scoped country, in a radius around target system
+clear_uncharted_space = { from = <target> }
+Supported Scopes: country
+
+every_owned_leader - Iterate through each leader that is owned by the country - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_leader = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_owned_leader - Iterate through each leader that is owned by the country - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_leader = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+establish_communications - Establish communications between scoped country and target country
+establish_communications = <target>
+Supported Scopes: country
+
+add_monthly_resource_mult - Adds a lump sum of a resource to the scoped country, defined as a multiple of the country's monthly income of that resource (clamped to max and min allowed values)
+add_monthly_resource_mult = { resource = <key> value = <multiplier, float> max = <max cap, int> min = <min cap, int> }
+Supported Scopes: country
+
+set_leader_flag - Sets an arbitrarily-named flag on the scoped leader
+set_leader_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: leader
+
+remove_leader_flag - Removes a flag from the scoped leader
+remove_leader_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: leader
+
+add_research_option - Adds a tech research option to the scoped country's tech view list, permanent until researched
+add_research_option = <key>
+Supported Scopes: country
+
+set_heir - Sets the target leader to be the scoped country's heir
+set_heir = <target>
+Supported Scopes: country
+
+leave_alliance - Removes scoped country from any alliances it is in
+leave_alliance = {
+	override_requirements = yes/no (default: no)
+	apply_opinion_penalty = yes (default: no; sets whether 'Broke Federation' opinion is applied)
+}
+Supported Scopes: country
+
+random_owned_pop - Iterate through all owned pops - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_pop = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet country pop_faction sector
+
+set_policy - Sets a policy to a specific option for the scoped country and specifies if policy cooldown should go into effect
+set_policy = { policy = <key> option = <key> cooldown = <bool> }
+Supported Scopes: all
+
+recruitable - Sets scoped leader as non/recruitable
+recruitable = yes
+Supported Scopes: leader
+
+closest_system - Executes enclosed effects on a system -within a specific number of jumps span- that meets the limit criteria. This completely ignores bypasses (wormholes and gateways)
+closest_system = {
+	min_steps = <int, minimum # of systems 'away'>
+	max_steps = <int, maximum # of systems 'away'>
+	use_bypasses = yes/no (default: no)
+	limit = { <triggers> }
+	<effects>
+}
+Supported Scopes: all
+
+random_owned_fleet - Iterate through each fleet owned by the country - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_fleet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+random_ambient_object - Iterate through every ambient object in the game - executes the enclosed effects on one of them for which the limit triggers return true
+random_ambient_object = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+random_system_ambient_object - Iterate through every ambient object in the solar system - executes the enclosed effects on one of them for which the limit triggers return true
+random_system_ambient_object = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+every_ambient_object - Iterate through every ambient object in the game - executes the enclosed effects on all of them for which the limit triggers return true
+every_ambient_object = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+every_system_ambient_object - Iterate through every ambient object in the solar system - executes the enclosed effects on all of them for which the limit triggers return true
+every_system_ambient_object = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+set_ambient_object_flag - Sets an arbitrarily-named flag on the scoped ambient object
+set_ambient_object_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: ambient_object
+
+set_timed_ambient_object_flag - Sets an arbitrarily-named flag on the scoped ambient object for a set duration
+set_timed_ambient_object_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: fleet
+
+remove_ambient_object_flag - Removes a flag from the scoped ambient object
+remove_ambient_object_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: ambient_object
+
+every_fleet_in_system - Iterate through each fleet in the current system - executes the enclosed effects on all of them for which the limit triggers return true
+every_fleet_in_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+random_fleet_in_system - Iterate through each fleet in the current system - executes the enclosed effects on one of them for which the limit triggers return true
+random_fleet_in_system = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+set_aggro_range - Sets the scoped fleet/country's aggro range in intra-system units
+set_aggro_range = <int>
+Supported Scopes: country fleet
+
+set_fleet_stance - Sets the stance of the scoped fleet
+set_fleet_stance = <key, aggressive/passive/evasive>
+Supported Scopes: fleet
+
+add_favors - Add <value> favors for scoped country to use on target country. add_favor = {
+	target = <target>
+	value = 2/variable }
+Supported Scopes: country
+
+remove_favors - Remove <value/all> favors that scoped country have on target country:
+remove_favors = {
+target = <target>
+value = <value/all/variable> }
+Supported Scopes: country
+
+set_aggro_range_measure_from - Determines whether the scoped fleet/country's aggro range is measured from the fleet's current position or its spawn location
+set_aggro_range_measure_from = <key, self/return_point>
+Supported Scopes: country fleet
+
+establish_communications_no_message - Silently establish communications between scoped country and target country
+establish_communications_no_message = <target>
+Supported Scopes: country
+
+remove_war_participant - Removes a specified country from the war
+remove_war_participant = <target>
+Supported Scopes: war
+
+set_subject_of - Sets the scoped country to be a specific subject of target country
+set_subject_of = { who = <target> subject_type = <key> }
+Supported Scopes: country
+
+unassign_leader - Unassigns scoped leader from their post or unassigns leader from the scoped planet/ship/fleet/army
+unassign_leader = <target>
+Supported Scopes: ship fleet leader army
+
+exile_leader_as - Exiles the scoped country/fleet/army/pop faction's leader and saves them with a custom name
+exile_leader_as = <key>
+Supported Scopes: country fleet leader army pop_faction
+
+set_leader - Reinstates a previously-exiled leader to the scoped country/fleet/army/pop faction
+set_leader = <key>
+Supported Scopes: country fleet army pop_faction
+
+add_skill - Adds a sum of experience points to the scoped leader
+add_skill = 200
+Supported Scopes: leader
+
+set_skill - Sets the scoped leader's level
+set_skill = 3
+Supported Scopes: leader
+
+every_neighbor_system - Iterate through all a system's neighboring systems by hyperlane - executes the enclosed effects on all of them for which the limit triggers return true
+every_neighbor_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+random_neighbor_system - Iterate through all a system's neighboring systems by hyperlane - executes the enclosed effects on one of them for which the limit triggers return true
+random_neighbor_system = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+set_federation_leader - Sets a country to lead a federation
+set_federation_leader = <target>
+Supported Scopes: country federation
+
+add_colony_progress - Adds to ongoing colonization progress on the scoped planet
+add_colony_progress = <0.0-1.0>
+Supported Scopes: planet
+
+start_colony - Starts colonization of the scoped planet
+start_colony = {
+	owner = <target>
+	species = <target / key>
+	ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet
+
+subtract_variable - Decrements a previously-set variable by a specific amount
+subtract_variable = { which = <string> value = <float>/<variable>/<scope> / value = { scope = <scope> variable = <variable> } }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+multiply_variable - Multiplies a previously-set variable by a specific amount
+multiply_variable = { which = <string> value = <float>/<variable>/<scope> / value = { scope = <scope> variable = <variable> } }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+divide_variable - Divides a previously-set variable by a specific amount
+divide_variable = { which = <string> value = <float>/<variable>/<scope> / value = { scope = <scope> variable = <variable> } }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+modulo_variable - Modulos a previously-set variable by a specific amount i.e. X % Y
+modulo_variable = { which = <string> value = <float>/<variable>/<scope> / value = { scope = <scope> variable = <variable> } }
+Supported Scopes: megastructure planet country ship pop fleet galactic_object leader army species pop_faction war federation starbase sector first_contact
+
+play_sound - Play the defined sound effect
+play_sound = myfirstsoundeffect
+Supported Scopes: all
+
+set_crisis_sound - Sets the crisis ambient loop to the current effect
+set_crisis_sound = myfirstsoundeffect
+Supported Scopes: all
+
+stop_crisis_sound - Stops the crisis ambient loop
+stop_crisis_sound = yes
+Supported Scopes: all
+
+force_add_civic - Adds civic to a government without checking the restrictions
+force_add_civic = <civic>
+Supported Scopes: country
+
+force_remove_civic - Removes civic from a government without checking the restrictions
+force_remove_civic = <civic>
+Supported Scopes: country
+
+set_origin - Sets the country's origin to a certain value. Note: This will not run effects executed during galaxy generation.
+set_origin = <origin>
+Supported Scopes: country
+
+set_is_female - Sets the gender of the scoped leader
+set_is_female = true
+Supported Scopes: leader
+
+create_fleet_from_naval_cap - Creates a new fleet from empire designs up to specified fraction of naval cap
+create_fleet_from_naval_cap = 0.5
+create_fleet_from_naval_cap = { fraction = 0.5 ship_owner_type = <country/federation/galactic_community>
+Supported Scopes: country
+
+remove_opinion_modifier - Removes a specific opinion modifier towards target country or any contry from the scoped country
+remove_opinion_modifier = { modifier = <key> who = <target (optional)> }
+Supported Scopes: country
+
+set_war_goal - Sets a war goal to the scoped rebel country/war
+set_war_goal = { type = <key> target = <target> enemy = <target> }
+Supported Scopes: country war
+
+change_country_flag - Changes the scoped country's flag
+change_country_flag = random
+change_country_flag = { icon = { category = <key> file = <filename> } background = { category = <key> file = <filename> } colors = { <key> <key> } }
+Supported Scopes: country
+
+add_threat - Adds diplomatic threat from target country
+add_threat = { who = <country> amount = 4/variable }
+Supported Scopes: planet country galactic_object
+
+set_mission - Sets the current mission of an observation station
+set_mission = passive_observation
+Supported Scopes: fleet
+
+change_dominant_species - Changes the dominant species of the current Country, change_all also changes all usage of that species (Pops etc) in the empire
+change_dominant_species = { species = target change_all = yes }
+Supported Scopes: country
+
+end_rivalry - Force-end rivalry with target country
+end_rivalry = <target>
+Supported Scopes: country
+
+set_truce - Force a truce with target country of a specified type, or a war
+set_truce = { target = <country/war> type = war/liberation/alliance/guarantee/none }
+Supported Scopes: country
+
+end_truce - Force-end truce with target country
+end_truce = <target>
+Supported Scopes: country
+
+set_species_flag - Sets an arbitrarily-named flag on the scoped species
+set_species_flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+Supported Scopes: species
+
+set_timed_species_flag - Sets an arbitrarily-named flag on the scoped species for a set duration
+set_timed_species_flag = { 
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: species
+
+remove_species_flag - Removes a flag from the scoped species
+remove_species_flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+Supported Scopes: species
+
+auto_move_to_planet - Makes a fleet or ship auto-move to target planet
+auto_move_to_planet = { target = <planet> clear_auto_move_on_arrival = yes }
+Supported Scopes: ship fleet
+
+remove_auto_move_target - Makes a fleet or ship stop auto-moving
+remove_auto_move_target = yes
+Supported Scopes: ship fleet
+
+auto_follow_fleet - Makes a fleet or ship auto-move to target fleet and potentially attack it
+auto_follow_fleet = { target = <fleet> attack_fleet = yes }
+Supported Scopes: ship fleet
+
+set_closed_borders - Changes closed borders status between two countries
+set_closed_borders = {
+	who = target
+	status = yes/no
+	forced = <int>/<variable> (number of years)
+}
+Supported Scopes: country
+
+every_war_participant - Iterate through all war participants - executes the enclosed effects on all of them for which the limit triggers return true
+every_war_participant = { limit = { <triggers> } <effects> }
+Supported Scopes: war
+
+repair_percentage - Restores a certain percentage of hull points to the scoped ship
+repair_percentage = yes
+Supported Scopes: ship fleet
+
+endgame_telemetry - Send endgame telemetry event
+Supported Scopes: all
+
+set_deposit - Replaces resource deposit on the scoped planet
+set_deposit = <key/random>
+Supported Scopes: planet
+
+randomize_flag_symbol - Randomizes a country's flag symbol within the selected category
+randomize_flag_symbol = pirate
+Supported Scopes: country
+
+add_claims - Adds claims on target system
+add_claims = { who = <country> num_of_claims = x show_notification = no }
+Supported Scopes: galactic_object
+
+remove_claims - Removes claims on target system
+remove_claims = { who = <country> num_of_claims = x }
+Supported Scopes: galactic_object
+
+create_military_fleet - Creates a military fleet with the designs of a specified country.
+create_military_fleet = { owner = <target> scaled_size = 1.0 effect = { } }
+Supported Scopes: all
+
+guarantee_country - Makes a country guarantee another country
+guarantee_country = <target>
+guarantee_country = { target = <target> free_guarantee_days = 30
+Supported Scopes: country
+
+every_owned_fleet - Iterate through each fleet owned by the country - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+every_subject - Iterate through all subjects of the scoped country - executes the enclosed effects on all of them for which the limit triggers return true
+every_subject = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_subject - Iterate through all subjects of the scoped country - executes the enclosed effects on one of them for which the limit triggers return true
+random_subject = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+set_species_homeworld - Defines a homeworld for the current species.
+set_species_homeworld = <target planet>
+Supported Scopes: species
+
+clear_resources - Clears resources of a country
+clear_resources = yes
+Supported Scopes: country
+
+reroll_planet_modifiers - Rebuild modifiers on target planet
+reroll_planet_modifiers = yes
+Supported Scopes: planet
+
+reroll_deposits - Rebuild resource deposits on target planet
+reroll_deposits = yes
+Supported Scopes: planet
+
+delete_fleet - Deletes the target fleet (no death graphics)
+delete_fleet = <target>
+delete_fleet = {
+	target=<target>
+	kill_leader=<yes/no> #default yes
+	destroy_template=<yes/no> #default no
+}
+Supported Scopes: all
+
+add_trust - Adds trust on scope country towards target country
+add_trust = { amount = <amount>/<variable> who = <target> }
+Supported Scopes: country
+
+add_tradition - Adds the specified tradition to the scoped country. add_tradition = <tradition_key>
+Supported Scopes: country
+
+join_war - Joins wars on the side of target country
+join_war = <target>
+Supported Scopes: country
+
+add_global_ship_design - Adds a specific global design to the game
+add_global_ship_design = <target>
+Supported Scopes: all
+
+set_timed_leader_flag - Sets an arbitrarily-named flag on the scoped leader for a set duration
+set_timed_leader_flag = { 
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: leader
+
+set_species_identity - Sets the current species scopes identity to match the target scopes making them evaluate as the same species in is_same_species trigger.
+set_species_identity = new/<target species>
+Supported Scopes: species
+
+pop_force_add_ethic - Adds a specific ethic to the scoped pop regardless if pop-species allows ethic divergence or not. 
+pop_force_add_ethic = <key>
+Supported Scopes: pop
+
+set_empire_name - Sets the name of the current Empire.
+set_empire_name = "name"
+Supported Scopes: country
+
+set_empire_flag - Sets the flag of the current Empire.
+set_empire_flag = <flag>
+Supported Scopes: country
+
+set_planet_name - Sets the name of the current planet.
+set_planet_name = "name"
+Supported Scopes: planet
+
+set_fleet_formation - Sets a custom fleet formation on a fleet. 
+set_fleet_formation = { position = { x = 1 y = 1 } position = { x = 2 y = 1 } }
+Supported Scopes: fleet
+
+create_message - Creates a message, can take multiple variables
+create_message = { type = BYPASS_EXPLORED localization = BYPASS_EXPLORED_MESSAGE days = 30 target = root variable = { type = name localization = SYSTEM1 scope = from } variable = { type = name localization = SYSTEM2 scope = fromfrom } }
+Supported Scopes: all
+
+set_halted - Sets the mega structure upgrade to halted status for n days. -1 days = indefinitely
+set_halted = nDays
+Supported Scopes: megastructure
+
+upgrade_megastructure_to - Starts an upgrade process on a mega structure. 
+upgrade_megastructure_to = <new_type>
+Supported Scopes: megastructure
+
+set_planet_entity - Change entity of a planet.
+Example:
+set_planet_entity = {
+	entity = <name of entity>
+	graphical_culture = <target or name of culture>
+	picture = <picture override>
+	atmosphere_color = <color from 3 components>
+	atmosphere_intensity = <0.0 - 1.0>
+	atmosphere_width = <0.0 - 1.0> 
+}
+Supported Scopes: planet
+
+remove_planet - Removes the planet from the scope 
+remove_planet = yes
+Supported Scopes: planet
+
+set_megastructure_flag - Sets an arbitrarily-named flag on the scoped mega structure
+set_megastructure_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: megastructure
+
+set_timed_megastructure_flag - Sets an arbitrarily-named flag on the scoped mega structure for a set duration
+set_timed_megastructure_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: megastructure
+
+remove_megastructure_flag - Removes a flag from the scoped mega structure
+remove_megastructure_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: megastructure
+
+destroy_ship - Destroys the target ship (with death graphics)
+destroy_ship = <target>
+Supported Scopes: all
+
+delete_ship - Deletes the target ship (no death graphics)
+delete_ship = <target>
+Supported Scopes: all
+
+change_species - Changes the species of the scoped object
+change_species = <target>
+Supported Scopes: country ship pop leader army
+
+change_leader_portrait - Changes the portrait of the leader in scope.
+change_leader_portrait = <key or species event target>
+Supported Scopes: leader
+
+resettle_pop - Instantly resettles pop
+resettle_pop = { pop = <target pop> planet = <target planet> tile = <target tile> }
+Supported Scopes: all
+
+set_citizenship_type - Set citizenship type for scoped species/pop/leader
+set_citizenship_type = { country = <target> type = citizenship_full cooldown = yes }
+Supported Scopes: pop leader species
+
+set_military_service_type - Set military service type for scoped species/pop/leader
+set_military_service_type = { country = <target> type = military_service_full cooldown = yes }
+Supported Scopes: pop leader species
+
+set_purge_type - Set purge type for scoped species/pop/leader
+set_purge_type = { country = <target> type = purge_full cooldown = yes }
+Supported Scopes: pop leader species
+
+set_slavery_type - Set slavery type for scoped species/pop/leader
+set_slavery_type = { country = <target> type = slavery_livestock cooldown = yes }
+Supported Scopes: pop leader species
+
+set_population_controls - Set population control for scoped species/pop/leader
+set_population_controls = { country = <target> type = yes/no cooldown = yes }
+Supported Scopes: pop leader species
+
+set_migration_controls - Set migration control for scoped species/pop/leader
+set_migration_controls = { country = <target> type = yes/no cooldown = yes }
+Supported Scopes: pop leader species
+
+set_colonization_controls - Set colonization control for scoped species/pop/leader
+set_colonization_controls = { country = <target> type = yes/no cooldown = yes }
+Supported Scopes: pop leader species
+
+set_living_standard - Set living standard for scoped species/pop/leader
+set_living_standard = { country = <target> type = living_standard_good cooldown = yes }
+Supported Scopes: pop leader species
+
+shift_ethic - Shifts an empire towards a specific ethic, adjusting afterwards to keep number of ethics points consistent
+shift_ethic = <key>
+Supported Scopes: country
+
+pop_change_ethic - Changes scoped pop to chosen ethic
+pop_change_ethic = <key>
+Supported Scopes: pop
+
+clear_ethos - Clears all ethics of specified pop or country
+clear_ethos = yes
+Supported Scopes: country pop
+
+clear_planet_modifiers - Clear modifiers on target planet
+clear_planet_modifiers = yes
+Supported Scopes: planet
+
+remove_all_armies - Removes all armies on scoped planet
+remove_all_armies = yes
+Supported Scopes: planet
+
+mutate_species - Randomly mutate a species.
+mutate_species = yes
+Supported Scopes: species
+
+rename_species - rename_species = { 
+	use one of the following:
+	name = "an explicit name with [Bracket.Stuff]"
+	name = random
+	name_list = "key"
+}
+Supported Scopes: species
+
+reset_years_of_peace - Resets years of peace for a country.
+reset_years_of_peace = yes
+Supported Scopes: country
+
+add_ruler_trait - Adds a specific ruler trait to the scoped leader, even if they are not currently ruler; it becomes active when they become ruler
+add_ruler_trait = <trait>
+Supported Scopes: leader
+
+remove_ruler_trait - Removes a specific ruler trait from the scoped leader, even if they are not currently ruler; this is relevant if they ever become ruler
+remove_ruler_trait = <trait>
+Supported Scopes: leader
+
+add_notification_modifier - Add a notification modifier to the country
+add_notification_modifier = <key>
+Supported Scopes: country
+
+remove_notification_modifier - Remove a notification modifier to the country
+remove_notification_modifier = <key>
+Supported Scopes: country
+
+set_city_graphical_culture - Sets the scoped country's city graphical culture
+set_city_graphical_culture = <key>
+Supported Scopes: country
+
+set_player - Assign the player of the target country to play the scoped country instead
+event_target:new_country = { set_player = event_target:old_country }
+Supported Scopes: country
+
+change_species_characteristics - Changes the characteristics of a species
+change_species_characteristics = {
+	sapient = <Y/N, determines if species is pre-sapient>
+	immortal = <Y/N, determines if species leaders are immortal>
+	pops_can_be_colonizers = <Y/N, determines if pops of that species can colonize>
+	pops_can_migrate = <Y/N, determines if pops of that species can migrate>
+	pops_can_reproduce = <Y/N, determines if pops of that species can reproduce>
+	pops_can_join_factions = <Y/N, determines if pops of that species can join factions>
+	can_generate_leaders = <Y/N, determines if that species can generate leaders>
+	pops_can_be_slaves = <Y/N, determines if pops from that species can become slaves>
+	pops_have_happiness = <Y/N, determines if pops from that species have happiness>
+	can_be_modified = <Y/N, determines if the species can be modified>
+	pops_auto_growth = <1, speed at which the pops from that species grow automatically
+	pop_maintenance = <1, amount of energy each pop of that species consume monthly
+	new_pop_resource_requirement = { type = food_surplus value = 42 }
+	portrait = <key or species event target>
+
+Supported Scopes: species
+
+copy_techs_from - Copies all techs from the target country to the scoped country, except for some exceptions listed. Tech weights (and weight modifiers) are honoured, meaning that techs a country should not have will not be copied.
+copy_techs_from = { 
+	target = country
+	except = { tech_1 tech_2 }
+}
+Supported Scopes: country
+
+create_bypass - Creates a bypass in the parent SpatialObject (stored in FromFrom), of the type passed in "type".
+create_bypass = { owner = <target> type = <bypass type> effect = { <effects> } }
+Supported Scopes: megastructure
+
+activate_gateway - Activates the gateway associated with a megastructure.
+activate_gateway = <target>
+Supported Scopes: all
+
+spawn_natural_wormhole - Spawns a new natural wormhole in the scoped system.
+spawn_natural_wormhole = { bypass_type = <wormhole/sealed_wormhole> orbit_distance = 100 orbit_angle = 90 random_pos = yes/no }
+Supported Scopes: galactic_object
+
+link_wormholes - Link the wormhole from the scoped system to the wormhole in the target system.
+link_wormholes = from
+Supported Scopes: galactic_object
+
+create_starbase - Creates a starbase in orbit of the star of the scoped galactic object
+create_starbase = {
+	owner = <target>
+	size = <ship_size>
+	module = <starbase_module>
+	building = <starbase_building>
+	effect = { ... }
+}
+Supported Scopes: galactic_object
+
+set_starbase_size - Sets the ship size of a starbase
+set_starbase_size = <ship_size>
+Supported Scopes: starbase
+
+set_starbase_module - Sets a module in a slot on a starbase
+set_starbase_module = { slot = <int> module = <starbase_module> }
+Supported Scopes: starbase
+
+set_starbase_building - Sets a building in a slot on a starbase
+set_starbase_building = { slot = <int> building = <starbase_building> }
+Supported Scopes: starbase
+
+remove_starbase_module - Removes a module from a certain slot or all slots on a starbase
+remove_starbase_module = { slot = <int> (optional, default = all) module = <starbase_module> (optional) }
+Supported Scopes: starbase
+
+remove_starbase_building - Remove a building from a certain slot or all slots on a starbase
+remove_starbase_building = { slot = <int> (optional, default = all) building = <starbase_building> (optional) }
+Supported Scopes: starbase
+
+add_casus_belli - Adds a Casus Belli to the scoped country against the target country.
+add_casus_belli = { type = cb_subjugation who = <country> days = 10/variable }
+Supported Scopes: country
+
+get_galaxy_setup_value - Copies a value from the galaxy setup into a variable, optionally scaling it by an int value
+get_galaxy_setup_value = { which = <string> setting = <string> [ scale_by = <float> ] }
+possible values: num_empires, num_advanced_empires, num_fallen_empires, num_marauder_empires, mid_game_year, end_game_year, victory_year, num_guaranteed_colonies, num_gateways, num_wormhole_pairs, num_hyperlanes, habitable_worlds_scale, primitive_worlds_scale, crisis_strength_scale, tech_costs_scale
+Supported Scopes: all
+
+finish_upgrade - Finish the current upgrade of a Mega Structure.
+finish_upgrade = yes
+Supported Scopes: megastructure
+
+effect_on_blob - Executes an effect on systems with planets owned by the scoped country, starting at an origin, and until a certain percentage of owned planets matching the planet_limit has been covered.
+effect_on_blob = {
+	center = <system target>
+	owned_planets_percentage = 1.0/variable
+	planet_limit = { <planet triggers> }
+	effect = { <system effects> }
+}
+Supported Scopes: country
+
+add_seen_bypass_type - Makes the scoped country remember that it has encountered the bypass type
+add_seen_bypass_type = bypass_type
+Supported Scopes: country
+
+add_seen_bypass - Makes the scoped country remember that it has encountered the bypass 
+add_seen_bypass = FROM
+Supported Scopes: country
+
+set_fleet_bombardment_stance - Sets the bombardment stance of the scoped fleet
+set_fleet_bombardment_stance = selective
+Supported Scopes: fleet
+
+check_casus_belli_valid - Re-evaluate the specified casus belli type with given target country
+check_casus_belli_valid = {
+	target = none/<optional country target>
+	type = <optional casus belli type>
+}
+Supported Scopes: country
+
+copy_ethos_and_authority - Makes the scoped country copy the ethos and government authority of the target country.
+copy_ethos_and_authority = FROM
+Supported Scopes: country
+
+clone_leader - Clones the last created leader for the scoped country
+clone_leader = {
+	target = <event target>
+	#properties to override, see create_leader
+	effect = { ... }
+}
+Supported Scopes: country
+
+set_home_base - Set the home base of the scoped fleet to the specified starbase
+set_home_base = event_target:cool_starbase
+Supported Scopes: fleet
+
+add_hyperlane - Adds a hyperlane between two systems
+add_hyperlane = { from = <system> to = <system> }
+Supported Scopes: all
+
+remove_hyperlane - Removes existing hyperlane between two systems
+remove_hyperlane = { from = <system> to = <system> }
+Supported Scopes: all
+
+else_if - Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met, and its own limit is met
+if = { limit = { <triggers> } <effects> }
+else_if = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+create_saved_leader - Creates a new saved leader for the scoped country with a lookup key
+create_saved_leader = {
+	key = <string>
+	creator = <target>
+	name = <random / string>
+	species = <target / key>
+	gender = <optional / gender> #defalut = random
+type = <random / key>
+	skill = <random / int>
+	set_age = <int>
+ traits = { trait = <key> trait = <key> }
+}
+Supported Scopes: country
+
+remove_saved_leader - Removes a saved leader for the scoped country with a lookup key
+remove_saved_leader = <string>
+Supported Scopes: country
+
+activate_saved_leader - Moves a saved leader to the active for the scoped country with a lookup key
+activate_saved_leader = {
+	key = <string>
+	add_to_owned=<yes/no> #default yes
+	effect = {...}
+}
+Supported Scopes: country
+
+add_relic - Adds the specified relic to the scoped country. add_relic = <relic_key>
+Supported Scopes: country
+
+remove_relic - Removes the specified relic from the scoped country. remove_relic = <relic_key>
+Supported Scopes: country
+
+delete_megastructure - Deletes the target mega structure (no death graphics)
+delete_megastructure = <target>
+Supported Scopes: all
+
+add_random_research_option - Adds s random tech research option to the scoped country's tech view list, permanent until researched. if none applicable it runs fail_effects
+add_random_research_option = {
+	category = <string>
+	area = <key>
+	tier = <int>
+	add_progress = <num>/<variable>
+	ignore_prereqs = <yes/no> #default no
+	ignore_rare = <yes/no> #default yes
+	fail_effects = {}
+}
+Supported Scopes: country
+
+copy_random_tech_from - Adds a random tech from the target country within the given category and tech area constraints. The country must be able to research said tech (weight > 0, fulfils potential trigger)
+copy_random_tech_from = {
+	who = <country>
+	category = computing (optional)
+	area = physics (optional)
+	progress = 0.5/variable (optional: this makes it grant the tech option rather than the whole tech)
+}
+Supported Scopes: country
+
+add_asteroid_belt - Adds an asteroid belt at the distance in the scope.
+Example:
+add_asteroid_belt = {
+	radius=<desired radius>
+	type=<asteroid belt type key>
+}
+Supported Scopes: galactic_object
+
+set_asteroid_belt - Sets an asteroid belt at the distance in the scope.
+Example:
+set_asteroid_belt = {
+	radius=<desired radius>
+	type=<asteroid belt type key>
+}
+Supported Scopes: galactic_object
+
+fleet_action_research_special_project - Sends a fleet to research a special project
+fleet_action_research_special_project = { special_project = test_project target = event_target:project_planet }
+Supported Scopes: fleet
+
+remove_last_built_district - Removes last built district from the scoped planet
+remove_last_built_district = yes
+Supported Scopes: planet
+
+remove_all_districts - Removes all districts from the scoped planet
+remove_all_districts = yes
+Supported Scopes: planet
+
+remove_district - Removes a specific district from the scoped planet
+remove_district = <key>
+Supported Scopes: planet
+
+add_district - Begins construction of a specific district on the scoped planet
+add_district = <key>
+Supported Scopes: planet
+
+enable_on_market - Enables a resource on the Galactic Market
+enable_on_market = <resource_key>
+Supported Scopes: all
+
+enable_galactic_market - Enables the galactic market. enable_galactic_market = <yes/no> 
+Supported Scopes: country
+
+add_timed_trait - Adds a specific trait to the scoped leader for a specific duration
+add_timed_trait = { trait = <trait> days/months/years = <value>/<variable> }
+Supported Scopes: leader
+
+create_archaeological_site - Creates a archaeological site associated with the scope object
+create_archaeological_site = <site type>
+Supported Scopes: megastructure planet ship fleet galactic_object ambient_object starbase
+
+destroy_archaeological_site - Destroys a archaeological site in right hand site event target
+destroy_archaeological_site = <event target>
+Supported Scopes: all
+
+add_stage_clues - Adds clues to the current stage of an archaeological or first contact site
+add_stage_clues = <int>
+Supported Scopes: archaeological_site first_contact
+
+add_expedition_log_entry - Adds clues to the current stage of a archaeological site
+add_stage_clues = <int>
+Supported Scopes: archaeological_site
+
+reset_current_stage - Resets the current stage
+reset_current_stage = yes/no
+yes = also randomize new difficulty if stage allows that.
+no = does not change difficulty
+Supported Scopes: archaeological_site
+
+finish_current_stage - Finish the current stage
+finish_current_stage = yes/no/<country>
+yes = trigger stage completed for each stage and current excavator.
+no = do not trigger any stage completed
+country = use this country instead of excavator, no stage complete will be triggered.
+Supported Scopes: archaeological_site
+
+finish_site - Finish the whole archaeological site
+finish_site	 = yes/no/<country>
+yes = trigger stage completed for each stage and current excavator.
+no = do not trigger any stage completed
+country = use this country instead of excavator, no stage complete will be triggered.
+Supported Scopes: archaeological_site
+
+set_site_progress_locked - Locks or unlocks the progress of a site
+set_site_progress_locked = yes/no
+Supported Scopes: archaeological_site first_contact
+
+custom_tooltip_with_params - Displays a specific localization string with parameters in tooltip
+custom_tooltip_with_params = {
+	description = <loc key>
+	description_parameters = {
+		<value key> = <string/int/num/bool>
+	}
+}
+Supported Scopes: all
+
+set_federation_law - Sets the given law for the scoped federation
+set_federation_law = <federation law>
+Supported Scopes: federation
+
+add_to_galactic_community - Tries to add the scoped country to the Galactic Community
+add_to_galactic_community = yes/no
+Supported Scopes: country
+
+add_to_galactic_community_no_message - Tries to add the scoped country to the Galactic Community without producing member joining notifications.
+add_to_galactic_community_no_message = yes/no
+Supported Scopes: country
+
+remove_from_galactic_community - Tries to remove the scoped country from the Galactic Community
+remove_from_galactic_community = yes/no
+Supported Scopes: country
+
+add_to_galactic_council - Tries to add the scoped country to the Galactic Council
+add_to_galactic_council = yes/no
+Supported Scopes: country
+
+remove_from_galactic_council - Tries to remove the scoped country from the Galactic Council
+remove_from_galactic_council = yes/no
+Supported Scopes: country
+
+steal_relic - Steal all/a random/a specific relic from a target country
+steal_relic = { target = <Target Country> relic = <relic_name/all/random>
+Supported Scopes: country
+
+country_list_tooltip - Prints a list of the countries that match the limit triggers in a tooltip, each separated by a line break.
+country_list_tooltip = { limit = { <triggers> } }
+Supported Scopes: all
+
+owned_planet_list_tooltip - Prints a list of the country's planets that match the limit triggers in a tooltip, each separated by a line break.
+owned_planet_list_tooltip = { limit = { <triggers> } }
+Supported Scopes: country
+
+owned_pop_faction_list_tooltip - Prints a list of the country's pop factions that match the limit triggers in a tooltip, each separated by a line break.
+owned_pop_faction_list_tooltip = { limit = { <triggers> } }
+Supported Scopes: country
+
+owned_leader_list_tooltip - Prints a list of the country's leaders that match the limit triggers in a tooltip, each separated by a line break.
+owned_leader_list_tooltip = { limit = { <triggers> } }
+Supported Scopes: country
+
+owned_fleet_list_tooltip - Prints a list of the country's fleets that match the limit triggers in a tooltip, each separated by a line break.
+owned_fleet_list_tooltip = { limit = { <triggers> } divider_tooltip = localisation }
+Supported Scopes: country
+
+set_cooldown - Locks the leader in its current role for the next X days.
+set_cooldown = int
+Supported Scopes: leader
+
+add_federation_experience - Adds experience to the scoped federation
+add_federation_experience = <federation experience>
+Supported Scopes: federation
+
+set_federation_type - Sets federation type to the scoped federation
+set_federation_type = <federation type>
+Supported Scopes: federation
+
+set_federation_succession_type - Sets federation succession type to the scoped federation
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_federation_succession_type = <federation succession type>
+Federation succession types: strongest/diplomatic_weight/rotation/challenge/random
+Supported Scopes: federation
+
+set_federation_succession_term - Sets federation succession term to the scoped federation
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_federation_succession_type = <federation succession term>
+Federation succession terms: status_change/years_10/years_20/years_30/years_40
+Supported Scopes: federation
+
+set_only_leader_builds_fleets - Sets exclusive right to build fleets by federation leader
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_only_leader_builds_fleets = <yes/no>
+
+Supported Scopes: federation
+
+set_allow_subjects_to_join - Sets right for subjects to join federations
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_allow_subjects_to_join = <yes/no>
+
+Supported Scopes: federation
+
+set_equal_voting_power - Sets different voting weight
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_equal_voting_power = <yes/no>
+
+Supported Scopes: federation
+
+set_diplomacy_action_setting - Sets diplomatic action custom setting
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_diplomacy_action_setting = {
+	action = <action_key>
+	settings = {
+	tvote_type = default
+	}
+}
+Supported Scopes: federation
+
+set_free_migration - Sets unified migration flag for federation
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_free_migration = <yes/no>
+
+Supported Scopes: federation
+
+set_federation_settings - Sets diplomatic action custom setting
+Please don't use outside law on_enact, functional effect! Use set_federation_law and has_federation_law instead.
+set_federation_settings = {
+	<setting> = <value>
+	...
+}
+Supported Scopes: federation
+
+add_associate_member - Add specified country as an associate member
+add_associate_member = { who = <target> override_requirements = yes/no }
+Supported Scopes: federation
+
+remove_associate_member - Removes a specific associate member from the federation
+remove_associate_member = { who = <country> override_requirements = yes/no }
+Supported Scopes: federation
+
+add_cohesion - Add cohesion to the federation
+add_cohesion = <value>
+
+Supported Scopes: federation
+
+set_council_size - Sets the number of seats on the Galactic Council
+set_council_size = <int>
+Supported Scopes: all
+
+increase_council_size - Increases the number of seats on the Galactic Council by 1
+increase_council_size = yes/no
+Supported Scopes: all
+
+decrease_council_size - Decreases the number of seats on the Galactic Council by 1
+decrease_council_size = yes/no
+Supported Scopes: all
+
+set_council_veto - Sets whether council members can veto resolutions or not
+set_council_veto = yes/no
+Supported Scopes: all
+
+set_council_emergency_measures - Sets whether council members can propose emergency measures or not
+set_council_emergency_measures = yes/no
+Supported Scopes: all
+
+add_permanent_councillor - Gives provided country a permanent position on the Galactic Council
+add_permanent_councillor = yes/no
+Supported Scopes: country
+
+remove_permanent_councillor - Remove the provided country from their permanent council position
+remove_permanent_councillor = yes/no
+Supported Scopes: country
+
+set_sector_capital - Sets the scoped planet to be the capital of the sector it is part of. If used in the capital sector, it will shift the empire capital. Warning: Experimental, may have unintended consequences.
+set_sector_capital = yes
+Supported Scopes: planet
+
+set_sector_focus - Sets the sector's focus
+set_sector_focus = <sector focus>
+Supported Scopes: sector
+
+set_colony_type - Sets the colony's designation type
+set_colony_type = <colony type>
+Supported Scopes: planet
+
+set_male_ruler_title - Sets the country's male ruler title to a custom value
+set_male_ruler_title = "Grand Executioner"
+Supported Scopes: country
+
+set_female_ruler_title - Sets the country's female ruler title to a custom value
+set_female_ruler_title = "Grand Executionerress"
+Supported Scopes: country
+
+set_male_heir_title - Sets the country's male heir title to a custom value
+set_male_heir_title = "Little Executioner"
+Supported Scopes: country
+
+set_female_heir_title - Sets the country's female heir title to a custom value
+set_female_heir_title = "Little Executioneress"
+Supported Scopes: country
+
+clear_custom_ruler_and_heir_titles - Clears all custom ruler and heir titles from the country, resetting them to default values
+clear_custom_ruler_and_heir_titles = yes
+Supported Scopes: country
+
+complete_special_project - Completes a specific special project for the country, firing the on complete effects
+complete_special_project = { type = <project key> location = <target> }
+Supported Scopes: country
+
+set_government_cooldown - Locks the country's government for a given period of days, the default cooldown, or unlocks it.
+set_government_cooldown = 500/default/no
+Supported Scopes: country
+
+change_colony_foundation_date - Changes the colony foundation date (affecting on_colony_X_years pulses) by a specific number of days. Use with care, you can probably break things with this!
+change_colony_foundation_date = <+/- int>
+Supported Scopes: planet
+
+log_error - Prints a message to error.log for debugging purposes.
+Supported Scopes: all
+
+add_intel - Adds the defined amount of intel toward the target empire add_intel = { amount = <float>/<variable> who = <target> }
+Supported Scopes: country
+
+fire_on_action - Fires a made-up on_action.
+fire_on_action = { on_action = <string> scopes = { from = X fromfrom = Y } }
+Supported Scopes: all
+
+set_first_contact_stage - Sets the given stage for the scoped first contact
+set_first_contact_stage = <stage name>
+Supported Scopes: first_contact
+
+finish_current_operation_stage - Finish the current operation phase
+finish_current_operation_stage = yes/no
+yes = trigger stage completed for each stage and current excavator.
+no = do not trigger any stage completed
+Supported Scopes: espionage_operation
+
+set_mia - Sets the current fleet to go missing in action and return home.
+set_mia = yes
+Supported Scopes: fleet
+
+create_espionage_asset - Creates espionage asset within a given spy network
+create_espionage_asset = {
+	type = <espionage asset type>
+	effect = { <effects executed on asset> }
+}
+Supported Scopes: spy_network
+
+destroy_espionage_asset - Destroys espionage asset within a given spy network/operation
+destroy_espionage_asset = <esspionage asset type>
+Supported Scopes: spy_network espionage_operation
+
+set_espionage_operation_progress_locked - Locks or unlocks the progress of an espionage operation
+set_espionage_operation_progress_locked = yes/no
+Supported Scopes: espionage_operation
+
+unassign_espionage_asset - Unassignes espionage asset from the scope operation to owning spy network
+unassign_espionage_asset = <esspionage asset type>
+Supported Scopes: espionage_operation
+
+assign_espionage_asset - Assigns espionage asset to the scope operation from owning spy network
+assign_espionage_asset = <esspionage asset type>
+Supported Scopes: espionage_operation
+
+set_espionage_operation_flag - Sets an arbitrarily-named flag on the scoped espionage operation
+set_espionage_operation_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: espionage_operation
+
+remove_espionage_operation_flag - Removes a flag from the scoped espionage operation
+remove_espionage_operation_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: espionage_operation
+
+complete_crisis_objective - Gives the player the reward for the specified crisis objective
+complete_crisis_objective = <objective>
+Supported Scopes: country
+
+espionage_operation_event - Fires a espionage event event for the scoped object, with optional DAYS and RANDOM delay
+espionage_operation_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: espionage_operation
+
+join_war_on_side - Joins the war on the specified side.
+join_war_on_side = { war = <target> side = attackers/defenders/<country> }
+Supported Scopes: country
+
+dissolve_federation - Dissolved the current federation
+dissolve_federation = yes
+Supported Scopes: federation
+
+remove_random_starbase_building - Remove a number of random building(s) matching/not matching a type from the starbase
+remove_random_starbase_building = {
+	type = <starbase building> ( optional. default: all )
+	count = <int> (optional. default: 1 )
+}
+Supported Scopes: starbase
+
+remove_random_starbase_module - Remove a number of random module(s) matching/not matching a type from the starbase
+remove_random_starbase_module = {
+	type = <starbase module> ( optional. default: all )
+	count = <int> (optional. default: 1 )
+}
+Supported Scopes: starbase
+
+set_timed_espionage_operation_flag - Sets an arbitrarily-named flag on the scoped espionage operation for a set duration
+set_timed_espionage_operation_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days/months/years = <int>/<variable>
+}
+Supported Scopes: espionage_operation
+
+destroy_espionage_operation - Destroys a espionage operation site in right hand site event target
+destroy_espionage_operation = <event target>
+Supported Scopes: all
+
+add_espionage_information - Adds information to the current stage of an espionage operation
+add_espionage_information = <value>
+Supported Scopes: espionage_operation
+
+add_victory_score - Adds victory score to a country
+add_victory_score = { source=<loc_key> score=<value>/<variable> }
+Supported Scopes: country
+
+store_galactic_community_leader_backup_data - Stores a copy of the specified data of the Galactic Custodian/Emperor. The values default to 'no'.
+store_galactic_community_leader_backup_data = {
+flag = <yes/no>
+room = <yes/no>
+name = <yes/no
+ethics = <yes/no>
+government = <yes/no>
+}
+Supported Scopes: all
+
+restore_galactic_community_leader_backup_data - Retores backed up data to the Galactic Custodian/Emperor
+restore_galactic_community_leader_backup_data = <yes/no>
+Supported Scopes: all
+
+activate_crisis_progression - Activates crisis progression for the country
+activate_crisis_progression = yes
+Supported Scopes: country
+
+room_name_override - Sets the room background of the empire. Provide an empty string to remove the override.
+room_name_override = <room_name>
+Supported Scopes: country
+
+set_ai_personality - Sets the AI personality of a country to a new one
+set_ai_personality=<personality>
+Supported Scopes: country
+
+add_custodian_term_days - Increase the current Custodian term time
+add_custodian_term_days = <days>
+
+Supported Scopes: all
+
+set_custodian_term_days - Set the current Custodian term time. -1 will make the Custodianship permanent.
+set_custodian_term_days = <days>
+
+Supported Scopes: all
+
+pass_targeted_resolution - Immediately passes the first found (oldest) proposed/voting for/failed resolution OR a new resolution of this type that has the specified target. Ignores whether the target is valid or not.
+pass_targeted_resolution = { resolution = <resolution type> target = <target>
+Supported Scopes: country
+
+set_update_modifiers_batch - Disables modifier system to do full updates between Begin and End.
+On end it will trigger a full update of any dirty modifiers.
+Begin: set_update_modifiers_batch = begin
+End: set_update_modifiers_batch = end
+Supported Scopes: all
+
+validate_planet_buildings_and_districts - Checks whether the planets and districts on the planet are valid (their potential triggers are fulfilled), removes or replaces them if not.
+validate_planet_buildings_and_districts = yes
+Supported Scopes: planet
+
+country_event - Fires a country event for the scoped country, with optional DAYS and RANDOM delay
+country_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay, capped at value)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: country
+
+planet_event - Fires a planet event for the scoped planet, with optional DAYS and RANDOM delay
+planet_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay, capped at value)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: planet
+
+random - All enclosed effects may or may not be executed depending on set chance
+random = { chance = 50 <effects> }
+Supported Scopes: all
+
+create_ship_design - Creates a new ship design for use with last_created_design target
+create_ship_design = { design = <key> ftl = <target, optional, sets FTL drive to target country's> }
+Supported Scopes: all
+
+change_government - Change the scoped country's government authority and/or civics
+change_government = random
+or
+change_government = {
+	authority = random / <key>
+	civics = random / { civic = <key> civic = random }
+cooldown = no (default: yes)
+remove_invalid_civics = yes (default: no)
+}
+Supported Scopes: country
+
+ship_event - Fires a ship event for the scoped ship, with optional DAYS and RANDOM delay
+ship_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: ship
+
+pop_event - Fires a pop event for the scoped pop, with optional DAYS and RANDOM delay
+pop_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: pop
+
+enable_special_project - Enables a specific special research project for target country at a specific location (should be same as the current scope where possible)
+enable_special_project = { name = <project key> owner = <target, default = root> location = <target, ideally THIS (that is default)> }
+Supported Scopes: all
+
+add_resource - Adds specific resource to the stockpile for the country scope:
+add_resource = {
+	<resource_name_1> = <value_1>
+	<resource_name_2> = <value_2>
+	...
+	mult = <variable> (optional: multiplies all gained resources by a variable)
+}
+Supported Scopes: country
+
+fleet_event - Fires a fleet event for the scoped fleet, with optional DAYS and RANDOM delay
+fleet_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: fleet
+
+random_planet_within_border - Iterate through each planet within the current empire's borders - executes the enclosed effects on one of them for which the limit triggers return true
+random_planet_within_border = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+pop_remove_ethic - Removes a specific ethic from the scoped pop
+pop_remove_ethic = <key>
+Supported Scopes: pop
+
+create_rebels - Creates a rebellion
+create_rebels = {
+	name = <random / string>
+	authority = <random / key>
+	civics = random / { civic = <key> civic = random }
+	species = <target>
+	ethos = <random / { ethic = <key> ethic = <key> }
+}
+Supported Scopes: planet
+
+cancel_terraformation - Cancels terraformation of the scoped planet
+cancel_terraformation = yes
+Supported Scopes: planet
+
+set_primitive_age - Sets a 'primitive age' for the scoped (primitive, pre-FTL) country
+set_primitive_age = renaissance_age
+Supported Scopes: country
+
+while - Repeats enclosed effects while limit criteria are met or until set iteration count is reached
+while = { limit = { <triggers> } <effects> }
+ while = { count = [3|Variable] <effects> }
+Supported Scopes: all
+
+clear_blocker - Clears scoped deposit blocker and fires its on_cleared effect
+clear_blocker = yes
+Supported Scopes: deposit
+
+every_system_in_cluster - Executes enclosed effects on every system in the cluster that meet the limit criteria
+every_system_in_cluster = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+create_cluster - Creates a cluster centered around the specified spatial object
+Supported Scopes: all
+
+remove_army - Removes the scoped army
+remove_army = yes
+Supported Scopes: army
+
+prevent_anomaly - Disables or enables anomaly generation for the scoped planet
+prevent_anomaly = yes
+Supported Scopes: planet
+
+add_deposit - Adds resource deposit to the scoped planet
+add_deposit = <key/random>
+Supported Scopes: planet
+
+clear_deposits - Removes all deposits from the scoped planet
+clear_desposits = yes
+Supported Scopes: planet
+
+set_country_type - Changes the country type of the scoped country
+set_country_type = <key>
+Supported Scopes: country
+
+set_age - Sets the age of the scoped leader
+set_age = <int>
+Supported Scopes: leader
+
+conquer - Conquers the planet by setting its owner to target country and adding an unhappiness modifier
+conquer = <target country>
+Supported Scopes: planet
+
+pop_faction_event - Fires a pop faction event for the scoped pop faction, with optional DAYS and RANDOM delay
+pop_faction_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: pop_faction
+
+set_pop_faction_flag - Sets an arbitrarily-named flag on the scoped pop's faction/pop faction
+set_pop_faction_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: pop pop_faction
+
+remove_pop_faction_flag - Removes a flag from the scoped pop's faction/pop faction
+remove_pop_faction_flag = <key> (note: one can use e.g. my_flag@from to track relationships between objects)
+Supported Scopes: pop pop_faction
+
+set_timed_pop_faction_flag - Sets an arbitrarily-named flag on the scoped pop faction for a set duration
+set_timed_pop_faction_flag = {
+	flag = <key> (note: one can use <key>@scope e.g. my_flag@from to track relationships between objects)
+	days = <int>
+}
+Supported Scopes: pop pop_faction
+
+add_tech_progress - Gives percentage progress (0.0-1.0) in a specific tech to the scoped country
+add_tech_progress = { tech = <key> progress = <float>/<variable> }
+Supported Scopes: country
+
+abort_special_project - Aborts a specific special project for the country, removing it from the situation log
+abort_special_project = { type = <project key> location = <target> }
+Supported Scopes: country
+
+every_pop_faction - Iterate through all the country's pop factions - executes the enclosed effects on all of them for which the limit triggers return true
+every_pop_faction = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_pop_faction - Iterate through all the country's pop factions - executes the enclosed effects on one of them for which the limit triggers return true
+random_pop_faction = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+observer_event - Fires an observer event for all observers.
+Supported Scopes: all
+
+set_custom_capital_location - Sets a custom spatial object as custom country capital location.
+set_custom_capital_location = <target>
+Supported Scopes: country
+
+spawn_planet - Spawns a planet in a system.
+Supported Scopes: galactic_object
+
+spawn_megastructure - Spawns a mega structure in a system.
+spawn_megastructure = {
+	type = ring_world_ruined
+	name = <string>
+	owner = <target>
+	planet = <planet/star target>
+	coords_from = <target> (use this or 'planet' to set the location)
+	graphical_culture = <target>
+	orbit_distance = 50
+	orbit_angle = 50
+}
+Supported Scopes: galactic_object
+
+remove_megastructure - Removes a mega structure.
+remove_megastructure = <target mega structure>
+Supported Scopes: all
+
+trigger_megastructure_icon - if a planet has trigger_megastructure_icon = yes then the map icon for the star will show a megastructure icon
+Supported Scopes: planet
+
+run_ai_strategic_data - Recomputes ALL strategic data for AI = yes
+Supported Scopes: country
+
+add_static_war_exhaustion - Adds static war exhaustion, scaled with value_for_planet_destruction, to owner of the battle location 
+add_static_war_exhaustion = {
+	attacker = <country>
+	location = <planet> 
+	value_for_planet_destruction = <0.0-1.0>/<variable> #scales the amount of war exhaustion that is added
+}
+Supported Scopes: country
+
+set_planet_size - Sets the planet size to a specified number
+set_planet_size = <int>
+Supported Scopes: planet
+
+run_ai_strategic_war_data - Recomputes strategic war ( attack / defense ) data for AI = yes
+Supported Scopes: country
+
+expire_site_event - Manually flags an archaeological event as expired
+expire_site_event = ancrel.7003
+Supported Scopes: archaeological_site
+
+pass_resolution - Immediately passes the first found (oldest) proposed/voting for/failed resolution OR a new resolution of this type.
+pass_resolution = <resolution type>
+Supported Scopes: country
+
+pass_resolution_no_cooldown - Immediately passes the first found (oldest) proposed/voting for/failed resolution OR a new resolution of this type. Skips the cooldown on the relevant category.
+pass_resolution_no_cooldown = <resolution type>
+Supported Scopes: country
+
+first_contact_event - Fires a first contact event for the scoped first contact site, with optional DAYS and RANDOM delay
+first_contact_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: first_contact
+
+finish_first_contact - Ends the First Contact
+finish_first_contact = yes
+Supported Scopes: first_contact
+
+set_galactic_custodian - Sets whether or not the scoped country is the Galactic Custodian
+set_galactic_custodian = yes/no
+Supported Scopes: country
+
+set_galactic_emperor - Sets whether or not the scoped country is the Galactic Emperor
+set_galactic_emperor = yes/no
+Supported Scopes: country
+
+add_imperial_authority - Add imperial_authority
+add_imperial_authority = <value>
+
+Supported Scopes: all
+
+add_stage_modifier - Adds a specific modifier to the current espionage operation stage for a set duration or until stage is changed
+add_stage_modifier = { modifier = <key> days = <int, -1 means it never expires> }
+Supported Scopes: espionage_operation
+
+remove_stage_modifier - Removes a specific modifier from the espionage operation current stage
+remove_stage_modifier = <key>
+Supported Scopes: espionage_operation
+
+add_intel_report - Adds the intel level for the category selected. Default duration (0) is forever.
+add_intel_report = { category = <string> level = <int> days = <int> who = <target> }
+Supported Scopes: country
+
+set_galactic_defense_force - Sets whether the Galactic Defense force or Imperial Armada exists
+set_galactic_defense_force = yes/no
+Supported Scopes: all
+
+clear_intel_report - Removes all the intel reports related to the provided category.
+clear_intel_report = { category = <string> who = <target> }
+Supported Scopes: country
+
+starbase_event - Fires a starbase event for the scoped starbase
+starbase_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: starbase
+
+system_event - Fires a system event for the scoped system
+system_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: galactic_object
+
+leader_event - Fires a leader event for the scoped leader
+leader_event = {
+	id = <id>
+	days = x (optional: specify delay)
+	random = y (optional: specify random delay from 0 to value, which is added on to the 'days' delay)
+	scopes = { from = fromfrom } (optional: specify scope overrides)
+}
+Supported Scopes: leader
+
+transfer_galactic_defense_force_fleets - Moves all owned GDF fleets to the target.
+transfer_galactic_defense_force_fleets = <target>
+Supported Scopes: country
+
+cancel_resolution - Immediately cancels/removes the latest active/passed/proposed/voting for/failed resolution of this type
+cancel_resolution = <resolution type>
+Supported Scopes: country
+
+add_spy_network_level - Adds levels to the current Spy Network
+add_spy_network_level = <int>
+Supported Scopes: spy_network
+
+every_system_planet - Iterate through each planet in the current system - executes the enclosed effects on all of them for which the limit triggers return true
+every_system_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+join_alliance - Join federation with target
+join_alliance = { who = <target> override_requirements = yes/no }
+Supported Scopes: country
+
+complete_tutorial_step - Create and sends an telemetry event keeping track of the tutorial steps for the current game
+Supported Scopes: all
+
+set_emperor_can_change_council_members - Sets whether the Galactic Emperor can change Imperial Council members or not
+set_emperor_can_change_council_members = yes/no
+Supported Scopes: all
+
+create_leader - Creates a new leader for the scoped country
+create_leader = {
+	name = <random / string>
+	species = <target / key>
+	gender = <gender> #optional, default = random
+	type = <random / key>
+	skill = <random / int>
+	set_age = <int>
+	traits = { trait = <key> trait = <key> }
+}
+Supported Scopes: country
+
+set_disabled - Enables or disables the scoped ship
+set_disabled = no
+Supported Scopes: ship
+
+else - Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met
+if = { limit = { <triggers> } <effects> }
+else = { <effects> }
+Supported Scopes: all
+
+log - Prints a message to game.log for debugging purposes.
+Supported Scopes: all
+
+debug_break - Trigger an assertion to stop the debugger when encountering this effect; argument is ignored
+debug_break = yes
+Supported Scopes: all
+
+inverted_switch - Executes the first appropriate effect set for a specific trigger treated as NOT.
+inverted_switch = {
+	trigger = <trigger>
+	<corresponding key/bool/int> = { <effect> }
+	<corresponding key/bool/int> > (less/greater than appear 'reversed') { <effect> }
+	default = { <effect> }
+}
+Supported Scopes: all
+
+random_owned_army - Iterate through each army that is owned by the country - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_army = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_owned_army - Iterate through each army that is owned by the country - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_army = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_planet_army - Iterate through each army on the planet (not in ground combat) belonging to the planet owner - executes the enclosed effects on one of them for which the limit triggers return true
+random_planet_army = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet
+
+every_planet_army - Iterate through each army on the planet (not in ground combat) belonging to the planet owner - executes the enclosed effects on all of them for which the limit triggers return true
+every_planet_army = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+
+random_ground_combat_defender - Iterate through each army currently defending the planet in ground combat - executes the enclosed effects on one of them for which the limit triggers return true
+random_ground_combat_defender = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet
+
+every_ground_combat_defender - Iterate through each army currently defending the planet in ground combat - executes the enclosed effects on all of them for which the limit triggers return true
+every_ground_combat_defender = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+
+random_ground_combat_attacker - Iterate through each army currently attacking the planet in ground combat - executes the enclosed effects on one of them for which the limit triggers return true
+random_ground_combat_attacker = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet
+
+every_ground_combat_attacker - Iterate through each army currently attacking the planet in ground combat - executes the enclosed effects on all of them for which the limit triggers return true
+every_ground_combat_attacker = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+
+random_relation - Iterate through all relations - executes the enclosed effects on one of them for which the limit triggers return true
+random_relation = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_relation - Iterate through all relations - executes the enclosed effects on all of them for which the limit triggers return true
+every_relation = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_neighbor_country - Iterate through all neighbor countries - executes the enclosed effects on one of them for which the limit triggers return true
+random_neighbor_country = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_neighbor_country - Iterate through all neighbor countries - executes the enclosed effects on all of them for which the limit triggers return true
+every_neighbor_country = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_bordering_country - Iterate through all bordering countries of a system - executes the enclosed effects on one of them for which the limit triggers return true
+random_bordering_country = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+every_bordering_country - Iterate through all bordering countries of a system - executes the enclosed effects on all of them for which the limit triggers return true
+every_bordering_country = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+random_rival_country - Iterate through all countries rivalled by the scoped country - executes the enclosed effects on one of them for which the limit triggers return true
+random_rival_country = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_rival_country - Iterate through all countries rivalled by the scoped country - executes the enclosed effects on all of them for which the limit triggers return true
+every_rival_country = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_federation_ally - Iterate through all countries in a federation with the scoped country - executes the enclosed effects on one of them for which the limit triggers return true
+random_federation_ally = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_federation_ally - Iterate through all countries in a federation with the scoped country - executes the enclosed effects on all of them for which the limit triggers return true
+every_federation_ally = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_spynetwork - Iterate through each spynetwork - executes the enclosed effects on one of them for which the limit triggers return true
+random_spynetwork = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country no_scope
+
+every_spynetwork - Iterate through each spynetwork - executes the enclosed effects on all of them for which the limit triggers return true
+every_spynetwork = { limit = { <triggers> } <effects> }
+Supported Scopes: country no_scope
+
+random_espionage_operation - Iterate through each espionage operation - executes the enclosed effects on one of them for which the limit triggers return true
+random_espionage_operation = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country no_scope spy_network
+
+every_espionage_operation - Iterate through each espionage operation - executes the enclosed effects on all of them for which the limit triggers return true
+every_espionage_operation = { limit = { <triggers> } <effects> }
+Supported Scopes: country no_scope spy_network
+
+random_espionage_asset - Iterate through each espionage asset - executes the enclosed effects on one of them for which the limit triggers return true
+random_espionage_asset = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: no_scope spy_network espionage_operation
+
+every_espionage_asset - Iterate through each espionage asset - executes the enclosed effects on all of them for which the limit triggers return true
+every_espionage_asset = { limit = { <triggers> } <effects> }
+Supported Scopes: no_scope spy_network espionage_operation
+
+random_federation - Iterate through each federation - executes the enclosed effects on one of them for which the limit triggers return true
+random_federation = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_federation - Iterate through each federation - executes the enclosed effects on all of them for which the limit triggers return true
+every_federation = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_first_contact - Iterate through each first contact (both active and complete) that this country is engaging in - executes the enclosed effects on one of them for which the limit triggers return true
+random_first_contact = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_first_contact - Iterate through each first contact (both active and complete) that this country is engaging in - executes the enclosed effects on all of them for which the limit triggers return true
+every_first_contact = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_active_first_contact - Iterate through each active (non-completed) first contact that this country is engaging in - executes the enclosed effects on one of them for which the limit triggers return true
+random_active_first_contact = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_active_first_contact - Iterate through each active (non-completed) first contact that this country is engaging in - executes the enclosed effects on all of them for which the limit triggers return true
+every_active_first_contact = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_galaxy_fleet - Iterate through each fleet in the entire game - executes the enclosed effects on one of them for which the limit triggers return true
+random_galaxy_fleet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_galaxy_fleet - Iterate through each fleet in the entire game - executes the enclosed effects on all of them for which the limit triggers return true
+every_galaxy_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_combatant_fleet - Iterate through each fleet this fleet is in combat with - executes the enclosed effects on one of them for which the limit triggers return true
+random_combatant_fleet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: fleet
+
+every_combatant_fleet - Iterate through each fleet this fleet is in combat with - executes the enclosed effects on all of them for which the limit triggers return true
+every_combatant_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: fleet
+
+random_fleet_in_orbit - Iterate through each fleet orbiting the current planet/starbase/megastructure - executes the enclosed effects on one of them for which the limit triggers return true
+random_fleet_in_orbit = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: megastructure planet starbase
+
+every_fleet_in_orbit - Iterate through each fleet orbiting the current planet/starbase/megastructure - executes the enclosed effects on all of them for which the limit triggers return true
+every_fleet_in_orbit = { limit = { <triggers> } <effects> }
+Supported Scopes: megastructure planet starbase
+
+random_orbital_station - Iterate through each orbital station owned by the current country or in the current system - executes the enclosed effects on one of them for which the limit triggers return true
+random_orbital_station = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country galactic_object
+
+every_orbital_station - Iterate through each orbital station owned by the current country or in the current system - executes the enclosed effects on all of them for which the limit triggers return true
+every_orbital_station = { limit = { <triggers> } <effects> }
+Supported Scopes: country galactic_object
+
+random_galcom_member - Iterate through each member of the galactic community - executes the enclosed effects on one of them for which the limit triggers return true
+random_galcom_member = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_galcom_member - Iterate through each member of the galactic community - executes the enclosed effects on all of them for which the limit triggers return true
+every_galcom_member = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_council_member - Iterate through each member of the galactic council - executes the enclosed effects on one of them for which the limit triggers return true
+random_council_member = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_council_member - Iterate through each member of the galactic council - executes the enclosed effects on all of them for which the limit triggers return true
+every_council_member = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_pool_leader - Iterate through each leader that is recruitable for the country - executes the enclosed effects on one of them for which the limit triggers return true
+random_pool_leader = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_pool_leader - Iterate through each leader that is recruitable for the country - executes the enclosed effects on all of them for which the limit triggers return true
+every_pool_leader = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_envoy - Iterate through each envoy available to the country - executes the enclosed effects on one of them for which the limit triggers return true
+random_envoy = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_envoy - Iterate through each envoy available to the country - executes the enclosed effects on all of them for which the limit triggers return true
+every_envoy = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_megastructure - Iterate through each megastructure - executes the enclosed effects on one of them for which the limit triggers return true
+random_megastructure = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_megastructure - Iterate through each megastructure - executes the enclosed effects on all of them for which the limit triggers return true
+every_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_owned_megastructure - Iterate through each owned megastructure - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_megastructure = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_owned_megastructure - Iterate through each owned megastructure - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_system_megastructure - Iterate through each megastructure in system - executes the enclosed effects on one of them for which the limit triggers return true
+random_system_megastructure = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_system_megastructure - Iterate through each megastructure in system - executes the enclosed effects on all of them for which the limit triggers return true
+every_system_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_member - Iterate through each member of the federation - executes the enclosed effects on one of them for which the limit triggers return true
+random_member = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: federation
+
+every_member - Iterate through each member of the federation - executes the enclosed effects on all of them for which the limit triggers return true
+every_member = { limit = { <triggers> } <effects> }
+Supported Scopes: federation
+
+random_associate - Iterate through each associate member of the federation - executes the enclosed effects on one of them for which the limit triggers return true
+random_associate = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: federation
+
+every_associate - Iterate through each associate member of the federation - executes the enclosed effects on all of them for which the limit triggers return true
+every_associate = { limit = { <triggers> } <effects> }
+Supported Scopes: federation
+
+random_owned_planet - Iterate through each inhabited planet owned by the current empire - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_planet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country sector
+
+every_owned_planet - Iterate through each inhabited planet owned by the current empire - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: country sector
+
+random_controlled_planet - Iterate through each inhabited planet controlled by the current empire - executes the enclosed effects on one of them for which the limit triggers return true
+random_controlled_planet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_controlled_planet - Iterate through each inhabited planet controlled by the current empire - executes the enclosed effects on all of them for which the limit triggers return true
+every_controlled_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_galaxy_planet - Iterate through each planet ANYWHERE in the game; warning: resource intensive! - executes the enclosed effects on one of them for which the limit triggers return true
+random_galaxy_planet = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_galaxy_planet - Iterate through each planet ANYWHERE in the game; warning: resource intensive! - executes the enclosed effects on all of them for which the limit triggers return true
+every_galaxy_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_species_pop - Iterate through each pop that belongs to this species; warning: resource-intensive! - executes the enclosed effects on one of them for which the limit triggers return true
+random_species_pop = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: species
+
+every_species_pop - Iterate through each pop that belongs to this species; warning: resource-intensive! - executes the enclosed effects on all of them for which the limit triggers return true
+every_species_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: species
+
+random_galaxy_sector - Iterate through all sectors in the game - executes the enclosed effects on one of them for which the limit triggers return true
+random_galaxy_sector = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_galaxy_sector - Iterate through all sectors in the game - executes the enclosed effects on all of them for which the limit triggers return true
+every_galaxy_sector = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_owned_sector - Iterate through every owned sector - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_sector = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_owned_sector - Iterate through every owned sector - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_sector = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_ship_in_system - Iterate through each ship in the current system - executes the enclosed effects on one of them for which the limit triggers return true
+random_ship_in_system = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+every_ship_in_system - Iterate through each ship in the current system - executes the enclosed effects on all of them for which the limit triggers return true
+every_ship_in_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+random_owned_pop_species - Iterate through each species of a country's owned pops - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_pop_species = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_owned_pop_species - Iterate through each species of a country's owned pops - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_pop_species = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_galaxy_species - Check if any species in the galaxy meet the specified criteria - executes the enclosed effects on one of them for which the limit triggers return true
+random_galaxy_species = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_galaxy_species - Check if any species in the galaxy meet the specified criteria - executes the enclosed effects on all of them for which the limit triggers return true
+every_galaxy_species = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_owned_species - Check if any of the species <on the planet/in the country> meet the specified criteria - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_species = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet country
+
+every_owned_species - Check if any of the species <on the planet/in the country> meet the specified criteria - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_species = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country
+
+random_enslaved_species - Check if any of the species with enslaved pops <on the planet/in the country> meet the specified criteria - executes the enclosed effects on one of them for which the limit triggers return true
+random_enslaved_species = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: planet country
+
+every_enslaved_species - Check if any of the species with enslaved pops <on the planet/in the country> meet the specified criteria - executes the enclosed effects on all of them for which the limit triggers return true
+every_enslaved_species = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country
+
+random_owned_starbase - Iterate through every owned starbase - executes the enclosed effects on one of them for which the limit triggers return true
+random_owned_starbase = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_owned_starbase - Iterate through every owned starbase - executes the enclosed effects on all of them for which the limit triggers return true
+every_owned_starbase = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+random_system - Iterate through all systems - executes the enclosed effects on one of them for which the limit triggers return true
+random_system = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: all
+
+every_system - Iterate through all systems - executes the enclosed effects on all of them for which the limit triggers return true
+every_system = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+
+random_system_within_border - Iterate through all systems within the country's or sector's borders - executes the enclosed effects on one of them for which the limit triggers return true
+random_system_within_border = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country sector
+
+every_system_within_border - Iterate through all systems within the country's or sector's borders - executes the enclosed effects on all of them for which the limit triggers return true
+every_system_within_border = { limit = { <triggers> } <effects> }
+Supported Scopes: country sector
+
+random_neighbor_system_euclidean - Iterate through all a system's neigboring systems (by closeness, not by hyperlanes) - executes the enclosed effects on one of them for which the limit triggers return true
+random_neighbor_system_euclidean = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: galactic_object
+
+every_neighbor_system_euclidean - Iterate through all a system's neigboring systems (by closeness, not by hyperlanes) - executes the enclosed effects on all of them for which the limit triggers return true
+every_neighbor_system_euclidean = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+
+random_war_participant - Iterate through all war participants - executes the enclosed effects on one of them for which the limit triggers return true
+random_war_participant = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: war
+
+random_attacker - Iterate through all attackers in the current war - executes the enclosed effects on one of them for which the limit triggers return true
+random_attacker = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: war
+
+every_attacker - Iterate through all attackers in the current war - executes the enclosed effects on all of them for which the limit triggers return true
+every_attacker = { limit = { <triggers> } <effects> }
+Supported Scopes: war
+
+random_defender - Iterate through all defenders in the current war - executes the enclosed effects on one of them for which the limit triggers return true
+random_defender = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: war
+
+every_defender - Iterate through all defenders in the current war - executes the enclosed effects on all of them for which the limit triggers return true
+every_defender = { limit = { <triggers> } <effects> }
+Supported Scopes: war
+
+random_war - Iterate through all wars the country is engaged in - executes the enclosed effects on one of them for which the limit triggers return true
+random_war = {
+	limit = { <triggers> }
+	weights = { (optional - adds weights to affect the chance a specific object is selected)
+		base = float
+		modifier = { <add/mult = float> <triggers> }
+	}
+	<effects>
+}
+Supported Scopes: country
+
+every_war - Iterate through all wars the country is engaged in - executes the enclosed effects on all of them for which the limit triggers return true
+every_war = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+
+
+=================
