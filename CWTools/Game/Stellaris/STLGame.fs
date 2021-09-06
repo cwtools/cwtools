@@ -158,9 +158,24 @@ module STLGameFunctions =
                         getAllScriptedTriggers
                     |x -> [x])
 
+    let addValueTriggersToTriggers rules (lookup : Lookup) =
+        let triggers = rules
+                       |> List.choose (function
+                           |AliasRule("trigger", (LeafRule(SpecificField(SpecificValue n), _), o)) -> Some (StringResource.stringManager.GetStringForID n.normal, o)
+                           |_ -> None)
+                       |> Map.ofList
+        
+        let inline triggerAugment (trigger : Effect) =
+            match trigger, triggers |> Map.tryFind (trigger.Name) with
+            | :? DocEffect as doc, Some options when options.comparison -> DocEffect(doc.Name, doc.Scopes, doc.Target, EffectType.ValueTrigger, doc.Desc, doc.Usage, doc.RefHint) :> Effect
+            | trigger, _ -> trigger
+            
+        lookup.triggers |> List.map triggerAugment
+//        lookup.triggers |> List.
 
     let loadConfigRulesHook rules (lookup : Lookup) embedded =
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
+        let triggersWithValueTriggers = addValueTriggersToTriggers rules lookup
+        lookup.allCoreLinks <- triggersWithValueTriggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         let rulesWithMod = rules @ addModifiersWithScopes(lookup)
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes

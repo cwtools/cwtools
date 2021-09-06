@@ -157,7 +157,7 @@ module Scopes =
     let createChangeScope (oneToOneScopes) (varPrefixFun : string -> string * bool) (hoi4TargetedHardcodedVariables : bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
-        (fun (varLHS : bool) (skipEffect : bool) (eventTargetLinks : EffectMap) (_ : EffectMap) (_ : ScopedEffect list) (vars : StringSet) (key : string) (source : ScopeContext) ->
+        (fun (varLHS : bool) (skipEffect : bool) (eventTargetLinks : EffectMap) (valueTriggers : EffectMap) (_ : ScopedEffect list) (vars : StringSet) (key : string) (source : ScopeContext) ->
             let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
             if
                 key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
@@ -173,13 +173,28 @@ module Scopes =
                         // let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope  -> Some e |_ -> None)
                         // let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
                         let eventTargetLinkMatch = eventTargetLinks.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
+                        let valueScopeMatch = valueTriggers.TryFind nextKey
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)
                         // if skipEffect then (context, false), NotFound else
-                        match first && nextKey.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase), eventTargetLinkMatch with
-                        | true, _ -> (context, (true, true)), NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [], None)
-                        | _, None ->
+                        match first && nextKey.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase), eventTargetLinkMatch, valueScopeMatch with
+                        | true, _, _ -> (context, (true, true)), NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [], None)
+                        | _, _, Some e ->
+                            if last
+                            then
+                                let possibleScopes = e.Scopes
+                                let currentScope = context.CurrentScope
+                                let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
+                                let refHint = e.RefHint
+                                match context.CurrentScope, possibleScopes, exact with
+                                | x, _, _ when x = source.Root.AnyScope -> (context, (false, false)), ValueFound (refHint)
+                                | _, [], _ -> (context, (false, false)), NotFound
+                                | _, _, true -> (context, (false, false)), ValueFound (refHint)
+                                | current, ss, false -> (context, (false, false)), WrongScope (nextKey, current, ss, refHint)
+                            else
+                                (context, (false, false)), NotFound
+                        | _, None, _ ->
                             if last && (vars.Contains nextKey)
                             then
                                 (context, (false, false)), VarFound
@@ -189,7 +204,7 @@ module Scopes =
                                     (context, (false, false)), VarNotFound nextKey
                                 else
                                     (context, (false, false)), NotFound
-                        | _, Some e ->
+                        | _, Some e, _ ->
                             let possibleScopes = e.Scopes
                             let currentScope = context.CurrentScope
                             let exact = possibleScopes |> List.exists currentScope.IsOfScope

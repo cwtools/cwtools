@@ -45,5 +45,14 @@ event = {
 
         }
     }
+    
+    trigger = {
+        num_moons = num_moons
+        num_moons = THIS.num_moons
+        #error
+        num_moons_no_compare = num_moons_no_compare
+        #error
+        num_moons_no_compare = THIS.num_moons_no_compare
+    }
 
 }
