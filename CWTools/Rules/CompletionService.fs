@@ -172,6 +172,7 @@ type CompletionService
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
                                                 |> List.map (fun s -> "event_target:" + s, [anyScope])
+//        linkMap.ToList() |> List.iter (printfn "%A") 
         let scopedEffects = linkMap.ToList() |> List.choose (fun (_, s) -> s |> function | :? ScopedEffect as x -> Some (x.Name, x.Scopes) | _ -> None )
         evs @ gevs @ scopedEffects
 
@@ -260,6 +261,30 @@ type CompletionService
                 | NotFound -> defaultRes
             else
                 defaultRes
+        let completionForRHSDotChain (key : string) (startingContext : ScopeContext) =
+            let createSnippetWithScore scopeContext = (fun r key -> Simple(key, Some (scoreFunction r scopeContext key)))
+
+            let defaultRes = scopeCompletionList |> List.map (fun (l, r) -> createSnippetWithScore startingContext r l)
+            // eprintfn "dr %A" defaultRes
+            if key.Contains(".")
+            then
+                let splitKey = key.Split([|'.'|])
+                let changeScopeRes =
+                        splitKey |> Array.takeWhile (fun x -> x.Contains "\u0016" |> not)
+                         |> String.concat "."
+                         |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                log (sprintf "%A %A" key changeScopeRes)
+                match changeScopeRes with
+                | NewScope (newscope, _, _) ->
+                    log (sprintf "%A %A" key newscope)
+                    scopeCompletionList |> List.map (fun (l, r) -> createSnippetWithScore newscope r l)
+                | ValueFound _
+                | VarFound
+                | VarNotFound _
+                | WrongScope _
+                | NotFound -> defaultRes
+            else
+                defaultRes
         let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =
             // eprintfn "crtc %A %A" key rule
             let r, o = rule
@@ -326,9 +351,9 @@ type CompletionService
                 |SubtypeRule(_) -> []
                 |_ -> []
             //TODO: Add leafvalue
-        let fieldToRules (field : NewField) (value : string) =
-            //log "%A" types
-            //log "%A" field
+        let fieldToRules (field : NewField) (value : string) (scopeContext : ScopeContext) =
+            log (sprintf "%A %A" field value)
+//            eprintfn "%A" value
             match field with
             |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.ValueField v -> FieldValidators.getValidValues v |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -340,7 +365,8 @@ type CompletionService
                 |true, _ -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |false, _ -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.FilepathField _ -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
-            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
+            |NewField.ScopeField x -> completionForRHSDotChain value scopeContext
+//            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
             |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableField _ -> varMap.TryFind "variable" |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -395,7 +421,7 @@ type CompletionService
                 | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     //log "%s %A" key fs
-                    let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f value)
+                    let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f value scopeContext)
                     //log "res %A" res
                     res
             | (key, count, _, NodeRHS)::rest ->
@@ -465,7 +491,7 @@ type CompletionService
                 else []
         let items =
             match path |> List.tryLast, path.Length with
-            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@x") ->
+            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@\u0016") ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
             |Some (_, _, _, CompletionContext.NodeLHS), 1 ->

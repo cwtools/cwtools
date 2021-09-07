@@ -46,6 +46,15 @@ event = {
         }
     }
     
+    ## Test completion
+    #@ 15 simple_with_scope
+    test_ship = simple_with_scope
+    #@ 15 simple_with_scope
+    #@? 35 simple_with_scope
+    #@ 55 simple_with_scope
+    #@! 55 trigger:num_moons
+    test_ship = simple_with_scope.simple_back_scope.simple_with_scope
+    
     trigger = {
         ### Test trigger RHS values
         
@@ -57,6 +66,7 @@ event = {
         
         ## Test trigger prefix
         num_moons = THIS.trigger:num_moons
+        ##@ 15 trigger:num_moons
         num_moons = trigger:num_moons
         
         ## Test non-comparable trigger
