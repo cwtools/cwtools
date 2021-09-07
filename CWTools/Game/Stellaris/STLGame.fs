@@ -167,10 +167,13 @@ module STLGameFunctions =
         
         let inline triggerAugment (trigger : Effect) =
             match trigger, triggers |> Map.tryFind (trigger.Name) with
-            | :? DocEffect as doc, Some options when options.comparison -> DocEffect(doc.Name, doc.Scopes, doc.Target, EffectType.ValueTrigger, doc.Desc, doc.Usage, doc.RefHint) :> Effect
-            | trigger, _ -> trigger
+            | :? DocEffect as doc, Some options when options.comparison ->
+                [ DocEffect("trigger:" + doc.Name, doc.Scopes, doc.Target, EffectType.ValueTrigger, doc.Desc, doc.Usage, doc.RefHint) :> Effect
+                  doc :> Effect
+                  ]
+            | trigger, _ -> [trigger]
             
-        lookup.triggers |> List.map triggerAugment
+        lookup.triggers |> List.collect triggerAugment
 //        lookup.triggers |> List.
 
     let loadConfigRulesHook rules (lookup : Lookup) embedded =
