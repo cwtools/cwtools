@@ -804,7 +804,8 @@ module private RulesParserImpl =
             | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
         rules |> List.collect rulesMapper
 
-    let replaceValueMarkerFields (useFormulas : bool) (rules : RootRule list) =
+    /// stellarisScopeTrigger -> num_moons = owner -> num_moons = owner.trigger:num_moons
+    let replaceValueMarkerFields (useFormulas : bool) (stellarisScopeTrigger : bool) (rules : RootRule list) =
         let rec cataRule rule : NewRule list =
             match rule with
             | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when not o.comparison && useFormulas ->
@@ -813,7 +814,12 @@ module private RulesParserImpl =
                     LeafRule(ValueScopeField(i, m), SingleAliasField("formula")), o
                     LeafRule(ValueScopeField(i, m), SingleAliasField("range")), o
                 ]
-            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o ->
+            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when o.comparison && stellarisScopeTrigger ->
+                [
+                    LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
+                    LeafRule(ValueScopeField(i, m), ScopeField(o.requiredScopes)), o
+                ]
+            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o -> 
                 [
                     LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
                 ]
@@ -822,6 +828,11 @@ module private RulesParserImpl =
                     LeafRule(l, ValueScopeField(i2, m2)), o
                     LeafRule(l, SingleAliasField("formula")), o
                     LeafRule(l, SingleAliasField("range")), o
+                ]
+            | LeafRule (l, ValueScopeMarkerField (i2,m2)), o  when o.comparison && stellarisScopeTrigger ->
+                [
+                    LeafRule(l, ValueScopeField(i2, m2)), o
+                    LeafRule(l, ScopeField(o.requiredScopes)), o
                 ]
             | LeafRule (l, ValueScopeMarkerField (i2,m2)), o ->
                 [
@@ -894,10 +905,10 @@ module RulesParser =
             let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
             //log "processConfig"
             processConfig parseScope allScopes anyScope scopeGroup root
-    let parseConfigs (parseScope) (allScopes) (anyScope) scopeGroup useFormulas (files : (string * string) list)  =
+    let parseConfigs (parseScope) (allScopes) (anyScope) scopeGroup useFormulas stellarisScopeTriggers (files : (string * string) list)  =
         let rules, types, enums, complexenums, values =
             files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope scopeGroup filename fileString)
               |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
-        let rules = rules |> replaceValueMarkerFields useFormulas |> replaceSingleAliases |> replaceColourField |> replaceIgnoreMarkerFields
+        let rules = rules |> replaceValueMarkerFields useFormulas stellarisScopeTriggers |> replaceSingleAliases |> replaceColourField |> replaceIgnoreMarkerFields
         // File.AppendAllText ("test.test", sprintf "%O" rules)
         rules, types, enums, complexenums, values

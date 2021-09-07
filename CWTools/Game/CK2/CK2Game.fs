@@ -310,6 +310,7 @@ type CK2Game(setupSettings : CK2Settings) =
     let rulesManagerSettings = {
         rulesSettings = settings.rules
         useFormulas = false
+        stellarisScopeTriggers = false
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
