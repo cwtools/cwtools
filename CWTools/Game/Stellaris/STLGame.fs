@@ -324,6 +324,7 @@ type STLGame (setupSettings : StellarisSettings) =
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules
+            useFormulas = false
             parseScope = scopeManager.ParseScope()
             allScopes = scopeManager.AllScopes
             anyScope = scopeManager.AnyScope

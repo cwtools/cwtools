@@ -232,6 +232,7 @@ type EU4Game(setupSettings : EU4Settings) =
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
+        useFormulas = false
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope
