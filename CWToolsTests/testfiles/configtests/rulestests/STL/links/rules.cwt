@@ -52,3 +52,7 @@ enums = {
 ## scope = planet
 alias[trigger:num_moons] == value_field
 alias[trigger:num_moons_no_compare] = value_field
+
+alias[trigger:nested_trigger] = {
+    value = value_field
+}
