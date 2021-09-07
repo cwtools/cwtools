@@ -165,7 +165,7 @@ type CompletionService
     //// Normal complete
     ///
     ///
-    let scopeCompletionList =
+    let scopeCompletionListInner =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
                                                 |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = anyScope |})
@@ -179,7 +179,9 @@ type CompletionService
                 | :? ScopedEffect as x ->
                     Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = x.Target |> Option.defaultValue anyScope |})
                 | _ -> None )
-        evs @ gevs @ scopedEffects
+        evs @ gevs @ scopedEffects, scopedEffects
+    let scopeCompletionList = scopeCompletionListInner |> fst
+    let scopeCompletionListNonGlobal = scopeCompletionListInner |> snd
 
     let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule list) (description : string option) (key : string) =
         let filterToCompletion =
@@ -248,49 +250,63 @@ type CompletionService
             let createSnippetForClauseWithCustomScopeReq scopeContext i o r = createSnippetForClause (scoreFunction scopeContext i o r)
 
             let defaultRes = scopeCompletionList |> List.map (fun x -> createSnippetForClauseWithCustomScopeReq startingContext x.requiredScopes (Some x.outputScope) targetScopes innerRules description x.key)
+            let defaultResNonGlobal = scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetForClauseWithCustomScopeReq startingContext x.requiredScopes (Some x.outputScope) targetScopes innerRules description x.key)
             // eprintfn "dr %A" defaultRes
             if key.Contains(".")
             then
                 let splitKey = key.Split([|'.'|])
-                let changeScopeRes =
-                        splitKey |> Array.take (splitKey.Length - 1)
-                         |> String.concat "."
-                         |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                let changeScopeRes, containsDot =
+                        let substringBefore =
+                            splitKey |> (fun x -> log (sprintf "%A" x); x)
+                             |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A" a); a)
+                             |> String.concat "."
+                        let res =
+                            substringBefore
+                            |> (fun x -> log x; x)
+                            |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                        res, substringBefore.Contains(".") 
                 match changeScopeRes with
                 | NewScope (newscope, _, _) ->
-                    scopeCompletionList
+                    let sourceList = if containsDot then scopeCompletionListNonGlobal else scopeCompletionList
+                    sourceList
                     |> List.map (fun x -> createSnippetForClauseWithCustomScopeReq newscope x.requiredScopes (Some x.outputScope) targetScopes innerRules description x.key)
                 | ValueFound _
                 | VarFound
                 | VarNotFound _
                 | WrongScope _
-                | NotFound -> defaultRes
+                | NotFound -> if containsDot then defaultResNonGlobal else defaultRes
             else
                 defaultRes
         let completionForRHSDotChain (key : string) (startingContext : ScopeContext) (targetScopes : Scope list) =
             let createSnippetWithScore scopeContext = (fun i o r key -> Simple(key, Some (scoreFunction scopeContext i o r key)))
 
             let defaultRes = scopeCompletionList |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes (Some x.outputScope) targetScopes x.key)
+            let defaultResNonGlobal = scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes (Some x.outputScope) targetScopes x.key)
             // eprintfn "dr %A" defaultRes
             if key.Contains(".")
             then
                 let splitKey = key.Split([|'.'|])
-                let changeScopeRes =
-                        splitKey |> (fun x -> log (sprintf "%A" x); x)
-                         |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A" a); a)
-                         |> String.concat "."
-                         |> (fun x -> log x; x)
-                         |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                let changeScopeRes, containsDot =
+                        let substringBefore =
+                            splitKey |> (fun x -> log (sprintf "%A" x); x)
+                             |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A" a); a)
+                             |> String.concat "."
+                        let res =
+                            substringBefore
+                            |> (fun x -> log x; x)
+                            |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                        res, substringBefore.Contains(".") 
                 log (sprintf "REW %A %A %A" key changeScopeRes targetScopes)
                 match changeScopeRes with
                 | NewScope (newscope, _, _) ->
                     log (sprintf "%A %A" key newscope)
-                    scopeCompletionList |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes (Some x.outputScope) targetScopes x.key)
+                    let sourceList = if containsDot then scopeCompletionListNonGlobal else scopeCompletionList
+                    sourceList |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes (Some x.outputScope) targetScopes x.key)
                 | ValueFound _
                 | VarFound
                 | VarNotFound _
                 | WrongScope _
-                | NotFound -> defaultRes
+                | NotFound -> if containsDot then defaultResNonGlobal else defaultRes
             else
                 defaultRes
         let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =
