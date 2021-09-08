@@ -168,18 +168,18 @@ type CompletionService
     let scopeCompletionListInner =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope |})
+                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None |})
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope |})
+                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None |})
         linkMap.ToList() |> List.iter (fun x -> log (sprintf "iop %A" x))
         let scopedEffects =
             linkMap.ToList()
             |> List.choose (fun (_, s) -> s |> function
                 | :? ScopedEffect as x when x.Type = EffectType.Link ->
-                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = x.Target |})
+                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = x.Target; desc = Some x.Desc |})
                 | :? ScopedEffect as x when x.Type = EffectType.ValueTrigger ->
-                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = None |})
+                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = None; desc = Some x.Desc|})
                 | _ -> None )
         evs @ gevs @ scopedEffects, scopedEffects
     let scopeCompletionList = scopeCompletionListInner |> fst
@@ -280,10 +280,10 @@ type CompletionService
             else
                 defaultRes
         let completionForRHSDotChain (key : string) (startingContext : ScopeContext) (targetScopes : Scope list) =
-            let createSnippetWithScore scopeContext = (fun i o r key -> Simple(key, Some (scoreFunction scopeContext i o r key)))
+            let createSnippetWithScore scopeContext = (fun i o r key desc -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key)))
 
-            let defaultRes = scopeCompletionList |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key)
-            let defaultResNonGlobal = scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key)
+            let defaultRes = scopeCompletionList |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc)
+            let defaultResNonGlobal = scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc)
             // eprintfn "dr %A" defaultRes
             if key.Contains(".")
             then
@@ -310,7 +310,7 @@ type CompletionService
                 | None -> defaultRes
                 | Some (NewScope (newscope, _, _)) ->
                     log (sprintf "%A %A" key newscope)
-                    scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes x.outputScope targetScopes x.key)
+                    scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes x.outputScope targetScopes x.key x.desc)
                 | Some (ValueFound _)
                 | Some VarFound
                 | Some (VarNotFound _)
