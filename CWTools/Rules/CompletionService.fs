@@ -466,33 +466,61 @@ type CompletionService
         //log "res2 %A" res
         res
     let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: 'T option) (requiredScopes : 'T list) (key : string) =
-        let validInputScope =
+        let validInputScopeScore =
             match inputScopes with
-            | [] -> true
-            | xs ->
+            | [] -> 0 // This item doesn't care what scope it's in
+            | [x] when x = anyScope -> 10 // It supports any scope, so, non-specific
+            | xs -> // This item expects these scopes
                 match startingContext.CurrentScope with
-                | x when x = anyScope -> true
-                | s -> List.exists s.IsOfScope xs
-        let validOutputScope =
+                | x when x = anyScope -> 25 // We're in any scope, so non-specific
+                | s ->
+                    if List.exists s.IsOfScope xs
+                    then 50 // It supports the scope we're in
+                    else 0 // It doesn't support the scope we're in
+        let validOutputScopeScore =
             match requiredScopes with
-            | [] -> true
-            | xs ->
+            | [] -> 0 // This context doesn't expect anything
+            | [x] when x = anyScope -> 10 // The context expects any scope, so, non-specific
+            | xs -> // This context expects these scopes
                 match outputScope with
-                | Some x when x = anyScope -> true
-                | Some x -> List.exists x.IsOfScope xs
-                | _ -> false
-        //TODO add shortcutting
-        
-        let usedKey = List.contains key allUsedKeys
-        match validOutputScope, usedKey, validInputScope with
-        | true, true, true -> 110
-        | true, true, false -> 60
-        | true, false, true -> 100
-        | true, false, false -> 50
-        | false, true, true -> 60
-        | false, true, false -> 10
-        | false, false, true -> 50
-        | false, false, false -> 1
+                | Some x when x = anyScope -> 25 // We're in any scope, so non-specific
+                | Some x ->
+                    if List.exists x.IsOfScope xs
+                    then 50 // It expects the scope we'll output
+                    else 0 // It doesn't expect the scope we'll output
+                | _ -> 0 // We don't output a scope
+        let usedKeyBonus =
+            if List.contains key allUsedKeys
+            then 10
+            else 0
+        validInputScopeScore + validOutputScopeScore + usedKeyBonus
+//        let validInputScope =
+//            match inputScopes with
+//            | [] -> true
+//            | xs ->
+//                match startingContext.CurrentScope with
+//                | x when x = anyScope -> true
+//                | s -> List.exists s.IsOfScope xs
+//        let validOutputScope =
+//            match requiredScopes with
+//            | [] -> true
+//            | xs ->
+//                match outputScope with
+//                | Some x when x = anyScope -> true
+//                | Some x -> List.exists x.IsOfScope xs
+//                | _ -> false
+//        //TODO add shortcutting
+//        
+//        let usedKey = List.contains key allUsedKeys
+//        match validOutputScope, usedKey, validInputScope with
+//        | true, true, true -> 110
+//        | true, true, false -> 60
+//        | true, false, true -> 100
+//        | true, false, false -> 50
+//        | false, true, true -> 60
+//        | false, true, false -> 10
+//        | false, false, true -> 50
+//        | false, false, false -> 1
 
     let complete (pos : pos) (entity : Entity) (scopeContext : ScopeContext option) =
         let scopeContext = Option.defaultValue defaultContext scopeContext
