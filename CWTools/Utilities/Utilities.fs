@@ -81,6 +81,10 @@ module Utils =
             yield! getAllFolders 0 dirs
         }
 
+    [<Literal>]
+    let magicChar = '\u1E00'
+    [<Literal>]
+    let magicCharString = "\u1E00"
 module TryParser =
     // convenient, functional TryParse wrappers returning option<'a>
     let tryParseWith tryParseFunc = tryParseFunc >> function

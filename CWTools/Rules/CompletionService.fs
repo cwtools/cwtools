@@ -258,7 +258,7 @@ type CompletionService
                 let changeScopeRes, containsDot =
                         let substringBefore =
                             splitKey |> (fun x -> log (sprintf "try %A" x); x)
-                             |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A" a); a)
+                             |> Array.takeWhile (fun x -> log x; let a = x.Contains magicCharString |> not in log (sprintf "%A" a); a)
                              |> String.concat "."
                         let res =
                             substringBefore
@@ -289,7 +289,7 @@ type CompletionService
                 let changeScopeRes =
                         let substringBefore =
                             splitKey |> (fun x -> log (sprintf "try %A" x); x)
-                             |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A %A" x a); a)
+                             |> Array.takeWhile (fun x -> log x; let a = x.Contains magicCharString |> not in log (sprintf "%A %A" x a); a)
                         match substringBefore.Length = 0 with
                         | true -> None
                         | false ->
@@ -466,6 +466,9 @@ type CompletionService
         //log "res2 %A" res
         res
     let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: 'T option) (requiredScopes : 'T list) (key : string) =
+        if key = "fleet"
+        then log (sprintf "sf %A %A %A %A" startingContext.CurrentScope inputScopes outputScope requiredScopes)
+        else ()
         let validInputScopeScore =
             match inputScopes with
             | [] -> 0 // This item doesn't care what scope it's in
@@ -493,7 +496,8 @@ type CompletionService
             if List.contains key allUsedKeys
             then 10
             else 0
-        validInputScopeScore + validOutputScopeScore + usedKeyBonus
+        let score = validInputScopeScore + validOutputScopeScore + usedKeyBonus
+        max score 1
 //        let validInputScope =
 //            match inputScopes with
 //            | [] -> true
@@ -564,7 +568,7 @@ type CompletionService
                 else []
         let items =
             match path |> List.tryLast, path.Length with
-            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@\u0016") ->
+            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@"+magicCharString) ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
             |Some (_, _, _, CompletionContext.NodeLHS), 1 ->

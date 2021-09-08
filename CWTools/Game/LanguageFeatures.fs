@@ -43,7 +43,7 @@ module LanguageFeatures =
 
     let completion (fileManager : FileManager) (completionService : CompletionService option) (infoService : InfoService option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
-        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "\u0016") in log(sprintf "%s" s); s else s) |> String.concat "\n"
+        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, magicCharString) in log(sprintf "%s" s); s else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
         match Path.GetExtension filepath ,resourceManager.ManualProcessResource resource, completionService, infoService with
         | ".yml", _, Some completion, _ ->
