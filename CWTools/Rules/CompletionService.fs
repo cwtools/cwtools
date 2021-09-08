@@ -172,7 +172,7 @@ type CompletionService
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
                                                 |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = anyScope |})
-//        linkMap.ToList() |> List.iter (printfn "%A") 
+        linkMap.ToList() |> List.iter (fun x -> log (sprintf "iop %A" x))
         let scopedEffects =
             linkMap.ToList()
             |> List.choose (fun (_, s) -> s |> function
@@ -257,7 +257,7 @@ type CompletionService
                 let splitKey = key.Split([|'.'|])
                 let changeScopeRes, containsDot =
                         let substringBefore =
-                            splitKey |> (fun x -> log (sprintf "%A" x); x)
+                            splitKey |> (fun x -> log (sprintf "try %A" x); x)
                              |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A" a); a)
                              |> String.concat "."
                         let res =
@@ -286,27 +286,34 @@ type CompletionService
             if key.Contains(".")
             then
                 let splitKey = key.Split([|'.'|])
-                let changeScopeRes, containsDot =
+                let changeScopeRes =
                         let substringBefore =
-                            splitKey |> (fun x -> log (sprintf "%A" x); x)
-                             |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A" a); a)
-                             |> String.concat "."
-                        let res =
+                            splitKey |> (fun x -> log (sprintf "try %A" x); x)
+                             |> Array.takeWhile (fun x -> log x; let a = x.Contains "\u0016" |> not in log (sprintf "%A %A" x a); a)
+                        match substringBefore.Length = 0 with
+                        | true -> None
+                        | false ->
                             substringBefore
-                            |> (fun x -> log x; x)
+                            |> String.concat "."
                             |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
-                        res, substringBefore.Contains(".") 
+                            |> Some
+                             
+//                        let res =
+//                            substringBefore
+//                            |> (fun x -> log x; x)
+//                            |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+//                        res, substringBefore.Contains(".") 
                 log (sprintf "REW %A %A %A" key changeScopeRes targetScopes)
                 match changeScopeRes with
-                | NewScope (newscope, _, _) ->
+                | None -> defaultRes
+                | Some (NewScope (newscope, _, _)) ->
                     log (sprintf "%A %A" key newscope)
-                    let sourceList = if containsDot then scopeCompletionListNonGlobal else scopeCompletionList
-                    sourceList |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes (Some x.outputScope) targetScopes x.key)
-                | ValueFound _
-                | VarFound
-                | VarNotFound _
-                | WrongScope _
-                | NotFound -> if containsDot then defaultResNonGlobal else defaultRes
+                    scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes (Some x.outputScope) targetScopes x.key)
+                | Some (ValueFound _)
+                | Some VarFound
+                | Some (VarNotFound _)
+                | Some (WrongScope _)
+                | Some (NotFound) -> defaultResNonGlobal
             else
                 defaultRes
         let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =

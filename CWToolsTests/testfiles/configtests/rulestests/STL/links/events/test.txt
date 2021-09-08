@@ -47,6 +47,14 @@ event = {
     }
     
     ## Test completion
+    
+    set_event_target = test_event_target
+    
+    test_ship = event_target:test_event_target
+    #error
+    #@! 35 event_target:test_event_target
+    test_ship = simple_with_scope.event_target:test_event_target
+    
     #@ 15 simple_with_scope
     test_ship = simple_with_scope
     #@ 15 simple_with_scope

@@ -36,6 +36,9 @@ event = {
     set_test_value = value_set[link_test_value]
     
     ## cardinality = 0..inf
+    set_event_target = value_set[event_target]
+    
+    ## cardinality = 0..inf
     ## replace_scope = { this = planet root = country }
     trigger = {
         alias_name[trigger] = alias_match_left[trigger]
