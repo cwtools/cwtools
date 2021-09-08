@@ -281,7 +281,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                 | Snippet(label, _, _, score, _) -> label, score
             let compRes = game.Complete pos filename filetext |> List.map getLabel
             let labels = compRes |> List.map fst
-            let lowscorelables = compRes |> List.choose (fun (label, score) -> score |> Option.bind (fun s -> if s <= 10 then Some label else None))
+            let lowscorelables = compRes |> List.choose (fun (label, score) -> score |> Option.bind (fun s -> if s <= 30 then Some label else None))
             let scoreMap = compRes |> Map.ofList
             match negate, lowscore with
             | true, _ ->
