@@ -168,18 +168,23 @@ type CompletionService
     let scopeCompletionListInner =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None |})
+                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None
+                                                                         kind = CompletionCategory.Global |})
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None |})
+                                                |> List.map (fun s -> {| key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None
+                                                                         kind = CompletionCategory.Global |})
+                                                
         linkMap.ToList() |> List.iter (fun x -> log (sprintf "iop %A" x))
         let scopedEffects =
             linkMap.ToList()
             |> List.choose (fun (_, s) -> s |> function
                 | :? ScopedEffect as x when x.Type = EffectType.Link ->
-                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = x.Target; desc = Some x.Desc |})
+                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = x.Target; desc = Some x.Desc
+                             kind = CompletionCategory.Link |})
                 | :? ScopedEffect as x when x.Type = EffectType.ValueTrigger ->
-                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = None; desc = Some x.Desc|})
+                    Some ({| key = x.Name; requiredScopes = x.Scopes; outputScope = None; desc = Some x.Desc
+                             kind = CompletionCategory.Value |})
                 | _ -> None )
         evs @ gevs @ scopedEffects, scopedEffects
     let scopeCompletionList = scopeCompletionListInner |> fst
@@ -212,7 +217,7 @@ type CompletionService
         let requiredRules = if requiredRules = "" then "\t${0}\n" else requiredRules
 
         let score = scoreFunction key
-        CompletionResponse.Snippet (key, (sprintf "%s = {\n%s}" key requiredRules), description, Some score)
+        CompletionResponse.Snippet (key, (sprintf "%s = {\n%s}" key requiredRules), description, Some score, Other)
 
 
     // | LeafValue
@@ -280,10 +285,10 @@ type CompletionService
             else
                 defaultRes
         let completionForRHSDotChain (key : string) (startingContext : ScopeContext) (targetScopes : Scope list) =
-            let createSnippetWithScore scopeContext = (fun i o r key desc -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key)))
+            let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
 
-            let defaultRes = scopeCompletionList |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc)
-            let defaultResNonGlobal = scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc)
+            let defaultRes = scopeCompletionList |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
+            let defaultResNonGlobal = scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
             // eprintfn "dr %A" defaultRes
             if key.Contains(".")
             then
@@ -310,7 +315,7 @@ type CompletionService
                 | None -> defaultRes
                 | Some (NewScope (newscope, _, _)) ->
                     log (sprintf "%A %A" key newscope)
-                    scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes x.outputScope targetScopes x.key x.desc)
+                    scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetWithScore newscope x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
                 | Some (ValueFound _)
                 | Some VarFound
                 | Some (VarNotFound _)
@@ -328,8 +333,8 @@ type CompletionService
             if enough
             then []
             else
-                let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunctioni inner))
-                let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction context r None []) inner))
+                let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunctioni inner), Other)
+                let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction context r None []) inner), Other)
                 match r with
                 |NodeRule (SpecificField(SpecificValue s), innerRules) ->
                     [createSnippetForClausei innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
@@ -599,9 +604,9 @@ type CompletionService
             if allUsedKeys |> List.contains label then 10 else 1
         (items @ rootTypeItems) |> List.map
                     (function
-                     | Simple (label, None) -> Simple (label, Some (scoreForLabel label))
-                     | Detailed (label, desc, None) -> Detailed (label, desc, Some (scoreForLabel label))
-                     | Snippet (label, snippet, desc, None) -> Snippet(label, snippet, desc, Some (scoreForLabel label))
+                     | Simple (label, None, kind) -> Simple (label, Some (scoreForLabel label), kind)
+                     | Detailed (label, desc, None, kind) -> Detailed (label, desc, Some (scoreForLabel label), kind)
+                     | Snippet (label, snippet, desc, None, kind) -> Snippet(label, snippet, desc, Some (scoreForLabel label), kind)
                      | x -> x
                      )
 

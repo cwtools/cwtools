@@ -276,9 +276,9 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         let completionTest (game : IGame) filename filetext (pos : pos, text : string, negate : bool, lowscore : bool) =
             let getLabel =
                 function
-                | Simple(label, score)
-                | Detailed(label, _, score )
-                | Snippet(label, _, _, score) -> label, score
+                | Simple(label, score, _)
+                | Detailed(label, _, score , _)
+                | Snippet(label, _, _, score, _) -> label, score
             let compRes = game.Complete pos filename filetext |> List.map getLabel
             let labels = compRes |> List.map fst
             let lowscorelables = compRes |> List.choose (fun (label, score) -> score |> Option.bind (fun s -> if s <= 10 then Some label else None))
