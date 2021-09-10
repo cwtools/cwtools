@@ -307,13 +307,16 @@ module ValidationCore =
 
     let lazyErrorMerge rs f defValue (errors : ValidationResult) merge =
         // let mutable state = errors
-        let mutable foundOK = false
-        let mutable any = false        //Take every potential rule
-        let res =
-            rs |> Seq.fold (fun es r ->
+//        let mutable foundOK = false
+//        let mutable any = false        //Take every potential rule
+        let struct (foundOK, any, res) =
+            rs |> Seq.fold (fun struct (foundOK, any, es) r ->
             if foundOK
-            then es
-            else (let x = f r es in if x.Equals es then foundOK <- true; x else any <- true; x)) errors
+            then struct (foundOK, any, es)
+            else (let x = f r es in
+                  if x.Equals es
+                  then struct (true, any, x)
+                  else struct (foundOK, true, x))) struct (false, false, errors)
         match foundOK, any, merge with
         |true, _, _ -> errors
         |_, false, _ -> defValue()
