@@ -85,6 +85,7 @@ module Utils =
     let magicChar = '\u1E00'
     [<Literal>]
     let magicCharString = "\u1E00"
+    let quoteCharArray = [|'"'|]
 module TryParser =
     // convenient, functional TryParse wrappers returning option<'a>
     let tryParseWith tryParseFunc = tryParseFunc >> function
