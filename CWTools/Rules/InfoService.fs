@@ -651,7 +651,7 @@ type InfoService
                     let found, value = nodeSpecificDict.TryGetValue keyId.lower
                     let rs =
                         if found
-                        then seq { yield! value; yield! noderules }
+                        then Seq.append value noderules
                         else upcast noderules
                     rs |> Seq.choose (function |NodeRule (l, rs), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some struct (NodeC c, ((NodeRule (l, rs)), o)) else None) |_ -> None)
                 | ValueClauseC vc ->
@@ -662,7 +662,7 @@ type InfoService
                     let found, value = leafSpecificDict.TryGetValue keyId.lower
                     let rs =
                         if found
-                        then seq { yield! value; yield! leafrules }
+                        then Seq.append value leafrules
                         else upcast leafrules
                     rs |> Seq.choose (function |LeafRule (l, r), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some struct(LeafC leaf, ((LeafRule (l, r)), o)) else None) |_ -> None)
                 | LeafValueC leafvalue ->
