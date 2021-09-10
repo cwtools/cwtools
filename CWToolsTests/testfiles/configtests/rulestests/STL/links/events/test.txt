@@ -76,8 +76,9 @@ event = {
         num_moons = THIS.num_moons
         
         ## Test trigger prefix
+        #@ 25 trigger:num_moons
         num_moons = THIS.trigger:num_moons
-        ##@ 15 trigger:num_moons
+        #@ 15 trigger:num_moons
         num_moons = trigger:num_moons
         
         ## Test non-comparable trigger

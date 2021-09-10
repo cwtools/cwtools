@@ -187,7 +187,7 @@ type CompletionService
     ///
     
 
-    let scopeCompletionListInner =
+    let valueFieldAll, valueFieldNonGlobal, scopeFieldAll, scopeFieldNonGlobal, variableFieldAll, variableFieldNonGlobal =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
                                                 |> List.map (fun s -> { key = "event_target:" + s; requiredScopes =  [anyScope]; outputScope = Scope anyScope; desc = None;
@@ -216,15 +216,22 @@ type CompletionService
                 | :? ScopedEffect as x when x.Type = EffectType.Link && x.Target.IsNone ->
                     Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = CompletionScopeOutput.Nothing; desc = Some x.Desc;
                              kind = CompletionCategory.Link })
+                | _ -> None )
+        let valueTriggers =
+            valueTriggerMap.ToList()
+            |> List.choose (fun (_, s) -> s |> function
                 | :? DocEffect as x when x.Type = EffectType.ValueTrigger ->
                     Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = CompletionScopeOutput.Value; desc = Some x.Desc;
-                             kind = CompletionCategory.Value })
+                            kind = CompletionCategory.Value })
                 | _ -> None )
-        evs @ gevs @ scopedEffects @ vars, scopedEffects, scopedEffects @ vars, vars
-    let scopeCompletionList = let res, _, _, _ = scopeCompletionListInner in res
-    let scopeCompletionListNonGlobal = let _, _, res, _ = scopeCompletionListInner in res
-    let scopeCompletionListVars = let _, _, _, res = scopeCompletionListInner in res
-    let scopeCompletionListLinks = let _, res, _, _ = scopeCompletionListInner in res
+//        let scopedEffects = scopedEffects @ valueTriggers
+        let valueFieldAll = evs @ gevs @ scopedEffects @ vars @ valueTriggers
+        let valueFieldNonGlobal = scopedEffects @ vars @ valueTriggers
+        let scopeFieldAll = evs @ gevs @ scopedEffects
+        let scopeFieldNonGlobal = scopedEffects
+        let variableFieldAll = evs @ gevs @ scopedEffects @ vars
+        let variableFieldNonGlobal = scopedEffects @ vars
+        valueFieldAll, valueFieldNonGlobal, scopeFieldAll, scopeFieldNonGlobal, variableFieldAll, variableFieldNonGlobal
 
     let createSnippetForClause (scoreFunction : string -> int) (rules : NewRule list) (description : string option) (key : string) =
         let filterToCompletion =
@@ -333,7 +340,8 @@ type CompletionService
             | None -> defaultRes
             | Some (NewScope (newscope, _, _)) ->
 //                log (sprintf "%A %A" key newscope)
-                scopeCompletionListNonGlobal |> List.map (fun x -> createSnippetFun newscope x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
+                // The magic char probably breaks any scope matches, so we'll never be on the first item here
+                terminalLinkList |> List.map (fun x -> createSnippetFun newscope x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
             | Some (ValueFound _)
             | Some VarFound
             | Some (VarNotFound _)
@@ -343,22 +351,22 @@ type CompletionService
             let createSnippetForClauseWithCustomScopeReq scopeContext i o r key desc kind = createSnippetForClause (scoreFunction scopeContext i o r) innerRules description key
             
             completionDotChainInner key startingContext 
-            |> convertScopeResToList startingContext targetScopes scopeCompletionList scopeCompletionListNonGlobal createSnippetForClauseWithCustomScopeReq 
+            |> convertScopeResToList startingContext targetScopes scopeFieldAll scopeFieldNonGlobal createSnippetForClauseWithCustomScopeReq 
                     
         let completionForRHSScopeChain (key : string) (startingContext : ScopeContext) (targetScopes : CompletionScopeExpectation) =
             let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
             completionDotChainInner key startingContext 
-            |> convertScopeResToList startingContext targetScopes scopeCompletionList scopeCompletionListLinks createSnippetWithScore 
+            |> convertScopeResToList startingContext targetScopes scopeFieldAll scopeFieldNonGlobal createSnippetWithScore 
             
         let completionForRHSValueChain (key : string) (startingContext : ScopeContext) =
             let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
             completionDotChainInner key startingContext
-            |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue scopeCompletionList scopeCompletionListNonGlobal createSnippetWithScore
+            |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue valueFieldAll valueFieldNonGlobal createSnippetWithScore
             
         let completionForRHSVariableChain (key : string) (startingContext : ScopeContext) =
             let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
             completionDotChainInner key startingContext
-            |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue scopeCompletionList scopeCompletionListVars createSnippetWithScore
+            |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue variableFieldAll variableFieldNonGlobal createSnippetWithScore
             
         let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =
             // eprintfn "crtc %A %A" key rule
@@ -403,7 +411,7 @@ type CompletionService
                 |LeafRule (FilepathField(_), _) -> []
                 |LeafRule (IconField(folder), _) -> checkIconField folder |> List.map keyvalue
                 |LeafRule (LocalisationField(_), _) -> []
-                |LeafRule (ScopeField(_), _) -> scopeCompletionList |> List.map (fun x -> keyvalueWithCustomScopeReq x.requiredScopes x.key)
+                |LeafRule (ScopeField(_), _) -> scopeFieldAll |> List.map (fun x -> keyvalueWithCustomScopeReq x.requiredScopes x.key)
                     //TODO: Scopes
                 |LeafRule (SubtypeField(_), _) -> []
                 |LeafRule (TypeField(TypeType.Simple t), _) ->
@@ -528,8 +536,8 @@ type CompletionService
                     else 0 // It doesn't support the scope we're in
         let validOutputScopeScore =
             match expectedScope, outputScope with
-            | VariableOrValue, CompletionScopeOutput.Value
-            | VariableOrValue, CompletionScopeOutput.Variable -> 25
+            | VariableOrValue, CompletionScopeOutput.Value -> 25
+            | VariableOrValue, CompletionScopeOutput.Variable -> 20
             | Nothing, CompletionScopeOutput.Nothing -> 25
             | Scopes expectedScopes, CompletionScopeOutput.Scope scope ->
                match expectedScopes, scope with
