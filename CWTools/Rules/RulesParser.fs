@@ -30,24 +30,24 @@ module private RulesParserImpl =
 
     let private getNodeComments (clause : IClause) =
         let findComments (t : range) s (a : Child) =
-                match (s, a) with
-                | ((b, c), _) when b -> (b, c)
-                | ((_, c), CommentC (_, nc)) when nc.StartsWith("#") -> (false, nc::c)
-                | ((_, c), CommentC (_, _)) -> (false, c)
-                | ((_, c), NodeC n) when n.Position.Code = t.Code -> (true, c)
-                | ((_, c), LeafC v) when v.Position.Code = t.Code -> (true, c)
-                | ((_, c), LeafValueC v) when v.Position.Code = t.Code -> (true, c)
-                | ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code-> (true, c)
-                | _ -> (false, [])
+                match struct (s, a) with
+                | struct (struct (b, c), _) when b -> struct (b, c)
+                | struct ((_, c), CommentC (_, nc)) when nc.StartsWith("#", StringComparison.OrdinalIgnoreCase) -> struct (false, nc::c)
+                | struct ((_, c), CommentC (_, _)) -> struct (false, c)
+                | struct ((_, c), NodeC n) when n.Position.Code = t.Code -> struct (true, c)
+                | struct ((_, c), LeafC v) when v.Position.Code = t.Code -> struct (true, c)
+                | struct ((_, c), LeafValueC v) when v.Position.Code = t.Code -> struct (true, c)
+                | struct ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code-> struct (true, c)
+                | _ -> struct (false, [])
                 // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
                 // | ((_, _), _) -> (false, [])
         //let fNode = (fun (node:Node) (children) ->
-        let one = clause.Leaves |> Seq.map (fun e -> LeafC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd) |> List.ofSeq
+        let one = clause.Leaves |> Seq.map (fun e -> LeafC e, clause.AllArray |> Array.fold (findComments e.Position) struct (false, []) |> structSnd) |> List.ofSeq
         //log "%s %A" node.Key (node.All |> List.rev)
         //log "%A" one
-        let two = clause.Nodes |> Seq.map (fun e -> NodeC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l))) |> List.ofSeq
-        let three = clause.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
-        let four = clause.ValueClauses |> Seq.toList |> List.map (fun e -> ValueClauseC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
+        let two = clause.Nodes |> Seq.map (fun e -> NodeC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd |> (fun l -> (l))) |> List.ofSeq
+        let three = clause.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd)
+        let four = clause.ValueClauses |> Seq.toList |> List.map (fun e -> ValueClauseC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd)
         let new2 = one @ two @ three @ four
         new2
 

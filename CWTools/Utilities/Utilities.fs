@@ -80,6 +80,8 @@ module Utils =
             yield! dirs
             yield! getAllFolders 0 dirs
         }
+        
+    let structSnd struct(_, x) = x
 
     [<Literal>]
     let magicChar = '\u1E00'
