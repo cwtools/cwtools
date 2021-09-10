@@ -216,10 +216,10 @@ type InfoService
         match child with
         |NodeC node ->
             let finalAcc = fNode acc node rule
-            fChild (node :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
+            fChild (node :> IClause) rule |> Seq.fold (fun a struct (c, r) -> recurse a c r) finalAcc
         |ValueClauseC valueClause ->
             let finalAcc = fValueClause acc valueClause rule
-            fChild (valueClause :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse a c r) finalAcc
+            fChild (valueClause :> IClause) rule |> Seq.fold (fun a struct (c, r) -> recurse a c r) finalAcc
         |LeafC leaf ->
             fLeaf acc leaf rule
         |LeafValueC leafvalue ->
@@ -233,10 +233,10 @@ type InfoService
         match child with
         |NodeC node ->
             let newCtx, finalAcc = fNode ctx acc node rule
-            fChild (node :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse newCtx a c r) finalAcc
+            fChild (node :> IClause) rule |> Seq.fold (fun a struct (c, r) -> recurse newCtx a c r) finalAcc
         |ValueClauseC valueClause ->
             let newCtx, finalAcc = fValueClause ctx acc valueClause rule
-            fChild (valueClause :> IClause) rule |> Seq.fold (fun a (c, r) -> recurse newCtx a c r) finalAcc
+            fChild (valueClause :> IClause) rule |> Seq.fold (fun a struct (c, r) -> recurse newCtx a c r) finalAcc
         |LeafC leaf ->
             fLeaf ctx acc leaf rule
         |LeafValueC leafvalue ->
@@ -653,9 +653,9 @@ type InfoService
                         if found
                         then seq { yield! value; yield! noderules }
                         else upcast noderules
-                    rs |> Seq.choose (function |NodeRule (l, rs), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some (NodeC c, ((NodeRule (l, rs)), o)) else None) |_ -> None)
+                    rs |> Seq.choose (function |NodeRule (l, rs), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some struct (NodeC c, ((NodeRule (l, rs)), o)) else None) |_ -> None)
                 | ValueClauseC vc ->
-                    valueclauserules |> Seq.choose (function |ValueClauseRule rs, o -> Some (ValueClauseC vc, ((ValueClauseRule (rs)), o)) |_ -> None)
+                    valueclauserules |> Seq.choose (function |ValueClauseRule rs, o -> Some struct (ValueClauseC vc, ((ValueClauseRule (rs)), o)) |_ -> None)
                 | LeafC leaf ->
                     let key = leaf.Key
                     let keyId = leaf.KeyId
@@ -664,11 +664,11 @@ type InfoService
                         if found
                         then seq { yield! value; yield! leafrules }
                         else upcast leafrules
-                    rs |> Seq.choose (function |LeafRule (l, r), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None) |_ -> None)
+                    rs |> Seq.choose (function |LeafRule (l, r), o -> (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then Some struct(LeafC leaf, ((LeafRule (l, r)), o)) else None) |_ -> None)
                 | LeafValueC leafvalue ->
                     let key = leafvalue.Key
                     let keyId = leafvalue.ValueId
-                    leafvaluerules |> Seq.choose (function |LeafValueRule lv, o -> (if FieldValidators.checkLeftField p Severity.Error ctx lv keyId then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None) |_ -> None)
+                    leafvaluerules |> Seq.choose (function |LeafValueRule lv, o -> (if FieldValidators.checkLeftField p Severity.Error ctx lv keyId then  Some struct (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None) |_ -> None)
                 | CommentC _ -> Seq.empty
             node.AllArray |> Seq.collect inner
 
