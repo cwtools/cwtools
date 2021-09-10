@@ -511,9 +511,9 @@ type CompletionService
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
-    let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (requiredScopes : CompletionScopeExpectation) (key : string) =
+    let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (expectedScope : CompletionScopeExpectation) (key : string) =
         if key = "fleet"
-        then log (sprintf "sf %A %A %A %A" startingContext.CurrentScope inputScopes outputScope requiredScopes)
+        then log (sprintf "sf %A %A %A %A" startingContext.CurrentScope inputScopes outputScope expectedScope)
         else ()
         let validInputScopeScore =
             match inputScopes with
@@ -527,20 +527,38 @@ type CompletionService
                     then 50 // It supports the scope we're in
                     else 0 // It doesn't support the scope we're in
         let validOutputScopeScore =
-            match requiredScopes with
-            | [] -> // This context doesn't expect anything
-                match outputScope with
-                | None -> 25 // It expects no scope and that's what we give (e.g. variables?)
-                | _ -> 0 
-            | [x] when x = anyScope -> 5 // The context expects any scope, so, non-specific
-            | xs -> // This context expects these scopes
-                match outputScope with
-                | Some x when x = anyScope -> 15 // We're in any scope, so non-specific
-                | Some x ->
-                    if List.exists x.IsOfScope xs
-                    then 25 // It expects the scope we'll output
-                    else 0 // It doesn't expect the scope we'll output
-                | _ -> 0 // We don't output a scope
+            match expectedScope, outputScope with
+            | VariableOrValue, CompletionScopeOutput.Value
+            | VariableOrValue, CompletionScopeOutput.Variable -> 25
+            | Nothing, CompletionScopeOutput.Nothing -> 25
+            | Scopes expectedScopes, CompletionScopeOutput.Scope scope ->
+               match expectedScopes, scope with
+               | [x], _ when x = anyScope -> 5
+               | [], _ -> 0
+               | xs, y when y = anyScope -> 15
+               | xs, y ->
+                   if List.exists y.IsOfScope xs
+                   then 25
+                   else 0
+               | _ -> 0
+            | _ -> 0
+            
+//        let validOutputScopeScore =
+//            
+//            match expectedScope with
+//            | Nothing -> // This context doesn't expect anything
+//                match outputScope with
+//                | None -> 25 // It expects no scope and that's what we give (e.g. variables?)
+//                | _ -> 0 
+//            | [x] when x = anyScope -> 5 // The context expects any scope, so, non-specific
+//            | xs -> // This context expects these scopes
+//                match outputScope with
+//                | Some x when x = anyScope -> 15 // We're in any scope, so non-specific
+//                | Some x ->
+//                    if List.exists x.IsOfScope xs
+//                    then 25 // It expects the scope we'll output
+//                    else 0 // It doesn't expect the scope we'll output
+//                | _ -> 0 // We don't output a scope
         let usedKeyBonus =
             if List.contains key allUsedKeys
             then 10
