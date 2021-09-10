@@ -19,13 +19,25 @@ type CompletionContext =
     | LeafRHS
 
 
+type private CompletionScopeOutput =
+    | Variable
+    | Value
+    | Scope of scope : Scope
+    | Nothing
+type private CompletionScopeExpectation =
+    | VariableOrValue
+    | Scopes of scopes : Scope list
+    | Nothing
+
 type private CompletionLinkItem = {
         key : string
         requiredScopes : Scope list
-        outputScope : Scope option
+        outputScope : CompletionScopeOutput
         desc : string option
         kind : CompletionCategory
 }
+
+
 type CompletionService
                     (rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>,
                      enums : Collections.Map<string, string * StringSet>, varMap : Collections.Map<string, StringSet>,
@@ -178,11 +190,11 @@ type CompletionService
     let scopeCompletionListInner =
         let evs = varMap.TryFind "event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> { key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None;
+                                                |> List.map (fun s -> { key = "event_target:" + s; requiredScopes =  [anyScope]; outputScope = Scope anyScope; desc = None;
                                                                          kind = CompletionCategory.Global })
         let gevs = varMap.TryFind "global_event_target" |> Option.map (fun l -> l.ToList())
                                                 |> Option.defaultValue []
-                                                |> List.map (fun s -> { key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Some anyScope; desc = None;
+                                                |> List.map (fun s -> { key = "event_target:" + s; requiredScopes = [anyScope]; outputScope = Scope anyScope; desc = None;
                                                                          kind = CompletionCategory.Global })
                                                 
         let vars = varMap.TryFind "variable" |> Option.map (fun l -> l.ToList())
@@ -190,7 +202,7 @@ type CompletionService
                                              |> List.map (fun s -> {
                                                  key = s
                                                  requiredScopes = [anyScope]
-                                                 outputScope = None
+                                                 outputScope = CompletionScopeOutput.Variable
                                                  desc = None
                                                  kind = CompletionCategory.Variable
                                              })
@@ -198,11 +210,14 @@ type CompletionService
         let scopedEffects =
             linkMap.ToList()
             |> List.choose (fun (_, s) -> s |> function
-                | :? ScopedEffect as x when x.Type = EffectType.Link ->
-                    Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = x.Target; desc = Some x.Desc;
+                | :? ScopedEffect as x when x.Type = EffectType.Link && x.Target.IsSome ->
+                    Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = Scope x.Target.Value; desc = Some x.Desc;
+                             kind = CompletionCategory.Link })
+                | :? ScopedEffect as x when x.Type = EffectType.Link && x.Target.IsNone ->
+                    Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = CompletionScopeOutput.Nothing; desc = Some x.Desc;
                              kind = CompletionCategory.Link })
                 | :? ScopedEffect as x when x.Type = EffectType.ValueTrigger ->
-                    Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = None; desc = Some x.Desc;
+                    Some ({ key = x.Name; requiredScopes = x.Scopes; outputScope = CompletionScopeOutput.Value; desc = Some x.Desc;
                              kind = CompletionCategory.Value })
                 | _ -> None )
         evs @ gevs @ scopedEffects @ vars, scopedEffects, scopedEffects @ vars, vars
@@ -272,10 +287,10 @@ type CompletionService
                     // | Some lv -> (lv.Key, countChildren node lv.Key, Some lv.ValueText)::stack
                     // | None -> stack
 
-    and getCompletionFromPath (scoreFunction : ScopeContext -> _ list -> _ option -> _ list -> string -> int) (rules : NewRule list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
+    and getCompletionFromPath (scoreFunction : ScopeContext -> _ list -> CompletionScopeOutput -> CompletionScopeExpectation -> string -> int) (rules : NewRule list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
         // log (sprintf "%A" stack)
        
-        let completionDotChainInner (key : string) (startingContext : ScopeContext) (targetScopes : Scope list) =
+        let completionDotChainInner (key : string) (startingContext : ScopeContext) =
             if key.Contains(".")
             then
                 let splitKey = key.Split([|'.'|])
@@ -296,7 +311,7 @@ type CompletionService
 //                            |> (fun x -> log x; x)
 //                            |> (fun next -> changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
 //                        res, substringBefore.Contains(".") 
-                log (sprintf "REW %A %A %A" key changeScopeRes targetScopes)
+//                log (sprintf "REW %A %A %A" key changeScopeRes targetScopes)
                 changeScopeRes
 //                match changeScopeRes with
 //                | None -> defaultRes
@@ -310,7 +325,7 @@ type CompletionService
 //                | Some (NotFound) -> defaultResNonGlobal
             else
                 None
-        let inline convertScopeResToList  startingContext targetScopes linkList terminalLinkList createSnippetFun (scopeRes : ScopeResult option)=
+        let inline convertScopeResToList  startingContext (targetScopes : CompletionScopeExpectation) linkList terminalLinkList createSnippetFun (scopeRes : ScopeResult option)=
             
             let defaultRes = linkList |> List.map (fun x -> createSnippetFun startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
             let defaultResNonGlobal = terminalLinkList |> List.map (fun x -> createSnippetFun startingContext x.requiredScopes x.outputScope targetScopes x.key x.desc x.kind)
@@ -324,39 +339,39 @@ type CompletionService
             | Some (VarNotFound _)
             | Some (WrongScope _)
             | Some (NotFound) -> defaultResNonGlobal
-        let completionForScopeDotChain (key : string) (startingContext : ScopeContext) innerRules (description : string option) (targetScopes : Scope list)=
+        let completionForScopeDotChain (key : string) (startingContext : ScopeContext) innerRules (description : string option) (targetScopes : CompletionScopeExpectation)=
             let createSnippetForClauseWithCustomScopeReq scopeContext i o r key desc kind = createSnippetForClause (scoreFunction scopeContext i o r) innerRules description key
             
-            completionDotChainInner key startingContext targetScopes
+            completionDotChainInner key startingContext 
             |> convertScopeResToList startingContext targetScopes scopeCompletionList scopeCompletionListNonGlobal createSnippetForClauseWithCustomScopeReq 
                     
-        let completionForRHSScopeChain (key : string) (startingContext : ScopeContext) (targetScopes : Scope list) =
+        let completionForRHSScopeChain (key : string) (startingContext : ScopeContext) (targetScopes : CompletionScopeExpectation) =
             let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
-            completionDotChainInner key startingContext targetScopes
+            completionDotChainInner key startingContext 
             |> convertScopeResToList startingContext targetScopes scopeCompletionList scopeCompletionListLinks createSnippetWithScore 
             
         let completionForRHSValueChain (key : string) (startingContext : ScopeContext) =
             let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
-            completionDotChainInner key startingContext []
-            |> convertScopeResToList startingContext [] scopeCompletionList scopeCompletionListNonGlobal createSnippetWithScore
+            completionDotChainInner key startingContext
+            |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue scopeCompletionList scopeCompletionListNonGlobal createSnippetWithScore
             
         let completionForRHSVariableChain (key : string) (startingContext : ScopeContext) =
             let createSnippetWithScore scopeContext = (fun i o r key desc kind -> Detailed(key, desc, Some (scoreFunction scopeContext i o r key), kind))
-            completionDotChainInner key startingContext []
-            |> convertScopeResToList startingContext [] scopeCompletionList scopeCompletionListVars createSnippetWithScore
+            completionDotChainInner key startingContext
+            |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue scopeCompletionList scopeCompletionListVars createSnippetWithScore
             
         let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =
             // eprintfn "crtc %A %A" key rule
             let r, o = rule
-            let scoreFunctioni = scoreFunction context o.requiredScopes None []
+            let scoreFunctioni = scoreFunction context o.requiredScopes CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing
             let createSnippetForClausei = createSnippetForClause scoreFunctioni
-            let createSnippetForClauseWithCustomScopeReq = (fun (r) -> createSnippetForClause (scoreFunction context r None []))
+            let createSnippetForClauseWithCustomScopeReq = (fun (r) -> createSnippetForClause (scoreFunction context r CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing))
             let enough = o.max <= count
             if enough
             then []
             else
                 let keyvalue (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some (scoreFunctioni inner), Other)
-                let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction context r None []) inner), Other)
+                let keyvalueWithCustomScopeReq r (inner : string) = CompletionResponse.Snippet (inner, (sprintf "%s = $0" inner), o.description, Some ((scoreFunction context r CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing) inner), Other)
                 match r with
                 |NodeRule (SpecificField(SpecificValue s), innerRules) ->
                     [createSnippetForClausei innerRules o.description (StringResource.stringManager.GetStringForID s.normal)]
@@ -369,7 +384,7 @@ type CompletionService
                     checkIconField folder |> List.map (fun e -> createSnippetForClausei innerRules o.description e)
                 |NodeRule (LocalisationField(_), _) -> []
                 |NodeRule (ScopeField(x), innerRules) ->
-                    completionForScopeDotChain key context innerRules o.description x
+                    completionForScopeDotChain key context innerRules o.description (CompletionScopeExpectation.Scopes x)
                 //TODO: Scopes better
                 |NodeRule (SubtypeField(_), _) -> []
                 |NodeRule (TypeField(TypeType.Simple t), innerRules) ->
@@ -425,7 +440,7 @@ type CompletionService
                 |true, _ -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
                 |false, _ -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.FilepathField _ -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
-            |NewField.ScopeField x -> completionForRHSScopeChain value scopeContext x
+            |NewField.ScopeField x -> completionForRHSScopeChain value scopeContext (CompletionScopeExpectation.Scopes x)
 //            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
             |NewField.VariableGetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
             |NewField.VariableSetField v -> varMap.TryFind v |> Option.map (fun ss -> ss.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -496,7 +511,7 @@ type CompletionService
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
-    let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: 'T option) (requiredScopes : 'T list) (key : string) =
+    let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (requiredScopes : CompletionScopeExpectation) (key : string) =
         if key = "fleet"
         then log (sprintf "sf %A %A %A %A" startingContext.CurrentScope inputScopes outputScope requiredScopes)
         else ()
@@ -506,7 +521,7 @@ type CompletionService
             | [x] when x = anyScope -> 10 // It supports any scope, so, non-specific
             | xs -> // This item expects these scopes
                 match startingContext.CurrentScope with
-                | x when x = anyScope -> 25 // We're in any scope, so non-specific
+                | x when x = anyScope -> 20 // We're in any scope, so non-specific
                 | s ->
                     if List.exists s.IsOfScope xs
                     then 50 // It supports the scope we're in

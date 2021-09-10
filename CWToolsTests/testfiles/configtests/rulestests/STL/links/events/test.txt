@@ -64,6 +64,8 @@ event = {
     #@! 55 trigger:num_moons
     test_ship = simple_with_scope.simple_back_scope.simple_with_scope
     
+    set_variable = test_variable
+    
     trigger = {
         ### Test trigger RHS values
         
@@ -103,6 +105,10 @@ event = {
             #error
             value = ROOT.trigger:num_moons
         }
+        
+        #@ 25 test_variable
+        #@? 25 simple_with_scope
+        num_moons_no_compare = THIS.test_variable
     }
 
 }
