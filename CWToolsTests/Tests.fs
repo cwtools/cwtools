@@ -287,7 +287,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             | true, _ ->
                 Expect.hasCountOf (labels) 0u ((=) text) (sprintf "Completion shouldn't contain value %s at %A in %s" text pos filename)
             | false, true ->
-                logInfo (sprintf "ct %A" compRes)
+//                logInfo (sprintf "ct %A" compRes)
                 let firstLowScore = text, scoreMap.[text]
                 Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s. Score (%A)" pos filename firstLowScore )
             | false, false ->

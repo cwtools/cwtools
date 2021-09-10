@@ -206,7 +206,7 @@ type CompletionService
                                                  desc = None
                                                  kind = CompletionCategory.Variable
                                              })
-        linkMap.ToList() |> List.iter (fun x -> log (sprintf "iop %A" x))
+//        linkMap.ToList() |> List.iter (fun x -> log (sprintf "iop %A" x))
         let scopedEffects =
             linkMap.ToList()
             |> List.choose (fun (_, s) -> s |> function
@@ -270,7 +270,7 @@ type CompletionService
             n2.Nodes |> Seq.choose (function |c when c.Key == key -> Some c |_ -> None) |> Seq.length
         match node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos) with
         | Some c ->
-            log (sprintf "%s %A %A" c.Key c.Position pos)
+//            log (sprintf "%s %A %A" c.Key c.Position pos)
             match (c.Position.StartLine = (pos.Line)) && ((c.Position.StartColumn + c.Key.Length + 1) > pos.Column) with
             | true -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeLHS) :: stack) c
             | false -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeRHS) :: stack) c
@@ -303,8 +303,8 @@ type CompletionService
                 let splitKey = key.Split([|'.'|])
                 let changeScopeRes =
                         let substringBefore =
-                            splitKey |> (fun x -> log (sprintf "try %A" x); x)
-                             |> Array.takeWhile (fun x -> log x; let a = x.Contains magicCharString |> not in log (sprintf "%A %A" x a); a)
+                            splitKey 
+                             |> Array.takeWhile (fun x -> x.Contains magicCharString |> not)
                         match substringBefore.Length = 0 with
                         | true -> None
                         | false ->
@@ -435,7 +435,7 @@ type CompletionService
                 |_ -> []
             //TODO: Add leafvalue
         let fieldToRules (field : NewField) (value : string) (scopeContext : ScopeContext) =
-            log (sprintf "%A %A" field value)
+//            log (sprintf "%A %A" field value)
 //            eprintfn "%A" value
             match field with
             |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun (_, s) -> s.ToList()) |> Option.defaultValue [] |> List.map CompletionResponse.CreateSimple
@@ -520,9 +520,7 @@ type CompletionService
         //log "res2 %A" res
         res
     let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (expectedScope : CompletionScopeExpectation) (key : string) =
-        if key = "fleet"
-        then log (sprintf "sf %A %A %A %A" startingContext.CurrentScope inputScopes outputScope expectedScope)
-        else ()
+       
         let validInputScopeScore =
             match inputScopes with
             | [] -> 0 // This item doesn't care what scope it's in
@@ -541,37 +539,23 @@ type CompletionService
             | Nothing, CompletionScopeOutput.Nothing -> 25
             | Scopes expectedScopes, CompletionScopeOutput.Scope scope ->
                match expectedScopes, scope with
-               | [x], _ when x = anyScope -> 5
-               | [], _ -> 0
-               | xs, y when y = anyScope -> 15
+               | [x], _ when x = anyScope -> 5  // The context expects any scope, so, non-specific
+               | [], _ -> 0 // The context doesn't want a scope
+               | xs, y when y = anyScope -> 15 // We're in any scope, so, non-specific
                | xs, y ->
                    if List.exists y.IsOfScope xs
-                   then 25
+                   then 25 // It expects the scope we'll output
                    else 0
                | _ -> 0
             | _ -> 0
-            
-//        let validOutputScopeScore =
-//            
-//            match expectedScope with
-//            | Nothing -> // This context doesn't expect anything
-//                match outputScope with
-//                | None -> 25 // It expects no scope and that's what we give (e.g. variables?)
-//                | _ -> 0 
-//            | [x] when x = anyScope -> 5 // The context expects any scope, so, non-specific
-//            | xs -> // This context expects these scopes
-//                match outputScope with
-//                | Some x when x = anyScope -> 15 // We're in any scope, so non-specific
-//                | Some x ->
-//                    if List.exists x.IsOfScope xs
-//                    then 25 // It expects the scope we'll output
-//                    else 0 // It doesn't expect the scope we'll output
-//                | _ -> 0 // We don't output a scope
         let usedKeyBonus =
             if List.contains key allUsedKeys
             then 10
             else 0
         let score = validInputScopeScore + validOutputScopeScore + usedKeyBonus
+//        if key = "test_variable"
+//        then log (sprintf "sf %A %A %A %A %A %A %A" startingContext.CurrentScope inputScopes outputScope expectedScope validInputScopeScore validOutputScopeScore usedKeyBonus)
+//        else ()
         max score 1
 //        let validInputScope =
 //            match inputScopes with
@@ -604,7 +588,7 @@ type CompletionService
     let complete (pos : pos) (entity : Entity) (scopeContext : ScopeContext option) =
         let scopeContext = Option.defaultValue defaultContext scopeContext
         let path = getRulePath pos [] entity.entity |> List.rev
-        log (sprintf "%A" path)
+//        log (sprintf "%A" path)
         let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
         let file = Path.GetFileName entity.logicalpath
         // log "%A" typedefs
