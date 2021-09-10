@@ -6,6 +6,10 @@ links = {
         input_scopes = system
         output_scope = ship
     }
+    simple_back_scope = {
+        input_scopes = ship
+        output_scope = system
+    }
     complex = {
         from_data = yes
         data_source = <ship_size>

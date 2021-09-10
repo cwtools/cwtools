@@ -45,7 +45,7 @@ let main argv =
     let rules, types, enums, _, _ =
         rulesFiles
             |> List.filter (fun (fileName, _) -> Path.GetExtension fileName = ".cwt" )
-            |> RulesParser.parseConfigs (scopeManager.ParseScope()) scopeManager.AllScopes scopeManager.AnyScope scopeManager.ScopeGroups
+            |> RulesParser.parseConfigs (scopeManager.ParseScope()) scopeManager.AllScopes scopeManager.AnyScope scopeManager.ScopeGroups true
 
     let renderedHtml = HtmlTemplates.rootRules rules enums types
 

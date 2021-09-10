@@ -45,5 +45,71 @@ event = {
 
         }
     }
+    
+    ## Test completion
+    
+    set_event_target = test_event_target
+    
+    test_ship = event_target:test_event_target
+    #error
+    #@! 35 event_target:test_event_target
+    test_ship = simple_with_scope.event_target:test_event_target
+    
+    #@ 15 simple_with_scope
+    test_ship = simple_with_scope
+    #@ 15 simple_with_scope
+    #@? 15 simple_back_scope
+    #@ 35 simple_with_scope
+    #@ 55 simple_with_scope
+    #@! 55 trigger:num_moons
+    test_ship = simple_with_scope.simple_back_scope.simple_with_scope
+    
+    set_variable = test_variable
+    
+    trigger = {
+        ### Test trigger RHS values
+        
+        ## Test absence of trigger prefix
+        #error
+        num_moons = num_moons
+        #error
+        num_moons = THIS.num_moons
+        
+        ## Test trigger prefix
+        #@ 25 trigger:num_moons
+        num_moons = THIS.trigger:num_moons
+        #@ 15 trigger:num_moons
+        num_moons = trigger:num_moons
+        
+        ## Test non-comparable trigger
+        #error
+        num_moons_no_compare = num_moons_no_compare
+        #error
+        num_moons_no_compare = THIS.num_moons_no_compare
+        #error
+        num_moons_no_compare = trigger:num_moons_no_compare
+        #error
+        num_moons_no_compare = THIS.trigger:num_moons_no_compare
+        
+        ## Test incorrect scope
+        #error 
+        num_moons = ROOT.trigger:num_moons
+        
+        ## Test stellaris trigger scope magic
+        #error
+        num_moons = ROOT
+        num_moons = THIS
+        
+        
+        ## Test error message text
+        nested_trigger = {
+            #error
+            value = ROOT.trigger:num_moons
+        }
+        
+        #@ 25 test_variable
+        #@? 25 simple_with_scope
+        num_moons_no_compare = THIS.test_variable
+    }
 
 }

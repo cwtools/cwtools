@@ -10,13 +10,13 @@ open CWTools.Process
 open System.Collections.Generic
 
 type Helpers =
-    static member LoadAndInitializeFromConfigFiles (configs : (string * string) seq) (game : Game) =
+    static member LoadAndInitializeFromConfigFiles (configs : (string * string) seq) (game : Game) (useFormulas : bool) (stellarisScopeTriggers : bool) =
         RulesLoader.loadAndInitializeFromConfigFiles (configs |> List.ofSeq) game |> ignore
         let rules, types, enums, complexenums, values =
             configs
                 |> List.ofSeq
                 |> List.filter (fun (fn, ft) -> Path.GetExtension fn == ".cwt" )
-                |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+                |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope) (scopeManager.ScopeGroups) useFormulas stellarisScopeTriggers
         rules, types, enums, complexenums, values
 
     static member GetTypesInFile (filepath : string) (node : Node) (types : TypeDefinition list) =

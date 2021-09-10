@@ -276,18 +276,20 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         let completionTest (game : IGame) filename filetext (pos : pos, text : string, negate : bool, lowscore : bool) =
             let getLabel =
                 function
-                | Simple(label, score)
-                | Detailed(label, _, score )
-                | Snippet(label, _, _, score) -> label, score
+                | Simple(label, score, _)
+                | Detailed(label, _, score , _)
+                | Snippet(label, _, _, score, _) -> label, score
             let compRes = game.Complete pos filename filetext |> List.map getLabel
             let labels = compRes |> List.map fst
-            let lowscorelables = compRes |> List.choose (fun (label, score) -> score |> Option.bind (fun s -> if s <= 10 then Some label else None))
+            let lowscorelables = compRes |> List.choose (fun (label, score) -> score |> Option.bind (fun s -> if s <= 20 then Some label else None))
+            let scoreMap = compRes |> Map.ofList
             match negate, lowscore with
             | true, _ ->
                 Expect.hasCountOf (labels) 0u ((=) text) (sprintf "Completion shouldn't contain value %s at %A in %s" text pos filename)
             | false, true ->
-                logInfo (sprintf "ct %A" compRes)
-                Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s" pos filename)
+//                logInfo (sprintf "ct %A" compRes)
+                let firstLowScore = text, scoreMap.[text]
+                Expect.contains lowscorelables text (sprintf "Incorrect completion values (missing low score) at %A in %s. Score (%A)" pos filename firstLowScore )
             | false, false ->
                 Expect.contains labels text (sprintf "Incorrect completion values at %A in %s, %A" pos filename labels)
                 Expect.isNonEmpty labels (sprintf "No completion results, expected %s" text)

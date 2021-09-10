@@ -411,7 +411,7 @@ let testsv =
 
                 let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let pos = mkPos 3 8
-                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |CompletionResponse.Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |CompletionResponse.Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -426,7 +426,7 @@ let testsv =
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let pos = mkPos 3 3
-                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -440,13 +440,13 @@ let testsv =
                             }\n"
             let pos = mkPos 1 0
             let split = input.Split('\n')
-            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
+            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, magicCharString) in log(sprintf "%s" s); s else s) |> String.concat "\n"
             match CKParser.parseString filetext "test.txt" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
-                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
                 let expected = ["create_starbase"; "create_starbase"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -474,7 +474,7 @@ let testsv =
                 let comp = CompletionService([TypeRule ("ship_size", shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let res = comp.Complete(pos, entity, None)
                 eprintfn "res4 %A" res
-                let suggestions = res |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+                let suggestions = res |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -590,7 +590,7 @@ let testsConfig =
             // let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input
             let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input
             //eprintfn "%A" suggestions
-            let suggestions = suggestions |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+            let suggestions = suggestions |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -611,8 +611,8 @@ let testsConfig =
                             }"
             let pos = mkPos 2 20
             let pos2 = mkPos 2 5
-            let suggestions = stl.Complete pos2 "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
-            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos2 "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -634,7 +634,7 @@ let testsConfig =
                             }\n\
                             }"
             let pos = mkPos 3 0
-            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
             let expected = ["tech_one"; "tech_two"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -654,7 +654,7 @@ let testsConfig =
                             class = \n\
                             }"
             let pos = mkPos 2 8
-            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _) -> c |Snippet (l, _, _, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
             let expected = ["shipclass_military"; "shipclass_transport"; "shipclass_military_station"; "shipclass_starbase"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
     ]

@@ -48,6 +48,9 @@ event = {
 
     ## cardinality = 0..inf
     predefvalue = value[predefined]
+    
+    ## cardinality = 0..inf
+    valuefieldrule = value_field
 }
 
 skipevent = {

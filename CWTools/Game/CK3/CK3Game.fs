@@ -298,6 +298,8 @@ type CK3Game(setupSettings : CK3Settings) =
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
+        useFormulas = true
+        stellarisScopeTriggers = false
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope

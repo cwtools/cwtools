@@ -49,10 +49,10 @@ module internal SharedParsers =
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =[|'ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö'|]
-    let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'; '^'; '&'|]
+    let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'; '^'; '&'; magicChar|]
     let isAnyofidCharArray = isAnyOf idCharArray
     let isidchar = fun c -> isLetter c || isDigit c || isAnyofidCharArray c
-    let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'; '^'; '*'; '&'|])
+    let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'; '^'; '*'; '&'; magicChar|])
     let isAnyValueChar = isAnyOf valueCharArray
     let isvaluechar = fun c -> isLetter c || isDigit c || isAnyValueChar c
 

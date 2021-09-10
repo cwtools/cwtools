@@ -56,13 +56,19 @@ type CachedRuleMetadata = {
     scriptedLoc : string list
 }
 
+type CompletionCategory =
+    | Link
+    | Global
+    | Variable
+    | Value
+    | Other
 
 type CompletionResponse =
-    |Simple of label : string * score : int option
-    |Detailed of label : string * desc : string option * score : int option
-    |Snippet of label : string * snippet : string * desc : string option * score : int option
-    static member CreateSimple(label : string) = Simple(label, None)
-    static member CreateSnippet(label, snippet, desc) = Snippet(label, snippet, desc, None)
+    |Simple of label : string * score : int option * CompletionCategory
+    |Detailed of label : string * desc : string option * score : int option * CompletionCategory
+    |Snippet of label : string * snippet : string * desc : string option * score : int option * CompletionCategory
+    static member CreateSimple(label : string) = Simple(label, None, Other)
+    static member CreateSnippet(label, snippet, desc) = Snippet(label, snippet, desc, None, Other)
 
 type IGame =
     abstract ParserErrors : unit -> (string * string * FParsec.Position) list

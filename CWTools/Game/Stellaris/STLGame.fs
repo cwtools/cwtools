@@ -158,9 +158,27 @@ module STLGameFunctions =
                         getAllScriptedTriggers
                     |x -> [x])
 
+    let addValueTriggersToTriggers rules (lookup : Lookup) =
+        let triggers = rules
+                       |> List.choose (function
+                           |AliasRule("trigger", (LeafRule(SpecificField(SpecificValue n), _), o)) -> Some (StringResource.stringManager.GetStringForID n.normal, o)
+                           |_ -> None)
+                       |> Map.ofList
+        
+        let inline triggerAugment (trigger : Effect) =
+            match trigger, triggers |> Map.tryFind (trigger.Name) with
+            | :? DocEffect as doc, Some options when options.comparison ->
+                [ DocEffect("trigger:" + doc.Name, doc.Scopes, doc.Target, EffectType.ValueTrigger, doc.Desc, doc.Usage, doc.RefHint) :> Effect
+                  doc :> Effect
+                  ]
+            | trigger, _ -> [trigger]
+            
+        lookup.triggers |> List.collect triggerAugment
+//        lookup.triggers |> List.
 
     let loadConfigRulesHook rules (lookup : Lookup) embedded =
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
+        let triggersWithValueTriggers = addValueTriggersToTriggers rules lookup
+        lookup.allCoreLinks <- triggersWithValueTriggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         let rulesWithMod = rules @ addModifiersWithScopes(lookup)
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
@@ -204,8 +222,17 @@ module STLGameFunctions =
                     |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
                     |> Option.defaultWith (fun () -> Utils.logError "trigger_docs.log was not found in stellaris config"; ([], []))
+                    
+        
         let stlSetupModifiers =
-            configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
+            if configs |> List.exists (fun (fn, _) -> Path.GetFileName fn = "modifiers.log")
+            then
+                configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.log")
+                    |> Option.map (fun (fn, ft) -> StellarisModifierParser.parseLogsFile fn)
+                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (StellarisModifierParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
+                    |> Option.defaultWith (fun () -> Utils.logError "modifiers.log was not found in stellaris config"; ([]))
+            else
+                configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
                     |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
                     |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
                     |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; ([]))
@@ -297,6 +324,8 @@ type STLGame (setupSettings : StellarisSettings) =
 
         let rulesManagerSettings = {
             rulesSettings = settings.rules
+            useFormulas = false
+            stellarisScopeTriggers = true
             parseScope = scopeManager.ParseScope()
             allScopes = scopeManager.AllScopes
             anyScope = scopeManager.AnyScope

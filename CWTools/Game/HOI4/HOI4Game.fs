@@ -232,6 +232,8 @@ type HOI4Game(setupSettings : HOI4Settings) =
 
     let rulesManagerSettings = {
         rulesSettings = settings.rules
+        useFormulas = false
+        stellarisScopeTriggers = false
         parseScope = scopeManager.ParseScope()
         allScopes = scopeManager.AllScopes
         anyScope = scopeManager.AnyScope

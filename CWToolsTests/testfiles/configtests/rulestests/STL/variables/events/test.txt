@@ -129,3 +129,11 @@ country_event = {
     #error
     use_variable_32 = 10.0001
 }
+
+country_event = {
+    save_var = some_variable
+    valuefieldrule = THIS.some_variable
+    valuefieldrule = some_variable
+    #error
+    valuefieldrule = THIS.other_var
+}   

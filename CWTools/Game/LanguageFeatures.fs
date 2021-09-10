@@ -1,4 +1,5 @@
 namespace CWTools.Games
+open System.Resources
 open CWTools.Utilities.Position
 open System.IO
 open Files
@@ -42,7 +43,7 @@ module LanguageFeatures =
 
     let completion (fileManager : FileManager) (completionService : CompletionService option) (infoService : InfoService option) (resourceManager : ResourceManager<_>) (pos : pos) (filepath : string) (filetext : string) =
         let split = filetext.Split('\n')
-        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, "x") in log(sprintf "%s" s); s else s) |> String.concat "\n"
+        let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then log (sprintf "%s" s); let s = s.Insert(pos.Column, magicCharString) in log(sprintf "%s" s); s else s) |> String.concat "\n"
         let resource = makeEntityResourceInput fileManager filepath filetext
         match Path.GetExtension filepath ,resourceManager.ManualProcessResource resource, completionService, infoService with
         | ".yml", _, Some completion, _ ->
@@ -95,6 +96,8 @@ module LanguageFeatures =
                                |> Some
             |_ -> None
         |_, _ -> None
+    
+
 
     let scopesAtPos (fileManager : FileManager) (resourceManager : ResourceManager<_>) (infoService : InfoService option) (anyScope : Scope) (pos : pos) (filepath : string) (filetext : string) =
         let resource = makeEntityResourceInput fileManager filepath filetext
