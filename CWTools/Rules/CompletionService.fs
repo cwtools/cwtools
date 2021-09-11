@@ -207,6 +207,11 @@ type CompletionService
                                                  kind = CompletionCategory.Variable
                                              })
 //        linkMap.ToList() |> List.iter (fun x -> log (sprintf "iop %A" x))
+        let scopedEffectsExtra =
+            ["this"; "root"; "prev"; "prevprev"; "prevprevprev"; "prevprevprevprev";
+                "from"; "fromfrom"; "fromfromfrom"; "fromfromfromfrom"]
+            |> List.map(fun s -> {key = s; requiredScopes = [anyScope]; outputScope = Scope anyScope
+                                  desc = None; kind = CompletionCategory.Link})
         let scopedEffects =
             linkMap.ToList()
             |> List.choose (fun (_, s) -> s |> function
@@ -225,6 +230,7 @@ type CompletionService
                             kind = CompletionCategory.Value })
                 | _ -> None )
 //        let scopedEffects = scopedEffects @ valueTriggers
+        let scopedEffects = scopedEffects @ scopedEffectsExtra
         let valueFieldAll = evs @ gevs @ scopedEffects @ vars @ valueTriggers
         let valueFieldNonGlobal = scopedEffects @ vars @ valueTriggers
         let scopeFieldAll = evs @ gevs @ scopedEffects
