@@ -514,17 +514,18 @@ module internal FieldValidators =
         let scope = ctx.scopes
         // let res = changeScope false true linkMap valueTriggerMap varSet key scope
         let key = getOriginalKey ids
-        match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        |_, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-        |Some f, _, _ when min <= f && max >= f -> errors
-        |_, _, VarFound -> errors
-        |_, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
-        |_, _, ValueFound _ -> errors
+        match  firstCharEqualsAmp ids.lower, TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        |true, _, _, _ -> errors
+        |_, _, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
+        |_, Some f, _, _ when min <= f && max >= f -> errors
+        |_, _, _, VarFound -> errors
+        |_, _, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
+        |_, _, _, ValueFound _ -> errors
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
-        |_, _, ScopeResult.WrongScope (command, prevscope, expected, refHint) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode <&&&> errors
-        |_, _, NotFound _ ->
+        |_, _, _, ScopeResult.WrongScope (command, prevscope, expected, refHint) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode <&&&> errors
+        |_, _, _, NotFound _ ->
                 match enumsMap.TryFind "static_values" with
                 | Some (_, es) ->
                     if es.Contains (trimQuote key) then errors else inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
@@ -533,13 +534,14 @@ module internal FieldValidators =
     let checkValueScopeFieldNE (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (ids : StringTokens) =
         let scope = ctx.scopes
         let key = getOriginalKey ids
-        match TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        |_, Some i, _ -> isInt && min <= decimal i && max >= decimal i
-        |Some f, _, _ -> min <= f && max >= f
-        |_, _, VarFound -> true
-        |_, _, VarNotFound s -> false
-        |_, _, ValueFound _ -> true
-        |_, _, NotFound ->
+        match firstCharEqualsAmp ids.lower, TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        |true, _, _, _ -> true
+        |_, _, Some i, _ -> isInt && min <= decimal i && max >= decimal i
+        |_, Some f, _, _ -> min <= f && max >= f
+        |_, _, _, VarFound -> true
+        |_, _, _, VarNotFound s -> false
+        |_, _, _, ValueFound _ -> true
+        |_, _, _, NotFound ->
                 match enumsMap.TryFind "static_values" with
                 | Some (_, es) -> es.Contains (trimQuote key)
                 | None -> false

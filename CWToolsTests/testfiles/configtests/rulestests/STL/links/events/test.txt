@@ -110,6 +110,10 @@ event = {
         #@ 25 test_variable
         #@? 25 simple_with_scope
         num_moons_no_compare = THIS.test_variable
+        
+        
+        ## Test @ var
+        num_moons_no_compare = @asdasd
     }
 
 }
