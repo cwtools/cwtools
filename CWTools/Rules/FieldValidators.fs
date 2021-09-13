@@ -563,7 +563,8 @@ module internal FieldValidators =
         | Some values -> values |> Set.contains ids.lower
         | None -> true
     let rec checkField (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) (keyIDs : StringTokens) (leafornode : IKeyPos) errors =
-            if (stringManager.GetMetadataForID keyIDs.lower).containsDoubleDollar then errors else
+            let metadataForId = (stringManager.GetMetadataForID keyIDs.lower)
+            if metadataForId.containsDoubleDollar || metadataForId.startsWithSquareBracket then errors else
             match field with
             |ValueField vt ->
                 checkValidValue p.varMap p.enumsMap p.localisation severity vt keyIDs leafornode errors
@@ -588,7 +589,8 @@ module internal FieldValidators =
             |AliasValueKeysField aliasKey -> checkAliasValueKeysField p.aliasKeyList aliasKey keyIDs severity leafornode errors
             |IgnoreField field -> checkField p severity ctx field keyIDs leafornode errors
     let rec checkFieldNE (p : CheckFieldParams) (severity : Severity) (ctx : RuleContext) (field : NewField) (keyIDs : StringTokens) =
-            if (stringManager.GetMetadataForID keyIDs.lower).containsDoubleDollar then true else
+            let metadataForId = (stringManager.GetMetadataForID keyIDs.lower)
+            if metadataForId.containsDoubleDollar || metadataForId.startsWithSquareBracket then true else
             match field with
             |ValueField vt ->
                 checkValidValueNE p.varMap p.enumsMap p.localisation severity vt keyIDs

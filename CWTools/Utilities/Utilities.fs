@@ -125,12 +125,14 @@ type StringMetadata =
         val containsDoubleDollar : bool
         val containsQuestionMark : bool
         val containsHat : bool
-        new(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat) =
+        val startsWithSquareBracket : bool
+        new(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat, startsWithSquareBracket) =
             {
                 startsWithAmp = startsWithAmp;
                 containsDoubleDollar = containsDoubleDollar
                 containsQuestionMark = containsQuestionMark
                 containsHat = containsHat
+                startsWithSquareBracket = startsWithSquareBracket
             }
     end
 [<Sealed>]
@@ -171,7 +173,7 @@ type StringResourceManager() =
                 strings.[ls] <- resl;
                 ints.[lowID] <- ls;
                 ints.[stringID] <- s;
-                let startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar =
+                let startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar, startsWithSquareBracket =
                     if ls.Length > 0
                     then
                         let startsWithAmp = ls.[0] = '@'
@@ -180,12 +182,13 @@ type StringResourceManager() =
                         let first = ls.IndexOf('$')
                         let last = ls.LastIndexOf('$')
                         let containsDoubleDollar = first >= 0 && first <> last
+                        let startsWithSquareBracket = ls.[0] = '[' || ls.[0] = ']'
                         // let quoted =
-                        startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar
+                        startsWithAmp, containsQuestionMark, containsHat, containsDoubleDollar, startsWithSquareBracket
                     else
-                        false, false, false, false
-                metadata.[lowID] <- StringMetadata(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat)
-                metadata.[stringID] <- StringMetadata(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat)
+                        false, false, false, false, false
+                metadata.[lowID] <- StringMetadata(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat, startsWithSquareBracket)
+                metadata.[stringID] <- StringMetadata(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat, startsWithSquareBracket)
                 res
         )
     member x.GetStringForIDs(id : StringTokens) =

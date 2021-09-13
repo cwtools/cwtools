@@ -250,7 +250,7 @@ type RuleValidationService
             rs |> Seq.filter (function |NodeRule (l, rs), o -> checkQuotes (node.KeyId.quoted) (o.keyRequiredQuotes) && FieldValidators.checkLeftField p Severity.Error ctx l keyIds |_ -> false)
                           |> (fun rs -> lazyErrorMerge rs (fun (NodeRule (l, r), o) e -> applyNodeRule enforceCardinality ctx o l r node e) createDefault innerErrors false)
         let leafValueFun innerErrors (leafvalue : LeafValue) =
-            let createDefault() = if enforceCardinality then inv (ErrorCodes.ConfigRulesUnexpectedPropertyLeafValue (sprintf "%s is unexpected in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
+            let createDefault() = if enforceCardinality && not (stringManager.GetMetadataForID leafvalue.ValueId.lower).startsWithSquareBracket then inv (ErrorCodes.ConfigRulesUnexpectedPropertyLeafValue (sprintf "%s is unexpected in %s" leafvalue.Key startNode.Key) severity) leafvalue <&&&> innerErrors else innerErrors
             leafvaluerules |> Seq.filter (function |LeafValueRule l, o -> FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId |_ -> false)
                           |> (fun rs -> lazyErrorMerge rs (fun (LeafValueRule l, o) e -> applyLeafValueRule ctx o l leafvalue e) createDefault innerErrors true)
         let valueClauseFun innerErrors (valueclause : ValueClause) =

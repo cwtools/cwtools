@@ -195,3 +195,11 @@ country_event = {
     }
 }
 
+
+country_event = {
+    option = {
+        [[Test
+ 
+        ]
+    }
+}
