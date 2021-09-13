@@ -53,9 +53,6 @@ type ValidationManager<'T when 'T :> ComputedData>
         tryParseWith (errorCache.TryGetValue) entity
     let validate (shallow : bool) (entities : struct (Entity * Lazy<'T>) list) =
         log (sprintf "Validating %i files" (entities.Length))
-        let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
-        let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
-
         let oldEntities = EntitySet (resources.AllEntities())
         let newEntities = EntitySet entities
         let runValidators f (validators : (StructureValidator<'T> * string) list) =
