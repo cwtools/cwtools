@@ -478,6 +478,32 @@ module private RulesParserImpl =
                     Some (st, res)
                 |_ -> None
             |_ -> None
+        let parseModifier ((child : Child), comments : string list) =
+            match child with
+            |LeafC modifier ->
+                let value = modifier.Key
+                let category = modifier.Value.ToRawString() |> modifierCategoryManager.ParseModifier()
+                let description =
+                                    match comments |> List.tryFind (fun s -> s.StartsWith "##") with
+                                    | Some d -> Some (d.Trim('#'))
+                                    | None -> None
+                match value.IndexOf "$" with
+                | -1 ->
+                    Some { TypeModifier.prefix = ""; suffix = ""; category = category; documentation = description}
+                | dollarIndex ->
+                    let prefix = value.Substring(0, dollarIndex)
+                    let suffix = value.Substring(dollarIndex + 1)
+                    Some { TypeModifier.prefix = prefix; suffix = suffix; category = category; documentation = description}
+            |_ -> None
+        let parseSubTypeModifier (subtype : Node) =
+            match subtype.Key.StartsWith("subtype[") with
+            |true ->
+                match getSettingFromString subtype.Key "subtype" with
+                |Some st ->
+                    let res = getNodeComments subtype |> List.choose parseModifier
+                    Some (st, res)
+                |_ -> None
+            |_ -> None
         let parseSubType ((child : Child), comments : string list) =
             match child with
             |NodeC subtype when subtype.Key.StartsWith "subtype" ->
@@ -518,7 +544,16 @@ module private RulesParserImpl =
 
                 let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup))
                 match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules = rules; typeKeyField = typekeyfilter; pushScope = pushScope; localisation = []; startsWith = startsWith; displayName = displayName; abbreviation = abbreviation; onlyIfNot = onlyIfNot }
+                |Some key -> Some { name = key
+                                    rules = rules
+                                    typeKeyField = typekeyfilter
+                                    pushScope = pushScope
+                                    localisation = []
+                                    startsWith = startsWith
+                                    displayName = displayName
+                                    abbreviation = abbreviation
+                                    onlyIfNot = onlyIfNot
+                                    modifiers = [] }
                 |None -> None
             |_ -> None
         let getSkipRootKey (node : Node) =
@@ -571,8 +606,11 @@ module private RulesParserImpl =
             let unique = node.TagText "unique" == "yes"
             let shouldBeReferenced = node.TagText "should_be_used" == "yes"
             let localisation = node.Child "localisation" |> Option.map (fun l -> getNodeComments l |> List.choose parseLocalisation) |> Option.defaultValue []
+            let modifiers = node.Child "modifiers" |> Option.map (fun l -> getNodeComments l |> List.choose parseModifier) |> Option.defaultValue []
             let subtypelocalisations = node.Child "localisation" |> Option.map (fun l -> l.Children |> List.choose parseSubTypeLocalisation) |> Option.defaultValue []
+            let subtypeModifiers = node.Child "modifiers" |> Option.map (fun l -> l.Children |> List.choose parseSubTypeModifier) |> Option.defaultValue []
             let subtypes = subtypes |> List.map (fun st -> let loc = subtypelocalisations |> List.filter (fun (stl, _) -> stl = st.name) |> List.collect snd in {st with localisation = loc})
+            let subtypes = subtypes |> List.map (fun st -> let mods = subtypeModifiers |> List.filter (fun (stl, _) -> stl = st.name) |> List.collect snd in {st with modifiers = mods})
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 |Some c ->
@@ -618,7 +656,8 @@ module private RulesParserImpl =
                     typeKeyFilter = typekeyfilter;
                     skipRootKey = skiprootkey;
                     warningOnly = warningOnly;
-                    localisation = localisation;
+                    localisation = localisation
+                    modifiers = modifiers
                     startsWith = startsWith;
                     unique = unique;
                     shouldBeReferenced = shouldBeReferenced;

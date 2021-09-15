@@ -107,6 +107,13 @@ type TypeLocalisation = {
     primary : bool
 }
 
+type TypeModifier = {
+    prefix : string
+    suffix : string
+    category : ModifierCategory
+    documentation : string option
+}
+
 type SkipRootKey = |SpecificKey of string |AnyKey |MultipleKeys of string list * bool
 type SubTypeDefinition = {
     name : string
@@ -118,6 +125,7 @@ type SubTypeDefinition = {
     pushScope : Scope option
     localisation : TypeLocalisation list
     onlyIfNot : string list
+    modifiers : TypeModifier list
 }
 and TypeDefinition = {
     name : string
@@ -135,6 +143,7 @@ and TypeDefinition = {
     shouldBeReferenced : bool
     localisation : TypeLocalisation list
     graphRelatedTypes : string list
+    modifiers : TypeModifier list
 }
 
 and NewField =
