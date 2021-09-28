@@ -635,7 +635,7 @@ module internal FieldValidators =
         |None -> OK
         |Some typedef ->
             let inner =
-                (fun l ->
+                (fun (l : TypeLocalisation) ->
                 let lockey = l.prefix + key + l.suffix
                 if l.optional || l.explicitField.IsSome
                 then OK
