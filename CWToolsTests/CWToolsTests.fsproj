@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilation>true</TieredCompilation>
     <PaketCommand>dotnet paket</PaketCommand>
@@ -22,6 +22,7 @@
   <ItemGroup>
     <EmbeddedResource Include="testfiles/embeddedtest/embedded/**" />
     <EmbeddedResource Include="testfiles/overwritetest/embedded/**" />
+    <None Include="testfiles/configtests/**" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
