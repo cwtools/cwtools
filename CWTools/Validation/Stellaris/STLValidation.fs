@@ -242,115 +242,115 @@ module STLValidation =
 
 
 
-    let findAllSetVariables (node : Node) =
-        let keys = ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]
-        let fNode = (fun (x : Node) acc ->
-                    x.Children |> List.fold (fun a n -> if List.contains (n.Key) keys then n.TagText "which" :: a else a) acc
-                     )
-        foldNode7 fNode node |> List.ofSeq
+    // let findAllSetVariables (node : Node) =
+    //     let keys = ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]
+    //     let fNode = (fun (x : Node) acc ->
+    //                 x.Children |> List.fold (fun a n -> if List.contains (n.Key) keys then n.TagText "which" :: a else a) acc
+    //                  )
+    //     foldNode7 fNode node |> List.ofSeq
 
-    let  validateUsedVariables (variables : string list) (node : Node) =
-        let fNode = (fun (x : Node) children ->
-                    match x.Childs "check_variable" |> List.ofSeq with
-                    | [] -> children
-                    | t ->
-                        t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node]) ))
-                        <&&> children
-                    )
-        let fCombine = (<&&>)
-        foldNode2 fNode fCombine OK node
+    // let  validateUsedVariables (variables : string list) (node : Node) =
+    //     let fNode = (fun (x : Node) children ->
+    //                 match x.Childs "check_variable" |> List.ofSeq with
+    //                 | [] -> children
+    //                 | t ->
+    //                     t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node]) ))
+    //                     <&&> children
+    //                 )
+    //     let fCombine = (<&&>)
+    //     foldNode2 fNode fCombine OK node
 
-    let getDefinedScriptVariables (es : STLEntitySet) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? TriggerBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
-        let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        //effects @ opts |> List.collect findAllSetVariables
-        es.AllEffects |> List.collect findAllSetVariables
+    // let getDefinedScriptVariables (es : STLEntitySet) =
+    //     let fNode = (fun (x : Node) acc ->
+    //                 match x with
+    //                 | (:? EffectBlock as x) -> x::acc
+    //                 | _ -> acc
+    //                 )
+    //     let ftNode = (fun (x : Node) acc ->
+    //                 match x with
+    //                 | (:? TriggerBlock as x) -> x::acc
+    //                 | _ -> acc
+    //                 )
+    //     let foNode = (fun (x : Node) acc ->
+    //                 match x with
+    //                 | (:? Option as x) -> x::acc
+    //                 | _ -> acc
+    //                 )
+    //     let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
+    //     let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
+    //     //effects @ opts |> List.collect findAllSetVariables
+    //     es.AllEffects |> List.collect findAllSetVariables
 
-    let getEntitySetVariables (e : Entity) =
-        let fNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? EffectBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-        let foNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? Option as x) -> x::acc
-                    | _ -> acc
-                    )
-        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
-        let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        effects @ opts |> List.collect findAllSetVariables
+    // let getEntitySetVariables (e : Entity) =
+    //     let fNode = (fun (x : Node) acc ->
+    //                 match x with
+    //                 | (:? EffectBlock as x) -> x::acc
+    //                 | _ -> acc
+    //                 )
+    //     let foNode = (fun (x : Node) acc ->
+    //                 match x with
+    //                 | (:? Option as x) -> x::acc
+    //                 | _ -> acc
+    //                 )
+    //     let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
+    //     let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
+    //     effects @ opts |> List.collect findAllSetVariables
 
-    let valVariables : STLStructureValidator =
-        fun os es ->
-            let ftNode = (fun (x : Node) acc ->
-                    match x with
-                    | (:? TriggerBlock as x) -> x::acc
-                    | _ -> acc
-                    )
-            let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
-            let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setvariables)
-            //let defVars = effects @ opts |> List.collect findAllSetVariables
-            triggers <&!!&> (validateUsedVariables defVars)
+    // let valVariables : STLStructureValidator =
+    //     fun os es ->
+    //         let ftNode = (fun (x : Node) acc ->
+    //                 match x with
+    //                 | (:? TriggerBlock as x) -> x::acc
+    //                 | _ -> acc
+    //                 )
+    //         let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
+    //         let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().Setvariables)
+    //         //let defVars = effects @ opts |> List.collect findAllSetVariables
+    //         triggers <&!!&> (validateUsedVariables defVars)
 
-    let hasFlagMap =
-        fun (flags : Collections.Map<FlagType, string list>) (leaf : Leaf) ->
-            let validate (flag : string) (flagType : FlagType) =
-                let flag = if flag.Contains "@" then flag.Split('@').[0] else flag
-                //Hack due to testing files
-                if flag == "yes" || flag == "true" || flag == "test" then OK else
-                flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
-                                       |> Option.defaultValue (Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
-            match leaf.Key with
-            |"has_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
-            |"has_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
-            |"has_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
-            |"has_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
-            |"has_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
-            |"has_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
-            |"has_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
-            |"has_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
-            |"has_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
-            |"has_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
-            |"has_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
-            |"has_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
-            |"has_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
-            |"remove_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
-            |"remove_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
-            |"remove_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
-            |"remove_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
-            |"remove_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
-            |"remove_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
-            |"remove_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
-            |"remove_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
-            |"remove_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
-            |"remove_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
-            |"remove_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
-            |"remove_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
-            |"remove_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
-            |_ -> OK
+    // let hasFlagMap =
+    //     fun (flags : Collections.Map<FlagType, string list>) (leaf : Leaf) ->
+    //         let validate (flag : string) (flagType : FlagType) =
+    //             let flag = if flag.Contains "@" then flag.Split('@').[0] else flag
+    //             //Hack due to testing files
+    //             if flag == "yes" || flag == "true" || flag == "test" then OK else
+    //             flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
+    //                                    |> Option.defaultValue (Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedFlag flag flagType) leaf]))
+    //         match leaf.Key with
+    //         |"has_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
+    //         |"has_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
+    //         |"has_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
+    //         |"has_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
+    //         |"has_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
+    //         |"has_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
+    //         |"has_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
+    //         |"has_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
+    //         |"has_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
+    //         |"has_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
+    //         |"has_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
+    //         |"has_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
+    //         |"has_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
+    //         |"remove_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
+    //         |"remove_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
+    //         |"remove_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
+    //         |"remove_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
+    //         |"remove_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
+    //         |"remove_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
+    //         |"remove_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
+    //         |"remove_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
+    //         |"remove_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
+    //         |"remove_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
+    //         |"remove_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
+    //         |"remove_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
+    //         |"remove_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
+    //         |_ -> OK
 
-    let validateUsedFlags (flags : Collections.Map<FlagType, string list>) (node : Node) =
-        let fNode = (fun (x : Node) children ->
-                        (x.Values <&!&> hasFlagMap flags) <&&> children
-                    )
-        let fCombine = (<&&>)
-        foldNode2 fNode fCombine OK node
+    // let validateUsedFlags (flags : Collections.Map<FlagType, string list>) (node : Node) =
+    //     let fNode = (fun (x : Node) children ->
+    //                     (x.Values <&!&> hasFlagMap flags) <&&> children
+    //                 )
+    //     let fCombine = (<&&>)
+    //     foldNode2 fNode fCombine OK node
 
 
     let valTest : STLStructureValidator =
@@ -417,23 +417,23 @@ module STLValidation =
         let shipKeys = ships |> List.map (fun f -> f.Key)
         let shipModifierCreate =
             (fun k ->
-            [
-                {ActualModifier.tag = "shipsize_"+k+"_build_speed_mult"; category = modifierCategoryManager.ParseModifier() "Starbase" }
-                // {tag = "shipsize_"+k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Starbase" }
-                {tag = "shipsize_"+k+"_hull_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
-                {tag = "shipsize_"+k+"_hull_add"; category = modifierCategoryManager.ParseModifier() "Ship" }
-                // {tag = "shipsize_"+k+"_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
-                // {tag = "shipsize_"+k+"_evasion_addt"; category = modifierCategoryManager.ParseModifier() "Ship" }
-                // {tag = "shipsize_"+k+"_disengage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+            [ //Todo: I think the Crisis added a few more here
+                {ActualModifier.tag = "shipsize_"+k+"_build_speed_mult"; category = modifierCategoryManager.ParseModifier() "Starbases" }
+                // {tag = "shipsize_"+k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Starbases" }
+                {tag = "shipsize_"+k+"_hull_mult"; category = modifierCategoryManager.ParseModifier() "Ships" }
+                {tag = "shipsize_"+k+"_hull_add"; category = modifierCategoryManager.ParseModifier() "Ships" }
+                // {tag = "shipsize_"+k+"_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ships" }
+                // {tag = "shipsize_"+k+"_evasion_addt"; category = modifierCategoryManager.ParseModifier() "Ships" }
+                // {tag = "shipsize_"+k+"_disengage_mult"; category = modifierCategoryManager.ParseModifier() "Ships" }
             ])
         let shipModifiers = shipKeys |> List.collect shipModifierCreate
         let weaponTags = es.GlobMatch("**/common/component_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
         let weaponTagsModifierCreate =
             (fun k ->
             [
-                {ActualModifier.tag = k+"_weapon_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
-                {tag = k+"_weapon_fire_rate_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
-                {tag = k+"_speed_mult"; category = modifierCategoryManager.ParseModifier() "Ship" }
+                {ActualModifier.tag = k+"_weapon_damage_mult"; category = modifierCategoryManager.ParseModifier() "Ships" }
+                {tag = k+"_weapon_fire_rate_mult"; category = modifierCategoryManager.ParseModifier() "Ships" }
+                {tag = k+"_speed_mult"; category = modifierCategoryManager.ParseModifier() "Ships" }
             ])
         let weaponModifiers = weaponTags |> List.map (fun l -> l.Value.ToRawString())
                                              |> List.collect weaponTagsModifierCreate
@@ -443,10 +443,10 @@ module STLValidation =
                 match node.Child "modifier_types" with
                 | Some mt ->
                         if mt.LeafValues |> Seq.exists (fun lv -> lv.Key == "mult") then
-                            yield {ActualModifier.tag = triggeredCat+res+modType+"_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {ActualModifier.tag = triggeredCat+res+modType+"_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if mt.LeafValues |> Seq.exists (fun lv -> lv.Key == "add") then
-                            yield {ActualModifier.tag = triggeredCat+res+modType+"_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {ActualModifier.tag = triggeredCat+res+modType+"_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                 | None -> ()
             }
@@ -458,25 +458,25 @@ module STLValidation =
                     match node.Child "generate_mult_modifiers" with
                     | Some gen ->
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "cost") then
-                            yield {ActualModifier.tag = econCat+res+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {ActualModifier.tag = econCat+res+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "produces") then
-                            yield {tag = econCat+res+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {tag = econCat+res+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "upkeep") then
-                            yield {tag = econCat+res+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {tag = econCat+res+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                     | None -> ()
                     match node.Child "generate_add_modifiers" with
                     | Some gen ->
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "cost") then
-                            yield {ActualModifier.tag = econCat+res+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {ActualModifier.tag = econCat+res+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "produces") then
-                            yield {ActualModifier.tag = econCat+res+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {ActualModifier.tag = econCat+res+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "upkeep") then
-                            yield {ActualModifier.tag = econCat+res+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Resource" }
+                            yield {ActualModifier.tag = econCat+res+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                     | None -> ()
                     yield! (node.Childs "triggered_upkeep_modifier" |> Seq.collect (econCategoryTriggeredModifierCreate "_upkeep" res))
@@ -491,7 +491,7 @@ module STLValidation =
         let srModifierCreate =
             (fun k ->
             [
-                yield {ActualModifier.tag = "country_resource_max_"+k+"_add"; category = modifierCategoryManager.ParseModifier() "Country" }
+                yield {ActualModifier.tag = "country_resource_max_"+k+"_add"; category = modifierCategoryManager.ParseModifier() "Countries" }
                 yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f (k)))
                 yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f ("_"+k)))
             ])
@@ -502,8 +502,8 @@ module STLValidation =
         let popCatModifierCreate =
             (fun k ->
                 [
-                    {ActualModifier.tag = "pop_cat_" + k + "_happiness"; category = modifierCategoryManager.ParseModifier() "Pop"}
-                    {tag = "pop_cat_" + k + "_political_power"; category = modifierCategoryManager.ParseModifier() "Pop"}
+                    {ActualModifier.tag = "pop_cat_" + k + "_happiness"; category = modifierCategoryManager.ParseModifier() "Pops"}
+                    {tag = "pop_cat_" + k + "_political_power"; category = modifierCategoryManager.ParseModifier() "Pops"}
                 ])
         let popCatModifiers = pop_cats |> List.collect popCatModifierCreate
 
@@ -511,21 +511,21 @@ module STLValidation =
         let jobModifierCreate =
             (fun k ->
                 [
-                    {ActualModifier.tag = "job_" + k + "_add"; category = modifierCategoryManager.ParseModifier() "Planet"}
-                    {tag = "job_" + k + "_per_pop"; category = modifierCategoryManager.ParseModifier() "Planet"}
-                    {tag = "job_" + k + "_per_crime"; category = modifierCategoryManager.ParseModifier() "Planet"}
+                    {ActualModifier.tag = "job_" + k + "_add"; category = modifierCategoryManager.ParseModifier() "Planets"}
+                    {tag = "job_" + k + "_per_pop"; category = modifierCategoryManager.ParseModifier() "Planets"}
+                    {tag = "job_" + k + "_per_crime"; category = modifierCategoryManager.ParseModifier() "Planets"}
                 ])
         let jobModifiers = jobs |> List.collect jobModifierCreate
 
         let planetclasses = es.GlobMatchChildren("**/common/planet_classes/*.txt")
         let pcKeys = planetclasses |> List.map (fun f -> f.Key)
-        let pcModifiers = pcKeys |> List.map (fun k -> {ActualModifier.tag = k+"_habitability"; category = modifierCategoryManager.ParseModifier() "PlanetClass"})
+        let pcModifiers = pcKeys |> List.map (fun k -> {ActualModifier.tag = k+"_habitability"; category = modifierCategoryManager.ParseModifier() "Habitability"})
         let buildingTags = es.GlobMatch("**/common/building_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
         let buildingTagModifierCreate =
             (fun k ->
             [
-                {ActualModifier.tag = k+"_construction_speed_mult"; category = modifierCategoryManager.ParseModifier() "Planet" }
-                {tag = k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Planet" }
+                {ActualModifier.tag = k+"_construction_speed_mult"; category = modifierCategoryManager.ParseModifier() "Planets" }
+                {tag = k+"_build_cost_mult"; category = modifierCategoryManager.ParseModifier() "Planets" }
             ])
         let buildingModifiers = buildingTags |> List.map (fun l -> l.Value.ToRawString())
                                              |> List.collect buildingTagModifierCreate
@@ -533,22 +533,22 @@ module STLValidation =
         let buildingWithModCapCreate =
             (fun k ->
             [
-                {ActualModifier.tag = k+"_max"; category = modifierCategoryManager.ParseModifier() "Planet" }
+                {ActualModifier.tag = k+"_max"; category = modifierCategoryManager.ParseModifier() "Planets" }
             ])
         let buildingWithModCapModifiers = buildingWithModCap |> List.map (fun n -> n.Key)
                                                              |> List.collect buildingWithModCapCreate
         let countryTypeKeys = es.GlobMatchChildren("**/common/country_types/*.txt") |> List.map (fun f -> f.Key)
-        let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {ActualModifier.tag = "damage_vs_country_type_"+k+"_mult"; category = modifierCategoryManager.ParseModifier() "Ship"})
+        let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {ActualModifier.tag = "damage_vs_country_type_"+k+"_mult"; category = modifierCategoryManager.ParseModifier() "Ships"})
         let speciesKeys = es.GlobMatchChildren("**/common/species_archetypes/*.txt")
                             //|> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
-        let speciesModifiers = speciesKeys |> List.map (fun k -> {ActualModifier.tag = k+"_species_trait_points_add"; category = modifierCategoryManager.ParseModifier() "Country"})
+        let speciesModifiers = speciesKeys |> List.map (fun k -> {ActualModifier.tag = k+"_species_trait_points_add"; category = modifierCategoryManager.ParseModifier() "Countries"})
         let districts = es.GlobMatchChildren("**/common/districts/*.txt") |> List.filter (fun d -> not (d.TagText "is_capped_by_modifier" == "no"))
-        let districtModifiers = districts |> List.map (fun k -> {ActualModifier.tag = k.Key+"_max"; category = modifierCategoryManager.ParseModifier() "Planet"})
+        let districtModifiers = districts |> List.map (fun k -> {ActualModifier.tag = k.Key+"_max"; category = modifierCategoryManager.ParseModifier() "Planets"})
         let popEthicKeys = es.GlobMatchChildren("**/common/ethics/*.txt") |> List.map (fun s -> s.Key)
-        let popEthicModifiers = popEthicKeys |> List.map (fun k -> { ActualModifier.tag = "pop_" + k + "_attraction_mult"; category = modifierCategoryManager.ParseModifier() "Pop"})
+        let popEthicModifiers = popEthicKeys |> List.map (fun k -> { ActualModifier.tag = "pop_" + k + "_attraction_mult"; category = modifierCategoryManager.ParseModifier() "Pops"})
         let techCategoryKeys = es.GlobMatchChildren("**/common/technology/category/*.txt") |> List.map (fun s -> s.Key)
-        let techCatModifiers = techCategoryKeys |> List.map (fun k -> { ActualModifier.tag = "category_"+  k + "_research_speed_mult"; category = modifierCategoryManager.ParseModifier() "Country"})
+        let techCatModifiers = techCategoryKeys |> List.map (fun k -> { ActualModifier.tag = "category_"+  k + "_research_speed_mult"; category = modifierCategoryManager.ParseModifier() "Countries"})
         shipModifiers @  weaponModifiers @ srModifiers @ popCatModifiers @ jobModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers @ buildingWithModCapModifiers
                     @ districtModifiers @ popEthicModifiers @ techCatModifiers
 
