@@ -11,7 +11,7 @@ nuget FSharpx.Collections 2.0 #
 nuget FSharp.Compiler.Service
 nuget Sandwych.QuickGraph.Core #
 nuget FsPickler #
-nuget FSharp.Core 4.7.0 #
+nuget FSharp.Core 6.0.0 #
 nuget System.Text.Encoding.CodePages #
 nuget Argu
 nuget Pastel
@@ -19,4 +19,4 @@ nuget Chiron
 nuget NuGet.CommandLine
 nuget SharpZipLib
 nuget CWTools 0.4.0-alpha
-github giraffe-fsharp/Giraffe src/Giraffe/GiraffeViewEngine.fs
+github giraffe-fsharp/Giraffe:612aa186c68101f532196817f67ebaa083c16146 src/Giraffe/GiraffeViewEngine.fs
