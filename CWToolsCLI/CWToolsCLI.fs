@@ -155,6 +155,15 @@ module CWToolsCLI =
             member s.Usage =
                 match s with
                 |File _ -> "file to parse"
+                
+    type FormatArgs =
+        | [<MainCommand; ExactlyOnce; Last>] File of string
+    with
+        interface IArgParserTemplate with
+            member s.Usage =
+                match s with
+                |File _ -> "file to format"
+                
     type CacheTypes =
         | Full = 1
         | Metadata = 2
@@ -179,6 +188,7 @@ module CWToolsCLI =
         | [<CustomCommandLine("validate")>] Validate of ParseResults<ValidateArgs>
         | [<CustomCommandLine("list")>] List of ParseResults<ListArgs>
         | [<CustomCommandLine("parse")>] Parse of ParseResults<ParseArgs>
+        | [<CustomCommandLine("format")>] Format of ParseResults<FormatArgs>
         | [<CliPrefix(CliPrefix.None)>] Serialize of ParseResults<SerializeArgs>
 
     with
@@ -193,6 +203,7 @@ module CWToolsCLI =
                 | ModFilter _ -> "filter to mods with this in name"
                 | DocsPath _ -> "path to a custom trigger_docs game.log file"
                 | Parse _ -> "parse a file"
+                | Format _ -> "format a file"
                 | Serialize _ -> "created serialized files for embedding"
                 | CacheFile _ -> "path to the cache file"
                 | RulesPath _ -> "path to the cwt rules"
@@ -417,6 +428,17 @@ module CWToolsCLI =
         // File.WriteAllBytes("pickled.xml", pickle)
 
 
+    let format  (file : ParseResults<_>) =
+        let file = file.TryGetResult <@ File @>
+        match file with
+        | Some file ->
+            match CWTools.Parser.CKParser.parseFile file, (Path.GetExtension file) = ".gui" || (Path.GetExtension file) = ".yml" with
+            | Success(sl, _, _), false ->
+                let formatted = CKPrinter.printTopLevelKeyValueList sl
+                printf "%s" formatted
+            | Failure(msg, _, _), _ -> failwith ("Failed to parse file: " + msg)
+        | None -> failwith "No file found"
+        
     [<EntryPoint>]
     let main argv =
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -437,6 +459,7 @@ module CWToolsCLI =
         | List r -> list game directory scope modFilter docsPath rulesPath r; 0
         | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath cacheType r
         | Serialize r -> serialize game directory scope modFilter cachePath rulesPath r ;0
+        | Format f -> format f; 0
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"; 1
 
