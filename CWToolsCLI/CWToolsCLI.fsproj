@@ -6,6 +6,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilation>true</TieredCompilation>
     <PaketCommand>dotnet paket</PaketCommand>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 
     <PackageVersion>0.0.16-alpha2</PackageVersion>
     <PackAsTool>true</PackAsTool>
