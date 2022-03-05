@@ -525,7 +525,7 @@ type CompletionService
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
-    let scoreFunction (allUsedKeys : string list) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (expectedScope : CompletionScopeExpectation) (key : string) =
+    let scoreFunction (allUsedKeys : Collections.Set<string> ) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (expectedScope : CompletionScopeExpectation) (key : string) =
        
         let validInputScopeScore =
             match inputScopes with
@@ -555,7 +555,7 @@ type CompletionService
                | _ -> 0
             | _ -> 0
         let usedKeyBonus =
-            if List.contains key allUsedKeys
+            if Set.contains key allUsedKeys
             then 10
             else 0
         let score = validInputScopeScore + validOutputScopeScore + usedKeyBonus
@@ -610,7 +610,7 @@ type CompletionService
 
         let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
         let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
-        let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables
+        let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables |> Set.ofList
         let scoreFunction = scoreFunction allUsedKeys
         let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext) list) =
             let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
@@ -659,7 +659,7 @@ type CompletionService
         // eprintfn "%A" path
         // eprintfn "%A" rootTypeItems
         let scoreForLabel (label : string) =
-            if allUsedKeys |> List.contains label then 10 else 1
+            if allUsedKeys |> Set.contains label then 10 else 1
         (items @ rootTypeItems) |> List.map
                     (function
                      | Simple (label, None, kind) -> Simple (label, Some (scoreForLabel label), kind)

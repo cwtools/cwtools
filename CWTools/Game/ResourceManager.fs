@@ -437,7 +437,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let res = updateFiles [file]
         if res.Length > 1 then log (sprintf "File %A returned multiple resources" (file)) else ()
         res.[0]
-    let getResources() = fileMap |> Map.toList |> List.map snd
+    let getResources() = fileMap.Values |> List.ofSeq
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
     let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
     let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun struct (e, _) -> e.validate)
