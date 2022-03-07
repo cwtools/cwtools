@@ -270,7 +270,7 @@ type CompletionService
 
 
     // | LeafValue
-    let rec getRulePath (pos : pos) (stack : (string * int * string option * CompletionContext) list) (node : IClause) =
+    let rec getRulePath (pos : pos) (stack : (string * int * string option * CompletionContext * string option) list) (node : IClause) =
        //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
         let countChildren (n2 : IClause) (key : string) =
             n2.Nodes |> Seq.choose (function |c when c.Key == key -> Some c |_ -> None) |> Seq.length
@@ -278,29 +278,29 @@ type CompletionService
         | Some c ->
 //            log (sprintf "%s %A %A" c.Key c.Position pos)
             match (c.Position.StartLine = (pos.Line)) && ((c.Position.StartColumn + c.Key.Length + 1) > pos.Column) with
-            | true -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeLHS) :: stack) c
-            | false -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeRHS) :: stack) c
+            | true -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeLHS, c.KeyPrefix) :: stack) c
+            | false -> getRulePath pos ((c.Key, countChildren node c.Key, None, NodeRHS, c.KeyPrefix) :: stack) c
         | None ->
                 /// This handles LHS vs RHS beacuse LHS gets an "x" inserted into it, so fails to match any rules
                 match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
                 | Some l ->
                     // SHould be <, but for some reason it isn't
                     match l.Position.StartColumn + l.Key.Length + 1 > pos.Column with
-                    |true -> (l.Key, countChildren node l.Key, Some l.Key, LeafLHS)::stack
-                    |false -> (l.Key, countChildren node l.Key, Some l.ValueText, LeafRHS)::stack
+                    |true -> (l.Key, countChildren node l.Key, Some l.Key, LeafLHS, None)::stack
+                    |false -> (l.Key, countChildren node l.Key, Some l.ValueText, LeafRHS, None)::stack
                 | None ->
                     match node.ClauseList |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
                     | Some vc ->
                         match (vc.Position.StartLine = (pos.Line)) && ((vc.Position.StartColumn + vc.Key.Length + 1) > pos.Column) with
-                        | true -> getRulePath pos ((vc.Key, countChildren node vc.Key, None, NodeLHS) :: stack) vc
-                        | false -> getRulePath pos ((vc.Key, countChildren node vc.Key, None, NodeRHS) :: stack) vc
+                        | true -> getRulePath pos ((vc.Key, countChildren node vc.Key, None, NodeLHS, None) :: stack) vc
+                        | false -> getRulePath pos ((vc.Key, countChildren node vc.Key, None, NodeRHS, None) :: stack) vc
                     | None ->
                         stack
                     // match node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos) with
                     // | Some lv -> (lv.Key, countChildren node lv.Key, Some lv.ValueText)::stack
                     // | None -> stack
 
-    and getCompletionFromPath (scoreFunction : ScopeContext -> _ list -> CompletionScopeOutput -> CompletionScopeExpectation -> string -> int) (rules : NewRule list) (stack : (string * int * string option * CompletionContext) list) scopeContext =
+    and getCompletionFromPath (scoreFunction : ScopeContext -> _ list -> CompletionScopeOutput -> CompletionScopeExpectation -> string -> int) (rules : NewRule list) (stack : (string * int * string option * CompletionContext * string option) list) scopeContext =
         // log (sprintf "%A" stack)
        
         let completionDotChainInner (key : string) (startingContext : ScopeContext) =
@@ -522,6 +522,7 @@ type CompletionService
             | (key, count, _, t)::rest ->
                 log (sprintf "Completion error %A %A" key t)
                 expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+        let stack = stack |> List.map (fun (a, b,  c, d, e) -> (a, b, c, d))
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
@@ -612,31 +613,31 @@ type CompletionService
         let getCompletion typerules fixedpath = getCompletionFromPath typerules fixedpath
         let allUsedKeys = getAllKeysInFile entity.entity @ globalScriptVariables |> Set.ofList
         let scoreFunction = scoreFunction allUsedKeys
-        let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext) list) =
+        let rec validateTypeSkipRoot (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) (path : (string * int * string option * CompletionContext * string option) list) =
             let typerules = typeRules |> List.choose (function |(name, typerule) when name == t.name -> Some typerule |_ -> None)
             match skipRootKeyStack, t.type_per_file, path with
             |_, false, [] ->
                 getCompletionFromPath scoreFunction typerules [] scopeContext
-            |_, true, (head, c, b, nt)::tail ->
+            |_, true, (head, c, b, nt, keyprefix)::tail ->
                 // getCompletionFromPath scoreFunction typerules ((head, c, b, nt)::tail) scopeContext
-                getCompletionFromPath scoreFunction typerules ((t.name, 1, None, NodeRHS)::(head, c, b, nt)::tail) scopeContext
+                getCompletionFromPath scoreFunction typerules ((t.name, 1, None, NodeRHS, None)::(head, c, b, nt, keyprefix)::tail) scopeContext
             |_, true, [] ->
-                getCompletionFromPath scoreFunction typerules ([t.name, 1, None, NodeRHS]) scopeContext
-            |[], false, (head, c, _, _)::tail ->
+                getCompletionFromPath scoreFunction typerules ([t.name, 1, None, NodeRHS, None]) scopeContext
+            |[], false, (head, c, _, _, keyprefix)::tail ->
                 //TODO: Handle key prefix
-                if FieldValidators.typekeyfilter t head None
+                if FieldValidators.typekeyfilter t head keyprefix
                 then
-                    getCompletionFromPath scoreFunction typerules ((t.name, c, None, NodeRHS)::tail) scopeContext else []
-            |head::tail, false, (pathhead, _, _,_)::pathtail ->
+                    getCompletionFromPath scoreFunction typerules ((t.name, c, None, NodeRHS, None)::tail) scopeContext else []
+            |head::tail, false, (pathhead, _, _,_, _)::pathtail ->
                 if skiprootkey head pathhead
                 then validateTypeSkipRoot t tail pathtail
                 else []
         let items =
             match path |> List.tryLast, path.Length with
-            |Some (_, count, Some x, _), _ when x.Length > 0 && x.StartsWith("@"+magicCharString) ->
+            |Some (_, count, Some x, _, _), _ when x.Length > 0 && x.StartsWith("@"+magicCharString) ->
                 let staticVars = CWTools.Validation.Stellaris.STLValidation.getDefinedVariables entity.entity
                 staticVars |> List.map (fun s -> CompletionResponse.CreateSimple (s))
-            |Some (_, _, _, CompletionContext.NodeLHS), 1 ->
+            |Some (_, _, _, CompletionContext.NodeLHS,_), 1 ->
                 []
             | _ ->
                 pathFilteredTypes |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
@@ -651,7 +652,7 @@ type CompletionService
 
         let rootTypeItems =
             match path with
-            | [(_,_,_,CompletionContext.NodeLHS)] ->
+            | [(_,_,_,CompletionContext.NodeLHS, _)] ->
                 pathFilteredTypes |> List.collect createSnippetForType
             | y when y.Length = 0 ->
                 pathFilteredTypes |> List.collect createSnippetForType
