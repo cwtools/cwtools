@@ -19,6 +19,9 @@ types = {
 	type[scripted_effect] = {
 		path = "game/common/scripted_effects"
 	}
+	type[script_value] = {
+		path = "game/common/script_values"
+	}
 }
 
 ## scope = ship
@@ -84,3 +87,18 @@ alias[effect:NAND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:AND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:OR] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:hidden_effect] = { alias_name[effect] = alias_match_left[effect] }
+
+alias[trigger:test_value] = value_field
+
+script_value = {
+	## cardinality = 0..1
+	enum[simple_maths_enum] = yes
+}
+enums = {
+	enum[simple_maths_enum] = {
+		round
+		ceiling
+		floor
+		abs
+	}
+}

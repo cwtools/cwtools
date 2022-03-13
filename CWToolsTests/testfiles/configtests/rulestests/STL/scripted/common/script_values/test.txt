@@ -1,0 +1,7 @@
+﻿simple = {
+    abs = yes
+}
+
+scripted_param = {
+    $PARAM$ = yes
+}

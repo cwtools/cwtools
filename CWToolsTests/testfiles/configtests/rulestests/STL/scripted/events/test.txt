@@ -31,5 +31,11 @@ country_event = {
         #error
         test_scripted_trigger_ship = yes
         test_scripted_trigger_country = yes
+        
+        test_value = value:simple
+        test_value = value:scripted_param
+        test_value = value:scripted_param|PARAM|abs
+        #error
+        test_value = value:scripted_param|PARAM|absss
     }
 }
