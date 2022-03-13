@@ -2,6 +2,8 @@ namespace CWTools.Games
 open CWTools.Parser
 open CWTools.Common
 open CWTools.Process
+open CWTools.Rules
+open CWTools.Utilities
 open CWTools.Utilities.Utils
 
 module Helpers =
@@ -11,6 +13,41 @@ module Helpers =
 
     let private convertSourceRuleType (lookup : Lookup) (link : EventTargetDataLink) =
         // log (sprintf "csr %A" link)
+        let types = lookup.typeDefInfo
+        let enums = lookup.enumDefs
+        let ruleToCompletionListHelper =
+                        function
+                        | LeafRule (SpecificField (SpecificValue x), _), _ -> [StringResource.stringManager.GetStringForIDs x]
+                        | NodeRule (SpecificField (SpecificValue x), _), _ -> [StringResource.stringManager.GetStringForIDs x]
+                        | LeafRule (NewField.TypeField (TypeType.Simple t), _), _ ->
+                            types.TryFind(t)
+                            |> Option.map (fun s -> s |> List.map (fun s -> s.id)) |> Option.defaultValue []
+                        | NodeRule (NewField.TypeField (TypeType.Simple t), _), _ ->
+                            types.TryFind(t)
+                            |> Option.map (fun s -> s |> List.map (fun s -> s.id)) |> Option.defaultValue []
+                        | LeafRule (NewField.TypeField (TypeType.Complex (p,t,suff)), _), _ ->
+                            types.TryFind(t)
+                            |> Option.map (fun s -> s |> List.map (fun s -> (p + s.id + suff))) |> Option.defaultValue []
+                        | NodeRule (NewField.TypeField (TypeType.Complex (p,t,suff)), _), _ ->
+                            types.TryFind(t)
+                            |> Option.map (fun s -> s |> List.map (fun s -> ((p + s.id + suff)))) |> Option.defaultValue []
+                        | LeafRule (NewField.ValueField (Enum e), _), _ ->
+                            enums.TryFind(e)
+                            |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> (s))) |> Option.defaultValue []
+                        | NodeRule (NewField.ValueField (Enum e), _), _ ->
+                            enums.TryFind(e)
+                            |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> (s))) |> Option.defaultValue []
+                        | _ -> []
+        let aliases =
+                    lookup.configRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
+                              |> List.groupBy fst
+                              |> List.map (fun (k, vs) -> k, vs |> List.map snd)
+                              |> Collections.Map.ofList
+                              
+        let aliasKeyMap =
+                    aliases |> Map.toList |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
+                        |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
+                        |> Map.ofList
         match link.sourceRuleType.Trim() with
         | x when x.StartsWith "<" && x.EndsWith ">" ->
             let sourceType = x.Trim([|'<';'>'|])
@@ -33,6 +70,13 @@ module Helpers =
             | None ->
                 log (sprintf "Link %s refers to undefined value %A" link.name valuename)
                 []
+        | x when x.StartsWith "alias_keys_field[" ->
+            let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
+            match aliasname |> Option.bind (fun x -> Map.tryFind x aliasKeyMap) with
+            | Some vs -> vs |> Set.toList |> List.map (fun x -> x, None)
+            | None ->
+                log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
+                []
         | x ->
             log (sprintf "Link %s refers to invalid source %s" link.name x)
             []
@@ -45,6 +89,7 @@ module Helpers =
 
     let addDataEventTargetLinks (lookup : Lookup) (embeddedSettings : EmbeddedSettings) (addWildCardLinks : bool) =
         let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
+  
         let convertLinkToEffects (link : EventTargetDataLink) =
             let typeDefinedKeys = convertSourceRuleType lookup link
             let keyToEffect (key : string, refHint : ReferenceHint option) =
