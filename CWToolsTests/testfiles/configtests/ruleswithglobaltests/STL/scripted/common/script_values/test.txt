@@ -3,5 +3,6 @@
 }
 
 scripted_param = {
+    #error
     $PARAM$ = yes
 }

@@ -12,11 +12,14 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities
 open System.Threading.Tasks
 
+type ReferenceType = | TypeDef | Link
 type ReferenceDetails = {
     name: string
+    originalValue : string
     position : range
     isOutgoing : bool
     referenceLabel : string option
+    referenceType : ReferenceType
 }
 
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets) =

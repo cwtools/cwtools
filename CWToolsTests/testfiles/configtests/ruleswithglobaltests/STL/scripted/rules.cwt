@@ -74,7 +74,7 @@ alias[trigger:NOT] = {
 alias[trigger:NOR] = { alias_name[trigger] = alias_match_left[trigger] }
 alias[trigger:NAND] = { alias_name[trigger] = alias_match_left[trigger] }
 alias[trigger:AND] = { alias_name[trigger] = alias_match_left[trigger] }
-alias[trigger:AOR] = { alias_name[trigger] = alias_match_left[trigger] }
+alias[trigger:OR] = { alias_name[trigger] = alias_match_left[trigger] }
 alias[trigger:hidden_trigger] = { alias_name[trigger] = alias_match_left[trigger] }
 
 #These are not required as covered by scope_field
@@ -86,7 +86,7 @@ alias[effect:NOT] = {
 alias[effect:NOR] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:NAND] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:AND] = { alias_name[effect] = alias_match_left[effect] }
-alias[effect:AOR] = { alias_name[effect] = alias_match_left[effect] }
+alias[effect:OR] = { alias_name[effect] = alias_match_left[effect] }
 alias[effect:hidden_effect] = { alias_name[effect] = alias_match_left[effect] }
 
 alias[trigger:test_value] = value_field

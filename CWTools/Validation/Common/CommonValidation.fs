@@ -158,21 +158,17 @@ module CommonValidation =
         (fun fileManager rulesValidator lu res es ->
             let res = res.AllEntities()
             let entityMap = res |> List.map (fun struct(e, d) -> e.filepath, struct(e, d)) |> Map.ofList
-            let findParams (pos : CWTools.Utilities.Position.range) (key : string) =
-                logInfo (sprintf "vsvp %s" key)
-                match entityMap |> Map.tryFind pos.FileName with
-                | Some struct (e, _) ->
-                    let rec findChild (node: Node) =
-                        if node.Position = pos
-                        then Some node
-                        else
-                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
-                            | Some c -> findChild c
-                            | None -> None
-                    findChild e.entity
-                | None -> None
-                //|> Option.map (fun s -> eprintfn "vsep %A %A" s.Key key; s)
-                |> Option.map (fun s -> s.Values |> List.map (fun l -> "$" + l.Key + "$", l.ValueText))
+            let findParams (referenceDetails : ReferenceDetails) =
+//                logInfo (sprintf "vsvp %s" key)
+                let splitString = referenceDetails.originalValue.Split '|' |> List.ofArray
+                let rec getParamsFromArray =
+                    function
+                    | key::value::rest -> ($"${key}$", value) :: getParamsFromArray rest
+                    | _ -> []
+                logInfo (sprintf "vsvp b %A" splitString)
+                let svparams = getParamsFromArray (if List.length splitString > 1 then List.tail splitString else splitString)
+                logInfo (sprintf "vsvp c %A" svparams)
+                if List.isEmpty svparams then None else Some svparams
             let findScriptValue (pos : range) =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
@@ -193,7 +189,7 @@ module CommonValidation =
                     //eprintfn "grfrt %A" referencedtypes
                     referencedtypes |> (fun refMap -> Map.tryFind "script_value" refMap) |> Option.defaultValue []
                 let allRefs = es.AllWithData |> List.collect (fun (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
-                                             |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref.position ref.name|})
+                                             |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref|})
                                              |> List.groupBy (fun ref -> ref.effectName)
                                              |> Map.ofList
                 // eprintfn "ar %A" allRefs
@@ -214,7 +210,7 @@ module CommonValidation =
                     | Some seps ->
                         foldOverNode (stringReplace seps) newNode
                     | None -> ()
-                    // eprintfn "%A %A" (CKPrinter.api.prettyPrintStatements newNode.ToRaw) (seParams)
+                    logInfo (sprintf "vsvp d %A %A" (CKPrinter.api.prettyPrintStatement newNode.ToRaw) (seParams))
                     let res = rv.ManualRuleValidate(logicalpath, rootNode)
                     // eprintfn "%A %A" logicalpath res
                     let message = {
@@ -223,7 +219,9 @@ module CommonValidation =
                     }
                     res |> (function
                             | OK -> OK
-                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+                            | Invalid (_, inv) ->
+                                Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+//                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
                 let memoizeValidation =
                     let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
                     let memFun = validateSESpecific

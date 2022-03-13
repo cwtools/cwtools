@@ -1,11 +1,11 @@
 test_scripted_effect_ship = {
-    AOR = {
+    OR = {
         set_ship_flag = yes
     }
 }
 
 test_scripted_effect_country = {
-    AOR = {
+    OR = {
         set_country_flag = yes
     }
 }

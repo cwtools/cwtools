@@ -5,8 +5,9 @@ country_event = {
     option = {
         #error
         set_ship_flag = test
-        AOR = {
-            AOR = {
+        OR = {
+            #error
+            OR = {
                 #error
                 set_ship_flag = test
                 #error
@@ -36,7 +37,7 @@ country_event = {
         test_value = value:simple
         test_value = value:scripted_param
         test_value = value:scripted_param|PARAM|abs
-        #error
+        ### Test on other side
         test_value = value:scripted_param|PARAM|absss
     }
 }
