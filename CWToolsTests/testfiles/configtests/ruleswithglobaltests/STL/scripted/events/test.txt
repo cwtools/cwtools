@@ -1,11 +1,12 @@
 namespace = test
 
 country_event = {
+    is_triggered_only = yes
     option = {
         #error
         set_ship_flag = test
-        OR = {
-            OR = {
+        AOR = {
+            AOR = {
                 #error
                 set_ship_flag = test
                 #error

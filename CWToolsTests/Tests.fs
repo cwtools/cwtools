@@ -403,9 +403,9 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         yield! completionVals |> List.map (fun (f, t) -> testCase ("Completion " + f.ToString()) <| fun() -> completionTestPerFile game (f, t))
     ]
 
-let testSubdirectories stl dir =
+let testSubdirectories stl rulesonly dir =
     let dirs = Directory.EnumerateDirectories dir
-    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d) true true stl "en-GB")
+    dirs |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d) rulesonly true stl "en-GB")
 [<Tests>]
 let folderTests =
     testList "validation" [
@@ -427,11 +427,14 @@ let folderTests =
 //[<Tests>]
 //let irAllSubfolderTests = testList "validation all ir" (testSubdirectories false "./testfiles/configtests/rulestests/All" |> List.ofSeq)
 [<Tests>]
-let stlSubfolderTests = testList "validation stl" (testSubdirectories 1 "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
+let stlSubfolderTests = testList "validation stl" (testSubdirectories 1 true "./testfiles/configtests/rulestests/STL" |> List.ofSeq)
+
 [<Tests>]
-let irSubfolderTests = testList "validation ir" (testSubdirectories 0 "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
+let stlGlobalSubfolderTests = testList "validation stl global" (testSubdirectories 1 false "./testfiles/configtests/ruleswithglobaltests/STL" |> List.ofSeq)
 [<Tests>]
-let hoi4SubfolderTests = testList "validation hoi4" (testSubdirectories 2 "./testfiles/configtests/rulestests/HOI4" |> List.ofSeq)
+let irSubfolderTests = testList "validation ir" (testSubdirectories 0 true "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
+[<Tests>]
+let hoi4SubfolderTests = testList "validation hoi4" (testSubdirectories 2 true "./testfiles/configtests/rulestests/HOI4" |> List.ofSeq)
 
 [<Tests>]
 let specialtests =

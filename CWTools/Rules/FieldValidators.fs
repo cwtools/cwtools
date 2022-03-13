@@ -513,7 +513,12 @@ module internal FieldValidators =
     let checkValueScopeField (enumsMap : Collections.Map<_, string * Set<_, _>>) (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt min max (ids : StringTokens) leafornode errors =
         let scope = ctx.scopes
         // let res = changeScope false true linkMap valueTriggerMap varSet key scope
+        let metadata = getStringMetadata ids.lower
         let key = getOriginalKey ids
+        let key =
+            match metadata.containsPipe with
+            | true -> key.Split('|').[0]
+            | _ -> key
         match  firstCharEqualsAmp ids.lower, TryParser.parseDecimal key, TryParser.parseInt key, changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
         |true, _, _, _ -> errors
         |_, _, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors

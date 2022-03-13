@@ -201,6 +201,46 @@ let perf4(b) =
     ()
 
 
+let perf5(b) =
+    let timer = new System.Diagnostics.Stopwatch()
+    timer.Start()
+    scopeManager.ReInit(defaultScopeInputs, [])
+    let configFiles = (if Directory.Exists @"C:\Users\Thomas\git\cwtools-ck3-config\" then getAllFoldersUnion ([@"C:\Users\Thomas\git\cwtools-ck3-config\"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+    let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
+    let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
+    let folders = configs |> List.tryPick getFolderList
+
+    let settings = {
+        CWTools.Games.CK3.CK3Settings.rootDirectories = [WD { WorkspaceDirectory.name = "Crusader Kings III"; path = @"D:\Games\Steam\steamapps\common\Crusader Kings III\game"}]
+        modFilter = None
+        scriptFolders = folders
+        excludeGlobPatterns = None
+        validation = {
+            validateVanilla = true
+            experimental = false
+            langs = [CK3 CK3Lang.English]
+        }
+        rules = Some {
+            ruleFiles = configs
+            validateRules = true
+            debugRulesOnly = false
+            debugMode = false
+        }
+        embedded = FromConfig ([], [])
+        maxFileSize = None
+    }
+    let eu4 = CWTools.Games.CK3.CK3Game(settings) :> IGame<CK3ComputedData>
+
+    // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
+    if b then
+        let errors = eu4.ValidationErrors() |> List.map (fun e -> e.range)
+        let errors = eu4.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
+        let testVals = eu4.AllEntities()
+        eu4.RefreshCaches()
+        ()
+    else ()
+    eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+    ()
 let test() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
@@ -210,7 +250,7 @@ let test() =
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
 [<EntryPoint>]
 let main argv =
-    let config =  { defaultConfig  with ``parallel`` = false}
+    let config =  { defaultConfig  with runInParallel = false}
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     CultureInfo.DefaultThreadCurrentCulture <-CultureInfo("ru-RU");
     CultureInfo.DefaultThreadCurrentUICulture <-CultureInfo("ru-RU");
@@ -232,6 +272,8 @@ let main argv =
     then perf3(true); 0
     elif Array.tryHead argv = Some "y"
     then perf4(true); 0
+    elif Array.tryHead argv = Some "z"
+    then perf5(true); 0
     elif Array.tryHead argv = Some "t"
     then test(); test(); 0
     else Tests.runTestsInAssembly config argv

@@ -154,6 +154,91 @@ module CommonValidation =
                 scriptedEffects <&!&> (fun (name, lp, node, refs) -> validateSE name lp node refs)
             | _ -> OK
             )
+    let valScriptValueParams<'T when 'T :> ComputedData> : CWTools.Games.LookupFileValidator<'T> =
+        (fun fileManager rulesValidator lu res es ->
+            let res = res.AllEntities()
+            let entityMap = res |> List.map (fun struct(e, d) -> e.filepath, struct(e, d)) |> Map.ofList
+            let findParams (pos : CWTools.Utilities.Position.range) (key : string) =
+                logInfo (sprintf "vsvp %s" key)
+                match entityMap |> Map.tryFind pos.FileName with
+                | Some struct (e, _) ->
+                    let rec findChild (node: Node) =
+                        if node.Position = pos
+                        then Some node
+                        else
+                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                            | Some c -> findChild c
+                            | None -> None
+                    findChild e.entity
+                | None -> None
+                //|> Option.map (fun s -> eprintfn "vsep %A %A" s.Key key; s)
+                |> Option.map (fun s -> s.Values |> List.map (fun l -> "$" + l.Key + "$", l.ValueText))
+            let findScriptValue (pos : range) =
+                match entityMap |> Map.tryFind pos.FileName with
+                | Some struct (e, _) ->
+                    let rec findChild (node: Node) =
+                        if node.Position = pos
+                        then Some node
+                        else
+                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                            | Some c -> findChild c
+                            | None -> None
+                    findChild e.entity
+                | None -> None
+            match rulesValidator, lu.typeDefInfo |> Map.tryFind "script_value" with
+            | Some rv, Some scriptValues ->
+                logInfo (sprintf "vsvpa %A" scriptValues)
+                let allScriptValues = scriptValues |> List.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
+                let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
+                    //eprintfn "grfrt %A" referencedtypes
+                    referencedtypes |> (fun refMap -> Map.tryFind "script_value" refMap) |> Option.defaultValue []
+                let allRefs = es.AllWithData |> List.collect (fun (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
+                                             |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref.position ref.name|})
+                                             |> List.groupBy (fun ref -> ref.effectName)
+                                             |> Map.ofList
+                // eprintfn "ar %A" allRefs
+                let scriptedEffects = allScriptValues |> List.map (fun (name, filename, node) -> name, fileManager.ConvertPathToLogicalPath(filename), node, allRefs |> Map.tryFind name |> Option.defaultValue [])
+                let stringReplace (seParams : (string * string) list) (key : string) =
+                    seParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
+                let rec foldOverNode (stringReplacer) (node : Node) =
+                    // eprintfn "fov %A" node.Key
+                    node.Key <- stringReplacer node.Key
+                    node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
+                    node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
+                    node.Children |> List.iter (foldOverNode stringReplacer)
+                let validateSESpecific ((name : string), (logicalpath : string), (node : Node), (callSite : range), (seParams : (string * string) list option)) =
+                    let newNode = CWTools.Process.STLProcess.cloneNode node
+                    let rootNode = Node("root")
+                    rootNode.AllArray <- [|NodeC newNode|]
+                    match seParams with
+                    | Some seps ->
+                        foldOverNode (stringReplace seps) newNode
+                    | None -> ()
+                    // eprintfn "%A %A" (CKPrinter.api.prettyPrintStatements newNode.ToRaw) (seParams)
+                    let res = rv.ManualRuleValidate(logicalpath, rootNode)
+                    // eprintfn "%A %A" logicalpath res
+                    let message = {
+                        location = callSite
+                        message = sprintf "This call of scripted effect %s results in an error" name
+                    }
+                    res |> (function
+                            | OK -> OK
+                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+                let memoizeValidation =
+                    let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
+                    let memFun = validateSESpecific
+                    memoize keyFun memFun
+                let validateSE (name: string) (logicalpath : string) (node : Node option) (refs : {|callSite : range ; effectName : string ; seParams : (string * string) list option|} list) =
+                    // eprintfn "vse %A %A %A" name node refs
+                    let res =
+                        match node with
+                        | Some node ->
+                            refs <&!&> (fun ref -> memoizeValidation (name, logicalpath, node, ref.callSite, ref.seParams))
+                        | None -> OK
+                    res
+                scriptedEffects <&!&> (fun (name, lp, node, refs) -> validateSE name lp node refs)
+            | _ -> OK
+            )
 
     type BoolState = | AND | OR
     let validateRedundantANDWithNOR : StructureValidator<_> =

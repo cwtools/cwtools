@@ -1,11 +1,11 @@
 test_scripted_trigger_ship = {
-    OR = {
+    AOR = {
         has_ship_flag = yes
     }
 }
 
 test_scripted_trigger_country = {
-    OR = {
+    AOR = {
         has_country_flag = yes
     }
 }

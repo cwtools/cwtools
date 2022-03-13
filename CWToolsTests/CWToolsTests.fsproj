@@ -24,5 +24,8 @@
     <EmbeddedResource Include="testfiles/overwritetest/embedded/**" />
     <None Include="testfiles/configtests/**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="testfiles\configtests\ruleswithglobaltests\STL" />
+  </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
