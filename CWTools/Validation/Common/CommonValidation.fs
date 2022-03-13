@@ -165,9 +165,9 @@ module CommonValidation =
                     function
                     | key::value::rest -> ($"${key}$", value) :: getParamsFromArray rest
                     | _ -> []
-                logInfo (sprintf "vsvp b %A" splitString)
+//                logInfo (sprintf "vsvp b %A" splitString)
                 let svparams = getParamsFromArray (if List.length splitString > 1 then List.tail splitString else splitString)
-                logInfo (sprintf "vsvp c %A" svparams)
+//                logInfo (sprintf "vsvp c %A" svparams)
                 if List.isEmpty svparams then None else Some svparams
             let findScriptValue (pos : range) =
                 match entityMap |> Map.tryFind pos.FileName with
@@ -183,7 +183,7 @@ module CommonValidation =
                 | None -> None
             match rulesValidator, lu.typeDefInfo |> Map.tryFind "script_value" with
             | Some rv, Some scriptValues ->
-                logInfo (sprintf "vsvpa %A" scriptValues)
+//                logInfo (sprintf "vsvpa %A" scriptValues)
                 let allScriptValues = scriptValues |> List.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
@@ -210,7 +210,7 @@ module CommonValidation =
                     | Some seps ->
                         foldOverNode (stringReplace seps) newNode
                     | None -> ()
-                    logInfo (sprintf "vsvp d %A %A" (CKPrinter.api.prettyPrintStatement newNode.ToRaw) (seParams))
+//                    logInfo (sprintf "vsvp d %A %A" (CKPrinter.api.prettyPrintStatement newNode.ToRaw) (seParams))
                     let res = rv.ManualRuleValidate(logicalpath, rootNode)
                     // eprintfn "%A %A" logicalpath res
                     let message = {
