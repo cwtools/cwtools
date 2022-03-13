@@ -215,7 +215,7 @@ module CommonValidation =
                     // eprintfn "%A %A" logicalpath res
                     let message = {
                         location = callSite
-                        message = sprintf "This call of scripted effect %s results in an error" name
+                        message = sprintf "This call of scripted value %s results in an error" name
                     }
                     res |> (function
                             | OK -> OK
