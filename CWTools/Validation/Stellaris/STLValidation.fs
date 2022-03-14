@@ -271,25 +271,25 @@ module STLValidation =
                     match node.Child "generate_mult_modifiers" with
                     | Some gen ->
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "cost") then
-                            yield {ActualModifier.tag = econCat+res+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
+                            yield {ActualModifier.tag = econCat+"_"+res+"_cost_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "produces") then
-                            yield {tag = econCat+res+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
+                            yield {tag = econCat+"_"+res+"_produces_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "upkeep") then
-                            yield {tag = econCat+res+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
+                            yield {tag = econCat+"_"+res+"_upkeep_mult"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                     | None -> ()
                     match node.Child "generate_add_modifiers" with
                     | Some gen ->
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "cost") then
-                            yield {ActualModifier.tag = econCat+res+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
+                            yield {ActualModifier.tag = econCat+"_"+res+"_cost_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "produces") then
-                            yield {ActualModifier.tag = econCat+res+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
+                            yield {ActualModifier.tag = econCat+"_"+res+"_produces_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                         if gen.LeafValues |> Seq.exists (fun lv -> lv.Key == "upkeep") then
-                            yield {ActualModifier.tag = econCat+res+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
+                            yield {ActualModifier.tag = econCat+"_"+res+"_upkeep_add"; category = modifierCategoryManager.ParseModifier() "Economic Units" }
                         else ()
                     | None -> ()
                     yield! (node.Childs "triggered_upkeep_modifier" |> Seq.collect (econCategoryTriggeredModifierCreate "_upkeep" res))
