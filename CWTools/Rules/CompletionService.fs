@@ -375,12 +375,12 @@ type CompletionService
             |> convertScopeResToList startingContext CompletionScopeExpectation.VariableOrValue variableFieldAll variableFieldNonGlobal createSnippetWithScore
             
         let rec convRuleToCompletion (key : string) (count : int) (context : ScopeContext) (rule : NewRule) =
-            // eprintfn "crtc %A %A" key rule
+//            eprintfn "crtc %A %A %A" key count rule
             let r, o = rule
             let scoreFunctioni = scoreFunction context o.requiredScopes CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing
             let createSnippetForClausei = createSnippetForClause scoreFunctioni
             let createSnippetForClauseWithCustomScopeReq = (fun (r) -> createSnippetForClause (scoreFunction context r CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing))
-            let enough = o.max <= count
+            let enough = o.max < count
             if enough
             then []
             else

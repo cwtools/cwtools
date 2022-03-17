@@ -102,6 +102,7 @@ event = {
         
         
         ## Test error message text
+        #@ 8 nested_trigger
         nested_trigger = {
             #error
             value = ROOT.trigger:num_moons
