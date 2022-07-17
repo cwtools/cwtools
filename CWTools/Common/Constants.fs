@@ -31,6 +31,8 @@ type STLLang =
     | Braz_Por = 6
     | Default = 7
     | Chinese = 8
+    | Japanese = 9
+    | Korean = 10
 
 type HOI4Lang =
     | English = 0
@@ -120,7 +122,9 @@ module LangHelpers =
           STL STLLang.Russian
           STL STLLang.Polish
           STL STLLang.Braz_Por
-          STL STLLang.Chinese ]
+          STL STLLang.Chinese
+		  STL STLLang.Japanese
+          STL STLLang.Korean ]
 
     let allHOI4Langs =
         [ HOI4 HOI4Lang.English

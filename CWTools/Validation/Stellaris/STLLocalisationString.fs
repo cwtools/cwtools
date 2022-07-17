@@ -67,8 +67,9 @@ module STLLocalisationString =
             |x when x.IndexOf("l_russian",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Russian
             |x when x.IndexOf("l_polish",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Polish
             |x when x.IndexOf("l_braz_por",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Braz_Por
-            |x when x.IndexOf("l_default",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Default
             |x when x.IndexOf("l_simp_chinese",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Chinese
+            |x when x.IndexOf("l_japanese",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Japanese
+            |x when x.IndexOf("l_korean",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Korean
             |_ -> None
         let keyAtEnd =
             function
@@ -81,6 +82,8 @@ module STLLocalisationString =
             |x when x.EndsWith("l_braz_por",StringComparison.OrdinalIgnoreCase) -> true
             |x when x.EndsWith("l_default",StringComparison.OrdinalIgnoreCase) -> true
             |x when x.EndsWith("l_simp_chinese",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_japanese",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_korean",StringComparison.OrdinalIgnoreCase) -> true
             |_ -> false
         match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
         |_ , Some STLLang.Default -> OK

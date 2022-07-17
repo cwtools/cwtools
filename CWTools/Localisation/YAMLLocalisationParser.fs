@@ -188,7 +188,8 @@ module STL =
         |"l_polish" -> Some STLLang.Polish
         |"l_braz_por" -> Some STLLang.Braz_Por
         |"l_simp_chinese" -> Some STLLang.Chinese
-        |"l_default" -> Some STLLang.Default
+        |"l_japanese" -> Some STLLang.Japanese
+        |"l_korean" -> Some STLLang.Korean
         |_ -> None
 
     let STLLocalisationService (files : (string * string) list) =
