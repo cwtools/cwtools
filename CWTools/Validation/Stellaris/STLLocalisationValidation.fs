@@ -95,20 +95,6 @@ module STLLocalisationValidation =
 
 
 
-    let valEventLocs : LocalisationValidator =
-        fun _ keys es ->
-            let es = es.GlobMatchChildren("**/events/*.txt")
-            let inner =
-                fun (event : Node) ->
-                    let titles = event.Leafs "title" |> List.ofSeq |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
-                    let desc = event.Leafs "desc" |> List.ofSeq |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
-                    let options = event.Childs "option" |> List.ofSeq
-                                                        |> List.collect (fun o -> o.Leafs "name" |> List.ofSeq |> List.map (checkLocKeys keys))
-                                                        |> List.fold (<&&>) OK
-                    let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
-                    titles <&&> desc <&&> options <&&> usedKeys
-            es <&!&> inner
-
     let valEffectLocs : LocalisationValidator =
         fun _ keys es ->
             let fNode = (fun (x : Node) children ->
@@ -200,56 +186,6 @@ module STLLocalisationValidation =
     //             fun (node : Node) ->
     //                 node.Children <&!&> (getLocKeys keys ["text"; "fail_text"])
     //         entities |> List.map inner |> List.fold (<&&>) OK
-
-    let valTraditionLocs (node : Node) (keys : (Lang * Set<string>) list) (starts : string list) (finals : string list) (traditions : string list)=
-        let key = node.Key
-        let finishres =
-            match finals |> List.contains key with
-            | true ->
-                let effect = key + "_effect"
-                keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l effect node) OK
-            | false -> OK
-        let adoptres =
-            match starts |> List.contains key with
-            | true ->
-                (let effect = key + "_effect"
-                keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l effect node) OK)
-                <&&>
-                (let desc = key + "_desc"
-                keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l desc node) OK)
-            | false -> OK
-        let traditionsres =
-            match traditions |> List.contains key with
-            | true ->
-                let desc = key + "_desc"
-                let a = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l desc node) OK
-                let delayed = key + "_delayed"
-                let b = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l delayed node) OK
-                a <&&> b
-            | false -> OK
-        let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l key node) OK
-        keyres <&&> finishres <&&> adoptres <&&> traditionsres
-
-    let processTradCat  (keys : (Lang * Set<string>) list) (cat : Node) =
-        let key = cat.Key
-        let start = cat.TagText "adoption_bonus"
-        let finish = cat.TagText "finish_bonus"
-        let vals = cat.Child "traditions" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueC lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
-        let traditions = vals |> List.map (function |QString s -> s |x -> x.ToString())
-        let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l key cat) OK
-        (start, finish, traditions)
-
-    let valTraditionLocCats : LocalisationValidator =
-        fun es keys nes ->
-            let cats = es.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
-            let newcats = nes.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
-            let starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun ( ss, fs, ts) (s, f, t) -> s::ss,  f::fs, ts @ t) ([], [], [])
-            let traditions = nes.GlobMatch("**/traditions/*.txt")  |> List.collect (fun e -> e.Children)
-            let inner = fun tradition -> valTraditionLocs tradition keys starts finishes trads
-            let innerCat = fun (cat : Node) -> keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l cat.Key cat) OK
-            newcats |> List.map innerCat |> List.fold (<&&>) OK
-            <&&>
-            (traditions |> List.map inner |> List.fold (<&&>) OK)
 
     let valPolicies : LocalisationValidator =
         fun _ keys es ->

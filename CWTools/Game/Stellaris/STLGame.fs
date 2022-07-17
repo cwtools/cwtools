@@ -286,9 +286,7 @@ type STLGame (setupSettings : StellarisSettings) =
         lookupFileValidators = [valScriptedEffectParams, "scripted_effects"; valScriptValueParams, "script_values"]
         useRules = setupSettings.rules |> Option.map (fun o -> o.validateRules) |> Option.defaultValue false
         debugRulesOnly = setupSettings.rules |> Option.map (fun o -> o.debugRulesOnly) |> Option.defaultValue false
-        localisationValidators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valTraditionLocCats
-
-                                ; valPolicies; valEffectLocs; valTriggerLocs;]
+        localisationValidators = [valTechLocs; valCompSetLocs; valCompTempLocs; valPolicies; valEffectLocs; valTriggerLocs;]
 
     }
     let embeddedSettings =
