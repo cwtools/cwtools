@@ -73,6 +73,7 @@ module STLValidation =
         let isMTTH = event.Has "mean_time_to_happen"
         let isTrig = event.Has "is_triggered_only"
         let isOnce = event.Has "fire_only_once"
+        let isInherited = event.Has "base"
         let isAlwaysNo =
             match event.Child "trigger" with
             | Some t ->
@@ -81,7 +82,7 @@ module STLValidation =
                 | _ -> false
             | None -> false
         let e =
-            match isMTTH || isTrig || isOnce || isAlwaysNo with
+            match isMTTH || isTrig || isOnce || isAlwaysNo || isInherited with
             | false -> Invalid (Guid.NewGuid(), [inv ErrorCodes.EventEveryTick event])
             | true -> OK
         e
