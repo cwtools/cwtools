@@ -39,24 +39,6 @@ module STLLocalisationValidation =
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
 
-    let valEventNameLocs (keys : (Lang * Set<string>) list) (node : Node) =
-        let names = keys |> List.choose (fun (l, ks) -> if l = STL STLLang.Default then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
-        let fNode = (fun (x : Node) children ->
-                        match x.Key.ToLower(), x.Leafs "name" |> List.ofSeq with
-                        | "create_point_of_interest", _
-                        | "enable_special_project", _
-                        | "create_species", _
-                        | "option", _ -> children
-                        | _, [] -> children
-                        | _, [leaf] ->
-                            let name = leaf.Value |> function |(QString s) -> s |s -> s.ToString()
-                            if name = "random" then OK else
-                                children <&&> (checkLocName leaf names (STL STLLang.Default) (name) )
-                        | _, names -> children
-                         )
-        let fCombine = (<&&>)
-        node |> (foldNode2 fNode fCombine OK)
-
     let checkLocLeafValue (keys : Set<string>) (lang : Lang) key (lv : LeafValue) =
         if lang = STL STLLang.Default then OK else
             match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
@@ -124,8 +106,7 @@ module STLLocalisationValidation =
                                                         |> List.collect (fun o -> o.Leafs "name" |> List.ofSeq |> List.map (checkLocKeys keys))
                                                         |> List.fold (<&&>) OK
                     let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
-                    let nameres = valEventNameLocs keys event
-                    titles <&&> desc <&&> options <&&> usedKeys <&&> nameres
+                    titles <&&> desc <&&> options <&&> usedKeys
             es <&!&> inner
 
     let valEffectLocs : LocalisationValidator =
