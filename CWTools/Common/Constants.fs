@@ -123,7 +123,7 @@ module LangHelpers =
           STL STLLang.Polish
           STL STLLang.Braz_Por
           STL STLLang.Chinese
-		  STL STLLang.Japanese
+          STL STLLang.Japanese
           STL STLLang.Korean ]
 
     let allHOI4Langs =

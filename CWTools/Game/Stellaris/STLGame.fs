@@ -311,8 +311,7 @@ type STLGame (setupSettings : StellarisSettings) =
     do if scopeManager.Initialized |> not then Utils.logError (sprintf "%A has no scopes" (settings.rootDirectories |> List.head)) else ()
     let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v, links) -> (if l.Length = 0 then Legacy ([],[], []) else Legacy (l, v, links)) |_ -> Legacy ([],[], [])
 
-    let settings = { settings with validation = { settings.validation with langs = STL STLLang.Default::settings.validation.langs }
-                                   embedded = { settings.embedded with localisationCommands = locSettings }
+    let settings = { settings with embedded = { settings.embedded with localisationCommands = locSettings }
                                    initialLookup = STLLookup()}
 
     let legacyLocDataTypes = settings.embedded.localisationCommands |> function | Legacy (c, v, links) -> (c, v, (links, settings.embedded.eventTargetLinks))| _ -> ([], [], ([], []))
