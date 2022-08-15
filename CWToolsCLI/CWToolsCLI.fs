@@ -66,7 +66,7 @@ module CWToolsCLI =
         | Game.STL, BrazPor -> Some (STL STLLang.Braz_Por)
         | Game.STL, SimpChinese -> Some (STL STLLang.Chinese)
         | Game.STL, Japanese -> Some (STL STLLang.Japanese)
-        | Game.STL, Japanese -> Some (STL STLLang.Korean)
+        | Game.STL, Korean -> Some (STL STLLang.Korean)
         | Game.HOI4, English -> Some (HOI4 HOI4Lang.English)
         | Game.HOI4, French -> Some (HOI4 HOI4Lang.French)
         | Game.HOI4, German -> Some (HOI4 HOI4Lang.German)
