@@ -43,6 +43,7 @@
     <Compile Include="Process/Scopes/HOI4Scopes.fs" />
     <Compile Include="Process/Scopes/CK2Scopes.fs" />
     <Compile Include="Process/Scopes/CK3Scopes.fs" />
+    <Compile Include="Process\Scopes\VIC3Scopes.fs" />
     <Compile Include="Process/Scopes/IRScopes.fs" />
     <Compile Include="Process/Scopes/VIC2Scopes.fs" />
     <Compile Include="Rules/RulesParserConstants.fs" />
@@ -95,6 +96,7 @@
     <Compile Include="CSharp/Helpers.fs" />
     <Compile Include="CSharp/Extensions.fs" />
     <Compile Include="ExtensionPoints/StatementVisitor.fs" />
+    <Compile Include="Game\VIC3\VIC3Game.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

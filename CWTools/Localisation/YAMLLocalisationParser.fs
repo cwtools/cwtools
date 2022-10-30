@@ -251,3 +251,21 @@ module CK3 =
         YAMLLocalisationService ( files, keyToLanguage, CK3 )
     let CK3LocalisationServiceFromFolder (folder : string) =
         YAMLLocalisationService ({ folder =  folder; gameName = "CK3"; keyToLanguage = keyToLanguage; gameToLang = CK3 })
+        
+module VIC3 =
+    open YAMLLocalisationParser
+    
+    let private keyToLanguage =
+        function
+        |"l_english" -> Some VIC3Lang.English
+        |"l_french" -> Some VIC3Lang.French
+        |"l_german" -> Some VIC3Lang.German
+        |"l_spanish" -> Some VIC3Lang.Spanish
+        |"l_simp_chinese" -> Some VIC3Lang.Chinese
+        |"l_russian" -> Some VIC3Lang.Russian
+        |"l_korean" -> Some VIC3Lang.Korean
+        |_ -> None
+    let VIC3LocalisationService (files : (string * string) list) =
+        YAMLLocalisationService ( files, keyToLanguage, VIC3 )
+    let VIC3LocalisationServiceFromFolder (folder : string) =
+        YAMLLocalisationService ({ folder =  folder; gameName = "VIC3"; keyToLanguage = keyToLanguage; gameToLang = VIC3 })

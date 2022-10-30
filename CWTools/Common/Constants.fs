@@ -73,7 +73,15 @@ type CK3Lang =
     | Chinese = 4
     | Russian = 5
     | Korean = 6
-
+    
+type VIC3Lang =
+    | English = 0
+    | French = 1
+    | German = 2
+    | Spanish = 3
+    | Chinese = 4
+    | Russian = 5
+    | Korean = 6
 type CustomLang =
     | English = 0
     | French = 1
@@ -93,6 +101,7 @@ type Lang =
     | IR of IRLang
     | VIC2 of VIC2Lang
     | CK3 of CK3Lang
+    | VIC3 of VIC3Lang
     | Custom of CustomLang
     override x.ToString() =
         x
@@ -104,6 +113,7 @@ type Lang =
         | IR s -> s.ToString()
         | VIC2 s -> s.ToString()
         | CK3 s -> s.ToString()
+        | VIC3 s -> s.ToString()
         | Custom s -> s.ToString()
 
 module LangHelpers =
@@ -164,6 +174,10 @@ module LangHelpers =
           CK3 CK3Lang.Russian
           CK3 CK3Lang.Korean ]
 
+    let allVIC3Langs =
+        [
+            VIC3 VIC3Lang.English
+        ]
     let allCustomLangs =
         [ Custom CustomLang.English
           Custom CustomLang.French
