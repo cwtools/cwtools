@@ -15,6 +15,7 @@
     <Compile Include="Common/HOI4Constants.fs" />
     <Compile Include="Common/CK2Constants.fs" />
     <Compile Include="Common/CK3Constants.fs" />
+    <Compile Include="Common\VIC3Constants.fs" />
     <Compile Include="Common/IRConstants.fs" />
     <Compile Include="Common/VIC2Constants.fs" />
     <Compile Include="Parser/Types.fs" />

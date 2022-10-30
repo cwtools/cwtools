@@ -264,6 +264,10 @@ module VIC3 =
         |"l_simp_chinese" -> Some VIC3Lang.Chinese
         |"l_russian" -> Some VIC3Lang.Russian
         |"l_korean" -> Some VIC3Lang.Korean
+        |"l_japanese" -> Some VIC3Lang.Japanese
+        |"l_braz_por" -> Some VIC3Lang.Braz_Por
+        |"l_polish" -> Some VIC3Lang.Polish
+        |"l_turkish" -> Some VIC3Lang.Turkish
         |_ -> None
     let VIC3LocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, VIC3 )

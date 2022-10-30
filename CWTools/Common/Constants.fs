@@ -82,6 +82,10 @@ type VIC3Lang =
     | Chinese = 4
     | Russian = 5
     | Korean = 6
+    | Braz_Por = 7
+    | Japanese = 8
+    | Polish = 9
+    | Turkish = 10
 type CustomLang =
     | English = 0
     | French = 1
@@ -177,6 +181,16 @@ module LangHelpers =
     let allVIC3Langs =
         [
             VIC3 VIC3Lang.English
+            VIC3 VIC3Lang.Chinese
+            VIC3 VIC3Lang.French
+            VIC3 VIC3Lang.German
+            VIC3 VIC3Lang.Japanese
+            VIC3 VIC3Lang.Korean
+            VIC3 VIC3Lang.Polish
+            VIC3 VIC3Lang.Russian
+            VIC3 VIC3Lang.Spanish
+            VIC3 VIC3Lang.Turkish
+            VIC3 VIC3Lang.Braz_Por
         ]
     let allCustomLangs =
         [ Custom CustomLang.English
