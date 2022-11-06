@@ -602,7 +602,7 @@ type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
 
     new(rawEffect: RawEffect, effectType: EffectType, parseScopes) =
         let scopes =
-            rawEffect.scopes |> List.collect parseScopes
+            rawEffect.scopes |> List.map (fun x -> x.Trim()) |> List.collect parseScopes
 
         let target =
             rawEffect.targets
