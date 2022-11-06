@@ -13,6 +13,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Vic3.fs" />
     <Compile Include="CWToolsScripts.fs" />
     <None Include="App.config" />
     <EmbeddedResource Include="../CWTools/files/**" />

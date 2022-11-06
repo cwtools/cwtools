@@ -6,6 +6,7 @@ open CWTools.Games.Files
 open FSharp.Data
 open FSharp.Data.JsonExtensions
 
+open Vic3
 module CWToolsScripts =
     open System
 
@@ -44,7 +45,7 @@ module CWToolsScripts =
 
         let rules, types, enums, complexenums, values =
                     rulesFiles
-                        |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope) (scopeManager.ScopeGroups) true
+                        |> CWTools.Rules.RulesParser.parseConfigs (scopeManager.ParseScope()) (scopeManager.AllScopes) (scopeManager.AnyScope) (scopeManager.ScopeGroups) true false
         let oldTriggers =
             rules
             |> List.choose
@@ -458,5 +459,8 @@ module CWToolsScripts =
         elif Array.tryHead argv = Some "hoi4modifiers"
         then
             generateHOI4Modifiers()
+        elif Array.tryHead argv = Some "vic3"
+        then
+            generateVic3()
         else
             0
