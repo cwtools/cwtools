@@ -36,7 +36,8 @@ module EU4 =
         // "FROMFROM", from 2;
         // "FROMFROMFROM", from 3;
         // "FROMFROMFROMFROM", from 4;
-        "PREV", prev;
+        "PREV", prev
+        "PREV_PREV", prev >> prev
         // "PREVPREV", prev >> prev;
         // "PREVPREVPREV", prev >> prev >> prev;
         // "PREVPREVPREVPREV", prev >> prev >> prev >> prev
