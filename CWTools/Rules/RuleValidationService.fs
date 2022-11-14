@@ -460,9 +460,18 @@ type RuleValidationService
     let applyNodeRuleRoot (typedef : TypeDefinition) (rules : NewRule list) (options : Options) (node : IClause) =
         let pushScope, subtypes = testSubtype (typedef.subtypes) node
         let startingScopeContext =
-            match Option.orElse pushScope options.pushScope with
-            |Some ps -> { Root = ps; From = []; Scopes = [ps] }
-            |None -> defaultContext
+            match Option.orElse pushScope options.pushScope, options.replaceScopes with
+            |Some ps, _ -> { Root = ps; From = []; Scopes = [ps] }
+            |_, Some rs ->
+                let replaceContext =
+                    { Root = rs.root |> Option.orElse rs.this |> Option.defaultValue anyScope
+                             From = rs.froms |> Option.defaultValue []
+                             Scopes = rs.prevs |> Option.defaultValue [] }
+                if rs.this |> Option.isSome then
+                    { replaceContext with Scopes = rs.this.Value::replaceContext.Scopes }
+                else
+                    replaceContext 
+            |None, None -> defaultContext
         let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
         applyNodeRule true context options (SpecificField(SpecificValue rootId)) rules node OK
 

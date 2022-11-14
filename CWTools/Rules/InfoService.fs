@@ -189,7 +189,22 @@ type InfoService
                 noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificMap, leafSpecificMap
 
         memoizeRulesInner memFunction
-
+    let getRulesContextFromOptions (pushScope : Scope option) (subtypes : string list) (typeruleOptions : Options option) =
+        match pushScope, typeruleOptions with
+        |_, Some { replaceScopes = Some rs } ->
+            let replaceContext =
+                {
+                    Root = rs.root |> Option.orElse rs.this |> Option.defaultValue anyScope
+                    From = rs.froms |> Option.defaultValue []
+                    Scopes = rs.prevs |> Option.defaultValue [] }
+            if rs.this |> Option.isSome then
+                { subtypes = subtypes; scopes = { replaceContext with Scopes = rs.this.Value::replaceContext.Scopes }; warningOnly = false }
+            else
+                { subtypes = subtypes; scopes = replaceContext; warningOnly = false }
+        |_, Some { pushScope = Some ps } ->
+            { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
+        |Some ps, _ -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
+        |None, _ -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
     let rec singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment acc child rule :'r =
         let recurse = singleInfoService fNode fChild fLeaf fLeafValue fValueClause fComment
         match child with
@@ -512,10 +527,15 @@ type InfoService
         let ctx =
             match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
             |Some c, Some typedef ->
+                let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None) 
+                let typeruleOptions =
+                    match typerules |> List.tryHead with
+                    |Some ((NodeRule ((SpecificField(SpecificValue (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
+                        if FieldValidators.typekeyfilter typedef c.Key c.KeyPrefix then Some o else None
+                    |_ -> None
                 let pushScope, subtypes = ruleValidationService.TestSubType (typedef.subtypes, c)
-                match pushScope with
-                |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
-                |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
+                getRulesContextFromOptions pushScope subtypes typeruleOptions
+
             |_, _ -> { subtypes = []; scopes = defaultContext; warningOnly = false }
 
         let ctx = ctx, (None)
@@ -624,12 +644,18 @@ type InfoService
         let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
         // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
         let ctx =
+            
+            
             match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
             |Some c, Some typedef ->
+                let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None) 
+                let typeruleOptions =
+                    match typerules |> List.tryHead with
+                    |Some ((NodeRule ((SpecificField(SpecificValue (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
+                        if FieldValidators.typekeyfilter typedef c.Key c.KeyPrefix then Some o else None
+                    |_ -> None
                 let pushScope, subtypes = ruleValidationService.TestSubType (typedef.subtypes, c)
-                match pushScope with
-                |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
-                |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
+                getRulesContextFromOptions pushScope subtypes typeruleOptions
             |_, _ -> { subtypes = []; scopes = defaultContext; warningOnly = false }
 
         let ctx = ctx, (None, None, None)
@@ -683,12 +709,16 @@ type InfoService
                 (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
         let infoServiceNode (typedef : TypeDefinition) rs o =
-            (fun a c ->
+            (fun a (c : Node) ->
                 let ctx =
+                    let typerules = typeRules |> List.choose (function |(name, r) when name == typedef.name -> Some r |_ -> None) 
+                    let typeruleOptions =
+                        match typerules |> List.tryHead with
+                        |Some ((NodeRule ((SpecificField(SpecificValue (x))), rs), o)) when (StringResource.stringManager.GetStringForID x.normal) == typedef.name->
+                            if FieldValidators.typekeyfilter typedef c.Key c.KeyPrefix then Some o else None
+                        |_ -> None
                     let pushScope, subtypes = ruleValidationService.TestSubType (typedef.subtypes, c)
-                    match pushScope with
-                    |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
-                    |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
+                    getRulesContextFromOptions pushScope subtypes typeruleOptions
                 infoServiceFunction fNode fChild fLeaf fLeafValue fValueClause fComment ctx a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
         let pathFilteredTypes = typedefs |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
         let rec infoServiceSkipRoot rs o (t : TypeDefinition) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
