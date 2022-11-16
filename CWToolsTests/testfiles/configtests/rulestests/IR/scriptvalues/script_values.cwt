@@ -21,5 +21,7 @@ single_alias[range] = {
 }
 
 single_alias[formula] = {
-
+    alias_name[arithmetic_operation] = alias_match_left[arithmetic_operation]
 }
+
+alias[arithmetic_operation:add] = value_field

@@ -23,4 +23,9 @@ links = {
         output_scope = country
         prefix = test:
     }
+    value_link = {
+        output_scope = value
+        type = value
+        input_scope = any
+    }
 }

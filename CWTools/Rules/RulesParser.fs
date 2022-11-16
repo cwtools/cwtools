@@ -847,7 +847,7 @@ module private RulesParserImpl =
     let replaceValueMarkerFields (useFormulas : bool) (stellarisScopeTrigger : bool) (rules : RootRule list) =
         let rec cataRule rule : NewRule list =
             match rule with
-            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when not o.comparison && useFormulas ->
+            | LeafRule (ValueScopeMarkerField (i,m), ValueScopeMarkerField (i2,m2)), o when useFormulas ->
                 [
                     LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
                     LeafRule(ValueScopeField(i, m), SingleAliasField("formula")), o
@@ -862,7 +862,7 @@ module private RulesParserImpl =
                 [
                     LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
                 ]
-            | LeafRule (l, ValueScopeMarkerField (i2,m2)), o when not o.comparison && useFormulas ->
+            | LeafRule (l, ValueScopeMarkerField (i2,m2)), o when useFormulas ->
                 [
                     LeafRule(l, ValueScopeField(i2, m2)), o
                     LeafRule(l, SingleAliasField("formula")), o

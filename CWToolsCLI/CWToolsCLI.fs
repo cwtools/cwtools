@@ -46,7 +46,8 @@ module CWToolsCLI =
         | BrazPor
         | SimpChinese
         | Korean
-		| Japanese
+        | Japanese
+  
     let parseLanguageArg (game : Game) (lang : LanguageArg) =
         match game, lang with
         | Game.Custom, English -> Some (Custom CustomLang.English)

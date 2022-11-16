@@ -1,12 +1,91 @@
+## Things to test:
+## value_field on rhs
+## - accepts number
+## - accepts a script_value name
+## - accepts a chained resolution to a script_value name
+## - accepts a range/formula block
+## triggers with == and/or docs
+## - on RHS can be chained to as if they were script values
+## - on LHS support all of value_field on the RHS
+## links with scope output
+## - on RHS can be chained to as if they were script values
+## - on LHS support all of value_field on the RHS
 province_event = {
    test_value_field = 5
    test_value_field = my_static_value
+   test_value_field = my_script_value
    #error
    test_value_field = blah
    test_value_field = root.my_script_value
    #error
    test_value_field = root
    test_value_field = {
-
+        5 10
+   }
+   test_value_field = {
+       add = 5
+   }
+   comparison_trigger_without_docs = 5
+   comparison_trigger_without_docs = my_static_value
+   comparison_trigger_without_docs = my_script_value
+   comparison_trigger_without_docs = root.my_script_value
+   comparison_trigger_without_docs = {
+       add = 5
+   }
+   test_value_field = comparison_trigger_without_docs
+   
+   comparison_trigger_with_docs = 5
+   comparison_trigger_with_docs = my_static_value
+   comparison_trigger_with_docs = my_script_value
+   comparison_trigger_with_docs = root.my_script_value
+   comparison_trigger_with_docs = {
+       add = 5
+   }
+   test_value_field = comparison_trigger_with_docs
+   
+   non_comparison_trigger_without_docs = 5
+   non_comparison_trigger_without_docs = my_static_value
+   non_comparison_trigger_without_docs = my_script_value
+   non_comparison_trigger_without_docs = root.my_script_value
+   non_comparison_trigger_without_docs = {
+       add = 5
+   }
+   #error
+   test_value_field = non_comparison_trigger_without_docs
+   
+   
+   non_comparison_trigger_with_docs = 5
+   non_comparison_trigger_with_docs = my_static_value
+   non_comparison_trigger_with_docs = my_script_value
+   non_comparison_trigger_with_docs = root.my_script_value
+   non_comparison_trigger_with_docs = {
+       add = 5
+   }
+   test_value_field = non_comparison_trigger_with_docs
+   
+   root.my_script_value > non_comparison_trigger_with_docs
+   root.my_script_value > {
+       add = 5
+   }
+   root.comparison_trigger_without_docs = 5
+   root.comparison_trigger_without_docs > {
+       add = 5
+   }
+   
+   #error
+   root.non_comparison_trigger_without_docs = 5
+   #error
+   root.non_comparison_trigger_without_docs > {
+       add = 5
+   }
+   
+   root.value_link = 5
+   root.value_link > {
+      add = 5
+   }
+   
+   value_link = 5
+   value_link > {
+      add = 5
    }
 }

@@ -2103,3 +2103,15 @@ Supported Scopes: country
 
 is_in_list - Checks if a target in in a list
 Supported Scopes: none
+
+--------------------
+
+comparison_trigger_with_docs - Checks if a target in in a list
+Traits: <, <=, =, !=, >, >=
+Supported Scopes: any
+
+--------------------
+
+non_comparison_trigger_with_docs - Checks if a target in in a list
+Traits: <, <=, =, !=, >, >=
+Supported Scopes: any
