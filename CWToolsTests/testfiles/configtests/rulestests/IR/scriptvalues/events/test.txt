@@ -89,5 +89,6 @@ province_event = {
       add = 5
    }
    
+   #error
    simple.comparison_trigger_with_docs = 5
 }

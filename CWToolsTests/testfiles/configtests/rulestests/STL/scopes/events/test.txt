@@ -23,7 +23,6 @@ country_event = {
         }
         country_only = test
 
-
         USA = {
             save_scope_as = country_target
             USA = {
