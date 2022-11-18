@@ -88,4 +88,6 @@ province_event = {
    value_link > {
       add = 5
    }
+   
+   simple.comparison_trigger_with_docs = 5
 }

@@ -237,7 +237,7 @@ type RuleValidationService
                 then seq { yield! value; yield! leafrules }
                 else upcast leafrules
             rs |> Seq.filter (function |LeafRule (l, r), o -> checkQuotes (leaf.KeyId.quoted) (o.keyRequiredQuotes) && FieldValidators.checkLeftField p Severity.Error ctx l keyIds |_ -> false)
-                          |> (fun rs -> lazyErrorMerge rs (fun (LeafRule (l, r), o) e -> applyLeafRule ctx o r leaf e) createDefault innerErrors true)
+                          |> (fun rs -> lazyErrorMerge rs (fun (LeafRule (l, r), o) e -> applyLeafRule ctx o l r leaf e) createDefault innerErrors true)
         let nodeFun innerErrors (node : Node) =
             let key = node.Key
             let keyIds = node.KeyId
@@ -325,8 +325,10 @@ type RuleValidationService
         <&&>
         (if checkQuotes leafvalue.ValueId.quoted options.valueRequiredQuotes then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "This value is expected to be quoted" Severity.Error) leafvalue] ))
 
-    and applyLeafRule (ctx : RuleContext) (options : Options) (rule : NewField) (leaf : Leaf) errors =
-        let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
+    and applyLeafRule (ctx : RuleContext) (options : Options) (leftRule : NewField) (rightRule : NewField) (leaf : Leaf) errors =
+        ((FieldValidators.checkField p Severity.Error ctx leftRule (leaf.KeyId) (leaf) OK)
+        <&%&>
+        (let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         // let errors = OK
         (match options.requiredScopes with
         |[] -> OK
@@ -339,13 +341,13 @@ type RuleValidationService
         <&&>
         (if options.errorIfOnlyMatch.IsSome
         then
-            let res = FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
-            if res = errors
-            then inv (ErrorCodes.FromRulesCustomError options.errorIfOnlyMatch.Value severity) leaf <&&&> errors
+            let res = FieldValidators.checkField p severity ctx rightRule (leaf.ValueId) (leaf) OK
+            if res = OK
+            then inv (ErrorCodes.FromRulesCustomError options.errorIfOnlyMatch.Value severity) leaf <&&&> OK
             else res
         else
-            FieldValidators.checkField p severity ctx rule (leaf.ValueId) (leaf) errors
-            )
+            FieldValidators.checkField p severity ctx rightRule (leaf.ValueId) (leaf) OK
+            ))) <&&> errors
     and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : IClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
         let newCtx  =

@@ -2108,7 +2108,7 @@ Supported Scopes: none
 
 comparison_trigger_with_docs - Checks if a target in in a list
 Traits: <, <=, =, !=, >, >=
-Supported Scopes: any
+Supported Scopes: province
 
 --------------------
 

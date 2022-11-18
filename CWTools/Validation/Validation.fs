@@ -251,6 +251,13 @@ module ValidationCore =
         | Invalid (_, e1), Invalid (_, e2) -> Invalid (Guid.NewGuid(),(e1 @ e2))
         |Invalid (_, e), OK -> OK
         |OK, Invalid (_, e) -> OK
+        
+        
+    let (<&%&>) f1 f2 =
+        match f1, f2 with
+        |OK, OK -> OK
+        |Invalid(g, e1), _ -> Invalid(g, (e1))
+        |OK, Invalid(g, e2) -> Invalid(g, (e2))
 
     let mergeValidationErrors (errorcode : string) =
         let rec mergeErrorsInner es =

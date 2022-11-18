@@ -21,3 +21,4 @@ alias[trigger:non_comparison_trigger_with_docs] = value_field
 
 
 alias[trigger:value_field] == value_field
+alias[trigger:scope_field] = scope_field
