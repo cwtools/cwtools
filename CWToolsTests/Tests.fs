@@ -71,6 +71,21 @@ let emptyImperatorSettings (rootDirectory) = {
     maxFileSize = None
 }
 
+let emptyVictoriaSettings (rootDirectory) = {
+    rootDirectories = [WD { name = "test"; path = rootDirectory;}]
+    modFilter = None
+    validation = {
+        validateVanilla = false
+        experimental = true
+        langs = [VIC3 VIC3Lang.English]
+    }
+    rules = None
+    embedded = FromConfig ([], [])
+    scriptFolders = None
+    excludeGlobPatterns = None
+    maxFileSize = None
+}
+
 let getAllTestLocs node =
     let fNode = (fun (x:Node) (req, notreq) ->
         let required = x.Values |> List.filter ( fun l -> l.Value.ToRawString() = "test_required") |> List.map (fun l -> l.Position)
@@ -326,16 +341,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             else if stl = 0 then
                 let configtext = ("./testfiles/configtests/rulestests/IR/triggers.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/triggers.log")::configtext
                 let configtext = ("./testfiles/configtests/rulestests/IR/effects.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/effects.log")::configtext
-                // let triggers = JominiParser.parseTriggerFilesRes "./testfiles/configtests/rulestests/IR/triggers.log" |> CWTools.Parser.JominiParser.processTriggers IRConstants.parseScopes
-                // let effects = JominiParser.parseEffectFilesRes "./testfiles/configtests/rulestests/IR/effects.log" |> CWTools.Parser.JominiParser.processEffects IRConstants.parseScopes
-                // eprintfn "testtest %A" triggers
-                // configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-                //             |> (fun f -> UtilityParser.initializeScopes f None )
-
-                // let eventTargetLinks =
-                //             configtext |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
-                //                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks IRConstants.Scope.Any IRConstants.parseScope IRConstants.allScopes fn ft)
-                //                     |> Option.defaultValue (Scopes.IR.scopedEffects |> List.map SimpleLink)
+                
                 let settings = emptyImperatorSettings folder
                 let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
                 let ir = CWTools.Games.IR.IRGame(settings) :> IGame<IRComputedData>
@@ -352,6 +358,27 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                                     getCompletionTests e.entity
                                     )
                 (ir :> IGame), errors, testVals, completionTests, (ir.ParserErrors())
+                
+            else if stl = 2 then
+                let configtext = ("./testfiles/configtests/rulestests/IR/triggers.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/triggers.log")::configtext
+                let configtext = ("./testfiles/configtests/rulestests/IR/effects.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/effects.log")::configtext
+                
+                let settings = emptyVictoriaSettings folder
+                let settings = { settings with rules = if config then Some { ruleFiles = configtext; validateRules = configValidate; debugRulesOnly = configOnly; debugMode = false} else None}
+                let vic3 = CWTools.Games.VIC3.VIC3Game(settings) :> IGame<VIC3ComputedData>
+                let errors = vic3.ValidationErrors() @ (if configLoc then vic3.LocalisationErrors(false, false) else []) |> List.map (fun e -> e.message, e.range) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+                let testVals = vic3.AllEntities()
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
+                                    getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r))
+                                    )
+                let completionTests =
+                                vic3.AllEntities()
+                                |> List.map (fun struct (e, _) ->
+                                    e.filepath,
+                                    getCompletionTests e.entity
+                                    )
+                (vic3 :> IGame), errors, testVals, completionTests, (vic3.ParserErrors())
             else
                 // let configtext = ("./testfiles/configtests/rulestests/IR/triggers.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/triggers.log")::configtext
                 // let configtext = ("./testfiles/configtests/rulestests/IR/effects.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/effects.log")::configtext
@@ -434,7 +461,10 @@ let stlGlobalSubfolderTests = testList "validation stl global" (testSubdirectori
 [<Tests>]
 let irSubfolderTests = testList "validation ir" (testSubdirectories 0 true "./testfiles/configtests/rulestests/IR" |> List.ofSeq)
 [<Tests>]
-let hoi4SubfolderTests = testList "validation hoi4" (testSubdirectories 2 true "./testfiles/configtests/rulestests/HOI4" |> List.ofSeq)
+let hoi4SubfolderTests = testList "validation hoi4" (testSubdirectories 3 true "./testfiles/configtests/rulestests/HOI4" |> List.ofSeq)
+
+[<Tests>]
+let vic3SubfolderTests = ftestList "validation vic3" (testSubdirectories 2 true "./testfiles/configtests/rulestests/VIC3" |> List.ofSeq)
 
 [<Tests>]
 let specialtests =

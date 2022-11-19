@@ -35,8 +35,10 @@ module VIC3GameFunctions =
         globalTypeLoc |> (function |Invalid (_, es) -> es |_ -> [])
     let updateScriptedLoc (game : GameObject) = ()
 
-    let updateModifiers (game : GameObject) =
-        game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
+    let addModifiersFromCoreAndTypes (lookup : Lookup) (embeddedSettings : EmbeddedSettings)=
+        let typeGeneratedModifiers = RulesHelpers.generateModifiersFromTypes lookup.typeDefs lookup.typeDefInfo
+        lookup.coreModifiers <- embeddedSettings.modifiers @ typeGeneratedModifiers
+        
 
     let addModifiersWithScopes (lookup : Lookup) =
         let modifierCategoryToScopesMap() = Map.empty
@@ -162,6 +164,7 @@ module VIC3GameFunctions =
                             |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embedded : EmbeddedSettings) =
+        addModifiersFromCoreAndTypes lookup embedded
         lookup.typeDefInfo <-
             (lookup.typeDefInfo)
             |> addModifiersAsTypes lookup
@@ -184,8 +187,8 @@ module VIC3GameFunctions =
         // updateDefinedVariables()
         // updateProvinces(game)
         // updateCharacters(game)
-        updateModifiers(game)
-
+        // updateModifiers(game)
+        ()
         // updateLegacyGovernments(game)
         // updateTechnologies()
         // game.LocalisationManager.UpdateAllLocalisation()
@@ -315,7 +318,7 @@ type VIC3Game(setupSettings : VIC3Settings) =
         processLocalisation = processLocalisationFunction
         validateLocalisation = validationLocalisationCommandFunction
     }
-    let scriptFolders = []
+    let scriptFolders = [ "common"; "events" ]
 
     let game = GameObject<JominiComputedData, JominiLookup>.CreateGame
                 ((settings, "crusader kings iii", scriptFolders, Compute.Jomini.computeJominiData,

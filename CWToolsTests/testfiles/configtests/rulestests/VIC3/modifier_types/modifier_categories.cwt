@@ -1,0 +1,11 @@
+﻿modifier_categories = {
+    state = {
+        supported_scopes = { state }
+    }
+    building = {
+        supported_scopes = { building }
+    }
+    country = {
+        supported_scopes = { country }
+    }
+}

@@ -505,8 +505,10 @@ module rec NewScope =
           explicitLocalisation: (string * string * bool) list
           subtypes: string list }
 
+type ModifierSource = | Rules | CodeGen | TypeDef of name : string * typeDef : string
 type ActualModifier =
     { tag: string
+      // source: ModifierSource
       category: ModifierCategory }
 
 type StaticModifier =

@@ -1,0 +1,28 @@
+﻿types = {
+    type[building] = {
+        path = "game/common/buildings"
+        modifiers = {
+            building_mod_$_country = country
+            building_mod_$_building = building
+        }
+    }
+    type[event] = {
+        path = "game/events"
+    }
+}
+
+
+event = {
+    ## cardinality = 0..inf
+    ## replace_scope = { THIS = country }
+    country_modifiers = {
+        ## cardinality = 0..inf
+        <modifier> = int
+    }
+    ## cardinality = 0..inf
+    ## replace_scope = { THIS = building }
+    building_modifiers = {
+        ## cardinality = 0..inf
+        <modifier> = int
+    }
+}

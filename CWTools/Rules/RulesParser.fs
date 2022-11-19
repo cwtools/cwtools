@@ -586,6 +586,7 @@ module private RulesParserImpl =
             | NodeC node ->
                 match node.Key with
                 | "localisation" -> ()
+                | "modifiers" -> ()
                 | x when x.StartsWith "subtype" -> ()
                 | x -> log (sprintf "Unexpected node %s found in type definition at %A" x node.Position)
             | LeafValueC leafvalue -> log (sprintf "Unexpected leafvalue %s found in type definition at %A" leafvalue.Key leafvalue.Position)

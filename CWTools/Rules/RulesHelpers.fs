@@ -189,3 +189,55 @@ let expandPredefinedValues (types : Map<string, _>) (enums : Map<string, _ * lis
         | None -> [value]
     values |> List.collect (fun v -> if v.Contains "<" && v.Contains ">" then replaceType v else [v])
            |> List.collect (fun v -> if v.Contains "enum[" && v.Contains "]" then replaceEnum v else [v])
+
+// let generateModifiersFromType (typedefs : TypeDefinition list) (invertedTypeMap : Collections.Map<string, TypeDefInfo list>) (typeKey : string) (key : string) =
+//     let typenames = typeKey.Split('.')
+//     let typename = typenames.[0]
+//     let actualSubtypes =
+//         match invertedTypeMap |> Map.tryFind key with
+//         | Some keytypes ->
+//             keytypes |> List.tryPick (fun kt -> if kt.id = key kt.subtypes)
+//             // keytypes |> List.filter (fun kt -> kt.StartsWith (typename+".", StringComparison.OrdinalIgnoreCase))
+//                      // |> List.map (fun kt -> kt.Split('.').[1])
+//         | None -> []
+//     match typedefs |> List.tryFind (fun t -> t.name == typename) with
+//     |None -> []
+//     |Some typedef ->
+//         let inner =
+//             (fun (l : TypeModifier) ->
+//             let modifierKey = l.prefix + key + l.suffix
+//             { ActualModifier.tag = modifierKey
+//               source = ModifierSource.TypeDef (key, typedef.name)
+//               category = l.category
+//               })
+//         let subtype =
+//             let subtypes = (if typenames.Length > 1 then typenames.[1]::actualSubtypes else actualSubtypes) |> List.distinct
+//             let inner2 (nextSt : string) =
+//                 match typedef.subtypes |> List.tryFind (fun st -> st.name == nextSt) with
+//                 |None -> []
+//                 |Some st -> st.modifiers |> List.map inner
+//             subtypes |> List.collect inner2
+//         (typedef.modifiers |> List.map inner) @ subtype
+let generateModifiersFromType (typedef : TypeDefinition) (typeInstance : TypeDefInfo) =
+    let actualSubtypes = typeInstance.subtypes
+    let inner =
+            (fun (l : TypeModifier) ->
+            let modifierKey = l.prefix + typeInstance.id + l.suffix
+            { ActualModifier.tag = modifierKey
+              // source = ModifierSource.TypeDef (typeInstance.id, typedef.name)
+              category = l.category
+              })
+    let subtype =
+            let inner2 (nextSt : string) =
+                match typedef.subtypes |> List.tryFind (fun st -> st.name == nextSt) with
+                |None -> []
+                |Some st -> st.modifiers |> List.map inner
+            actualSubtypes  |> List.collect inner2
+    (typedef.modifiers |> List.map inner) @ subtype
+        
+let generateModifiersFromTypes (typedefs : TypeDefinition list) (typeDefMap : Collections.Map<string, TypeDefInfo list>) =
+    typedefs |> List.collect (fun td ->
+        match typeDefMap |> Map.tryFind td.name with
+        | Some typeInstances ->
+            typeInstances |> List.collect (fun ti -> generateModifiersFromType td ti)
+        | None -> [])

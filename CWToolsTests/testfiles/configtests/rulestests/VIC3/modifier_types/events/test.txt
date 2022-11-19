@@ -1,0 +1,22 @@
+﻿event = {
+    building_modifiers = {
+        #error
+        building_mod_building_one_country = 5
+        #error
+        building_mod_building_two_country = 5
+        #error
+        building_mod_building_three_country = 5
+        building_mod_building_one_building = 6
+        building_mod_building_two_building = 7
+        #error
+        building_mod_building_three_building = 8
+    }
+    country_modifiers = {
+        building_mod_building_one_country = 5
+        building_mod_building_two_country = 5
+        #error
+        building_mod_building_three_country = 5
+        #error
+        building_mod_building_one_building = 6
+    }
+}
