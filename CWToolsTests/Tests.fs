@@ -464,7 +464,7 @@ let irSubfolderTests = testList "validation ir" (testSubdirectories 0 true "./te
 let hoi4SubfolderTests = testList "validation hoi4" (testSubdirectories 3 true "./testfiles/configtests/rulestests/HOI4" |> List.ofSeq)
 
 [<Tests>]
-let vic3SubfolderTests = ftestList "validation vic3" (testSubdirectories 2 true "./testfiles/configtests/rulestests/VIC3" |> List.ofSeq)
+let vic3SubfolderTests = testList "validation vic3" (testSubdirectories 2 true "./testfiles/configtests/rulestests/VIC3" |> List.ofSeq)
 
 [<Tests>]
 let specialtests =
