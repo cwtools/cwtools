@@ -241,3 +241,19 @@ let generateModifiersFromTypes (typedefs : TypeDefinition list) (typeDefMap : Co
         | Some typeInstances ->
             typeInstances |> List.collect (fun ti -> generateModifiersFromType td ti)
         | None -> [])
+
+let private modifierRuleFromNameAndTypeDef (nameWithSubtypes : string) (m : TypeModifier) =
+    let modifierOptions = { Options.DefaultOptions with requiredScopes = modifierCategoryManager.SupportedScopes m.category }
+    let lhs =
+        if m.prefix = "" && m.suffix = ""
+        then TypeField (TypeType.Simple(nameWithSubtypes))
+        else TypeField (TypeType.Complex(m.prefix, nameWithSubtypes, m.suffix))
+    AliasRule ("modifier", NewRule(LeafRule(lhs, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions))
+
+let generateModifierRulesFromTypes (typedefs : TypeDefinition list) =
+    typedefs
+        |> List.collect (fun td ->
+                td.modifiers
+                    |> List.map (fun m -> modifierRuleFromNameAndTypeDef td.name m)
+                    |> List.append (td.subtypes |> List.collect (fun st -> st.modifiers |> List.map (fun m -> modifierRuleFromNameAndTypeDef (td.name + "." + st.name) m)))
+            )

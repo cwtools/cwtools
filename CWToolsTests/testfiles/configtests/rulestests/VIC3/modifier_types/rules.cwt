@@ -16,13 +16,11 @@ event = {
     ## cardinality = 0..inf
     ## replace_scope = { THIS = country }
     country_modifiers = {
-        ## cardinality = 0..inf
-        <modifier> = int
+        alias_name[modifier] = alias_match_left[modifier]
     }
     ## cardinality = 0..inf
     ## replace_scope = { THIS = building }
     building_modifiers = {
-        ## cardinality = 0..inf
-        <modifier> = int
+        alias_name[modifier] = alias_match_left[modifier]
     }
 }

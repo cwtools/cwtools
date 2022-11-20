@@ -47,8 +47,9 @@ module VIC3GameFunctions =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
         let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
-        lookup.coreModifiers
-            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
+        (lookup.coreModifiers
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c))))
+        @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
 
     let updateScriptedTriggers (lookup : Lookup) (rules :RootRule list) (embeddedSettings : EmbeddedSettings) =
         let vanillaTriggers =
