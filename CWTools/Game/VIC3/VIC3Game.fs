@@ -145,6 +145,7 @@ module VIC3GameFunctions =
         let es = updateScriptedEffects lookup rules embedded
         let ls = updateEventTargetLinks embedded
         lookup.allCoreLinks <- ts @ es @ ls
+        lookup.coreModifiers <- embedded.modifiers
         // eprintfn "crh %A" ts
         addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
