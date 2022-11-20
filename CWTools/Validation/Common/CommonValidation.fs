@@ -108,6 +108,7 @@ module CommonValidation =
                     //eprintfn "grfrt %A" referencedtypes
                     referencedtypes |> (fun refMap -> Map.tryFind "scripted_effect" refMap) |> Option.defaultValue []
                 let allRefs = es.AllWithData |> List.collect (fun (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
+                                             |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                                              |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref.position ref.name|})
                                              |> List.groupBy (fun ref -> ref.effectName)
                                              |> Map.ofList
@@ -189,6 +190,7 @@ module CommonValidation =
                     //eprintfn "grfrt %A" referencedtypes
                     referencedtypes |> (fun refMap -> Map.tryFind "script_value" refMap) |> Option.defaultValue []
                 let allRefs = es.AllWithData |> List.collect (fun (n, d) -> d.Force().Referencedtypes |> Option.map getRefsFromRefTypes |> Option.defaultValue [])
+                                             |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                                              |> List.map (fun ref -> {| effectName = ref.name; callSite = ref.position; seParams = findParams ref|})
                                              |> List.groupBy (fun ref -> ref.effectName)
                                              |> Map.ofList
@@ -287,12 +289,39 @@ module CommonValidation =
                 match allReferences |> Map.tryFind typename with
                 | None -> failwith "no refernences?" //inv (ErrorCodes.CustomError "This type should be used" Severity.Error)
                 | Some refs ->
-                    typedefs |> List.choose (checkTypeDef (refs |> List.map (fun r -> r.name)))
+                    typedefs |> List.choose (checkTypeDef (refs |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef) |> List.map (fun r -> r.name)))
 
             match typeInfos |> List.collect checkType with
             | [] -> OK
             | errors -> Invalid (Guid.NewGuid(), errors)
 
+    let validateUndefinedModifierTypes : LookupValidator<_> =
+        let merge (a : Map<'a, 'b>) (b : Map<'a, 'b>) (f : 'a -> 'b * 'b -> 'b) =
+            Map.fold (fun s k v ->
+                match Map.tryFind k s with
+                | Some v' -> Map.add k (f k (v, v')) s
+                | None -> Map.add k v s) a b
+
+        fun l os _ ->
+            // Check that all referenced modifiers have a defined modifier type
+            let modifierReferences =
+                os.AllWithData |> List.choose (fun (_, lazydata) -> lazydata.Force().Referencedtypes)
+                |> Seq.collect (fun map -> map.Values)
+                |> Seq.collect id
+                |> Seq.filter (fun ref -> ref.associatedType.IsSome && ref.associatedType.Value = "modifier_type")
+            match l.typeDefInfo.TryFind "modifier_type" with
+            | Some modifierTypes ->
+                modifierReferences <&!&> (fun ref ->
+                    match ref.referenceType with
+                    | ReferenceType.TypeDefFuzzy
+                    | ReferenceType.TypeDef ->
+                        match modifierTypes |> List.tryFind (fun t -> t.id = ref.name) with
+                        | Some _ -> OK
+                        | None -> Invalid (Guid.NewGuid(), [invManual (ErrorCodes.UndefinedModifierTypeForModifier ref.name) ref.position ref.name None])
+                    | _ -> OK)
+            | _ -> OK
+            
+           
     open CWTools.Utilities
     let private intern x = (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken x).lower
     let private retrieveString x = CWTools.Utilities.StringResource.stringManager.GetStringForID x

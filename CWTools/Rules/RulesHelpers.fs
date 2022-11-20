@@ -243,7 +243,12 @@ let generateModifiersFromTypes (typedefs : TypeDefinition list) (typeDefMap : Co
         | None -> [])
 
 let private modifierRuleFromNameAndTypeDef (nameWithSubtypes : string) (m : TypeModifier) =
-    let modifierOptions = { Options.DefaultOptions with requiredScopes = modifierCategoryManager.SupportedScopes m.category }
+    let modifierOptions =
+        {
+          Options.DefaultOptions with
+            requiredScopes = modifierCategoryManager.SupportedScopes m.category
+            typeHint = Some ("modifier_type", false)
+        }
     let lhs =
         if m.prefix = "" && m.suffix = ""
         then TypeField (TypeType.Simple(nameWithSubtypes))

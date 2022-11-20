@@ -122,6 +122,7 @@ type ErrorCodes =
     static member ConfigRulesVariableTooSmall = { ID = "CW270"; Severity = Severity.Warning; Message = "Value too small, only 3 decimal places are supported in this context" }
     static member ConfigRulesVariableIntOnly = { ID = "CW271"; Severity = Severity.Warning; Message = "Expected an integer" }
     static member FromRulesCustomError = fun error severity -> { ID = "CW272"; Severity = severity; Message = error}
+    static member UndefinedModifierTypeForModifier = fun modifierType -> { ID = "CW273"; Severity = Severity.Warning; Message = sprintf "Modifier type %s is not defined but is used" modifierType }
     static member RulesError = fun error severity -> { ID = "CW998"; Severity = severity; Message = error}
     static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 

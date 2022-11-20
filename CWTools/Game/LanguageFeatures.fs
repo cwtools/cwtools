@@ -92,7 +92,7 @@ module LanguageFeatures =
                 let t = t.Split('.').[0]
                 resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else let contains, value = ((info.GetReferencedTypes) e).TryGetValue t in if contains then Some (value |> List.ofSeq) else None)
                                |> List.collect id
-                               |> List.choose (fun ref -> if ref.name == tv then Some (ref.position) else None)
+                               |> List.choose (fun ref -> if ref.name == tv && ref.referenceType = ReferenceType.TypeDef then Some (ref.position) else None)
                                |> Some
             |_ -> None
         |_, _ -> None

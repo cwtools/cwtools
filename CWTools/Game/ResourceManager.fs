@@ -12,7 +12,8 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities
 open System.Threading.Tasks
 
-type ReferenceType = | TypeDef | Link
+// Fuzzy = prefix/suffix
+type ReferenceType = | TypeDef | Link | TypeDefFuzzy
 type ReferenceDetails = {
     name: string
     originalValue : string
@@ -20,6 +21,8 @@ type ReferenceDetails = {
     isOutgoing : bool
     referenceLabel : string option
     referenceType : ReferenceType
+    // Associated type, e.g. with modifiers, the main type is the building, but the associated type is modifier_type
+    associatedType : string option
 }
 
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets) =

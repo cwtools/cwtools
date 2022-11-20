@@ -9,6 +9,9 @@
     type[event] = {
         path = "game/events"
     }
+    type[modifier_type] = {
+        path = "game/common/modifier_types"
+    }
 }
 
 

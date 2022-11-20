@@ -1,0 +1,24 @@
+﻿building_mod_building_one_country = {
+
+}
+
+building_mod_building_two_country = {
+
+}
+
+building_mod_building_one_building = {
+
+}
+
+building_mod_building_two_building = {
+
+}
+
+
+rules_based_building = {
+
+}
+
+rules_based_country = {
+
+}

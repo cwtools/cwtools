@@ -10,6 +10,15 @@
         building_mod_building_two_building = 7
         #error
         building_mod_building_three_building = 8
+        
+        rules_based_building = 1
+        #error
+        rules_based_country = 1
+        
+        #error
+        rules_based_missing_modifier_type = 1
+        #error
+        building_mod_building_four_building = 2
     }
     country_modifiers = {
         building_mod_building_one_country = 5
@@ -18,5 +27,14 @@
         building_mod_building_three_country = 5
         #error
         building_mod_building_one_building = 6
+        
+        #error
+        rules_based_building = 1
+        rules_based_country = 1
+        #error
+        rules_based_missing_modifier_type = 1
+        #error
+        #error
+        building_mod_building_four_building = 2
     }
 }

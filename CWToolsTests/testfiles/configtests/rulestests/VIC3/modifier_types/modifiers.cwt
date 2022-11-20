@@ -1,0 +1,4 @@
+﻿modifiers = {
+    rules_based_country = country
+    rules_based_building = building
+}
