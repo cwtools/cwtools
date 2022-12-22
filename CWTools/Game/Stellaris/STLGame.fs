@@ -95,7 +95,10 @@ module STLGameFunctions =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc <&&> locParseErrors |> (function |Invalid (_, es) -> es |_ -> [])
-
+    let addModifiersFromCoreAndTypes (lookup : Lookup) (embeddedSettings : EmbeddedSettings)=
+        let typeGeneratedModifiers = RulesHelpers.generateModifiersFromTypes lookup.typeDefs lookup.typeDefInfo
+        lookup.coreModifiers <- embeddedSettings.modifiers @ typeGeneratedModifiers
+        
     let updateModifiers(game : GameObject) =
         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
 
@@ -108,8 +111,9 @@ module STLGameFunctions =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
         let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
-        lookup.coreModifiers
-            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
+        (lookup.coreModifiers
+            |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c))))
+        @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
 
     let addTriggerDocsScopes (lookup : Lookup) (rules : RootRule list) =
             let scriptedOptions (scripted : string) (effect : ScriptedEffect) =
@@ -179,6 +183,7 @@ module STLGameFunctions =
     let loadConfigRulesHook rules (lookup : Lookup) embedded =
         let triggersWithValueTriggers = addValueTriggersToTriggers rules lookup
         lookup.allCoreLinks <- triggersWithValueTriggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
+        lookup.coreModifiers <- embedded.modifiers
         let rulesWithMod = rules @ addModifiersWithScopes(lookup)
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
@@ -195,6 +200,7 @@ module STLGameFunctions =
 
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
+        addModifiersFromCoreAndTypes lookup embeddedSettings
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
@@ -206,7 +212,7 @@ module STLGameFunctions =
             game.Lookup.allCoreLinks <- game.Lookup.triggers @ es @ game.Lookup.eventTargetLinks
             updateStaticodifiers(game)
             updateScriptedLoc(game)
-            updateModifiers(game)
+            // updateModifiers(game)
             updateTechnologies(game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs : (string * string) list) cachedRuleMetadata =
