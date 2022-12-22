@@ -2,6 +2,7 @@ namespace CWTools.Games.Stellaris
 
 open CWTools.Parser
 open CWTools.Process
+open CWTools.Utilities.Position
 open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -100,8 +101,8 @@ module STLGameFunctions =
         let current = embeddedSettings.modifiers @ typeGeneratedModifiers
         lookup.coreModifiers <- addGeneratedModifiers current (EntitySet (resources.AllEntities()))
         
-    let updateModifiers(game : GameObject) =
-        game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
+    // let updateModifiers(game : GameObject) =
+        // game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
 
     let updateTechnologies(game : GameObject) =
         game.Lookup.technologies <- getTechnologies (EntitySet (game.Resources.AllEntities()))
@@ -190,6 +191,11 @@ module STLGameFunctions =
         rulesWithEmbeddedScopes
 
     let refreshConfigBeforeFirstTypesHook (lookup : STLLookup) (resources : IResourceAPI<STLComputedData>) (embeddedSettings : EmbeddedSettings)  =
+        let modifierEnums =
+            { key = "modifiers";
+              values = lookup.coreModifiers |> List.map (fun m -> m.tag);
+              description = "Modifiers";
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
         lookup.STLScriptedEffectKeys <- "scaled_skill" :: (resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().ScriptedEffectParams |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
                                             |> List.ofSeq |> List.collect id)
         let scriptedEffectParmas = { key = "scripted_effect_params"; description = "Scripted effect parameter"; values = lookup.STLScriptedEffectKeys; valuesWithRange = lookup.STLScriptedEffectKeys |> List.map (fun x -> x, None) }
@@ -198,10 +204,16 @@ module STLGameFunctions =
         lookup.enumDefs <-
             lookup.enumDefs |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
                             |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
+                            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
+    let addModifiersAsTypes (lookup : Lookup) (typesMap : Map<string,TypeDefInfo list>) =
+        typesMap.Add("modifier", lookup.coreModifiers |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] []))
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
         addModifiersFromCoreAndTypes lookup embeddedSettings resources
+        lookup.typeDefInfo <-
+            (lookup.typeDefInfo)
+            |> addModifiersAsTypes lookup
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
@@ -402,7 +414,7 @@ type STLGame (setupSettings : StellarisSettings) =
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
         member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
-        member __.RefreshCaches() = updateModifiers(game); game.RefreshCaches()
+        member __.RefreshCaches() =  game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()
         member __.Types() = game.Lookup.typeDefInfo
