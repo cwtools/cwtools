@@ -95,9 +95,10 @@ module STLGameFunctions =
         let locParseErrors = game.LocalisationManager.LocalisationAPIs() <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
         game.Lookup.proccessedLoc |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys <&&> locFileValidation <&&> globalTypeLoc <&&> locParseErrors |> (function |Invalid (_, es) -> es |_ -> [])
-    let addModifiersFromCoreAndTypes (lookup : Lookup) (embeddedSettings : EmbeddedSettings)=
+    let addModifiersFromCoreAndTypes (lookup : Lookup) (embeddedSettings : EmbeddedSettings) (resources : IResourceAPI<_>) =
         let typeGeneratedModifiers = RulesHelpers.generateModifiersFromTypes lookup.typeDefs lookup.typeDefInfo
-        lookup.coreModifiers <- embeddedSettings.modifiers @ typeGeneratedModifiers
+        let current = embeddedSettings.modifiers @ typeGeneratedModifiers
+        lookup.coreModifiers <- addGeneratedModifiers current (EntitySet (resources.AllEntities()))
         
     let updateModifiers(game : GameObject) =
         game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
@@ -200,7 +201,7 @@ module STLGameFunctions =
 
 
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
-        addModifiersFromCoreAndTypes lookup embeddedSettings
+        addModifiersFromCoreAndTypes lookup embeddedSettings resources
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
     let refreshConfigAfterVarDefHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
