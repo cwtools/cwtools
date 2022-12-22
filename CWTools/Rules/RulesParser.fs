@@ -483,17 +483,20 @@ module private RulesParserImpl =
             |LeafC modifier ->
                 let value = modifier.Key
                 let category = modifier.Value.ToRawString() |> modifierCategoryManager.ParseModifier()
+                let explicit = comments |> List.exists (fun s -> s.Contains "explicit")
                 let description =
                                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
                                     | Some d -> Some (d.Trim('#'))
                                     | None -> None
                 match value.IndexOf "$" with
                 | -1 ->
-                    Some { TypeModifier.prefix = ""; suffix = ""; category = category; documentation = description}
+                    Some { TypeModifier.prefix = ""; suffix = ""; category = category; documentation = description
+                           explicit = explicit }
                 | dollarIndex ->
                     let prefix = value.Substring(0, dollarIndex)
                     let suffix = value.Substring(dollarIndex + 1)
-                    Some { TypeModifier.prefix = prefix; suffix = suffix; category = category; documentation = description}
+                    Some { TypeModifier.prefix = prefix; suffix = suffix; category = category; documentation = description
+                           explicit = explicit }
             |_ -> None
         let parseSubTypeModifier (subtype : Node) =
             match subtype.Key.StartsWith("subtype[") with

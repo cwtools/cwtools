@@ -112,6 +112,7 @@ type TypeModifier = {
     suffix : string
     category : ModifierCategory
     documentation : string option
+    explicit : bool
 }
 
 type SkipRootKey = |SpecificKey of string |AnyKey |MultipleKeys of string list * bool
