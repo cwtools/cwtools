@@ -172,7 +172,7 @@ type IResourceAPI<'T when 'T :> ComputedData > =
     abstract ForceRulesDataGenerate : unit -> unit
     abstract GetFileNames : GetFileNames
 
-type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit), encoding, fallbackencoding) =
+type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit), encoding, fallbackencoding, inlineKey : string option) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -343,8 +343,18 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             match res2 with
             |Success(_,_,_) -> res2
             |Failure(_,_,_) -> res
+    let inlineReplace (node : Node) (inlineKey : string) =
+        let inner (node : Node) (children : (Node * bool) list) =
+            if node.Has inlineKey
+            then
+            else
+                
+            
+            
+        ProcessCore.cata inner node 
     let parseFileThenEntity (file : ResourceInput) =
-        match file with
+        let resource, entityOption as entity =
+            match file with
             |CachedResourceInput (r, e) -> r, Some e
             |EntityResourceInput e ->
                 // log "%A %A" e.logicalpath e.filepath
@@ -356,6 +366,10 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             |FileWithContentResourceInput f ->
                 (FileWithContentResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath; filetext = f.filetext; overwrite = No; extension = Path.GetExtension(f.filepath); validate = f.validate}), [])
                  |> parseEntity
+        match inlineKey, entityOption with
+        | Some key, Some entity ->
+            let entity = { entity with entity = entity.entity.  }
+        | _ -> entity
 
 
     let saveResults (resource, entity) =
