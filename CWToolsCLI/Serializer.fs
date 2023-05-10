@@ -98,11 +98,13 @@ let addDLCs (workspaceDirectory: WorkspaceDirectory) =
             | Some zip ->
                 // eprintfn "d2 %A" zip
                 use file = File.OpenRead(zip)
-                use zipFile = new ZipArchive(file, ZipArchiveMode.Read)
-                let files = zipFile.Entries |> Seq.map (fun e -> Path.Combine([|"uri:"; zip; e.FullName.Replace("\\","/")|]), use sr = new StreamReader(e.Open()) in sr.ReadToEnd())
-                            |> List.ofSeq
-                // eprintfn "%A" files
-                Some (ZD { ZippedDirectory.name = Path.GetFileName zip; path = zip.Replace("\\","/"); files = files})
+                try
+                    use zipFile = new ZipArchive(file, ZipArchiveMode.Read)
+                    let files = zipFile.Entries |> Seq.map (fun e -> Path.Combine([|"uri:"; zip; e.FullName.Replace("\\","/")|]), use sr = new StreamReader(e.Open()) in sr.ReadToEnd())
+                                |> List.ofSeq
+                    Some (ZD { ZippedDirectory.name = Path.GetFileName zip; path = zip.Replace("\\","/"); files = files})
+                with
+                | _ -> None
             | None -> None
         dlcs |> Seq.choose createZippedDirectory |> List.ofSeq
     else
