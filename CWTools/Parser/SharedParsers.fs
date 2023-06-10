@@ -79,15 +79,16 @@ module internal SharedParsers =
     let oppGTE = skipString ">=" |>> (fun _ -> Operator.GreaterThanOrEqual)
     let oppNE = skipString "!=" |>> (fun _ -> Operator.NotEqual)
     let oppEE = skipString "==" |>> (fun _ -> Operator.EqualEqual)
+    let oppQE = skipString "?=" |>> (fun _ -> Operator.QuestionEqual)
     let oppLT = skipChar '<' |>> (fun _ -> Operator.LessThan)
     let oppGT = skipChar '>' |>> (fun _ -> Operator.GreaterThan)
     let oppE = skipChar '=' |>> (fun _ -> Operator.Equals)
 
-    let operator = choiceL [oppLTE; oppGTE; oppNE; oppEE; oppLT; oppGT; oppE] "operator" .>> ws
+    let operator = choiceL [oppLTE; oppGTE; oppNE; oppEE; oppLT; oppGT; oppE; oppQE] "operator" .>> ws
 
     // let opp = new OperatorPrecedenceParser<float,unit,unit>()
     // let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
-    let operatorLookahead = choice [chSkip '='; chSkip '>'; chSkip '<'; chSkip '!'] <?> "operator 1"
+    let operatorLookahead = choice [chSkip '='; chSkip '>'; chSkip '<'; chSkip '!'; chSkip '?'] <?> "operator 1"
     let comment = parseWithPosition (skipChar '#' >>. restOfLine true .>> ws |>> string) <?> "comment"
 
     let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"

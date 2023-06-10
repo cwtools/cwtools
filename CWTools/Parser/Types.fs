@@ -20,6 +20,7 @@ module Types =
     | LessThanOrEqual = 4uy
     | NotEqual = 5uy
     | EqualEqual = 6uy
+    | QuestionEqual = 7uy
     let operatorToString =
             function
             | Operator.Equals -> "="
@@ -29,6 +30,7 @@ module Types =
             | Operator.LessThanOrEqual -> "<="
             | Operator.NotEqual -> "!="
             | Operator.EqualEqual -> "=="
+            | Operator.QuestionEqual -> "?="
             | x -> failwith (sprintf "Unknown enum value %A" x)
     [<Struct>]
     type Key =

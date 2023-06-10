@@ -137,3 +137,11 @@ country_event = {
     #error
     valuefieldrule = THIS.other_var
 }   
+
+country_event = {
+   valuefieldrule > some_variable
+   valuefieldrule >= some_variable
+   valuefieldrule <= some_variable
+   valuefieldrule != some_variable
+   valuefieldrule ?= some_variable
+}
