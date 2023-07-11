@@ -16,5 +16,13 @@
     <Name>CWTools.fsproj</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="testevent2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testevent.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

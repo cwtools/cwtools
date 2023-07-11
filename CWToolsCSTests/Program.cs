@@ -89,9 +89,11 @@ namespace CWToolsCSTests
 
             //Add is_triggered_only = true
             var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), FSharpOption<range>.None);
-            myEvent.AllChildren.Add(Child.NewLeafC(leaf));
+            myEvent.SetTag(leaf.Key, Child.NewLeafC(leaf));
             // or
-            // myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true)));
+            // var newChildren = myEvent.AllChildren;
+            // newChildren.Add(Leaf.Create(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), range.Zero));
+            // myEvent.AllChildren = newChildren;
 
             //Output
             var output = processed.ToRaw;
@@ -110,7 +112,7 @@ namespace CWToolsCSTests
                                     .Where(f => Path.GetExtension(f) == ".cwt" || Path.GetExtension(f) == ".log")
                                     .Select(f => Tuple.Create(f, File.ReadAllText(f)));
 
-            var (rules, types, enums, complexenums, values) = CWTools.CSharp.Helpers.LoadAndInitializeFromConfigFiles(files, CWTools.Common.Game.STL);
+            var (rules, types, enums, complexenums, values) = CWTools.CSharp.Helpers.LoadAndInitializeFromConfigFiles(files, CWTools.Common.Game.STL, false, false);
             var typeInfo = Helpers.GetTypesInFile("events/testevent.txt", processed, types);
             PrintfModule
                 .PrintFormatLine(
