@@ -30,6 +30,8 @@ module EU4GameFunctions =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target" |> Option.defaultValue [] |> List.map fst)
             @
+            (lookup.varDefInfo.TryFind "global_event_target" |> Option.defaultValue [] |> List.map fst)
+            @
             (lookup.typeDefInfo.TryFind "province_id" |> Option.defaultValue [] |> List.map (fun tdi -> tdi.id))
             @
             (lookup.enumDefs.TryFind "country_tags" |> Option.map (fun x -> (snd x) |> List.map fst) |> Option.defaultValue [])
