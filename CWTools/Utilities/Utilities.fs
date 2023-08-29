@@ -139,9 +139,9 @@ type StringMetadata =
     end
 [<Sealed>]
 type StringResourceManager() =
-    let strings = new System.Collections.Generic.Dictionary<string, StringTokens>(1024)
-    let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
-    let metadata = new System.Collections.Generic.Dictionary<StringToken, StringMetadata>(1024)
+    let strings = new System.Collections.Concurrent.ConcurrentDictionary<string, StringTokens>()
+    let ints = new System.Collections.Concurrent.ConcurrentDictionary<StringToken, string>()
+    let metadata = new System.Collections.Concurrent.ConcurrentDictionary<StringToken, StringMetadata>()
     let mutable i = 0
     // let mutable j = 0
     let monitor = Object()
