@@ -161,6 +161,8 @@ type GameObject<'T, 'L when 'T :> ComputedData
                     |_ -> None
                     )
             resourceManager.Api.UpdateFiles(filteredfiles) |> ignore
+            log (sprintf "Parsed files in %A" (timer.ElapsedMilliseconds))
+            timer.Restart()
             let embeddedFiles =
                 settings.embedded.embeddedFiles
                 |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
@@ -176,6 +178,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
             let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
             let embedded = embeddedFiles @ cached
             if fileManager.ShouldUseEmbedded then resourceManager.Api.UpdateFiles(embedded) |> ignore else ()
+            log (sprintf "Parsed embedded in %A" (timer.ElapsedMilliseconds))
     let updateRulesCache() =
         let rules, info, completion = rulesManager.RefreshConfig()
         this.RuleValidationService <- Some rules
@@ -184,11 +187,23 @@ type GameObject<'T, 'L when 'T :> ComputedData
         this.RefreshValidationManager()
 
     let initialConfigRules() =
+        log (sprintf "Initial config rules update")
+        let timer = new System.Diagnostics.Stopwatch()
+        timer.Start()
         localisationManager.UpdateAllLocalisation()
+        log (sprintf "Loc updated in %A" (timer.ElapsedMilliseconds))
+        timer.Restart()
         if settings.rules.IsSome then rulesManager.LoadBaseConfig(settings.rules.Value) else ()
+        log (sprintf "Rules loaded in %A" (timer.ElapsedMilliseconds))
+        timer.Restart()
         updateRulesCache()
+        log (sprintf "Rules cache updated in %A" (timer.ElapsedMilliseconds))
+        timer.Restart()
         this.Resources.ForceRecompute()
+        log (sprintf "Resource recomputer in %A" (timer.ElapsedMilliseconds))
+        timer.Restart()
         localisationManager.UpdateAllLocalisation()
+        log (sprintf "Loc updated again in %A" (timer.ElapsedMilliseconds))
 
     do
         lookup.rootFolders <- settings.rootDirectories

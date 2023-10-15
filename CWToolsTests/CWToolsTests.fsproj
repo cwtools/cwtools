@@ -8,6 +8,7 @@
     <PaketCommand>dotnet paket</PaketCommand>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj" />
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>
