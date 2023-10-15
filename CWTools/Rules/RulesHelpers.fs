@@ -172,9 +172,9 @@ let expandPredefinedValues (types : Map<string, _>) (enums : Map<string, _ * lis
         let referencedType = value.Substring(startIndex + 1, (endIndex - startIndex))
         match types |> Map.tryFind referencedType with
         | Some typeValues ->
-            eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
+            // eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
             let res = typeValues |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2)) |> List.ofSeq
-            eprintfn "epv2 %A" res
+            // eprintfn "epv2 %A" res
             res
         | None -> [value]
     let replaceEnum (value : string) =
