@@ -11,7 +11,7 @@ nuget FSharpx.Collections 2.0 #
 nuget FSharp.Compiler.Service
 nuget Sandwych.QuickGraph.Core #
 nuget FsPickler #
-nuget FSharp.Core 6.0.0 #
+nuget FSharp.Core #
 nuget System.Text.Encoding.CodePages #
 nuget Argu
 nuget Pastel

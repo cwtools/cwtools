@@ -327,4 +327,4 @@ let main argv =
     then perfHOI4(true); perfHOI4(true); 0
     elif Array.tryHead argv = Some "k"
     then perfHOI4(true); 0
-    else Tests.runTestsInAssembly config argv
+    else Tests.runTestsInAssemblyWithCLIArgs [Sequenced] argv
