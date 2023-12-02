@@ -2,10 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TieredCompilation>true</TieredCompilation>
     <PaketCommand>dotnet paket</PaketCommand>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles> 
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj" />
