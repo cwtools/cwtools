@@ -215,7 +215,7 @@ module CommonValidation =
                     | Some seps ->
                         foldOverNode (stringReplace seps) newNode
                     | None -> ()
-                    eprintfn "vis %A %A" (CKPrinter.api.prettyPrintStatements [newNode.ToRaw]) (isParams)
+                    // eprintfn "vis %A %A" (CKPrinter.api.prettyPrintStatements [newNode.ToRaw]) (isParams)
                     let res = rv.ManualRuleValidate(logicalpath, rootNode)
                     // eprintfn "%A %A" logicalpath res
                     let message = {

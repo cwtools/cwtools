@@ -1,4 +1,5 @@
 namespace CWTools.Games
+open System.Collections.Generic
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -414,6 +415,67 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
 
         // log "print all"
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
+    let updateInlineScripts (news : (Resource *  struct (Entity * Lazy<'T>) option) list) =
+        let inlinePath = "common/inline_scripts"
+        let inlinePathLength = inlinePath.Length
+        let entities =
+            news |> Seq.choose (snd)
+            |> Seq.map structFst
+        let inlineScriptsMap =
+            entitiesMap |> Map.toSeq |> Seq.map snd |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+            |> Seq.map structFst
+            |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
+            |> Seq.map (fun e -> (e.logicalpath.Substring inlinePathLength, e.entity))
+            |> Map.ofSeq
+        let keyId = StringResource.stringManager.InternIdentifierToken "inline_script"
+        let folder (node : Node) (acc : Child list) =
+            if node.KeyId.lower = keyId.lower
+            then
+                NodeC node :: acc
+            else
+                node.LeafsById keyId.lower |> Seq.fold (fun state x -> LeafC x :: state) acc
+        let updateEntity (e : Entity) =
+            let allScriptRefs =
+                ProcessCore.foldNode7 folder e.entity
+            let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) |> HashSet
+            let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None) |> HashSet
+            let rec replaceCataFun (node : Node) =
+                let childFun (index : int) (child : Child) =
+                    match child with
+                    |NodeC n ->
+                        if nodeScriptRefs.Contains n
+                        then
+                            ()
+                        else
+                            replaceCataFun n
+                    |LeafC l ->
+                        if leafScriptRefs.Contains l
+                        then
+                            let scriptName = l.ValueText
+                            match inlineScriptsMap |> Map.tryFind scriptName with
+                            |Some scriptNode ->
+                                let newScriptNode = STLProcess.cloneNode scriptNode
+                                node.AllArray.[index] <- NodeC newScriptNode
+                            |None -> ()
+                        else
+                            ()
+                    | _ -> ()
+                node.AllArray |> Array.iteri childFun
+            if List.isEmpty allScriptRefs
+            then
+                None
+            else
+                let newNode = CWTools.Process.STLProcess.cloneNode e.entity
+                replaceCataFun newNode
+                Some newNode
+        let replacedEntities =
+            entities |> Seq.map (fun e -> e, updateEntity e)
+            |> Seq.choose (function |e, Some newNode -> Some {e with entity = newNode } |_, None -> None)
+            |> Seq.iter (fun e ->
+                let lazyi = new System.Lazy<_>((fun () -> computedDataFunction e),System.Threading.LazyThreadSafetyMode.PublicationOnly)
+                let item = struct(e, lazyi)
+                entitiesMap <- entitiesMap.Add(e.filepath, item))
+        ()
     let forceRulesData() =
         entitiesMap |> Map.toSeq |> PSeq.iter (fun (_,(struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
     let rand = new System.Random()
@@ -437,6 +499,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     let updateFiles files =
         let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
+        updateInlineScripts news
         let task = new Task(fun () -> forceEagerData())
         task.Start()
         news

@@ -222,11 +222,12 @@ and Node (key : string, pos : range) =
     member this.LeafValues = all |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
     member this.ValueClauses = all |> Seq.choose(function |ValueClauseC vc -> Some vc |_ -> None)
     member this.Clauses = all |> Seq.choose(function |ValueClauseC vc -> Some (vc :> IClause) |NodeC n -> Some (n :> IClause) |_ -> None)
-    member this.Has x = all |> (Seq.exists (bothFind x))
-    member this.HasById x = all |> (Seq.exists (bothFindId x))
+    member this.Has x = all |> (Array.exists (bothFind x))
+    member this.HasById x = all |> (Array.exists (bothFindId x))
     member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key == x -> Some l.Value |_ -> None)
     member __.TagById x = leaves() |> Array.tryPick (function |l when l.KeyId.lower = x -> Some l.ValueId |_ -> None)
     member __.Leafs x = leaves() |> Array.choose (function |l when l.Key == x -> Some l |_ -> None) |> Array.toSeq
+    member __.LeafsById x = leaves() |> Array.filter (fun l -> l.KeyId.lower = x) |> Array.toSeq
     member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
     member this.TagsText x = this.Tags x |> Seq.map (function |(QString s) -> s |s -> s.ToString())
@@ -437,3 +438,20 @@ module ProcessCore =
         let recurse = cata fNode
         fNode node (node.Children |> Seq.map recurse)
 
+    let rec cataNodeIter fNode (node:Node) =
+        let recurse = cataNodeIter fNode
+        if fNode node
+        then
+            ()
+        else
+            node.Nodes |> Seq.iter recurse
+            
+    let rec cataIter fChild (child:Child) =
+        let recurse = cataIter fChild
+        if fChild child
+        then
+            ()
+        else
+            match child with
+            | NodeC node -> node.AllArray |> Array.iter recurse
+            | _ -> ()

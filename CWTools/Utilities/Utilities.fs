@@ -82,6 +82,7 @@ module Utils =
         }
         
     let structSnd struct(_, x) = x
+    let structFst struct(x, _) = x
 
     [<Literal>]
     let magicChar = '\u1E00'
