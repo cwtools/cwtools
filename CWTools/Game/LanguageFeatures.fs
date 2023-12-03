@@ -78,6 +78,11 @@ module LanguageFeatures =
             |Some (_, (_, Some (EnumRef (enumName, enumValue)), _)) ->
                 let enumValues = lookup.enumDefs.[enumName] |> snd
                 enumValues |> List.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
+            |Some (_, (_, Some (FileRef f), _)) ->
+                resourceManager.Api.AllEntities()
+                    |> Seq.map structFst
+                    |> Seq.tryFind (fun x -> x.logicalpath = f)
+                    |> Option.map (fun x -> mkRange x.filepath pos pos)
             |_ -> None
         |_, _ -> None
 

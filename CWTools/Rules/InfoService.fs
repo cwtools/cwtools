@@ -568,6 +568,7 @@ type InfoService
             | Some (t, false), _ -> ctx, (Some o, Some (TypeRef(t, leaf.ValueText)), Some (LeafC leaf))
             | _, LeafRule (_, TypeField (TypeType.Simple t)) -> ctx, (Some o, Some (TypeRef(t, leaf.ValueText)), Some (LeafC leaf))
             | _, LeafRule (_, LocalisationField _) -> ctx, (Some o, Some (LocRef(leaf.ValueText)), Some (LeafC leaf))
+            | _, LeafRule (_, FilepathField (Some pre, Some ext)) -> ctx, (Some o, Some(FileRef (pre + leaf.ValueText + ext)), Some (LeafC leaf))
             | _, LeafRule (TypeField (TypeType.Simple t), _) -> ctx, (Some o, Some (TypeRef(t, leaf.Key)), Some (LeafC leaf))
             | _, LeafRule (LocalisationField _, _) -> ctx, (Some o, Some (LocRef(leaf.Key)), Some (LeafC leaf))
             | _, LeafRule (_, ScopeField _) -> ctx, (Some o, changeScopeInner leaf.ValueText ctx.scopes, Some (LeafC leaf))

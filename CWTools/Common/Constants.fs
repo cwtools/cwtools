@@ -525,6 +525,7 @@ type EffectType =
     | TypeRef of typeName : string * typeValue : string
     | LocRef of locKey : string
     | EnumRef of enumName : string * enumValue : string
+    | FileRef of filename : string
 
 type Effect internal (name, scopes, effectType, refHint) =
     member val Name: string = name
