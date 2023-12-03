@@ -132,13 +132,14 @@ type Entity =
     {
         filepath : string
         logicalpath : string
+        rawEntity : Node
         entity : Node
         validate : bool
         entityType : EntityType
         overwrite : Overwrite
     }
     override x.ToString() = sprintf "%s %s %b" x.filepath x.logicalpath x.validate
-
+type RawEntity = Entity
 type CachedResourceData = {
     resources : (Resource * Entity) list
     files : (string * string) list
@@ -302,7 +303,6 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
 
     let mutable fileMap : Map<string, Resource> = Map.empty
     let mutable entitiesMap : Map<string, struct (Entity * Lazy<'T>)> = Map.empty
-    let mutable rawEntitiesMap : Map<string, Entity> = Map.empty
     let duration f =
         let timer = System.Diagnostics.Stopwatch()
         timer.Start()
@@ -329,7 +329,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v; logicalpath = l}) ->
                     let entityType = filepathToEntityType f
                     let filename = Path.GetFileNameWithoutExtension f
-                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType filename (mkZeroFile f) (statements)); validate = v; entityType = entityType; overwrite = No}
+                    let entity = (shipProcess entityType filename (mkZeroFile f) (statements))
+                    Some { filepath = f; logicalpath = l; entity = entity; rawEntity = entity ; validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
     let changeEncoding (filestring : string) (source : System.Text.Encoding) (target : System.Text.Encoding) =
@@ -373,7 +374,6 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 let item = struct(e, lazyi)
                 // log "e %A %A %A" e.filepath e.logicalpath e.overwrite
                 entitiesMap <- entitiesMap.Add(e.filepath, item)
-                rawEntitiesMap <- rawEntitiesMap.Add(e.filepath, e)
                 yield resource, Some item
             |None -> yield resource, None
         }
@@ -397,8 +397,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let entityMap em (s, (e : EntityResource)) =
             match Map.tryFind s em with
             |None -> em
-            |Some struct (olde, oldl) ->
-                 em.Add(s, struct ({olde with Entity.overwrite = e.overwrite}, oldl))
+            |Some struct ( olde, oldl) ->
+                 em.Add(s,( {olde with Entity.overwrite = e.overwrite}, oldl))
         entitiesMap <- res |> List.fold entityMap entitiesMap
         let filesWithContent = filelist |> List.choose (function |FileWithContentResource (s, e) -> Some ((s, e)) |_ -> None)
         let processGroup (key, (es : (string * FileWithContentResource) list)) =
@@ -491,7 +491,6 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         |> Seq.map (function
                 |(resource, Some struct(oldE, oldLazy)) ->
                     let updatedE = updateEntity oldE
-                    rawEntitiesMap <- rawEntitiesMap.Add(oldE.filepath, oldE)
                     match updatedE with
                     |Some newNode ->
                         let newE = { oldE with entity = newNode }

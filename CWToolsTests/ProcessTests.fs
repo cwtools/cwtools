@@ -409,7 +409,7 @@ let testsv =
             match CKParser.parseString input "test.txt" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let enums = [("size", ("size", ["medium"; "large"]))] |> Map.ofList |> Map.toSeq |> Seq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s)))) |> Map.ofSeq
 
                 let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, enums, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
@@ -426,7 +426,7 @@ let testsv =
             match CKParser.parseString input "test.txt" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
@@ -447,7 +447,7 @@ let testsv =
             match CKParser.parseString filetext "test.txt" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node ; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ("create_starbase", createStarbase())], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let suggestions = comp.Complete(pos, entity, None) |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
                 let expected = ["create_starbase"; "create_starbase"] |> Seq.sort
@@ -467,12 +467,12 @@ let testsv =
             match CKParser.parseString input "common/ship_sizes/test.txt", CKParser.parseString behaviours "common/ship_behaviors/test.txt" with
             |Success(r, _, _), Success(b, _, _) ->
                 let bnode = (STLProcess.shipProcess.ProcessNode() "root" (mkZeroFile "common/ship_behaviors/test.txt") b)
-                let be = { entity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors/test.txt"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
+                let be = { entity = bnode; rawEntity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors/test.txt"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
                 let ruleapplicator = RuleValidationService([TypeRule ("create_starbase", createStarbase())], [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let typeinfo = CWTools.Rules.RulesHelpers.getTypesFromDefinitions (Some ruleapplicator) [shipBehaviorType; shipSizeType] [be] |> Map.toSeq |> Seq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun s -> s.id)))) |> Map.ofSeq
                 eprintfn "%A" typeinfo
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
-                let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
                 let comp = CompletionService([TypeRule ("ship_size", shipsize)], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypes, processLocalisation, validateLocalisation)
                 let res = comp.Complete(pos, entity, None)
@@ -492,7 +492,7 @@ let testsv =
             |Success(r, _, _) ->
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap,(scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisation, validateLocalisation)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
@@ -518,7 +518,7 @@ let testsv =
             |Success(r, _, _) ->
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisation, validateLocalisation)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
@@ -543,7 +543,7 @@ let testsv =
             |Success(r, _, _) ->
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
-                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let rules = RuleValidationService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap , (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisation, validateLocalisation)
                 let infoService = InfoService([TypeRule ("create_starbase", createStarbase()); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDef], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisation, validateLocalisation)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbase())], [RulesParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])

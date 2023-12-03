@@ -24,6 +24,7 @@ type Helpers =
             filepath = filepath
             logicalpath = filepath
             entity = node
+            rawEntity = node 
             validate = true
             entityType = CWTools.Common.STLConstants.EntityType.Other
             overwrite = Overwrite.No
