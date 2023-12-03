@@ -470,8 +470,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         // log $"b {l.ValueText} {l.Position}"
                         if l.KeyId = keyId
                         then
-                            leafScriptRefs |> List.iter (fun x -> log $"a {x.Key} {x.Position} {x.ValueText} {x.ValueId}")
-                            log $"b {l.Key} {l.Position} {l.ValueText} {l.ValueId}"
+                            leafScriptRefs |> List.iter (fun x -> log $"a {x.Key} {x.Position} {x.ValueText} {x.ValueId.normal} {l.ValueId.lower}")
+                            log $"b {l.Key} {l.Position} {l.ValueText} {l.ValueId.normal} {l.ValueId.lower}"
                         
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
