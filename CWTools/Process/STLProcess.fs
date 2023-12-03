@@ -104,19 +104,7 @@ module STLProcess =
         let savetargets = findAllSavedEventTargets node
         let usedtargets = findAllUsedEventTargets node
         ScriptedEffect(node.Key, scopes |> Set.toList, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
-    let rec copy source target =
-        let properties (x:obj) = x.GetType().GetProperties()
-        query {
-            for s in properties source do
-            join t in properties target on (s.Name = t.Name)
-            where t.CanWrite
-            select s }
-        |> Seq.iter (fun s ->
-            let value = s.GetValue(source,null)
-            if value.GetType().FullName.StartsWith("System.")
-            then s.SetValue(target, value, null)
-            else copy value (s.GetValue(target,null))
-        )
+
     let rec cloneNode (source : Node) =
         let rec mapChild =
             function
@@ -167,64 +155,6 @@ module STLProcess =
 
     //     )
 
-    let optionTriggers = ["trigger"; "allow"; "exclusive_trigger"]
-    let optionEffects = ["tooltip";]
-    let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
-    let optionExcludeSet = optionExcludes |> Set.ofList
-    let rec copyChild (a : Child) =
-        match a with
-        |NodeC n when Set.contains n.Key optionExcludeSet -> None
-        |NodeC n ->
-            let children = n.AllChildren |> Seq.choose copyChild //|> Array.ofSeq
-            let n2 = (Node(n.Key, n.Position))
-            n2.AllChildren <- children |> ResizeArray<Child>
-            Some (NodeC n2)
-        |LeafC l when Set.contains l.Key optionExcludeSet -> None
-        |x -> Some x
-        // |LeafValueC lv -> LeafValueC (LeafValue(lv.Value, lv.Position))
-        // |LeafC l -> LeafC (Leaf(l.Key, l.Value, l.Position))
-        // |CommentC c -> CommentC c
-        //newO :> Node
-
-    type Ship (key, pos) =
-        inherit Node(key, pos)
-        member this.Name = this.TagText "name"
-        member this.ShipSize = this.TagText "ship_size"
-
-    type ShipSection (key, pos) =
-        inherit Node(key, pos)
-        member this.Template = this.TagText "template"
-        member this.Slot = this.TagText "slot"
-
-    type ShipComponent (key, pos) =
-        inherit Node(key, pos)
-        member this.Template = this.TagText "template"
-        member this.Slot = this.TagText "slot"
-
-    type Button_Effect (key, pos) =
-        inherit Node(key, pos)
-
-    type Event(key, pos) =
-        inherit Node(key, pos)
-        member this.ID = this.TagText "id"
-        member this.Desc = this.TagText "desc"
-        member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
-
-    type EffectBlock(key, pos) = inherit Node(key, pos)
-    let filterOptionToEffects (o : Node) =
-        let newO = EffectBlock(o.Key, o.Position)
-        newO.AllChildren <- (o.AllChildren |> Seq.choose copyChild |> ResizeArray<Child>)
-        //let newChildren = FsPickler.Clone(o.AllChildren, pickler = nodePickler)
-        //copy o newO
-        // newO.All <- newO.All |> List.filter (function |LeafC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
-        // newO.All <- newO.All |> List.filter (function |NodeC l -> (not (Set.contains l.Key optionExcludeSet)) | _ -> true)
-        newO.Scope <- o.Scope
-        newO
-    type Option(key, pos) =
-        inherit Node(key, pos)
-        member this.AsEffectBlock = filterOptionToEffects this
-
-    // let shipProcess = BaseProcess(stellarisFunction)
     let shipProcess = BaseProcess(fun _ -> processNodeSimple, "", id)
     let simpleProcess = BaseProcess(fun _ -> processNodeSimple, "", id)
 

@@ -18,17 +18,8 @@ open CWTools.Common.NewScope
 
 module STLValidation =
     type S = Severity
-    let shipName (ship : Ship) = if ship.Name = "" then Invalid (Guid.NewGuid(), [(inv (ErrorCodes.CustomError "must have name" Severity.Error) ship)]) else OK
-    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid (Guid.NewGuid(), [(inv (ErrorCodes.CustomError "must have size" Severity.Error) ship)]) else OK
 
     // let validateShip : Validator<Ship>  = shipName <&> shipSize
-
-    let validateShips : STLStructureValidator =
-        fun _ es ->
-            let ships =
-                es.All |> List.collect (fun n -> n.Children)
-                   |> List.choose (function | :? Ship as s -> Some s |_ -> None)
-            ships <&!&> (fun s -> (shipName <&> shipSize) s)
 
     let getDefinedVariables (node : Node) =
         let fNode = (fun (x:Node) acc ->

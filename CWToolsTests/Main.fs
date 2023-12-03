@@ -249,7 +249,7 @@ let perfHOI4(b) =
     timer.Start()
     scopeManager.ReInit(defaultScopeInputs, [])
          
-    let cached, cachedFiles = Serializer.deserialize @"C:\Users\Thomas\.vscode\extensions\tboby.cwtools-vscode-0.10.12\.cwtools\hoi4.cwb"
+    let cached, cachedFiles = Serializer.deserialize @"C:\Users\Thomas\.vscode\extensions\tboby.cwtools-vscode-0.10.15\.cwtools\hoi4.cwb"
     let configs = CWToolsCLI.getConfigFiles (None, Some @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config")
     let folders = configs |> List.tryPick getFolderList
 

@@ -295,7 +295,7 @@ type STLGame (setupSettings : StellarisSettings) =
         validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valEventCalls, "event";
                             validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateSolarSystemInitializers, "solar";
                              validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantANDWithNOR, "AND"; valMegastructureGraphics, "megastructure";
-                            valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateShips, "ships"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"; validatePreTriggers, "pre";
+                            valPlanetClassGraphics, "pcg"; validateDeprecatedSetName, "setname"; validateEvents, "eventsSimple"; validateNOTMultiple, "not"; validatePreTriggers, "pre";
                             validateIfWithNoEffect, "ifnoeffect";]
         experimentalValidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"]
         heavyExperimentalValidators = [getEventChains, "event chains"]
