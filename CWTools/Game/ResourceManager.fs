@@ -468,10 +468,10 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         then
                             let scriptName = l.ValueText + ".txt"
                             match inlineScriptsMap |> Map.tryFind scriptName with
-                            |Some scriptNode ->
+                            |Some scriptNode when scriptNode.AllArray.Length > 0 ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
                                 node.AllArray.[index] <- NodeC newScriptNode
-                            |None -> ()
+                            |_ -> ()
                         else
                             ()
                     | _ -> ()
