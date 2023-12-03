@@ -1,5 +1,6 @@
 namespace CWTools.Games
 open System.Collections.Generic
+open CWTools.Common
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -441,7 +442,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) 
             let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
-                let childFun (index : int) (child : Child) =
+                let childFun (child : Child) =
                     match child with
                     |NodeC n ->
                         let stringReplace (isParams : (string * string) list) (key : string) =
@@ -457,14 +458,14 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             let values = n.Leaves |> Seq.map (fun l -> l.Key, l.ValueText) |> List.ofSeq
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode when scriptNode.AllArray.Length > 0 ->
-                                let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
+                                let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
-                                node.AllArray.[index] <- NodeC newScriptNode
-                            |Some scriptNode -> node.AllArray.[index] <- CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")
-                            |_ -> node.AllArray.[index] <- LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position))
-                            ()
+                                newScriptNode.All |> Seq.ofList
+                            |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
+                            |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position))]
                         else
                             replaceCataFun n
+                            [NodeC n]
                     |LeafC l ->
                         // log $"b {l.ValueText} {l.Position}"
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
@@ -472,14 +473,14 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             let scriptName = l.ValueText
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode when scriptNode.AllArray.Length > 0 ->
-                                let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
-                                node.AllArray.[index] <- NodeC newScriptNode
-                            |Some scriptNode -> node.AllArray.[index] <- CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")
-                            |_ -> node.AllArray.[index] <- LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))
+                                let newScriptNode = STLProcess.cloneNode scriptNode
+                                [NodeC newScriptNode]
+                            |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
+                            |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))]
                         else
-                            ()
-                    | _ -> ()
-                node.AllArray |> Array.iteri childFun
+                            [LeafC l]
+                    | x -> [x]
+                node.AllArray <- node.AllArray |> Seq.collect childFun |> Array.ofSeq
             if List.isEmpty allScriptRefs
             then
                 None
