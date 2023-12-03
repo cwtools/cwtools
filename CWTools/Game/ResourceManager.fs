@@ -438,7 +438,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let updateEntity (e : Entity) =
             let allScriptRefs =
                 ProcessCore.foldNode7 folder e.entity
-            allScriptRefs |> List.iter (function |LeafC l -> log l.ValueText |_ -> ())
+            allScriptRefs |> List.iter (function |LeafC l -> log $"a {l.ValueText} {l.Position}" |_ -> ())
             let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) 
             let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
@@ -467,6 +467,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         else
                             replaceCataFun n
                     |LeafC l ->
+                        log $"b {l.ValueText} {l.Position}"
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
                             let scriptName = l.ValueText
