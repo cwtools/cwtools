@@ -425,7 +425,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
             |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.entity))
-            |> Seq.map (fun (x, e) -> log x; (x, e))
+            // |> Seq.map (fun (x, e) -> log x; (x, e))
             |> Map.ofSeq
         let keyId = StringResource.stringManager.InternIdentifierToken "inline_script"
         let folder (node : Node) (acc : Child list) =
@@ -437,7 +437,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let updateEntity (e : Entity) =
             let allScriptRefs =
                 ProcessCore.foldNode7 folder e.entity
-            allScriptRefs |> List.iter (function |LeafC l -> log $"a {l.ValueText} {l.Position}" |_ -> ())
+            // allScriptRefs |> List.iter (function |LeafC l -> log $"a {l.ValueText} {l.Position}" |_ -> ())
             let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) 
             let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
@@ -466,7 +466,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         else
                             replaceCataFun n
                     |LeafC l ->
-                        log $"b {l.ValueText} {l.Position}"
+                        // log $"b {l.ValueText} {l.Position}"
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
                             let scriptName = l.ValueText
