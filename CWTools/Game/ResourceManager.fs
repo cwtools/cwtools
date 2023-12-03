@@ -470,12 +470,13 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         // log $"b {l.ValueText} {l.Position}"
                         if l.KeyId = keyId
                         then
-                            leafScriptRefs |> List.iter (fun x -> log $"a {x.Key} {x.Position} {x.ValueText}")
-                            log $"b {l.Key} {l.Position} {l.ValueText}"
+                            leafScriptRefs |> List.iter (fun x -> log $"a {x.Key} {x.Position} {x.ValueText} {x.ValueId}")
+                            log $"b {l.Key} {l.Position} {l.ValueText} {l.ValueId}"
                         
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
                             let scriptName = l.ValueText
+                            log $"c {scriptName}"
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode when scriptNode.AllArray.Length > 0 ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
