@@ -175,7 +175,7 @@ type IResourceAPI<'T when 'T :> ComputedData > =
     abstract ForceRulesDataGenerate : unit -> unit
     abstract GetFileNames : GetFileNames
 
-type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit), encoding, fallbackencoding) =
+type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit), encoding, fallbackencoding, enableInlineScripts) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -539,10 +539,13 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     let updateFiles files =
         let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
-        let inlinedScriptedEntities = updateInlineScripts news
+        let mutable res = news
+        if enableInlineScripts
+        then
+            res <- updateInlineScripts news |> Seq.toList
         let task = new Task(fun () -> forceEagerData())
         task.Start()
-        inlinedScriptedEntities |> Seq.toList
+        res
     let updateFile file =
         let res = updateFiles [file]
         if res.Length > 1 then log (sprintf "File %A returned multiple resources" (file)) else ()

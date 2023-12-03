@@ -546,7 +546,7 @@ let embeddedTests =
         //Test serialization
         let fileManager = FileManager([WD { name = "test"; path = "./testfiles/embeddedtest/test"}], Some "", scriptFolders, "stellaris", Encoding.UTF8, [], 2000000)
         let files = fileManager.AllFilesByPath()
-        let resources : IResourceAPI<STLComputedData> = ResourceManager<STLComputedData>(Compute.STL.computeSTLData (fun () -> None), Compute.STL.computeSTLDataUpdate (fun () -> None), Encoding.UTF8, Encoding.GetEncoding(1252)).Api
+        let resources : IResourceAPI<STLComputedData> = ResourceManager<STLComputedData>(Compute.STL.computeSTLData (fun () -> None), Compute.STL.computeSTLDataUpdate (fun () -> None), Encoding.UTF8, Encoding.GetEncoding(1252), true).Api
         let entities = resources.UpdateFiles(files) |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None) |> List.map (fun (r, (struct (e, _))) -> r, e)
         let mkPickler (resolver : IPicklerResolver) =
             let arrayPickler = resolver.Resolve<Leaf array> ()

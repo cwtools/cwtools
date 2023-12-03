@@ -25,6 +25,7 @@ type GameSettings<'L> = {
     modFilter : string option
     initialLookup : 'L
     maxFileSize : int option
+    enableInlineScripts : bool
 }
 
 type EmbeddedSetupSettings =
@@ -66,7 +67,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
     // let mutable completionService : CompletionService<_> option = None
     let mutable ruleValidationService : RuleValidationService option = None
     let mutable infoService : InfoService option = None
-    let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding)
+    let resourceManager = ResourceManager<'T>(computeFunction (fun () -> this.InfoService), computeUpdateFunction (fun () -> this.InfoService), encoding, fallbackencoding, settings.enableInlineScripts)
     let validatableFiles() = this.Resources.ValidatableFiles
     let lookup = settings.initialLookup
     let localisationManager = LocalisationManager<'T>(resourceManager.Api, localisationService, settings.validation.langs, lookup, processLocalisation, localisationExtension)

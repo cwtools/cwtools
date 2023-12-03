@@ -278,7 +278,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         modFilter = setupSettings.modFilter
         initialLookup = VIC2Lookup()
         maxFileSize = setupSettings.maxFileSize
-
+        enableInlineScripts = false 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()
     let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v, links) -> (if l.Length = 0 then Legacy ([],[],[]) else Legacy (l, v, links)) |_ -> Legacy ([],[], [])

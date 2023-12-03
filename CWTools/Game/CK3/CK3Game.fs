@@ -282,6 +282,7 @@ type CK3Game(setupSettings : CK3Settings) =
         modFilter = setupSettings.modFilter
         initialLookup = JominiLookup()
         maxFileSize = setupSettings.maxFileSize
+        enableInlineScripts = false 
 
     }
     do if scopeManager.Initialized |> not then eprintfn "%A has no scopes" (settings.rootDirectories |> List.head) else ()

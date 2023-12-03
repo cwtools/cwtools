@@ -326,6 +326,7 @@ type STLGame (setupSettings : StellarisSettings) =
         modFilter = setupSettings.modFilter
         initialLookup = STLLookup()
         maxFileSize = setupSettings.maxFileSize
+        enableInlineScripts = true 
     }
     do if scopeManager.Initialized |> not then Utils.logError (sprintf "%A has no scopes" (settings.rootDirectories |> List.head)) else ()
     let locSettings = settings.embedded.localisationCommands |> function |Legacy (l, v, links) -> (if l.Length = 0 then Legacy ([],[], []) else Legacy (l, v, links)) |_ -> Legacy ([],[], [])
