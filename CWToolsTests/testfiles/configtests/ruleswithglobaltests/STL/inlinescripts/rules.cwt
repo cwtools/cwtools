@@ -17,7 +17,34 @@ types = {
         path = "game/events"
         type_key_prefix = not_event
     }
+    
+    type[inline_script] = {
+        path = "game/common/inline_scripts"
+        type_per_file = yes
+    }
+    
+    type[script_consume] = {
+        path = "game/common/script_consume"
+    }
 
+}
+inline_script = {
+
+}
+script_consume = {
+   ## cardinality = 0..inf
+   country_event = {
+        not_event = yes
+   }
+   ## cardinality = 0..inf
+   inline_script = <inline_script>
+   #inline_script = filepath[common/inline_scripts/,.txt]
+   ## cardinality = 0..inf
+   inline_script = {
+        script = <inline_script> 
+        ## cardinality = 0..inf
+        scalar = scalar
+   }
 }
 not_event = {
     not_event = yes

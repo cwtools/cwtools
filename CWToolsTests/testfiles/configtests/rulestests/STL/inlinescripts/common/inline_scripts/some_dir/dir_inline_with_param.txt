@@ -1,4 +1,0 @@
-not_event country_event = {
-    not_event = $VALUE$
-}
-

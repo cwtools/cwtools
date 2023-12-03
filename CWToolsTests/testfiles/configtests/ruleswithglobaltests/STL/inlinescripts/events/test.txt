@@ -1,0 +1,33 @@
+namespace = test
+
+#error
+country_event = {
+    option = {
+        test = {
+            something = yes
+        }
+        double test2 = {
+            something2 = yes
+        }
+        test = {
+            something = yes
+            #error
+            something2 = yes
+        }
+        #error
+        double test2 = {
+
+        }
+    }
+}
+
+#error
+not_event country_event = {
+    not_event = yes
+}
+
+#error
+#error
+not_event country_event = {
+
+}
