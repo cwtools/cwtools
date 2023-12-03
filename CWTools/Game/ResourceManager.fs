@@ -425,7 +425,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             entitiesMap |> Map.toSeq |> Seq.map snd |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
-            |> Seq.map (fun e -> (e.logicalpath.Substring inlinePathLength, e.entity))
+            |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.entity))
+            |> Seq.map (fun (x, e) -> log x; (x, e))
             |> Map.ofSeq
         let keyId = StringResource.stringManager.InternIdentifierToken "inline_script"
         let folder (node : Node) (acc : Child list) =
@@ -466,7 +467,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                     |LeafC l ->
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
-                            let scriptName = l.ValueText + ".txt"
+                            let scriptName = l.ValueText
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode when scriptNode.AllArray.Length > 0 ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
