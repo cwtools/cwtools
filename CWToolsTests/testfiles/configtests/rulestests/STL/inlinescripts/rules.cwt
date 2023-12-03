@@ -1,0 +1,38 @@
+types = {
+    type[event] = {
+        path = "game/events"
+
+        ## type_key_filter = ship_event
+		## push_scope = ship
+        subtype[ship] = {
+        }
+
+        ## type_key_filter = country_event
+		## push_scope = country
+        subtype[country] = {
+        }
+
+    }
+    type[not_event] = {
+        path = "game/events"
+        type_key_prefix = not_event
+    }
+
+}
+not_event = {
+    not_event = yes
+}
+
+event = {
+    ## cardinality = 0..inf
+    option = {
+        ## cardinality = 0..inf
+        test = {
+            something = yes
+        }
+        ## cardinality = 0..inf
+        double test2 = {
+            something2 = yes
+        }
+    }
+}

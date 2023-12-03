@@ -1,0 +1,54 @@
+namespace = test
+
+country_event = {
+    option = {
+        test = {
+            something = yes
+        }
+        double test2 = {
+            something2 = yes
+        }
+        test = {
+            something = yes
+            #error
+            something2 = yes
+        }
+        #error
+        double test2 = {
+
+        }
+    }
+}
+
+not_event country_event = {
+    not_event = yes
+}
+
+#error
+not_event country_event = {
+
+}
+
+inline_script = root_inline
+inline_script = some_dir/dir_inline
+#error
+inline_script = some_dir/dir_inline_with_param
+inline_script = {
+    script = root_inline
+}
+inline_script = {
+    script = some_dir/dir_inline
+}
+#error
+inline_script = {
+    script = some_dir/dir_inline_with_param
+}
+inline_script = {
+    script = some_dir/dir_inline_with_param
+    VALUE = yes
+}
+#error
+inline_script = {
+    script = some_dir/dir_inline_with_param
+    VALUE = no
+}
