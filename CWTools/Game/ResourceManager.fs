@@ -416,7 +416,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         // log "print all"
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
     let updateInlineScripts (news : (Resource *  struct (Entity * Lazy<'T>) option) list) =
-        let inlinePath = "common/inline_scripts"
+        let inlinePath = "common/inline_scripts/"
         let inlinePathLength = inlinePath.Length
         let entities =
             news |> Seq.choose (snd)
@@ -437,24 +437,24 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let updateEntity (e : Entity) =
             let allScriptRefs =
                 ProcessCore.foldNode7 folder e.entity
-            let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) |> HashSet
-            let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None) |> HashSet
+            let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) 
+            let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
                 let childFun (index : int) (child : Child) =
                     match child with
                     |NodeC n ->
-                        if nodeScriptRefs.Contains n
+                        if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId = n.KeyId)
                         then
                             ()
                         else
                             replaceCataFun n
                     |LeafC l ->
-                        if leafScriptRefs.Contains l
+                        if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
-                            let scriptName = l.ValueText
+                            let scriptName = l.ValueText + ".txt"
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode ->
-                                let newScriptNode = STLProcess.cloneNode scriptNode
+                                let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
                                 node.AllArray.[index] <- NodeC newScriptNode
                             |None -> ()
                         else
@@ -468,8 +468,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 let newNode = CWTools.Process.STLProcess.cloneNode e.entity
                 replaceCataFun newNode
                 Some newNode
-        let replacedEntities =
-            entities |> Seq.map (fun e -> e, updateEntity e)
+        entities |> Seq.map (fun e -> e, updateEntity e)
             |> Seq.choose (function |e, Some newNode -> Some {e with entity = newNode } |_, None -> None)
             |> Seq.iter (fun e ->
                 let lazyi = new System.Lazy<_>((fun () -> computedDataFunction e),System.Threading.LazyThreadSafetyMode.PublicationOnly)

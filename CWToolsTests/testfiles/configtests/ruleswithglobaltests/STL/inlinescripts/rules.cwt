@@ -28,20 +28,18 @@ types = {
     }
 
 }
-inline_script = {
-
-}
 script_consume = {
    ## cardinality = 0..inf
    country_event = {
         not_event = yes
    }
    ## cardinality = 0..inf
-   inline_script = <inline_script>
-   #inline_script = filepath[common/inline_scripts/,.txt]
+   inline_script = filepath[common/inline_scripts/,.txt]
+   #inline_script = <inline_script>
    ## cardinality = 0..inf
    inline_script = {
-        script = <inline_script> 
+        ##script = <inline_script> 
+        script = filepath[common/inline_scripts/,.txt]
         ## cardinality = 0..inf
         scalar = scalar
    }

@@ -6,7 +6,7 @@ test = {
         script = not_real
     }
     inline_script = root_inline
-    ##inline_script = some_dir/dir_inline
+    inline_script = some_dir/dir_inline
     #error
     inline_script = some_dir/dir_inline_with_param
     inline_script = root_inline_with_error
