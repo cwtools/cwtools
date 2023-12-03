@@ -468,6 +468,11 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             [NodeC n]
                     |LeafC l ->
                         // log $"b {l.ValueText} {l.Position}"
+                        if l.KeyId = keyId
+                        then
+                            leafScriptRefs |> List.iter (fun x -> log $"a {x.Key} {x.Position} {x.ValueText}")
+                            log $"b {l.Key} {l.Position} {l.ValueText}"
+                        
                         if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
                         then
                             let scriptName = l.ValueText
