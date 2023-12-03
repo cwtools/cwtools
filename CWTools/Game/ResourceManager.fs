@@ -474,7 +474,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode when scriptNode.AllArray.Length > 0 ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
-                                [NodeC newScriptNode]
+                                newScriptNode.All |> Seq.ofList
                             |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))]
                         else
