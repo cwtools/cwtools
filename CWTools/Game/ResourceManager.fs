@@ -452,36 +452,30 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.Children |> List.iter (foldOverNode stringReplacer)
-                        if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId = n.KeyId)
+                        if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
                         then
                             let scriptName = n.TagText "script"
                             let values = n.Leaves |> Seq.map (fun l -> l.Key, l.ValueText) |> List.ofSeq
                             match inlineScriptsMap |> Map.tryFind scriptName with
-                            |Some scriptNode when scriptNode.AllArray.Length > 0 ->
+                            |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
                                 newScriptNode.All |> Seq.ofList
-                            |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
+                            // |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position))]
                         else
                             replaceCataFun n
                             [NodeC n]
                     |LeafC l ->
                         // log $"b {l.ValueText} {l.Position}"
-                        if l.KeyId = keyId
-                        then
-                            leafScriptRefs |> List.iter (fun x -> log $"a {x.Key} {x.Position} {x.ValueText} {x.ValueId.normal} {l.ValueId.lower}")
-                            log $"b {l.Key} {l.Position} {l.ValueText} {l.ValueId.normal} {l.ValueId.lower}"
-                        
-                        if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId = l.ValueId)
+                        if leafScriptRefs |> List.exists (fun s -> s.Position = l.Position && s.KeyId = l.KeyId && s.ValueId.lower = l.ValueId.lower)
                         then
                             let scriptName = l.ValueText
-                            log $"c {scriptName}"
                             match inlineScriptsMap |> Map.tryFind scriptName with
-                            |Some scriptNode when scriptNode.AllArray.Length > 0 ->
+                            |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 newScriptNode.All |> Seq.ofList
-                            |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
+                            // |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))]
                         else
                             [LeafC l]
