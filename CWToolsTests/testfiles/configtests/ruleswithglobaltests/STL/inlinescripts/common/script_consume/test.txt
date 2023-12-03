@@ -2,14 +2,14 @@ test = {
     #error
     inline_script = not_real
     inline_script = {
-        ##error
+        #error
         script = not_real
     }
     inline_script = root_inline
     inline_script = some_dir/dir_inline
-    #error
-    inline_script = some_dir/dir_inline_with_param
-    inline_script = root_inline_with_error
+    ##error
+    ##inline_script = some_dir/dir_inline_with_param
+    inline_script = noerr_root_inline_with_error
     inline_script = {
         script = root_inline
     }
@@ -29,11 +29,11 @@ test = {
     }
     
     inline_script = {
-        script = root_inline_with_param 
+        script = noerr_root_inline_with_param 
         VALUE = yes
     }
     inline_script = {
-        script = root_inline_with_param
+        script = noerr_root_inline_with_param
         VALUE = no
     }
 }

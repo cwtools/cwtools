@@ -18,10 +18,10 @@ types = {
         type_key_prefix = not_event
     }
     
-    type[inline_script] = {
-        path = "game/common/inline_scripts"
-        type_per_file = yes
-    }
+    #type[inline_script] = {
+    #    path = "game/common/inline_scripts"
+    #    type_per_file = yes
+    #}
     
     type[script_consume] = {
         path = "game/common/script_consume"

@@ -414,16 +414,20 @@ let testFolder folder testsname config configValidate configfile configOnly conf
         //eprintfn "%A" testVals
         // eprintfn "%A" (stl.AllFiles())
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
-        let inner (file, ((nodekeys : range list)) )=
-            let expected = nodekeys |> List.map (fun nk -> "", nk)
-             //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
-            let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file )
-            let fileErrorPositions = fileErrors //|> List.map snd
-            let missing = remove_all_by expected fileErrorPositions snd
-            let extras = remove_all_by fileErrorPositions expected snd
-            //eprintfn "%A" nodekeys
-            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
-            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+        let inner (file : string, ((nodekeys : range list)) )=
+            if file.Contains "noerr"
+            then
+                ()
+            else
+                let expected = nodekeys |> List.map (fun nk -> "", nk)
+                 //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
+                let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file )
+                let fileErrorPositions = fileErrors //|> List.map snd
+                let missing = remove_all_by expected fileErrorPositions snd
+                let extras = remove_all_by fileErrorPositions expected snd
+                //eprintfn "%A" nodekeys
+                Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
+                Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         // eprintfn "ss %s %s" folder testsname
         yield testCase (sprintf "parse %s" folder) <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))

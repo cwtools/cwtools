@@ -443,8 +443,23 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 let childFun (index : int) (child : Child) =
                     match child with
                     |NodeC n ->
+                        let stringReplace (isParams : (string * string) list) (key : string) =
+                            isParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
+                        let rec foldOverNode (stringReplacer) (node : Node) =
+                            node.Key <- stringReplacer node.Key
+                            node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
+                            node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
+                            node.Children |> List.iter (foldOverNode stringReplacer)
                         if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId = n.KeyId)
                         then
+                            let scriptName = n.TagText "script"
+                            let values = n.Leaves |> Seq.map (fun l -> l.Key, l.ValueText) |> List.ofSeq
+                            match inlineScriptsMap |> Map.tryFind scriptName with
+                            |Some scriptNode ->
+                                let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
+                                foldOverNode (stringReplace values) newScriptNode
+                                node.AllArray.[index] <- NodeC newScriptNode
+                            |None -> ()
                             ()
                         else
                             replaceCataFun n
