@@ -438,6 +438,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let updateEntity (e : Entity) =
             let allScriptRefs =
                 ProcessCore.foldNode7 folder e.entity
+            allScriptRefs |> List.iter (function |LeafC l -> log l.ValueText |_ -> ())
             let nodeScriptRefs = allScriptRefs |> List.choose (function |NodeC n -> Some n |_ -> None) 
             let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
@@ -456,11 +457,12 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             let scriptName = n.TagText "script"
                             let values = n.Leaves |> Seq.map (fun l -> l.Key, l.ValueText) |> List.ofSeq
                             match inlineScriptsMap |> Map.tryFind scriptName with
-                            |Some scriptNode ->
+                            |Some scriptNode when scriptNode.AllArray.Length > 0 ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
                                 foldOverNode (stringReplace values) newScriptNode
                                 node.AllArray.[index] <- NodeC newScriptNode
-                            |None -> ()
+                            |Some scriptNode -> node.AllArray.[index] <- CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")
+                            |_ -> node.AllArray.[index] <- LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position))
                             ()
                         else
                             replaceCataFun n
@@ -472,7 +474,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             |Some scriptNode when scriptNode.AllArray.Length > 0 ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode.Children[0]
                                 node.AllArray.[index] <- NodeC newScriptNode
-                            |_ -> ()
+                            |Some scriptNode -> node.AllArray.[index] <- CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")
+                            |_ -> node.AllArray.[index] <- LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))
                         else
                             ()
                     | _ -> ()
