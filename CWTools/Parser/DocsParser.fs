@@ -8,7 +8,7 @@ open CWTools.Common
 
 module DocsParser =
 
-    let private idChar = letter <|> anyOf ['_']
+    let private idChar = letter <|> digit <|> anyOf ['_']
     let private isvaluechar = SharedParsers.isvaluechar
     let private header = skipCharsTillString "DOCUMENTATION ==" true 2000 .>> SharedParsers.ws <?> "header"
     let private name = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>>. restOfLine false .>> SharedParsers.ws <?> "name"
