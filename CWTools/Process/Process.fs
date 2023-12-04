@@ -281,7 +281,7 @@ module ProcessCore =
         |"" -> f { context with previous = key }
         |_ -> f { context with parents = n::context.parents; previous = key }
 
-    type BaseProcess (maps : NodeTypeMap ) =
+    type BaseProcess() =
         let rec nodeWindowFun (context) (backtwo : Statement option, backone : Statement option, acc) (next : Statement) =
             //eprintfn "%A %A %A" backtwo backone next
             match backtwo, backone, next with
@@ -331,8 +331,7 @@ module ProcessCore =
         member __.ProcessNode() = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) sl |> function |NodeC c -> c)
         member __.ProcessNode(entityType : EntityType) = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = entityType}) sl |> function |NodeC c -> c)
 
-    let baseMap = fun _ -> processNodeSimple, "", id;
-    let processNodeBasic = BaseProcess(baseMap).ProcessNode()
+    let processNodeBasic = BaseProcess().ProcessNode()
 
     let rec foldNode fNode acc (node : Node) :'r =
         let recurse = foldNode fNode

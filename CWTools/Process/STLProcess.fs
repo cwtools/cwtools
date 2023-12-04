@@ -9,24 +9,8 @@ open CWTools.Common
 open CWTools.Common.NewScope
 
 module STLProcess =
-    let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
-    let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
-                        "CAPITAL_SCOPE"]//Added used in STH]
-    let targetKeys = _targetKeys |> List.sortByDescending (fun k -> k.Length)
-    let toEffectBlockKeys = ["if"; "else"; "tooltip"]
-    let ignoreKeys = ["count"; "min_steps"; "max_steps"]
-
-
-    let rec isTargetKey =
-        function
-        |"" -> true
-        |x ->
-            match targetKeys |> List.tryFind (fun f -> x.StartsWith(f, StringComparison.OrdinalIgnoreCase))  with
-            |Some s -> if s.Length = x.Length then true else isTargetKey (x.Substring(s.Length + 1))
-            |None -> false
 
     let rec scriptedTriggerScope (strict : bool) (effects : (Effect list)) (triggers : (Effect list)) (root : string) (node : Node) =
-        let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
         let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect"]
         let triggerBlockKeys = ["limit"] //@ targetKeys
         let nodeScopes = node.Children
@@ -125,38 +109,8 @@ module STLProcess =
                 CommentC c
         mapChild (NodeC source) |> function |NodeC node -> node
 
-    // let nodePickler : (ResizeArray<Child> -> ResizeArray<Child>) =
-    //     let mkPickler (resolver : IPicklerResolver) =
-    //         let arrayPickler = resolver.Resolve<Leaf array> ()
-    //         let writer (w : WriteState) (ns : Lazy<Leaf array>) =
-    //             arrayPickler.Write w "value" (ns.Force())
-    //         let reader (r : ReadState) =
-    //             let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
-    //         let cloner (c : CloneState) (ns : Lazy<Leaf array>) =
-    //             lazy (arrayPickler.Clone c (ns.Force()))
-    //         Pickler.FromPrimitives(reader, writer, cloner = cloner)
-    //     let registry = new CustomPicklerRegistry()
-    //     do registry.RegisterFactory mkPickler
-    //     registry.DeclareSerializable<FParsec.Position>()
-    //     let cache = PicklerCache.FromCustomPicklerRegistry registry
-    //     let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
-    //     //(fun (input : ResizeArray<Child>) -> binarySerializer.Pickle input |> binarySerializer.UnPickle)
-    //     // (fun (input) -> FsPickler.Clone(input, pickler = (cache.GeneratePickler<ResizeArray<Child>>())))
-    //     let pickler = cache.GeneratePickler<ResizeArray<Child>>()
-    //     let t = typeof<CloneState>
-    //     (fun (input) ->
-    //         let state = t.GetConstructors(BindingFlags.Instance ||| BindingFlags.NonPublic).[0].Invoke([|cache; null; null; null|]) :?> CloneState
-    //         // let state = t.Assembly.CreateInstance(
-    //         //                 t.FullName, false,
-    //         //                 BindingFlags.Instance ||| BindingFlags.NonPublic ||| BindingFlags.Public ||| BindingFlags.,
-    //         //                 null, [|cache|], null, null) :?> CloneState
-    //         //let state = new CloneState(cache)
-    //         pickler.Clone state input
-
-    //     )
-
-    let shipProcess = BaseProcess(fun _ -> processNodeSimple, "", id)
-    let simpleProcess = BaseProcess(fun _ -> processNodeSimple, "", id)
+    let shipProcess = BaseProcess()
+    let simpleProcess = BaseProcess()
 
     let staticModifierCategory (modifiers : (string * ModifierCategory) list) (node : Node) =
         node.Values |> List.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
