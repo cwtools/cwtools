@@ -103,7 +103,7 @@ type ValidationManager<'T when 'T :> ComputedData>
             else OK
         let vs = if settings.debugRulesOnly then typeVs else vs <&&> typeVs
         log (sprintf "Localisation check took %ims" timer.ElapsedMilliseconds)
-        logDiag (sprintf "%A" vs)
+        // logDiag (sprintf "%A" vs)
         ((vs) |> (function Invalid (_ , es) -> es |_ -> []))
 
     let createScopeContextFromReplace (rep : ReplaceScopes option) =
