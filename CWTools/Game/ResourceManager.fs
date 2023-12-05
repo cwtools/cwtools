@@ -455,7 +455,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
                         then
                             let scriptName = n.TagText "script"
-                            let values = n.Leaves |> Seq.map (fun l -> l.Key, l.ValueText) |> List.ofSeq
+                            let values = n.Leaves |> Seq.map (fun l -> "$"+l.Key+"$", l.ValueText) |> List.ofSeq
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
