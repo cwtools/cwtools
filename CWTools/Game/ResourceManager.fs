@@ -425,7 +425,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             entitiesMap |> Map.toSeq |> Seq.map snd |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
-            |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.entity))
+            |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.rawEntity))
             // |> Seq.map (fun (x, e) -> log x; (x, e))
             |> Map.ofSeq
         let keyId = StringResource.stringManager.InternIdentifierToken "inline_script"
@@ -454,7 +454,8 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             node.Children |> List.iter (foldOverNode stringReplacer)
                         if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
                         then
-                            let scriptName = n.TagText "script"
+                            let scriptName = (n.TagText "script")
+                            
                             let values = n.Leaves |> Seq.map (fun l -> "$"+l.Key+"$", l.ValueText) |> List.ofSeq
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode ->
@@ -491,7 +492,14 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         news
         |> Seq.map (function
                 |(resource, Some struct(oldE, oldLazy)) ->
-                    let updatedE = updateEntity oldE
+                    let maxIter = 5
+                    let rec updateInner entity i =
+                        match i, updateEntity entity with
+                        | i, Some newEntity when i = maxIter -> Some newEntity
+                        | i, Some newEntity -> updateInner ({ entity with entity = newEntity }) (i + 1)
+                        | 0, None -> None
+                        | _, None -> Some entity.entity
+                    let updatedE = updateInner oldE 0
                     match updatedE with
                     |Some newNode ->
                         let newE = { oldE with entity = newNode }
