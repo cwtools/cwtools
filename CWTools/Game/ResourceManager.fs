@@ -443,6 +443,13 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
                 let childFun (child : Child) =
+                    let addTrivia =
+                        function
+                        | NodeC n -> n.Trivia <- Some { originalSource = Some node.Position }
+                        | LeafC l -> l.Trivia <- Some { originalSource = Some node.Position }
+                        | LeafValueC lv -> lv.Trivia <- Some { originalSource = Some node.Position }
+                        | ValueClauseC vc -> vc.Trivia <- Some { originalSource = Some node.Position }
+                        | CommentC _ -> ()
                     match child with
                     |NodeC n ->
                         let stringReplace (isParams : (string * string) list) (key : string) =
@@ -452,13 +459,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.Children |> List.iter (foldOverNode stringReplacer)
-                        let addTrivia =
-                            function
-                            | NodeC n -> n.Trivia <- Some { originalSource = Some node.Position }
-                            | LeafC l -> l.Trivia <- Some { originalSource = Some node.Position }
-                            | LeafValueC lv -> lv.Trivia <- Some { originalSource = Some node.Position }
-                            | ValueClauseC vc -> vc.Trivia <- Some { originalSource = Some node.Position }
-                            | CommentC _ -> ()
+
                             
                         if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
                         then
@@ -483,7 +484,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
-                                newScriptNode.All |> Seq.ofList
+                                newScriptNode.All |> Seq.map (fun x -> addTrivia x ; x)
                             // |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))]
                         else
