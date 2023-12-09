@@ -415,7 +415,7 @@ type RuleValidationService
         | newErrors, None -> oldErrors <&&> newErrors
         | Invalid(guid, cwErrors), Some source ->
             let updatedErrors = cwErrors |> List.map (fun e -> {e with relatedErrors = Some [{ location = source; message = "Related source" }] })
-            let markerError = invManual (ErrorCodes.RulesError "Marker error" severity) source "test" None
+            let markerError = invManual (ErrorCodes.InlineScriptResultsInError severity) source "inline_script" None
             let markerError = { markerError with relatedErrors = Some (updatedErrors |> List.map (fun x -> { location = x.range; message = x.message })) }
             oldErrors <&&> Invalid(Guid.NewGuid(), markerError :: updatedErrors)
 
