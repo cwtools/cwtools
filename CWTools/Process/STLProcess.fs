@@ -112,16 +112,14 @@ module STLProcess =
     let shipProcess = BaseProcess()
     let simpleProcess = BaseProcess()
 
-    let staticModifierCategory (modifiers : (string * ModifierCategory) list) (node : Node) =
-        node.Values |> List.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
-                    |> List.map (fun v -> List.tryPick (function |(m, c) when m = v.Key -> Some c |_ -> None) modifiers)
-                    |> List.choose id
-                    // |> List.collect id
-                    |> List.distinct
+    let staticModifierCategory (modifiers : System.Linq.ILookup<string,ModifierCategory>) (node : Node) =
+        node.Values |> Seq.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
+                    |> Seq.filter (fun v -> modifiers.Contains v.Key)
+                    |> Seq.collect (fun v -> modifiers[v.Key])
+                    |> Seq.distinct
 
-    let getStaticModifierCategory (modifiers : ActualModifier list) (node : Node) =
-        let modifiers2 = modifiers |> List.map (fun t -> t.tag, t.category)
-        let categories = staticModifierCategory modifiers2 node
+    let getStaticModifierCategory modifierMap (node : Node) =
+        let categories = staticModifierCategory modifierMap node |> List.ofSeq
         {tag = node.Key; categories = categories }
 
 

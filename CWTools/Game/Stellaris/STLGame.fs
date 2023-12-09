@@ -67,7 +67,9 @@ module STLGameFunctions =
             game.Resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
             |> List.collect (fun n -> n.Children)
-        let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory game.Settings.embedded.modifiers e)
+            
+        let modifiers2 = System.Linq.Enumerable.ToLookup(game.Settings.embedded.modifiers, (fun x -> x.tag), (fun x -> x.category))
+        let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers2 e)
         game.Lookup.staticModifiers <- newModifiers
 
     let updateScriptedLoc (game : GameObject) =
