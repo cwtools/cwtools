@@ -416,6 +416,7 @@ type RuleValidationService
         | Invalid(guid, cwErrors), Some source ->
             let updatedErrors = cwErrors |> List.map (fun e -> {e with relatedErrors = Some [{ location = source; message = "Related source" }] })
             let markerError = invManual (ErrorCodes.RulesError "Marker error" severity) source "test" None
+            let markerError = { markerError with relatedErrors = Some (updatedErrors |> List.map (fun x -> { location = x.range; message = x.message })) }
             oldErrors <&&> Invalid(Guid.NewGuid(), markerError :: updatedErrors)
 
     and applyValueClauseRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rules : NewRule list) (valueclause : ValueClause) errors =
