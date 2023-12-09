@@ -443,12 +443,12 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
             let leafScriptRefs = allScriptRefs |> List.choose (function |LeafC l -> Some l |_ -> None)
             let rec replaceCataFun (node : Node) =
                 let childFun (child : Child) =
-                    let addTrivia =
+                    let addTrivia originalPosition =
                         function
-                        | NodeC n -> n.Trivia <- Some { originalSource = Some node.Position }
-                        | LeafC l -> l.Trivia <- Some { originalSource = Some node.Position }
-                        | LeafValueC lv -> lv.Trivia <- Some { originalSource = Some node.Position }
-                        | ValueClauseC vc -> vc.Trivia <- Some { originalSource = Some node.Position }
+                        | NodeC n -> n.Trivia <- Some { originalSource = Some originalPosition }
+                        | LeafC l -> l.Trivia <- Some { originalSource = Some originalPosition }
+                        | LeafValueC lv -> lv.Trivia <- Some { originalSource = Some originalPosition }
+                        | ValueClauseC vc -> vc.Trivia <- Some { originalSource = Some originalPosition }
                         | CommentC _ -> ()
                     match child with
                     |NodeC n ->
@@ -470,7 +470,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
-                                newScriptNode.All |> Seq.map (fun x -> addTrivia x ; x)
+                                newScriptNode.All |> Seq.map (fun x -> addTrivia n.Position x ; x)
                             // |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position))]
                         else
@@ -484,7 +484,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
-                                newScriptNode.All |> Seq.map (fun x -> addTrivia x ; x)
+                                newScriptNode.All |> Seq.map (fun x -> addTrivia l.Position x ; x)
                             // |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position))]
                         else

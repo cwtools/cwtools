@@ -44,7 +44,7 @@ type CWError = {
     keyLength : int
     message : string
     data : string option
-    relatedErrors : CWRelatedError option
+    relatedErrors : CWRelatedError list option
     }
 
 type CachedRuleMetadata = {

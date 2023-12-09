@@ -139,7 +139,7 @@ module CommonValidation =
                     }
                     res |> (function
                             | OK -> OK
-                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some [message]})))
                 let memoizeValidation =
                     let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
                     let memFun = validateSESpecific
@@ -224,7 +224,7 @@ module CommonValidation =
                     }
                     res |> (function
                             | OK -> OK
-                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some [message] })))
                 let memoizeValidation =
                     let keyFun = (fun (_, _, (node : Node), _, (isParams)) -> (node.Position, isParams))
                     let memFun = validateISSpecific
@@ -307,7 +307,7 @@ module CommonValidation =
                     res |> (function
                             | OK -> OK
                             | Invalid (_, inv) ->
-                                Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
+                                Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some [message] })))
 //                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
                 let memoizeValidation =
                     let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
