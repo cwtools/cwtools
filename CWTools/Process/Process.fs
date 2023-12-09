@@ -26,11 +26,14 @@ module List =
     | Some ls -> ls
     | None -> add::xs
 
-
+type Trivia = {
+    originalSource : range option
+}
 type IKeyPos =
     abstract member Key : string
     abstract member KeyId : StringTokens
     abstract member Position : range
+    abstract member Trivia : Trivia option with get, set
 
 type IClause =
     inherit IKeyPos
@@ -52,6 +55,7 @@ and Leaf =
     val mutable private _value : Value
     val mutable Position : range
     val mutable Operator : Operator
+    val mutable Trivia : Trivia option
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
@@ -70,6 +74,7 @@ and Leaf =
             _value = value;
             Position = pos;
             Operator = op
+            Trivia = None
             }
     //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
     new(keyvalueitem : KeyValueItem, ?pos : range) =
@@ -81,8 +86,9 @@ and Leaf =
         member this.Key = this.Key
         member this.KeyId = this.KeyId
         member this.Position = this.Position
+        member this.Trivia with get () = this.Trivia and set v = this.Trivia <- v
 and LeafValue(value : Value, ?pos : range) =
-
+    member val Trivia : Trivia option = None with get, set
     member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToString()) with get, set
     member val private _value = value with get, set
     // val mutable private _value : Value = value
@@ -99,6 +105,7 @@ and LeafValue(value : Value, ?pos : range) =
         member this.Key = this.Key
         member this.KeyId = this.ValueId
         member this.Position = this.Position
+        member this.Trivia with get () = this.Trivia and set v = this.Trivia <- v
 
 
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : (range * string) |LeafValueC of leafvalue : LeafValue |ValueClauseC of valueclause : ValueClause
@@ -117,6 +124,7 @@ and ValueClause(keys : Value[], pos : range) =
 
     member val Position = pos
     member val Scope : Scope = scopeManager.AnyScope with get, set
+    member val Trivia : Trivia option = None with get, set
     member __.AllChildren with get () = all |> ResizeArray<Child>
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
     member __.AllArray with get () = all
@@ -161,6 +169,7 @@ and ValueClause(keys : Value[], pos : range) =
         member this.Key = this.FirstKey |> Option.defaultValue "clause"
         member this.KeyId = this.FirstKeyId |> Option.defaultValue (StringResource.stringManager.InternIdentifierToken(""))
         member this.Position = this.Position
+        member this.Trivia with get () = this.Trivia and set v = this.Trivia <- v
 
     interface IClause with
         member this.Nodes = this.Nodes
@@ -195,6 +204,7 @@ and Node (key : string, pos : range) =
 
     member val Position = pos
     member val Scope : Scope = scopeManager.AnyScope with get, set
+    member val Trivia : Trivia option = None with get, set
 
     member val KeyPrefixId : StringTokens option = None with get, set
     member this.KeyPrefix
@@ -253,6 +263,7 @@ and Node (key : string, pos : range) =
         member this.Key = this.Key
         member this.KeyId = this.KeyId
         member this.Position = this.Position
+        member this.Trivia with get () = this.Trivia and set v = this.Trivia <- v
     interface IClause with
         member this.Nodes = this.Nodes
         member this.Leaves = this.Leaves

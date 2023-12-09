@@ -452,6 +452,14 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.Children |> List.iter (foldOverNode stringReplacer)
+                        let addTrivia =
+                            function
+                            | NodeC n -> n.Trivia <- Some { originalSource = Some node.Position }
+                            | LeafC l -> l.Trivia <- Some { originalSource = Some node.Position }
+                            | LeafValueC lv -> lv.Trivia <- Some { originalSource = Some node.Position }
+                            | ValueClauseC vc -> vc.Trivia <- Some { originalSource = Some node.Position }
+                            | CommentC _ -> ()
+                            
                         if nodeScriptRefs |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
                         then
                             let scriptName = (n.TagText "script")
@@ -461,7 +469,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                             |Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
-                                newScriptNode.All |> Seq.ofList
+                                newScriptNode.All |> Seq.map (fun x -> addTrivia x ; x)
                             // |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             |_ -> [LeafValueC (LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position))]
                         else

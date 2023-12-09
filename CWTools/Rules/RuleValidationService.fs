@@ -377,36 +377,45 @@ type RuleValidationService
                     |None -> newctx
                 |None ->
                     ctx
-        (match options.requiredScopes with
-        |[] -> OK
-        |xs ->
-            match ctx.scopes.CurrentScope with
-            |x when x = anyScope  -> OK
-            |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node]))
-        <&&>
-        match rule with
-        |IgnoreField _ -> OK
-        |ScopeField s ->
-            let scope = newCtx.scopes
-            let key = node.Key.Trim('"')
-            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope, (stringManager.GetMetadataForID (node.KeyId.lower)).containsDoubleDollar with
-            |_, true ->
-                let newCtx = { newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
-                applyClauseField enforceCardinality options.severity newCtx rules node errors
-            |NewScope (newScopes ,_, _), _ ->
-                let newCtx = {newCtx with scopes = newScopes}
-                applyClauseField enforceCardinality options.severity newCtx rules node errors
-            |NotFound _, _  ->
-                inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
-            |WrongScope (command, prevscope, expected, _), _  ->
-                inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node <&&&> errors
-            |VarFound, _  ->
-                let newCtx = {newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes }}
-                applyClauseField enforceCardinality options.severity newCtx rules node errors
-            |VarNotFound v, _ ->
-                inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node <&&&> errors
-            |_ -> inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node <&&&> errors
-        |_ -> applyClauseField enforceCardinality options.severity newCtx rules node errors
+        let oldErrors = errors
+        let errors = OK
+        let newErrors =
+            (match options.requiredScopes with
+            |[] -> OK
+            |xs ->
+                match ctx.scopes.CurrentScope with
+                |x when x = anyScope  -> OK
+                |s -> if List.exists (fun x -> s.IsOfScope x) xs then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesRuleWrongScope (s.ToString()) (xs |> List.map (fun f -> f.ToString()) |> String.concat ", ") (node.Key)) node]))
+            <&&>
+            match rule with
+            |IgnoreField _ -> OK
+            |ScopeField s ->
+                let scope = newCtx.scopes
+                let key = node.Key.Trim('"')
+                match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope, (stringManager.GetMetadataForID (node.KeyId.lower)).containsDoubleDollar with
+                |_, true ->
+                    let newCtx = { newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes}}
+                    applyClauseField enforceCardinality options.severity newCtx rules node errors
+                |NewScope (newScopes ,_, _), _ ->
+                    let newCtx = {newCtx with scopes = newScopes}
+                    applyClauseField enforceCardinality options.severity newCtx rules node errors
+                |NotFound _, _  ->
+                    inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
+                |WrongScope (command, prevscope, expected, _), _  ->
+                    inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node <&&&> errors
+                |VarFound, _  ->
+                    let newCtx = {newCtx with scopes = { newCtx.scopes with Scopes = anyScope::newCtx.scopes.Scopes }}
+                    applyClauseField enforceCardinality options.severity newCtx rules node errors
+                |VarNotFound v, _ ->
+                    inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node <&&&> errors
+                |_ -> inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node <&&&> errors
+            |_ -> applyClauseField enforceCardinality options.severity newCtx rules node errors
+        match newErrors, node.Trivia |> Option.bind (_.originalSource) with
+        | OK, _ -> oldErrors
+        | newErrors, None -> oldErrors <&&> newErrors
+        | Invalid(guid, cwErrors), Some source ->
+            let updatedErrors = cwErrors |> List.map (fun e -> {e with relatedErrors = Some { location = source; message = "Related source" } })
+            oldErrors <&&> Invalid(Guid.NewGuid(), updatedErrors)
 
     and applyValueClauseRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rules : NewRule list) (valueclause : ValueClause) errors =
         let severity = options.severity |> Option.defaultValue (if ctx.warningOnly then Severity.Warning else Severity.Error)
@@ -450,7 +459,7 @@ type RuleValidationService
         let results =
             subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
                      |> List.filter (fun st -> st.startsWith |> function | Some sw -> node.Key.StartsWith(sw, StringComparison.OrdinalIgnoreCase) | None -> true )
-                    |> List.map (fun s -> s, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node OK)
+                    |> List.map (fun s -> s, applyClauseField false None {subtypes = []; scopes = defaultContext; warningOnly = false; } (s.rules) node OK)
         let res = results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some (s))
         let allSubtypes = res |> List.map (fun s -> s.name)
         let checkOnlyNotIf (s : SubTypeDefinition) = s.onlyIfNot |> List.exists (fun s2 -> List.contains s2 allSubtypes) |> not
@@ -474,7 +483,7 @@ type RuleValidationService
                 else
                     replaceContext 
             |None, None -> defaultContext
-        let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
+        let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly; }
         applyNodeRule true context options (SpecificField(SpecificValue rootId)) rules node OK
 
     let rootTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file)
@@ -527,7 +536,7 @@ type RuleValidationService
         res <&&> rootres
 
 
-    member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } CWTools.Rules.RulesParser.defaultOptions (SpecificField(SpecificValue rootId)) rule node OK
+    member this.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false; } CWTools.Rules.RulesParser.defaultOptions (SpecificField(SpecificValue rootId)) rule node OK
     member this.TestSubType(subtypes, node) = testSubtype subtypes node
     member this.RuleValidate() = (fun _ (es : EntitySet<_>) -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate)
     member this.RuleValidateEntity = (fun e -> validate (e.logicalpath, e.entity))
