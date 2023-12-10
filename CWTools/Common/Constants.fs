@@ -422,7 +422,7 @@ module rec NewScope =
         member this.AnyModifier = anyModifier
         member this.InvalidModifiere = invalidModifier
         member this.ParseModifier = parseModifierCategory
-        member this.ReInit(modifiers: ModifierCategoryInput list) = init (modifiers)
+        member this.ReInit(modifiers: ModifierCategoryInput list) = init modifiers
 
         member this.SupportsScope (source: ModifierCategory) (target: Scope) =
             match Set.contains (source, target) matchesSet, source, target with

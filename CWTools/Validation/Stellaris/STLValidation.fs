@@ -81,7 +81,7 @@ module STLValidation =
         fun _ es ->
             let ships =
                 es.AllOfTypeChildren EntityType.Events
-            ships <&!&> (fun s -> (validateEventValsInternal) s)
+            ships <&!&> (fun s -> validateEventValsInternal s)
     let stellarisEventPreTriggers =
         [|
             "has_owner"
@@ -163,7 +163,7 @@ module STLValidation =
 
     let valButtonEffects : STLStructureValidator =
         fun os es ->
-            let effects = (os.GlobMatchChildren("**/common/button_effects/*.txt"))
+            let effects = os.GlobMatchChildren("**/common/button_effects/*.txt")
                             |> List.map (fun e -> e.Key)
             let buttons = es.AllOfTypeChildren EntityType.Interface
             let fNode = (fun (x : Node) children ->
@@ -297,7 +297,7 @@ module STLValidation =
             (fun k ->
             [
                 yield {ActualModifier.tag = "country_resource_max_"+k+"_add"; category = modifierCategoryManager.ParseModifier() "Countries" }
-                yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f (k)))
+                yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f k))
                 yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f ("_"+k)))
             ])
 
@@ -362,7 +362,7 @@ module STLValidation =
                             |> List.filter (fun s -> not (s.Has "uses_modifiers"))
                             |> List.map (fun s -> s.Has "robotic", s.Key)
         let speciesModifiersCreate =
-            (fun ((robotic : bool), k) ->
+            (fun (robotic : bool, k) ->
                [
                   yield {ActualModifier.tag = k+"_species_trait_points_add"; category = modifierCategoryManager.ParseModifier() "Countries" }
                   yield {ActualModifier.tag = k+"_pop_happiness"; category = modifierCategoryManager.ParseModifier() "Pops" }
@@ -410,7 +410,7 @@ module STLValidation =
             let getPrereqGen (e : Entity) : obj list =
                 if List.contains e.entityType [EntityType.Buildings; EntityType.ShipSizes; EntityType.SectionTemplates; EntityType.ComponentTemplates;
                                                 EntityType.StrategicResources; EntityType.Armies; EntityType.Edicts; EntityType.TileBlockers; EntityType.Deposits; EntityType.Decisions; EntityType.Traits]
-                then List.collect getPrereqs (e.entity.Children)
+                then List.collect getPrereqs e.entity.Children
                 else []
 
             // let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings// |> List.collect getPrereqs
@@ -426,7 +426,7 @@ module STLValidation =
             let allPrereqs = os.AddOrGetCached "techprereqs" getPrereqGen |> List.map (fun s -> s :?> string) |> Set.ofList
             let hastechs = (es.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs)) @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
             // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let allPrereqs = (hastechs) |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
+            let allPrereqs = hastechs |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
             //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
             // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -450,7 +450,7 @@ module STLValidation =
                 let isWeightZero = t.Tag "weight" |> (function |Some (Value.Int 0) -> true |_ -> false)
                 let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00m) -> true |_ -> false)) |> Option.defaultValue false
                 let hasFeatureFlag = t.Has "feature_flags"
-                if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnusedTech (t.Key)) t])
+                if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnusedTech t.Key) t])
             let res = techs <&!&> inner
             // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             res
@@ -489,7 +489,7 @@ module STLValidation =
                 | _ -> None
             let sectionInfo = section_templates |> List.choose getSectionInfo |> Map.ofList
 
-            let validateComponent (section : string) (sectionMap : Collections.Map<string, (string * string)>) (c : Node) =
+            let validateComponent (section : string) (sectionMap : Collections.Map<string, string * string>) (c : Node) =
                 let slot = c.TagText "slot"
                 let slotFound = sectionMap |> Map.tryFind slot
                 let template = c.TagText "template"
@@ -557,7 +557,7 @@ module STLValidation =
 
     let validateIfElse210 : STLStructureValidator =
         fun _ es ->
-            let codeBlocks = (es.AllEffects)// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let codeBlocks = es.AllEffects// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "limit" || x.Key == "modifier" then OK else
@@ -570,7 +570,7 @@ module STLValidation =
 
     let validateIfElse : STLStructureValidator =
         fun _ es ->
-            let codeBlocks = (es.AllEffects)
+            let codeBlocks = es.AllEffects
             let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "if" && x.Has "else" && not(x.Has "if") then
@@ -587,7 +587,7 @@ module STLValidation =
                                 |y when y == "else" || y == "else_if" ->
                                     false, Some (Invalid (Guid.NewGuid(), [inv ErrorCodes.IfElseOrder x]))
                                 |_ -> false, None
-                        let _, res = nodes |> List.fold (fun (s, (r : ValidationResult option)) n -> if r.IsSome then s, r else checkNext s n) (false, None)
+                        let _, res = nodes |> List.fold (fun (s, r : ValidationResult option) n -> if r.IsSome then s, r else checkNext s n) (false, None)
                         match res with |None -> children |Some r -> r <&&> children
                 )
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
@@ -596,7 +596,7 @@ module STLValidation =
 
     let validateDeprecatedSetName : STLStructureValidator =
         fun _ es ->
-            let effects = (es.AllEffects)
+            let effects = es.AllEffects
             let fNode =
                 fun (x : Node) children ->
                     if x.Key == "set_empire_name" || x.Key == "set_planet_name" then

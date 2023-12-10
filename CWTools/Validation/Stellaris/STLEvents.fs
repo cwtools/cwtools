@@ -20,8 +20,8 @@ module STLEventValidation =
     type Vertex<'a> = {string: 'a}
     let connectedComponents (g : 'a Graph) =
         match g with
-        |(_, []) -> []
-        |(_, es) ->
+        |_, [] -> []
+        |_, es ->
             let edges = List.map ((fun x -> ({string = fst x}, {string = snd x})) >> Edge<Vertex<'a>>) es
             let undirGraph = edges.ToUndirectedGraph()
             let algo = QuickGraph.Algorithms.ConnectedComponents.ConnectedComponentsAlgorithm(undirGraph)
@@ -61,7 +61,7 @@ module STLEventValidation =
         let projectKeys = ["on_success"; "on_fail"; "on_start"; "on_progress_25"; "on_progress_50"; "on_progress_75";]
         let getProjectTarget (n : Node) =
             n.Children |> List.filter (fun c -> List.contains c.Key projectKeys) |> List.collect (foldNode7 fNode)
-        let projectTargets = projects |> List.filter (fun (_, pk) -> List.contains (pk) referencedProjects) |> List.collect (fun (p, _) -> getProjectTarget p)
+        let projectTargets = projects |> List.filter (fun (_, pk) -> List.contains pk referencedProjects) |> List.collect (fun (p, _) -> getProjectTarget p)
         //log "%s proj targets %A" (event.ID) projectTargets
         directCalls @ projectTargets
 
@@ -142,7 +142,7 @@ module STLEventValidation =
                // log "%A" ret
                 ret
 
-        let getExistsTargets (currentx) (ids : string list) =
+        let getExistsTargets currentx (ids : string list) =
             let inter = ids |> List.choose (fun x -> current |> List.tryPick (fun ((e2id, e2),_, _, u2, _, _ ,x2) -> if e2id = x then Some (u2, x2) else None))
             let all = inter |> List.fold (fun xs (u, x) -> Set.union(Set.union u x) xs) currentx
             let ret = inter |> List.fold (fun xs (u, x) -> xs |> Set.toList |> List.fold (fun nxs nx -> if Set.contains nx u && not(Set.contains nx x) then nxs else nx::nxs) [] |> Set.ofList) all
@@ -156,16 +156,16 @@ module STLEventValidation =
             Set.difference (Set.union u (getRequiredTargets r)) os,
             r,
             ox,
-            Set.union x (getExistsTargets (x) r)
+            Set.union x (getExistsTargets x r)
         let mutable i = 0
 
-        let step (es) =
+        let step es =
             //log "%A" current
             i <- i + 1
             let before = current
             current <- es |> List.map update
             current = before || i > 100
-        while (not(step current)) do ()
+        while not(step current) do ()
         //current |> List.iter (fun (e, s, u, r) -> log "event %s has %A and needs %A" (e.ID) s u)
 
         // let getSourceSetTargets (ids : string list) =
@@ -174,50 +174,50 @@ module STLEventValidation =
         //     |[] -> Set.empty
         //     | xs -> xs |> List.map inner |> List.reduce (Set.intersect)
         let getSourceSetTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun ((e2id, e2), _, s2, _, r2,_, _) ->  if List.contains x r2 && e2id <> x then Some (s2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun ((e2id, e2), _, s2, _, r2,_, _) ->  if List.contains x r2 && e2id <> x then Some s2 else None))
             inner id
 
         let getSourceExistsTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun ((e2id, e2), _, _, _, r2,_, x2) -> if List.contains x r2 && e2id <> x then Some (x2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun ((e2id, e2), _, _, _, r2,_, x2) -> if List.contains x r2 && e2id <> x then Some x2 else None))
             inner id
 
-        let downOptimistic (((eid, e) : (string * Node)), os, s, u, r, ox, x) =
+        let downOptimistic ((eid, e) : string * Node, os, s, u, r, ox, x) =
             (eid, e),
             os,
-            Set.union os (getSourceSetTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.union) f)),
+            Set.union os (getSourceSetTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce Set.union f)),
             u,
             r,
             ox,
             //x
-            Set.union x (getSourceExistsTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.union) f))
+            Set.union x (getSourceExistsTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce Set.union f))
         let mutable i = 0
 
-        let step (es) =
+        let step es =
             //log "%A" current
             i <- i + 1
             let before = current
             current <- es |> List.map downOptimistic
             current = before || i > 100
-        while (not(step current)) do ()
+        while not(step current) do ()
 
-        let downPessimistic (((eid, e) : (string * Node)), os, s, u, r, ox, x) =
+        let downPessimistic ((eid, e) : string * Node, os, s, u, r, ox, x) =
             (eid, e),
             os,
-            Set.union os (getSourceSetTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f)),
+            Set.union os (getSourceSetTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce Set.intersect f)),
             u,
             r,
             ox,
             //x
-            Set.union x (getSourceExistsTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f))
+            Set.union x (getSourceExistsTargets eid |> (fun f -> if List.isEmpty f then Set.empty else List.reduce Set.intersect f))
         let mutable i = 0
 
-        let step (es) =
+        let step es =
             //log "%A" i
             i <- i + 1
             let before = current
             current <- es |> List.map downPessimistic
             current = before || i > 100
-        while (not(step current)) do ()
+        while not(step current) do ()
         //current |> List.iter (fun (e, s, u, r) -> log "event %s has %A and needs %A" (e.ID) s u)
        // current |> List.iter (fun (e, s, u, r) -> log "event %s is missing %A" (e.ID) (Set.difference u s))
        // current |> List.iter (fun (e, os, s, u, r, ox, x) -> log "%s %A %A %A %A" e.ID s u r x;)
@@ -226,12 +226,12 @@ module STLEventValidation =
         let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) ->
                                                     not(Set.difference (Set.difference u s) globals |> Set.isEmpty)
                                                     && (Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let createError ((eid, e) : (string * Node), os, s, u, _, _, x) =
+        let createError ((eid, e) : string * Node, os, s, u, _, _, x) =
              let needed = Set.difference (Set.difference u (Set.union s x)) globals |> Set.toList |> String.concat ", "
-             Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnsavedEventTarget (eid) needed) e])
-        let createWarning ((eid, e) : (string * Node), os, s, u, _, _, _) =
+             Invalid (Guid.NewGuid(), [inv (ErrorCodes.UnsavedEventTarget eid needed) e])
+        let createWarning ((eid, e) : string * Node, os, s, u, _, _, _) =
              let needed = Set.difference (Set.difference u s) globals |> Set.toList |> String.concat ", "
-             Invalid (Guid.NewGuid(), [inv (ErrorCodes.MaybeUnsavedEventTarget (eid) needed) e])
+             Invalid (Guid.NewGuid(), [inv (ErrorCodes.MaybeUnsavedEventTarget eid needed) e])
         missing <&!&> createError
         <&&>
         (maybeMissing <&!&> createWarning)
@@ -245,21 +245,21 @@ module STLEventValidation =
             let eids = events |> List.map (fun e -> e.TagText "id", e) |> Map.ofList
             let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
             let projectsWithTags = projects |> List.map (fun p -> p, p.TagText("key"))
-            let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.TagText "id", f))
+            let chains = events |> List.collect (fun event -> findAllReferencedEvents projectsWithTags event |> List.map (fun f -> event.TagText "id", f))
                         |> List.filter (fun (_, f) -> Map.containsKey f eids)
                         //|> (fun f -> log "%A" f; f)
                         |> List.collect(fun (s, t) -> [s,t; t,s])
                         //|> (fun f -> log "%A" f; f)
                         //|> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
-                        |> (fun es -> ((events |> List.map (fun f -> f.TagText "id"), es)))
+                        |> (fun es -> (events |> List.map (fun f -> f.TagText "id"), es))
                         |> connectedComponents
                         //|> (fun f -> log "%A" f; f)
-                        |> List.map (fun set -> set |> List.map (fun (event) -> eids.[event] ))
+                        |> List.map (fun set -> set |> List.map (fun event -> eids.[event] ))
             if chains |> List.isEmpty then OK else
                 let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
                 let effects = os.AllEffects @ es.AllEffects
                 let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
-                let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
+                let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold Set.union Set.empty)
                 let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
                 //log "%s" (globals |> Set.toList |> String.concat ", ")
                 let filteredChains = chains |> List.choose (fun c -> if c.Length > 500 then None else Some c)

@@ -51,7 +51,7 @@ module VIC2GameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes;  }
-        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -94,7 +94,7 @@ module VIC2GameFunctions =
         match provinceFile with
         |None -> ()
         |Some pf ->
-            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let lines = pf.filetext.Split([|"\r\n"; "\r"; "\n"|], StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.VIC2provinces <- provinces
 
@@ -110,14 +110,14 @@ module VIC2GameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 let innerScope =
                     match o.pushScope with
                     | None ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
@@ -126,14 +126,14 @@ module VIC2GameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 let innerScope =
                     match o.pushScope with
                     | None ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
@@ -178,7 +178,7 @@ module VIC2GameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup : VIC2Lookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
-            (lookup.typeDefInfo)
+            lookup.typeDefInfo
             |> addModifiersAsTypes lookup
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
@@ -228,7 +228,7 @@ module VIC2GameFunctions =
         let vic2EventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
-                    |> Option.defaultValue ([])
+                    |> Option.defaultValue []
         let featureSettings =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
                     |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
@@ -336,11 +336,11 @@ type VIC2Game(setupSettings : VIC2Settings) =
     let parseErrors() =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
-            |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
+            |> List.choose (fun r -> r.result |> function |Fail result when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<VIC2ComputedData> with
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
+        member __.ValidationErrors() = let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
@@ -359,7 +359,7 @@ type VIC2Game(setupSettings : VIC2Settings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (VIC2 VIC2Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
+        member __.ReplaceConfigRules rules = game.ReplaceConfigRules { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false} //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()

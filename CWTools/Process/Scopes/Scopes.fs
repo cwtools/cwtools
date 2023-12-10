@@ -52,7 +52,7 @@ module Scopes =
         match scope with
         | None -> context
         | Some ps -> ps::context
-    let createJominiChangeScope (oneToOneScopes) (varPrefixFun : string -> string * bool) =
+    let createJominiChangeScope oneToOneScopes (varPrefixFun : string -> string * bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         let amp = [|'@'|]
@@ -73,7 +73,7 @@ module Scopes =
                 let keys = key.Split('.')
                 let keylength = keys.Length - 1
                 let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
-                let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) (last : bool) =
+                let inner (context : ScopeContext, changed : bool) (nextKey : string) (last : bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     // eprintfn "o2o %A" onetoone
                     match onetoone with
@@ -98,9 +98,9 @@ module Scopes =
                                 let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
                                 let refHint = e.RefHint
                                 match context.CurrentScope, possibleScopes, exact with
-                                | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound (refHint)
+                                | x, _, _ when x = source.Root.AnyScope -> (context, false), ValueFound refHint
                                 | _, [], _ -> (context, false), NotFound
-                                | _, _, true -> (context, false), ValueFound (refHint)
+                                | _, _, true -> (context, false), ValueFound refHint
                                 | current, ss, false -> (context, false), WrongScope (nextKey, current, ss, refHint)
                             else
                                 (context, false), NotFound
@@ -154,7 +154,7 @@ module Scopes =
                 // x
                 res2)
 
-    let createChangeScope (oneToOneScopes) (varPrefixFun : string -> string * bool) (hoi4TargetedHardcodedVariables : bool) =
+    let createChangeScope oneToOneScopes (varPrefixFun : string -> string * bool) (hoi4TargetedHardcodedVariables : bool) =
         // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
         // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun (varLHS : bool) (skipEffect : bool) (eventTargetLinks : EffectMap) (valueTriggers : EffectMap) (_ : ScopedEffect list) (vars : StringSet) (key : string) (source : ScopeContext) ->
@@ -165,7 +165,7 @@ module Scopes =
             then NewScope ({ Root = source.Root; From = source.From; Scopes = source.Root.AnyScope::source.Scopes }, [], None)
             else
                 let key, varOnly = varPrefixFun key
-                let inner ((context : ScopeContext), (first : bool, changed : bool)) (nextKey : string) (last : bool) =
+                let inner (context : ScopeContext, (first : bool, changed : bool)) (nextKey : string) (last : bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     match onetoone with
                     | Some (_, f) -> f (context, (first, false)), NewScope (f (context, (false, false)) |> fst, [], None)
@@ -188,9 +188,9 @@ module Scopes =
                                 let exact = possibleScopes |> List.exists (fun x -> currentScope.IsOfScope x)
                                 let refHint = e.RefHint
                                 match context.CurrentScope, possibleScopes, exact with
-                                | x, _, _ when x = source.Root.AnyScope -> (context, (false, false)), ValueFound (refHint)
+                                | x, _, _ when x = source.Root.AnyScope -> (context, (false, false)), ValueFound refHint
                                 | _, [], _ -> (context, (false, false)), NotFound
-                                | _, _, true -> (context, (false, false)), ValueFound (refHint)
+                                | _, _, true -> (context, (false, false)), ValueFound refHint
                                 | current, ss, false -> (context, (false, false)), WrongScope (nextKey, current, ss, refHint)
                             else
                                 (context, (false, false)), NotFound

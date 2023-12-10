@@ -46,7 +46,7 @@ module CK2GameFunctions =
     let updateScriptedLoc (game : GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some f.entity |_ -> None)
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
@@ -60,7 +60,7 @@ module CK2GameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
-        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -105,7 +105,7 @@ module CK2GameFunctions =
              | County, false -> (ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, value::cs, blls, bs)
              | Barony, true -> (ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, cs, value::blls, bs)
              | Barony, false -> (ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, cs, blls, value::bs)
-        let (ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, cs, blls, bs) = titles |> List.fold inner ([], [], [], [], [], [], [], [], [], [], [], [])
+        let ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, cs, blls, bs = titles |> List.fold inner ([], [], [], [], [], [], [], [], [], [], [], [])
         game.Lookup.CK2LandedTitles <-
             ((Empire, true), ells)::((Empire, false), es)::((Kingdom, true), klls)::((Kingdom, false), ks)
                 ::((Duchy_Normal, true), dnlls)::((Duchy_Normal, false), dns)
@@ -144,7 +144,7 @@ module CK2GameFunctions =
         match provinceFile with
         |None -> ()
         |Some pf ->
-            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let lines = pf.filetext.Split([|"\r\n"; "\r"; "\n"|], StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.CK2provinces <- provinces
 
@@ -196,7 +196,7 @@ module CK2GameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup : CK2Lookup) _ (embeddedSettings : EmbeddedSettings) =
         lookup.typeDefInfo <-
-            createLandedTitleTypes lookup (lookup.typeDefInfo)
+            createLandedTitleTypes lookup lookup.typeDefInfo
             |> addModifiersAsTypes lookup
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false
 
@@ -350,11 +350,11 @@ type CK2Game(setupSettings : CK2Settings) =
     let parseErrors() =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
-            |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
+            |> List.choose (fun r -> r.result |> function |Fail result when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<CK2ComputedData> with
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
+        member __.ValidationErrors() = let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
@@ -373,7 +373,7 @@ type CK2Game(setupSettings : CK2Settings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (CK2 CK2Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
+        member __.ReplaceConfigRules rules = game.ReplaceConfigRules { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false} //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()

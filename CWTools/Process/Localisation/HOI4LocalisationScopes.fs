@@ -17,7 +17,7 @@ module HOI4 =
 
     let locPrimaryScopes() =
         let from = fun (s, change) -> {s with Scopes = scopeManager.AnyScope::s.Scopes}, true
-        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
         [
         "This", id;
         "Root", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;

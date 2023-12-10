@@ -30,11 +30,11 @@ module CK2Localisation =
                         | c   -> c
 
 
-    let nonQuotedCellChar = escapeChar <|> (noneOf (";\r\n"))
+    let nonQuotedCellChar = escapeChar <|> (noneOf ";\r\n")
     let cellChar = escapeChar <|> (noneOf "\"")
     let skipSemicolons = skipMany (skipChar ';')
     // Trys to parse quoted cells, if that fails try to parse non-quoted cells
-    let cell = (between (skipChar '\"') (skipChar '\"') (manyChars cellChar) <|> manyChars (nonQuotedCellChar)) .>> skipSemicolons
+    let cell = (between (skipChar '\"') (skipChar '\"') (manyChars cellChar) <|> manyChars nonQuotedCellChar) .>> skipSemicolons
 
     let row = pipe5 cell cell cell cell cell (fun c e f g s -> { CSVLocRow.Code = c; English = e; French = f; German = g; Spanish = s } )
     let parseRow name text = runParserOnString row () name text
@@ -86,7 +86,7 @@ module CK2Localisation =
             //     | Failure msg ->
             //         (false, 0, msg, None)
 
-        let mutable results : Results = upcast new Dictionary<string, (bool * int * string * FParsec.Position option)>()
+        let mutable results : Results = upcast new Dictionary<string, bool * int * string * FParsec.Position option>()
         let addFiles (x : (string * string) list) = List.map (fun (fn, fs) -> (fn, addFile (fn, fs))) x
 
         let getForLang language (x : CSVLocRow) =
@@ -117,12 +117,12 @@ module CK2Localisation =
 
         let getDesc lang x =
             let one = csv |> Seq.tryFind ( snd >> (fun f -> f.Code = x)) |> Option.map snd
-            match (one) with
-            | (Some x) -> getForLang lang x
+            match one with
+            | Some x -> getForLang lang x
             | _ -> x
 
         do
-            results <- addFiles (files) |> dict
+            results <- addFiles files |> dict
         // do
         //     match Directory.Exists(localisationFolder) with
         //     | true ->

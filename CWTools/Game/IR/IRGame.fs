@@ -124,7 +124,7 @@ module IRGameFunctions =
         match provinceFile with
         |None -> ()
         |Some pf ->
-            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let lines = pf.filetext.Split([|"\r\n"; "\r"; "\n"|], StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.IRprovinces <- provinces
 
@@ -136,7 +136,7 @@ module IRGameFunctions =
         match characterFile with
         |None -> ()
         |Some pf ->
-            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let lines = pf.filetext.Split([|"\r\n"; "\r"; "\n"|], StringSplitOptions.None)
             let chars = lines |> Array.choose (fun l -> if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then None else l.Split([|','|], 3, StringSplitOptions.RemoveEmptyEntries) |> (fun a -> if a.Length > 1 then a |> Array.skip 1 |> Array.tryHead else None)) |> List.ofArray
             game.Lookup.IRcharacters <- chars
 
@@ -152,14 +152,14 @@ module IRGameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 let innerScope =
                     match o.pushScope with
                     | None ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
@@ -168,14 +168,14 @@ module IRGameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 let innerScope =
                     match o.pushScope with
                     | None ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
@@ -222,7 +222,7 @@ module IRGameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup : IRLookup) _ (embedded : EmbeddedSettings) =
         lookup.typeDefInfo <-
-            (lookup.typeDefInfo)
+            lookup.typeDefInfo
             |> addModifiersAsTypes lookup
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
@@ -278,14 +278,14 @@ module IRGameFunctions =
         let irEffects =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "effects.log")
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseEffectStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
-                    |> Option.map (JominiParser.processEffects (scopeManager.ParseScopes))
-                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in ir config"; ([]))
+                    |> Option.map (JominiParser.processEffects scopeManager.ParseScopes)
+                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in ir config"; [])
 
         let irTriggers =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "triggers.log")
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseTriggerStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.map (JominiParser.processTriggers scopeManager.ParseScopes)
-                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in ir config"; ([]))
+                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in ir config"; [])
         let jominiLocDataTypes =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "data_types.log")
                     |> Option.map (fun (fn, ft) -> DataTypeParser.parseDataTypesStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
@@ -394,11 +394,11 @@ type IRGame(setupSettings : IRSettings) =
     let parseErrors() =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
-            |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
+            |> List.choose (fun r -> r.result |> function |Fail result when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<IRComputedData> with
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
+        member __.ValidationErrors() = let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
@@ -417,7 +417,7 @@ type IRGame(setupSettings : IRSettings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (IR IRLang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
+        member __.ReplaceConfigRules rules = game.ReplaceConfigRules { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false} //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()

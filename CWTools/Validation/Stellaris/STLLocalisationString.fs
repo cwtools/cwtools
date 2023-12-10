@@ -85,7 +85,7 @@ module STLLocalisationString =
             |x when x.EndsWith("l_japanese",StringComparison.OrdinalIgnoreCase) -> true
             |x when x.EndsWith("l_korean",StringComparison.OrdinalIgnoreCase) -> true
             |_ -> false
-        match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
+        match keyToLanguage filename, Option.bind keyToLanguage fileHeader with
         |_ , Some STLLang.Default -> OK
         |_, None -> Invalid (Guid.NewGuid(), [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 1) "" None ])
         |None, _ -> Invalid (Guid.NewGuid(), [invManual ErrorCodes.MissingLocFileLang (rangeN file 1) "" None ])

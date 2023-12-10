@@ -18,7 +18,7 @@ type RulesSettings = {
 }
 
 type LocalisationEmbeddedSettings =
-| Legacy of (string * (Scope list)) list * string list * (string * Scope list * Scope) list
+| Legacy of (string * Scope list) list * string list * (string * Scope list * Scope) list
 | Jomini of CWTools.Parser.DataTypeParser.JominiLocDataTypes
 
 type EmbeddedSettings = {
@@ -49,8 +49,8 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> = {
     refreshConfigBeforeFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
     refreshConfigAfterFirstTypesHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
     refreshConfigAfterVarDefHook : 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
-    processLocalisation : 'L -> (Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>)
-    validateLocalisation : 'L -> (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
+    processLocalisation : 'L -> Lang * Collections.Map<string,CWTools.Localisation.Entry> -> Lang * Collections.Map<string,LocEntry>
+    validateLocalisation : 'L -> LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult
 }
 
 type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
@@ -95,7 +95,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     | Some v' -> Map.add k (v@v') s
                     | None -> Map.add k v s) newMap md.varDefs
 
-    let addEmbeddedLoc (langs) =
+    let addEmbeddedLoc langs =
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
@@ -170,7 +170,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst)))) |> Map.ofSeq
 
         /// First pass type defs
-        let loc = addEmbeddedLoc languages (localisation.localisationKeys)
+        let loc = addEmbeddedLoc languages localisation.localisationKeys
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofList)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -193,14 +193,14 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             tempTypeMap <- refreshTypeInfo()
             log (sprintf "Refresh types time: %i" timer.ElapsedMilliseconds); timer.Restart()
             tempTypeMap = before || i > 5
-        while (not(step())) do ()
+        while not(step()) do ()
 
         let tempRuleValidationService = RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap , settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
 
-        lookup.typeDefInfoForValidation <- lookup.typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun (tdi) -> if tdi.validate then Some (tdi.id, tdi.range) else None))
+        lookup.typeDefInfoForValidation <- lookup.typeDefInfo |> Map.map (fun _ v -> v |> List.choose (fun tdi -> if tdi.validate then Some (tdi.id, tdi.range) else None))
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
         tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id)))) |> Map.ofSeq
-        let tempInfoService = (InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup)))
+        let tempInfoService = InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, Collections.Map.empty, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, tempRuleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
 
 
         //let infoService = tempInfoService
@@ -215,7 +215,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         lookup.varDefInfo <- addEmbeddedVarDefData results
         // eprintfn "vdi %A" results
         let results = resources.AllEntities() |> PSeq.map (fun struct(e, l) -> (l.Force().SavedEventTargets |> (Option.defaultWith (fun () -> tempInfoService.GetSavedEventTargets e))))
-                        |> Seq.fold (fun (acc : ResizeArray<_>) e -> acc.AddRange((e)); acc ) (new ResizeArray<_>())
+                        |> Seq.fold (fun (acc : ResizeArray<_>) e -> acc.AddRange e; acc ) (new ResizeArray<_>())
         lookup.savedEventTargets <- results
                         //|> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) tempValues
         settings.refreshConfigAfterVarDefHook lookup resources embeddedSettings
@@ -226,11 +226,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let dataTypes = embeddedSettings.localisationCommands |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; confidentFunctions = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
 
-        let completionService = (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang, dataTypes, (settings.processLocalisation lookup), (settings.validateLocalisation lookup)))
+        let completionService = CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, [], settings.changeScope, settings.defaultContext, settings.anyScope, settings.oneToOneScopesNames, settings.defaultLang, dataTypes, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let ruleValidationService =  (RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup)))
+        let ruleValidationService =  RuleValidationService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, settings.anyScope, settings.changeScope, settings.defaultContext, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let infoService = (InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup)))
+        let infoService = InfoService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, varMap, loc, files, lookup.eventTargetLinksMap, lookup.valueTriggerMap, ruleValidationService, settings.changeScope, settings.defaultContext, settings.anyScope, settings.defaultLang, (settings.processLocalisation lookup), (settings.validateLocalisation lookup))
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
         debugChecks()

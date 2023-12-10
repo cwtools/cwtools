@@ -93,7 +93,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
             lookup = lookup
             ruleValidationService = ruleValidationService
             infoService = infoService
-            localisationKeys = (fun _ -> addEmbeddedLoc (settings.validation.langs) (localisationManager.LocalisationKeys()))
+            localisationKeys = (fun _ -> addEmbeddedLoc settings.validation.langs (localisationManager.LocalisationKeys()))
             fileManager = fileManager
         }
     let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), ErrorCache())
@@ -111,7 +111,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
         timer.Start()
         let res =
             match filepath with
-            | x when x.EndsWith (localisationExtension) ->
+            | x when x.EndsWith localisationExtension ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                 let resourceInput = LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
                 let resource, _ = this.Resources.UpdateFile(resourceInput)
@@ -127,16 +127,16 @@ type GameObject<'T, 'L when 'T :> ComputedData
             | _ ->
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
                 let resource = LanguageFeatures.makeEntityResourceInput fileManager filepath file
-                let newEntities = [this.Resources.UpdateFile (resource)] |> List.choose snd
+                let newEntities = [this.Resources.UpdateFile resource] |> List.choose snd
                 afterUpdateFile this filepath
                 match shallow with
                 | true ->
-                    let (shallowres, _) = (validationManager.Validate(shallow, newEntities))
+                    let shallowres, _ = validationManager.Validate(shallow, newEntities)
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     let deep = errorCache |> Map.tryFind filepath |> Option.defaultValue []
                     shallowres @ deep
                 | false ->
-                    let (shallowres, deepres) = (validationManager.Validate(shallow, newEntities))
+                    let shallowres, deepres = validationManager.Validate(shallow, newEntities)
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     errorCache <- errorCache.Add(filepath, deepres)
                     shallowres @ deepres
@@ -162,7 +162,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
                     |_ -> None
                     )
             resourceManager.Api.UpdateFiles(filteredfiles) |> ignore
-            log (sprintf "Parsed files in %A" (timer.ElapsedMilliseconds))
+            log (sprintf "Parsed files in %A" timer.ElapsedMilliseconds)
             timer.Restart()
             let embeddedFiles =
                 settings.embedded.embeddedFiles
@@ -179,7 +179,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
             let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
             let embedded = embeddedFiles @ cached
             if fileManager.ShouldUseEmbedded then resourceManager.Api.UpdateFiles(embedded) |> ignore else ()
-            log (sprintf "Parsed embedded in %A" (timer.ElapsedMilliseconds))
+            log (sprintf "Parsed embedded in %A" timer.ElapsedMilliseconds)
     let updateRulesCache() =
         let rules, info, completion = rulesManager.RefreshConfig()
         this.RuleValidationService <- Some rules
@@ -192,29 +192,29 @@ type GameObject<'T, 'L when 'T :> ComputedData
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         localisationManager.UpdateAllLocalisation()
-        log (sprintf "Loc updated in %A" (timer.ElapsedMilliseconds))
+        log (sprintf "Loc updated in %A" timer.ElapsedMilliseconds)
         timer.Restart()
         if settings.rules.IsSome then rulesManager.LoadBaseConfig(settings.rules.Value) else ()
-        log (sprintf "Rules loaded in %A" (timer.ElapsedMilliseconds))
+        log (sprintf "Rules loaded in %A" timer.ElapsedMilliseconds)
         timer.Restart()
         updateRulesCache()
-        log (sprintf "Rules cache updated in %A" (timer.ElapsedMilliseconds))
+        log (sprintf "Rules cache updated in %A" timer.ElapsedMilliseconds)
         timer.Restart()
         this.Resources.ForceRecompute()
-        log (sprintf "Resource recomputer in %A" (timer.ElapsedMilliseconds))
+        log (sprintf "Resource recomputer in %A" timer.ElapsedMilliseconds)
         timer.Restart()
         localisationManager.UpdateAllLocalisation()
-        log (sprintf "Loc updated again in %A" (timer.ElapsedMilliseconds))
+        log (sprintf "Loc updated again in %A" timer.ElapsedMilliseconds)
 
     do
         lookup.rootFolders <- settings.rootDirectories
         initialLoad()
 
     member __.RuleValidationService with get() = ruleValidationService
-    member __.RuleValidationService with set(value) = ruleValidationService <- value
+    member __.RuleValidationService with set value = ruleValidationService <- value
     // member val ruleValidationService : RuleValidationService<'S> option = None with get, set
     member __.InfoService with get() = infoService
-    member __.InfoService with set(value) = infoService <- value
+    member __.InfoService with set value = infoService <- value
     // member val infoService : InfoService<'S> option = None with get, set
     member val completionService : CompletionService option = None with get, set
 

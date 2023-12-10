@@ -7,23 +7,23 @@ open CWTools.Common
 
 let computeData (infoService : unit -> InfoService option) (e : Entity) =
     let withRulesData = infoService().IsSome
-    let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+    let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
     let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
         match res with
         | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
         | None -> (None, None, None, None, None)
-    let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+    let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
     ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
 let computeDataUpdate (infoService : unit -> InfoService option) (e : Entity) (data : ComputedData) =
     let withRulesData = infoService().IsSome
-    let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+    let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
     let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
         match res with
         | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
         | None -> (None, None, None, None, None)
 
-    let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+    let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
     data.Referencedtypes <- referencedtypes
     data.Definedvariables <- definedvariable
     data.SavedEventTargets <- savedEventTargets
@@ -43,7 +43,7 @@ module EU4 =
     open CWTools.Process.ProcessCore
 
     let getScriptedEffectParams (node : Node) =
-        let getDollarText (s : string) (acc) =
+        let getDollarText (s : string) acc =
             s.Split('$') |> Array.mapi (fun i s -> i, s) |> Array.fold (fun acc (i, s) -> if i % 2 = 1 then s::acc else acc ) acc
             // let split = s.Split([|'$'|],3)
             // if split.Length = 3 then split.[1]::acc else acc
@@ -56,11 +56,11 @@ module EU4 =
     let getScriptedEffectParamsEntity (e : Entity) =
         if (e.logicalpath.StartsWith("common/scripted_effects", StringComparison.OrdinalIgnoreCase)
                     || e.logicalpath.StartsWith("common/scripted_triggers", StringComparison.OrdinalIgnoreCase))
-                then getScriptedEffectParams (e.entity) else []
+                then getScriptedEffectParams e.entity else []
 
     let computeEU4Data (infoService : unit -> InfoService option) (e : Entity) =
         let withRulesData = infoService().IsSome
-        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
             | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
@@ -68,17 +68,17 @@ module EU4 =
         // let hastechs = getAllTechPrereqs e
         let scriptedeffectparams = Some (getScriptedEffectParamsEntity e)
 
-        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
         EU4ComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
     let computeEU4DataUpdate (infoService : unit -> InfoService option) (e : Entity) (data : EU4ComputedData) =
         let withRulesData = infoService().IsSome
-        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
             | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
             | None -> (None, None, None, None, None)
 
-        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
         data.Referencedtypes <- referencedtypes
         data.Definedvariables <- definedvariable
         data.SavedEventTargets <- savedEventTargets
@@ -112,7 +112,7 @@ module STL =
         let withRulesData = infoService().IsSome
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (fun ee -> if ee.Has "id" then Some (ee.TagText "id") else None) else []
         // let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
-        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
             | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
@@ -122,18 +122,18 @@ module STL =
         // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
         let hastechs = getAllTechPrereqs e
         let scriptedeffectparams = Some (EU4.getScriptedEffectParamsEntity e)
-        let referencedtypes = referencedtypes |> Option.map (fun r -> r |>  List.ofSeq |> List.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |>  List.ofSeq |> List.fold (fun acc kv -> acc |> (Map.add kv.Key kv.Value)) Map.empty )
         let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
         STLComputedData(eventIds, referencedtypes, hastechs, definedvariable, withRulesData, effectBlocks, triggersBlocks, scriptedeffectparams, savedEventTargets)
 
     let computeSTLDataUpdate (infoService : unit -> InfoService option) (e : Entity) (data : STLComputedData) =
         let withRulesData = infoService().IsSome
-        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
             | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
             | None -> (None, None, None, None, None)
-        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
 
         data.Referencedtypes <- referencedtypes
         data.Definedvariables <- definedvariable
@@ -148,7 +148,7 @@ module Jomini =
     open CWTools.Process.ProcessCore
 
     let getScriptedEffectParams (node : Node) =
-        let getDollarText (s : string) (acc) =
+        let getDollarText (s : string) acc =
             s.Split('$') |> Array.mapi (fun i s -> i, s) |> Array.fold (fun acc (i, s) -> if i % 2 = 1 then s::acc else acc ) acc
             // let split = s.Split([|'$'|],3)
             // if split.Length = 3 then split.[1]::acc else acc
@@ -161,11 +161,11 @@ module Jomini =
     let getScriptedEffectParamsEntity (e : Entity) =
         if (e.logicalpath.StartsWith("common/scripted_effects", StringComparison.OrdinalIgnoreCase)
                     || e.logicalpath.StartsWith("common/scripted_triggers", StringComparison.OrdinalIgnoreCase))
-                then getScriptedEffectParams (e.entity) else []
+                then getScriptedEffectParams e.entity else []
 
     let computeJominiData (infoService : unit -> InfoService option) (e : Entity) =
         let withRulesData = infoService().IsSome
-        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
             | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
@@ -173,17 +173,17 @@ module Jomini =
         // let hastechs = getAllTechPrereqs e
         let scriptedeffectparams = Some (getScriptedEffectParamsEntity e)
 
-        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
         JominiComputedData(referencedtypes, definedvariable, scriptedeffectparams, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
     let computeJominiDataUpdate (infoService : unit -> InfoService option) (e : Entity) (data : JominiComputedData) =
         let withRulesData = infoService().IsSome
-        let res = (if infoService().IsSome then Some ((infoService().Value.BatchFolds)(e)) else None)
+        let res = (if infoService().IsSome then Some (infoService().Value.BatchFolds(e)) else None)
         let referencedtypes, definedvariable, effectBlocks, triggersBlocks, savedEventTargets =
             match res with
             | Some (r, d, (e, _), (t, _), et) -> (Some r, Some d, Some e, Some t, Some et)
             | None -> (None, None, None, None, None)
 
-        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc (kv) -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
+        let referencedtypes = referencedtypes |> Option.map (fun r -> r |> Seq.fold (fun acc kv -> acc |> (Map.add kv.Key (kv.Value |> List.ofSeq))) Map.empty )
         data.Referencedtypes <- referencedtypes
         data.Definedvariables <- definedvariable
         data.SavedEventTargets <- savedEventTargets

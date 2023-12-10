@@ -20,7 +20,7 @@ module Utils =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
             match dict.TryGetValue(keyFunction(n)) with
-            | (true, v) -> v
+            | true, v -> v
             | _ ->
                 let temp = memFunction(n)
                 dict.Add(keyFunction(n), temp)
@@ -99,8 +99,8 @@ module TryParser =
     let parseInt : string -> _    = tryParseWith System.Int32.TryParse
     let parseIntWithDecimal : string -> _    =  tryParseWith (fun s -> System.Int32.TryParse(s, Globalization.NumberStyles.AllowDecimalPoint ||| Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture))
     let parseSingle : string -> _ = tryParseWith System.Single.TryParse
-    let parseDouble : string -> _ = tryParseWith (fun s -> (System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
-    let parseDecimal : string -> _ = tryParseWith (fun s -> (System.Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
+    let parseDouble : string -> _ = tryParseWith (fun s -> System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture))
+    let parseDecimal : string -> _ = tryParseWith (fun s -> System.Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture))
     // etc.
 
     // active patterns for try-parsing strings

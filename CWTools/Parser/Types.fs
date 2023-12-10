@@ -10,7 +10,7 @@ module Types =
         override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
         static member Empty = Position (FParsec.Position("none", 0L, 0L, 0L))
         static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
-        static member Conv(pos : FParsec.Position) = Position (pos)
+        static member Conv(pos : FParsec.Position) = Position pos
         static member UnConv(pos : Position) = let (Position p) = pos in p
     type Operator =
     | Equals = 0uy

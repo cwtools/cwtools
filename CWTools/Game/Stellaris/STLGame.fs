@@ -58,14 +58,14 @@ module STLGameFunctions =
             let se = game.Lookup.effects
             let ve = game.Settings.embedded.effects |> List.map (fun e -> e :> Effect)
             se @ ve
-        let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects (game.Lookup.triggers)
+        let ses, es = STLLookup.updateScriptedEffects game.Resources vanillaEffects game.Lookup.triggers
         game.Lookup.onlyScriptedEffects <- ses
         ses @ es
 
     let updateStaticodifiers (game : GameObject) =
         let rawModifiers =
             game.Resources.AllEntities()
-            |> List.choose (function |struct (f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("static_modifiers") -> Some f.entity |_ -> None)
             |> List.collect (fun n -> n.Children)
             
         let modifiers2 = System.Linq.Enumerable.ToLookup(game.Settings.embedded.modifiers, (fun x -> x.tag), (fun x -> x.category))
@@ -75,7 +75,7 @@ module STLGameFunctions =
     let updateScriptedLoc (game : GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_loc") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_loc") -> Some f.entity |_ -> None)
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
@@ -114,7 +114,7 @@ module STLGameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
-        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
         (lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c))))
         @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
@@ -132,7 +132,7 @@ module STLGameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
@@ -141,7 +141,7 @@ module STLGameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
@@ -174,7 +174,7 @@ module STLGameFunctions =
                        |> Map.ofList
         
         let inline triggerAugment (trigger : Effect) =
-            match trigger, triggers |> Map.tryFind (trigger.Name) with
+            match trigger, triggers |> Map.tryFind trigger.Name with
             | :? DocEffect as doc, Some options when options.comparison ->
                 [ DocEffect("trigger:" + doc.Name, doc.Scopes, doc.Target, EffectType.ValueTrigger, doc.Desc, doc.Usage, doc.RefHint) :> Effect
                   doc :> Effect
@@ -214,7 +214,7 @@ module STLGameFunctions =
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) (resources : IResourceAPI<_>) (embeddedSettings : EmbeddedSettings) =
         addModifiersFromCoreAndTypes lookup embeddedSettings resources
         lookup.typeDefInfo <-
-            (lookup.typeDefInfo)
+            lookup.typeDefInfo
             |> addModifiersAsTypes lookup
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ (updateEventTargetLinks embeddedSettings @ addDataEventTargetLinks lookup embeddedSettings false)
 
@@ -241,7 +241,7 @@ module STLGameFunctions =
         let triggers, effects =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "trigger_docs.log")
                     |> Option.map (fun (fn, ft) -> DocsParser.parseDocsFile fn)
-                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None))
+                    |> Option.bind (function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (DocsParser.processDocs scopeManager.ParseScopes p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> eprintfn "%A" e; None)
                     |> Option.defaultWith (fun () -> Utils.logError "trigger_docs.log was not found in stellaris config"; ([], []))
                     
         
@@ -250,13 +250,13 @@ module STLGameFunctions =
             then
                 configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.log")
                     |> Option.map (fun (fn, ft) -> StellarisModifierParser.parseLogsFile fn)
-                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (StellarisModifierParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
-                    |> Option.defaultWith (fun () -> Utils.logError "modifiers.log was not found in stellaris config"; ([]))
+                    |> Option.bind (function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (StellarisModifierParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None)
+                    |> Option.defaultWith (fun () -> Utils.logError "modifiers.log was not found in stellaris config"; [])
             else
                 configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "setup.log")
                     |> Option.map (fun (fn, ft) -> SetupLogParser.parseLogsFile fn)
-                    |> Option.bind ((function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None))
-                    |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; ([]))
+                    |> Option.bind (function |FParsec.CharParsers.ParserResult.Success(p, _, _) -> Some (SetupLogParser.processLogs p) |FParsec.CharParsers.ParserResult.Failure(e, _, _) -> None)
+                    |> Option.defaultWith (fun () -> Utils.logError "setup.log was not found in stellaris config"; [])
 
         let stlRulesMods =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
@@ -270,7 +270,7 @@ module STLGameFunctions =
         let stlEventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
-                    |> Option.defaultValue ([])
+                    |> Option.defaultValue []
         let featureSettings =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
                     |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
@@ -387,7 +387,7 @@ type STLGame (setupSettings : StellarisSettings) =
     let parseErrors() =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
-            |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
+            |> List.choose (fun r -> r.result |> function |Fail result when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
 
     let validateTechnology (entities : (string * Node) list) =
@@ -397,7 +397,7 @@ type STLGame (setupSettings : StellarisSettings) =
     member __.Lookup = lookup
     interface IGame<STLComputedData> with
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
+        member __.ValidationErrors() = let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
@@ -416,7 +416,7 @@ type STLGame (setupSettings : StellarisSettings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (STL STLLang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
+        member __.ReplaceConfigRules rules = game.ReplaceConfigRules { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false} //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() =  game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()

@@ -46,7 +46,7 @@ module VIC3GameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
-        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
         (lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c))))
         @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
@@ -93,14 +93,14 @@ module VIC3GameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 let innerScope =
                     match o.pushScope with
                     | None ->
-                        lookup.effectsMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.effectsMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
@@ -109,14 +109,14 @@ module VIC3GameFunctions =
                 let newScopes =
                     match o.requiredScopes with
                     |[] ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.map(fun se -> se.Scopes)
                             |> Option.defaultValue []
                     |x -> x
                 let innerScope =
                     match o.pushScope with
                     | None ->
-                        lookup.triggersMap.TryFind((StringResource.stringManager.GetStringForID s.normal))
+                        lookup.triggersMap.TryFind (StringResource.stringManager.GetStringForID s.normal)
                             |> Option.bind (function | :? DocEffect as se -> Some se | _ -> None)
                             |> Option.bind(fun se -> se.Target)
                     | x -> x
@@ -168,7 +168,7 @@ module VIC3GameFunctions =
     let refreshConfigAfterFirstTypesHook (lookup : Lookup) _ (embedded : EmbeddedSettings) =
         addModifiersFromCoreAndTypes lookup embedded
         lookup.typeDefInfo <-
-            (lookup.typeDefInfo)
+            lookup.typeDefInfo
             |> addModifiersAsTypes lookup
         let ts = updateScriptedTriggers lookup lookup.configRules embedded @ addScriptFormulaLinks lookup
         let es = updateScriptedEffects lookup lookup.configRules embedded
@@ -227,14 +227,14 @@ module VIC3GameFunctions =
         let irEffects =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "effects.log")
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseEffectStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
-                    |> Option.map (JominiParser.processEffects (scopeManager.ParseScopes))
-                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in VIC3 config"; ([]))
+                    |> Option.map (JominiParser.processEffects scopeManager.ParseScopes)
+                    |> Option.defaultWith (fun () -> eprintfn "effects.log was not found in VIC3 config"; [])
 
         let irTriggers =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "triggers.log")
                     |> Option.bind (fun (fn, ft) -> JominiParser.parseTriggerStreamRes (new MemoryStream(System.Text.Encoding.GetEncoding(1252).GetBytes(ft))))
                     |> Option.map (JominiParser.processTriggers scopeManager.ParseScopes)
-                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in VIC3 config"; ([]))
+                    |> Option.defaultWith (fun () -> eprintfn "triggers.log was not found in VIC3 config"; [])
         let featureSettings =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
                     |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
@@ -347,11 +347,11 @@ type VIC3Game(setupSettings : VIC3Settings) =
     let parseErrors() =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
-            |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
+            |> List.choose (fun r -> r.result |> function |Fail result when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     interface IGame<JominiComputedData> with
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
+        member __.ValidationErrors() = let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
@@ -370,7 +370,7 @@ type VIC3Game(setupSettings : VIC3Settings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (VIC3 VIC3Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
+        member __.ReplaceConfigRules rules = game.ReplaceConfigRules { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false} //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()

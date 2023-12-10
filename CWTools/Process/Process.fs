@@ -59,12 +59,12 @@ and Leaf =
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
-        and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
+        and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
     member this.ValueId
         with get () = this._valueId
     member this.Value
         with get () = this._value
-        and set (value) = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
+        and set value = this._value <- value; this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
     member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
     member this.ToRaw = KeyValue(PosKeyValue(this.Position, KeyValueItem(Key(this.Key), this.Value, this.Operator)))
     new(key : string, value : Value, pos : range, op : Operator) =
@@ -94,7 +94,7 @@ and LeafValue(value : Value, ?pos : range) =
     // val mutable private _value : Value = value
     member this.Value
         with get () = this._value
-        and set (value) = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
+        and set value = this._value <- value; this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
     member this.ValueText with get () = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
 
     member this.Key = StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
@@ -113,7 +113,7 @@ and ValueClause(keys : Value[], pos : range) =
     let mutable _keys = keys |> Array.map (fun v -> StringResource.stringManager.InternIdentifierToken(v.ToString()))
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty
-    let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
+    let mutable _leaves : Lazy<Leaf array> = lazy Array.empty
     let reset() =
         _leaves <- lazy (all |> Array.choose (function |LeafC l -> Some l |_ -> None))
     let leaves() = _leaves.Force()
@@ -128,7 +128,7 @@ and ValueClause(keys : Value[], pos : range) =
     member __.AllChildren with get () = all |> ResizeArray<Child>
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
     member __.AllArray with get () = all
-    member __.AllArray with set(value) = all <- value; reset()
+    member __.AllArray with set value = all <- value; reset()
     member this.All with get () = all |> List.ofSeq
     member this.All with set(value : Child list) = all <- (value |> List.toArray); reset()
     member this.Nodes = all |> Seq.choose (function |NodeC n -> Some n |_ -> None)
@@ -144,7 +144,7 @@ and ValueClause(keys : Value[], pos : range) =
     member __.Leafs x = leaves() |> Array.choose (function |l when l.Key == x -> Some l |_ -> None) |> Array.toSeq
     member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
-    member this.TagsText x = this.Tags x |> Seq.map (function |(QString s) -> s |s -> s.ToString())
+    member this.TagsText x = this.Tags x |> Seq.map (function |QString s -> s |s -> s.ToString())
     member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
@@ -152,7 +152,7 @@ and ValueClause(keys : Value[], pos : range) =
     member this.FirstKeyId = if _keys.Length > 0 then Some _keys.[0] else None
     member this.SecondKey = if _keys.Length > 0 then Some (StringResource.stringManager.GetStringForID _keys.[1].normal) else None
     member __.Keys with get() = _keys
-    member __.Keys with set(value) = _keys <- value
+    member __.Keys with set value = _keys <- value
     member this.ToRaw : Statement list = this.All |>
                                          List.collect (function
                                            |NodeC n -> [n.ToRaw]
@@ -187,7 +187,7 @@ and Node (key : string, pos : range) =
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let bothFindId (x : StringLowerToken) = function |NodeC n when n.KeyId.lower = x -> true |LeafC l when l.KeyId.lower = x -> true |_ -> false
     let mutable all : Child array = Array.empty
-    let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
+    let mutable _leaves : Lazy<Leaf array> = lazy Array.empty
     let reset() =
         _leaves <- lazy (all |> Array.choose (function |LeafC l -> Some l |_ -> None))
     let leaves() = _leaves.Force()
@@ -200,7 +200,7 @@ and Node (key : string, pos : range) =
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
-        and set (value) = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
+        and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member val Position = pos
     member val Scope : Scope = scopeManager.AnyScope with get, set
@@ -209,19 +209,19 @@ and Node (key : string, pos : range) =
     member val KeyPrefixId : StringTokens option = None with get, set
     member this.KeyPrefix
         with get () = this.KeyPrefixId |> Option.map (fun pkid -> StringResource.stringManager.GetStringForID(pkid.normal))// |> Option.defaultValue ""
-        and set (value) = this.KeyPrefixId <- value |> Option.map(fun value -> (StringResource.stringManager.InternIdentifierToken(value)))
+        and set value = this.KeyPrefixId <- value |> Option.map(fun value -> StringResource.stringManager.InternIdentifierToken(value))
 
     member val ValuePrefixId : StringTokens option = None with get, set
     member this.ValuePrefix
         with get () = this.ValuePrefixId |> Option.map (fun pkid -> StringResource.stringManager.GetStringForID(pkid.normal))// |> Option.defaultValue ""
-        and set (value) = this.ValuePrefixId <- value |> Option.map(fun value -> (StringResource.stringManager.InternIdentifierToken(value)))
+        and set value = this.ValuePrefixId <- value |> Option.map(fun value -> StringResource.stringManager.InternIdentifierToken(value))
 
     member this.IsComplex = this.KeyPrefixId.IsSome || this.ValuePrefixId.IsSome
 
     member __.AllChildren with get () = all |> ResizeArray<Child>
     member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
     member __.AllArray with get () = all
-    member __.AllArray with set(value) = all <- value; reset()
+    member __.AllArray with set value = all <- value; reset()
     member this.All with get () = all |> List.ofSeq
     member this.All with set(value : Child list) = all <- (value |> List.toArray); reset()
     member this.Nodes = all |> Seq.choose (function |NodeC n -> Some n |_ -> None)
@@ -240,7 +240,7 @@ and Node (key : string, pos : range) =
     member __.LeafsById x = leaves() |> Array.filter (fun l -> l.KeyId.lower = x) |> Array.toSeq
     member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
-    member this.TagsText x = this.Tags x |> Seq.map (function |(QString s) -> s |s -> s.ToString())
+    member this.TagsText x = this.Tags x |> Seq.map (function |QString s -> s |s -> s.ToString())
     member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
@@ -285,7 +285,7 @@ module ProcessCore =
 
     type LookupContext = { complete : bool; parents : string list; scope : string; previous : string; entityType : EntityType }
     let processNodeSimple _ = processNode id
-    type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Statement -> Child) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
+    type NodeTypeMap = string * range * LookupContext -> (LookupContext -> (Statement -> Child) -> string -> range -> Statement list -> Node) * string * (LookupContext -> LookupContext)
 
     let updateContext f n key context =
         match n with
@@ -293,21 +293,21 @@ module ProcessCore =
         |_ -> f { context with parents = n::context.parents; previous = key }
 
     type BaseProcess() =
-        let rec nodeWindowFun (context) (backtwo : Statement option, backone : Statement option, acc) (next : Statement) =
+        let rec nodeWindowFun context (backtwo : Statement option, backone : Statement option, acc) (next : Statement) =
             //eprintfn "%A %A %A" backtwo backone next
             match backtwo, backone, next with
-            | (Some (Value (_, Clause _))), _, _
-            | (Some (Value (_))), (Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(_), Clause _, _))))), Value (_, Clause _)
-            | _, (Some (Value (_, Clause _))), _ ->
+            | Some (Value (_, Clause _)), _, _
+            | Some (Value _), Some (KeyValue (PosKeyValue(_, KeyValueItem(Key _, Clause _, _)))), Value (_, Clause _)
+            | _, Some (Value (_, Clause _)), _ ->
                 backone, Some next, (processNodeInner context next)::acc
-            | (Some (Value (_, v2))), (Some (Value (_, v1))), Value (pos, Clause sl) ->
-                None, None, (lookupVC pos context sl ([| v2 ;v1 |]))::(acc |> List.skip 2)
-            | (Some (Value (_, v2))), (Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(k), v1, _))))), Value (pos, Clause sl) ->
+            | Some (Value (_, v2)), Some (Value (_, v1)), Value (pos, Clause sl) ->
+                None, None, (lookupVC pos context sl [| v2 ;v1 |])::(acc |> List.skip 2)
+            | Some (Value (_, v2)), Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(k), v1, _)))), Value (pos, Clause sl) ->
                 let node : Node = lookupN k pos context sl
                 node.KeyPrefix <- Some (v2.ToRawString())
                 node.ValuePrefix <- Some (v1.ToRawString())
                 None, None, (NodeC node)::(acc |> List.skip 2)
-            | _, (Some (Value (pos, v2))), (KeyValue (PosKeyValue(pos2, KeyValueItem(Key(k), Clause sl, _)))) when pos.StartLine = pos2.StartLine ->
+            | _, Some (Value (pos, v2)), KeyValue (PosKeyValue(pos2, KeyValueItem(Key(k), Clause sl, _))) when pos.StartLine = pos2.StartLine ->
                 let node = lookupN k pos2 context sl
                 node.KeyPrefix <- Some (v2.ToRawString())
                 None, None, (NodeC node)::(acc |> List.skip 1)
@@ -323,7 +323,7 @@ module ProcessCore =
                 n
                 )
         and lookupVC =
-            (fun (pos : range) (context : LookupContext) (sl : Statement list) (keys) ->
+            (fun (pos : range) (context : LookupContext) (sl : Statement list) keys ->
                 let vc = ValueClause(keys, pos)
                 //let children = sl |> List.map (fun e -> (processNodeInner context e))
                 let children = sl |> List.fold (nodeWindowFun context) (None, None, []) |> (fun (_, _, ls) -> ls |> List.rev)
@@ -339,8 +339,8 @@ module ProcessCore =
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
         // member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
         // member __.ProcessNode() = (fun key pos sl -> (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) (KeyValue(PosKeyValue(pos, KeyValueItem(Key(key) , Clause(sl), Operator.Equals)))))
-        member __.ProcessNode() = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) sl)
-        member __.ProcessNode(entityType : EntityType) = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = entityType}) sl)
+        member __.ProcessNode() = (fun key pos sl -> lookupN key pos { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other} sl)
+        member __.ProcessNode(entityType : EntityType) = (fun key pos sl -> lookupN key pos { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType} sl)
 
     let processNodeBasic = BaseProcess().ProcessNode()
 
@@ -352,7 +352,7 @@ module ProcessCore =
     let foldNode2 fNode fCombine acc (node:Node) =
         let rec loop nodes cont =
             match nodes with
-            | (x : Node)::tail ->
+            | x : Node::tail ->
                 loop x.Children (fun accChildren ->
                     let resNode = fNode x accChildren
                     loop tail (fun accTail ->
@@ -363,7 +363,7 @@ module ProcessCore =
     let foldClause2 fNode fCombine acc (node:IClause) =
         let rec loop nodes cont =
             match nodes with
-            | (x : IClause)::tail ->
+            | x : IClause::tail ->
                 loop (x.Clauses |> List.ofSeq) (fun accChildren ->
                     let resNode = fNode x accChildren
                     loop tail (fun accTail ->
@@ -375,7 +375,7 @@ module ProcessCore =
         let rec loop nodes cont =
             //Rewrite to use a parralel seq for each child
             match nodes with
-            | (x : Node)::tail ->
+            | x : Node::tail ->
                 let y = loop x.Children (fun a ->
                     let resNode = fNode x
                     loop tail (fun accTail ->
@@ -401,7 +401,7 @@ module ProcessCore =
     let foldNode5 fNode (node:Node) =
         let rec loop nodes cont =
             match nodes with
-            | (x : Node)::tail ->
+            | x : Node::tail ->
                 loop x.Children (fun a ->
                     let resNode = fNode x
                     loop tail (fun accTail ->
@@ -412,7 +412,7 @@ module ProcessCore =
     let foldNode6 fNode (node:Node) =
         let rec loop nodes cont =
             match nodes with
-            | (x : Node)::tail ->
+            | x : Node::tail ->
                 loop x.Children (fun accChildren ->
                     let resNode = fNode x
                     loop tail (fun accTail ->

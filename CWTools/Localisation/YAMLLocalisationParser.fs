@@ -34,9 +34,9 @@ module YAMLLocalisationParser =
     let value = digit .>> spaces <?> "version"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
 
-    let entry = pipe5 (getPosition) (key) (opt value) (desc) (getPosition .>> spaces) (fun s k v d e -> {key = k; value = v; desc = d; position = getRange s e}) <?> "entry"
+    let entry = pipe5 getPosition key (opt value) desc (getPosition .>> spaces) (fun s k v d e -> {key = k; value = v; desc = d; position = getRange s e}) <?> "entry"
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
-    let file = spaces >>. many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
+    let file = spaces >>. many (attempt comment) >>. pipe2 key (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 
     let parseLocFile filepath = runParserOnFile file () filepath System.Text.Encoding.UTF8
     let parseLocText text name = runParserOnString file () name text
@@ -63,7 +63,7 @@ module YAMLLocalisationParser =
         //     |"l_spanish" -> Some EU4Lang.Spanish
         //     |"l_german" -> Some EU4Lang.German
         //     |_ -> None
-        let mutable results : Results = upcast new Dictionary<string, (bool * int * string * Position option)>()
+        let mutable results : Results = upcast new Dictionary<string, bool * int * string * Position option>()
         let mutable records : struct (Entry * Lang) array = [||]
         let mutable recordsL : struct (Entry * Lang) list = []
 
@@ -156,7 +156,7 @@ module EU4 =
     let EU4LocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, EU4 )
     let EU4LocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "Europa Universalis IV"; keyToLanguage = keyToLanguage; gameToLang = EU4 })
+        YAMLLocalisationService { folder =  folder; gameName = "Europa Universalis IV"; keyToLanguage = keyToLanguage; gameToLang = EU4 }
 
 module HOI4 =
     open YAMLLocalisationParser
@@ -174,7 +174,7 @@ module HOI4 =
     let HOI4LocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, HOI4 )
     let HOI4LocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "Hearts of Iron IV"; keyToLanguage = keyToLanguage; gameToLang = HOI4 })
+        YAMLLocalisationService { folder =  folder; gameName = "Hearts of Iron IV"; keyToLanguage = keyToLanguage; gameToLang = HOI4 }
 
 module STL =
     open YAMLLocalisationParser
@@ -195,7 +195,7 @@ module STL =
     let STLLocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, STL )
     let STLLocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "Stellaris"; keyToLanguage = keyToLanguage; gameToLang = STL })
+        YAMLLocalisationService { folder =  folder; gameName = "Stellaris"; keyToLanguage = keyToLanguage; gameToLang = STL }
 
 module IR =
     open YAMLLocalisationParser
@@ -212,7 +212,7 @@ module IR =
     let IRLocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, IR )
     let IRLocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "Imperator"; keyToLanguage = keyToLanguage; gameToLang = IR })
+        YAMLLocalisationService { folder =  folder; gameName = "Imperator"; keyToLanguage = keyToLanguage; gameToLang = IR }
 
 module Custom =
     open YAMLLocalisationParser
@@ -232,7 +232,7 @@ module Custom =
     let CustomLocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, Custom )
     let CustomLocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "Custom"; keyToLanguage = keyToLanguage; gameToLang = Custom })
+        YAMLLocalisationService { folder =  folder; gameName = "Custom"; keyToLanguage = keyToLanguage; gameToLang = Custom }
 
 module CK3 =
     open YAMLLocalisationParser
@@ -250,7 +250,7 @@ module CK3 =
     let CK3LocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, CK3 )
     let CK3LocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "CK3"; keyToLanguage = keyToLanguage; gameToLang = CK3 })
+        YAMLLocalisationService { folder =  folder; gameName = "CK3"; keyToLanguage = keyToLanguage; gameToLang = CK3 }
         
 module VIC3 =
     open YAMLLocalisationParser
@@ -272,4 +272,4 @@ module VIC3 =
     let VIC3LocalisationService (files : (string * string) list) =
         YAMLLocalisationService ( files, keyToLanguage, VIC3 )
     let VIC3LocalisationServiceFromFolder (folder : string) =
-        YAMLLocalisationService ({ folder =  folder; gameName = "VIC3"; keyToLanguage = keyToLanguage; gameToLang = VIC3 })
+        YAMLLocalisationService { folder =  folder; gameName = "VIC3"; keyToLanguage = keyToLanguage; gameToLang = VIC3 }

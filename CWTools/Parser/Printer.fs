@@ -8,13 +8,13 @@ module CKPrinter =
 
     let private printTroop depth t = (tabs depth) + t.ToString()  + "\n"
     let private printValuelist depth is =
-        let printOne = (fun i -> tabs (depth) + (string i) + "\n")
+        let printOne = (fun i -> tabs depth + (string i) + "\n")
         List.map printOne is |> List.fold (+) ""
 
 
     let rec private printValue v depth =
         match v with
-        | Clause kvl -> "{\n" + printKeyValueList kvl (depth + 1) + tabs (depth) + "}"
+        | Clause kvl -> "{\n" + printKeyValueList kvl (depth + 1) + tabs depth + "}"
         | x -> x.ToString() + ""
     and private printKeyValue (acc, leadingNewline, prevStart, prevEnd) kv depth =
         match kv with
@@ -33,7 +33,7 @@ module CKPrinter =
         kvl |> List.fold (fun acc kv ->
             match kv with
             | KeyValue (PosKeyValue(_, KeyValueItem(_, Clause _, _))) as x ->
-                let (res, a, b, c) = printKeyValue acc kv 0
+                let res, a, b, c = printKeyValue acc kv 0
                 (res + "\n", a, b, c)
             | x -> printKeyValue acc kv 0
             ) ("", false, -1, -1)

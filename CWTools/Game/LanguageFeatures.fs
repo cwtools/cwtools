@@ -50,7 +50,7 @@ module LanguageFeatures =
             completion.LocalisationComplete(pos, filetext)
         | _, Some e, Some completion, Some info ->
             log (sprintf "completion %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
-            match (info.GetInfo)(pos, e) with
+            match info.GetInfo(pos, e) with
             | Some (ctx, _) ->
                 completion.Complete(pos, e, Some ctx)
             | None ->
@@ -65,7 +65,7 @@ module LanguageFeatures =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             log (sprintf "getInfo %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
-            match (info.GetInfo)(pos, e) with
+            match info.GetInfo(pos, e) with
             |Some (_, (_, Some (LocRef(tv)), _)) ->
                 match localisationManager.LocalisationEntries() |> List.tryFind (fun (l, _) -> l = lang) with
                 | Some (_, entries) ->
@@ -74,7 +74,7 @@ module LanguageFeatures =
                     | _ -> None
                 | None -> None
             |Some (_, (_, Some (TypeRef(t, tv)), _)) ->
-                lookup.typeDefInfo.[t] |> List.tryPick (fun (tdi) -> if tdi.id = tv then Some tdi.range else None)
+                lookup.typeDefInfo.[t] |> List.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
             |Some (_, (_, Some (EnumRef (enumName, enumValue)), _)) ->
                 let enumValues = lookup.enumDefs.[enumName] |> snd
                 enumValues |> List.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
@@ -91,13 +91,13 @@ module LanguageFeatures =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             log (sprintf "findRefs %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
-            match (info.GetInfo)(pos, e) with
-            |Some (_,( _, Some (TypeRef((t : string), tv)), _)) ->
+            match info.GetInfo(pos, e) with
+            |Some (_,( _, Some (TypeRef(t : string, tv)), _)) ->
                 //log "tv %A %A" t tv
                 let t = t.Split('.').[0]
-                resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else let contains, value = ((info.GetReferencedTypes) e).TryGetValue t in if contains then Some (value |> List.ofSeq) else None)
+                resourceManager.Api.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().Referencedtypes in if x.IsSome then (x.Value.TryFind t) else let contains, value = (info.GetReferencedTypes e).TryGetValue t in if contains then Some (value |> List.ofSeq) else None)
                                |> List.collect id
-                               |> List.choose (fun ref -> if ref.name == tv && ref.referenceType = ReferenceType.TypeDef then Some (ref.position) else None)
+                               |> List.choose (fun ref -> if ref.name == tv && ref.referenceType = ReferenceType.TypeDef then Some ref.position else None)
                                |> Some
             |_ -> None
         |_, _ -> None
@@ -109,9 +109,9 @@ module LanguageFeatures =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             // match info.GetInfo(pos, e) with
-            match (info.GetInfo)(pos, e) with
+            match info.GetInfo(pos, e) with
             |Some (ctx, _) when ctx <> { Root = anyScope; From = []; Scopes = [] } ->
-                Some (ctx)
+                Some ctx
             |_ ->
                 None
         |_ -> None
@@ -122,12 +122,12 @@ module LanguageFeatures =
         match resourceManager.ManualProcessResource resource, infoService with
         |Some e, Some info ->
             log (sprintf "symbolInfoAtPos %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
-            let (ruleOptions, typeInfo, nodeAtPos) =
-                (info.GetInfo)(pos, e)
+            let ruleOptions, typeInfo, nodeAtPos =
+                info.GetInfo(pos, e)
                 |> Option.map snd
                 |> Option.map (fun (rd, ti, child) -> child |> function | Some (NodeC node) -> rd, ti, Some node | _ -> rd, ti, None)
                 |> Option.defaultValue (None, None, None)
-            let (tv, t, locs) =
+            let tv, t, locs =
                 match typeInfo with
                 | Some (TypeRef(t, tv)) ->
                     let splitType = t.Split '.'
@@ -229,7 +229,7 @@ module LanguageFeatures =
                         match triggers with
                         |[] -> None
                         |triggers ->
-                            let (insertPos, insertText) = pretriggerBlockForEvent "pre_triggers" "trigger" event (triggers |> Seq.map snd)
+                            let insertPos, insertText = pretriggerBlockForEvent "pre_triggers" "trigger" event (triggers |> Seq.map snd)
                             let deletes = triggers |> Seq.map fst
                             Some (deletes, insertPos, insertText)
                     |_, _ -> None
@@ -242,7 +242,7 @@ module LanguageFeatures =
                         match triggers with
                         |[] -> None
                         |triggers ->
-                            let (insertPos, insertText) = pretriggerBlockForEvent "possible_pre_triggers" "possible" event (triggers |> Seq.map snd)
+                            let insertPos, insertText = pretriggerBlockForEvent "possible_pre_triggers" "possible" event (triggers |> Seq.map snd)
                             let deletes = triggers |> Seq.map fst
                             Some (deletes, insertPos, insertText)
                     |_ -> None
@@ -275,10 +275,10 @@ module LanguageFeatures =
         let entitiesInSelectedFiles = resourceManager.Api.AllEntities() |> List.filter (fun struct(e, _) -> files |> List.contains e.filepath)
 
         let locSet = referenceManager.Localisation |> Map.ofList
-        let findLoc key = locSet |> Map.tryFind key |> Option.map (fun (l) -> l.desc)
+        let findLoc key = locSet |> Map.tryFind key |> Option.map (fun l -> l.desc)
 
-        let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (tdi) -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
-        let getSourceTypes (x : Map<string, ReferenceDetails list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun (rd) -> k, rd.name, rd.position, rd.isOutgoing, rd.referenceLabel, []))
+        let getSourceTypesTD (x : Map<string, TypeDefInfo list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
+        let getSourceTypes (x : Map<string, ReferenceDetails list>) = Map.toList x |> List.filter (fun (k, _) -> sourceTypes |> List.contains k) |> List.collect (fun (k, vs) -> vs |> List.map (fun rd -> k, rd.name, rd.position, rd.isOutgoing, rd.referenceLabel, []))
         let getNonExplicitLoc (id : string) (typeName : string) =
             lookup.typeDefs |> List.tryPick (fun td -> if td.name = typeName then Some td.localisation else None)
                             |> Option.bind (fun ls -> ls |> List.tryFind (fun l -> l.explicitField.IsNone && l.primary))

@@ -14,6 +14,6 @@ module HOI4Validation =
         let keys = ["set_variable"; "add_to_variable"; "subtract_from_variable"; "multiply_variable"; "divide_variable";
                     "set_temp_variable"; "add_to_temp_variable"; "subtract_from_temp_variable"; "multiply_temp_variable"; "divide_temp_variable";]
         let fNode = (fun (x : Node) acc ->
-                    x.Children |> List.fold (fun a n -> if List.contains (n.Key) keys then getVar n a else a) acc
+                    x.Children |> List.fold (fun a n -> if List.contains n.Key keys then getVar n a else a) acc
                      )
         foldNode7 fNode node |> List.ofSeq

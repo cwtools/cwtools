@@ -14,7 +14,7 @@ module DocsParser =
     let private name = (many1Chars idChar) .>> SharedParsers.ws .>> pchar '-' .>>. restOfLine false .>> SharedParsers.ws <?> "name"
     let private usage = charsTillString "Supported scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
     let private usageC = charsTillString "Supported Scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
-    let private scope = many1Satisfy ((fun c -> isvaluechar c || c = '?' || c = '(' || c = ')')) .>> many (anyOf [' '; '\t']) <?> "scope"
+    let private scope = many1Satisfy (fun c -> isvaluechar c || c = '?' || c = '(' || c = ')') .>> many (anyOf [' '; '\t']) <?> "scope"
     let private target = many1Satisfy isvaluechar .>> many (skipChar ' ') <?> "target"
     let private targets = manyTill target newline .>> SharedParsers.ws <?> "targets"
     let private scopesWithoutTarget = manyTill scope newline |>> (fun x -> (x, [])) .>> SharedParsers.ws <?> "scopes"
@@ -26,7 +26,7 @@ module DocsParser =
 
     let private twoDocs = docFile .>>. docFile
 
-    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect(x, effectType, parseScopes)
+    let toDocEffect<'a when 'a : comparison> effectType parseScopes (x : RawEffect)  = DocEffect(x, effectType, parseScopes)
     let processDocs parseScopes (t, e) = t |> List.map (toDocEffect EffectType.Trigger parseScopes), e |> List.map (toDocEffect EffectType.Effect parseScopes)
 
     let parseDocsFile filepath = runParserOnFile twoDocs () filepath (System.Text.Encoding.GetEncoding(1252))
@@ -78,7 +78,7 @@ module JominiParser =
     let parseEffectStream file = runParserOnStream effectFile () "effectFile" file (System.Text.Encoding.GetEncoding(1252))
     let parseEffectStreamRes file = parseEffectStream file |> (function |Success(p, _, _) -> Some p |_ -> None)
 
-    let toDocEffect<'a when 'a : comparison> effectType (parseScopes) (x : RawEffect)  = DocEffect(x, effectType, parseScopes)
+    let toDocEffect<'a when 'a : comparison> effectType parseScopes (x : RawEffect)  = DocEffect(x, effectType, parseScopes)
 
     let processEffects parseScopes e = e |> List.map (toDocEffect EffectType.Effect parseScopes)
     let processTriggers parseScopes (t : RawEffect list) =
@@ -149,7 +149,7 @@ module StellarisModifierParser =
 
     let parseLogsFile filepath = runParserOnFile logFile () filepath (System.Text.Encoding.GetEncoding(1252))
     let parseLogsStream file = runParserOnStream logFile () "logFile" file (System.Text.Encoding.GetEncoding(1252))
-    let processLogs ((m : {|categories: string list; tag: string|} list)) =
+    let processLogs (m : {|categories: string list; tag: string|} list) =
         m |> List.collect (fun rm ->
             rm.categories
             |> List.map (fun cm ->

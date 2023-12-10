@@ -10,7 +10,7 @@ open CWTools.Common.NewScope
 
 module STLProcess =
 
-    let rec scriptedTriggerScope (strict : bool) (effects : (Effect list)) (triggers : (Effect list)) (root : string) (node : Node) =
+    let rec scriptedTriggerScope (strict : bool) (effects : Effect list) (triggers : Effect list) (root : string) (node : Node) =
         let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect"]
         let triggerBlockKeys = ["limit"] //@ targetKeys
         let nodeScopes = node.Children
@@ -18,7 +18,7 @@ module STLProcess =
                             function
                             | x when x.Key = root ->
                                 scopeManager.AllScopes |> Set.ofList
-                            | x when (x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)) ->
+                            | x when x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
                                 scopeManager.AllScopes |> Set.ofList
                             // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                             //     allScopes

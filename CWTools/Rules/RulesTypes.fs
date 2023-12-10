@@ -191,8 +191,8 @@ and RuleType =
         match x with
         | NodeRule (l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
         | LeafRule (l, r) -> sprintf "LeafRule with Left (%O) and right (%O)" l r
-        | LeafValueRule (r) -> sprintf "LeafValueRule (%O)" r
-        | ValueClauseRule (rs) -> sprintf "ValueClauseRule with inner (%O)" rs
+        | LeafValueRule r -> sprintf "LeafValueRule (%O)" r
+        | ValueClauseRule rs -> sprintf "ValueClauseRule with inner (%O)" rs
         | SubtypeRule (n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
 
 and NewRule = RuleType * Options

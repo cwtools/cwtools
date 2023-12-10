@@ -66,7 +66,7 @@ module CommonValidation =
                 List.groupBy (fun (tdi : TypeDefInfo) -> tdi.id) >> List.filter (fun (k, g) -> g.Length > 1)
                                  >> List.collect snd
             let res = zipped |> List.collect (fun (tn, ts) -> (groupFun ts) |> List.map (fun t -> tn, t))
-            res <&!&> (fun (typename, (tdi)) ->
+            res <&!&> (fun (typename, tdi) ->
                             Invalid (System.Guid.NewGuid(), [invManual (ErrorCodes.DuplicateTypeDef typename tdi.id) tdi.range "" None]))
                             //    |> List.map (fun td, ts -> )
             )
@@ -116,13 +116,13 @@ module CommonValidation =
                 let scriptedEffects = allScriptedEffects |> List.map (fun (name, filename, node) -> name, fileManager.ConvertPathToLogicalPath(filename), node, allRefs |> Map.tryFind name |> Option.defaultValue [])
                 let stringReplace (seParams : (string * string) list) (key : string) =
                     seParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
-                let rec foldOverNode (stringReplacer) (node : Node) =
+                let rec foldOverNode stringReplacer (node : Node) =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
                     node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.Children |> List.iter (foldOverNode stringReplacer)
-                let validateSESpecific ((name : string), (logicalpath : string), (node : Node), (callSite : range), (seParams : (string * string) list option)) =
+                let validateSESpecific (name : string, logicalpath : string, node : Node, callSite : range, seParams : (string * string) list option) =
                     let newNode = CWTools.Process.STLProcess.cloneNode node
                     let rootNode = Node("root")
                     rootNode.AllArray <- [|NodeC newNode|]
@@ -141,7 +141,7 @@ module CommonValidation =
                             | OK -> OK
                             | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some [message]})))
                 let memoizeValidation =
-                    let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
+                    let keyFun = (fun (_, _, node : Node, _, seParams) -> (node.Position, seParams))
                     let memFun = validateSESpecific
                     memoize keyFun memFun
                 let validateSE (name: string) (logicalpath : string) (node : Node option) (refs : {|callSite : range ; effectName : string ; seParams : (string * string) list option|} list) =
@@ -201,13 +201,13 @@ module CommonValidation =
                 let inlineScripts = allInlineScripts |> List.map (fun (name, filename, node) -> name, fileManager.ConvertPathToLogicalPath(filename), node, allRefs |> Map.tryFind name |> Option.defaultValue [])
                 let stringReplace (isParams : (string * string) list) (key : string) =
                     isParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
-                let rec foldOverNode (stringReplacer) (node : Node) =
+                let rec foldOverNode stringReplacer (node : Node) =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
                     node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.Children |> List.iter (foldOverNode stringReplacer)
-                let validateISSpecific ((name : string), (logicalpath : string), (node : Node), (callSite : range), (isParams : (string * string) list option)) =
+                let validateISSpecific (name : string, logicalpath : string, node : Node, callSite : range, isParams : (string * string) list option) =
                     let newNode = CWTools.Process.STLProcess.cloneNode node
                     let rootNode = Node("root")
                     rootNode.AllArray <- [|NodeC newNode|]
@@ -226,7 +226,7 @@ module CommonValidation =
                             | OK -> OK
                             | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some [message] })))
                 let memoizeValidation =
-                    let keyFun = (fun (_, _, (node : Node), _, (isParams)) -> (node.Position, isParams))
+                    let keyFun = (fun (_, _, node : Node, _, isParams) -> (node.Position, isParams))
                     let memFun = validateISSpecific
                     memoize keyFun memFun
                 let validateIS (name: string) (logicalpath : string) (node : Node option) (refs : {|callSite : range ; scriptName : string ; isParams : (string * string) list option|} list) =
@@ -283,13 +283,13 @@ module CommonValidation =
                 let scriptedEffects = allScriptValues |> List.map (fun (name, filename, node) -> name, fileManager.ConvertPathToLogicalPath(filename), node, allRefs |> Map.tryFind name |> Option.defaultValue [])
                 let stringReplace (seParams : (string * string) list) (key : string) =
                     seParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
-                let rec foldOverNode (stringReplacer) (node : Node) =
+                let rec foldOverNode stringReplacer (node : Node) =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
                     node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                     node.Children |> List.iter (foldOverNode stringReplacer)
-                let validateSESpecific ((name : string), (logicalpath : string), (node : Node), (callSite : range), (seParams : (string * string) list option)) =
+                let validateSESpecific (name : string, logicalpath : string, node : Node, callSite : range, seParams : (string * string) list option) =
                     let newNode = CWTools.Process.STLProcess.cloneNode node
                     let rootNode = Node("root")
                     rootNode.AllArray <- [|NodeC newNode|]
@@ -310,7 +310,7 @@ module CommonValidation =
                                 Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some [message] })))
 //                            | Invalid (_, inv) -> Invalid (System.Guid.NewGuid(), inv |> List.map (fun e -> { e with relatedErrors = Some message })))
                 let memoizeValidation =
-                    let keyFun = (fun (_, _, (node : Node), _, (seParams)) -> (node.Position, seParams))
+                    let keyFun = (fun (_, _, node : Node, _, seParams) -> (node.Position, seParams))
                     let memFun = validateSESpecific
                     memoize keyFun memFun
                 let validateSE (name: string) (logicalpath : string) (node : Node option) (refs : {|callSite : range ; effectName : string ; seParams : (string * string) list option|} list) =
@@ -328,8 +328,8 @@ module CommonValidation =
     type BoolState = | AND | OR
     let validateRedundantANDWithNOR : StructureValidator<_> =
         fun _ es ->
-            let effects = (es.AllEffects)
-            let triggers = (es.AllTriggers)
+            let effects = es.AllEffects
+            let triggers = es.AllTriggers
             let fNode =
                 fun (last : BoolState) (x : Node) ->
                     match last, x.Key with
@@ -340,8 +340,8 @@ module CommonValidation =
             (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid (Guid.NewGuid(), e)))
     let validateRedundantANDWithNOT : StructureValidator<_> =
         fun _ es ->
-            let effects = (es.AllEffects)
-            let triggers = (es.AllTriggers)
+            let effects = es.AllEffects
+            let triggers = es.AllTriggers
             let fNode =
                 fun (last : BoolState) (x : Node) ->
                     match last, x.Key with
@@ -370,7 +370,7 @@ module CommonValidation =
                 match List.contains typedef.id refs with
                 | true -> None
                 | false -> Some (invManual (ErrorCodes.CustomError "This type should be used" Severity.Error) typedef.range typedef.id None)
-            let checkType ((typename : string), (typedefs : TypeDefInfo list)) =
+            let checkType (typename : string, typedefs : TypeDefInfo list) =
                 match allReferences |> Map.tryFind typename with
                 | None -> failwith "no refernences?" //inv (ErrorCodes.CustomError "This type should be used" Severity.Error)
                 | Some refs ->
@@ -413,11 +413,11 @@ module CommonValidation =
     let validateOptimisations =
         fun (settings : UtilityParser.ListMergeOptimisationDefinition list) ->
             let createItem (def : UtilityParser.ListMergeOptimisationDefinition) =
-                intern (def.StartingKey), ((def.ConnectingKeys |> List.map intern), (def.SupportedValues |> List.map intern), def.TargetKey)
+                intern def.StartingKey, ((def.ConnectingKeys |> List.map intern), (def.SupportedValues |> List.map intern), def.TargetKey)
             let startMap = settings |> List.map createItem |> Map.ofList
             let res : StructureValidator<_> =
                 fun _ es ->
-                    let triggers = (es.AllTriggers) @ (es.AllEffects)
+                    let triggers = es.AllTriggers @ es.AllEffects
                     let fNode =
                         fun (last : (StringLowerToken list * StringLowerToken list * string * Node) option) (x : Node) ->
                             match last, Map.tryFind x.KeyId.lower startMap with
@@ -443,5 +443,5 @@ module CommonValidation =
                                 if x.KeyId.lower = inner
                                 then Some (inners, targets, merged, source), None
                                 else None, None
-                    (triggers) <&!&> (foldNodeWithState fNode None >> (fun e -> Invalid (Guid.NewGuid(), e)))
+                    triggers <&!&> (foldNodeWithState fNode None >> (fun e -> Invalid (Guid.NewGuid(), e)))
             res

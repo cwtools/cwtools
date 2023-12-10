@@ -52,7 +52,7 @@ module VIC2Localisation =
                 | Failure msg ->
                     (false, 0, msg, None)
 
-        let mutable results : Results = upcast new Dictionary<string, (bool * int * string * FParsec.Position option)>()
+        let mutable results : Results = upcast new Dictionary<string, bool * int * string * FParsec.Position option>()
         let addFiles (x : (string * string) list) = List.map (fun (fn, fs) -> (fn, addFile (fn, fs))) x
 
         let getForLang language (x : LocalisationEntry.Row) =
@@ -87,12 +87,12 @@ module VIC2Localisation =
             let one = csv |> Seq.tryFind ( snd >> (fun f -> f.``#CODE`` = x)) |> Option.map snd
             let two = csvFallback |> Seq.tryFind ( snd >> (fun f -> f.``#CODE`` = x)) |> Option.map snd
             match (one, two) with
-            | (Some x, _) -> getForLang lang x
-            | (None, Some x) -> getForLangFallback lang x
+            | Some x, _ -> getForLang lang x
+            | None, Some x -> getForLangFallback lang x
             | _ -> x
 
         do
-            results <- addFiles (files) |> dict
+            results <- addFiles files |> dict
         // do
         //     match Directory.Exists(localisationFolder) with
         //     | true ->

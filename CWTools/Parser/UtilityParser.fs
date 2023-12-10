@@ -8,7 +8,7 @@ open CWTools.Common.NewScope
 open CWTools.Utilities
 
 module UtilityParser =
-    let private parseLink (anyScope) (parseScope) (allScopes) (node : Node) =
+    let private parseLink anyScope parseScope allScopes (node : Node) =
         let name = node.Key
         let desc = node.TagText "desc"
         let inputScopes =
@@ -41,9 +41,9 @@ module UtilityParser =
     let loadEventTargetLinks anyScope parseScope allScopes filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        |Failure(e, _, _) -> log (sprintf "link file %s failed with %s" filename e); ([])
+        |Failure(e, _, _) -> log (sprintf "link file %s failed with %s" filename e); []
         |Success(s,_,_) ->
-            let root = CWTools.Process.STLProcess.simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = CWTools.Process.STLProcess.simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             root.Child "links"
                 |> Option.map (fun l -> l.Children |> List.map (parseLink anyScope parseScope allScopes))
                 |> Option.defaultValue []
@@ -67,7 +67,7 @@ module UtilityParser =
         match parsed with
         | Failure(e, _, _) -> log (sprintf "scopedefinitions file %s failed with %s" filename e); ([], [])
         | Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             let scopes =
                 root.Child "scopes"
                 |> Option.map (fun c -> c.Children |> List.map parseScopeDef)
@@ -100,9 +100,9 @@ module UtilityParser =
     let private loadModCatDefinitions filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        | Failure(e, _, _) -> log (sprintf "modifiercategorydefinitions file %s failed with %s" filename e); ([])
+        | Failure(e, _, _) -> log (sprintf "modifiercategorydefinitions file %s failed with %s" filename e); []
         | Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             root.Child "modifier_categories"
                 |> Option.map (fun c -> c.Children |> List.map parseModCatDef)
                 |> Option.defaultValue []
@@ -138,7 +138,7 @@ module UtilityParser =
         match parsed with
         |Failure(e, _, _) -> log (sprintf "loccommands file %s failed with %s" filename e); ([], [], [])
         |Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             let a, b =
                 root.Child "localisation_commands"
                 |> Option.map getLocCommands
@@ -152,9 +152,9 @@ module UtilityParser =
     let loadModifiers filename fileString =
         let parsed = CKParser.parseString fileString filename
         match parsed with
-        |Failure(e, _, _) -> log (sprintf "modifier file %s failed with %s" filename e); ([])
+        |Failure(e, _, _) -> log (sprintf "modifier file %s failed with %s" filename e); []
         |Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             root.Child "modifiers"
                 |> Option.map (fun ms ->  ms.Values |> List.map(fun l -> {ActualModifier.tag = l.Key; category = modifierCategoryManager.ParseModifier() (l.Value.ToRawString())}))
                 |> Option.defaultValue []
@@ -195,7 +195,7 @@ module UtilityParser =
             log (sprintf "settings file %s failed with %s" filename e);
             None
         |Success(s,_,_) ->
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             let listMergeOptimisations =
                 root.Child "list_merge_optimisations"
                 |> Option.map (fun ms ->  ms.Children |> List.choose loadListMergeOptimisation)

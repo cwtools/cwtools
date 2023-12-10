@@ -26,7 +26,7 @@ module Graphics =
                         let filename = fn.Value.ToRawString().Replace("\\","/")
                         match filenames |> List.exists (fun f -> f.EndsWith(filename, StringComparison.Ordinal)) with
                         | true -> OK
-                        | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile (filename)) fn])
+                        | false -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile filename) fn])
             pdxmesh <&!&> inner
 
     let valAssetFiles : STLFileValidator =
@@ -45,7 +45,7 @@ module Graphics =
                     |Some lv -> if names |> List.contains (lv.Value.ToRawString()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedPDXMesh (lv.Value.ToRawString())) lv])
             assets <&!&> inner
 
-    let inline validateEntityCulture (entities : Collections.Set<string>) (cultures : (string * string list) list) (entity : string) (leaf) (culture : string) =
+    let inline validateEntityCulture (entities : Collections.Set<string>) (cultures : (string * string list) list) (entity : string) leaf (culture : string) =
         let secondKey = cultures |> List.tryPick (fun (c, f) -> if c == culture then Some f else None)
                                  |> Option.defaultValue []
                                  //|> Option.map (fun k -> k + "_" + entity)
@@ -58,7 +58,7 @@ module Graphics =
         |false, Some fallback ->
             if entities.Contains fallback then None else Some (Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedSectionEntityFallback firstkey fallback culture ) leaf]))
 
-    let inline validateEntityCultures (entities : Collections.Set<string>) (allcultures : (string * string list) list) (entity : string) (leaf) (cultures : string list) =
+    let inline validateEntityCultures (entities : Collections.Set<string>) (allcultures : (string * string list) list) (entity : string) leaf (cultures : string list) =
         let errors = cultures |> List.choose (validateEntityCulture entities allcultures entity leaf)
         match errors with
         |[] -> OK
@@ -66,7 +66,7 @@ module Graphics =
         |[x1; x2] -> x1 <&&> x2
         |x1::x2::_ -> x1 <&&> x2 <&&> (Invalid (Guid.NewGuid(), [inv (ErrorCodes.CustomError "and more errors hidden" Severity.Error) leaf]))
 
-    let inline validateEntity (entities : Collections.Set<string>) (entity : string) (node) =
+    let inline validateEntity (entities : Collections.Set<string>) (entity : string) node =
         if entities.Contains entity then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.UndefinedEntity entity) node])
 
 

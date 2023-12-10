@@ -15,7 +15,7 @@ type Entry = {
 type GetDesc = string -> string
 type GetKeys = string list
 type Values = IDictionary<string, string>
-type Results = IDictionary<string, (bool * int * string * Position option)>
+type Results = IDictionary<string, bool * int * string * Position option>
 
 type ILocalisationAPI =
     abstract Results : Results

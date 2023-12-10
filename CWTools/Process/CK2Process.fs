@@ -10,7 +10,7 @@ module CK2Process =
 
     let processEventFile (ev : ParsedFile) =
         let (ParsedFile e) = ev
-        (ck2Process.ProcessNode()) "" range.Zero e
+        ck2Process.ProcessNode() "" range.Zero e
 
 
 

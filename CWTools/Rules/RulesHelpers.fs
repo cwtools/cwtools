@@ -9,7 +9,7 @@ open CWTools.Common
 
 
 let getTypesFromDefinitions (ruleapplicator : RuleValidationService option) (types : TypeDefinition list) (es : Entity list) =
-    let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e, (Path.GetFileName e.logicalpath), e.validate)
+    let entities = es |> List.map (fun e -> (Path.GetDirectoryName e.logicalpath).Replace("\\","/"), e, (Path.GetFileName e.logicalpath), e.validate)
     let getExplicitLocalisationKeys (entity : IClause) (typeDef : TypeDefinition) =
         typeDef.localisation |> List.choose (fun ld -> ld.explicitField |> Option.map (fun ef -> ld.name, ef, ld.primary))
                              |> List.choose (fun (name, field, primary) -> entity.Tag field |> Option.map (fun v -> name, v.ToRawString(), primary))
@@ -45,7 +45,7 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService option) (typ
                             let rec skiprootkey (srk : SkipRootKey list) (n : IClause)=
                                 let childKey =
                                     match n with
-                                    | :? ValueClause as vc -> vc.FirstKey |> Option.orElse (vc.SecondKey) |> Option.defaultValue "clause"
+                                    | :? ValueClause as vc -> vc.FirstKey |> Option.orElse vc.SecondKey |> Option.defaultValue "clause"
                                     | _ -> n.Key
                                 match srk with
                                 |[] -> []
@@ -56,10 +56,10 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService option) (typ
                                     n.ClauseList |> List.collect inner
                                 |MultipleKeys (keys, shouldMatch)::_ ->
                                     if (keys |> List.exists ((==) childKey)) <> (not shouldMatch) then n.ClauseList |> List.collect inner else []
-                                |(SpecificKey key)::tail ->
+                                |SpecificKey key::tail ->
                                     if childKey == key then n.ClauseList |> List.collect (skiprootkey tail) else []
                                     // n.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
-                                |(AnyKey)::tail ->
+                                |AnyKey::tail ->
                                     n.ClauseList |> List.collect (skiprootkey tail)
                                     // n.Children |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
                             match def.type_per_file, def.skipRootKey with
@@ -84,7 +84,7 @@ let getTypesFromDefinitions (ruleapplicator : RuleValidationService option) (typ
     types |> List.map (fun t -> t.name) |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m ) results
           |> Map.map (fun _ vs -> vs |> List.map (fun (v, n, r, el, sts) -> { TypeDefInfo.validate = v; id = n; range = r; explicitLocalisation = el; subtypes = sts}))
 
-let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
+let getEnumsFromComplexEnums (complexenums : ComplexEnumDef list) (es : Entity list) =
     let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
     let rec inner (enumtree : Node) (node : Node) =
         // log (sprintf "gece %A %A %A" (node.ToRaw) (enumtree.ToRaw) (node.Position.FileName))
@@ -121,7 +121,7 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
                 // log (sprintf "gecel %A %A" k node.Leaves)
                 if k == "scalar"
                 then node.Leaves |> Seq.map (fun l -> l.ValueText.Trim([|'\"'|]), Some l.Position) |> List.ofSeq
-                else node.TagsText (k) |> Seq.map (fun k -> k.Trim([|'\"'|]), None) |> List.ofSeq
+                else node.TagsText k |> Seq.map (fun k -> k.Trim([|'\"'|]), None) |> List.ofSeq
             |None ->
                 match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
                 |Some leaf ->
@@ -147,7 +147,7 @@ let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity
         // log "%A %A" complexenum.name values
         { key = complexenum.name; values = values |> List.map fst; description = complexenum.description; valuesWithRange = values }
     complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq
-                 |> List.fold (fun acc e -> if Map.containsKey e.key acc then Map.add e.key { e with values = e.values @ (acc.[e.key].values); valuesWithRange = e.valuesWithRange @ (acc.[e.key].valuesWithRange) } acc else Map.add e.key e acc ) Map.empty
+                 |> List.fold (fun acc e -> if Map.containsKey e.key acc then Map.add e.key { e with values = e.values @ acc.[e.key].values; valuesWithRange = e.valuesWithRange @ acc.[e.key].valuesWithRange } acc else Map.add e.key e acc ) Map.empty
                  |> Map.toList |> List.map snd
 
 let getDefinedVariables (infoService : InfoService) (es : Entity list) =

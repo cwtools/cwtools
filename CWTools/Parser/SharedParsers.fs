@@ -52,7 +52,7 @@ module internal SharedParsers =
     let idCharArray = [|'_'; ':'; '@'; '.'; '\"'; '-'; '''; '['; ']'; '!'; '<'; '>'; '$'; '^'; '&'; '|'; magicChar|]
     let isAnyofidCharArray = isAnyOf idCharArray
     let isidchar = fun c -> isLetter c || isDigit c || isAnyofidCharArray c
-    let valueCharArray = ([|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'; '^'; '*'; '&'; magicChar|])
+    let valueCharArray = [|'_'; '.'; '-'; ':'; ';'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'; ','; '<'; '>'; '?'; '$'; 'š'; 'Š'; '’'; '|'; '^'; '*'; '&'; magicChar|]
     let isAnyValueChar = isAnyOf valueCharArray
     let isvaluechar = fun c -> isLetter c || isDigit c || isAnyValueChar c
 
@@ -71,7 +71,7 @@ module internal SharedParsers =
     let metaprogrammingCharSnippet = many1Satisfy (fun c -> c <> ']' && c <> '\\')
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
 
-    let parseWithPosition p = pipe3 (getPosition) p (getPosition) (fun s r e -> getRange s e, r)
+    let parseWithPosition p = pipe3 getPosition p getPosition (fun s r e -> getRange s e, r)
 
     // Base types
     // =======
@@ -101,11 +101,11 @@ module internal SharedParsers =
 
     // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
     //                 ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(false)))
-    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot (isvaluechar) |>> (fun _ -> Bool(true))
-    let valueBNo = skipString "no" .>> nextCharSatisfiesNot (isvaluechar) |>> (fun _ -> Bool(false))
+    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot isvaluechar |>> (fun _ -> Bool(true))
+    let valueBNo = skipString "no" .>> nextCharSatisfiesNot isvaluechar |>> (fun _ -> Bool(false))
 
-    let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) |>> int |>> Int
-    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> decimal |>> Float
+    let valueI = pint64 .>> nextCharSatisfiesNot isvaluechar |>> int |>> Int
+    let valueF = pfloat .>> nextCharSatisfiesNot isvaluechar |>> decimal |>> Float
 
     let hsv3 = clause (pipe3 ((parseWithPosition valueF .>> ws) .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
     let hsv4 = clause (pipe4 (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
@@ -113,15 +113,15 @@ module internal SharedParsers =
         clause (pipe4 (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (opt (parseWithPosition valueF .>> ws))
             (fun a b c d ->
             match (a, b, c, d) with
-            | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
-            | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
+            | a, b, c, Some d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
+            | a, b, c, None -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
     let hsv = strSkip "hsv" >>. opt (strSkip "360") >>. hsvI .>> ws
     let hsvC = strSkip "HSV" >>. hsvI .>> ws
     let rgbI = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (opt (parseWithPosition valueI .>> ws))
                 (fun a b c d ->
                 match (a, b, c, d) with
-                | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
-                | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
+                | a, b, c, Some d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
+                | a, b, c, None -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
 
 
     let rgb3 = clause (pipe3 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
@@ -129,15 +129,15 @@ module internal SharedParsers =
     let rgb = strSkip "rgb" >>. rgbI .>> ws
     let rgbC = strSkip "RGB" >>. rgbI .>> ws
 
-    let metaprograming = pipe3 (pstring "@\\[") ( metaprogrammingCharSnippet) (ch ']') (fun a b c -> ( a + b + string c)) |>> String
+    let metaprograming = pipe3 (pstring "@\\[") metaprogrammingCharSnippet (ch ']') (fun a b c -> ( a + b + string c)) |>> String
     // Complex types
     // =======
 
     // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let (value : Parser<Value, unit>), valueimpl = createParserForwardedToRef()
-    let leafValue = pipe3 (getPosition) (value .>> ws) (getPosition) (fun a b c -> (getRange a c ,b))// |>> (fun (p, v) -> p, (Value v)))
-    let statement = comment |>> Comment <|> (attempt (((leafValue)) .>> notFollowedBy operatorLookahead |>> Value)) <|> (keyvalue) <?> "statement"
+    let leafValue = pipe3 getPosition (value .>> ws) getPosition (fun a b c -> (getRange a c ,b))// |>> (fun (p, v) -> p, (Value v)))
+    let statement = comment |>> Comment <|> (attempt (leafValue .>> notFollowedBy operatorLookahead |>> Value)) <|> keyvalue <?> "statement"
     let valueBlock = clause (many1 ((leafValue |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
 
     let valueClause = clause (many statement) |>> Clause //<?> "statement clause"
@@ -183,7 +183,7 @@ module internal SharedParsers =
 
 
     valueimpl := valueCustom <?> "value"
-    keyvalueimpl := pipe5 (getPosition) (keyQ <|> key) (operator) (value) (getPosition .>> ws) (fun start id op value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
+    keyvalueimpl := pipe5 getPosition (keyQ <|> key) operator value (getPosition .>> ws) (fun start id op value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> ( ParsedFile f ))
     let valuelist = many1 ((comment |>> Comment) <|> (leafValue |>> (fun (a,b) -> Value(a, b)))) .>> eof
     let statementlist = (many statement) .>> eof

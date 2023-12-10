@@ -30,13 +30,13 @@ module Helpers =
                             |> Option.map (fun s -> s |> List.map (fun s -> (p + s.id + suff))) |> Option.defaultValue []
                         | NodeRule (NewField.TypeField (TypeType.Complex (p,t,suff)), _), _ ->
                             types.TryFind(t)
-                            |> Option.map (fun s -> s |> List.map (fun s -> ((p + s.id + suff)))) |> Option.defaultValue []
+                            |> Option.map (fun s -> s |> List.map (fun s -> (p + s.id + suff))) |> Option.defaultValue []
                         | LeafRule (NewField.ValueField (Enum e), _), _ ->
                             enums.TryFind(e)
-                            |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> (s))) |> Option.defaultValue []
+                            |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> s)) |> Option.defaultValue []
                         | NodeRule (NewField.ValueField (Enum e), _), _ ->
                             enums.TryFind(e)
-                            |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> (s))) |> Option.defaultValue []
+                            |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> s)) |> Option.defaultValue []
                         | _ -> []
         let aliases =
                     lookup.configRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -51,7 +51,7 @@ module Helpers =
         match link.sourceRuleType.Trim() with
         | x when x.StartsWith "<" && x.EndsWith ">" ->
             let sourceType = x.Trim([|'<';'>'|])
-            match lookup.typeDefInfo |> Map.tryFind (sourceType) with
+            match lookup.typeDefInfo |> Map.tryFind sourceType with
                 | Some x -> x |> List.map (fun tdi -> tdi.id, Some (TypeRef(sourceType, tdi.id)))
                 | None ->
                     log (sprintf "Link %s refers to undefined type %s" link.name sourceType)
@@ -88,7 +88,7 @@ module Helpers =
         | _ -> None
 
     let addDataEventTargetLinks (lookup : Lookup) (embeddedSettings : EmbeddedSettings) (addWildCardLinks : bool) =
-        let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some (l) | _ -> None)
+        let links = embeddedSettings.eventTargetLinks |> List.choose (function | DataLink l -> Some l | _ -> None)
   
         let convertLinkToEffects (link : EventTargetDataLink) =
             let typeDefinedKeys = convertSourceRuleType lookup link
@@ -119,7 +119,7 @@ module Helpers =
             let resources = game.Resources
             let rulesLocErrors = game.ValidationManager.CachedRuleErrors(resources.ValidatableEntities()) |> List.filter (fun e -> e.code = "CW100")
             let genGlobal() =
-                let ges = (globalLocalisation(game))
+                let ges = globalLocalisation(game)
                 game.LocalisationManager.globalLocalisationErrors <- Some ges
                 ges
             let genAll() =
@@ -129,9 +129,9 @@ module Helpers =
             rulesLocErrors @
             match game.LocalisationManager.localisationErrors, game.LocalisationManager.globalLocalisationErrors with
             |Some les, Some ges -> (if force then genAll() else les) @ (if forceGlobal then genGlobal() else ges)
-            |None, Some ges -> (genAll()) @ (if forceGlobal then genGlobal() else ges)
-            |Some les, None -> (if force then genAll() else les) @ (genGlobal())
-            |None, None -> (genAll()) @ (genGlobal())
+            |None, Some ges -> genAll() @ (if forceGlobal then genGlobal() else ges)
+            |Some les, None -> (if force then genAll() else les) @ genGlobal()
+            |None, None -> genAll() @ genGlobal()
 
     let createTypeDefInfo validate id range explicitLocalisation subtypes =
         {
@@ -168,7 +168,7 @@ module Helpers =
             let eventtargets =
                 lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
                                          |> List.distinct
-                                         |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
+                                         |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k [s] map) Map.empty
             let eventtargets =
                 definedEventTargets |> List.fold (fun oldMap et -> oldMap |> Map.add et [scopeManager.AnyScope]) eventtargets
             let definedvars =

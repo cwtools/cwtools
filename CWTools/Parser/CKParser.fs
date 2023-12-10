@@ -27,7 +27,7 @@ open Types
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
             match dict.TryGetValue(keyFunction(n)) with
-            | (true, v) -> v
+            | true, v -> v
             | _ ->
                 let temp = memFunction(n)
                 dict.Add(keyFunction(n), temp)
@@ -39,7 +39,7 @@ open Types
         let hash = (fun (file, name) -> file.GetHashCode(), name)
         (memoize hash inner) (fileString, fileName)
 
-    let getSuccess (result) =
+    let getSuccess result =
         match result with
         |Success(s, _, _) -> s
         |_ -> ParsedFile []

@@ -210,7 +210,7 @@ module ValidationCore =
         { code = code.ID; severity = code.Severity; range = pos; keyLength = key.Length; message = code.Message; data = data; relatedErrors = None }
         // code.ID, code.Severity, pos, key.Length, code.Message, data, None
 
-    let inline inv (code : ErrorCode) (l) =
+    let inline inv (code : ErrorCode) l =
         invData code l None
 
     let invLeafValue (code : ErrorCode) (lv : LeafValue) (data : option<string>) =
@@ -223,7 +223,7 @@ module ValidationCore =
         { code = code.ID; severity = code.Severity; range = pos; keyLength = key.Length; message = code.Message; data = data; relatedErrors = None }
         // code.ID, code.Severity, pos, key.Length, code.Message, data, None
 
-    let inline invCustom (l) =
+    let inline invCustom l =
         invData (ErrorCodes.CustomError "default error" Severity.Error) l None
     // let inline inv (sev : Severity) (l : ^a) (s : string) =
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
@@ -258,8 +258,8 @@ module ValidationCore =
     let (<&%&>) f1 f2 =
         match f1, f2 with
         |OK, OK -> OK
-        |Invalid(g, e1), _ -> Invalid(g, (e1))
-        |OK, Invalid(g, e2) -> Invalid(g, (e2))
+        |Invalid(g, e1), _ -> Invalid(g, e1)
+        |OK, Invalid(g, e2) -> Invalid(g, e2)
 
     let mergeValidationErrors (errorcode : string) =
         let rec mergeErrorsInner es =
@@ -273,7 +273,7 @@ module ValidationCore =
                 |_, "CW272" -> head2
                 | _ ->
                     // let (e1c, e1s, e1r, e1l, e1m, e1d, e1rel), (_, _, _, _, e2m, _, _) = head, head2
-                    let t = { code = head.code; severity = max head.severity head2.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" (head.message) (head2.message)); data = head.data; relatedErrors = head.relatedErrors }
+                    let t = { code = head.code; severity = max head.severity head2.severity; range = head.range; keyLength = head.keyLength; message = (sprintf "%s\nor\n%s" head.message head2.message); data = head.data; relatedErrors = head.relatedErrors }
                     mergeErrorsInner (t::tail)
         mergeErrorsInner
 
@@ -304,7 +304,7 @@ module ValidationCore =
         |_, Invalid (_, []) -> None
         |_, Invalid (_, [res]) -> Some res
         |Invalid (_, []), Invalid (_, es) |OK, Invalid (_, es) -> Some (mergeValidationErrors "CW240" es)
-        |Invalid (_, (head::_)), Invalid (_, es) ->
+        |Invalid (_, head::_), Invalid (_, es) ->
             let t = List.takeWhile ((<>) head) es
             match t with
             |[] -> None

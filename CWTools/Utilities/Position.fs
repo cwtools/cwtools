@@ -198,7 +198,7 @@ let memoize (keyFunction : 'a -> 'b) (memFunction : 'a -> 'c) =
     let dict = new System.Collections.Concurrent.ConcurrentDictionary<'b,'c>()
     fun n ->
         match dict.TryGetValue(keyFunction(n)) with
-        | (true, v) -> v
+        | true, v -> v
         | _ ->
             let temp = memFunction(n)
             dict.TryAdd(keyFunction(n), temp) |> ignore

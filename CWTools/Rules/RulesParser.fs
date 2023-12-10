@@ -46,7 +46,7 @@ module private RulesParserImpl =
         let one = clause.Leaves |> Seq.map (fun e -> LeafC e, clause.AllArray |> Array.fold (findComments e.Position) struct (false, []) |> structSnd) |> List.ofSeq
         //log "%s %A" node.Key (node.All |> List.rev)
         //log "%A" one
-        let two = clause.Nodes |> Seq.map (fun e -> NodeC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd |> (fun l -> (l))) |> List.ofSeq
+        let two = clause.Nodes |> Seq.map (fun e -> NodeC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd |> (fun l -> l)) |> List.ofSeq
         let three = clause.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd)
         let four = clause.ValueClauses |> Seq.toList |> List.map (fun e -> ValueClauseC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd)
         let new2 = one @ two @ three @ four
@@ -65,7 +65,7 @@ module private RulesParserImpl =
                 match s, Decimal.TryParse s with
                 | "inf", _ -> Some (decimal RulesParserConstants.floatFieldDefaultMaximum)
                 | "-inf", _ -> Some (decimal RulesParserConstants.floatFieldDefaultMinimum)
-                | _, (true, num) -> Some (num)
+                | _, (true, num) -> Some num
                 | _, (false, _) -> None
             if split.Length < 2 then None else
                 match (parseDecimal split.[0]), (parseDecimal split.[1]) with
@@ -121,7 +121,7 @@ module private RulesParserImpl =
             let s = s.Trim('#')
             let parsed = CKParser.parseString s "config"
             match parsed with
-            | Failure(_) -> None
+            | Failure _ -> None
             | Success(s,_,_) ->
                 let n = (STLProcess.shipProcess.ProcessNode EntityType.Other "root" (mkZeroFile "config") s)
                 match n.Child "replace_scope" with
@@ -143,7 +143,7 @@ module private RulesParserImpl =
         | None -> None
 
 
-    let private getOptionsFromComments (parseScope) (allScopes) (anyScope) (operator : Operator) (keyRequiredQuotes : bool) (valueRequiredQuotes : bool) (comments : string list) =
+    let private getOptionsFromComments parseScope allScopes anyScope (operator : Operator) (keyRequiredQuotes : bool) (valueRequiredQuotes : bool) (comments : string list) =
         let min, max, strictmin =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             | Some c ->
@@ -161,7 +161,7 @@ module private RulesParserImpl =
             match comments |> List.filter (fun s -> s.StartsWith "##") with
             | [] -> None
             | [x] -> Some (x.Trim('#'))
-            | xs -> Some (xs |> List.map (fun x -> x.Trim('#')) |> String.concat (Environment.NewLine))
+            | xs -> Some (xs |> List.map (fun x -> x.Trim('#')) |> String.concat Environment.NewLine)
         let pushScope =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
             | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
@@ -207,7 +207,7 @@ module private RulesParserImpl =
         | "filepath" -> FilepathField (None, None)
         | x when fastStartsWith x "filepath[" ->
             match getSettingFromString x "filepath" with
-            | Some (setting) ->
+            | Some setting ->
                 match setting.Contains "," with
                 | true ->
                     match setting.Split([|','|], 2) with
@@ -230,29 +230,29 @@ module private RulesParserImpl =
         | x when fastStartsWith x "int[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> ValueField (ValueType.Int (min, max))
-            | None -> (defaultInt)
+            | None -> defaultInt
         | "float" -> defaultFloat
         | x when fastStartsWith x "float[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueField (ValueType.Float (min, max))
-            | None -> (defaultFloat)
+            | None -> defaultFloat
         | x when fastStartsWith x "enum[" ->
             match getSettingFromString x "enum" with
-            | Some (name) -> ValueField (ValueType.Enum name)
+            | Some name -> ValueField (ValueType.Enum name)
             | None -> ValueField (ValueType.Enum "")
         | x when fastStartsWith x "icon[" ->
             match getSettingFromString x "icon" with
-            | Some (folder) -> IconField folder
-            | None -> ScalarField (ScalarValue)
+            | Some folder -> IconField folder
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "alias_match_left[" ->
             match getSettingFromString x "alias_match_left" with
             | Some alias -> AliasField alias
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "alias_name[" ->
             match getSettingFromString x "alias_name" with
             | Some alias -> AliasField alias
-            | None -> ScalarField (ScalarValue)
-        | "scope_field" -> ScopeField [(anyScope)]
+            | None -> ScalarField ScalarValue
+        | "scope_field" -> ScopeField [anyScope]
         | "variable_field" -> VariableField (false, false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | x when fastStartsWith x "variable_field[" ->
             match getFloatSettingFromString x with
@@ -287,44 +287,44 @@ module private RulesParserImpl =
             match getSettingFromString x "value_set" with
             | Some variable ->
                 VariableSetField variable
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "value[" ->
             match getSettingFromString x "value" with
             | Some variable ->
                 VariableGetField variable
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "scope[" ->
             match getSettingFromString x "scope" with
             | Some target ->
                 ScopeField [(parseScope target)]
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "event_target" ->
             match getSettingFromString x "event_target" with
             | Some target ->
                 ScopeField [(parseScope target)]
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "single_alias_right" ->
             match getSettingFromString x "single_alias_right" with
             | Some alias ->
                 SingleAliasField alias
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "alias_keys_field" ->
             match getSettingFromString x "alias_keys_field" with
             | Some aliasKey ->
                 AliasValueKeysField aliasKey
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "stellaris_name_format" ->
             match getSettingFromString x "stellaris_name_format" with
             | Some aliasKey ->
                 ValueField (STLNameFormat aliasKey)
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | x when fastStartsWith x "scope_group[" ->
             match getSettingFromString x "scope_group" with
             | Some aliasKey ->
                 match scopeGroup |> Map.tryFind aliasKey with
                 | Some scopes -> ScopeField scopes
                 | None -> ScalarField(ScalarValue)
-            | None -> ScalarField (ScalarValue)
+            | None -> ScalarField ScalarValue
         | "portrait_dna_field" -> ValueField CK2DNA
         | "portrait_properties_field" -> ValueField CK2DNAProperty
         | "colour_field" -> MarkerField Marker.ColourField
@@ -337,24 +337,24 @@ module private RulesParserImpl =
 
 
 
-    let private configNode (processChildConfig) (parseScope) (allScopes) (anyScope) scopeGroup (node : Node) (comments : string list) (key : string) =
+    let private configNode processChildConfig parseScope allScopes anyScope scopeGroup (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) (node.KeyId.quoted) false comments
+        let options = getOptionsFromComments parseScope allScopes anyScope Operator.Equals node.KeyId.quoted false comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
         let rule =
             match key with
             |x when x.StartsWith "subtype[" ->
                 match getSettingFromString x "subtype" with
-                |Some st when st.StartsWith "!" -> SubtypeRule (st.Substring(1), false, (innerRules))
-                |Some st -> SubtypeRule (st, true, (innerRules))
+                |Some st when st.StartsWith "!" -> SubtypeRule (st.Substring(1), false, innerRules)
+                |Some st -> SubtypeRule (st, true, innerRules)
                 |None -> failwith (sprintf "Invalid subtype string %s" x)
             |_ when node.KeyPrefixId.IsSome && node.ValuePrefixId.IsSome -> NodeRule(JominiGuiField, innerRules)
             |x -> NodeRule(processKey parseScope anyScope scopeGroup (x.Trim('"')), innerRules)
         NewRule(rule, options)
 
-    let private configValueClause processChildConfig (parseScope) (allScopes) (anyScope) scopeGroup (valueclause : ValueClause) (comments : string list) =
+    let private configValueClause processChildConfig parseScope allScopes anyScope scopeGroup (valueclause : ValueClause) (comments : string list) =
         let children = getNodeComments valueclause
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) false false comments
+        let options = getOptionsFromComments parseScope allScopes anyScope Operator.Equals false false comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
         let rule = ValueClauseRule innerRules
         NewRule(rule, options)
@@ -362,9 +362,9 @@ module private RulesParserImpl =
     let private rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; strictMin = true; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None; keyRequiredQuotes = false; valueRequiredQuotes = false; typeHint = None; errorIfOnlyMatch = None }
     let private hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0M, 2.0M))), { min = 3; max = 4; strictMin = true; leafvalue = true; description = None; pushScope = None; replaceScopes = None; severity = None; requiredScopes = []; comparison = false; referenceDetails = None; keyRequiredQuotes = false; valueRequiredQuotes = false; typeHint = None; errorIfOnlyMatch = None }
 
-    let private configLeaf (parseScope) (allScopes) (anyScope) scopeGroup (leaf : Leaf) (comments : string list) (key : string) =
+    let private configLeaf parseScope allScopes anyScope scopeGroup (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey parseScope anyScope scopeGroup (key.Trim('"'))
-        let options = getOptionsFromComments parseScope allScopes anyScope (leaf.Operator) (leaf.KeyId.quoted) (leaf.ValueId.quoted) comments
+        let options = getOptionsFromComments parseScope allScopes anyScope leaf.Operator leaf.KeyId.quoted leaf.ValueId.quoted comments
         let rightkey = leaf.Value.ToString()
         match key, rightkey with
         |_, x when x.StartsWith("colour[") ->
@@ -388,12 +388,12 @@ module private RulesParserImpl =
             let leafRule = LeafRule(leftfield, rightfield)
             NewRule(leafRule, options)
 
-    let private configLeafValue (parseScope) allScopes (anyScope) scopeGroup (leafvalue : LeafValue) (comments : string list) =
+    let private configLeafValue parseScope allScopes anyScope scopeGroup (leafvalue : LeafValue) (comments : string list) =
         let field = processKey parseScope anyScope scopeGroup (leafvalue.Value.ToRawString())
-        let options = { getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) false leafvalue.ValueId.quoted comments with leafvalue = true }
+        let options = { getOptionsFromComments parseScope allScopes anyScope Operator.Equals false leafvalue.ValueId.quoted comments with leafvalue = true }
         NewRule(LeafValueRule(field), options)
 
-    let private configRootLeaf processChildConfig (parseScope) allScopes (anyScope) scopeGroup (leaf : Leaf) (comments : string list) =
+    let private configRootLeaf processChildConfig parseScope allScopes anyScope scopeGroup (leaf : Leaf) (comments : string list) =
         match leaf.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
@@ -405,7 +405,7 @@ module private RulesParserImpl =
                 TypeRule (x, rule)
         |x when x.StartsWith "single_alias[" ->
             match getSettingFromString x "single_alias" with
-            |Some (a) ->
+            |Some a ->
                 let innerRule = configLeaf parseScope allScopes anyScope scopeGroup leaf comments x
                 SingleAliasRule (a, innerRule)
             |None ->
@@ -415,9 +415,9 @@ module private RulesParserImpl =
             let rule = configLeaf parseScope allScopes anyScope scopeGroup leaf comments leaf.Key
             TypeRule (x, rule)
 
-    let private configRootNode processChildConfig (parseScope) allScopes (anyScope) scopeGroup (node : Node) (comments : string list) =
+    let private configRootNode processChildConfig parseScope allScopes anyScope scopeGroup (node : Node) (comments : string list) =
         let children = getNodeComments node
-        let options = getOptionsFromComments parseScope allScopes anyScope (Operator.Equals) false false comments
+        let options = getOptionsFromComments parseScope allScopes anyScope Operator.Equals false false comments
         let innerRules = children |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
         match node.Key with
         |x when x.StartsWith "alias[" ->
@@ -430,7 +430,7 @@ module private RulesParserImpl =
                 TypeRule (x, NewRule(NodeRule(SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
         |x when x.StartsWith "single_alias[" ->
             match getSettingFromString x "single_alias" with
-            |Some (a) ->
+            |Some a ->
                 let innerRule = configNode processChildConfig parseScope allScopes anyScope scopeGroup node comments x
                 SingleAliasRule (a, innerRule)
             |None ->
@@ -438,15 +438,15 @@ module private RulesParserImpl =
         |x ->
             TypeRule (x, NewRule(NodeRule(SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x)), innerRules), options))
 
-    let rec private processChildConfig (parseScope) allScopes (anyScope) scopeGroup ((child, comments) : Child * string list)  =
+    let rec private processChildConfig parseScope allScopes anyScope scopeGroup ((child, comments) : Child * string list)  =
         match child with
-        |NodeC n -> Some (configNode processChildConfig parseScope allScopes anyScope scopeGroup n comments (n.Key))
+        |NodeC n -> Some (configNode processChildConfig parseScope allScopes anyScope scopeGroup n comments n.Key)
         |ValueClauseC vc -> Some (configValueClause processChildConfig parseScope allScopes anyScope scopeGroup vc comments)
-        |LeafC l -> Some (configLeaf parseScope allScopes anyScope scopeGroup l comments (l.Key))
+        |LeafC l -> Some (configLeaf parseScope allScopes anyScope scopeGroup l comments l.Key)
         |LeafValueC lv -> Some (configLeafValue parseScope allScopes anyScope scopeGroup lv comments)
         |_ -> None
 
-    let private processChildConfigRoot (parseScope) (allScopes) (anyScope) scopeGroup ((child, comments) : Child * string list) =
+    let private processChildConfigRoot parseScope allScopes anyScope scopeGroup ((child, comments) : Child * string list) =
         match child with
         |NodeC n when n.Key == "types" -> None
         |NodeC n -> Some (configRootNode processChildConfig parseScope allScopes anyScope scopeGroup n comments)
@@ -456,8 +456,8 @@ module private RulesParserImpl =
 
     // Types
 
-    let private processType (parseScope) (allScopes) (anyScope) scopeGroup (node : Node) (comments : string list) =
-        let parseLocalisation ((child : Child), comments : string list) =
+    let private processType parseScope allScopes anyScope scopeGroup (node : Node) (comments : string list) =
+        let parseLocalisation (child : Child, comments : string list) =
             match child with
             |LeafC loc ->
                 let required = comments |> List.exists (fun s -> s.Contains "required")
@@ -482,7 +482,7 @@ module private RulesParserImpl =
                     Some (st, res)
                 |_ -> None
             |_ -> None
-        let parseModifier ((child : Child), comments : string list) =
+        let parseModifier (child : Child, comments : string list) =
             match child with
             |LeafC modifier ->
                 let value = modifier.Key
@@ -511,7 +511,7 @@ module private RulesParserImpl =
                     Some (st, res)
                 |_ -> None
             |_ -> None
-        let parseSubType ((child : Child), comments : string list) =
+        let parseSubType (child : Child, comments : string list) =
             match child with
             |NodeC subtype when subtype.Key.StartsWith "subtype" ->
                 let typekeyfilter =
@@ -550,7 +550,7 @@ module private RulesParserImpl =
                     |None -> []
 
                 let rules = (getNodeComments subtype |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup))
-                match getSettingFromString (subtype.Key) "subtype" with
+                match getSettingFromString subtype.Key "subtype" with
                 |Some key -> Some { name = key
                                     rules = rules
                                     typeKeyField = typekeyfilter
@@ -677,7 +677,7 @@ module private RulesParserImpl =
 
 
 
-    let private processChildType (parseScope) allScopes (anyScope) scopeGroup ((child, comments) : Child * string list) =
+    let private processChildType parseScope allScopes anyScope scopeGroup ((child, comments) : Child * string list) =
         match child with
         | NodeC n when n.Key == "types" ->
             let inner ((child2, comments2) : Child * string list) =
@@ -696,9 +696,9 @@ module private RulesParserImpl =
             | Some en ->
                 let description =
                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
-                    | Some d -> (d.Trim('#'))
+                    | Some d -> d.Trim('#')
                     | None -> en
-                Some ({key = en; values = values |> List.map fst; description = description; valuesWithRange = values})
+                Some {key = en; values = values |> List.map fst; description = description; valuesWithRange = values}
             | None -> None
         | _ -> None
 
@@ -723,7 +723,7 @@ module private RulesParserImpl =
             | Some en, Some nt ->
                 let description =
                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
-                    | Some d -> (d.Trim('#'))
+                    | Some d -> d.Trim('#')
                     | None -> en
                 Some {name = en; pathOptions = pathOptions; nameTree = nt; start_from_root = start_from_root; description = description}
             | _ -> None
@@ -768,10 +768,10 @@ module private RulesParserImpl =
 
         let rec cataRule rule : NewRule =
             match rule with
-            | (NodeRule (l, r), o) -> (NodeRule (l, r |> List.map cataRule), o)
-            | (ValueClauseRule (r), o) -> (ValueClauseRule (r |> List.map cataRule), o)
-            | (SubtypeRule (a, b, i), o) -> (SubtypeRule(a, b, (i |> List.map cataRule)), o)
-            | (LeafRule (l, SingleAliasField name), o) ->
+            | NodeRule (l, r), o -> (NodeRule (l, r |> List.map cataRule), o)
+            | ValueClauseRule r, o -> (ValueClauseRule (r |> List.map cataRule), o)
+            | SubtypeRule (a, b, i), o -> (SubtypeRule(a, b, (i |> List.map cataRule)), o)
+            | LeafRule (l, SingleAliasField name), o ->
                 match singlealiasesmap() |> Map.tryFind name with
                 | Some (LeafRule (al, ar), ao) ->
                     // log (sprintf "Replaced single alias leaf %A %s with leaf %A" (l |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") name (al |> function |ValueField (Specific x) -> StringResource.stringManager.GetStringForIDs x |_ -> ""))
@@ -783,7 +783,7 @@ module private RulesParserImpl =
                     log (sprintf "Failed to find defined single alias %s when replacing single alias leaf %A. Found %A" name (l |> function |SpecificField (SpecificValue x) -> StringResource.stringManager.GetStringForIDs x |_ -> "") x)
                     rule
             /// TODO: Add clause key validation
-            | (LeafValueRule (SingleAliasClauseField (clauseKey, name)), o) ->
+            | LeafValueRule (SingleAliasClauseField (clauseKey, name)), o ->
                 match singlealiasesmap() |> Map.tryFind name with
                 | Some (NodeRule (al, ar), ao) ->
                     ValueClauseRule(ar), o
@@ -820,29 +820,29 @@ module private RulesParserImpl =
 
         let rec cataRule rule : NewRule list =
             match rule with
-            | LeafRule (l, MarkerField (ColourField)), o  ->
+            | LeafRule (l, MarkerField ColourField), o  ->
                 [
-                    NodeRule((l), [LeafValueRule(ValueField(ValueType.Float(-256.0M, 256.0M))), { defaultOptions with min = 3; max = 3 } ]), o
+                    NodeRule(l, [LeafValueRule(ValueField(ValueType.Float(-256.0M, 256.0M))), { defaultOptions with min = 3; max = 3 } ]), o
                 ]
-            | LeafRule (l, MarkerField (IRCountryTag)), o  ->
+            | LeafRule (l, MarkerField IRCountryTag), o  ->
                 [
                     LeafRule(l, ValueField(ValueType.Enum "country_tags")), o
                     LeafRule(l, VariableGetField "dynamic_country_tag"), o
                 ]
-            | LeafRule (MarkerField (IRCountryTag), r), o  ->
+            | LeafRule (MarkerField IRCountryTag, r), o  ->
                 [
                     LeafRule(ValueField(ValueType.Enum "country_tags"), r), o
                     LeafRule(VariableGetField "dynamic_country_tag", r), o
                 ]
-            | NodeRule (MarkerField (IRCountryTag), r), o ->
+            | NodeRule (MarkerField IRCountryTag, r), o ->
                 [
                     NodeRule(ValueField(ValueType.Enum "country_tags"), r |> List.collect cataRule), o
                     NodeRule(VariableGetField "dynamic_country_tag", r |> List.collect cataRule), o
                 ]
             | NodeRule (l, r), o ->
                 [NodeRule(l, r |> List.collect cataRule), o]
-            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
-            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | ValueClauseRule r, o -> [ValueClauseRule (r |> List.collect cataRule), o]
+            | SubtypeRule (a, b, i), o -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
             | _ -> [rule]
         let rulesMapper =
             function
@@ -891,8 +891,8 @@ module private RulesParserImpl =
                 [NodeRule(ValueScopeField(i, m), r |> List.collect cataRule), o]
             | NodeRule (l, r), o ->
                 [NodeRule(l, r |> List.collect cataRule), o]
-            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
-            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | ValueClauseRule r, o -> [ValueClauseRule (r |> List.collect cataRule), o]
+            | SubtypeRule (a, b, i), o -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
             | _ -> [rule]
         let rulesMapper =
             function
@@ -908,8 +908,8 @@ module private RulesParserImpl =
                [ NodeRule (IgnoreField field, []), o ]
             | NodeRule (l, r), o ->
                 [NodeRule(l, r |> List.collect cataRule), o]
-            | ValueClauseRule (r), o -> [ValueClauseRule (r |> List.collect cataRule), o]
-            | (SubtypeRule (a, b, i), o) -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
+            | ValueClauseRule r, o -> [ValueClauseRule (r |> List.collect cataRule), o]
+            | SubtypeRule (a, b, i), o -> [(SubtypeRule(a, b, (i |> List.collect cataRule)), o)]
             | _ -> [rule]
         let rulesMapper =
             function
@@ -918,7 +918,7 @@ module private RulesParserImpl =
             | SingleAliasRule (name, rule) -> cataRule rule |> List.map (fun x ->  SingleAliasRule(name, x))
         rules |> List.collect rulesMapper
 
-    let processConfig (parseScope) (allScopes) (anyScope) scopeGroup (node : Node) =
+    let processConfig parseScope allScopes anyScope scopeGroup (node : Node) =
         let nodes = getNodeComments node
         let rules = nodes |> List.choose (processChildConfigRoot parseScope allScopes anyScope scopeGroup)
         let types = nodes |> List.choose (processChildType parseScope allScopes anyScope scopeGroup) |> List.collect id
@@ -942,17 +942,17 @@ module RulesParser =
     let defaultFloat = ValueField (ValueType.Float (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
     let defaultInt = ValueField (ValueType.Int (RulesParserConstants.IntFieldDefaultMinimum, RulesParserConstants.IntFieldDefaultMaximum))
 
-    let parseConfig (parseScope) (allScopes) (anyScope) scopeGroup filename fileString =
+    let parseConfig parseScope allScopes anyScope scopeGroup filename fileString =
         //log "parse"
         let parsed = CKParser.parseString fileString filename
         match parsed with
         |Failure(e, _, _) -> log (sprintf "config file %s failed with %s" filename e); ([], [], [], [], [])
         |Success(s,_,_) ->
             //log "parsed %A" s
-            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) (s)
+            let root = simpleProcess.ProcessNode() "root" (mkZeroFile filename) s
             //log "processConfig"
             processConfig parseScope allScopes anyScope scopeGroup root
-    let parseConfigs (parseScope) (allScopes) (anyScope) scopeGroup useFormulas stellarisScopeTriggers (files : (string * string) list)  =
+    let parseConfigs parseScope allScopes anyScope scopeGroup useFormulas stellarisScopeTriggers (files : (string * string) list)  =
         let rules, types, enums, complexenums, values =
             files |> Seq.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope scopeGroup filename fileString)
               |> Seq.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])

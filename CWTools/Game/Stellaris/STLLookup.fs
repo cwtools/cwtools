@@ -17,16 +17,16 @@ module STLLookup =
     let getChildrenWithComments (root : Node) =
         let findComment t s (a : Child) =
             match (s, a) with
-            | ((b, c), _) when b -> (b, c)
-            | ((_, c), CommentC (_, nc)) -> (false, nc::c)
-            | ((_, c), NodeC n) when n.Key = t -> (true, c)
-            | ((_, _), _) -> (false, [])
+            | (b, c), _ when b -> (b, c)
+            | (_, c), CommentC (_, nc) -> (false, nc::c)
+            | (_, c), NodeC n when n.Key = t -> (true, c)
+            | (_, _), _ -> (false, [])
         root.Children |> List.map (fun e -> e, root.All |> List.fold (findComment e.Key) (false, []) |> snd)
 
     let updateScriptedTriggers (resources : IResourceAPI<STLComputedData>) (vanillaTriggers : Effect list) =
         let rawTriggers =
             resources.AllEntities()
-            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_triggers") -> Some f.entity |_ -> None)
             |> List.collect getChildrenWithComments
         let mutable final = vanillaTriggers
         let mutable i = 0
@@ -34,7 +34,7 @@ module STLLookup =
         let ff() =
             i <- i + 1
             let before = final
-            final <- rawTriggers |> PSeq.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger (final) (vanillaTriggers @ final) t) :> Effect) |> List.ofSeq
+            final <- rawTriggers |> PSeq.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger final (vanillaTriggers @ final) t) :> Effect) |> List.ofSeq
             first <- false
             before = final || i > 10
         while (not (ff())) do ()
@@ -49,7 +49,7 @@ module STLLookup =
     let updateScriptedEffects (resources : IResourceAPI<STLComputedData>) (vanillaEffects : Effect list) (scriptedTriggers : Effect list) =
         let rawEffects =
             resources.AllEntities()
-            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_effects") -> Some f.entity |_ -> None)
             |> List.collect getChildrenWithComments
         let mutable final = vanillaEffects
         let mutable i = 0
@@ -65,6 +65,6 @@ module STLLookup =
             vanillaEffects
             |> List.map (function | :? DocEffect as ve when manualEffectScopeOverrides.ContainsKey ve.Name ->
                                     let newScopes = manualEffectScopeOverrides.[ve.Name]
-                                    (DocEffect(ve.Name, newScopes, ve.Target, ve.Type, ve.Desc, ve.Usage)) :> Effect
+                                    DocEffect(ve.Name, newScopes, ve.Target, ve.Type, ve.Desc, ve.Usage) :> Effect
                                   | x -> x)
         final, adjustedEffects

@@ -59,14 +59,14 @@ module HOI4GameFunctions =
         match provinceFile with
         |None -> ()
         |Some pf ->
-            let lines = pf.filetext.Split(([|"\r\n"; "\r"; "\n"|]), StringSplitOptions.None)
+            let lines = pf.filetext.Split([|"\r\n"; "\r"; "\n"|], StringSplitOptions.None)
             let provinces = lines |> Array.choose (fun l -> l.Split([|';'|], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead) |> List.ofArray
             game.Lookup.HOI4provinces <- provinces
 
     let updateScriptedLoc (game : GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_localisation") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_localisation") -> Some f.entity |_ -> None)
             |> List.collect (fun n -> n.Children)
             |> List.map (fun l -> l.TagText "name")
         game.Lookup.embeddedScriptedLoc <- game.Settings.embedded.cachedRuleMetadata |> Option.map (fun crm -> crm.scriptedLoc) |> Option.defaultValue []
@@ -106,7 +106,7 @@ module HOI4GameFunctions =
             let requiredScopes =
                 modifierCategoryManager.SupportedScopes modifier.category
             { Options.DefaultOptions with requiredScopes = requiredScopes }
-        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) (scopeManager.AnyScope) (scopeManager.ScopeGroups)
+        let processField = RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
         lookup.coreModifiers
             |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(processField c.tag, ValueField (ValueType.Float (-1E+12M, 1E+12M))), modifierOptions c)))
 
@@ -163,7 +163,7 @@ module HOI4GameFunctions =
         let eventTargetLinks =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "links.cwt")
                     |> Option.map (fun (fn, ft) -> UtilityParser.loadEventTargetLinks scopeManager.AnyScope (scopeManager.ParseScope()) scopeManager.AllScopes fn ft)
-                    |> Option.defaultValue ([])
+                    |> Option.defaultValue []
         let featureSettings =
             configs |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
                     |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
@@ -276,12 +276,12 @@ type HOI4Game(setupSettings : HOI4Settings) =
     let parseErrors() =
         resources.GetResources()
             |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
-            |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
+            |> List.choose (fun r -> r.result |> function |Fail result when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
     member __.Lookup = lookup
     interface IGame<ComputedData> with
         member __.ParserErrors() = parseErrors()
-        member __.ValidationErrors() = let (s, d) = (game.ValidationManager.Validate(false, (resources.ValidatableEntities()))) in s @ d
+        member __.ValidationErrors() = let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
         member __.LocalisationErrors(force : bool, forceGlobal : bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
@@ -300,7 +300,7 @@ type HOI4Game(setupSettings : HOI4Settings) =
         member __.GoToType pos file text = getInfoAtPos fileManager game.ResourceManager game.InfoService game.LocalisationManager lookup (HOI4 HOI4Lang.English) pos file text
         member __.FindAllRefs pos file text = findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
         member __.InfoAtPos pos file text = game.InfoAtPos pos file text
-        member __.ReplaceConfigRules rules = game.ReplaceConfigRules(({ ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})) //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
+        member __.ReplaceConfigRules rules = game.ReplaceConfigRules { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false} //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
         member __.RefreshCaches() = game.RefreshCaches()
         member __.RefreshLocalisationCaches() = game.LocalisationManager.UpdateProcessedLocalisation()
         member __.ForceRecompute() = resources.ForceRecompute()

@@ -12,11 +12,11 @@ module STL =
     let defaultDesc = "Scope (/context) switch"
 
     let oneToOneScopes =
-        let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, (false, true)
-        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, (false, true)
+        let from i = fun (s, change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, (false, true)
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, (false, true)
         [
         "THIS", id;
-        "ROOT", fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, (false, true);
+        "ROOT", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, (false, true);
         "FROM", from 1;
         "FROMFROM", from 2;
         "FROMFROMFROM", from 3;
@@ -36,9 +36,9 @@ module STL =
         let inner (nextKey : string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             match onetoone with
-            | Some (_) -> None
+            | Some _ -> None
             | None ->
-                let effect = (effects)
+                let effect = effects
                             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                             |> List.tryFind (fun e -> e.Name == nextKey)
                 match effect with

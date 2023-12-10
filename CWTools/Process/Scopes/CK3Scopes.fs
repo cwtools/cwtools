@@ -32,9 +32,9 @@ module CK3 =
 
 
     let oneToOneScopes =
-        let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
-        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true
-        let root = fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, true
+        let from i = fun (s, change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
+        let root = fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true
         [
         "THIS", id;
         "ROOT", root;

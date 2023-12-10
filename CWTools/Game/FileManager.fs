@@ -59,7 +59,7 @@ module Files =
             let dir =
                 allDirsBelowRoot workspaceDir
                 |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName || folder.ToLower() = "game" || folder.ToLower() = gameDirName.Replace(" ", "_"))
-                |> Option.map (fst)
+                |> Option.map fst
                 |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             dir.IsSome
 
@@ -68,7 +68,7 @@ module Files =
             let checkFolderLooksLikeGameFolder = (fun (f : string) -> let f = Path.GetFileName f in  f = "common" || f = "events" || f = "interface" || f = "gfx" || f = "localisation")
             let getMultipleModDirectory (workspaceDir : WorkspaceDirectory) : ModInfo list =
                 let getModFiles modDir =
-                    Directory.EnumerateFiles (modDir)
+                    Directory.EnumerateFiles modDir
                             |> List.ofSeq
                             |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
                             |> List.map CKParser.parseFile
@@ -122,7 +122,7 @@ module Files =
             | None -> expanded
 
         do
-            logInfo ("Workspace roots:")
+            logInfo "Workspace roots:"
             rootDirectories |> List.iter (fun rd -> logInfo (sprintf "root %s, exists: %b" rd.path (Directory.Exists rd.path)))
             logInfo (sprintf "embedded folder %A" embeddedFolder)
             expandedRootDirectories |> List.iter (fun rd -> log (sprintf "normalised %s" rd.normalisedPath))
@@ -173,7 +173,7 @@ module Files =
             |".sfx"
             |".asset"
             |".map" ->
-                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + (normalisedPathLength) + 1)
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + normalisedPathLength + 1)
                 if fileLength > ((int64 maxFileSizeMB) * 1000000L) then None else
                 Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = fileTextThunk(); validate = true})
             |".dds"
@@ -185,11 +185,11 @@ module Files =
             |".ttf"
             |".otf"
             |".wav" ->
-                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + (normalisedPathLength) + 1)
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + normalisedPathLength + 1)
                 Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
             |".yml"
             |".csv" ->
-                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + (normalisedPathLength) + 1)
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedPath) + normalisedPathLength + 1)
                 Some (FileWithContentResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath; filetext = fileTextThunk(); validate = true})
             |_ -> None
 //File.ReadAllText(filepath, encoding
@@ -197,7 +197,7 @@ module Files =
             let excludeGlobTest =
                 let globs = ignoreGlobList |> List.map Glob.Parse
                 (fun (path : string) ->
-                    globs |> List.exists (fun g -> (g.IsMatch(path)))
+                    globs |> List.exists (fun g -> g.IsMatch(path))
                     )
 
             let getAllFiles (modInfo : ModInfo) =
@@ -210,7 +210,7 @@ module Files =
                         |> List.filter (fun (_, f) -> f |> excludeGlobTest |> not)
             let allFiles = duration (fun _ -> PSeq.map getAllFiles (allFoldersInWorkspaceDir workspaceDir)
                                                 |> PSeq.collect id
-                                                |> PSeq.choose (fun (scope, fn) -> (fileToResourceInput (workspaceDir.normalisedPath) (workspaceDir.normalisedPathLength) (scope,fn) (fn |> FileInfo).Length (fun _ -> File.ReadAllText(fn, encoding) )))
+                                                |> PSeq.choose (fun (scope, fn) -> (fileToResourceInput workspaceDir.normalisedPath workspaceDir.normalisedPathLength (scope,fn) (fn |> FileInfo).Length (fun _ -> File.ReadAllText(fn, encoding) )))
                                                 |> List.ofSeq ) "Load files"
             allFiles
         let allFilesInZips =
@@ -226,7 +226,7 @@ module Files =
             expandedRootDirectories
                         |> List.tryPick (fun rd ->
                                             let index = path.IndexOf(rd.normalisedPath)
-                                            if index >= 0 then Some (rd.name)
+                                            if index >= 0 then Some rd.name
                                             else None)
 
         member __.AllFilesByPath() = (expandedRootDirectories |> List.collect allFilesByPath) @ allFilesInZips

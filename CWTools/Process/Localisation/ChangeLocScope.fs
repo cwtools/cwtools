@@ -55,7 +55,7 @@ type LegacyLocStaticSettings = {
     /// Parameter variables? `parameter:` goes to a scope
     parameterVariables : bool
     /// 1:2:1 like FROM, THIS, PREV
-    locPrimaryScopes : ((string * (ScopeContext * bool -> ScopeContext * bool)) list)
+    locPrimaryScopes : (string * (ScopeContext * bool -> ScopeContext * bool)) list
     /// 1:2:1 like OWNER
     scopedLocEffectsMap : EffectMap
     /// Terminal, scope specific, like GetRulerName, name and required scopes
@@ -81,7 +81,7 @@ module ChangeLocScope =
                 else command, None
             let keys = command.Split('.') |> List.ofArray
 
-            let inner ((first : bool), (inVariable : bool), (context : ScopeContext)) (nextKey : string) =
+            let inner (first : bool, inVariable : bool, context : ScopeContext) (nextKey : string) =
                 let onetooneMatch() =
                     staticSettings.locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                     |> Option.map (fun (_, f) -> (LocContextResult.NewScope (f (context, false) |> fst)))
@@ -92,9 +92,9 @@ module ChangeLocScope =
                                         let currentScope = context.CurrentScope
                                         let exact = validScopes |> List.exists currentScope.IsOfScope
                                         match context.CurrentScope, validScopes, exact with
-                                            | x, _, _ when x = context.Root.AnyScope -> (LocContextResult.NewScope ({source with Scopes =applyTargetScope e.Target context.Scopes}))
+                                            | x, _, _ when x = context.Root.AnyScope -> (LocContextResult.NewScope {source with Scopes =applyTargetScope e.Target context.Scopes})
                                             // | _, [], _ -> (context, false), NotFound
-                                            | _, _, true -> (LocContextResult.NewScope ({source with Scopes = applyTargetScope e.Target context.Scopes}))
+                                            | _, _, true -> (LocContextResult.NewScope {source with Scopes = applyTargetScope e.Target context.Scopes})
                                             | current, ss, false -> LocContextResult.WrongScope (nextKey, current, ss)
                                     )
                 let commandMatch() =
@@ -106,19 +106,19 @@ module ChangeLocScope =
                     |Some _, _, _ -> LocContextResult.Found (context.CurrentScope.ToString())
                     | _, _, true -> LocContextResult.Found (context.CurrentScope.ToString())
                     |None, false, false ->
-                        match staticSettings.usesVariableCommands, dynamicSettings.setVariables |> List.exists (fun sv -> sv == (nextKey.Split('@').[0])) with
+                        match staticSettings.usesVariableCommands, dynamicSettings.setVariables |> List.exists (fun sv -> sv == nextKey.Split('@').[0]) with
                         | true, true -> LocContextResult.Found (context.CurrentScope.ToString())
                         | false, true -> LocContextResult.VariableScope context
-                        | _, false -> LocNotFound (nextKey)
+                        | _, false -> LocNotFound nextKey
                     |None, true, false ->
                         // TODO: Add scope push
                         match dynamicSettings.eventTargets |> List.exists (fun (et, _) -> et == nextKey) with
-                        | true -> LocContextResult.NewScope ({source with Scopes = context.Root.AnyScope::source.Scopes })
-                        | false -> LocNotFound (nextKey)
+                        | true -> LocContextResult.NewScope {source with Scopes = context.Root.AnyScope::source.Scopes }
+                        | false -> LocNotFound nextKey
                 let variableCommandMatch() =
                     match staticSettings.variableCommands |> List.tryFind (fun c -> c == nextKey) with
-                    | Some _ -> LocContextResult.Found ("variable")
-                    | None -> LocNotFound (nextKey)
+                    | Some _ -> LocContextResult.Found "variable"
+                    | None -> LocNotFound nextKey
                 if inVariable
                 then variableCommandMatch()
                 else
@@ -149,7 +149,7 @@ module ChangeLocScope =
         let convScopeToDataType (scope : Scope) = scopeManager.DataTypeForScope(scope)
         let command = command |> List.map (function |Command (key, cs) -> key, cs)
         let keys = command |> List.map fst
-        let inner ((context : bool * string * bool)) (nextKey : string) =
+        let inner (context : bool * string * bool) (nextKey : string) =
             let first, dataType, confident = context
             // TODO: Replace this with some smarter
             let savedScopedMatch() =
@@ -166,18 +166,18 @@ module ChangeLocScope =
                                             NewDataType ((scope, confident)))
             let promoteMatch() =
                 dataTypes.promotes |> Map.tryFind nextKey
-                |> Option.orElse (dataTypes.promotes |> Map.tryFind (nextKey))
-                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+                |> Option.orElse (dataTypes.promotes |> Map.tryFind nextKey)
+                |> Option.map (fun newType -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
             let globalFunctionConfidentMatch() =
                 dataTypes.confidentFunctions |> Map.tryFind nextKey
-                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+                |> Option.map (fun newType -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
             let globalFunctionMatch() =
                 dataTypes.functions |> Map.tryFind nextKey
-                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+                |> Option.map (fun newType -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
             let functionMatch() =
                 dataTypes.dataTypes |> Map.tryFind dataType
                 |> Option.bind (fun dataTypeMap -> dataTypeMap |> Map.tryFind nextKey)
-                |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
+                |> Option.map (fun newType -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
             let rawTypeMatch() =
                 if dataTypes.dataTypes |> Map.containsKey nextKey then Some (NewDataType (nextKey, true)) else None
 
@@ -195,11 +195,11 @@ module ChangeLocScope =
             | Start startDataType ->
                 inner (true, startDataType.CurrentScope.ToString(), true) nextKey
             | NewDataType (newDataType, confident) -> inner (false, newDataType, confident) nextKey
-            | Found endDataType -> LocNotFound (nextKey)
-            | LocNotFound (n) -> LocNotFound (n)
+            | Found endDataType -> LocNotFound nextKey
+            | LocNotFound n -> LocNotFound n
             | res -> res
         // TODO: Better scopecontext to starting datatype
-        keys |> List.fold locKeyFolder (Start (source))
+        keys |> List.fold locKeyFolder (Start source)
         // match res with
         // | Start _ -> LocContextResult.Start source
         // | NewDataType newDataType -> LocContextResult.LocNotFound newDataType

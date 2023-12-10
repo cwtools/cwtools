@@ -29,9 +29,9 @@ module VIC2 =
             // ScopedEffect("owner", [Scope.Province], Scope.Character, EffectType.Both, defaultDesc, "", true);
         ]
     let oneToOneScopes =
-        let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
-        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, true
-        let root = fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, true
+        let from i = fun (s, change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
+        let root = fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true
         [
         "THIS", id;
         "ROOT", root;

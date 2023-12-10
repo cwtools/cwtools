@@ -27,11 +27,11 @@ module EU4 =
     //     | NotFound
 
     let oneToOneScopes =
-        let from i = fun ((s), change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, (false, true)
-        let prev = fun ((s), change) -> {s with Scopes = s.PopScope}, (false, true)
+        let from i = fun (s, change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, (false, true)
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, (false, true)
         [
         "THIS", id;
-        "ROOT", fun ((s), change) -> {s with Scopes = s.Root::s.Scopes}, (false, true);
+        "ROOT", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, (false, true);
         "FROM", from 1;
         // "FROMFROM", from 2;
         // "FROMFROMFROM", from 3;

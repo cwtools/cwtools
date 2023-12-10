@@ -40,7 +40,7 @@ type Lookup() =
 
     member __.allCoreLinks
         with get () = _allCoreLinks and
-            set(value) =
+            set value =
             _allCoreLinks <- value
             resetTriggers()
             resetEffects()
@@ -68,9 +68,9 @@ type Lookup() =
     member val embeddedScriptedLoc : string list = [] with get,set
     member val _realScriptedLoc : string list = [] with get, set
     member this.scriptedLoc with get() = this.embeddedScriptedLoc @ this._realScriptedLoc
-    member this.scriptedLoc with set(value) = this._realScriptedLoc <- value
+    member this.scriptedLoc with set value = this._realScriptedLoc <- value
     member val proccessedLoc : (Lang * Collections.Map<string, LocEntry>) list = [] with get, set
-    member val technologies : (string * (string list)) list =  [] with get, set
+    member val technologies : (string * string list) list =  [] with get, set
     member val configRules : RootRule list = [] with get, set
     member val typeDefs : TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)

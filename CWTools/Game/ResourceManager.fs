@@ -30,8 +30,8 @@ type ReferenceDetails = {
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets) =
     member val Cache : Map<string, obj list> = Map.empty with get, set
     member val WithRulesData : bool = withRulesData with get,set
-    member val Referencedtypes : Map<string, (ReferenceDetails) list> option = referencedtypes with get, set
-    member val Definedvariables : Map<string, ResizeArray<(string * range)>> option = definedvariable with get, set
+    member val Referencedtypes : Map<string, ReferenceDetails list> option = referencedtypes with get, set
+    member val Definedvariables : Map<string, ResizeArray<string * range>> option = definedvariable with get, set
     member val SavedEventTargets : ResizeArray<string * range * CWTools.Common.NewScope.Scope> option = savedEventTargets with get, set
     member val EffectBlocks : Node list option = effectBlocks with get, set
     member val TriggerBlocks : Node list option = triggersBlocks with get, set
@@ -156,7 +156,7 @@ type ResourceInput =
 
 
 
-type UpdateFile<'T> = ResourceInput -> (Resource * struct (Entity * Lazy<'T>) option)
+type UpdateFile<'T> = ResourceInput -> Resource * struct (Entity * Lazy<'T>) option
 type UpdateFiles<'T> = ResourceInput list -> (Resource *  struct (Entity * Lazy<'T>) option) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
@@ -175,12 +175,12 @@ type IResourceAPI<'T when 'T :> ComputedData > =
     abstract ForceRulesDataGenerate : unit -> unit
     abstract GetFileNames : GetFileNames
 
-type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity -> 'T), computedDataUpdateFunction : (Entity -> 'T -> unit), encoding, fallbackencoding, enableInlineScripts) =
+type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : Entity -> 'T, computedDataUpdateFunction : Entity -> 'T -> unit, encoding, fallbackencoding, enableInlineScripts) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
             match dict.TryGetValue(keyFunction(n)) with
-            | (true, v) -> v
+            | true, v -> v
             | _ ->
                 let temp = memFunction(n)
                 dict.Add(keyFunction(n), temp)
@@ -330,7 +330,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v; logicalpath = l}) ->
                     let entityType = filepathToEntityType f
                     let filename = Path.GetFileNameWithoutExtension f
-                    let entity = (shipProcess entityType filename (mkZeroFile f) (statements))
+                    let entity = (shipProcess entityType filename (mkZeroFile f) statements)
                     Some { filepath = f; logicalpath = l; entity = entity; rawEntity = entity ; validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
@@ -382,7 +382,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     let updateOverwrite() =
         let filelist = fileMap |> Map.toList |> List.map snd
         let entities = filelist |> List.choose (function |EntityResource (s, e) -> Some ((s, e)) |_ -> None)
-        let processGroup (key, (es : (string * EntityResource) list)) =
+        let processGroup (key, es : (string * EntityResource) list) =
             match es with
             | [s,e] -> [s, {e with overwrite = No}]
             | es ->
@@ -395,14 +395,14 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let res = entities |> List.groupBy (fun (s, e) -> e.logicalpath)
                            |> List.collect processGroup
         fileMap <- res |> List.fold (fun fm (s, e) -> fm.Add(s, EntityResource (s, e))) fileMap
-        let entityMap em (s, (e : EntityResource)) =
+        let entityMap em (s, e : EntityResource) =
             match Map.tryFind s em with
             |None -> em
             |Some struct ( olde, oldl) ->
                  em.Add(s,( {olde with Entity.overwrite = e.overwrite}, oldl))
         entitiesMap <- res |> List.fold entityMap entitiesMap
         let filesWithContent = filelist |> List.choose (function |FileWithContentResource (s, e) -> Some ((s, e)) |_ -> None)
-        let processGroup (key, (es : (string * FileWithContentResource) list)) =
+        let processGroup (key, es : (string * FileWithContentResource) list) =
             match es with
             | [s,e] -> [s, {e with overwrite = No}]
             | es ->
@@ -454,7 +454,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                     |NodeC n ->
                         let stringReplace (isParams : (string * string) list) (key : string) =
                             isParams |> List.fold (fun (key : string) (par, value) -> key.Replace(par, value)) key
-                        let rec foldOverNode (stringReplacer) (node : Node) =
+                        let rec foldOverNode stringReplacer (node : Node) =
                             node.Key <- stringReplacer node.Key
                             node.Values |> List.iter (fun (l : Leaf) -> l.Key <- stringReplacer l.Key; l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
                             node.LeafValues |> Seq.iter (fun (l : LeafValue) -> l.Value |> (function |Value.String s -> l.Value <- String (stringReplacer s) |Value.QString s -> l.Value <- QString (stringReplacer s) |_ -> ()))
@@ -500,12 +500,12 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                 Some newNode
         news
         |> Seq.map (function
-                |(resource, Some struct(oldE, oldLazy)) ->
+                |resource, Some struct(oldE, oldLazy) ->
                     let maxIter = 5
                     let rec updateInner entity i =
                         match i, updateEntity entity with
                         | i, Some newEntity when i = maxIter -> Some newEntity
-                        | i, Some newEntity -> updateInner ({ entity with entity = newEntity }) (i + 1)
+                        | i, Some newEntity -> updateInner { entity with entity = newEntity } (i + 1)
                         | 0, None -> None
                         | _, None -> Some entity.entity
                     let updatedE = updateInner oldE 0
@@ -518,7 +518,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
                         resource, Some item
                     |None ->
                         resource, Some struct(oldE, oldLazy)
-                |(resource, None) -> resource, None
+                |resource, None -> resource, None
                 )
         // entities |> Seq.map (fun e -> e, updateEntity e)
         //     |> Seq.map (function |e, Some newNode -> (e, {e with entity = newNode }, true) |e, None -> (e, e, false))
@@ -554,7 +554,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         let task = new Task(fun () -> forceEagerData())
         task.Start()
     let updateFiles files =
-        let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
+        let news = files |> PSeq.ofList |> PSeq.map parseFileThenEntity |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
         let mutable res = news
         if enableInlineScripts
@@ -565,7 +565,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
         res
     let updateFile file =
         let res = updateFiles [file]
-        if res.Length > 1 then log (sprintf "File %A returned multiple resources" (file)) else ()
+        if res.Length > 1 then log (sprintf "File %A returned multiple resources" file) else ()
         res.[0]
     let getResources() = fileMap.Values |> List.ofSeq
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
@@ -577,7 +577,7 @@ type ResourceManager<'T when 'T :> ComputedData> (computedDataFunction : (Entity
     member __.ManualProcess (filename : string) (filetext : string) =
         let parsed = CKParser.parseString filetext filename
         match parsed with
-        |Failure(_) -> None
+        |Failure _ -> None
         |Success(s,_,_) ->
             let filenamenopath = Path.GetFileNameWithoutExtension filename
             Some (shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)

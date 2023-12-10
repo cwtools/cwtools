@@ -9,9 +9,9 @@ open FSharp.Collections.ParallelSeq
 
 type LocalisationManager<'T when 'T :> ComputedData>
     (resources : IResourceAPI<'T>, localisationService : _ -> ILocalisationAPICreator, langs : Lang list, lookup: Lookup,
-     processLocalisation : (Lookup -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry>),
+     processLocalisation : Lookup -> Lang * Map<string,Entry>-> Lang * Map<string,LocEntry>,
      localisationExtension : string) as this =
-    let mutable localisationAPIMap : Map<string * Lang, (bool * ILocalisationAPI)> = Map.empty
+    let mutable localisationAPIMap : Map<string * Lang, bool * ILocalisationAPI> = Map.empty
     let allLocalisation() = this.LocalisationAPIs() |> List.map snd
     let validatableLocalisation() = this.LocalisationAPIs() |> List.choose (fun (validate, api) -> if validate then Some api else None)
     let parseLocFile (locFile : FileWithContentResource) =
