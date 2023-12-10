@@ -45,6 +45,7 @@ type ErrorCache() =
 
     let sourceToErrorsForTargets = ConcurrentDictionary<string, ConcurrentDictionary<string, CWError list>>()
     let targetToErrors = ConcurrentDictionary<string, HashSet<CWError>>()
+    let selfErrors = ConcurrentDictionary<string, HashSet<CWError>>()
 
     let monitor = new Object()
     member this.AddErrorsGeneratedByFile (fromEntity : Entity, errorsForFiles : CWError seq) =
@@ -66,16 +67,27 @@ type ErrorCache() =
             sourceToErrorsForTargets.[fromEntity.filepath] <- newErrors
 
             for targetFile, cwErrors in groupedErrors do
-                newErrors.[targetFile] <- cwErrors |> List.ofSeq
-                let bag = targetToErrors.GetOrAdd(targetFile, (fun _ -> new HashSet<CWError>()))
-                for error in cwErrors do
-                    bag.Add error |> ignore
+                if fromEntity.filepath = targetFile
+                then
+                    selfErrors.[targetFile] <- new HashSet<CWError>(cwErrors)
+                else
+                    newErrors.[targetFile] <- cwErrors |> List.ofSeq
+                    let bag = targetToErrors.GetOrAdd(targetFile, (fun _ -> new HashSet<CWError>()))
+                    for error in cwErrors do
+                        bag.Add error |> ignore
         )
 
     member this.GetErrorsForFile (entity : Entity) =
-        match targetToErrors.TryGetValue(entity.filepath) with
-        | (true, errors) -> Some (Seq.toList errors)
+        match targetToErrors.TryGetValue(entity.filepath), selfErrors.TryGetValue(entity.filepath) with
+        | (true, errors1), (true, errors2) -> Some (Seq.append errors1 errors2 |> Seq.toList)
+        | (false, _), (true, errors)
+        | (true, errors), (false, _) -> Some (Seq.toList errors)
         | _ -> None
+    member this.GetNonSelfErrorsForFile (entity : Entity) =
+        match targetToErrors.TryGetValue(entity.filepath) with
+        | true, cwErrors -> Some (Seq.toList cwErrors)
+        | _ -> None
+        
 type ValidationManager<'T when 'T :> ComputedData>
         (settings : ValidationManagerSettings<'T>
         , services : ValidationManagerServices<'T>,
@@ -109,11 +121,15 @@ type ValidationManager<'T when 'T :> ComputedData>
                 let res = services.ruleValidationService.Value.RuleValidateEntity e
                 let errors = res |> (function | Invalid (_, es) -> es | _ -> [])
                 addToCache e errors
-                res)
+                let fileIndex = fileIndexOfFile e.filepath
+                res |> (function | Invalid (_, es) -> Invalid (Guid.NewGuid(), es |> List.filter (fun e -> e.range.FileIndex = fileIndex)) | _ -> OK)
+                )
         let rres =
             if settings.useRules && services.ruleValidationService.IsSome
             then
-                entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid (_, es) -> es | _ -> [])
+                (entities |> List.map (fun struct (e, _) -> e) <&!!&> ruleValidate |> (function | Invalid (_, es) -> es | _ -> []))
+                @
+                (entities |> List.choose (fun struct (e, _) -> errorCache.GetNonSelfErrorsForFile e) |> List.collect id)
             else
                 []
         let rres = rres |> List.filter (fun err -> err.code <> "CW100")
