@@ -526,7 +526,7 @@ type CompletionService
         let res = findRule rules stack scopeContext |> List.distinct
         //log "res2 %A" res
         res
-    let scoreFunction (allUsedKeys : Collections.Set<string> ) (startingContext : ScopeContext) (inputScopes : 'T list) (outputScope: CompletionScopeOutput) (expectedScope : CompletionScopeExpectation) (key : string) =
+    let scoreFunction (allUsedKeys : Collections.Set<string> ) (startingContext : ScopeContext) (inputScopes : Scope list) (outputScope: CompletionScopeOutput) (expectedScope : CompletionScopeExpectation) (key : string) =
        
         let validInputScopeScore =
             match inputScopes with
@@ -553,7 +553,6 @@ type CompletionService
                    if List.exists y.IsOfScope xs
                    then 25 // It expects the scope we'll output
                    else 0
-               | _ -> 0
             | _ -> 0
         let usedKeyBonus =
             if Set.contains key allUsedKeys

@@ -399,7 +399,7 @@ type RuleValidationService
                 |NewScope (newScopes ,_, _), _ ->
                     let newCtx = {newCtx with scopes = newScopes}
                     applyClauseField enforceCardinality options.severity newCtx rules node errors
-                |NotFound _, _  ->
+                |NotFound, _  ->
                     inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
                 |WrongScope (command, prevscope, expected, _), _  ->
                     inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node <&&&> errors
