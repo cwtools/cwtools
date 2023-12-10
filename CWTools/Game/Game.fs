@@ -96,7 +96,7 @@ type GameObject<'T, 'L when 'T :> ComputedData
             localisationKeys = (fun _ -> addEmbeddedLoc (settings.validation.langs) (localisationManager.LocalisationKeys()))
             fileManager = fileManager
         }
-    let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), new System.Collections.Concurrent.ConcurrentDictionary<_,CWError list>())
+    let mutable validationManager : ValidationManager<'T> = ValidationManager(validationSettings, validationServices(), validateLocalisationCommand, defaultContext, (if debugMode then noneContext else defaultContext), ErrorCache())
 
     let rulesManager = RulesManager<'T, 'L>(resourceManager.Api, lookup, ruleManagerSettings, localisationManager, settings.embedded, settings.validation.langs, debugMode)
     // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
