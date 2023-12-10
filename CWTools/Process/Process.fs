@@ -303,12 +303,12 @@ module ProcessCore =
             | (Some (Value (_, v2))), (Some (Value (_, v1))), Value (pos, Clause sl) ->
                 None, None, (lookupVC pos context sl ([| v2 ;v1 |]))::(acc |> List.skip 2)
             | (Some (Value (_, v2))), (Some (KeyValue (PosKeyValue(_, KeyValueItem(Key(k), v1, _))))), Value (pos, Clause sl) ->
-                let (NodeC node) = lookupN k pos context sl
+                let node : Node = lookupN k pos context sl
                 node.KeyPrefix <- Some (v2.ToRawString())
                 node.ValuePrefix <- Some (v1.ToRawString())
                 None, None, (NodeC node)::(acc |> List.skip 2)
             | _, (Some (Value (pos, v2))), (KeyValue (PosKeyValue(pos2, KeyValueItem(Key(k), Clause sl, _)))) when pos.StartLine = pos2.StartLine ->
-                let (NodeC node) = lookupN k pos2 context sl
+                let node = lookupN k pos2 context sl
                 node.KeyPrefix <- Some (v2.ToRawString())
                 None, None, (NodeC node)::(acc |> List.skip 1)
             //     None, None,
@@ -320,7 +320,7 @@ module ProcessCore =
                 // let children = sl |> List.map (fun e -> (processNodeInner context e))
                 let children = sl |> List.fold (nodeWindowFun context) (None, None, []) |> (fun (_, _, ls) -> ls |> List.rev)
                 n.All <- children
-                NodeC n
+                n
                 )
         and lookupVC =
             (fun (pos : range) (context : LookupContext) (sl : Statement list) (keys) ->
@@ -332,15 +332,15 @@ module ProcessCore =
         and processNodeInner (c : LookupContext) statement =
             //log "%A" node.Key
             match statement with
-            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl), _))) -> lookupN k pos c sl
+            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl), _))) -> NodeC (lookupN k pos c sl)
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
             | Comment(r, c) -> CommentC (r, c)
             | Value(pos, Value.Clause sl) -> lookupVC pos c sl [||]
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
         // member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
         // member __.ProcessNode() = (fun key pos sl -> (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) (KeyValue(PosKeyValue(pos, KeyValueItem(Key(key) , Clause(sl), Operator.Equals)))))
-        member __.ProcessNode() = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) sl |> function |NodeC c -> c)
-        member __.ProcessNode(entityType : EntityType) = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = entityType}) sl |> function |NodeC c -> c)
+        member __.ProcessNode() = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) sl)
+        member __.ProcessNode(entityType : EntityType) = (fun key pos sl -> lookupN key pos ({ complete = false; parents = []; scope = ""; previous = ""; entityType = entityType}) sl)
 
     let processNodeBasic = BaseProcess().ProcessNode()
 
