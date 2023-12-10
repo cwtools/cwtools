@@ -954,7 +954,7 @@ module RulesParser =
             processConfig parseScope allScopes anyScope scopeGroup root
     let parseConfigs (parseScope) (allScopes) (anyScope) scopeGroup useFormulas stellarisScopeTriggers (files : (string * string) list)  =
         let rules, types, enums, complexenums, values =
-            files |> PSeq.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope scopeGroup filename fileString)
+            files |> Seq.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope scopeGroup filename fileString)
               |> Seq.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
         let rules = rules |> replaceValueMarkerFields useFormulas stellarisScopeTriggers |> replaceSingleAliases |> replaceColourField |> replaceIgnoreMarkerFields
         // File.AppendAllText ("test.test", sprintf "%O" rules)
