@@ -4,6 +4,7 @@ open CWTools.Localisation
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes
 open CWTools.Process.Localisation
+open FSharp.Collections.ParallelSeq
 
 
 type LocalisationManager<'T when 'T :> ComputedData>
@@ -23,9 +24,9 @@ type LocalisationManager<'T when 'T :> ComputedData>
         localisationAPIMap <-
             let allLocs = resources.GetResources()
                         |> List.choose (function |FileWithContentResource (_, e) -> Some e |_ -> None)
-                        |> List.choose parseLocFile
-                        |> List.collect id
-            allLocs |> Map.ofList
+                        |> PSeq.choose parseLocFile
+                        |> Seq.collect id
+            allLocs |> Map.ofSeq
         this.localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
         this.taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
     let updateLocalisationSource (locFile : FileWithContentResource) =

@@ -2,6 +2,7 @@ namespace CWTools.Games.Stellaris
 open CWTools.Process
 open CWTools.Games
 open CWTools.Common
+open FSharp.Collections.ParallelSeq
 
 module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
@@ -33,7 +34,7 @@ module STLLookup =
         let ff() =
             i <- i + 1
             let before = final
-            final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger (final) (vanillaTriggers @ final) t) :> Effect)
+            final <- rawTriggers |> PSeq.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger (final) (vanillaTriggers @ final) t) :> Effect) |> List.ofSeq
             first <- false
             before = final || i > 10
         while (not (ff())) do ()
@@ -56,7 +57,7 @@ module STLLookup =
         let ff() =
             i <- i + 1
             let before = final
-            final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect (final @ vanillaEffects) scriptedTriggers e) :> Effect)
+            final <- rawEffects |>  PSeq.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect (final @ vanillaEffects) scriptedTriggers e) :> Effect) |> List.ofSeq
             first <- false
             before = final || i > 10
         while (not (ff())) do ()

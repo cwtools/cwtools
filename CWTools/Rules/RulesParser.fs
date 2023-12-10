@@ -13,6 +13,7 @@ open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
 open CWTools.Rules
+open FSharp.Collections.ParallelSeq
 
 module private RulesParserImpl =
     let internal specificField x = SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x))
@@ -192,6 +193,9 @@ module private RulesParserImpl =
 
         { min = min; max = max; strictMin = strictmin; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes parseScope comments; severity = severity; requiredScopes = reqScope; comparison = comparison; referenceDetails = referenceDetails; keyRequiredQuotes = keyRequiredQuotes; valueRequiredQuotes = valueRequiredQuotes; typeHint = None; errorIfOnlyMatch = errorIfMatched }
 
+    let fastStartsWith (x : string) y = x.StartsWith(y, StringComparison.OrdinalIgnoreCase)
+    let fastEndsWith (x : string) y = x.EndsWith(y, StringComparison.OrdinalIgnoreCase)
+    
     let internal processKey parseScope anyScope scopeGroup =
         function
         | "scalar" -> ScalarField ScalarValue
@@ -201,7 +205,7 @@ module private RulesParserImpl =
         | "localisation_synced" -> LocalisationField (true, false)
         | "localisation_inline" -> LocalisationField (false, true)
         | "filepath" -> FilepathField (None, None)
-        | x when x.StartsWith "filepath[" ->
+        | x when fastStartsWith x "filepath[" ->
             match getSettingFromString x "filepath" with
             | Some (setting) ->
                 match setting.Contains "," with
@@ -215,7 +219,7 @@ module private RulesParserImpl =
             | None -> FilepathField (None, None)
         | "date_field" -> ValueField Date
         | "datetime_field" -> ValueField DateTime
-        | x when x.StartsWith "<" && x.EndsWith ">" ->
+        | x when fastStartsWith x "<" && fastEndsWith x ">" ->
             TypeField (TypeType.Simple (x.Trim([|'<'; '>'|])))
         | x when x.Contains "<" && x.Contains ">" ->
             let x = x.Trim('"')
@@ -223,98 +227,98 @@ module private RulesParserImpl =
             let suffixI = x.IndexOf ">"
             TypeField (TypeType.Complex (x.Substring(0,prefixI), x.Substring(prefixI + 1, suffixI - prefixI - 1), x.Substring(suffixI + 1)))
         | "int" -> defaultInt
-        | x when x.StartsWith "int[" ->
+        | x when fastStartsWith x "int[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> ValueField (ValueType.Int (min, max))
             | None -> (defaultInt)
         | "float" -> defaultFloat
-        | x when x.StartsWith "float[" ->
+        | x when fastStartsWith x "float[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueField (ValueType.Float (min, max))
             | None -> (defaultFloat)
-        | x when x.StartsWith "enum[" ->
+        | x when fastStartsWith x "enum[" ->
             match getSettingFromString x "enum" with
             | Some (name) -> ValueField (ValueType.Enum name)
             | None -> ValueField (ValueType.Enum "")
-        | x when x.StartsWith "icon[" ->
+        | x when fastStartsWith x "icon[" ->
             match getSettingFromString x "icon" with
             | Some (folder) -> IconField folder
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "alias_match_left[" ->
+        | x when fastStartsWith x "alias_match_left[" ->
             match getSettingFromString x "alias_match_left" with
             | Some alias -> AliasField alias
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "alias_name[" ->
+        | x when fastStartsWith x "alias_name[" ->
             match getSettingFromString x "alias_name" with
             | Some alias -> AliasField alias
             | None -> ScalarField (ScalarValue)
         | "scope_field" -> ScopeField [(anyScope)]
         | "variable_field" -> VariableField (false, false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
-        | x when x.StartsWith "variable_field[" ->
+        | x when fastStartsWith x "variable_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> VariableField (false, false,(min, max))
             | None -> VariableField (false, false,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | "int_variable_field" -> VariableField (true, false, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
-        | x when x.StartsWith "int_variable_field[" ->
+        | x when fastStartsWith x "int_variable_field[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> VariableField (true, false,(decimal min,decimal max))
             | None -> VariableField (true, false, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | "variable_field_32" -> VariableField (false, true, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
-        | x when x.StartsWith "variable_field_32[" ->
+        | x when fastStartsWith x "variable_field_32[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> VariableField (false, true,(min, max))
             | None -> VariableField (false, true,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | "int_variable_field_32" -> VariableField (true, true, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
-        | x when x.StartsWith "int_variable_field_32[" ->
+        | x when fastStartsWith x "int_variable_field_32[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> VariableField (true, true,(decimal min,decimal max))
             | None -> VariableField (true, true,(decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
         | "value_field" -> ValueScopeMarkerField (false, (RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
-        | x when x.StartsWith "value_field[" ->
+        | x when fastStartsWith x "value_field[" ->
             match getFloatSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (false,(min, max))
             | None -> ValueScopeMarkerField (false,(RulesParserConstants.floatFieldDefaultMinimum, RulesParserConstants.floatFieldDefaultMaximum))
         | "int_value_field" -> ValueScopeMarkerField (true, (decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
-        | x when x.StartsWith "int_value_field[" ->
+        | x when fastStartsWith x "int_value_field[" ->
             match getIntSettingFromString x with
             | Some (min, max) -> ValueScopeMarkerField (true,(decimal min,decimal max))
             | None -> ValueScopeMarkerField (true,(decimal RulesParserConstants.IntFieldDefaultMinimum, decimal RulesParserConstants.IntFieldDefaultMaximum))
-        | x when x.StartsWith "value_set[" ->
+        | x when fastStartsWith x "value_set[" ->
             match getSettingFromString x "value_set" with
             | Some variable ->
                 VariableSetField variable
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "value[" ->
+        | x when fastStartsWith x "value[" ->
             match getSettingFromString x "value" with
             | Some variable ->
                 VariableGetField variable
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "scope[" ->
+        | x when fastStartsWith x "scope[" ->
             match getSettingFromString x "scope" with
             | Some target ->
                 ScopeField [(parseScope target)]
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "event_target" ->
+        | x when fastStartsWith x "event_target" ->
             match getSettingFromString x "event_target" with
             | Some target ->
                 ScopeField [(parseScope target)]
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "single_alias_right" ->
+        | x when fastStartsWith x "single_alias_right" ->
             match getSettingFromString x "single_alias_right" with
             | Some alias ->
                 SingleAliasField alias
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "alias_keys_field" ->
+        | x when fastStartsWith x "alias_keys_field" ->
             match getSettingFromString x "alias_keys_field" with
             | Some aliasKey ->
                 AliasValueKeysField aliasKey
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "stellaris_name_format" ->
+        | x when fastStartsWith x "stellaris_name_format" ->
             match getSettingFromString x "stellaris_name_format" with
             | Some aliasKey ->
                 ValueField (STLNameFormat aliasKey)
             | None -> ScalarField (ScalarValue)
-        | x when x.StartsWith "scope_group[" ->
+        | x when fastStartsWith x "scope_group[" ->
             match getSettingFromString x "scope_group" with
             | Some aliasKey ->
                 match scopeGroup |> Map.tryFind aliasKey with
@@ -950,8 +954,8 @@ module RulesParser =
             processConfig parseScope allScopes anyScope scopeGroup root
     let parseConfigs (parseScope) (allScopes) (anyScope) scopeGroup useFormulas stellarisScopeTriggers (files : (string * string) list)  =
         let rules, types, enums, complexenums, values =
-            files |> List.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope scopeGroup filename fileString)
-              |> List.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
+            files |> PSeq.map (fun (filename, fileString) -> parseConfig parseScope allScopes anyScope scopeGroup filename fileString)
+              |> Seq.fold (fun (rs, ts, es, ces, vs) (r, t, e, ce, v) -> r@rs, t@ts, e@es, ce@ces, v@vs) ([], [], [], [], [])
         let rules = rules |> replaceValueMarkerFields useFormulas stellarisScopeTriggers |> replaceSingleAliases |> replaceColourField |> replaceIgnoreMarkerFields
         // File.AppendAllText ("test.test", sprintf "%O" rules)
         rules, types, enums, complexenums, values
