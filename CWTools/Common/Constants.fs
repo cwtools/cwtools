@@ -73,7 +73,7 @@ type CK3Lang =
     | Chinese = 4
     | Russian = 5
     | Korean = 6
-    
+
 type VIC3Lang =
     | English = 0
     | French = 1
@@ -86,6 +86,7 @@ type VIC3Lang =
     | Japanese = 8
     | Polish = 9
     | Turkish = 10
+
 type CustomLang =
     | English = 0
     | French = 1
@@ -107,18 +108,19 @@ type Lang =
     | CK3 of CK3Lang
     | VIC3 of VIC3Lang
     | Custom of CustomLang
+
     override x.ToString() =
         x
         |> function
-        | CK2 c -> c.ToString()
-        | STL s -> s.ToString()
-        | HOI4 s -> s.ToString()
-        | EU4 s -> s.ToString()
-        | IR s -> s.ToString()
-        | VIC2 s -> s.ToString()
-        | CK3 s -> s.ToString()
-        | VIC3 s -> s.ToString()
-        | Custom s -> s.ToString()
+            | CK2 c -> c.ToString()
+            | STL s -> s.ToString()
+            | HOI4 s -> s.ToString()
+            | EU4 s -> s.ToString()
+            | IR s -> s.ToString()
+            | VIC2 s -> s.ToString()
+            | CK3 s -> s.ToString()
+            | VIC3 s -> s.ToString()
+            | Custom s -> s.ToString()
 
 module LangHelpers =
     let allCK2Langs =
@@ -179,19 +181,18 @@ module LangHelpers =
           CK3 CK3Lang.Korean ]
 
     let allVIC3Langs =
-        [
-            VIC3 VIC3Lang.English
-            VIC3 VIC3Lang.Chinese
-            VIC3 VIC3Lang.French
-            VIC3 VIC3Lang.German
-            VIC3 VIC3Lang.Japanese
-            VIC3 VIC3Lang.Korean
-            VIC3 VIC3Lang.Polish
-            VIC3 VIC3Lang.Russian
-            VIC3 VIC3Lang.Spanish
-            VIC3 VIC3Lang.Turkish
-            VIC3 VIC3Lang.Braz_Por
-        ]
+        [ VIC3 VIC3Lang.English
+          VIC3 VIC3Lang.Chinese
+          VIC3 VIC3Lang.French
+          VIC3 VIC3Lang.German
+          VIC3 VIC3Lang.Japanese
+          VIC3 VIC3Lang.Korean
+          VIC3 VIC3Lang.Polish
+          VIC3 VIC3Lang.Russian
+          VIC3 VIC3Lang.Spanish
+          VIC3 VIC3Lang.Turkish
+          VIC3 VIC3Lang.Braz_Por ]
+
     let allCustomLangs =
         [ Custom CustomLang.English
           Custom CustomLang.French
@@ -253,18 +254,21 @@ module rec NewScope =
               dataTypeName = None }
 
         let parseScope () =
-            if not initialized
-            then CWTools.Utilities.Utils.logError "Error: parseScope was used without initializing scopes"
-            else ()
+            if not initialized then
+                CWTools.Utilities.Utils.logError "Error: parseScope was used without initializing scopes"
+            else
+                ()
+
             (fun (x: string) ->
                 let found, value = dict.TryGetValue(x.ToLower())
+
                 if found then
                     value
                 else
                     log (sprintf "Unexpected scope %O" x)
                     anyScope)
 
-        let init (scopes: ScopeInput list, scopeGroups : (string * string list) list) =
+        let init (scopes: ScopeInput list, scopeGroups: (string * string list) list) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
             dict <- Dictionary<string, Scope>()
@@ -281,9 +285,9 @@ module rec NewScope =
             let addScope (newScope: ScopeInput) =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
-                newScope.aliases
-                |> List.iter (fun s -> dict.Add(s, Scope(newID)))
+                newScope.aliases |> List.iter (fun s -> dict.Add(s, Scope(newID)))
                 reverseDict.Add(Scope(newID), newScope)
+
                 match newScope.dataTypeName with
                 | Some dtn -> dataTypeMap <- dataTypeMap |> Map.add (Scope(newID)) dtn
                 | None -> ()
@@ -293,16 +297,24 @@ module rec NewScope =
             let addScopeSubset (newScope: ScopeInput) =
                 newScope.isSubscopeOf
                 |> List.iter (fun ss ->
-                    matchesSet <- (Set.add (parseScope () (newScope.aliases |> List.head), parseScope () ss) matchesSet))
+                    matchesSet <-
+                        (Set.add (parseScope () (newScope.aliases |> List.head), parseScope () ss) matchesSet))
 
             scopes |> List.iter addScopeSubset
-            if Set.isEmpty matchesSet then () else complexEquality <- true
 
-            groupDict <- scopeGroups |> List.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
-                        |> Map.ofList
+            if Set.isEmpty matchesSet then
+                ()
+            else
+                complexEquality <- true
+
+            groupDict <-
+                scopeGroups
+                |> List.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
+                |> Map.ofList
 
         member this.GetName(scope: Scope) =
             let found, value = reverseDict.TryGetValue scope
+
             if found then
                 value.name
             else
@@ -320,7 +332,8 @@ module rec NewScope =
             | "all" -> this.AllScopes
             | x -> [ this.ParseScope () x ]
 
-        member this.ReInit(scopes: ScopeInput list, scopeGroups : (string * string list) list) = init (scopes, scopeGroups)
+        member this.ReInit(scopes: ScopeInput list, scopeGroups: (string * string list) list) =
+            init (scopes, scopeGroups)
 
         member this.MatchesScope (source: Scope) (target: Scope) =
             if not complexEquality then
@@ -336,8 +349,7 @@ module rec NewScope =
                 | _, x, y -> x = y
 
         member this.DataTypeForScope(scope: Scope) =
-            Map.tryFind scope dataTypeMap
-            |> Option.defaultValue (scope.ToString())
+            Map.tryFind scope dataTypeMap |> Option.defaultValue (scope.ToString())
 
         member this.Initialized = initialized
 
@@ -352,8 +364,7 @@ module rec NewScope =
         let mutable initialized = false
         let mutable dict = Dictionary<string, ModifierCategory>()
 
-        let mutable reverseDict =
-            Dictionary<ModifierCategory, ModifierCategoryInput>()
+        let mutable reverseDict = Dictionary<ModifierCategory, ModifierCategoryInput>()
 
         let mutable matchesSet = Set<ModifierCategory * Scope>(Seq.empty)
         let mutable idMap = Map<int, ModifierCategory>([])
@@ -377,8 +388,10 @@ module rec NewScope =
                     "Error: parseModifierCategory was used without initializing modifier categories"
             else
                 ()
+
             (fun (x: string) ->
                 let found, value = dict.TryGetValue(x.ToLower())
+
                 if found then
                     value
                 else
@@ -402,8 +415,10 @@ module rec NewScope =
                 let modifier = ModifierCategory(newID)
                 dict.Add(newModifier.name.ToLower(), modifier)
                 reverseDict.Add(modifier, newModifier)
+
                 newModifier.scopes
                 |> List.iter (fun s -> matchesSet <- matchesSet |> Set.add (modifier, s))
+
                 match newModifier.internalID with
                 | Some id -> idMap <- idMap |> (Map.add id modifier)
                 | None -> ()
@@ -412,6 +427,7 @@ module rec NewScope =
 
         member this.GetName(modifier: ModifierCategory) =
             let found, value = reverseDict.TryGetValue modifier
+
             if found then
                 value.name
             else
@@ -433,6 +449,7 @@ module rec NewScope =
 
         member this.SupportedScopes(modifier: ModifierCategory) =
             let found, value = reverseDict.TryGetValue modifier
+
             if found then
                 value.scopes
             else
@@ -505,7 +522,11 @@ module rec NewScope =
           explicitLocalisation: (string * string * bool) list
           subtypes: string list }
 
-type ModifierSource = | Rules | CodeGen | TypeDef of name : string * typeDef : string
+type ModifierSource =
+    | Rules
+    | CodeGen
+    | TypeDef of name: string * typeDef: string
+
 type ActualModifier =
     { tag: string
       // source: ModifierSource
@@ -521,26 +542,23 @@ type EffectType =
     | Link
     | ValueTrigger
 
-    type ReferenceHint =
-    | TypeRef of typeName : string * typeValue : string
-    | LocRef of locKey : string
-    | EnumRef of enumName : string * enumValue : string
-    | FileRef of filename : string
+type ReferenceHint =
+    | TypeRef of typeName: string * typeValue: string
+    | LocRef of locKey: string
+    | EnumRef of enumName: string * enumValue: string
+    | FileRef of filename: string
 
 type Effect internal (name, scopes, effectType, refHint) =
     member val Name: string = name
     member val Scopes: Scope list = scopes
     member this.ScopesSet = this.Scopes |> Set.ofList
     member val Type: EffectType = effectType
-    member val RefHint : ReferenceHint option = refHint
+    member val RefHint: ReferenceHint option = refHint
 
 
     override x.Equals(y) =
         match y with
-        | :? Effect as y ->
-            x.Name = y.Name
-            && x.Scopes = y.Scopes
-            && x.Type = y.Type
+        | :? Effect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
         | _ -> false
 
     interface System.IComparable with
@@ -548,17 +566,15 @@ type Effect internal (name, scopes, effectType, refHint) =
             match yobj with
             | :? Effect as y ->
                 let r1 = x.Name.CompareTo(y.Name)
-                if r1 = 0
-                then 0
-                else List.compareWith compare x.Scopes y.Scopes
-            | _ ->
-                invalidArg
-                    "yobj"
-                    ("cannot compare values of different types"
-                     + yobj.GetType().ToString())
+
+                if r1 = 0 then
+                    0
+                else
+                    List.compareWith compare x.Scopes y.Scopes
+            | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
 
     override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
-    new (name, scopes, effectType) = Effect(name, scopes, effectType, None)
+    new(name, scopes, effectType) = Effect(name, scopes, effectType, None)
 
 type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
@@ -569,10 +585,7 @@ type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, use
 
     override x.Equals(y) =
         match y with
-        | :? ScriptedEffect as y ->
-            x.Name = y.Name
-            && x.Scopes = y.Scopes
-            && x.Type = y.Type
+        | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
         | _ -> false
 
     interface System.IComparable with
@@ -607,26 +620,27 @@ type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
         let scopes =
             rawEffect.scopes |> List.map (fun x -> x.Trim()) |> List.collect parseScopes
 
-        let target =
-            rawEffect.targets
-            |> List.collect parseScopes
-            |> List.tryHead
+        let target = rawEffect.targets |> List.collect parseScopes |> List.tryHead
 
         DocEffect(rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
+
     new(name, scopes, target, effectType, desc, usage) = DocEffect(name, scopes, target, effectType, desc, usage, None)
 
-type ScopedEffect(name,
-                  scopes,
-                  inner,
-                  effectType,
-                  desc,
-                  usage,
-                  isScopeChange,
-                  ignoreChildren,
-                  scopeonlynoteffect,
-                  isValue,
-                  isWildCard,
-                  refHint) =
+type ScopedEffect
+    (
+        name,
+        scopes,
+        inner,
+        effectType,
+        desc,
+        usage,
+        isScopeChange,
+        ignoreChildren,
+        scopeonlynoteffect,
+        isValue,
+        isWildCard,
+        refHint
+    ) =
     inherit DocEffect(name, scopes, inner, effectType, desc, usage, refHint)
     member val IsScopeChange: bool = isScopeChange
     member val IgnoreChildren: string list = ignoreChildren
@@ -637,31 +651,58 @@ type ScopedEffect(name,
     member val IsWildCard: bool = isWildCard
 
     new(de: DocEffect, inner, isScopeChange, ignoreChildren, scopeonlynoteffect, isValue) =
-        ScopedEffect
-            (de.Name,
-             de.Scopes,
-             inner,
-             de.Type,
-             de.Desc,
-             de.Usage,
-             isScopeChange,
-             ignoreChildren,
-             scopeonlynoteffect,
-             isValue,
-             false,
-             None)
+        ScopedEffect(
+            de.Name,
+            de.Scopes,
+            inner,
+            de.Type,
+            de.Desc,
+            de.Usage,
+            isScopeChange,
+            ignoreChildren,
+            scopeonlynoteffect,
+            isValue,
+            false,
+            None
+        )
 
     new(de: DocEffect, inner) =
         ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, true, [], false, false, false, None)
 
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect, isValue, refHint) =
-        ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, isValue, false, refHint)
+        ScopedEffect(
+            name,
+            scopes,
+            inner,
+            effectType,
+            desc,
+            usage,
+            true,
+            [],
+            scopeonlynoteffect,
+            isValue,
+            false,
+            refHint
+        )
 
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
         ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
 
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
-        ScopedEffect(name, scopes, Some inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
+        ScopedEffect(
+            name,
+            scopes,
+            Some inner,
+            effectType,
+            desc,
+            usage,
+            true,
+            [],
+            scopeonlynoteffect,
+            false,
+            false,
+            None
+        )
 
 
 type TitleType =

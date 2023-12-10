@@ -1,4 +1,4 @@
- namespace CWTools.Games
+namespace CWTools.Games
 // open CWTools.Process
 // open FSharp.Collections.ParallelSeq
 // open FParsec

@@ -4,19 +4,21 @@ open FParsec
 open Types
 
 
- module CKParser =
+module CKParser =
 
-    let parseEventFile filepath = runParserOnFile SharedParsers.alle () filepath (System.Text.Encoding.GetEncoding(1252))
+    let parseEventFile filepath =
+        runParserOnFile SharedParsers.alle () filepath (System.Text.Encoding.GetEncoding(1252))
 
-    let private applyParser (parser: Parser<'Result,'UserState>) (stream: CharStream<'UserState>) =
+    let private applyParser (parser: Parser<'Result, 'UserState>) (stream: CharStream<'UserState>) =
         let reply = parser stream
+
         if reply.Status = Ok then
             Success(reply.Result, stream.UserState, stream.Position)
         else
             let error = ParserError(stream.Position, stream.UserState, reply.Error)
             Failure(error.ToString(stream), error, stream.UserState)
 
-    let parseFile (filepath : string) =
+    let parseFile (filepath: string) =
         use stream = new CharStream<unit>(filepath, System.Text.Encoding.GetEncoding(1252))
         stream.UserState <- ()
         stream.Name <- filepath
@@ -24,16 +26,19 @@ open Types
 
 
     let private memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_,_>()
+        let dict = new System.Collections.Generic.Dictionary<_, _>()
+
         fun n ->
-            match dict.TryGetValue(keyFunction(n)) with
+            match dict.TryGetValue(keyFunction (n)) with
             | true, v -> v
             | _ ->
-                let temp = memFunction(n)
-                dict.Add(keyFunction(n), temp)
+                let temp = memFunction (n)
+                dict.Add(keyFunction (n), temp)
                 temp
 
-    let parseString fileString filename = runParserOnString SharedParsers.all () filename fileString
+    let parseString fileString filename =
+        runParserOnString SharedParsers.all () filename fileString
+
     let parseEventString fileString fileName =
         let inner = (fun (file, name) -> runParserOnString SharedParsers.alle () name file)
         let hash = (fun (file, name) -> file.GetHashCode(), name)
@@ -41,6 +46,5 @@ open Types
 
     let getSuccess result =
         match result with
-        |Success(s, _, _) -> s
-        |_ -> ParsedFile []
-
+        | Success(s, _, _) -> s
+        | _ -> ParsedFile []

@@ -43,13 +43,12 @@ module VIC3Constants =
     //             NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope())
     //             })
 
-    let scriptFolders = [
-        "common";
-        "events";
-        "gfx";
-        "gui";
-        "interface";
-        "localization";
-        "content_source";
-        "map_data"
-    ]
+    let scriptFolders =
+        [ "common"
+          "events"
+          "gfx"
+          "gui"
+          "interface"
+          "localization"
+          "content_source"
+          "map_data" ]
