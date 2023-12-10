@@ -8,7 +8,6 @@ open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
 open CWTools.Rules.RulesHelpers
 open System.IO
-open CWTools.Common.NewScope
 open CWTools.Parser.UtilityParser
 type RulesSettings = {
     ruleFiles : (string * string) list

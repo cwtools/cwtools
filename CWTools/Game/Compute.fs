@@ -3,7 +3,6 @@ module CWTools.Games.Compute
 open CWTools.Games
 open System
 open CWTools.Rules
-open CWTools.Common
 
 let computeData (infoService : unit -> InfoService option) (e : Entity) =
     let withRulesData = infoService().IsSome
@@ -89,11 +88,9 @@ module EU4 =
 module STL =
     open CWTools.Process
     open CWTools.Process.ProcessCore
-    open CWTools.Process.STLProcess
     open CWTools.Games.Stellaris.STLLookup
     open CWTools.Utilities.Utils
     open CWTools.Common.STLConstants
-    open CWTools.Validation.Stellaris
 
     let getAllTechPrereqs (e : Entity) =
         let fNode = (fun (x : Node) acc ->

@@ -1,13 +1,6 @@
 namespace CWTools.Validation.EU4
 open CWTools.Validation
-open CWTools.Validation.ValidationCore
-open CWTools.Process
-open CWTools.Process.ProcessCore
 open CWTools.Common
-open CWTools.Common.EU4Constants
-open CWTools.Games
-open System
-open FSharpx.Collections
 
 
 module EU4Validation =

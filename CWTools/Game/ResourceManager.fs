@@ -1,6 +1,5 @@
 namespace CWTools.Games
 open System.Collections.Generic
-open CWTools.Common
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -8,7 +7,6 @@ open System.IO
 open CWTools.Parser
 open DotNet.Globbing
 open CWTools.Common.STLConstants
-open CWTools.Parser.Types
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities

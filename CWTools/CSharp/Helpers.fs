@@ -1,6 +1,5 @@
 namespace CWTools.CSharp
 open CWTools.Rules.RulesHelpers
-open CWTools.Games.Stellaris.STLGameFunctions
 open CWTools.Common
 open CWTools.Rules
 open System.IO

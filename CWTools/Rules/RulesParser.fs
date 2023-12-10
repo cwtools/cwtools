@@ -13,7 +13,6 @@ open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
 open CWTools.Rules
-open FSharp.Collections.ParallelSeq
 
 module private RulesParserImpl =
     let internal specificField x = SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken x))

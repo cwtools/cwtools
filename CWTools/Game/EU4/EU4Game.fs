@@ -17,7 +17,6 @@ open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.EU4.EU4Validation
-open CWTools.Validation.EU4.EU4LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Games.Compute.EU4
 open CWTools.Parser

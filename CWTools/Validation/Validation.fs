@@ -6,8 +6,6 @@ open CWTools.Utilities.Position
 open DotNet.Globbing
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games
-open CWTools.Process.STLProcess
-open CWTools.Process.ProcessCore
 open CWTools.Common.STLConstants
 open System
 

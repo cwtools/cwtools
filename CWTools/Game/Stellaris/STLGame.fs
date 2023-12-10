@@ -20,7 +20,6 @@ open CWTools.Games
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Rules
-open CWTools.Validation.Stellaris
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Process.Scopes.Scopes
 open System.Text

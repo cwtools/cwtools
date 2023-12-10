@@ -16,12 +16,9 @@ open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.LocalisationString
-open CWTools.Process
 open System
 open CWTools.Games.Helpers
 open CWTools.Parser
-open CWTools.Process.Localisation
-open CWTools.Process.Localisation.ChangeLocScope
 
 module IRGameFunctions =
     type GameObject = GameObject<IRComputedData, IRLookup>

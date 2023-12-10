@@ -1,9 +1,5 @@
 namespace CWTools.Common
 
-open System
-open System.ComponentModel.Design
-open System
-open CWTools.Utilities.Utils
 open NewScope
 
 module STLConstants =

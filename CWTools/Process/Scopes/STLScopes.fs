@@ -3,9 +3,7 @@ namespace CWTools.Process.Scopes
 open System
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Common.NewScope
 module STL =
-    open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged
 

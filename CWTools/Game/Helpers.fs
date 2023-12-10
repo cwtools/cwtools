@@ -1,7 +1,5 @@
 namespace CWTools.Games
-open CWTools.Parser
 open CWTools.Common
-open CWTools.Process
 open CWTools.Rules
 open CWTools.Utilities
 open CWTools.Utilities.Utils

@@ -1,9 +1,7 @@
 namespace CWTools.Process.Scopes
 
-open CWTools.Common.VIC2Constants
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Common.NewScope
 module VIC2 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged

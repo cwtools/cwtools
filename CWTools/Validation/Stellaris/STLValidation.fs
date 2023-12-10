@@ -1,7 +1,6 @@
 namespace CWTools.Validation.Stellaris
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
-open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
@@ -10,10 +9,6 @@ open CWTools.Common.STLConstants
 open CWTools.Games
 open CWTools.Utilities.Utils
 open System
-open CWTools.Games.Stellaris.STLLookup
-open CWTools.Process.Scopes
-open FSharpx.Collections
-open CWTools.Common.NewScope
 
 
 module STLValidation =

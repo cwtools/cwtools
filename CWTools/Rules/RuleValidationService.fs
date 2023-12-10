@@ -6,7 +6,6 @@ open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
-open CWTools.Utilities.Position
 open CWTools.Utilities
 open CWTools.Common
 open Microsoft.FSharp.Collections.Tagged

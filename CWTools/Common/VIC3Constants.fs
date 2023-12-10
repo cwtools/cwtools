@@ -1,7 +1,5 @@
 namespace CWTools.Common
 
-open CWTools.Utilities.Utils
-open CWTools.Common.NewScope
 module VIC3Constants =
     // let defaultScopes = [
     //     "Value", ["value"]

@@ -1,5 +1,4 @@
 namespace CWTools.Games
-open System.Resources
 open CWTools.Utilities.Position
 open System.IO
 open Files

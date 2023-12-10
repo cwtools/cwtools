@@ -1,20 +1,10 @@
 namespace CWTools.Validation.Stellaris
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
-open CWTools.Validation.LocalisationString
-open CWTools.Process
-open CWTools.Process.Scopes.STL
 open CWTools.Common
-open CWTools.Common.STLConstants
 open System
-open CWTools.Utilities.Utils
 open System.IO
 open CWTools.Utilities.Position
-open CWTools.Process.Scopes
-open CWTools.Process.Scopes.Scopes
-open CWTools.Common.NewScope
-open CWTools.Process.Localisation
-open CWTools.Process.Localisation.STL
 
 module STLLocalisationString =
 

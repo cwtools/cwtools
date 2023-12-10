@@ -1,9 +1,7 @@
 namespace CWTools.Process.Scopes
 
-open CWTools.Common.IRConstants
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Common.NewScope
 module CK3 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged

@@ -1,5 +1,4 @@
 namespace CWTools.Games
-open CWTools.Process
 open CWTools.Common
 open CWTools.Rules
 open CWTools.Process.Scopes

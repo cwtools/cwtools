@@ -1,9 +1,7 @@
 namespace CWTools.Process.Scopes
 
-open CWTools.Common.EU4Constants
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Common.NewScope
 module EU4 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged

@@ -4,7 +4,6 @@ open CWTools.Common
 open FParsec
 open CWTools.Utilities.Utils
 open CWTools.Process.STLProcess
-open CWTools.Common.NewScope
 open CWTools.Utilities
 
 module UtilityParser =

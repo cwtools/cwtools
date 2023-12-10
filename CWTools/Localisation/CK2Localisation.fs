@@ -1,13 +1,11 @@
 namespace CWTools.Localisation
 
-open FSharp.Data
 open System.IO
 open System.Collections.Generic
 open CWTools.Common
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open FParsec
-open CWTools.Parser.SharedParsers
 
 
 module CK2Localisation =

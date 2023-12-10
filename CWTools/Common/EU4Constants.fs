@@ -1,9 +1,5 @@
 namespace CWTools.Common
 
-open System
-open System.ComponentModel.Design
-open CWTools.Utilities.Utils
-open System.Collections.Generic
 
 
 module EU4Constants =

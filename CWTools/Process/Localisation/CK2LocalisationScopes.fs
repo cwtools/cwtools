@@ -3,7 +3,6 @@ open CWTools.Process.Scopes
 open CWTools.Common
 open CWTools.Utilities.Utils
 open CWTools.Process.Scopes.Scopes
-open CWTools.Process.Localisation.ChangeLocScope
 
 module CK2 =
     let scopedLocEffects() = [

@@ -1,7 +1,6 @@
 namespace CWTools.Process.Scopes
 
 open System
-open CWTools.Utilities.Position
 open CWTools.Common
 open CWTools.Utilities.Utils
 open Microsoft.FSharp.Collections.Tagged

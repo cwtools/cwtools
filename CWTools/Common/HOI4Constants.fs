@@ -1,6 +1,5 @@
 namespace CWTools.Common
 
-open CWTools.Utilities.Utils
 open CWTools.Common.NewScope
 module HOI4Constants =
     let defaultScopes = [

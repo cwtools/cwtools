@@ -1,20 +1,10 @@
 namespace CWTools.Validation.EU4
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
-open CWTools.Validation.LocalisationString
-open CWTools.Process
-open CWTools.Process.Scopes.EU4
 open CWTools.Common
-open CWTools.Common.EU4Constants
 open System
-open CWTools.Utilities.Utils
 open System.IO
 open CWTools.Utilities.Position
-open CWTools.Process.Scopes
-open CWTools.Process.Scopes.Scopes
-open CWTools.Common.NewScope
-open CWTools.Process.Localisation
-open CWTools.Process.Localisation.EU4
 
 module EU4LocalisationString =
 

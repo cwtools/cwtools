@@ -1,9 +1,7 @@
 namespace CWTools.Process.Scopes
 
-open CWTools.Common.CK2Constants
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Common.NewScope
 module CK2 =
     open CWTools.Utilities.Utils
     open Microsoft.FSharp.Collections.Tagged

@@ -10,7 +10,6 @@ open CWTools.Process
 open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Utilities.Position
-open CWTools.Utilities.TryParser
 open CWTools.Process.Scopes
 open FSharp.Collections.ParallelSeq
 open CWTools.Process.Localisation
@@ -39,7 +38,6 @@ type ValidationManagerServices<'T when 'T :> ComputedData> = {
     fileManager : Files.FileManager
 }
 open System.Collections.Generic
-open System.Collections.Concurrent
 
 type ErrorCache() =
 

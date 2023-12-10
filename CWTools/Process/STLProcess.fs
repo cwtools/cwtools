@@ -1,12 +1,9 @@
 namespace CWTools.Process
 open CWTools.Process.ProcessCore
-open CWTools.Parser.Types
 open CWTools.Process
-open CWTools.Common.STLConstants
 open System
 open CWTools.Utilities.Utils
 open CWTools.Common
-open CWTools.Common.NewScope
 
 module STLProcess =
 

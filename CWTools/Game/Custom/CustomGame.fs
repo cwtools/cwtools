@@ -13,13 +13,10 @@ open CWTools.Process.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.LocalisationString
-open CWTools.Process
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
-open System
-open CWTools.Process.Localisation.ChangeLocScope
 open CWTools.Process.Localisation
 
 module CustomGameFunctions =
