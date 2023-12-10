@@ -39,7 +39,6 @@ type CheckFieldParams =
 module internal FieldValidators =
 
     open System
-    open CWTools.Utilities.Utils
     open CWTools.Process
     open CWTools.Validation
     open CWTools.Validation.ValidationCore
@@ -447,7 +446,7 @@ module internal FieldValidators =
             if checkAnyScopesMatch anyScope s current
             then errors
             else inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString()) key) leafornode <&&&> errors
-        |NotFound _ -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
+        |NotFound -> inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode <&&&> errors
         |ScopeResult.WrongScope (command, prevscope, expected, _) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected) ) leafornode <&&&> errors
         |VarFound -> errors
         |VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
@@ -461,7 +460,7 @@ module internal FieldValidators =
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         |ScopeResult.NewScope ({Scopes = current::_} ,_, _) -> checkAnyScopesMatch anyScope s current
-        |NotFound _ -> false
+        |NotFound -> false
         |ScopeResult.WrongScope (command, prevscope, expected, _) -> true
         |VarNotFound s -> false
         |ValueFound _ -> false
@@ -487,7 +486,7 @@ module internal FieldValidators =
         //TODO: Better error messages for scope instead of variable
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         |_, _, ScopeResult.WrongScope (command, prevscope, expected, refHint) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
-        |_, _, NotFound _ -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
+        |_, _, NotFound -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
 //        |_, _, WrongScope (command, prevscope, expected) -> 
         |_ -> inv (ErrorCodes.CustomError "Expecting a variable, but got a scope" Severity.Error) leafornode <&&&> errors
     let checkVariableFieldNE (linkMap : Map<_,_,_>) (valueTriggerMap : Map<_,_,_>) (wildcardLinks : ScopedEffect list) varSet changeScope anyScope (ctx : RuleContext) isInt is32Bit min max (ids : StringTokens) =
@@ -530,7 +529,7 @@ module internal FieldValidators =
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         |_, _, _, ScopeResult.WrongScope (command, prevscope, expected, refHint) -> inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode <&&&> errors
-        |_, _, _, NotFound _ ->
+        |_, _, _, NotFound ->
                 match enumsMap.TryFind "static_values" with
                 | Some (_, es) ->
                     if es.Contains (trimQuote key) then errors else inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors

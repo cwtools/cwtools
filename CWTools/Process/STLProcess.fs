@@ -107,7 +107,9 @@ module STLProcess =
                 ValueClauseC newVC
             | CommentC c ->
                 CommentC c
-        mapChild (NodeC source) |> function |NodeC node -> node
+        let newNode = Node(source.Key, source.Position)
+        newNode.AllArray <- source.AllArray |> Array.map mapChild
+        newNode
 
     let shipProcess = BaseProcess()
     let simpleProcess = BaseProcess()
