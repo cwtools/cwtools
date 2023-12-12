@@ -650,8 +650,7 @@ module internal FieldValidators =
             else if value.Contains("@") && values.Contains(value.Split([| '@' |]).[0]) then
                 errors
             else if
-                values.ToList()
-                |> List.exists (fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
+                values.Exists (fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
             then
                 errors
             else
@@ -681,8 +680,7 @@ module internal FieldValidators =
             else
                 values.Contains value
                 || (value.Contains("@") && values.Contains(value.Split([| '@' |]).[0]))
-                || values.ToList()
-                   |> List.exists (fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
+                || values.Exists(fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
         | None -> false
 
     let checkFilepathField
