@@ -138,10 +138,11 @@ module ChangeLocScope =
                     | Some _, _, _ -> LocContextResult.Found(context.CurrentScope.ToString())
                     | _, _, true -> LocContextResult.Found(context.CurrentScope.ToString())
                     | None, false, false ->
+                        let firstPart = nextKey.Split('@').[0]
                         match
                             staticSettings.usesVariableCommands,
                             dynamicSettings.setVariables
-                            |> List.exists (fun sv -> sv == nextKey.Split('@').[0])
+                            |> List.exists (fun sv -> sv == firstPart)
                         with
                         | true, true -> LocContextResult.Found(context.CurrentScope.ToString())
                         | false, true -> LocContextResult.VariableScope context

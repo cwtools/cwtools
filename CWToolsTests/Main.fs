@@ -292,14 +292,14 @@ let perfHOI4(b) =
     timer.Start()
     scopeManager.ReInit(defaultScopeInputs, [])
          
-    let cached, cachedFiles = Serializer.deserialize @"C:\Users\Thomas\.vscode\extensions\tboby.cwtools-vscode-0.10.17\.cwtools\hoi4.cwb"
+    let cached, cachedFiles = Serializer.deserialize @"C:\Users\Thomas\Git\cwtools-vscode\.cwtools\hoi4.cwb"
     let configs = CWToolsCLI.getConfigFiles (None, Some @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config")
     let folders = configs |> List.tryPick getFolderList
 
     let hoi4modpath = "Main.files.hoi4.modifiers"
 
     let hoi4settings = {
-        rootDirectories = [ WorkspaceDirectoryInput.WD { path = @"C:\Users\Thomas\Documents\Paradox Interactive\Hearts of Iron IV\mod\Test\"; name = "test" } ]
+        rootDirectories = [ WorkspaceDirectoryInput.WD { path = @"D:\Git\Hearts of Iron IV\Millennium_Dawn"; name = "test" } ]
         scriptFolders = folders
         excludeGlobPatterns = None
         embedded = FromConfig (cachedFiles, cached)
