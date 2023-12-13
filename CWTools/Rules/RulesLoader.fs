@@ -27,7 +27,7 @@ module RulesLoader =
                 | FParsec.CharParsers.ParserResult.Success(p, _, _) ->
                     Some(DocsParser.processDocs scopeManager.ParseScopes p)
                 | FParsec.CharParsers.ParserResult.Failure(e, _, _) ->
-                    eprintfn "%A" e
+                    eprintfn $"%A{e}"
                     None)
             |> Option.defaultWith (fun () ->
                 Utils.logError "trigger_docs.log was not found in stellaris config"

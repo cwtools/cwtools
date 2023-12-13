@@ -68,18 +68,18 @@ type ValueType =
     override x.ToString() =
         match x with
         // | Scalar -> "Scalar"
-        | Enum enumc -> sprintf "Enum %s" enumc
+        | Enum enumc -> $"Enum %s{enumc}"
         // | Specific valuec -> sprintf "Specific %s" (StringResource.stringManager.GetStringForIDs valuec)
-        | Float(min, max) -> sprintf "Float with min %f and max %f" min max
+        | Float(min, max) -> $"Float with min %f{min} and max %f{max}"
         | Bool -> "Bool"
-        | Int(min, max) -> sprintf "Int with min %i and max %i" min max
+        | Int(min, max) -> $"Int with min %i{min} and max %i{max}"
         | Percent -> "Percent"
         | Date -> "Date"
         | DateTime -> "DateTime"
         | CK2DNA -> "CK2DNA"
         | CK2DNAProperty -> "CK2DNAProperty"
         | IRFamilyName -> "IRFamilyName"
-        | STLNameFormat x -> sprintf "STLNameFormat %s" x
+        | STLNameFormat x -> $"STLNameFormat %s{x}"
 
 [<Struct>]
 type SpecificValue = SpecificValue of valuec: StringTokens
@@ -176,13 +176,13 @@ and NewField =
 
     override x.ToString() =
         match x with
-        | ValueField vt -> sprintf "Field of %O" vt
+        | ValueField vt -> $"Field of {vt}"
         | ScalarField sv -> "Field of any value"
-        | SpecificField(SpecificValue sv) -> sprintf "Field of %s" (stringManager.GetStringForID sv.normal)
-        | VariableGetField sv -> sprintf "Field of \"%s\" value" sv
+        | SpecificField(SpecificValue sv) -> $"Field of %s{stringManager.GetStringForID sv.normal}"
+        | VariableGetField sv -> $"Field of \"%s{sv}\" value"
         | VariableField(isint, is32bit, (min, max)) ->
-            sprintf "Field of defined variable or number between %O and %O" min max
-        | _ -> sprintf "Field of %A" x
+            $"Field of defined variable or number between {min} and {max}"
+        | _ -> $"Field of %A{x}"
 
 and RuleType =
     | NodeRule of left: NewField * rules: NewRule list
@@ -193,11 +193,11 @@ and RuleType =
 
     override x.ToString() =
         match x with
-        | NodeRule(l, r) -> sprintf "NodeRule with Left (%O) and inner (%O)" l r
-        | LeafRule(l, r) -> sprintf "LeafRule with Left (%O) and right (%O)" l r
-        | LeafValueRule r -> sprintf "LeafValueRule (%O)" r
-        | ValueClauseRule rs -> sprintf "ValueClauseRule with inner (%O)" rs
-        | SubtypeRule(n, p, r) -> sprintf "SubtypeRule %s with inner (%O)" n r
+        | NodeRule(l, r) -> $"NodeRule with Left ({l}) and inner ({r})"
+        | LeafRule(l, r) -> $"LeafRule with Left ({l}) and right ({r})"
+        | LeafValueRule r -> $"LeafValueRule ({r})"
+        | ValueClauseRule rs -> $"ValueClauseRule with inner ({rs})"
+        | SubtypeRule(n, p, r) -> $"SubtypeRule %s{n} with inner ({r})"
 
 and NewRule = RuleType * Options
 
@@ -208,9 +208,9 @@ type RootRule =
 
     override x.ToString() =
         match x with
-        | AliasRule(n, r) -> sprintf "Alias definition %s (%O)" n r
-        | SingleAliasRule(n, r) -> sprintf "Single alias definition %s (%O)" n r
-        | TypeRule(n, r) -> sprintf "Type rule %s (%O)" n r
+        | AliasRule(n, r) -> $"Alias definition %s{n} ({r})"
+        | SingleAliasRule(n, r) -> $"Single alias definition %s{n} ({r})"
+        | TypeRule(n, r) -> $"Type rule %s{n} ({r})"
 // type EffectRule = Rule // Add scopes
 
 type EnumDefinition =

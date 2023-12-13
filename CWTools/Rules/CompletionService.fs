@@ -391,11 +391,7 @@ type CompletionService
         let rulePrint (i: int) =
             function
             | LeafRule(SpecificField(SpecificValue s), r) ->
-                sprintf
-                    "\t%s = ${%i:%s}\n"
-                    (StringResource.stringManager.GetStringForID s.normal)
-                    (i + 1)
-                    (fieldToCompletionList r)
+                $"\t%s{StringResource.stringManager.GetStringForID s.normal} = ${{%i{i + 1}:%s{fieldToCompletionList r}}}\n"
             | NodeRule(SpecificField(SpecificValue s), _) ->
                 sprintf "\t%s = ${%i:%s}\n" (StringResource.stringManager.GetStringForID s.normal) (i + 1) "{ }"
             | _ -> ""
@@ -410,7 +406,7 @@ type CompletionService
         let requiredRules = if requiredRules = "" then "\t${0}\n" else requiredRules
 
         let score = scoreFunction key
-        CompletionResponse.Snippet(key, (sprintf "%s = {\n%s}" key requiredRules), description, Some score, Other)
+        CompletionResponse.Snippet(key, $"%s{key} = {{\n%s{requiredRules}}}", description, Some score, Other)
 
 
     // | LeafValue
@@ -617,7 +613,7 @@ type CompletionService
                 let keyvalue (inner: string) =
                     CompletionResponse.Snippet(
                         inner,
-                        (sprintf "%s = $0" inner),
+                        $"%s{inner} = $0",
                         o.description,
                         Some(scoreFunctioni inner),
                         Other
@@ -626,7 +622,7 @@ type CompletionService
                 let keyvalueWithCustomScopeReq r (inner: string) =
                     CompletionResponse.Snippet(
                         inner,
-                        (sprintf "%s = $0" inner),
+                        $"%s{inner} = $0",
                         o.description,
                         Some(
                             (scoreFunction context r CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing)
@@ -919,7 +915,7 @@ type CompletionService
                     fs
                     |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
             | (key, count, _, t) :: rest ->
-                log (sprintf "Completion error %A %A" key t)
+                log $"Completion error %A{key} %A{t}"
                 expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
 
         let stack = stack |> List.map (fun (a, b, c, d, e) -> (a, b, c, d))

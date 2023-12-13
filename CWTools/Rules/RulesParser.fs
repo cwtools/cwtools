@@ -25,7 +25,7 @@ module private RulesParserImpl =
         | "info" -> Severity.Information
         | "information" -> Severity.Information
         | "hint" -> Severity.Hint
-        | s -> failwithf "Invalid severity %s" s
+        | s -> failwithf $"Invalid severity %s{s}"
 
     let defaultOptions = Options.DefaultOptions
 
@@ -600,7 +600,7 @@ module private RulesParserImpl =
                 match getSettingFromString x "subtype" with
                 | Some st when st.StartsWith "!" -> SubtypeRule(st.Substring(1), false, innerRules)
                 | Some st -> SubtypeRule(st, true, innerRules)
-                | None -> failwith (sprintf "Invalid subtype string %s" x)
+                | None -> failwith $"Invalid subtype string %s{x}"
             | _ when node.KeyPrefixId.IsSome && node.ValuePrefixId.IsSome -> NodeRule(JominiGuiField, innerRules)
             | x -> NodeRule(processKey parseScope anyScope scopeGroup (x.Trim('"')), innerRules)
 
@@ -1061,16 +1061,16 @@ module private RulesParserImpl =
                 if Array.contains leaf.Key validTypeKeys then
                     ()
                 else
-                    log (sprintf "Unexpected leaf %s found in type definition at %A" leaf.Key leaf.Position)
+                    log $"Unexpected leaf %s{leaf.Key} found in type definition at %A{leaf.Position}"
             | NodeC node ->
                 match node.Key with
                 | "localisation" -> ()
                 | "modifiers" -> ()
                 | x when x.StartsWith "subtype" -> ()
-                | x -> log (sprintf "Unexpected node %s found in type definition at %A" x node.Position)
+                | x -> log $"Unexpected node %s{x} found in type definition at %A{node.Position}"
             | LeafValueC leafvalue ->
-                log (sprintf "Unexpected leafvalue %s found in type definition at %A" leafvalue.Key leafvalue.Position)
-            | ValueClauseC vc -> log (sprintf "Unexpected valueclause found in type definition at %A" vc.Position)
+                log $"Unexpected leafvalue %s{leafvalue.Key} found in type definition at %A{leafvalue.Position}"
+            | ValueClauseC vc -> log $"Unexpected valueclause found in type definition at %A{vc.Position}"
             | CommentC _ -> ()
 
         match node.Key with
@@ -1369,12 +1369,7 @@ module private RulesParserImpl =
                 match singlealiasesmap () |> Map.tryFind name with
                 | Some(NodeRule(al, ar), ao) -> ValueClauseRule(ar), o
                 | x ->
-                    log (
-                        sprintf
-                            "Failed to find defined single alias %s when replacing single alias clause. Found %A"
-                            name
-                            x
-                    )
+                    log $"Failed to find defined single alias %s{name} when replacing single alias clause. Found %A{x}"
 
                     rule
 
@@ -1556,7 +1551,7 @@ module RulesParser =
 
         match parsed with
         | Failure(e, _, _) ->
-            log (sprintf "config file %s failed with %s" filename e)
+            log $"config file %s{filename} failed with %s{e}"
             ([], [], [], [], [])
         | Success(s, _, _) ->
             //log "parsed %A" s

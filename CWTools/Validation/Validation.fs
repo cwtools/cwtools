@@ -563,7 +563,7 @@ type ErrorCodes =
 //                 else false
 //         inner x y
 
-[<CustomEqualityAttribute; NoComparisonAttribute>]
+[<CustomEqualityAttribute; NoComparisonAttribute; Struct>]
 type ValidationResult =
     | OK
     | Invalid of Guid * CWError list

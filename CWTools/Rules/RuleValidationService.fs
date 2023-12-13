@@ -324,7 +324,7 @@ type RuleValidationService
                 if enforceCardinality && (leaf.Key.[0] <> '@') then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedPropertyNode
-                            (sprintf "%s is unexpected in %s" key startNode.Key)
+                            $"%s{key} is unexpected in %s{startNode.Key}"
                             severity)
                         leaf
                     <&&&> innerErrors
@@ -364,7 +364,7 @@ type RuleValidationService
                 if enforceCardinality then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedPropertyLeaf
-                            (sprintf "%s is unexpected in %s" key startNode.Key)
+                            $"%s{key} is unexpected in %s{startNode.Key}"
                             severity)
                         node
                     <&&&> innerErrors
@@ -404,7 +404,7 @@ type RuleValidationService
                 then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedPropertyLeafValue
-                            (sprintf "%s is unexpected in %s" leafvalue.Key startNode.Key)
+                            $"%s{leafvalue.Key} is unexpected in %s{startNode.Key}"
                             severity)
                         leafvalue
                     <&&&> innerErrors
@@ -428,7 +428,7 @@ type RuleValidationService
                 if enforceCardinality then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedPropertyValueClause
-                            (sprintf "Unexpected clause in %s" startNode.Key)
+                            $"Unexpected clause in %s{startNode.Key}"
                             severity)
                         valueclause
                     <&&&> innerErrors
@@ -469,20 +469,14 @@ type RuleValidationService
 
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf
-                                "Missing %s, expecting at least %i"
-                                (StringResource.stringManager.GetStringForID key.normal)
-                                opts.min)
+                            $"Missing %s{StringResource.stringManager.GetStringForID key.normal}, expecting at least %i{opts.min}"
                             minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf
-                                "Too many %s, expecting at most %i"
-                                (StringResource.stringManager.GetStringForID key.normal)
-                                opts.max)
+                            $"Too many %s{StringResource.stringManager.GetStringForID key.normal}, expecting at most %i{opts.max}"
                             Severity.Warning)
                         clause
                     <&&&> innerErrors
@@ -506,14 +500,14 @@ type RuleValidationService
 
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Missing %O, expecting at least %i" l opts.min)
+                            $"Missing {l}, expecting at least %i{opts.min}"
                             minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Too many n %O, expecting at most %i" l opts.max)
+                            $"Too many n {l}, expecting at most %i{opts.max}"
                             Severity.Warning)
                         clause
                     <&&&> innerErrors
@@ -534,14 +528,14 @@ type RuleValidationService
 
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Missing %O, expecting at least %i" l opts.min)
+                            $"Missing {l}, expecting at least %i{opts.min}"
                             minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Too many l %O %O, expecting at most %i" l r opts.max)
+                            $"Too many l {l} {r}, expecting at most %i{opts.max}"
                             Severity.Warning)
                         clause
                     <&&&> innerErrors
@@ -564,14 +558,14 @@ type RuleValidationService
 
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Missing %O, expecting at least %i" l opts.min)
+                            $"Missing {l}, expecting at least %i{opts.min}"
                             minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Too many lv %O, expecting at most %i" l opts.max)
+                            $"Too many lv {l}, expecting at most %i{opts.max}"
                             Severity.Warning)
                         clause
                     <&&&> innerErrors
@@ -589,14 +583,14 @@ type RuleValidationService
 
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Missing clause, expecting at least %i" opts.min)
+                            $"Missing clause, expecting at least %i{opts.min}"
                             minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            (sprintf "Too many clauses, expecting at most %i" opts.max)
+                            $"Too many clauses, expecting at most %i{opts.max}"
                             Severity.Warning)
                         clause
                     <&&&> innerErrors
@@ -778,7 +772,7 @@ type RuleValidationService
                      | NotFound, _ -> inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
                      | WrongScope(command, prevscope, expected, _), _ ->
                          inv
-                             (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected))
+                             (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}")
                              node
                          <&&&> errors
                      | VarFound, _ ->
@@ -790,7 +784,7 @@ type RuleValidationService
 
                          applyClauseField enforceCardinality options.severity newCtx rules node errors
                      | VarNotFound v, _ ->
-                         inv (ErrorCodes.CustomError (sprintf "The variable %s has not been set" v) Severity.Error) node
+                         inv (ErrorCodes.CustomError $"The variable %s{v} has not been set" Severity.Error) node
                          <&&&> errors
                      | _ ->
                          inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node

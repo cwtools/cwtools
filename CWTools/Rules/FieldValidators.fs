@@ -123,7 +123,7 @@ module internal FieldValidators =
                     errors
                 else
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting yes or no, got %s{key}" severity)
                         leafornode
                     <&&&> errors
             | ValueType.Int(min, max) ->
@@ -134,7 +134,7 @@ module internal FieldValidators =
                     else
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
-                                (sprintf "Expecting a value between %i and %i" min max)
+                                $"Expecting a value between %i{min} and %i{max}"
                                 severity)
                             leafornode
                         <&&&> errors
@@ -146,13 +146,13 @@ module internal FieldValidators =
                         else
                             inv
                                 (ErrorCodes.ConfigRulesUnexpectedValue
-                                    (sprintf "Expecting an integer, got %s" key)
+                                    $"Expecting an integer, got %s{key}"
                                     severity)
                                 leafornode
                             <&&&> errors
                     | None ->
                         inv
-                            (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity)
+                            (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting an integer, got %s{key}" severity)
                             leafornode
                         <&&&> errors
             | ValueType.Float(min, max) ->
@@ -163,7 +163,7 @@ module internal FieldValidators =
                     else
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
-                                (sprintf "Expecting a value between %f and %f" min max)
+                                $"Expecting a value between %f{min} and %f{max}"
                                 severity)
                             leafornode
                         <&&&> errors
@@ -175,13 +175,13 @@ module internal FieldValidators =
                         else
                             inv
                                 (ErrorCodes.ConfigRulesUnexpectedValue
-                                    (sprintf "Expecting a float, got %s" key)
+                                    $"Expecting a float, got %s{key}"
                                     severity)
                                 leafornode
                             <&&&> errors
                     | None ->
                         inv
-                            (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity)
+                            (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a float, got %s{key}" severity)
                             leafornode
                         <&&&> errors
             | ValueType.Enum e ->
@@ -192,14 +192,14 @@ module internal FieldValidators =
                     else
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
-                                (sprintf "Expecting a \"%s\" value, e.g. %A" desc es)
+                                $"Expecting a \"%s{desc}\" value, e.g. %A{es}"
                                 severity)
                             leafornode
                         <&&&> errors
                 | None ->
                     inv
                         (ErrorCodes.RulesError
-                            (sprintf "Configuration error: there are no defined values for the enum %s" e)
+                            $"Configuration error: there are no defined values for the enum %s{e}"
                             severity)
                         leafornode
                     <&&&> errors
@@ -211,7 +211,7 @@ module internal FieldValidators =
                     errors
                 else
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting an percentage, got %s{key}" severity)
                         leafornode
                     <&&&> errors
             | ValueType.Date ->
@@ -230,7 +230,7 @@ module internal FieldValidators =
                     errors
                 else
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity)
                         leafornode
                     <&&&> errors
             | ValueType.DateTime ->
@@ -262,7 +262,7 @@ module internal FieldValidators =
                     errors
                 else
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a date, got %s" key) severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity)
                         leafornode
                     <&&&> errors
             | ValueType.CK2DNA ->
@@ -270,7 +270,7 @@ module internal FieldValidators =
                     errors
                 else
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a dna value, got %s" key) severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a dna value, got %s{key}" severity)
                         leafornode
                     <&&&> errors
             | ValueType.CK2DNAProperty ->
@@ -279,7 +279,7 @@ module internal FieldValidators =
                 else
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedValue
-                            (sprintf "Expecting a portrait properties value, got %s" key)
+                            $"Expecting a portrait properties value, got %s{key}"
                             severity)
                         leafornode
                     <&&&> errors
@@ -289,7 +289,7 @@ module internal FieldValidators =
                 if (parts.Length <> 4) then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedValue
-                            (sprintf "Expecting a family names value, got %s" key)
+                            $"Expecting a family names value, got %s{key}"
                             severity)
                         leafornode
                     <&&&> errors
@@ -320,7 +320,7 @@ module internal FieldValidators =
 
                     if res then
                         inv
-                            (ErrorCodes.CustomError (sprintf "Expecting a defined parts list of %s" var) Severity.Error)
+                            (ErrorCodes.CustomError $"Expecting a defined parts list of %s{var}" Severity.Error)
                             leafornode
                         <&&&> errors
                     else
@@ -564,14 +564,14 @@ module internal FieldValidators =
                     errors
                 else
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expected value of type %s{fieldType}" severity)
                         leafornode
                     <&&&> errors
 
         //let values = values typeKeyMap values
         // if values.Contains value then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" fieldType) severity) leafornode <&&&> errors
         | None ->
-            inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" fieldType) Severity.Error) leafornode
+            inv (ErrorCodes.CustomError $"Unknown type referenced %s{fieldType}" Severity.Error) leafornode
             <&&&> errors
 
     let checkTypeFieldNE (typesMap: Collections.Map<_, StringSet>) severity (typetype: TypeType) (ids: StringTokens) =
@@ -656,14 +656,14 @@ module internal FieldValidators =
             else
                 inv
                     (ErrorCodes.ConfigRulesUnexpectedValue
-                        (sprintf "Expected defined value of %s, got %s" varName value)
+                        $"Expected defined value of %s{varName}, got %s{value}"
                         (min Severity.Warning severity))
                     leafornode
                 <&&&> errors
         | None ->
             inv
                 (ErrorCodes.ConfigRulesUnexpectedValue
-                    (sprintf "Expected defined value of %s, got %s" varName key)
+                    $"Expected defined value of %s{varName}, got %s{key}"
                     (min Severity.Warning severity))
                 leafornode
             <&&&> errors
@@ -785,7 +785,7 @@ module internal FieldValidators =
             inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString()) key) leafornode
             <&&&> errors
         | ScopeResult.WrongScope(command, prevscope, expected, _) ->
-            inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%O" expected)) leafornode
+            inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"{expected}") leafornode
             <&&&> errors
         | VarFound -> errors
         | VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
@@ -867,7 +867,7 @@ module internal FieldValidators =
                 Invalid(
                     Guid.NewGuid(),
                     [ inv
-                          (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected))
+                          (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}")
                           leafornode ]
                 )
             | _, _, NotFound -> inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
@@ -959,7 +959,7 @@ module internal FieldValidators =
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
         | _, _, _, ScopeResult.WrongScope(command, prevscope, expected, refHint) ->
-            inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected)) leafornode
+            inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}") leafornode
             <&&&> errors
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
@@ -1130,7 +1130,7 @@ module internal FieldValidators =
                 else
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedValue
-                            (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(v.normal)))
+                            $"Expecting value %s{StringResource.stringManager.GetStringForID(v.normal)}"
                             severity)
                         leafornode
                     <&&&> errors
@@ -1141,7 +1141,7 @@ module internal FieldValidators =
             | TypeMarkerField _
             | IgnoreMarkerField
             | ValueScopeMarkerField _ ->
-                inv (ErrorCodes.CustomError (sprintf "Unexpected rule type %O" field) Severity.Error) leafornode
+                inv (ErrorCodes.CustomError $"Unexpected rule type {field}" Severity.Error) leafornode
                 <&&&> errors
             | AliasValueKeysField aliasKey ->
                 checkAliasValueKeysField p.aliasKeyList aliasKey keyIDs severity leafornode errors
