@@ -588,6 +588,10 @@ type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, use
         | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
         | _ -> false
 
+    
+    override x.GetHashCode() = 
+        hash (x.Name, x.Scopes, x.Type, x.Comments, x.GlobalEventTargets, x.SavedEventTargets, x.UsedEventTargets)
+
     interface System.IComparable with
         member x.CompareTo yobj =
             match yobj with
@@ -609,6 +613,10 @@ type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
             && x.Desc = y.Desc
             && x.Usage = y.Usage
         | _ -> false
+
+    override x.GetHashCode() = 
+        hash (x.Name, x.Scopes, x.Type, x.Desc, x.Usage, x.Target)
+    
 
     interface System.IComparable with
         member x.CompareTo yobj =
