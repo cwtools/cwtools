@@ -205,7 +205,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempEnumMap <-
             lookup.enumDefs
             |> Map.toSeq
-            |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet()))
+            |> PSeq.map (fun (k, (d, s)) -> k, (d, s |> List.map fst |> createStringSet))
             |> Map.ofSeq
 
         /// First pass type defs
@@ -246,7 +246,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 lookup.typeDefInfo
                 |> Map.toSeq
                 |> PSeq.map (fun (k, s) ->
-                    k, let newSet = StringSet() in (s |> List.iter (fun tdi -> newSet.Add (tdi.id, tdi.id))); newSet)
+                    k, s |> List.map _.id |> createStringSet)
                 |> Map.ofSeq
 
             newTypeMap
@@ -298,7 +298,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             lookup.typeDefInfo
             |> Map.toSeq
             |> PSeq.map (fun (k, s) ->
-                k, let newSet = StringSet() in (s |> List.iter (fun tdi -> newSet.Add (tdi.id, tdi.id))); newSet)
+                k, s |> List.map _.id |> createStringSet)
             |> Map.ofSeq
 
         let tempInfoService =
@@ -374,7 +374,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let varMap =
             lookup.varDefInfo
             |> Map.toSeq
-            |> PSeq.map (fun (k, s) -> k, let newSet = StringSet() in (List.map fst s) |> List.iter (fun tdi -> newSet.Add (tdi, tdi)); newSet)
+            |> PSeq.map (fun (k, s) -> k, s |> List.map fst |> createStringSet)
             |> Map.ofSeq
 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

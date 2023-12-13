@@ -650,7 +650,7 @@ module internal FieldValidators =
             else if value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]) then
                 errors
             else if
-                (let result = values.FindSuccessor(value) in result <> null)
+                (let result = values.FindPredecessor(value) in result <> null)
             then
                 errors
             else
