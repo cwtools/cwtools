@@ -5,6 +5,7 @@ open System.Collections.Generic
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
+open VDS.Common.Tries
 
 module Utils =
 
@@ -72,7 +73,17 @@ module Utils =
     let mkZeroFile file =
         mkRange file (mkPos 0 0) (mkPos 10000 0)
 
-    type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
+    type LowerStringSparseTrie() =
+        inherit AbstractTrie<string, char, string>((fun s -> s.ToLower(CultureInfo.InvariantCulture)), new SparseCharacterTrieNode<string>(null, Unchecked.defaultof<char>))
+
+        override this.CreateRoot(key) = new SparseCharacterTrieNode<string>(null, key)
+        
+    // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
+    type StringSet = LowerStringSparseTrie
+    let createStringSet items =
+        let newSet = StringSet()
+        items |> Seq.iter (fun x -> newSet.Add(x, x))
+        newSet
 
     let repeatN f n x =
         let mutable x = x

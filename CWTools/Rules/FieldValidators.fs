@@ -102,7 +102,7 @@ module internal FieldValidators =
 
     let checkValidValue
         (varMap: Collections.Map<_, StringSet>)
-        (enumsMap: Collections.Map<_, string * Set<_, _>>)
+        (enumsMap: Collections.Map<_, string * StringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
         (vt: CWTools.Rules.ValueType)
@@ -141,7 +141,7 @@ module internal FieldValidators =
                 | None ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
-                        if es.Contains(trimQuote key) then
+                        if es.ContainsKey(trimQuote key) then
                             errors
                         else
                             inv
@@ -170,7 +170,7 @@ module internal FieldValidators =
                 | None ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
-                        if es.Contains(trimQuote key) then
+                        if es.ContainsKey(trimQuote key) then
                             errors
                         else
                             inv
@@ -187,7 +187,7 @@ module internal FieldValidators =
             | ValueType.Enum e ->
                 match enumsMap.TryFind e with
                 | Some(desc, es) ->
-                    if es.Contains(trimQuote key) then
+                    if es.ContainsKey(trimQuote key) then
                         errors
                     else
                         inv
@@ -316,7 +316,7 @@ module internal FieldValidators =
                         |> Seq.cast<Text.RegularExpressions.Capture>
                         |> Seq.map (fun c -> c.Value)
 
-                    let res = refs |> Seq.exists (vars.Contains >> not)
+                    let res = refs |> Seq.exists (vars.ContainsKey >> not)
 
                     if res then
                         inv
@@ -330,7 +330,7 @@ module internal FieldValidators =
 
     let checkValidValueNE
         (varMap: Collections.Map<_, StringSet>)
-        (enumsMap: Collections.Map<_, string * Set<_, _>>)
+        (enumsMap: Collections.Map<_, string * StringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
         (vt: CWTools.Rules.ValueType)
@@ -348,18 +348,18 @@ module internal FieldValidators =
              | Some i -> i <= max && i >= min
              | None ->
                  match enumsMap.TryFind "static_values" with
-                 | Some(_, es) -> es.Contains(trimQuote key)
+                 | Some(_, es) -> es.ContainsKey(trimQuote key)
                  | None -> false
          | ValueType.Float(min, max) ->
              match TryParser.parseDecimal key with
              | Some f -> f <= max && f >= min
              | None ->
                  match enumsMap.TryFind "static_values" with
-                 | Some(_, es) -> es.Contains(trimQuote key)
+                 | Some(_, es) -> es.ContainsKey(trimQuote key)
                  | None -> false
          | ValueType.Enum e ->
              match enumsMap.TryFind e with
-             | Some(_, es) -> es.Contains(trimQuote key)
+             | Some(_, es) -> es.ContainsKey(trimQuote key)
              | None -> false
          // | ValueType.Specific s ->
          //     // if trimQuote key == s then true else false
@@ -421,7 +421,7 @@ module internal FieldValidators =
                      |> Seq.map (fun m -> m.Groups.[1])
                      |> Seq.cast<Text.RegularExpressions.Capture>
                      |> Seq.map (fun c -> c.Value)
-                     |> Seq.exists (vars.Contains >> not)
+                     |> Seq.exists (vars.ContainsKey >> not)
 
                  res |> not
              | None -> false
@@ -558,7 +558,7 @@ module internal FieldValidators =
                             | _, _, n when n <= 0 -> None
                             | true, true, n -> Some(value.Substring(p.Length, n))
                     // eprintfn "ct %s %A %A" value newvalue typetype
-                    newvalue |> Option.map values.Contains |> Option.defaultValue false
+                    newvalue |> Option.map values.ContainsKey |> Option.defaultValue false
 
                 if found then
                     errors
@@ -617,7 +617,7 @@ module internal FieldValidators =
                         | _, _, n when n <= 0 -> None
                         | true, true, n -> Some(value.Substring(p.Length, n))
 
-                value |> Option.map values.Contains |> Option.defaultValue false
+                value |> Option.map values.ContainsKey |> Option.defaultValue false
         // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
         // match isComplex with
         // | true ->
@@ -645,12 +645,12 @@ module internal FieldValidators =
 
             if firstCharEqualsAmp ids.lower then
                 errors
-            else if values.Contains value then
+            else if values.ContainsKey value then
                 errors
-            else if value.Contains("@") && values.Contains(value.Split([| '@' |]).[0]) then
+            else if value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]) then
                 errors
             else if
-                values.Exists (fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
+                (let result = values.FindSuccessor(value) in result <> null)
             then
                 errors
             else
@@ -678,10 +678,15 @@ module internal FieldValidators =
             if firstCharEqualsAmp ids.lower then
                 true
             else
-                values.Contains value
-                || (value.Contains("@") && values.Contains(value.Split([| '@' |]).[0]))
-                || values.Exists(fun v -> value.StartsWith(v, StringComparison.OrdinalIgnoreCase))
+                values.ContainsKey value
+                || (value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]))
+                || (values.FindSuccessor(value) <> null)
         | None -> false
+        // var:asd
+    // var:asdasd
+    
+    // var -> var.StartsWith (var:asd)
+    // var:asd -> var:asdasd.StartsWith(var:asd)
 
     let checkFilepathField
         (files: Collections.Set<string>)
@@ -913,7 +918,7 @@ module internal FieldValidators =
             | _ -> false
 
     let checkValueScopeField
-        (enumsMap: Collections.Map<_, string * Set<_, _>>)
+        (enumsMap: Collections.Map<_, string * StringSet>)
         (linkMap: Map<_, _, _>)
         (valueTriggerMap: Map<_, _, _>)
         (wildcardLinks: ScopedEffect list)
@@ -959,7 +964,7 @@ module internal FieldValidators =
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
             | Some(_, es) ->
-                if es.Contains(trimQuote key) then
+                if es.ContainsKey(trimQuote key) then
                     errors
                 else
                     inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
@@ -969,7 +974,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkValueScopeFieldNE
-        (enumsMap: Collections.Map<_, string * Set<_, _>>)
+        (enumsMap: Collections.Map<_, string * StringSet>)
         (linkMap: Map<_, _, _>)
         (valueTriggerMap: Map<_, _, _>)
         (wildcardLinks: ScopedEffect list)
@@ -999,7 +1004,7 @@ module internal FieldValidators =
         | _, _, _, ValueFound _ -> true
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
-            | Some(_, es) -> es.Contains(trimQuote key)
+            | Some(_, es) -> es.ContainsKey(trimQuote key)
             | None -> false
 
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])

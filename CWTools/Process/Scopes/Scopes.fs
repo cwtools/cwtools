@@ -170,7 +170,7 @@ module Scopes =
                             else
                                 (context, false), NotFound
                         | None, _ ->
-                            if last && vars.Contains nextKey then
+                            if last && vars.ContainsKey nextKey then
                                 (context, false), VarFound
                             else if varOnly then
                                 (context, false), VarNotFound nextKey
@@ -364,7 +364,7 @@ module Scopes =
                             else
                                 (context, (false, false)), NotFound
                         | _, None, _ ->
-                            if last && (vars.Contains nextKey) then
+                            if last && (vars.ContainsKey nextKey) then
                                 (context, (false, false)), VarFound
                             else if varOnly then
                                 (context, (false, false)), VarNotFound nextKey
@@ -474,7 +474,7 @@ module Scopes =
                         | (_, (_, false)), Some r -> r
 
                     if ampersandSplit.Length > 1 then
-                        if vars.Contains key then
+                        if vars.ContainsKey key then
                             VarFound
                         else
                             let keys = ampersandSplit.[1].Split('.')

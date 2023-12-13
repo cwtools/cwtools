@@ -62,7 +62,7 @@ type RuleValidationService
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     let varSet =
         varMap.TryFind "variable"
-        |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
+        |> Option.defaultValue (StringSet())
 
     let wildCardLinks =
         linkMap.ToList()
@@ -83,55 +83,55 @@ type RuleValidationService
 
     let ruleToCompletionListHelper =
         function
-        | LeafRule(SpecificField(SpecificValue x), _), _ -> [ x.lower ]
-        | NodeRule(SpecificField(SpecificValue x), _), _ -> [ x.lower ]
+        | LeafRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
+        | NodeRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
         | LeafRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue (Seq.empty)
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue Seq.empty
         | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s ->
+                s.Values
+                |> Seq.map (fun s ->
                     (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
                         .lower))
-            |> Option.defaultValue []
+            |> Option.defaultValue Seq.empty
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s ->
+                s.Values
+                |> Seq.map (fun s ->
                     (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
                         .lower))
-            |> Option.defaultValue []
+            |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
             |> Option.map (fun (_, s) ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue Seq.empty
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
             |> Option.map (fun (_, s) ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
-        | _ -> []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue Seq.empty
+        | _ -> Seq.empty
 
     let aliasKeyMap =
         aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
-        |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper))
+        |> List.map (fun (key, values) -> key, Collections.Set.ofSeq values)
         |> Map.ofList
 
     // let isValidValue (value : Value) =

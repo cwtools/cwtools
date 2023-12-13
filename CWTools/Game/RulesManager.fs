@@ -143,10 +143,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let mutable tempValues = Map.empty
 
     let mutable tempTypeMap =
-        [ ("", StringSet.Empty(InsensitiveStringComparer())) ] |> Map.ofList
+        [ ("", StringSet()) ] |> Map.ofList
 
     let mutable tempEnumMap =
-        [ ("", ("", StringSet.Empty(InsensitiveStringComparer()))) ] |> Map.ofList
+        [ ("", ("", StringSet())) ] |> Map.ofList
 
     let mutable rulesDataGenerated = false
 
@@ -205,7 +205,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempEnumMap <-
             lookup.enumDefs
             |> Map.toSeq
-            |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
+            |> PSeq.map (fun (k, (d, s)) -> k, (d, StringSet()))
             |> Map.ofSeq
 
         /// First pass type defs
@@ -246,7 +246,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 lookup.typeDefInfo
                 |> Map.toSeq
                 |> PSeq.map (fun (k, s) ->
-                    k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id))))
+                    k, let newSet = StringSet() in (s |> List.iter (fun tdi -> newSet.Add (tdi.id, tdi.id))); newSet)
                 |> Map.ofSeq
 
             newTypeMap
@@ -298,7 +298,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             lookup.typeDefInfo
             |> Map.toSeq
             |> PSeq.map (fun (k, s) ->
-                k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map (fun tdi -> tdi.id))))
+                k, let newSet = StringSet() in (s |> List.iter (fun tdi -> newSet.Add (tdi.id, tdi.id))); newSet)
             |> Map.ofSeq
 
         let tempInfoService =
@@ -374,7 +374,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let varMap =
             lookup.varDefInfo
             |> Map.toSeq
-            |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (List.map fst s)))
+            |> PSeq.map (fun (k, s) -> k, let newSet = StringSet() in (List.map fst s) |> List.iter (fun tdi -> newSet.Add (tdi, tdi)); newSet)
             |> Map.ofSeq
 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

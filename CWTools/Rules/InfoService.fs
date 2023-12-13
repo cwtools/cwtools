@@ -89,11 +89,11 @@ type InfoService
 
     let varSet =
         varMap.TryFind "variable"
-        |> Option.defaultValue (StringSet.Empty(InsensitiveStringComparer()))
+        |> Option.defaultValue (StringSet())
 
     let inner (map: Collections.Map<string, string list>) (subtype: string) (set: StringSet) =
-        set.ToList()
-        |> List.fold
+        set.Values
+        |> Seq.fold
             (fun m v ->
                 Map.tryFind v m
                 |> function
@@ -116,55 +116,56 @@ type InfoService
 
     let ruleToCompletionListHelper =
         function
-        | LeafRule(SpecificField(SpecificValue x), _), _ -> [ x.lower ]
-        | NodeRule(SpecificField(SpecificValue x), _), _ -> [ x.lower ]
+        | LeafRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
+        | NodeRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
         | LeafRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue (Seq.empty)
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue Seq.empty
         | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s ->
+                s.Values
+                |> Seq.map (fun s ->
                     (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
                         .lower))
-            |> Option.defaultValue []
+            |> Option.defaultValue Seq.empty
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.ToList()
-                |> List.map (fun s ->
+                s.Values
+                |> Seq.map (fun s ->
                     (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
                         .lower))
-            |> Option.defaultValue []
+            |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
             |> Option.map (fun (_, s) ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue Seq.empty
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
             |> Option.map (fun (_, s) ->
-                s.ToList()
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
-        | _ -> []
+                s.Values
+                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+            |> Option.defaultValue Seq.empty
+        | _ -> Seq.empty
+
 
     let aliasKeyMap =
         aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
-        |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper))
+        |> List.map (fun (key, values) -> key, Collections.Set.ofSeq values)
         |> Map.ofList
 
     let monitor = new Object()
@@ -817,7 +818,7 @@ type InfoService
             | _ ->
                 match Map.tryFind "static_values" enums with
                 | Some(_, ss) ->
-                    if ss.Contains key then
+                    if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
                     else
                         None
@@ -1219,7 +1220,7 @@ type InfoService
             | _ ->
                 match Map.tryFind "static_values" enums with
                 | Some(_, ss) ->
-                    if ss.Contains key then
+                    if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
                     else
                         None
@@ -1732,6 +1733,7 @@ type InfoService
 
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
+      //  asdasdads // Try building a specialized fold which builds a single array instead of folding
 
     let singleDepthFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect depthInfoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
@@ -1763,7 +1765,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value)) then
+                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1777,7 +1779,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value)) then
+                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1808,7 +1810,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leafvalue) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value)) then
+                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1826,7 +1828,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value node) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.Contains(value)) then
+                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else

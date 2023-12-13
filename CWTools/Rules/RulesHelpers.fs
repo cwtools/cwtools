@@ -306,7 +306,7 @@ let getEntitiesWithoutTypes (types: TypeDefinition list) (es: Entity list) =
     es |> List.choose checkEntity
 
 let expandPredefinedValues
-    (types: Map<string, _>)
+    (types: Map<string, StringSet>)
     (enums: Map<string, _ * list<string * option<CWTools.Utilities.Position.range>>>)
     (values: string list)
     =
@@ -319,7 +319,7 @@ let expandPredefinedValues
         | Some typeValues ->
             // eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
             let res =
-                typeValues
+                typeValues.Values
                 |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2))
                 |> List.ofSeq
             // eprintfn "epv2 %A" res
