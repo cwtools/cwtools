@@ -77,7 +77,6 @@ module Utils =
         inherit AbstractTrie<string, char, string>((fun s -> s.ToLower(CultureInfo.InvariantCulture)), new SparseCharacterTrieNode<string>(null, Unchecked.defaultof<char>))
 
         override this.CreateRoot(key) = new SparseCharacterTrieNode<string>(null, key)
-        
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type StringSet = LowerStringSparseTrie
     let createStringSet items =

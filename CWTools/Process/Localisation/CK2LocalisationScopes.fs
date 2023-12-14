@@ -651,10 +651,7 @@ module CK2 =
           ) ]
 
     let scopedLocEffectsMap () =
-        EffectMap.FromList(
-            InsensitiveStringComparer(),
-            scopedLocEffects () |> List.map (fun se -> se.Name, se :> Effect)
-        )
+        EffectMap.FromList(scopedLocEffects ())
 
 
     let locPrimaryScopes () =
@@ -681,10 +678,7 @@ module CK2 =
             if localisationLinks |> List.isEmpty then
                 scopedLocEffectsMap ()
             else
-                EffectMap.FromList(
-                    InsensitiveStringComparer(),
-                    scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect)
-                )
+                EffectMap.FromList(scopedLocEffects)
 
         { questionMarkVariable = true
           usesVariableCommands = false

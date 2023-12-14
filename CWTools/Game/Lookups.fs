@@ -19,62 +19,51 @@ type Lookup() =
         _allCoreLinks
         |> List.filter (fun l -> l.Type = EffectType.Trigger || l.Type = EffectType.ValueTrigger)
 
-    let mutable _triggersMap: Lazy<Map<string, Effect, InsensitiveStringComparer>> =
+    let mutable _triggersMap: Lazy<EffectMap> =
         lazy
-            (Map<string, Effect, InsensitiveStringComparer>
-                .Empty(InsensitiveStringComparer()))
+            (EffectMap()) 
 
     let resetTriggers () =
         _triggersMap <-
             lazy
                 (_triggers ()
-                 |> List.map (fun e -> e.Name, e)
-                 |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l)))
+                 |> EffectMap.FromList)
 
     let _effects () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Effect)
 
-    let mutable _effectsMap: Lazy<Map<string, Effect, InsensitiveStringComparer>> =
-        lazy
-            (Map<string, Effect, InsensitiveStringComparer>
-                .Empty(InsensitiveStringComparer()))
+    let mutable _effectsMap: Lazy<EffectMap> =
+        lazy EffectMap()
 
     let resetEffects () =
         _effectsMap <-
             lazy
                 (_effects ()
-                 |> List.map (fun e -> e.Name, e)
-                 |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l)))
+                 |> (fun l -> EffectMap.FromList(l)))
 
     let _eventTargetLinks () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Link)
 
-    let mutable _eventTargetLinksMap: Lazy<Map<string, Effect, InsensitiveStringComparer>> =
-        lazy
-            (Map<string, Effect, InsensitiveStringComparer>
-                .Empty(InsensitiveStringComparer()))
+    let mutable _eventTargetLinksMap: Lazy<EffectMap> =
+        lazy EffectMap()
 
     let resetEventTargetLinks () =
         _eventTargetLinksMap <-
             lazy
                 (_eventTargetLinks ()
-                 |> List.map (fun e -> e.Name, e)
-                 |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l)))
+                 |> EffectMap.FromList)
 
     let _valueTriggers () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.ValueTrigger)
 
-    let mutable _valueTriggersMap: Lazy<Map<string, Effect, InsensitiveStringComparer>> =
-        lazy
-            (Map<string, Effect, InsensitiveStringComparer>
-                .Empty(InsensitiveStringComparer()))
+    let mutable _valueTriggersMap: Lazy<EffectMap> =
+        lazy EffectMap()
 
     let resetValueTriggers () =
         _valueTriggersMap <-
             lazy
                 (_valueTriggers ()
-                 |> List.map (fun e -> e.Name, e)
-                 |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l)))
+                 |> EffectMap.FromList)
 
     member __.allCoreLinks
         with get () = _allCoreLinks

@@ -54,7 +54,6 @@ module VIC2 =
           "PREVPREVPREVPREV", prev >> prev >> prev >> prev ]
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
-    type EffectMap = Map<string, Effect, InsensitiveStringComparer>
 
     let changeScope: bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> StringSet -> string -> ScopeContext -> ScopeResult =
         Scopes.createJominiChangeScope oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:")

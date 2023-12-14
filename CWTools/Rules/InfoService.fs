@@ -47,8 +47,8 @@ type InfoService
         varMap: Collections.Map<string, StringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
-        links: Map<string, Effect, InsensitiveStringComparer>,
-        valueTriggers: Map<string, Effect, InsensitiveStringComparer>,
+        links: EffectMap,
+        valueTriggers: EffectMap,
         ruleValidationService: RuleValidationService,
         changeScope,
         defaultContext,
@@ -61,11 +61,11 @@ type InfoService
     let linkMap = links
 
     let wildCardLinks =
-        linkMap.ToList()
-        |> List.map snd
-        |> List.choose (function
+        linkMap.Values
+        |> Seq.choose (function
             | :? ScopedEffect as e when e.IsWildCard -> Some e
             | _ -> None)
+        |> Seq.toList
 
     let valueTriggerMap = valueTriggers
 

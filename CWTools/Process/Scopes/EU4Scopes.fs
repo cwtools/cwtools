@@ -60,7 +60,6 @@ module EU4 =
           "hidden_trigger", id ]
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
-    type EffectMap = Map<string, Effect, InsensitiveStringComparer>
 
     let changeScope: bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> StringSet -> string -> ScopeContext -> ScopeResult =
         Scopes.createChangeScope oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:") false

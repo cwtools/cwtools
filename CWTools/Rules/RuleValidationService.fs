@@ -27,8 +27,8 @@ type RuleValidationService
         varMap: Collections.Map<string, StringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
-        links: Map<string, Effect, InsensitiveStringComparer>,
-        valueTriggers: Map<string, Effect, InsensitiveStringComparer>,
+        links: EffectMap,
+        valueTriggers: EffectMap,
         anyScope,
         changeScope: ChangeScope,
         defaultContext: ScopeContext,
@@ -65,11 +65,11 @@ type RuleValidationService
         |> Option.defaultValue (StringSet())
 
     let wildCardLinks =
-        linkMap.ToList()
-        |> List.map snd
-        |> List.choose (function
+        linkMap.Values
+        |> Seq.choose (function
             | :? ScopedEffect as e when e.IsWildCard -> Some e
             | _ -> None)
+        |> List.ofSeq
 
     let defaultKeys =
         localisation

@@ -18,9 +18,9 @@ type CheckFieldParams =
     { varMap: Collections.Map<string, StringSet>
       enumsMap: Collections.Map<string, string * StringSet>
       typesMap: Collections.Map<string, StringSet>
-      linkMap: Map<string, Effect, InsensitiveStringComparer>
+      linkMap: EffectMap 
       wildcardLinks: ScopedEffect list
-      valueTriggerMap: Map<string, Effect, InsensitiveStringComparer>
+      valueTriggerMap: EffectMap
       varSet: StringSet
       localisation: (Lang * Collections.Set<string>) list
       defaultLocalisation: Collections.Set<string>
@@ -192,7 +192,7 @@ module internal FieldValidators =
                     else
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
-                                $"Expecting a \"%s{desc}\" value, e.g. %A{es}"
+                                $"Expecting a \"%s{desc}\" value, e.g. %A{es.Values |> Seq.head}"
                                 severity)
                             leafornode
                         <&&&> errors
@@ -756,8 +756,8 @@ module internal FieldValidators =
         || (List.exists (fun s -> currentScope.IsOfScope(s) || s = anyScope) scopes)
 
     let checkScopeField
-        (linkMap: Map<_, _, _>)
-        (valueTriggerMap: Map<_, _, _>)
+        (linkMap: EffectMap)
+        (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
@@ -795,8 +795,8 @@ module internal FieldValidators =
         | _ -> errors
 
     let checkScopeFieldNE
-        (linkMap: Map<_, _, _>)
-        (valueTriggerMap: Map<_, _, _>)
+        (linkMap: EffectMap)
+        (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
@@ -820,8 +820,8 @@ module internal FieldValidators =
         | _ -> true
 
     let checkVariableField
-        (linkMap: Map<_, _, _>)
-        (valueTriggerMap: Map<_, _, _>)
+        (linkMap: EffectMap)
+        (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
@@ -877,8 +877,8 @@ module internal FieldValidators =
                 <&&&> errors
 
     let checkVariableFieldNE
-        (linkMap: Map<_, _, _>)
-        (valueTriggerMap: Map<_, _, _>)
+        (linkMap: EffectMap)
+        (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
@@ -919,8 +919,8 @@ module internal FieldValidators =
 
     let checkValueScopeField
         (enumsMap: Collections.Map<_, string * StringSet>)
-        (linkMap: Map<_, _, _>)
-        (valueTriggerMap: Map<_, _, _>)
+        (linkMap: EffectMap)
+        (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
@@ -975,8 +975,8 @@ module internal FieldValidators =
 
     let checkValueScopeFieldNE
         (enumsMap: Collections.Map<_, string * StringSet>)
-        (linkMap: Map<_, _, _>)
-        (valueTriggerMap: Map<_, _, _>)
+        (linkMap: EffectMap)
+        (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope

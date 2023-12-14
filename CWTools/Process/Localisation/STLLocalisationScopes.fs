@@ -29,11 +29,7 @@ module STL =
         // ScopedEffect("federation", [scopeManager.ParseScope() "Country"], scopeManager.ParseScope() "Federation", EffectType.Link, defaultDesc, "", true);
         ]
 
-    let scopedLocEffectsMap () =
-        EffectMap.FromList(
-            InsensitiveStringComparer(),
-            scopedLocEffects () |> List.map (fun se -> se.Name, se :> Effect)
-        )
+    let scopedLocEffectsMap () = EffectMap.FromList(scopedLocEffects ())
 
 
     let locPrimaryScopes () =
@@ -81,9 +77,8 @@ module STL =
             else
                 let locLinks =
                     (scopedLocEffects @ eventTargetLinks)
-                    |> List.map (fun se -> se.Name, se :> Effect)
 
-                EffectMap.FromList(InsensitiveStringComparer(), locLinks)
+                EffectMap.FromList(locLinks)
 
         { questionMarkVariable = true
           usesVariableCommands = false

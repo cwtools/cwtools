@@ -1,11 +1,32 @@
 namespace CWTools.Process.Scopes
 
 open System
+open System.Globalization
 open CWTools.Common
 open CWTools.Utilities.Utils
 open Microsoft.FSharp.Collections.Tagged
+open VDS.Common.Tries
 
-type EffectMap = Map<string, Effect, InsensitiveStringComparer>
+
+type EffectMapSparseTrie() =
+    inherit
+        AbstractTrie<string, char, Effect>(
+            (fun s -> s.ToLower(CultureInfo.InvariantCulture)),
+            new SparseCharacterTrieNode<Effect>(null, Unchecked.defaultof<char>)
+        )
+
+    override this.CreateRoot(key) =
+        new SparseCharacterTrieNode<Effect>(null, key)
+    member this.TryFind(key) =
+        let res = this.Find(key)
+        if res <> null && res.HasValue then Some res.Value else None
+    static member FromList<'a when 'a :> Effect> (effects : 'a seq) =
+        let tree = EffectMapSparseTrie()
+        effects |> Seq.iter (fun x -> tree.Add(x.Name, x))
+        tree
+
+type EffectMap = EffectMapSparseTrie
+
 type UsageScopeContext = Scope list
 
 type ScopeContext =

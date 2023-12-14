@@ -37,10 +37,7 @@ module HOI4 =
           ) ]
 
     let scopedLocEffectsMap () =
-        EffectMap.FromList(
-            InsensitiveStringComparer(),
-            scopedLocEffects () |> List.map (fun se -> se.Name, se :> Effect)
-        )
+        EffectMap.FromList(scopedLocEffects ())
 
 
     let locPrimaryScopes () =
@@ -70,10 +67,7 @@ module HOI4 =
             if localisationLinks |> List.isEmpty then
                 scopedLocEffectsMap ()
             else
-                EffectMap.FromList(
-                    InsensitiveStringComparer(),
-                    scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect)
-                )
+                EffectMap.FromList(scopedLocEffects)
 
         { questionMarkVariable = true
           usesVariableCommands = false

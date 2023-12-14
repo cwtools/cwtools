@@ -271,7 +271,7 @@ let shipSizeType =
 //  }
 
 
-let effectMap = Microsoft.FSharp.Collections.Tagged.Map<string,Effect,InsensitiveStringComparer>.Create(InsensitiveStringComparer(), [])
+let effectMap = EffectMap()
 
 [<Tests>]
 let testc =

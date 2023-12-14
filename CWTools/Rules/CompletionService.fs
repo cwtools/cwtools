@@ -48,8 +48,8 @@ type CompletionService
         varMap: Collections.Map<string, StringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
-        links: Map<string, Effect, InsensitiveStringComparer>,
-        valueTriggers: Map<string, Effect, InsensitiveStringComparer>,
+        links: EffectMap,
+        valueTriggers: EffectMap,
         globalScriptVariables: string list,
         changeScope: ChangeScope,
         defaultContext: ScopeContext,
@@ -151,11 +151,11 @@ type CompletionService
     let linkMap = links
 
     let wildCardLinks =
-        linkMap.ToList()
-        |> List.map snd
-        |> List.choose (function
+        linkMap.Values
+        |> Seq.choose (function
             | :? ScopedEffect as e when e.IsWildCard -> Some e
             | _ -> None)
+        |> Seq.toList
 
     let valueTriggerMap = valueTriggers
 
@@ -327,8 +327,8 @@ type CompletionService
                   kind = CompletionCategory.Link })
 
         let scopedEffects =
-            linkMap.ToList()
-            |> List.choose (fun (_, s) ->
+            linkMap.Values
+            |> Seq.choose (fun s ->
                 s
                 |> function
                     | :? ScopedEffect as x when x.Type = EffectType.Link && x.Target.IsSome ->
@@ -346,10 +346,11 @@ type CompletionService
                               desc = Some x.Desc
                               kind = CompletionCategory.Link }
                     | _ -> None)
+            |> Seq.toList
 
         let valueTriggers =
-            valueTriggerMap.ToList()
-            |> List.choose (fun (_, s) ->
+            valueTriggerMap.Values
+            |> Seq.choose (fun s ->
                 s
                 |> function
                     | :? DocEffect as x when x.Type = EffectType.ValueTrigger ->
@@ -360,6 +361,7 @@ type CompletionService
                               desc = Some x.Desc
                               kind = CompletionCategory.Value }
                     | _ -> None)
+            |> Seq.toList
         //        let scopedEffects = scopedEffects @ valueTriggers
         let scopedEffects = scopedEffects @ scopedEffectsExtra
         let valueFieldAll = evs @ gevs @ scopedEffects @ vars @ valueTriggers
