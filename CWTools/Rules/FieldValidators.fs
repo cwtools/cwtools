@@ -49,7 +49,7 @@ module internal FieldValidators =
         | true -> pathOptions.paths |> List.exists (fun tp -> pathDir == tp.Replace("\\", "/"))
         | false ->
             pathOptions.paths
-            |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\", "/")))
+            |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\", "/"), StringComparison.OrdinalIgnoreCase))
         && match pathOptions.pathFile with
            | Some f -> file == f
            | None -> true
