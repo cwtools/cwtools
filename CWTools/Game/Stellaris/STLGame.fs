@@ -494,7 +494,8 @@ type STLGame(setupSettings: StellarisSettings) =
               valMeshFiles, "mesh"
               valAssetFiles, "asset"
               valComponentIcons, "compicon" ]
-          lookupValidators = [ valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget" ]
+          lookupValidators = [ valUniqueTypes, "uniques"; validateEconomicCatAIBudget, "aibudget"
+                               validateUnusuedTypes, "requireds" ]
           lookupFileValidators =
             [ valScriptedEffectParams, "scripted_effects"
               valScriptValueParams, "script_values" ]
