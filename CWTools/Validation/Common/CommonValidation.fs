@@ -654,16 +654,12 @@ module CommonValidation =
                 |> List.choose (fun (_, lazydata) -> lazydata.Force().Referencedtypes)
                 |> Seq.fold (fun a b -> merge a b (fun _ (l1, l2) -> l1 @ l2)) Map.empty
 
-            let checkTypeDef (refs: string list) (typedef: TypeDefInfo) =
+            let checkTypeDef (typename) (refs: string list) (typedef: TypeDefInfo) =
                 match List.contains typedef.id refs with
                 | true -> None
                 | false ->
                     Some(
-                        invManual
-                            (ErrorCodes.CustomError "This type should be used" Severity.Error)
-                            typedef.range
-                            typedef.id
-                            None
+                        invManual (ErrorCodes.UnusedType typename typedef.id) typedef.range typedef.id None
                     )
 
             let checkType (typename: string, typedefs: TypeDefInfo list) =
@@ -672,7 +668,7 @@ module CommonValidation =
                 | Some refs ->
                     typedefs
                     |> List.choose (
-                        checkTypeDef (
+                        checkTypeDef typename (
                             refs
                             |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                             |> List.map (fun r -> r.name)

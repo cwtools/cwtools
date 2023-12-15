@@ -318,6 +318,12 @@ type ErrorCodes =
           Severity = Severity.Error
           Message = "An else/else_if is missing a preceding if" }
 
+    static member UnusedType =
+        fun (typeName: string) (referenceName: string) ->
+            { ID = "CW239"
+              Severity = Severity.Warning
+              Message = $"{referenceName} of type {typeName} is not used anywhere, but is expected to be" }
+            
     static member ConfigRulesUnexpectedValue =
         fun message severity ->
             { ID = "CW240"
