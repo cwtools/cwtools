@@ -781,3 +781,6 @@ module CommonValidation =
                     <&!&> (foldNodeWithState fNode None >> (fun e -> Invalid(Guid.NewGuid(), e)))
 
             res
+
+    let commonValidationRules =
+        [ valUniqueTypes, "uniques"; validateUnusuedTypes, "requireds" ]

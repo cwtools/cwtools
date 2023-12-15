@@ -395,9 +395,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
           heavyExperimentalValidators = []
           experimental = false
           fileValidators = []
-          lookupValidators =
-            [ valUniqueTypes, "uniques"
-              validateUndefinedModifierTypes, "undefinedmodifiers" ]
+          lookupValidators = (validateUndefinedModifierTypes, "undefinedmodifiers") :: commonValidationRules
           lookupFileValidators = []
           useRules = true
           debugRulesOnly = false
