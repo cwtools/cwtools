@@ -2,6 +2,7 @@ namespace CWTools.Rules
 
 open CWTools.Common
 open CWTools.Rules.RulesWrapper
+open CWTools.Utilities.Utils2
 open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities.Utils
 open CWTools.Process.Localisation
@@ -81,58 +82,37 @@ type CompletionService
 
     let ruleToCompletionListHelper =
         function
-        | LeafRule(SpecificField(SpecificValue x), _), _ -> [ x.lower ]
-        | NodeRule(SpecificField(SpecificValue x), _), _ -> [ x.lower ]
-        | LeafRule(NewField.TypeField(TypeType.Simple t), _), _ ->
-            types.TryFind(t)
-            |> Option.map (fun s ->
-                s
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
+        | LeafRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
+        | NodeRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
+        | LeafRule(NewField.TypeField(TypeType.Simple t), _), _
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
-            types.TryFind(t)
+            typesMap.TryFind(t)
             |> Option.map (fun s ->
-                s
-                |> List.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue []
-        | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
-            types.TryFind(t)
-            |> Option.map (fun s ->
-                s
-                |> List.map (fun s ->
-                    (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
-                        .lower))
-            |> Option.defaultValue []
+                s.IdValues |> Seq.map _.lower)
+            |> Option.defaultValue (Seq.empty)
+        | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
-            types.TryFind(t)
+            typesMap.TryFind(t)
             |> Option.map (fun s ->
-                s
-                |> List.map (fun s ->
+                s.Values
+                |> Seq.map (fun s ->
                     (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
                         .lower))
-            |> Option.defaultValue []
-        | LeafRule(NewField.ValueField(Enum e), _), _ ->
-            enums.TryFind(e)
-            |> Option.map (fun (_, s) ->
-                s.Values
-                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower)
-                |> List.ofSeq)
-            |> Option.defaultValue []
+            |> Option.defaultValue Seq.empty
+        | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
             |> Option.map (fun (_, s) ->
-                s.Values
-                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower)
-                |> List.ofSeq)
-            |> Option.defaultValue []
-        | _ -> []
+                s.IdValues |> Seq.map _.lower)
+            |> Option.defaultValue Seq.empty
+        | _ -> Seq.empty
+
 
 
     let aliasKeyMap =
         rootRules.Aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
-        |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
         |> Map.ofList
 
     let linkMap = links

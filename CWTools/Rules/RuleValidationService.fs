@@ -5,6 +5,7 @@ open CWTools.Process.Localisation
 open CWTools.Process
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities.Utils
+open CWTools.Utilities.Utils2
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities
@@ -71,26 +72,13 @@ type RuleValidationService
         function
         | LeafRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
         | NodeRule(SpecificField(SpecificValue x), _), _ -> seq { yield x.lower }
-        | LeafRule(NewField.TypeField(TypeType.Simple t), _), _ ->
-            types.TryFind(t)
-            |> Option.map (fun s ->
-                s.Values
-                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue (Seq.empty)
+        | LeafRule(NewField.TypeField(TypeType.Simple t), _), _
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.Values
-                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue Seq.empty
-        | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
-            types.TryFind(t)
-            |> Option.map (fun s ->
-                s.Values
-                |> Seq.map (fun s ->
-                    (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
-                        .lower))
-            |> Option.defaultValue Seq.empty
+                s.IdValues |> Seq.map _.lower)
+            |> Option.defaultValue (Seq.empty)
+        | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
@@ -99,25 +87,19 @@ type RuleValidationService
                     (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
                         .lower))
             |> Option.defaultValue Seq.empty
-        | LeafRule(NewField.ValueField(Enum e), _), _ ->
-            enums.TryFind(e)
-            |> Option.map (fun (_, s) ->
-                s.Values
-                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
-            |> Option.defaultValue Seq.empty
+        | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
             |> Option.map (fun (_, s) ->
-                s.Values
-                |> Seq.map (fun s -> (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken s).lower))
+                s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue Seq.empty
         | _ -> Seq.empty
+
 
     let aliasKeyMap =
         rootRules.Aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper))
-        |> List.map (fun (key, values) -> key, Collections.Set.ofSeq values)
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
         |> Map.ofList
 
     // let isValidValue (value : Value) =

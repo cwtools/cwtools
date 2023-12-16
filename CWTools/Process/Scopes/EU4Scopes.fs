@@ -2,6 +2,7 @@ namespace CWTools.Process.Scopes
 
 open CWTools.Common
 open CWTools.Process.Scopes
+open CWTools.Utilities.Utils2
 
 module EU4 =
     open CWTools.Utilities.Utils

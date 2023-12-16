@@ -21,6 +21,7 @@ open CWTools.Utilities.Position
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
+open CWTools.Utilities.Utils2
 open CWTools.Utilities
 open CWTools.Games.Files
 open CWTools.Games.Stellaris

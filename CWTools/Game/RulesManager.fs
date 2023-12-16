@@ -7,6 +7,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Process.Localisation
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils
+open CWTools.Utilities.Utils2
 open CWTools.Rules.RulesHelpers
 open System.IO
 open CWTools.Parser.UtilityParser

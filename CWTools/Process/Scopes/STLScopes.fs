@@ -3,6 +3,7 @@ namespace CWTools.Process.Scopes
 open System
 open CWTools.Common
 open CWTools.Process.Scopes
+open CWTools.Utilities.Utils2
 
 module STL =
     open CWTools.Utilities.Utils

@@ -73,16 +73,7 @@ module Utils =
     let mkZeroFile file =
         mkRange file (mkPos 0 0) (mkPos 10000 0)
 
-    type LowerStringSparseTrie() =
-        inherit AbstractTrie<string, char, string>((fun s -> s.ToLower(CultureInfo.InvariantCulture)), new SparseCharacterTrieNode<string>(null, Unchecked.defaultof<char>))
 
-        override this.CreateRoot(key) = new SparseCharacterTrieNode<string>(null, key)
-    // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
-    type StringSet = LowerStringSparseTrie
-    let createStringSet items =
-        let newSet = StringSet()
-        items |> Seq.iter (fun x -> newSet.Add(x, x))
-        newSet
 
     let repeatN f n x =
         let mutable x = x
@@ -304,3 +295,34 @@ type StringResourceManager() =
 
 module StringResource =
     let mutable stringManager = StringResourceManager()
+
+module Utils2 =
+    
+    type LowerStringSparseTrie() =
+        inherit
+            AbstractTrie<string, char, string>(
+                (fun s -> s.ToLower(CultureInfo.InvariantCulture)),
+                new SparseCharacterTrieNode<string>(null, Unchecked.defaultof<char>)
+            )
+
+        let idValueList = ResizeArray<StringTokens>()
+
+        override this.CreateRoot(key) =
+            new SparseCharacterTrieNode<string>(null, key)
+        
+        member this.AddWithIDs(key, value) =
+            base.Add(key, value)
+            idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
+        
+        member _.IdValues = idValueList
+            
+    // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
+    type StringSet = LowerStringSparseTrie
+
+    let createStringSet items =
+        let newSet = StringSet()
+
+        items
+        |> Seq.iter (fun x ->
+            newSet.AddWithIDs(x, x))
+        newSet
