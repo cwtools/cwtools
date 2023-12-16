@@ -10,6 +10,7 @@ open CWTools.Utilities.Utils
 open CWTools.Rules.RulesHelpers
 open System.IO
 open CWTools.Parser.UtilityParser
+open CWTools.Rules.RulesWrapper
 
 type RulesSettings =
     { ruleFiles: (string * string) list
@@ -187,6 +188,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             ()
 
     let refreshConfig () =
+        let rulesWrapper = RulesWrapper(lookup.configRules)
         /// Enums
         let complexEnumDefs =
             getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct (e, _) -> e))
@@ -219,7 +221,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let refreshTypeInfo () =
             let tempRuleValidationService =
                 RuleValidationService(
-                    lookup.configRules,
+                    rulesWrapper, 
                     lookup.typeDefs,
                     tempTypeMap,
                     tempEnumMap,
@@ -269,7 +271,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         let tempRuleValidationService =
             RuleValidationService(
-                lookup.configRules,
+                rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap,
                 tempEnumMap,
@@ -303,7 +305,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         let tempInfoService =
             InfoService(
-                lookup.configRules,
+                rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap,
                 tempEnumMap,
@@ -392,7 +394,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         let completionService =
             CompletionService(
-                lookup.configRules,
+                rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap,
                 tempEnumMap,
@@ -414,7 +416,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let ruleValidationService =
             RuleValidationService(
-                lookup.configRules,
+                rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap,
                 tempEnumMap,
@@ -433,7 +435,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let infoService =
             InfoService(
-                lookup.configRules,
+                rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap,
                 tempEnumMap,

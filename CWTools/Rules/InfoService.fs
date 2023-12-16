@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open CWTools.Rules.RulesWrapper
 open CWTools.Utilities
 open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities.Utils
@@ -40,7 +41,7 @@ module Test =
 
 type InfoService
     (
-        rootRules: RootRule list,
+        rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
         types: Collections.Map<string, StringSet>,
         enums: Collections.Map<string, string * StringSet>,
@@ -58,34 +59,17 @@ type InfoService
             Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>,
         validateLocalisation: LocEntry -> ScopeContext -> ValidationResult
     ) =
-    let linkMap = links
 
     let wildCardLinks =
-        linkMap.Values
+        links.Values
         |> Seq.choose (function
             | :? ScopedEffect as e when e.IsWildCard -> Some e
             | _ -> None)
         |> Seq.toList
 
-    let valueTriggerMap = valueTriggers
 
-    let aliases =
-        rootRules
-        |> List.choose (function
-            | AliasRule(a, rs) -> Some(a, rs)
-            | _ -> None)
-        |> List.groupBy fst
-        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
-        |> Collections.Map.ofList
-
-    let typeRules =
-        rootRules
-        |> List.choose (function
-            | TypeRule(k, rs) -> Some(k, rs)
-            | _ -> None)
-
-    let typesMap = types // |> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-    let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+// |> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+//|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
 
     let varSet =
         varMap.TryFind "variable"
@@ -102,7 +86,7 @@ type InfoService
             map
 
     let invertedTypeMap =
-        typesMap |> Map.toList |> List.fold (fun m (t, set) -> inner m t set) Map.empty
+        types |> Map.toList |> List.fold (fun m (t, set) -> inner m t set) Map.empty
 
     let defaultKeys =
         localisation
@@ -160,14 +144,12 @@ type InfoService
             |> Option.defaultValue Seq.empty
         | _ -> Seq.empty
 
-
     let aliasKeyMap =
-        aliases
+        rootRules.Aliases
         |> Map.toList
         |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper))
         |> List.map (fun (key, values) -> key, Collections.Set.ofSeq values)
         |> Map.ofList
-
     let monitor = new Object()
 
     let memoizeRulesInner memFunction =
@@ -234,15 +216,15 @@ type InfoService
                 let expandedbaserules =
                     rules
                     |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                         | x -> [])
 
                 let expandedsubtypedrules =
                     subtypedrules
                     |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                         | x -> [])
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
@@ -440,7 +422,7 @@ type InfoService
                     let key = node.Key.Trim('"')
 
                     let newCtx =
-                        match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+                        match changeScope false true links valueTriggers wildCardLinks varSet key scope with
                         | NewScope({ Scopes = current :: _ }, _, _) ->
                             // log "cs %A %A %A" s node.Key current
                             { newCtx with
@@ -485,10 +467,10 @@ type InfoService
     //         fComment acc comment rule
     let p =
         { varMap = varMap
-          enumsMap = enumsMap
-          typesMap = typesMap
-          linkMap = linkMap
-          valueTriggerMap = valueTriggerMap
+          enumsMap = enums
+          typesMap = types
+          linkMap = links
+          valueTriggerMap = valueTriggers
           varSet = varSet
           localisation = localisationKeys
           defaultLocalisation = defaultKeys
@@ -526,8 +508,8 @@ type InfoService
             let expandedrules =
                 subtypedrules
                 |> List.collect (function
-                    | LeafRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
-                    | NodeRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
+                    | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
+                    | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                     | x -> [ x ])
 
             let childMatch =
@@ -609,7 +591,7 @@ type InfoService
         let resultForType (child: Node option) (typedef: TypeDefinition) =
             match child with
             | Some c ->
-                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
 
                 match typerules, typedef.type_per_file with
                 | [ (n, (NodeRule(l, rs), o)) ], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
@@ -628,7 +610,7 @@ type InfoService
                     )
                 | _ -> None
             | None ->
-                let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
 
                 match typerules with
                 | [ (n, (NodeRule(l, rs), o)) ] ->
@@ -775,7 +757,7 @@ type InfoService
             with
             | Some c, Some typedef ->
                 let typerules =
-                    typeRules
+                    rootRules.TypeRules
                     |> List.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
@@ -804,14 +786,14 @@ type InfoService
 
     let getInfoAtPos (pos: pos) (entity: Entity) =
         let changeScopeInner key scope =
-            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ -> None
 
         let changeValueScopeInner key scope =
-            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
@@ -913,7 +895,7 @@ type InfoService
                 let key = node.Key.Trim('"')
 
                 let newCtx, rh =
-                    match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+                    match changeScope false true links valueTriggers wildCardLinks varSet key scope with
                     | NewScope({ Scopes = current :: _ }, _, rh) ->
                         // log "cs %A %A %A" s node.Key current
                         { newCtx with
@@ -965,7 +947,7 @@ type InfoService
             with
             | Some c, Some typedef ->
                 let typerules =
-                    typeRules
+                    rootRules.TypeRules
                     |> List.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
@@ -1080,7 +1062,7 @@ type InfoService
             (fun a (c: Node) ->
                 let ctx =
                     let typerules =
-                        typeRules
+                        rootRules.TypeRules
                         |> List.choose (function
                             | name, r when name == typedef.name -> Some r
                             | _ -> None)
@@ -1129,7 +1111,7 @@ type InfoService
                     acc
 
         let infoServiceBase (n: Node) acc (t: TypeDefinition) =
-            let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
+            let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == t.name)
 
             match typerules, t.type_per_file with
             | [ (_, (NodeRule(_, rs), o)) ], false -> n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
@@ -1213,7 +1195,7 @@ type InfoService
                 | true -> key.Split('|').[0]
                 | _ -> key
 
-            match changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope with
+            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
@@ -1765,7 +1747,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1779,7 +1761,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1810,7 +1792,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leafvalue) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1828,7 +1810,7 @@ type InfoService
                 //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
                 //     |> Map.toSeq |> Seq.map fst
                 // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value node) <&&> res
-                if typesMap |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else

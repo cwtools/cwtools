@@ -50,6 +50,7 @@
         <Compile Include="Rules/RulesParserConstants.fs"/>
         <Compile Include="Rules/RulesTypes.fs"/>
         <Compile Include="Rules/RulesParser.fs"/>
+        <Compile Include="Rules\RulesWrapper.fs" />
         <Compile Include="Parser/UtilityParser.fs"/>
         <Compile Include="Rules/RulesLoader.fs"/>
         <Compile Include="Game/ResourceManager.fs"/>

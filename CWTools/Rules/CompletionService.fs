@@ -1,6 +1,7 @@
 namespace CWTools.Rules
 
 open CWTools.Common
+open CWTools.Rules.RulesWrapper
 open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities.Utils
 open CWTools.Process.Localisation
@@ -41,7 +42,7 @@ type private CompletionLinkItem =
 
 type CompletionService
     (
-        rootRules: RootRule list,
+        rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
         types: Collections.Map<string, StringSet>,
         enums: Collections.Map<string, string * StringSet>,
@@ -61,20 +62,6 @@ type CompletionService
             Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>,
         validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult
     ) =
-    let aliases =
-        rootRules
-        |> List.choose (function
-            | AliasRule(a, rs) -> Some(a, rs)
-            | _ -> None)
-        |> List.groupBy fst
-        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
-        |> Collections.Map.ofList
-
-    let typeRules =
-        rootRules
-        |> List.choose (function
-            | TypeRule(k, rs) -> Some(k, rs)
-            | _ -> None)
 
     let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
 
@@ -142,7 +129,7 @@ type CompletionService
 
 
     let aliasKeyMap =
-        aliases
+        rootRules.Aliases
         |> Map.toList
         |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
         |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
@@ -844,10 +831,10 @@ type CompletionService
                 subtypedRules
                 |> List.collect (function
                     | LeafRule(AliasField a, _), o ->
-                        (aliases.TryFind a |> Option.defaultValue [])
+                        (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                         |> List.map (fun (r, oi) -> (r, { oi with min = o.min; max = oi.max }))
                     | NodeRule(AliasField a, _), o ->
-                        (aliases.TryFind a |> Option.defaultValue [])
+                        (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                         |> List.map (fun (r, oi) -> (r, { oi with min = o.min; max = oi.max }))
                     | x -> [ x ])
             //eprintfn "fr %A %A" stack (expandedRules |> List.truncate 10)
@@ -1032,7 +1019,7 @@ type CompletionService
             (path: (string * int * string option * CompletionContext * string option) list)
             =
             let typerules =
-                typeRules
+                rootRules.TypeRules
                 |> List.choose (function
                     | name, typerule when name == t.name -> Some typerule
                     | _ -> None)

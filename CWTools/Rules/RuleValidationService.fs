@@ -3,6 +3,7 @@ namespace CWTools.Rules
 open CWTools.Rules
 open CWTools.Process.Localisation
 open CWTools.Process
+open CWTools.Rules.RulesWrapper
 open CWTools.Utilities.Utils
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -20,7 +21,7 @@ open CWTools.Utilities.StringResource
 // let inline ruleValidationServiceCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
 type RuleValidationService
     (
-        rootRules: RootRule list,
+        rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
         types: Collections.Map<string, StringSet>,
         enums: Collections.Map<string, string * StringSet>,
@@ -41,21 +42,6 @@ type RuleValidationService
     let mutable errorList: ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
     let valueTriggerMap = valueTriggers
-
-    let aliases =
-        rootRules
-        |> List.choose (function
-            | AliasRule(a, rs) -> Some(a, rs)
-            | _ -> None)
-        |> List.groupBy fst
-        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
-        |> Collections.Map.ofList
-
-    let typeRules =
-        rootRules
-        |> List.choose (function
-            | TypeRule(k, rs) -> Some(k, rs)
-            | _ -> None)
 
     let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
     let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
@@ -128,7 +114,7 @@ type RuleValidationService
         | _ -> Seq.empty
 
     let aliasKeyMap =
-        aliases
+        rootRules.Aliases
         |> Map.toList
         |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper))
         |> List.map (fun (key, values) -> key, Collections.Set.ofSeq values)
@@ -205,15 +191,15 @@ type RuleValidationService
                 let expandedbaserules =
                     rules
                     |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                         | x -> [])
 
                 let expandedsubtypedrules =
                     subtypedrules
                     |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (aliases.TryFind a |> Option.defaultValue [])
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
                         | x -> [])
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
@@ -994,7 +980,7 @@ type RuleValidationService
         let inner (typedefs: TypeDefinition list) (node: IClause) =
             let validateType (typedef: TypeDefinition) (n: IClause) =
                 let typerules =
-                    typeRules
+                    rootRules.TypeRules
                     |> List.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
