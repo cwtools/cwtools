@@ -145,10 +145,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let mutable tempValues = Map.empty
 
     let mutable tempTypeMap =
-        [ ("", StringSet()) ] |> Map.ofList
+        [ ("", PrefixOptimisedStringSet()) ] |> Map.ofList
 
     let mutable tempEnumMap =
-        [ ("", ("", StringSet())) ] |> Map.ofList
+        [ ("", ("", PrefixOptimisedStringSet())) ] |> Map.ofList
 
     let mutable rulesDataGenerated = false
 

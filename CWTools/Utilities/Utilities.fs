@@ -321,10 +321,10 @@ module Utils2 =
         member _.StringValues = idValueList |> Seq.map (fun i -> StringResource.stringManager.GetStringForIDs i)
             
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
-    type StringSet = LowerStringSparseTrie
+    type PrefixOptimisedStringSet = LowerStringSparseTrie
 
     let createStringSet items =
-        let newSet = StringSet()
+        let newSet = PrefixOptimisedStringSet()
 
         items
         |> Seq.iter (fun x ->

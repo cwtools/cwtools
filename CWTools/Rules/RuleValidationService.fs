@@ -24,9 +24,9 @@ type RuleValidationService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, StringSet>,
-        enums: Collections.Map<string, string * StringSet>,
-        varMap: Collections.Map<string, StringSet>,
+        types: Collections.Map<string, PrefixOptimisedStringSet>,
+        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
+        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -47,7 +47,7 @@ type RuleValidationService
     let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
     let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
-    let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet())
+    let varSet = varMap.TryFind "variable" |> Option.defaultValue (PrefixOptimisedStringSet())
 
     let wildCardLinks =
         linkMap.Values

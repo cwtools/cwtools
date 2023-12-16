@@ -45,9 +45,9 @@ type InfoService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, StringSet>,
-        enums: Collections.Map<string, string * StringSet>,
-        varMap: Collections.Map<string, StringSet>,
+        types: Collections.Map<string, PrefixOptimisedStringSet>,
+        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
+        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -75,9 +75,9 @@ type InfoService
 
     let varSet =
         varMap.TryFind "variable"
-        |> Option.defaultValue (StringSet())
+        |> Option.defaultValue (PrefixOptimisedStringSet())
 
-    let inner (map: Collections.Map<string, string list>) (subtype: string) (set: StringSet) =
+    let inner (map: Collections.Map<string, string list>) (subtype: string) (set: PrefixOptimisedStringSet) =
         // set.Values
         set.IdValues |> Seq.map (fun i -> stringManager.GetStringForID i.normal)
         |> Seq.fold

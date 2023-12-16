@@ -16,13 +16,13 @@ type RuleContext =
       warningOnly: bool }
 
 type CheckFieldParams =
-    { varMap: Collections.Map<string, StringSet>
-      enumsMap: Collections.Map<string, string * StringSet>
-      typesMap: Collections.Map<string, StringSet>
+    { varMap: Collections.Map<string, PrefixOptimisedStringSet>
+      enumsMap: Collections.Map<string, string * PrefixOptimisedStringSet>
+      typesMap: Collections.Map<string, PrefixOptimisedStringSet>
       linkMap: EffectMap 
       wildcardLinks: ScopedEffect list
       valueTriggerMap: EffectMap
-      varSet: StringSet
+      varSet: PrefixOptimisedStringSet
       localisation: (Lang * Collections.Set<string>) list
       defaultLocalisation: Collections.Set<string>
       files: Collections.Set<string>
@@ -102,8 +102,8 @@ module internal FieldValidators =
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
     let checkValidValue
-        (varMap: Collections.Map<_, StringSet>)
-        (enumsMap: Collections.Map<_, string * StringSet>)
+        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
         (vt: CWTools.Rules.ValueType)
@@ -330,8 +330,8 @@ module internal FieldValidators =
 
 
     let checkValidValueNE
-        (varMap: Collections.Map<_, StringSet>)
-        (enumsMap: Collections.Map<_, string * StringSet>)
+        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
         (vt: CWTools.Rules.ValueType)
@@ -507,7 +507,7 @@ module internal FieldValidators =
                 temp
     // let memoizedComplexTypes (typetype : TypeType) (values : StringSet)
     let checkTypeField
-        (typesMap: Collections.Map<_, StringSet>)
+        (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
         severity
         (typetype: TypeType)
         (ids: StringTokens)
@@ -575,7 +575,7 @@ module internal FieldValidators =
             inv (ErrorCodes.CustomError $"Unknown type referenced %s{fieldType}" Severity.Error) leafornode
             <&&&> errors
 
-    let checkTypeFieldNE (typesMap: Collections.Map<_, StringSet>) severity (typetype: TypeType) (ids: StringTokens) =
+    let checkTypeFieldNE (typesMap: Collections.Map<_, PrefixOptimisedStringSet>) severity (typetype: TypeType) (ids: StringTokens) =
         let isComplex, fieldType =
             match typetype with
             | TypeType.Simple t -> false, t
@@ -631,7 +631,7 @@ module internal FieldValidators =
         | None -> false
 
     let checkVariableGetField
-        (varMap: Collections.Map<_, StringSet>)
+        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
         severity
         (varName: string)
         (ids: StringTokens)
@@ -669,7 +669,7 @@ module internal FieldValidators =
                 leafornode
             <&&&> errors
 
-    let checkVariableGetFieldNE (varMap: Collections.Map<_, StringSet>) severity (varName: string) (ids: StringTokens) =
+    let checkVariableGetFieldNE (varMap: Collections.Map<_, PrefixOptimisedStringSet>) severity (varName: string) (ids: StringTokens) =
         let key = getLowerKey ids
 
         match varMap.TryFind varName with
@@ -919,7 +919,7 @@ module internal FieldValidators =
             | _ -> false
 
     let checkValueScopeField
-        (enumsMap: Collections.Map<_, string * StringSet>)
+        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
@@ -975,7 +975,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkValueScopeFieldNE
-        (enumsMap: Collections.Map<_, string * StringSet>)
+        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)

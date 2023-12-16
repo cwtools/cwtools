@@ -307,7 +307,7 @@ let getEntitiesWithoutTypes (types: TypeDefinition list) (es: Entity list) =
     es |> List.choose checkEntity
 
 let expandPredefinedValues
-    (types: Map<string, StringSet>)
+    (types: Map<string, PrefixOptimisedStringSet>)
     (enums: Map<string, _ * list<string * option<CWTools.Utilities.Position.range>>>)
     (values: string list)
     =

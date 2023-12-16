@@ -46,9 +46,9 @@ type CompletionService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, StringSet>,
-        enums: Collections.Map<string, string * StringSet>,
-        varMap: Collections.Map<string, StringSet>,
+        types: Collections.Map<string, PrefixOptimisedStringSet>,
+        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
+        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -128,7 +128,7 @@ type CompletionService
 
     let varSet =
         varMap.TryFind "variable"
-        |> Option.defaultValue (StringSet())
+        |> Option.defaultValue (PrefixOptimisedStringSet())
 
     let getAllKeysInFile (root: Node) =
         let fNode =

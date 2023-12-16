@@ -82,7 +82,7 @@ type ScopeResult =
     | ValueFound of refHint: ReferenceHint option
 
 type ChangeScope =
-    bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> StringSet -> string -> ScopeContext -> ScopeResult
+    bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> PrefixOptimisedStringSet -> string -> ScopeContext -> ScopeResult
 
 module Scopes =
 
@@ -140,7 +140,7 @@ module Scopes =
             (eventTargetLinks: EffectMap)
             (valueTriggers: EffectMap)
             (wildcardLinks: ScopedEffect list)
-            (vars: StringSet)
+            (vars: PrefixOptimisedStringSet)
             (key: string)
             (source: ScopeContext) ->
             let key =
@@ -335,7 +335,7 @@ module Scopes =
             (eventTargetLinks: EffectMap)
             (valueTriggers: EffectMap)
             (_: ScopedEffect list)
-            (vars: StringSet)
+            (vars: PrefixOptimisedStringSet)
             (key: string)
             (source: ScopeContext) ->
             let key =
