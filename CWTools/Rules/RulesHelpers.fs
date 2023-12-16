@@ -320,7 +320,7 @@ let expandPredefinedValues
         | Some typeValues ->
             // eprintfn "epv %A %A %A %A" value typeValues (value.Substring(0, startIndex)) (value.Substring(endIndex + 2))
             let res =
-                typeValues.Values
+                typeValues.StringValues
                 |> Seq.map (fun tv -> value.Substring(0, startIndex) + tv + value.Substring(endIndex + 2))
                 |> List.ofSeq
             // eprintfn "epv2 %A" res

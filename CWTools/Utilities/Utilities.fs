@@ -315,6 +315,7 @@ module Utils2 =
             idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
         
         member _.IdValues = idValueList
+        member _.StringValues = idValueList |> Seq.map (fun i -> StringResource.stringManager.GetStringForIDs i)
             
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type StringSet = LowerStringSparseTrie

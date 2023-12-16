@@ -193,7 +193,7 @@ module internal FieldValidators =
                     else
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
-                                $"Expecting a \"%s{desc}\" value, e.g. %A{es.Values |> Seq.head}"
+                                $"Expecting a \"%s{desc}\" value, e.g. %A{es.StringValues |> Seq.head}"
                                 severity)
                             leafornode
                         <&&&> errors

@@ -78,7 +78,8 @@ type InfoService
         |> Option.defaultValue (StringSet())
 
     let inner (map: Collections.Map<string, string list>) (subtype: string) (set: StringSet) =
-        set.Values
+        // set.Values
+        set.IdValues |> Seq.map (fun i -> stringManager.GetStringForID i.normal)
         |> Seq.fold
             (fun m v ->
                 Map.tryFind v m

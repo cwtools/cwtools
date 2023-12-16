@@ -69,7 +69,7 @@ type CompletionService
 
     //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
     let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
-    let types = types |> Map.map (fun _ s -> s.Values |> List.ofSeq)
+    let types = types |> Map.map (fun _ s -> s.StringValues |> List.ofSeq)
 
     let defaultKeys =
         localisation
@@ -148,7 +148,7 @@ type CompletionService
         match field with
         | ValueField(Enum e) ->
             enums.TryFind(e)
-            |> Option.bind (fun (_, s) -> if s.Count = 0 then None else Some (s.Values |> Seq.head))
+            |> Option.bind (fun (_, s) -> if s.Count = 0 then None else Some (s.StringValues |> Seq.head))
             |> Option.defaultValue "x"
         | ValueField v ->
             FieldValidators.getValidValues v
@@ -244,7 +244,7 @@ type CompletionService
     let valueFieldAll, valueFieldNonGlobal, scopeFieldAll, scopeFieldNonGlobal, variableFieldAll, variableFieldNonGlobal =
         let evs =
             varMap.TryFind "event_target"
-            |> Option.map (fun l -> l.Values |> List.ofSeq)
+            |> Option.map (fun l -> l.StringValues |> List.ofSeq)
             |> Option.defaultValue []
             |> List.map (fun s ->
                 { key = "event_target:" + s
@@ -255,7 +255,7 @@ type CompletionService
 
         let gevs =
             varMap.TryFind "global_event_target"
-            |> Option.map (fun l -> l.Values |> List.ofSeq)
+            |> Option.map (fun l -> l.StringValues |> List.ofSeq)
             |> Option.defaultValue []
             |> List.map (fun s ->
                 { key = "event_target:" + s
@@ -266,7 +266,7 @@ type CompletionService
 
         let vars =
             varMap.TryFind "variable"
-            |> Option.map (fun l -> l.Values |> List.ofSeq)
+            |> Option.map (fun l -> l.StringValues |> List.ofSeq)
             |> Option.defaultValue []
             |> List.map (fun s ->
                 { key = s
@@ -609,7 +609,7 @@ type CompletionService
                 | NodeRule(ValueField(ValueType.Enum e), innerRules) ->
                     enums.TryFind(e)
                     |> Option.map (fun (_, es) ->
-                        es.Values
+                        es.StringValues
                         |> List.ofSeq
                         |> List.map (fun e -> createSnippetForClausei innerRules o.description e))
                     |> Option.defaultValue []
@@ -643,7 +643,7 @@ type CompletionService
                 | NodeRule(VariableGetField v, innerRules) ->
                     varMap.TryFind(v)
                     |> Option.map (fun ss ->
-                        ss.Values
+                        ss.StringValues
                         |> List.ofSeq
                         |> List.map (fun e -> createSnippetForClausei innerRules o.description e))
                     |> Option.defaultValue []
@@ -652,7 +652,7 @@ type CompletionService
                     [ keyvalue (StringResource.stringManager.GetStringForID s.normal) ]
                 | LeafRule(ValueField(ValueType.Enum e), _) ->
                     enums.TryFind(e)
-                    |> Option.map (fun (_, es) -> es.Values |> List.ofSeq |> List.map (fun e -> keyvalue e))
+                    |> Option.map (fun (_, es) -> es.StringValues |> List.ofSeq |> List.map (fun e -> keyvalue e))
                     |> Option.defaultValue []
                 | LeafRule(ValueField _, _) -> []
                 | LeafRule(AliasField _, _) -> []
@@ -674,11 +674,11 @@ type CompletionService
                     |> Option.defaultValue []
                 | LeafRule(VariableGetField v, _) ->
                     varMap.TryFind(v)
-                    |> Option.map (fun ss -> ss.Values |> List.ofSeq |> List.map (fun e -> keyvalue e))
+                    |> Option.map (fun ss -> ss.StringValues |> List.ofSeq |> List.map (fun e -> keyvalue e))
                     |> Option.defaultValue []
                 | LeafRule(VariableSetField v, _) ->
                     varMap.TryFind(v)
-                    |> Option.map (fun ss -> ss.Values |> List.ofSeq |> List.map (fun e -> keyvalue e))
+                    |> Option.map (fun ss -> ss.StringValues |> List.ofSeq |> List.map (fun e -> keyvalue e))
                     |> Option.defaultValue []
 
                 | LeafValueRule lv ->
@@ -694,17 +694,17 @@ type CompletionService
                         |> List.map CompletionResponse.CreateSimple
                     | NewField.ValueField(Enum e) ->
                         enums.TryFind(e)
-                        |> Option.map (fun (_, s) -> s.Values |> List.ofSeq)
+                        |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
                         |> Option.defaultValue []
                         |> List.map CompletionResponse.CreateSimple
                     | NewField.VariableGetField v ->
                         varMap.TryFind(v)
-                        |> Option.map (fun s -> s.Values |> List.ofSeq)
+                        |> Option.map (fun s -> s.StringValues |> List.ofSeq)
                         |> Option.defaultValue []
                         |> List.map CompletionResponse.CreateSimple
                     | NewField.VariableSetField v ->
                         varMap.TryFind(v)
-                        |> Option.map (fun s -> s.Values |> List.ofSeq)
+                        |> Option.map (fun s -> s.StringValues |> List.ofSeq)
                         |> Option.defaultValue []
                         |> List.map CompletionResponse.CreateSimple
                     | _ -> []
@@ -717,7 +717,7 @@ type CompletionService
             match field with
             | NewField.ValueField(Enum e) ->
                 enums.TryFind(e)
-                |> Option.map (fun (_, s) -> s.Values |> List.ofSeq)
+                |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
                 |> Option.defaultValue []
                 |> List.map CompletionResponse.CreateSimple
             | NewField.ValueField v ->
@@ -754,19 +754,19 @@ type CompletionService
             //            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
             | NewField.VariableGetField v ->
                 varMap.TryFind v
-                |> Option.map (fun ss -> ss.Values |> List.ofSeq)
+                |> Option.map (fun ss -> ss.StringValues |> List.ofSeq)
                 |> Option.defaultValue []
                 |> List.map CompletionResponse.CreateSimple
             | NewField.VariableSetField v ->
                 varMap.TryFind v
-                |> Option.map (fun ss -> ss.Values |> List.ofSeq)
+                |> Option.map (fun ss -> ss.StringValues |> List.ofSeq)
                 |> Option.defaultValue []
                 |> List.map CompletionResponse.CreateSimple
             | NewField.VariableField _ -> completionForRHSVariableChain value scopeContext
             | NewField.ValueScopeField _ ->
                 completionForRHSValueChain value scopeContext
                 @ (enums.TryFind("static_values")
-                   |> Option.map (fun (_, s) -> s.Values |> List.ofSeq)
+                   |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
                    |> Option.defaultValue []
                    |> List.map CompletionResponse.CreateSimple)
             | _ -> []
