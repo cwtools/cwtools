@@ -135,7 +135,7 @@ module Helpers =
         let convertLinkToEffects (link: EventTargetDataLink) =
             let typeDefinedKeys = convertSourceRuleType lookup link
 
-            let keyToEffect (key: string, refHint: ReferenceHint option) =
+            let inline keyToEffect (key: string, refHint: ReferenceHint option) =
                 let prefkey =
                     link.dataPrefix
                     |> Option.map (fun pref -> pref + key)
