@@ -22,8 +22,10 @@ module Helpers =
 
         let ruleToCompletionListHelper =
             function
-            | LeafRule(SpecificField(SpecificValue x), _), _ -> seq { yield StringResource.stringManager.GetStringForIDs x }
-            | NodeRule(SpecificField(SpecificValue x), _), _ -> seq { yield StringResource.stringManager.GetStringForIDs x }
+            | LeafRule(SpecificField(SpecificValue x), _), _ ->
+                seq { yield StringResource.stringManager.GetStringForIDs x }
+            | NodeRule(SpecificField(SpecificValue x), _), _ ->
+                seq { yield StringResource.stringManager.GetStringForIDs x }
             | LeafRule(NewField.TypeField(TypeType.Simple t), _), _ ->
                 types.TryFind(t)
                 |> Option.map (fun s -> s |> Seq.map (fun s -> s.id))
@@ -57,7 +59,12 @@ module Helpers =
                 | AliasRule(a, rs) -> Some(a, rs)
                 | _ -> None)
             |> List.groupBy fst
-            |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq)
+            |> Seq.map (fun (k, vs) ->
+                k,
+                vs
+                |> Seq.map snd
+                |> Seq.collect ruleToCompletionListHelper
+                |> Collections.Set.ofSeq)
             |> Map.ofSeq
 
         let convertSourceRuleType (lookup: Lookup) (link: EventTargetDataLink) =
@@ -134,66 +141,78 @@ module Helpers =
                     |> Option.map (fun pref -> pref + key)
                     |> Option.defaultValue key
 
-                match link.dataLinkType with
-                | DataLinkType.Scope ->
-                    [ ScopedEffect(
-                          StringResource.stringManager.InternIdentifierToken prefkey,
-                          link.inputScopes,
-                          Some link.outputScope,
-                          EffectType.Link,
-                          link.description,
-                          "",
-                          true,
-                          false,
-                          refHint
-                      ) ]
-                | DataLinkType.Value ->
-                    [ ScopedEffect(
-                          StringResource.stringManager.InternIdentifierToken prefkey,
-                          link.inputScopes,
-                          Some link.outputScope,
-                          EffectType.ValueTrigger,
-                          link.description,
-                          "",
-                          true,
-                          false,
-                          refHint
-                      ) ]
-                | DataLinkType.Both ->
-                    [ ScopedEffect(
-                          StringResource.stringManager.InternIdentifierToken prefkey,
-                          link.inputScopes,
-                          Some link.outputScope,
-                          EffectType.Link,
-                          link.description,
-                          "",
-                          true,
-                          false,
-                          refHint
-                      )
-                      ScopedEffect(
-                          StringResource.stringManager.InternIdentifierToken prefkey,
-                          link.inputScopes,
-                          Some link.outputScope,
-                          EffectType.ValueTrigger,
-                          link.description,
-                          "",
-                          true,
-                          false,
-                          refHint
-                      ) ]
+                seq {
+
+                    match link.dataLinkType with
+                    | DataLinkType.Scope ->
+                        yield
+                            ScopedEffect(
+                                StringResource.stringManager.InternIdentifierToken prefkey,
+                                link.inputScopes,
+                                Some link.outputScope,
+                                EffectType.Link,
+                                link.description,
+                                "",
+                                true,
+                                false,
+                                refHint
+                            )
+                    | DataLinkType.Value ->
+                        yield
+                            ScopedEffect(
+                                StringResource.stringManager.InternIdentifierToken prefkey,
+                                link.inputScopes,
+                                Some link.outputScope,
+                                EffectType.ValueTrigger,
+                                link.description,
+                                "",
+                                true,
+                                false,
+                                refHint
+                            )
+                    | DataLinkType.Both ->
+                        yield
+                            ScopedEffect(
+                                StringResource.stringManager.InternIdentifierToken prefkey,
+                                link.inputScopes,
+                                Some link.outputScope,
+                                EffectType.Link,
+                                link.description,
+                                "",
+                                true,
+                                false,
+                                refHint
+                            )
+
+                        yield
+                            ScopedEffect(
+                                StringResource.stringManager.InternIdentifierToken prefkey,
+                                link.inputScopes,
+                                Some link.outputScope,
+                                EffectType.ValueTrigger,
+                                link.description,
+                                "",
+                                true,
+                                false,
+                                refHint
+                            )
+                }
 
             let all = typeDefinedKeys |> Seq.collect keyToEffect
             let extra = if addWildCardLinks then getWildCard link else None
 
             seq {
                 yield! all
+
                 match extra with
                 | Some e -> yield e
                 | None -> ()
             }
 
-        links |> Seq.collect convertLinkToEffects |> Seq.map (fun e -> e :> Effect) |> List.ofSeq
+        links
+        |> Seq.collect convertLinkToEffects
+        |> Seq.map (fun e -> e :> Effect)
+        |> List.ofSeq
 
     let getLocalisationErrors (game: GameObject<_, _>) globalLocalisation =
         fun (force: bool, forceGlobal: bool) ->
