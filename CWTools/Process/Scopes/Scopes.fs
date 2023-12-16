@@ -1,6 +1,7 @@
 namespace CWTools.Process.Scopes
 
 open System
+open System.Collections.Generic
 open System.Globalization
 open CWTools.Common
 open CWTools.Utilities.Utils
@@ -26,7 +27,24 @@ type EffectMapSparseTrie() =
         effects |> Seq.iter (fun x -> tree.Add(x.Name, x))
         tree
 
-type EffectMap = EffectMapSparseTrie
+type EffectDictionary(effects : Effect seq) =
+
+    let dictionary : Dictionary<string, Effect> = Dictionary<string, Effect>()
+    do
+        for e in effects do
+            dictionary[e.Name.ToLowerInvariant()] <- e
+    new() = EffectDictionary(Seq.empty)
+    member this.TryFind(key : string) : Effect option =
+        let lowerKey = key.ToLowerInvariant()
+        let found, value = dictionary.TryGetValue lowerKey
+        if found then Some value else None
+    member this.Values with get () = dictionary.Values
+    // static member FromListE(effects : Effect seq) =
+        // EffectDictionary(effects)
+    static member FromList(effects : #Effect seq) : EffectDictionary =
+        EffectDictionary (effects |> Seq.map (fun e -> e :> Effect))
+
+type EffectMap = EffectDictionary
 
 type UsageScopeContext = Scope list
 
