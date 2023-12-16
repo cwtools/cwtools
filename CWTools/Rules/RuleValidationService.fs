@@ -82,10 +82,9 @@ type RuleValidationService
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.Values
-                |> Seq.map (fun s ->
-                    (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
-                        .lower))
+                s.IdValues |> Seq.map (fun i ->
+                    let s = stringManager.GetStringForID i.normal
+                    stringManager.InternIdentifierToken(p + s + suff).lower))
             |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->

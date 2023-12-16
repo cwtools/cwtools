@@ -16,6 +16,7 @@ open CWTools.Process.Scopes
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open System.Collections.Concurrent
+open CWTools.Utilities.StringResource
 
 module Test =
     let inline mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
@@ -113,10 +114,9 @@ type InfoService
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.Values
-                |> Seq.map (fun s ->
-                    (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken(p + s + suff))
-                        .lower))
+                s.IdValues |> Seq.map (fun i ->
+                    let s = stringManager.GetStringForID i.normal
+                    stringManager.InternIdentifierToken(p + s + suff).lower))
             |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
