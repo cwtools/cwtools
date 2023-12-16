@@ -47,9 +47,7 @@ type RuleValidationService
     let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
     let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
-    let varSet =
-        varMap.TryFind "variable"
-        |> Option.defaultValue (StringSet())
+    let varSet = varMap.TryFind "variable" |> Option.defaultValue (StringSet())
 
     let wildCardLinks =
         linkMap.Values
@@ -75,22 +73,21 @@ type RuleValidationService
         | LeafRule(NewField.TypeField(TypeType.Simple t), _), _
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
-            |> Option.map (fun s ->
-                s.IdValues |> Seq.map _.lower)
+            |> Option.map (fun s -> s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue (Seq.empty)
         | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.IdValues |> Seq.map (fun i ->
+                s.IdValues
+                |> Seq.map (fun i ->
                     let s = stringManager.GetStringForID i.normal
                     stringManager.InternIdentifierToken(p + s + suff).lower))
             |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
-            |> Option.map (fun (_, s) ->
-                s.IdValues |> Seq.map _.lower)
+            |> Option.map (fun (_, s) -> s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue Seq.empty
         | _ -> Seq.empty
 
@@ -98,7 +95,8 @@ type RuleValidationService
     let aliasKeyMap =
         rootRules.Aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
+        |> List.map (fun (key, rules) ->
+            key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
         |> Map.ofList
 
     // let isValidValue (value : Value) =
@@ -287,18 +285,18 @@ type RuleValidationService
             let key = leaf.Key
             let keyIds = leaf.KeyId
             // let createDefault =
-                // if enforceCardinality && (leaf.Key.[0] <> '@') then
-                    // (fun () -> 
-                    // inv
-                        // (ErrorCodes.ConfigRulesUnexpectedPropertyNode
-                            // $"%s{key} is unexpected in %s{startNode.Key}"
-                            // severity)
-                        // leaf
-                    // <&&&> innerErrors
-                    // )
-                // else
-                    // (fun () -> innerErrors
-            let inline createDefault() =
+            // if enforceCardinality && (leaf.Key.[0] <> '@') then
+            // (fun () ->
+            // inv
+            // (ErrorCodes.ConfigRulesUnexpectedPropertyNode
+            // $"%s{key} is unexpected in %s{startNode.Key}"
+            // severity)
+            // leaf
+            // <&&&> innerErrors
+            // )
+            // else
+            // (fun () -> innerErrors
+            let inline createDefault () =
                 if enforceCardinality && (leaf.Key.[0] <> '@') then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedPropertyNode
@@ -306,7 +304,7 @@ type RuleValidationService
                             severity)
                         leaf
                     <&&&> innerErrors
-                    
+
                 else
                     innerErrors
 
@@ -478,9 +476,7 @@ type RuleValidationService
                             Severity.Warning
 
                     inv
-                        (ErrorCodes.ConfigRulesWrongNumber
-                            $"Missing {l}, expecting at least %i{opts.min}"
-                            minSeverity)
+                        (ErrorCodes.ConfigRulesWrongNumber $"Missing {l}, expecting at least %i{opts.min}" minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
@@ -506,9 +502,7 @@ type RuleValidationService
                             Severity.Warning
 
                     inv
-                        (ErrorCodes.ConfigRulesWrongNumber
-                            $"Missing {l}, expecting at least %i{opts.min}"
-                            minSeverity)
+                        (ErrorCodes.ConfigRulesWrongNumber $"Missing {l}, expecting at least %i{opts.min}" minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
@@ -536,9 +530,7 @@ type RuleValidationService
                             Severity.Warning
 
                     inv
-                        (ErrorCodes.ConfigRulesWrongNumber
-                            $"Missing {l}, expecting at least %i{opts.min}"
-                            minSeverity)
+                        (ErrorCodes.ConfigRulesWrongNumber $"Missing {l}, expecting at least %i{opts.min}" minSeverity)
                         clause
                     <&&&> innerErrors
                 else if opts.max < total then
@@ -750,9 +742,7 @@ type RuleValidationService
                          applyClauseField enforceCardinality options.severity newCtx rules node errors
                      | NotFound, _ -> inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
                      | WrongScope(command, prevscope, expected, _), _ ->
-                         inv
-                             (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}")
-                             node
+                         inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}") node
                          <&&&> errors
                      | VarFound, _ ->
                          let newCtx =
@@ -887,15 +877,18 @@ type RuleValidationService
                     | None -> true)
             |> List.map (fun s ->
                 s,
-                applyClauseField
-                    false
-                    None
-                    { subtypes = []
-                      scopes = defaultContext
-                      warningOnly = false }
-                    s.rules
-                    node
-                    OK)
+                if s.rules |> List.isEmpty then
+                    OK
+                else
+                    applyClauseField
+                        false
+                        None
+                        { subtypes = []
+                          scopes = defaultContext
+                          warningOnly = false }
+                        s.rules
+                        node
+                        OK)
 
         let res =
             results
