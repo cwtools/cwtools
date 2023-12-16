@@ -74,7 +74,7 @@ let dynamicSettings (_) =
     {
             CWTools.Process.Localisation.LegacyLocDynamicsSettings.scriptedLocCommands = []
             CWTools.Process.Localisation.LegacyLocDynamicsSettings.eventTargets = []
-            CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = []
+            CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = LowerCaseStringSet()
     }
 
 let processLocalisation = (CWTools.Games.Helpers.createLocalisationFunctions CWTools.Process.Localisation.STL.locStaticSettings dynamicSettings ([], [], ([], []))  (STLLookup())) |> fst

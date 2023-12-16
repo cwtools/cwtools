@@ -2,6 +2,7 @@ namespace CWTools.Games.HOI4
 
 open CWTools.Common.HOI4Constants
 open CWTools.Localisation
+open CWTools.Utilities.Utils2
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
@@ -50,11 +51,11 @@ module HOI4GameFunctions =
                 yield! (lookup.varDefInfo.TryFind "exiled_ruler"
                    |> Option.defaultValue []
                    |> Seq.map fst)
-            }
+            } |> LowerCaseStringSet
 
         { scriptedLocCommands = lookup.scriptedLoc |> Seq.map (fun s -> s, [ scopeManager.AnyScope ]) |> Array.ofSeq
           eventTargets = eventtargets |> Seq.map (fun s -> s, scopeManager.AnyScope) |> Array.ofSeq
-          setVariables = definedvars |> Array.ofSeq }
+          setVariables = definedvars }
 
     let globalLocalisation (game: GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()

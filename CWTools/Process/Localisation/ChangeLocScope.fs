@@ -5,6 +5,7 @@ open CWTools.Common
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open System
+open CWTools.Utilities.Utils2
 
 type LocContextResult =
     | Start of startContext: ScopeContext
@@ -47,7 +48,7 @@ type LegacyLocDynamicsSettings =
         /// Event targets, must be first, can have a scope
         eventTargets: (string * Scope) seq
         /// Variables
-        setVariables: string seq
+        setVariables: LowerCaseStringSet
     }
 
 type LegacyLocStaticSettings =
@@ -141,8 +142,7 @@ module ChangeLocScope =
                         let firstPart = nextKey.Split('@').[0]
                         match
                             staticSettings.usesVariableCommands,
-                            dynamicSettings.setVariables
-                            |> Seq.exists (fun sv -> sv == firstPart)
+                            dynamicSettings.setVariables.Contains firstPart
                         with
                         | true, true -> LocContextResult.Found(context.CurrentScope.ToString())
                         | false, true -> LocContextResult.VariableScope context

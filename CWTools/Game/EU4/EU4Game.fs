@@ -1,6 +1,7 @@
 namespace CWTools.Games.EU4
 
 open CWTools.Localisation
+open CWTools.Utilities.Utils2
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
@@ -51,7 +52,7 @@ module EU4GameFunctions =
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-          setVariables = definedvars }
+          setVariables = definedvars |> LowerCaseStringSet }
 
     let globalLocalisation (game: GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()

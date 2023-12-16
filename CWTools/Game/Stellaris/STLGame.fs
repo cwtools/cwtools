@@ -3,6 +3,7 @@ namespace CWTools.Games.Stellaris
 open CWTools.Parser
 open CWTools.Process
 open CWTools.Utilities.Position
+open CWTools.Utilities.Utils2
 open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -44,7 +45,7 @@ module STLGameFunctions =
                |> List.map fst)
 
         let definedVariables =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> Seq.map fst |> LowerCaseStringSet)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
