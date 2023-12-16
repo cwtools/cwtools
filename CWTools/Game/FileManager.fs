@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System
 open System.IO
 open CWTools.Parser
 open CWTools.Process
@@ -218,7 +219,7 @@ module Files =
                 let checkDirectories (pathToCheck: string) =
                     expandedRootDirectories
                     |> List.tryPick (fun rd ->
-                        let index = pathToCheck.IndexOf(rd.normalisedPath)
+                        let index = pathToCheck.IndexOf(rd.normalisedPath, StringComparison.Ordinal)
 
                         if index >= 0 then
                             Some(pathToCheck.Substring(index + rd.normalisedPathLength))
@@ -230,7 +231,7 @@ module Files =
                 // let path = let index = path.IndexOf(normalisedScopeDirectory) in if index >= 0 then path.Substring(index + normalisedScopeDirectoryLength) else path
                 // log "conv2 %A" path
                 //let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
-                if path.StartsWith "gfx\\" || path.StartsWith "gfx/" then
+                if path.StartsWith("gfx\\", StringComparison.Ordinal) || path.StartsWith("gfx/", StringComparison.Ordinal) then
                     path
                 else
                     let pathContains (part: string) =
@@ -238,10 +239,10 @@ module Files =
 
                     let pathIndex (part: string) =
                         let i =
-                            if path.IndexOf("/" + part + "/") < 0 then
-                                path.IndexOf("\\" + part + "\\")
+                            if path.IndexOf("/" + part + "/", StringComparison.Ordinal) < 0 then
+                                path.IndexOf("\\" + part + "\\", StringComparison.Ordinal)
                             else
-                                path.IndexOf("/" + part + "/")
+                                path.IndexOf("/" + part + "/", StringComparison.Ordinal)
 
                         i + 1
 
@@ -272,7 +273,7 @@ module Files =
             | ".asset"
             | ".map" ->
                 let rootedpath =
-                    filepath.Substring(filepath.IndexOf(normalisedPath) + normalisedPathLength + 1)
+                    filepath.Substring(filepath.IndexOf(normalisedPath, StringComparison.Ordinal) + normalisedPathLength + 1)
 
                 if fileLength > ((int64 maxFileSizeMB) * 1000000L) then
                     None
@@ -295,7 +296,7 @@ module Files =
             | ".otf"
             | ".wav" ->
                 let rootedpath =
-                    filepath.Substring(filepath.IndexOf(normalisedPath) + normalisedPathLength + 1)
+                    filepath.Substring(filepath.IndexOf(normalisedPath, StringComparison.Ordinal) + normalisedPathLength + 1)
 
                 Some(
                     FileResourceInput
@@ -306,7 +307,7 @@ module Files =
             | ".yml"
             | ".csv" ->
                 let rootedpath =
-                    filepath.Substring(filepath.IndexOf(normalisedPath) + normalisedPathLength + 1)
+                    filepath.Substring(filepath.IndexOf(normalisedPath, StringComparison.Ordinal) + normalisedPathLength + 1)
 
                 Some(
                     FileWithContentResourceInput
@@ -376,7 +377,7 @@ module Files =
 
             expandedRootDirectories
             |> List.tryPick (fun rd ->
-                let index = path.IndexOf(rd.normalisedPath)
+                let index = path.IndexOf(rd.normalisedPath, StringComparison.Ordinal)
                 if index >= 0 then Some rd.name else None)
 
         member __.AllFilesByPath() =
