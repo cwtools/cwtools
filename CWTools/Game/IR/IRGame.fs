@@ -113,7 +113,7 @@ module IRGameFunctions =
 
         let vanillaTriggerNames =
             vanillaTriggers
-            |> List.map (fun vt -> StringResource.stringManager.InternIdentifierToken vt.Name)
+            |> List.map (_.Name)
 
         let effects =
             rules

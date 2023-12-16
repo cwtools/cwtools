@@ -8,6 +8,7 @@ open CWTools.Common
 
 module STLProcess =
 
+    //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
         (effects: Effect list)
@@ -47,7 +48,7 @@ module STLProcess =
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
                     (effects @ triggers)
-                    |> List.tryFind (fun e -> e.Name = x.Key)
+                    |> List.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
                     |> (function
                     | Some e -> e.ScopesSet
                     | None -> Set.empty))
@@ -151,7 +152,7 @@ module STLProcess =
         let usedtargets = findAllUsedEventTargets node
 
         ScriptedEffect(
-            node.Key,
+            node.KeyId,
             scopes |> Set.toList,
             effectType,
             commentString,

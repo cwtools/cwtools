@@ -4,40 +4,44 @@ open System
 open System.Collections.Generic
 open System.Globalization
 open CWTools.Common
+open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Utils2
 open Microsoft.FSharp.Collections.Tagged
 open VDS.Common.Tries
 
 
-type EffectMapSparseTrie() =
-    inherit
-        AbstractTrie<string, char, Effect>(
-            (fun s -> s.ToLower(CultureInfo.InvariantCulture)),
-            new SparseCharacterTrieNode<Effect>(null, Unchecked.defaultof<char>)
-        )
-
-    override this.CreateRoot(key) =
-        new SparseCharacterTrieNode<Effect>(null, key)
-    member this.TryFind(key) =
-        let res = this.Find(key)
-        if res <> null && res.HasValue then Some res.Value else None
-    static member FromList<'a when 'a :> Effect> (effects : 'a seq) =
-        let tree = EffectMapSparseTrie()
-        effects |> Seq.iter (fun x -> tree.Add(x.Name, x))
-        tree
+// type EffectMapSparseTrie() =
+//     inherit
+//         AbstractTrie<string, char, Effect>(
+//             (fun s -> s.ToLower(CultureInfo.InvariantCulture)),
+//             new SparseCharacterTrieNode<Effect>(null, Unchecked.defaultof<char>)
+//         )
+//
+//     override this.CreateRoot(key) =
+//         new SparseCharacterTrieNode<Effect>(null, key)
+//     member this.TryFind(key) =
+//         let res = this.Find(key)
+//         if res <> null && res.HasValue then Some res.Value else None
+//     static member FromList<'a when 'a :> Effect> (effects : 'a seq) =
+//         let tree = EffectMapSparseTrie()
+//         effects |> Seq.iter (fun x -> tree.Add(x.Name, x))
+//         tree
 
 type EffectDictionary(effects : Effect seq) =
 
-    let dictionary : Dictionary<string, Effect> = Dictionary<string, Effect>()
+    let dictionary : Dictionary<int, Effect> = Dictionary<int, Effect>()
     do
         for e in effects do
-            dictionary[e.Name.ToLowerInvariant()] <- e
+            dictionary[e.Name.lower] <- e
     new() = EffectDictionary(Seq.empty)
-    member this.TryFind(key : string) : Effect option =
-        let lowerKey = key.ToLowerInvariant()
-        let found, value = dictionary.TryGetValue lowerKey
+    member this.TryFind(key : StringTokens) : Effect option =
+        // let lowerKey = key.ToLowerInvariant()
+        let found, value = dictionary.TryGetValue key.lower
         if found then Some value else None
+    member this.TryFind(key : string) =
+        let s = StringResource.stringManager.InternIdentifierToken key
+        this.TryFind s
     member this.Values with get () = dictionary.Values
     // static member FromListE(effects : Effect seq) =
         // EffectDictionary(effects)
@@ -188,7 +192,7 @@ module Scopes =
 
                         let wildcardScopeMatch =
                             wildcardLinks
-                            |> List.tryFind (fun l -> nextKey.StartsWith(l.Name, StringComparison.OrdinalIgnoreCase))
+                            |> List.tryFind (fun l -> nextKey.StartsWith(StringResource.stringManager.GetStringForID l.Name.normal, StringComparison.OrdinalIgnoreCase))
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)

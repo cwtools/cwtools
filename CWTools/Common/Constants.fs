@@ -2,6 +2,7 @@ namespace CWTools.Common
 
 open System.Collections.Generic
 open System
+open CWTools.Utilities
 
 type Game =
     | CK2 = 0
@@ -549,7 +550,7 @@ type ReferenceHint =
     | FileRef of filename: string
 
 type Effect internal (name, scopes, effectType, refHint) =
-    member val Name: string = name
+    member val Name: StringTokens = name
     member val Scopes: Scope list = scopes
     member this.ScopesSet = this.Scopes |> Set.ofList
     member val Type: EffectType = effectType
@@ -565,7 +566,7 @@ type Effect internal (name, scopes, effectType, refHint) =
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y ->
-                let r1 = x.Name.CompareTo(y.Name)
+                let r1 = x.Name.normal.CompareTo(y.Name.normal)
 
                 if r1 = 0 then
                     0
@@ -573,10 +574,12 @@ type Effect internal (name, scopes, effectType, refHint) =
                     List.compareWith compare x.Scopes y.Scopes
             | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
 
-    override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
-    new(name, scopes, effectType) = Effect(name, scopes, effectType, None)
+    override x.ToString() = sprintf "%s: %A" (StringResource.stringManager.GetStringForIDs x.Name) x.Scopes
+    new(name : StringTokens, scopes, effectType) = Effect(name, scopes, effectType, None)
+    new(name : string, scopes, effectType) = Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, None)
+    new(name : string, scopes, effectType, refHint) = Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
 
-type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, usedtargets) =
+type ScriptedEffect(name : StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
     member val Comments: string = comments
     member val GlobalEventTargets: string list = globals
@@ -595,10 +598,10 @@ type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, use
     interface System.IComparable with
         member x.CompareTo yobj =
             match yobj with
-            | :? Effect as y -> x.Name.CompareTo(y.Name)
+            | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
             | _ -> invalidArg "yobj" "cannot compare values of different types"
 
-type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
+type DocEffect(name : StringTokens, scopes, target, effectType, desc, usage, refHint) =
     inherit Effect(name, scopes, effectType, refHint)
     member val Desc: string = desc
     member val Usage: string = usage
@@ -621,7 +624,7 @@ type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
     interface System.IComparable with
         member x.CompareTo yobj =
             match yobj with
-            | :? Effect as y -> x.Name.CompareTo(y.Name)
+            | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
             | _ -> invalidArg "yobj" "cannot compare values of different types"
 
     new(rawEffect: RawEffect, effectType: EffectType, parseScopes) =
@@ -630,13 +633,15 @@ type DocEffect(name, scopes, target, effectType, desc, usage, refHint) =
 
         let target = rawEffect.targets |> List.collect parseScopes |> List.tryHead
 
-        DocEffect(rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
+        DocEffect(StringResource.stringManager.InternIdentifierToken rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
 
     new(name, scopes, target, effectType, desc, usage) = DocEffect(name, scopes, target, effectType, desc, usage, None)
+    new(name : string, scopes, target, effectType, desc, usage) = DocEffect(StringResource.stringManager.InternIdentifierToken name, scopes, target, effectType, desc, usage, None)
+    new(name : string, scopes, target, effectType, desc, usage, refHint) = DocEffect(StringResource.stringManager.InternIdentifierToken name, scopes, target, effectType, desc, usage, refHint)
 
 type ScopedEffect
     (
-        name,
+        name : StringTokens,
         scopes,
         inner,
         effectType,
@@ -693,7 +698,22 @@ type ScopedEffect
             refHint
         )
 
-    new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+    new(name : string, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+        ScopedEffect(
+            StringResource.stringManager.InternIdentifierToken name,
+            scopes,
+            Some inner,
+            effectType,
+            desc,
+            usage,
+            true,
+            [],
+            scopeonlynoteffect,
+            false,
+            false,
+            None)
+        // ScopedEffect((StringResource.stringManager.InternIdentifierToken name), scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
+    new(name : StringTokens, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
         ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
 
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =

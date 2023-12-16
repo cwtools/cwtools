@@ -6,6 +6,7 @@ open CWTools.Utilities.Position
 open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
+open CWTools.Utilities.StringResource
 open CWTools.Localisation
 open CWTools.Localisation.STL
 open CWTools.Common
@@ -189,7 +190,7 @@ module STLGameFunctions =
                 AliasRule(
                     "effect",
                     NewRule(
-                        LeafRule(CWTools.Rules.RulesParser.specificField se.Name, ValueField(ValueType.Bool)),
+                        LeafRule(CWTools.Rules.RulesParser.specificFieldFromId se.Name, ValueField(ValueType.Bool)),
                         scriptedOptions "scripted_effect" se
                     )
                 ))
@@ -203,7 +204,7 @@ module STLGameFunctions =
                 AliasRule(
                     "trigger",
                     NewRule(
-                        LeafRule(CWTools.Rules.RulesParser.specificField se.Name, ValueField(ValueType.Bool)),
+                        LeafRule(CWTools.Rules.RulesParser.specificFieldFromId se.Name, ValueField(ValueType.Bool)),
                         scriptedOptions "scripted_trigger" se
                     )
                 ))
@@ -260,10 +261,10 @@ module STLGameFunctions =
             |> Map.ofList
 
         let inline triggerAugment (trigger: Effect) =
-            match trigger, triggers |> Map.tryFind trigger.Name with
+            match trigger, triggers |> Map.tryFind (trigger.Name.GetString()) with
             | :? DocEffect as doc, Some options when options.comparison ->
                 [ DocEffect(
-                      "trigger:" + doc.Name,
+                      "trigger:" + doc.Name.GetString(),
                       doc.Scopes,
                       doc.Target,
                       EffectType.ValueTrigger,

@@ -176,7 +176,7 @@ module STLEventValidation =
             (fun (x: Node) (s, u) ->
                 let inner (leaf: Leaf) =
                     effects
-                    |> List.tryFind (fun e -> leaf.Key == e.Name)
+                    |> List.tryFind (fun e -> leaf.KeyId.normal = e.Name.normal)
                     |> Option.map (fun e -> e.SavedEventTargets, e.UsedEventTargets)
 
                 x.Values

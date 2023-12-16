@@ -300,14 +300,14 @@ type CompletionService
                 |> function
                     | :? ScopedEffect as x when x.Type = EffectType.Link && x.Target.IsSome ->
                         Some
-                            { key = x.Name
+                            { key = x.Name.GetString()
                               requiredScopes = x.Scopes
                               outputScope = Scope x.Target.Value
                               desc = Some x.Desc
                               kind = CompletionCategory.Link }
                     | :? ScopedEffect as x when x.Type = EffectType.Link && x.Target.IsNone ->
                         Some
-                            { key = x.Name
+                            { key = x.Name.GetString()
                               requiredScopes = x.Scopes
                               outputScope = CompletionScopeOutput.Nothing
                               desc = Some x.Desc
@@ -322,7 +322,7 @@ type CompletionService
                 |> function
                     | :? DocEffect as x when x.Type = EffectType.ValueTrigger ->
                         Some
-                            { key = x.Name
+                            { key = x.Name.GetString()
                               requiredScopes = x.Scopes
                               outputScope = CompletionScopeOutput.Value
                               desc = Some x.Desc

@@ -108,7 +108,7 @@ module Helpers =
         | x, Some prefix when x.StartsWith "value[" ->
             Some(
                 ScopedEffect(
-                    prefix,
+                    StringResource.stringManager.InternIdentifierToken prefix,
                     link.inputScopes,
                     Some link.outputScope,
                     EffectType.Link,
@@ -143,7 +143,7 @@ module Helpers =
                 match link.dataLinkType with
                 | DataLinkType.Scope ->
                     [ ScopedEffect(
-                          prefkey,
+                          StringResource.stringManager.InternIdentifierToken prefkey,
                           link.inputScopes,
                           Some link.outputScope,
                           EffectType.Link,
@@ -155,7 +155,7 @@ module Helpers =
                       ) ]
                 | DataLinkType.Value ->
                     [ ScopedEffect(
-                          prefkey,
+                          StringResource.stringManager.InternIdentifierToken prefkey,
                           link.inputScopes,
                           Some link.outputScope,
                           EffectType.ValueTrigger,
@@ -167,7 +167,7 @@ module Helpers =
                       ) ]
                 | DataLinkType.Both ->
                     [ ScopedEffect(
-                          prefkey,
+                          StringResource.stringManager.InternIdentifierToken prefkey,
                           link.inputScopes,
                           Some link.outputScope,
                           EffectType.Link,
@@ -178,7 +178,7 @@ module Helpers =
                           refHint
                       )
                       ScopedEffect(
-                          prefkey,
+                          StringResource.stringManager.InternIdentifierToken prefkey,
                           link.inputScopes,
                           Some link.outputScope,
                           EffectType.ValueTrigger,

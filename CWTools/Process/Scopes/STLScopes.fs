@@ -3,6 +3,7 @@ namespace CWTools.Process.Scopes
 open System
 open CWTools.Common
 open CWTools.Process.Scopes
+open CWTools.Utilities
 open CWTools.Utilities.Utils2
 
 module STL =
@@ -47,6 +48,7 @@ module STL =
 
         let inner (nextKey: string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
+            let nextKey = StringResource.stringManager.InternIdentifierToken nextKey
 
             match onetoone with
             | Some _ -> None
@@ -56,7 +58,7 @@ module STL =
                     |> List.choose (function
                         | :? ScopedEffect as e -> Some e
                         | _ -> None)
-                    |> List.tryFind (fun e -> e.Name == nextKey)
+                    |> List.tryFind (fun e -> e.Name.lower = nextKey.lower)
 
                 match effect with
                 | None -> None

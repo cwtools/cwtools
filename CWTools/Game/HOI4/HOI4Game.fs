@@ -99,7 +99,7 @@ module HOI4GameFunctions =
 
         game.Lookup.scriptedLoc <- rawLocs
 
-    let updateScriptedEffects (rules: RootRule list) (states: string list) (countries: string list) =
+    let updateScriptedEffects (rules: RootRule list) (states: _ list) (countries: _ list) =
         let effects =
             rules
             |> List.choose (function
@@ -240,12 +240,12 @@ module HOI4GameFunctions =
     let refreshConfigAfterFirstTypesHook (lookup: Lookup) _ (embeddedSettings: EmbeddedSettings) =
         let states =
             lookup.typeDefInfo.TryFind "state"
-            |> Option.map (fun sl -> sl |> List.map (fun tdi -> tdi.id))
+            |> Option.map (fun sl -> sl |> List.map (fun tdi -> StringResource.stringManager.InternIdentifierToken tdi.id))
             |> Option.defaultValue []
 
         let countries =
             lookup.enumDefs.TryFind "country_tag"
-            |> Option.map (fun x -> (snd x) |> List.map fst)
+            |> Option.map (fun x -> (snd x) |> List.map (fst >> StringResource.stringManager.InternIdentifierToken))
             |> Option.defaultValue []
 
         let ts = updateScriptedTriggers lookup.configRules states countries

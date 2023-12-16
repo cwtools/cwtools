@@ -295,6 +295,9 @@ type StringResourceManager() =
 
 module StringResource =
     let mutable stringManager = StringResourceManager()
+    type StringTokens with
+        member this.GetString() =
+            stringManager.GetStringForIDs this
 
 module Utils2 =
     

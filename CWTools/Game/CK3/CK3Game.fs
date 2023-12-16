@@ -74,7 +74,7 @@ module CK3GameFunctions =
 
         let vanillaTriggerNames =
             vanillaTriggers
-            |> List.map (fun vt -> StringResource.stringManager.InternIdentifierToken vt.Name)
+            |> List.map _.Name
             |> Set.ofList
 
         let effects =

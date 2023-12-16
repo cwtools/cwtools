@@ -15,9 +15,10 @@ open CWTools.Parser
 open CWTools.Rules
 
 module private RulesParserImpl =
-    let internal specificField x =
+    let internal specificFieldFromString x =
         SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken x))
-
+    let internal specificFieldFromId x =
+        SpecificField(SpecificValue(x))
     let private parseSeverity =
         function
         | "error" -> Severity.Error
@@ -1515,7 +1516,8 @@ module private RulesParserImpl =
 module RulesParser =
     open RulesParserImpl
     let defaultOptions = defaultOptions
-    let specificField = specificField
+    let specificField = specificFieldFromString
+    let specificFieldFromId = specificFieldFromId
     let internal getSettingFromString = getSettingFromString
     let processTagAsField = processKey
     let requiredSingle: Options = { defaultOptions with min = 1; max = 1 }
