@@ -22,49 +22,42 @@ module Helpers =
 
         let ruleToCompletionListHelper =
             function
-            | LeafRule(SpecificField(SpecificValue x), _), _ -> [ StringResource.stringManager.GetStringForIDs x ]
-            | NodeRule(SpecificField(SpecificValue x), _), _ -> [ StringResource.stringManager.GetStringForIDs x ]
+            | LeafRule(SpecificField(SpecificValue x), _), _ -> seq { yield StringResource.stringManager.GetStringForIDs x }
+            | NodeRule(SpecificField(SpecificValue x), _), _ -> seq { yield StringResource.stringManager.GetStringForIDs x }
             | LeafRule(NewField.TypeField(TypeType.Simple t), _), _ ->
                 types.TryFind(t)
-                |> Option.map (fun s -> s |> List.map (fun s -> s.id))
-                |> Option.defaultValue []
+                |> Option.map (fun s -> s |> Seq.map (fun s -> s.id))
+                |> Option.defaultValue Seq.empty
             | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
                 types.TryFind(t)
-                |> Option.map (fun s -> s |> List.map (fun s -> s.id))
-                |> Option.defaultValue []
+                |> Option.map (fun s -> s |> Seq.map (fun s -> s.id))
+                |> Option.defaultValue Seq.empty
             | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
                 types.TryFind(t)
-                |> Option.map (fun s -> s |> List.map (fun s -> (p + s.id + suff)))
-                |> Option.defaultValue []
+                |> Option.map (fun s -> s |> Seq.map (fun s -> (p + s.id + suff)))
+                |> Option.defaultValue Seq.empty
             | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
                 types.TryFind(t)
-                |> Option.map (fun s -> s |> List.map (fun s -> (p + s.id + suff)))
-                |> Option.defaultValue []
+                |> Option.map (fun s -> s |> Seq.map (fun s -> (p + s.id + suff)))
+                |> Option.defaultValue Seq.empty
             | LeafRule(NewField.ValueField(Enum e), _), _ ->
                 enums.TryFind(e)
-                |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> s))
-                |> Option.defaultValue []
+                |> Option.map (fun (_, s) -> s |> Seq.map (fun (s, _) -> s))
+                |> Option.defaultValue Seq.empty
             | NodeRule(NewField.ValueField(Enum e), _), _ ->
                 enums.TryFind(e)
-                |> Option.map (fun (_, s) -> s |> List.map (fun (s, _) -> s))
-                |> Option.defaultValue []
-            | _ -> []
+                |> Option.map (fun (_, s) -> s |> Seq.map (fun (s, _) -> s))
+                |> Option.defaultValue Seq.empty
+            | _ -> Seq.empty
 
-        let aliases =
+        let aliasKeyMap =
             lookup.configRules
             |> List.choose (function
                 | AliasRule(a, rs) -> Some(a, rs)
                 | _ -> None)
             |> List.groupBy fst
-            |> List.map (fun (k, vs) -> k, vs |> List.map snd)
-            |> Collections.Map.ofList
-
-        let aliasKeyMap =
-            aliases
-            |> Map.toList
-            |> List.map (fun (key, rules) -> key, (rules |> List.collect ruleToCompletionListHelper))
-            |> List.map (fun (key, values) -> key, Collections.Set.ofList values)
-            |> Map.ofList
+            |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq)
+            |> Map.ofSeq
 
         match link.sourceRuleType.Trim() with
         | x when x.StartsWith "<" && x.EndsWith ">" ->
@@ -127,7 +120,7 @@ module Helpers =
     let addDataEventTargetLinks (lookup: Lookup) (embeddedSettings: EmbeddedSettings) (addWildCardLinks: bool) =
         let links =
             embeddedSettings.eventTargetLinks
-            |> List.choose (function
+            |> Seq.choose (function
                 | DataLink l -> Some l
                 | _ -> None)
 
@@ -189,14 +182,17 @@ module Helpers =
                           refHint
                       ) ]
 
-            let all = typeDefinedKeys |> List.collect keyToEffect
+            let all = typeDefinedKeys |> Seq.collect keyToEffect
             let extra = if addWildCardLinks then getWildCard link else None
 
-            match extra with
-            | Some e -> e :: all
-            | None -> all
+            seq {
+                yield! all
+                match extra with
+                | Some e -> yield e
+                | None -> ()
+            }
 
-        links |> List.collect convertLinkToEffects |> List.map (fun e -> e :> Effect)
+        links |> Seq.collect convertLinkToEffects |> Seq.map (fun e -> e :> Effect) |> List.ofSeq
 
     let getLocalisationErrors (game: GameObject<_, _>) globalLocalisation =
         fun (force: bool, forceGlobal: bool) ->
