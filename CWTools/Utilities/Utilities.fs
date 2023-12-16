@@ -205,6 +205,7 @@ type StringMetadata =
 
 [<Sealed>]
 type StringResourceManager() =
+    // TODO: Replace with arrays?
     let strings = new System.Collections.Generic.Dictionary<string, StringTokens>(1024)
     let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
 

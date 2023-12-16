@@ -316,11 +316,22 @@ type RuleValidationService
         // | false, true -> false
         // | _ -> true
 
-        let valueFun innerErrors (leaf: Leaf) =
+        let inline valueFun innerErrors (leaf: Leaf) =
             let key = leaf.Key
             let keyIds = leaf.KeyId
-
-            let createDefault () =
+            // let createDefault =
+                // if enforceCardinality && (leaf.Key.[0] <> '@') then
+                    // (fun () -> 
+                    // inv
+                        // (ErrorCodes.ConfigRulesUnexpectedPropertyNode
+                            // $"%s{key} is unexpected in %s{startNode.Key}"
+                            // severity)
+                        // leaf
+                    // <&&&> innerErrors
+                    // )
+                // else
+                    // (fun () -> innerErrors
+            let inline createDefault() =
                 if enforceCardinality && (leaf.Key.[0] <> '@') then
                     inv
                         (ErrorCodes.ConfigRulesUnexpectedPropertyNode
@@ -328,6 +339,7 @@ type RuleValidationService
                             severity)
                         leaf
                     <&&&> innerErrors
+                    
                 else
                     innerErrors
 
@@ -351,12 +363,12 @@ type RuleValidationService
             |> (fun rs ->
                 lazyErrorMerge
                     rs
-                    (fun (LeafRule(l, r), o) e -> applyLeafRule ctx o l r leaf e)
+                    (fun (LeafRule(l, r), o) -> applyLeafRule ctx o l r leaf)
                     createDefault
                     innerErrors
                     true)
 
-        let nodeFun innerErrors (node: Node) =
+        let inline nodeFun innerErrors (node: Node) =
             let key = node.Key
             let keyIds = node.KeyId
 
@@ -396,7 +408,7 @@ type RuleValidationService
                     innerErrors
                     false)
 
-        let leafValueFun innerErrors (leafvalue: LeafValue) =
+        let inline leafValueFun innerErrors (leafvalue: LeafValue) =
             let createDefault () =
                 if
                     enforceCardinality
@@ -423,7 +435,7 @@ type RuleValidationService
                     innerErrors
                     true)
 
-        let valueClauseFun innerErrors (valueclause: ValueClause) =
+        let inline valueClauseFun innerErrors (valueclause: ValueClause) =
             let createDefault () =
                 if enforceCardinality then
                     inv
@@ -444,7 +456,7 @@ type RuleValidationService
                     innerErrors
                     true)
 
-        let checkCardinality (clause: IClause) innerErrors (rule: NewRule) =
+        let inline checkCardinality (clause: IClause) innerErrors (rule: NewRule) =
             match rule with
             | NodeRule(SpecificField(SpecificValue key), _), opts
             | LeafRule(SpecificField(SpecificValue key), _), opts ->

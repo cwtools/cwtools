@@ -808,7 +808,8 @@ module ValidationCore =
     let isSameObject = LanguagePrimitives.PhysicalEquality
 
 
-    let lazyErrorMerge rs f defValue (errors: ValidationResult) merge =
+    let inline lazyErrorMerge rs f ([<InlineIfLambda>] defValue) (errors: ValidationResult) merge =
+    // let lazyErrorMerge rs f defValue (errors: ValidationResult) merge =
         // let mutable state = errors
         //        let mutable foundOK = false
         //        let mutable any = false        //Take every potential rule
