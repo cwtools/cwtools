@@ -267,6 +267,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             timer.Restart()
             tempTypeMap = before || i > 5
 
+        // TODO check this actually stops early
         while not (step ()) do
             ()
 

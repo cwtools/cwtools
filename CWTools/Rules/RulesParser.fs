@@ -1049,6 +1049,7 @@ module private RulesParserImpl =
             [| "name_field"
                "type_per_file"
                "skip_root_key"
+               "should_be_used"
                "path"
                "path_strict"
                "path_file"

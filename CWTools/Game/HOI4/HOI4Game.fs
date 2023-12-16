@@ -26,29 +26,35 @@ module HOI4GameFunctions =
     let createLocDynamicSettings (lookup: Lookup) =
         //eprintfn "clds %A" (lookup.enumDefs.TryFind "country_tags")
         let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "global_event_target"
-               |> Option.defaultValue []
-               |> List.map fst)
-            @ (lookup.typeDefInfo.TryFind "state"
-               |> Option.defaultValue []
-               |> List.map (fun tdi -> tdi.id))
-            @ (lookup.enumDefs.TryFind "country_tags"
-               |> Option.map (fun x -> (snd x) |> List.map fst)
-               |> Option.defaultValue [])
+            seq {
+
+                yield!
+                    lookup.varDefInfo.TryFind "event_target"
+                    |> Option.defaultValue []
+                    |> Seq.map fst
+                yield! lookup.varDefInfo.TryFind "global_event_target"
+                          |> Option.defaultValue []
+                          |> Seq.map fst
+                yield! lookup.typeDefInfo.TryFind "state"
+                          |> Option.defaultValue []
+                          |> Seq.map (_.id)
+                yield! lookup.enumDefs.TryFind "country_tags"
+                          |> Option.map (fun x -> (snd x) |> Seq.map fst)
+                          |> Option.defaultValue Seq.empty
+            }
 
         let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "exiled_ruler"
-               |> Option.defaultValue []
-               |> List.map fst)
+            seq {
+                yield! (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> Seq.map fst)
+                yield! (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> Seq.map fst)
+                yield! (lookup.varDefInfo.TryFind "exiled_ruler"
+                   |> Option.defaultValue []
+                   |> Seq.map fst)
+            }
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-          setVariables = definedvars }
+          eventTargets = eventtargets |> Seq.map (fun s -> s, scopeManager.AnyScope) |> List.ofSeq
+          setVariables = definedvars |> List.ofSeq }
 
     let globalLocalisation (game: GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
@@ -240,7 +246,9 @@ module HOI4GameFunctions =
     let refreshConfigAfterFirstTypesHook (lookup: Lookup) _ (embeddedSettings: EmbeddedSettings) =
         let states =
             lookup.typeDefInfo.TryFind "state"
-            |> Option.map (fun sl -> sl |> List.map (fun tdi -> StringResource.stringManager.InternIdentifierToken tdi.id))
+            |> Option.map (fun sl ->
+                sl
+                |> List.map (fun tdi -> StringResource.stringManager.InternIdentifierToken tdi.id))
             |> Option.defaultValue []
 
         let countries =
