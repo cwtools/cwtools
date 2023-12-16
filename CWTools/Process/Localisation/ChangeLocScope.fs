@@ -43,11 +43,11 @@ type LocEntry =
 type LegacyLocDynamicsSettings =
     {
         /// Terminal, scope specific, scripted loc, name and required scopes
-        scriptedLocCommands: (string * Scope list) list
+        scriptedLocCommands: (string * Scope list) seq
         /// Event targets, must be first, can have a scope
-        eventTargets: (string * Scope) list
+        eventTargets: (string * Scope) seq
         /// Variables
-        setVariables: string list
+        setVariables: string seq
     }
 
 type LegacyLocStaticSettings =
@@ -126,7 +126,7 @@ module ChangeLocScope =
                         staticSettings.commands
                         |> List.tryFind (fun (c, _) -> c == nextKey)
                         |> Option.orElse (
-                            dynamicSettings.scriptedLocCommands |> List.tryFind (fun (c, _) -> c == nextKey)
+                            dynamicSettings.scriptedLocCommands |> Seq.tryFind (fun (c, _) -> c == nextKey)
                         )
 
                     match
@@ -142,14 +142,14 @@ module ChangeLocScope =
                         match
                             staticSettings.usesVariableCommands,
                             dynamicSettings.setVariables
-                            |> List.exists (fun sv -> sv == firstPart)
+                            |> Seq.exists (fun sv -> sv == firstPart)
                         with
                         | true, true -> LocContextResult.Found(context.CurrentScope.ToString())
                         | false, true -> LocContextResult.VariableScope context
                         | _, false -> LocNotFound nextKey
                     | None, true, false ->
                         // TODO: Add scope push
-                        match dynamicSettings.eventTargets |> List.exists (fun (et, _) -> et == nextKey) with
+                        match dynamicSettings.eventTargets |> Seq.exists (fun (et, _) -> et == nextKey) with
                         | true ->
                             LocContextResult.NewScope
                                 { source with

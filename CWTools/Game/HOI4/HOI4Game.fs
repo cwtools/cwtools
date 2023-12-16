@@ -52,9 +52,9 @@ module HOI4GameFunctions =
                    |> Seq.map fst)
             }
 
-        { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> Seq.map (fun s -> s, scopeManager.AnyScope) |> List.ofSeq
-          setVariables = definedvars |> List.ofSeq }
+        { scriptedLocCommands = lookup.scriptedLoc |> Seq.map (fun s -> s, [ scopeManager.AnyScope ]) |> Array.ofSeq
+          eventTargets = eventtargets |> Seq.map (fun s -> s, scopeManager.AnyScope) |> Array.ofSeq
+          setVariables = definedvars |> Array.ofSeq }
 
     let globalLocalisation (game: GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
