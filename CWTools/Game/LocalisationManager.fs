@@ -13,7 +13,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
         localisationService: _ -> ILocalisationAPICreator,
         langs: Lang list,
         lookup: Lookup,
-        processLocalisation: Lookup -> Lang * Map<string, Entry> -> Lang * Map<string, LocEntry>,
+        processLocalisation,
         localisationExtension: string
     ) as this =
     let mutable localisationAPIMap: Map<string * Lang, bool * ILocalisationAPI> =

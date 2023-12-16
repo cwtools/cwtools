@@ -424,11 +424,6 @@ type HOI4Game(setupSettings: HOI4Settings) =
 
     let processLocalisationFunction lookup =
         (createLocalisationFunctions HOI4.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> fst
-
-    let validationLocalisationCommandFunction lookup =
-        (createLocalisationFunctions HOI4.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> snd
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -446,8 +441,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let game =
         GameObject.CreateGame
@@ -458,7 +452,6 @@ type HOI4Game(setupSettings: HOI4Settings) =
              Compute.computeHOI4DataUpdate,
              (HOI4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
              processLocalisationFunction,
-             validationLocalisationCommandFunction,
              defaultContext,
              noneContext,
              Encoding.UTF8,

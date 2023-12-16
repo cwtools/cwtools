@@ -393,11 +393,7 @@ type EU4Game(setupSettings: EU4Settings) =
 
     let processLocalisationFunction lookup =
         (createLocalisationFunctions EU4.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> fst
 
-    let validationLocalisationCommandFunction lookup =
-        (createLocalisationFunctions EU4.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> snd
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -415,8 +411,7 @@ type EU4Game(setupSettings: EU4Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let game =
         GameObject.CreateGame
@@ -427,7 +422,6 @@ type EU4Game(setupSettings: EU4Settings) =
               Compute.EU4.computeEU4DataUpdate,
               (EU4LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               defaultContext,
               noneContext,
               Encoding.UTF8,

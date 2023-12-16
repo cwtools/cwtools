@@ -457,10 +457,8 @@ type VIC3Game(setupSettings: VIC3Settings) =
             | _ -> None
 
     let processLocalisationFunction lookup =
-        (createJominiLocalisationFunctions jominiLocDataTypes lookup) |> fst
+        (createJominiLocalisationFunctions jominiLocDataTypes lookup)
 
-    let validationLocalisationCommandFunction lookup =
-        createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -478,8 +476,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let scriptFolders = [ "common"; "events" ]
 
@@ -492,7 +489,6 @@ type VIC3Game(setupSettings: VIC3Settings) =
               Compute.Jomini.computeJominiDataUpdate,
               (VIC3LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               CWTools.Process.Scopes.Scopes.defaultContext,
               CWTools.Process.Scopes.Scopes.noneContext,
               Encoding.UTF8,

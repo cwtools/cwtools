@@ -427,11 +427,6 @@ type VIC2Game(setupSettings: VIC2Settings) =
 
     let processLocalisationFunction lookup =
         (createLocalisationFunctions VIC2.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> fst
-
-    let validationLocalisationCommandFunction lookup =
-        (createLocalisationFunctions VIC2.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> snd
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -449,8 +444,7 @@ type VIC2Game(setupSettings: VIC2Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let game =
         GameObject<VIC2ComputedData, VIC2Lookup>.CreateGame
@@ -461,7 +455,6 @@ type VIC2Game(setupSettings: VIC2Settings) =
               Compute.computeVIC2DataUpdate,
               (VIC2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               defaultContext,
               noneContext,
               Encoding.UTF8,

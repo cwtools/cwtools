@@ -50,9 +50,8 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> =
       refreshConfigBeforeFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterVarDefHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
-      processLocalisation:
-          'L -> Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>
-      validateLocalisation: 'L -> LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult }
+      locFunctions:
+          'L -> ((Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>) * (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)) }
 
 type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (
@@ -220,6 +219,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let allentities = resources.AllEntities() |> List.map (fun struct (e, _) -> e)
 
         let refreshTypeInfo () =
+            let processLoc, validateLoc = settings.locFunctions lookup
             let tempRuleValidationService =
                 RuleValidationService(
                     rulesWrapper, 
@@ -235,8 +235,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     settings.changeScope,
                     settings.defaultContext,
                     settings.defaultLang,
-                    (settings.processLocalisation lookup),
-                    (settings.validateLocalisation lookup)
+                    processLoc,
+                    validateLoc
                 )
 
             let typeDefInfo =
@@ -257,20 +257,25 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let timer = System.Diagnostics.Stopwatch()
         timer.Start()
         let mutable i = 0
+        let mutable beforeCount = tempTypeMap |> Map.values |> Seq.sumBy (_.Count)
 
         let step () =
             //log "%A" current
             i <- i + 1
-            let before = tempTypeMap
+            //TODO: Only refresh the types which have subtypes that depend on other types
             tempTypeMap <- refreshTypeInfo ()
             log (sprintf "Refresh types time: %i" timer.ElapsedMilliseconds)
             timer.Restart()
-            tempTypeMap = before || i > 5
+            let afterCount = tempTypeMap |> Map.values |> Seq.sumBy (_.Count)
+            let complete = beforeCount = afterCount || i > 5
+            beforeCount <- afterCount
+            complete
 
         // TODO check this actually stops early
         while not (step ()) do
             ()
 
+        let processLoc, validateLoc = settings.locFunctions lookup
         let tempRuleValidationService =
             RuleValidationService(
                 rulesWrapper,
@@ -286,8 +291,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 settings.changeScope,
                 settings.defaultContext,
                 settings.defaultLang,
-                (settings.processLocalisation lookup),
-                (settings.validateLocalisation lookup)
+                processLoc,
+                validateLoc
             )
 
         lookup.typeDefInfoForValidation <-
@@ -305,6 +310,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 k, s |> List.map _.id |> createStringSet)
             |> Map.ofSeq
 
+        let processLoc, validateLoc = settings.locFunctions lookup
         let tempInfoService =
             InfoService(
                 rulesWrapper,
@@ -321,8 +327,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 settings.defaultContext,
                 settings.anyScope,
                 settings.defaultLang,
-                (settings.processLocalisation lookup),
-                (settings.validateLocalisation lookup)
+                processLoc,
+                validateLoc
             )
 
 
@@ -394,6 +400,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                       dataTypes = Map.empty
                       dataTypeNames = Set.empty }
 
+        let processLoc, validateLoc = settings.locFunctions lookup
         let completionService =
             CompletionService(
                 rulesWrapper,
@@ -412,8 +419,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 settings.oneToOneScopesNames,
                 settings.defaultLang,
                 dataTypes,
-                (settings.processLocalisation lookup),
-                (settings.validateLocalisation lookup)
+                processLoc,
+                validateLoc
             )
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let ruleValidationService =
@@ -431,8 +438,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 settings.changeScope,
                 settings.defaultContext,
                 settings.defaultLang,
-                (settings.processLocalisation lookup),
-                (settings.validateLocalisation lookup)
+                processLoc,
+                validateLoc
             )
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let infoService =
@@ -451,8 +458,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 settings.defaultContext,
                 settings.anyScope,
                 settings.defaultLang,
-                (settings.processLocalisation lookup),
-                (settings.validateLocalisation lookup)
+                processLoc,
+                validateLoc
             )
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()

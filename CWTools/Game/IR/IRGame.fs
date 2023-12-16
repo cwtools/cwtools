@@ -515,11 +515,7 @@ type IRGame(setupSettings: IRSettings) =
             | _ -> None
 
     let processLocalisationFunction lookup =
-        (createJominiLocalisationFunctions jominiLocDataTypes lookup) |> fst
-
-    let validationLocalisationCommandFunction lookup =
-        createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
-
+        (createJominiLocalisationFunctions jominiLocDataTypes lookup)
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -537,8 +533,7 @@ type IRGame(setupSettings: IRSettings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let game =
         GameObject<IRComputedData, IRLookup>.CreateGame
@@ -549,7 +544,6 @@ type IRGame(setupSettings: IRSettings) =
               Compute.Jomini.computeJominiDataUpdate,
               (IRLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               defaultContext,
               noneContext,
               Encoding.UTF8,

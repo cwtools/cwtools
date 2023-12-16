@@ -581,11 +581,6 @@ type STLGame(setupSettings: StellarisSettings) =
 
     let processLocalisationFunction lookup =
         (createLocalisationFunctions STL.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> fst
-
-    let validationLocalisationCommandFunction lookup =
-        (createLocalisationFunctions STL.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> snd
 
 
     let rulesManagerSettings =
@@ -604,8 +599,7 @@ type STLGame(setupSettings: StellarisSettings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction }
 
     let game =
         GameObject<STLComputedData, STLLookup>.CreateGame
@@ -616,7 +610,6 @@ type STLGame(setupSettings: StellarisSettings) =
              Compute.STL.computeSTLDataUpdate,
              (STLLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
              processLocalisationFunction,
-             validationLocalisationCommandFunction,
              defaultContext,
              noneContext,
              Encoding.UTF8,

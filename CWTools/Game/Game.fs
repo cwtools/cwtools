@@ -51,8 +51,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         computeFunction,
         computeUpdateFunction,
         localisationService,
-        processLocalisation,
-        validateLocalisationCommand,
+        locFunctions,
         defaultContext,
         noneContext,
         encoding: Encoding,
@@ -105,7 +104,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             localisationService,
             settings.validation.langs,
             lookup,
-            processLocalisation,
+            locFunctions >> fst,
             localisationExtension
         )
 
@@ -145,7 +144,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         ValidationManager(
             validationSettings,
             validationServices (),
-            validateLocalisationCommand,
+            locFunctions >> snd,
             defaultContext,
             (if debugMode then noneContext else defaultContext),
             ErrorCache()
@@ -356,7 +355,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             ValidationManager(
                 validationSettings,
                 validationServices (),
-                validateLocalisationCommand,
+                locFunctions >> snd,
                 defaultContext,
                 (if debugMode then noneContext else defaultContext),
                 validationManager.ErrorCache()

@@ -452,10 +452,10 @@ type CK3Game(setupSettings: CK3Settings) =
             | _ -> None
 
     let processLocalisationFunction lookup =
-        (createJominiLocalisationFunctions jominiLocDataTypes lookup) |> fst
+        (createJominiLocalisationFunctions jominiLocDataTypes lookup)
 
-    let validationLocalisationCommandFunction lookup =
-        createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
+    // let validationLocalisationCommandFunction lookup =
+        // createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -473,8 +473,7 @@ type CK3Game(setupSettings: CK3Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction }
 
     let scriptFolders = []
 
@@ -487,7 +486,6 @@ type CK3Game(setupSettings: CK3Settings) =
               Compute.Jomini.computeJominiDataUpdate,
               (CK3LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               CWTools.Process.Scopes.Scopes.defaultContext,
               CWTools.Process.Scopes.Scopes.noneContext,
               Encoding.UTF8,

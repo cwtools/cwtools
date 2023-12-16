@@ -487,11 +487,7 @@ type CK2Game(setupSettings: CK2Settings) =
 
     let processLocalisationFunction lookup =
         (createLocalisationFunctions CK2.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> fst
 
-    let validationLocalisationCommandFunction lookup =
-        (createLocalisationFunctions CK2.locStaticSettings createLocDynamicSettings legacyLocDataTypes lookup)
-        |> snd
 
 
     let rulesManagerSettings =
@@ -510,8 +506,7 @@ type CK2Game(setupSettings: CK2Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let game =
         GameObject.CreateGame
@@ -522,7 +517,6 @@ type CK2Game(setupSettings: CK2Settings) =
               Compute.computeCK2DataUpdate,
               (CK2LocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               defaultContext,
               noneContext,
               Encoding.UTF8,

@@ -449,11 +449,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
             | _ -> None
 
     let processLocalisationFunction lookup =
-        (createJominiLocalisationFunctions jominiLocDataTypes lookup) |> fst
-
-    let validationLocalisationCommandFunction lookup =
-        createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
-
+        (createJominiLocalisationFunctions jominiLocDataTypes lookup)
     let rulesManagerSettings =
         { rulesSettings = settings.rules
           useFormulas = true
@@ -470,8 +466,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          processLocalisation = processLocalisationFunction
-          validateLocalisation = validationLocalisationCommandFunction }
+          locFunctions = processLocalisationFunction } 
 
     let scriptFolders = []
 
@@ -484,7 +479,6 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
               Compute.Jomini.computeJominiDataUpdate,
               (CustomLocalisationService >> (fun f -> f :> ILocalisationAPICreator)),
               processLocalisationFunction,
-              validationLocalisationCommandFunction,
               CWTools.Process.Scopes.Scopes.defaultContext,
               CWTools.Process.Scopes.Scopes.noneContext,
               Encoding.UTF8,
