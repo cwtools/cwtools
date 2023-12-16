@@ -15,7 +15,7 @@ module Helpers =
 
         simpleEventTargetLinks
 
-    let private convertSourceRuleType (lookup: Lookup) (link: EventTargetDataLink) =
+    let addDataEventTargetLinks (lookup: Lookup) (embeddedSettings: EmbeddedSettings) (addWildCardLinks: bool) =
         // log (sprintf "csr %A" link)
         let types = lookup.typeDefInfo
         let enums = lookup.enumDefs
@@ -50,6 +50,7 @@ module Helpers =
                 |> Option.defaultValue Seq.empty
             | _ -> Seq.empty
 
+        //TODO crazy inefficient! Done for every link
         let aliasKeyMap =
             lookup.configRules
             |> List.choose (function
@@ -59,65 +60,65 @@ module Helpers =
             |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq)
             |> Map.ofSeq
 
-        match link.sourceRuleType.Trim() with
-        | x when x.StartsWith "<" && x.EndsWith ">" ->
-            let sourceType = x.Trim([| '<'; '>' |])
+        let convertSourceRuleType (lookup: Lookup) (link: EventTargetDataLink) =
+            match link.sourceRuleType.Trim() with
+            | x when x.StartsWith "<" && x.EndsWith ">" ->
+                let sourceType = x.Trim([| '<'; '>' |])
 
-            match lookup.typeDefInfo |> Map.tryFind sourceType with
-            | Some x -> x |> List.map (fun tdi -> tdi.id, Some(TypeRef(sourceType, tdi.id)))
-            | None ->
-                log (sprintf "Link %s refers to undefined type %s" link.name sourceType)
+                match lookup.typeDefInfo |> Map.tryFind sourceType with
+                | Some x -> x |> List.map (fun tdi -> tdi.id, Some(TypeRef(sourceType, tdi.id)))
+                | None ->
+                    log (sprintf "Link %s refers to undefined type %s" link.name sourceType)
+                    []
+            | x when x.StartsWith "enum[" ->
+                let enum = CWTools.Rules.RulesParser.getSettingFromString x "enum"
+
+                match enum |> Option.bind (fun x -> Map.tryFind x lookup.enumDefs) with
+                | Some(_, vs) -> (vs |> List.map (fun (x, _) -> x, None))
+                | None ->
+                    log (sprintf "Link %s refers to undefined enum %A" link.name enum)
+                    []
+            | x when x.StartsWith "value[" ->
+                let valuename = CWTools.Rules.RulesParser.getSettingFromString x "value"
+
+                match valuename |> Option.bind (fun x -> Map.tryFind x lookup.varDefInfo) with
+                | Some vs -> vs |> List.map (fun x -> fst x, None)
+                | None ->
+                    log (sprintf "Link %s refers to undefined value %A" link.name valuename)
+                    []
+            | x when x.StartsWith "alias_keys_field[" ->
+                let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
+
+                match aliasname |> Option.bind (fun x -> Map.tryFind x aliasKeyMap) with
+                | Some vs -> vs |> Set.toList |> List.map (fun x -> x, None)
+                | None ->
+                    log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
+                    []
+            | x ->
+                log (sprintf "Link %s refers to invalid source %s" link.name x)
                 []
-        | x when x.StartsWith "enum[" ->
-            let enum = CWTools.Rules.RulesParser.getSettingFromString x "enum"
 
-            match enum |> Option.bind (fun x -> Map.tryFind x lookup.enumDefs) with
-            | Some(_, vs) -> (vs |> List.map (fun (x, _) -> x, None))
-            | None ->
-                log (sprintf "Link %s refers to undefined enum %A" link.name enum)
-                []
-        | x when x.StartsWith "value[" ->
-            let valuename = CWTools.Rules.RulesParser.getSettingFromString x "value"
-
-            match valuename |> Option.bind (fun x -> Map.tryFind x lookup.varDefInfo) with
-            | Some vs -> vs |> List.map (fun x -> fst x, None)
-            | None ->
-                log (sprintf "Link %s refers to undefined value %A" link.name valuename)
-                []
-        | x when x.StartsWith "alias_keys_field[" ->
-            let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
-
-            match aliasname |> Option.bind (fun x -> Map.tryFind x aliasKeyMap) with
-            | Some vs -> vs |> Set.toList |> List.map (fun x -> x, None)
-            | None ->
-                log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
-                []
-        | x ->
-            log (sprintf "Link %s refers to invalid source %s" link.name x)
-            []
-
-    let private getWildCard (link: EventTargetDataLink) =
-        match link.sourceRuleType.Trim(), link.dataPrefix with
-        | x, Some prefix when x.StartsWith "value[" ->
-            Some(
-                ScopedEffect(
-                    StringResource.stringManager.InternIdentifierToken prefix,
-                    link.inputScopes,
-                    Some link.outputScope,
-                    EffectType.Link,
-                    link.description,
-                    "",
-                    true,
-                    [],
-                    true,
-                    false,
-                    true,
-                    None
+        let getWildCard (link: EventTargetDataLink) =
+            match link.sourceRuleType.Trim(), link.dataPrefix with
+            | x, Some prefix when x.StartsWith "value[" ->
+                Some(
+                    ScopedEffect(
+                        StringResource.stringManager.InternIdentifierToken prefix,
+                        link.inputScopes,
+                        Some link.outputScope,
+                        EffectType.Link,
+                        link.description,
+                        "",
+                        true,
+                        [],
+                        true,
+                        false,
+                        true,
+                        None
+                    )
                 )
-            )
-        | _ -> None
+            | _ -> None
 
-    let addDataEventTargetLinks (lookup: Lookup) (embeddedSettings: EmbeddedSettings) (addWildCardLinks: bool) =
         let links =
             embeddedSettings.eventTargetLinks
             |> Seq.choose (function
