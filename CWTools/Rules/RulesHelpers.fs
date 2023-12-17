@@ -295,7 +295,7 @@ let getDefinedVariables (infoService: InfoService) (es: Entity list) =
 let getEntitiesWithoutTypes (types: TypeDefinition list) (es: Entity list) =
     let checkEntity (entity: Entity) =
         let path = entity.logicalpath
-        let dir = Path.GetDirectoryName path
+        let dir = (Path.GetDirectoryName path).Replace("\\", "/")
         let file = Path.GetFileName path
         let checkPathDir = (fun a b c -> FieldValidators.checkPathDir c a b)
 

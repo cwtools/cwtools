@@ -185,7 +185,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let debugChecks () =
         if debugMode then
             // let filesWithoutTypes = getEntitiesWithoutTypes lookup.typeDefs (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            // filesWithoutTypes |> List.iter (eprintfn "File without type %s")
+            // filesWithoutTypes |> List.iter (fun x -> logDiag $"File without type %s{x}")
             ()
         else
             ()
