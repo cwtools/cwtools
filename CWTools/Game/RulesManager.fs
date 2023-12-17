@@ -170,6 +170,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         lookup.typeDefs <- types
         // let rulesWithMod = rules @ addModifiersWithScopes(game)
         let rulesPostHook = settings.loadConfigRulesHook rules lookup embeddedSettings
+        if rulesSettings.debugMode
+        then
+            RulesConsistencyValidation.checkForUndefinedTypes rulesPostHook lookup.typeDefs
         // lookup.configRules <- rulesWithMod
         lookup.configRules <- rulesPostHook
         simpleEnums <- enums

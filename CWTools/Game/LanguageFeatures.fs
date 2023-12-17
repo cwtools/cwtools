@@ -129,7 +129,8 @@ module LanguageFeatures =
                     | _ -> None
                 | None -> None
             | Some(_, (_, Some(TypeRef(t, tv)), _)) ->
-                lookup.typeDefInfo.[t]
+                lookup.typeDefInfo |> Map.tryFind t
+                |> Option.defaultValue []
                 |> List.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
             | Some(_, (_, Some(EnumRef(enumName, enumValue)), _)) ->
                 let enumValues = lookup.enumDefs.[enumName] |> snd

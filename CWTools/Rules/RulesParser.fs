@@ -17,8 +17,9 @@ open CWTools.Rules
 module private RulesParserImpl =
     let internal specificFieldFromString x =
         SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken x))
-    let internal specificFieldFromId x =
-        SpecificField(SpecificValue(x))
+
+    let internal specificFieldFromId x = SpecificField(SpecificValue(x))
+
     let private parseSeverity =
         function
         | "error" -> Severity.Error
@@ -1512,6 +1513,55 @@ module private RulesParserImpl =
         let values = nodes |> List.choose processChildValue |> List.collect id
         rules, types, enums, complexenums, values
 
+module RulesConsistencyValidation =
+    let rec cataRule (f: 'a list -> RuleType -> 'a list) (oldState) (rule: RuleType) : 'a list =
+        let newState = f oldState rule
+        let recurse = cataRule f
+
+        match rule with
+        | SubtypeRule(_, _, rules)
+        | NodeRule(_, rules)
+        | ValueClauseRule rules -> rules |> Seq.map fst |> Seq.fold recurse newState
+        | LeafValueRule _
+        | LeafRule _ -> newState
+
+    let getAllTypesReferenceInRules (acc: string list) (rule: RuleType) =
+        match rule with
+        | NodeRule(TypeField(TypeType.Simple(name = name)), _)
+        | NodeRule(TypeField(TypeType.Complex(name = name)), _)
+        | LeafRule(TypeField(TypeType.Simple(name = name)), _)
+        | LeafRule(TypeField(TypeType.Complex(name = name)), _)
+        | LeafRule(_, TypeField(TypeType.Simple(name = name)))
+        | LeafRule(_, TypeField(TypeType.Complex(name = name)))
+        | LeafValueRule(TypeField(TypeType.Simple(name = name)))
+        | LeafValueRule(TypeField(TypeType.Complex(name = name))) -> name :: acc
+        | _ -> acc
+
+    let checkForUndefinedTypes (rules: RootRule list) (typedefs: TypeDefinition list) =
+        let referencedTypes =
+            rules
+            |> Seq.collect (function
+                | TypeRule(_, (rule, _))
+                | AliasRule(_, (rule, _))
+                | SingleAliasRule(_, (rule, _)) -> cataRule getAllTypesReferenceInRules [] rule)
+            |> Seq.distinct
+
+        let missing =
+            referencedTypes
+            |> Seq.choose (fun t ->
+                match t.Split('.') with
+                | [| key |] when typedefs |> List.exists (fun x -> x.name = key) |> not -> Some key
+                | [| key; subtype |] when
+                    typedefs
+                    |> List.exists (fun x -> x.name = key && x.subtypes |> List.exists (fun st -> st.name = subtype))
+                    |> not
+                    ->
+                    Some(key + "." + subtype)
+                | _ -> None)
+            |> List.ofSeq
+        if missing |> List.isEmpty |> not
+        then
+            logWarning $"The following types were referenced in rules but not defined in rules %A{missing}"
 
 
 module RulesParser =
