@@ -126,12 +126,6 @@ module Graphics =
             <&&> x2
             <&&> (Invalid(Guid.NewGuid(), [ inv (ErrorCodes.CustomError "and more errors hidden" Severity.Error) leaf ]))
 
-    let inline validateEntity (entities: Collections.Set<string>) (entity: string) node =
-        if entities.Contains entity then
-            OK
-        else
-            Invalid(Guid.NewGuid(), [ inv (ErrorCodes.UndefinedEntity entity) node ])
-
 
     let getGraphicalCultures (es: STLEntitySet) =
         es.AllOfTypeChildren EntityType.GraphicalCulture
@@ -304,18 +298,7 @@ module Graphics =
                     OK
                 else
                     Invalid(Guid.NewGuid(), [ inv (ErrorCodes.UndefinedEntity(l.Value.ToRawString())) l ]))
-
-    let validateAmbientGraphics: STLStructureValidator =
-        fun os es ->
-            let assets =
-                os.AllOfTypeChildren EntityType.GfxAsset
-                |> List.map (fun a -> a.TagText "name")
-                |> Set.ofList
-
-            es.AllOfTypeChildren EntityType.AmbientObjects
-            |> List.collect (fun ao -> ao.Leafs "entity" |> List.ofSeq)
-            <&!&> (fun l -> validateEntity assets (l.Value.ToRawString()) l)
-
+            
     let valIconLeaf (sprites: Collections.Set<string>) (leaf: Leaf) =
         if Set.contains (leaf.Value.ToRawString()) sprites then
             OK

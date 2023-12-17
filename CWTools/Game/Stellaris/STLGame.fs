@@ -475,7 +475,6 @@ type STLGame(setupSettings: StellarisSettings) =
               valButtonEffects, "but"
               valSprites, "sprite"
               valEventCalls, "event"
-              validateAmbientGraphics, "ambient"
               validateShipDesigns, "designs"
               validateSolarSystemInitializers, "solar"
               validateIfElse, "ifelse2"
