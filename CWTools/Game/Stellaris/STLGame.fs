@@ -492,8 +492,6 @@ type STLGame(setupSettings: StellarisSettings) =
           experimental = setupSettings.validation.experimental
           fileValidators =
             [ valSpriteFiles, "sprites"
-              valMeshFiles, "mesh"
-              valAssetFiles, "asset"
               valComponentIcons, "compicon" ]
           lookupValidators =  (validateEconomicCatAIBudget, "aibudget") :: commonValidationRules
           lookupFileValidators =

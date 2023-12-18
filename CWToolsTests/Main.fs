@@ -259,7 +259,7 @@ let perfSTL(b) =
           excludeGlobPatterns = None
           embedded = FromConfig (cachedFiles, cached)
           validation = {
-              validateVanilla = false;
+              validateVanilla = true;
               langs = [ Lang.STL STLLang.English ]
               experimental = false
           }

@@ -6,22 +6,6 @@ open CWTools.Common
 open FSharp.Collections.ParallelSeq
 
 module STLLookup =
-    type FlagType =
-        | Country
-        | Planet
-        | Fleet
-        | Ship
-        | Pop
-        | Global
-        | Star
-        | Relation
-        | Leader
-        | AmbientObject
-        | Species
-        | Megastructure
-        | PopFaction
-
-
     type STLComputedData
         (
             eventids,
@@ -90,12 +74,6 @@ module STLLookup =
 
         final, vanillaTriggers
 
-    let manualEffectScopeOverrides =
-        [
-        //           "set_variable", [scopeManager.ParseScope() "Planet"; scopeManager.ParseScope() "Country"; scopeManager.ParseScope() "Fleet"; scopeManager.ParseScope() "GalacticObject"; scopeManager.ParseScope() "Leader"]
-        ]
-        |> Map.ofList
-
     let updateScriptedEffects
         (resources: IResourceAPI<STLComputedData>)
         (vanillaEffects: Effect list)
@@ -133,13 +111,5 @@ module STLLookup =
 
         while (not (ff ())) do
             ()
-
-        let adjustedEffects =
-            vanillaEffects
-            |> List.map (function
-                | :? DocEffect as ve when manualEffectScopeOverrides.ContainsKey ve.Name ->
-                    let newScopes = manualEffectScopeOverrides.[ve.Name]
-                    DocEffect(ve.Name, newScopes, ve.Target, ve.Type, ve.Desc, ve.Usage) :> Effect
-                | x -> x)
-
-        final, adjustedEffects
+            
+        final, vanillaEffects

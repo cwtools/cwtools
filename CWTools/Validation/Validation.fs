@@ -17,6 +17,11 @@ type ErrorCode =
       Message: string }
 
 type ErrorCodes =
+    static member private Unused(errorCode) =
+        { ID = errorCode
+          Severity = Severity.Hint
+          Message = "This error is retired" }
+
     static member MixedBlock =
         { ID = "CW002"
           Severity = Severity.Error
@@ -323,7 +328,7 @@ type ErrorCodes =
             { ID = "CW239"
               Severity = Severity.Warning
               Message = $"{referenceName} of type {typeName} is not used anywhere, but is expected to be" }
-            
+
     static member ConfigRulesUnexpectedValue =
         fun message severity ->
             { ID = "CW240"
@@ -396,11 +401,7 @@ type ErrorCodes =
               Severity = Severity.Warning
               Message = sprintf "This %s is unnecessary" logicOperator }
 
-    static member UndefinedFlag =
-        fun (variable: string) (flagType: FlagType) ->
-            { ID = "CW252"
-              Severity = Severity.Warning
-              Message = sprintf "%s flag of type %A is never set" variable flagType }
+    static member UndefinedFlag = ErrorCodes.Unused "CW252"
 
     static member DeprecatedSetName =
         { ID = "CW253"
@@ -809,7 +810,7 @@ module ValidationCore =
 
 
     let inline lazyErrorMerge rs f ([<InlineIfLambda>] defValue) (errors: ValidationResult) merge =
-    // let lazyErrorMerge rs f defValue (errors: ValidationResult) merge =
+        // let lazyErrorMerge rs f defValue (errors: ValidationResult) merge =
         // let mutable state = errors
         //        let mutable foundOK = false
         //        let mutable any = false        //Take every potential rule
