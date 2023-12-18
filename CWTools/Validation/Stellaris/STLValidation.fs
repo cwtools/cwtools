@@ -272,33 +272,6 @@ module STLValidation =
             let fCombine = (<&&>)
             gui <&!&> (foldNode2 fNode fCombine OK)
 
-    let valSpriteFiles: STLFileValidator =
-        fun rm es ->
-            let sprites =
-                es.AllOfTypeChildren EntityType.Interface // es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
-                |> List.filter (fun e -> e.Key = "spriteTypes")
-                |> List.collect (fun e -> e.Children)
-
-            let filenames = rm.GetFileNames()
-            //log "sprite filename %A" filenames
-            let inner =
-                fun (x: Node) ->
-                    Seq.append (x.Leafs "textureFile") (x.Leafs "effectFile")
-                    <&!&> (fun l ->
-                        let filename = l.Value.ToRawString().Replace("\\", "/")
-                        let filenamefallback = filename.Replace(".lua", ".shader").Replace(".tga", ".dds")
-
-                        match
-                            filenames
-                            |> List.exists (fun f ->
-                                f.EndsWith(filename, StringComparison.Ordinal)
-                                || f.EndsWith(filenamefallback, StringComparison.Ordinal))
-                        with
-                        | true -> OK
-                        | false -> Invalid(Guid.NewGuid(), [ inv (ErrorCodes.MissingFile(l.Value.ToRawString())) l ]))
-
-            sprites <&!&> inner
-
     let addGeneratedModifiers (modifiers: ActualModifier list) (es: STLEntitySet) : ActualModifier list =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)

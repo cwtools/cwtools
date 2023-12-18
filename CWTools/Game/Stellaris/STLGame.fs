@@ -45,7 +45,10 @@ module STLGameFunctions =
                |> List.map fst)
 
         let definedVariables =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> Seq.map fst |> LowerCaseStringSet)
+            (lookup.varDefInfo.TryFind "variable"
+             |> Option.defaultValue []
+             |> Seq.map fst
+             |> LowerCaseStringSet)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
@@ -490,10 +493,8 @@ type STLGame(setupSettings: StellarisSettings) =
           experimentalValidators = [ valSectionGraphics, "sections"; valComponentGraphics, "component" ]
           heavyExperimentalValidators = [ getEventChains, "event chains" ]
           experimental = setupSettings.validation.experimental
-          fileValidators =
-            [ valSpriteFiles, "sprites"
-              valComponentIcons, "compicon" ]
-          lookupValidators =  (validateEconomicCatAIBudget, "aibudget") :: commonValidationRules
+          fileValidators = []
+          lookupValidators = (validateEconomicCatAIBudget, "aibudget") :: commonValidationRules
           lookupFileValidators =
             [ valScriptedEffectParams, "scripted_effects"
               valScriptValueParams, "script_values" ]
