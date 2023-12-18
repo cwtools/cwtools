@@ -17,52 +17,42 @@ This is a simple example of loading an event file, modifying it, and printing th
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             //Parse event file
-            var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
+            var text2 = File.ReadAllText("./testevent2.txt");
+            var parsed2 = CWTools.CSharp.Parsers.ParseScriptFile("testevent2.txt", text2);
+
+            var eventFile2 = parsed2.GetError();
+            Console.WriteLine(eventFile2.ErrorMessage);
+
+            //Parse file
+            var text = File.ReadAllText("./testevent.txt");
+            var parsed = CWTools.CSharp.Parsers.ParseScriptFile("testevent.txt", text);
+
             var eventFile = parsed.GetResult();
 
             //"Process" result into nicer format
-            var processed = CK2Process.processEventFile(eventFile);
+            var processed = CWTools.CSharp.Parsers.ProcessStatements("testevent.txt", "./testevent.txt", eventFile);
 
             //Find interesting event
-            var myEvent = processed.Events.FirstOrDefault(x => x.ID == "test.1");
-            
+            var myEvent = processed.Nodes.FirstOrDefault(x => x.TagText("id") == "test.1");
+
             //Add is_triggered_only = true
-            var leaf = new Leaf("is_triggered_only", Value.NewBool(true));
-            myEvent.AllChildren.Add(Child.NewLeafC(leaf));
+            var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), FSharpOption<range>.None);
+            myEvent.SetTag(leaf.Key, Child.NewLeafC(leaf));
             // or
-            myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true)));
+            // var newChildren = myEvent.AllChildren;
+            // newChildren.Add(Leaf.Create(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), range.Zero));
+            // myEvent.AllChildren = newChildren;
 
             //Output
             var output = processed.ToRaw;
-            Console.WriteLine(CKPrinter.printKeyValueList(output, 0));
-```
-Which will take a file like
-```
-namespace = test
+            Console.WriteLine(CKPrinter.api.prettyPrintStatement.Invoke(output));
+            Console.WriteLine(output.PrettyPrint());
+            PrintfModule
+                .PrintFormatLine(
+                    new PrintfFormat<FSharpFunc<Statement, Unit>, TextWriter, Unit, Unit, Statement>("%A"))
+                .Invoke(output);
 
-#One event
-country_event = {
-        id = test.1
-    desc = "test description"
-}
-#Another event
-country_event = {
-    id = test.2
-desc = "test 2 description"
-}
+            var test = processed.Nodes.FirstOrDefault().ToRaw;
+            Console.WriteLine(CKPrinter.api.prettyPrintStatement.Invoke(test));
 ```
-and output a file like
-```
-namespace = test
-#One event
-country_event = {
-        is_triggered_only = yes
-        id = test.1
-        desc = "test description"
-         }
-#Another event
-country_event = {
-        id = test.2
-        desc = "test 2 description"
-         }
-```
+Example from [here](https://github.com/cwtools/cwtools/blob/master/CWToolsCSTests/Program.cs)
