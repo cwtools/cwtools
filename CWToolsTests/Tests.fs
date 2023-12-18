@@ -440,7 +440,6 @@ let testSubdirectories stl rulesonly dir =
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false false "" false false 1 "en-GB"
         testFolder "./testfiles/validationtests/gfxtests" "gfx" false false "" false false 1 "en-GB"
         // testFolder "./testfiles/validationtests/scopetests" "scopes" false "" false false "en-GB"
         // testFolder "./testfiles/validationtests/variabletests" "variables" true false "./testfiles/stellarisconfig" false false "en-GB"

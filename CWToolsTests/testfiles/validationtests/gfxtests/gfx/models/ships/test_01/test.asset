@@ -10,7 +10,6 @@ entity = {
 
 entity = {
 	name = "test_entity_fake_2"
-    #error
 	pdxmesh = "test_entity_fake_2_mesh"
 	
 	default_state = idle

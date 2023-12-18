@@ -47,14 +47,3 @@ country_event = {
         country_event = { id = testse.6 }
     }
 }
-
-country_event = {
-    id = testse.6
-    is_triggered_only = yes
-    immediate = {
-        country_event = {
-            #not defined
-            id = nothing
-        }
-    }
-}

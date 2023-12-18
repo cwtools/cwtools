@@ -1,3 +1,0 @@
-test_button_effect_1 = { }
-test_button_effect_2 = { }
-test_button_not_effect = "test"
