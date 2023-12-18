@@ -473,33 +473,3 @@ module STLEventValidation =
 
                 filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
 
-
-    let valEventCalls: STLStructureValidator =
-        fun os es ->
-            let events = (os.AllOfType EntityType.Events @ es.AllOfType EntityType.Events)
-            let eventIds = events |> List.collect (fun (e, d) -> d.Force().Eventids)
-            let effects = es.AllEffects
-
-            let eventEffectKeys =
-                [ "ship_event"
-                  "pop_event"
-                  "fleet_event"
-                  "pop_faction_event"
-                  "country_event"
-                  "planet_event" ]
-
-            let fNode =
-                (fun (x: Node) children ->
-                    match x.Key with
-                    | k when eventEffectKeys |> List.exists (fun f -> f == k) ->
-                        x.Leafs "id"
-                        <&!&> (fun l ->
-                            if eventIds |> List.contains (l.Value.ToRawString()) then
-                                OK
-                            else
-                                Invalid(Guid.NewGuid(), [ inv (ErrorCodes.UndefinedEvent(l.Value.ToRawString())) l ]))
-                    | _ -> OK
-                    <&&> children)
-
-            let fCombine = (<&&>)
-            effects <&!&> (foldNode2 fNode fCombine OK)

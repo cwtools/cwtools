@@ -210,68 +210,6 @@ module STLValidation =
             techs <&!&> inner
     //techs |> List.map inner |> List.fold (<&&>) OK
 
-    let valButtonEffects: STLStructureValidator =
-        fun os es ->
-            let effects =
-                os.GlobMatchChildren("**/common/button_effects/*.txt")
-                |> List.map (fun e -> e.Key)
-
-            let buttons = es.AllOfTypeChildren EntityType.Interface
-
-            let fNode =
-                (fun (x: Node) children ->
-                    let results =
-                        match x.Key with
-                        | "effectButtonType" ->
-                            x.Leafs "effect"
-                            <&!&> (fun e ->
-                                if List.contains (e.Value.ToRawString()) effects then
-                                    OK
-                                else
-                                    Invalid(
-                                        Guid.NewGuid(),
-                                        [ inv (ErrorCodes.ButtonEffectMissing(e.Value.ToString())) e ]
-                                    ))
-                        | _ -> OK
-
-                    results <&&> children)
-
-            let fCombine = (<&&>)
-            buttons <&!&> (foldNode2 fNode fCombine OK)
-
-    let valSprites: STLStructureValidator =
-        //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
-        fun os es ->
-            let sprites =
-                os.GlobMatchChildren("**/interface/*.gfx")
-                @ os.GlobMatchChildren("**/interface/*/*.gfx")
-                |> List.filter (fun e -> e.Key = "spriteTypes")
-                |> List.collect (fun e -> e.Children)
-
-            let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> List.ofSeq
-
-            let gui =
-                es.GlobMatchChildren("**/interface/*.gui")
-                @ es.GlobMatchChildren("**/interface/*/*.gui")
-
-            let fNode =
-                (fun (x: Node) children ->
-                    let results =
-                        match x.Leafs "spriteType" |> List.ofSeq with
-                        | [] -> OK
-                        | xs ->
-                            xs
-                            <&!&> (fun e ->
-                                if List.contains (e.Value.ToRawString()) spriteNames then
-                                    OK
-                                else
-                                    Invalid(Guid.NewGuid(), [ inv (ErrorCodes.SpriteMissing(e.Value.ToString())) e ]))
-
-                    results <&&> children)
-
-            let fCombine = (<&&>)
-            gui <&!&> (foldNode2 fNode fCombine OK)
-
     let addGeneratedModifiers (modifiers: ActualModifier list) (es: STLEntitySet) : ActualModifier list =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)
@@ -814,43 +752,6 @@ module STLValidation =
 
             ship_designs <&!&> validateDesign
 
-
-
-    let validateSolarSystemInitializers: STLStructureValidator =
-        fun os es ->
-            let inits =
-                es.AllOfTypeChildren EntityType.SolarSystemInitializers
-                |> List.filter (fun si -> not (si.Key == "random_list"))
-
-            let starclasses =
-                es.AllOfTypeChildren EntityType.StarClasses
-                @ os.AllOfTypeChildren EntityType.StarClasses
-                |> List.map (fun sc ->
-                    if sc.Key == "random_list" then
-                        sc.TagText "name"
-                    else
-                        sc.Key)
-
-            let fNode =
-                fun (x: Node) ->
-                    match x.Has "class", starclasses |> List.contains (x.TagText "class") with
-                    | true, true -> OK
-                    | false, _ ->
-                        Invalid(
-                            Guid.NewGuid(),
-                            [ inv (ErrorCodes.CustomError "This initializer is missing a class" Severity.Error) x ]
-                        )
-                    | _, false ->
-                        Invalid(
-                            Guid.NewGuid(),
-                            [ inv
-                                  (ErrorCodes.CustomError
-                                      (sprintf "The star class %s does not exist" (x.TagText "class"))
-                                      Severity.Error)
-                                  x ]
-                        )
-
-            inits <&!&> fNode
 
     let validatePlanetKillers: STLStructureValidator =
         fun os es ->
