@@ -568,8 +568,17 @@ let embeddedTests =
 
 
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
-        let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
-        let settingsE = { settings with embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached };}
+        
+        let configtext = configFilesFromDir "./testfiles/embeddedtest/config/"
+        let baseSettings = emptyStellarisSettings "./testfiles/embeddedtest/test"
+        let settings = { baseSettings
+                          with
+                            rules = Some { RulesSettings.ruleFiles = configtext; validateRules = true; debugMode = false; debugRulesOnly = false };
+                           }
+        let settingsE = {
+            settings with
+                embedded = ManualSettings {emptyEmbeddedSettings with embeddedFiles = filelist; cachedResourceData = cached };
+        }
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
 
         let stlE = STLGame(settingsE) :> IGame<STLComputedData>

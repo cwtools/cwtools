@@ -7,14 +7,11 @@ containerWindowType = {
     moveable = yes
     size = { width = 10 height = 10 }
 
-    background = { name = "background" quadTextureSprite ="GFX_tile_outliner_bg" }
 
 		effectButtonType = {
 			id = "irm_sector_b2_button"
 			name = "irm_sector_b2_button"
-			quadTextureSprite = "GFX_outliner_sector_settings"
 			position = { x = 320 y = 116 }
-			font = "cg_16b"
 			#error
 			effect = test_button_effect_1
         }
