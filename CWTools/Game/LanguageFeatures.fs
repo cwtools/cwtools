@@ -173,7 +173,7 @@ module LanguageFeatures =
                         if contains then Some(value |> List.ofSeq) else None)
                 |> List.collect id
                 |> List.choose (fun ref ->
-                    if ref.name == tv && ref.referenceType = ReferenceType.TypeDef then
+                    if ref.name.GetString() == tv && ref.referenceType = ReferenceType.TypeDef then
                         Some ref.position
                     else
                         None)
@@ -543,7 +543,7 @@ module LanguageFeatures =
                     (allInternalOrOutgoingRefs
                      |> List.choose (fun (reference, r2, isOutgoing, refLabel) ->
                          if rangeContainsRange r r2 then
-                             Some(reference, isOutgoing, refLabel)
+                             Some(reference.GetString(), isOutgoing, refLabel)
                          else
                              None)
                      |> List.distinct),
@@ -583,7 +583,7 @@ module LanguageFeatures =
                       abbreviation = abbrev })
 
             let allInternalOrOutgoingRefNames =
-                allInternalOrOutgoingRefs |> List.map (fun (r, _, _, _) -> r) |> List.distinct
+                allInternalOrOutgoingRefs |> List.map (fun (r, _, _, _) -> r.GetString()) |> List.distinct
 
             let allTypeNamesInFiles = typesDefinedInFiles |> List.map (fun (k, n, r, _, _) -> n)
 
@@ -611,7 +611,7 @@ module LanguageFeatures =
                         data.Force().Referencedtypes
                         |> Option.map (
                             getSourceTypes
-                            >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v, r, isOutgoing, refLabel))
+                            >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v.GetString(), r, isOutgoing, refLabel))
                         )
                         |> Option.defaultValue [])
                     |> List.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)

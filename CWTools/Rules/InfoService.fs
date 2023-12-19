@@ -1226,7 +1226,7 @@ type InfoService
                     res.[typename]
                         .Add(
                             createReferenceDetails
-                                leaf.ValueText
+                                leaf.ValueId
                                 leaf.Position
                                 isOutgoing
                                 referenceLabel
@@ -1239,7 +1239,7 @@ type InfoService
                     let newArr = ResizeArray<ReferenceDetails>()
 
                     newArr.Add(
-                        createReferenceDetails leaf.ValueText leaf.Position isOutgoing referenceLabel TypeDef assocType
+                        createReferenceDetails leaf.ValueId leaf.Position isOutgoing referenceLabel TypeDef assocType
                     )
 
                     res.TryAdd(typename, newArr) |> ignore
@@ -1251,7 +1251,7 @@ type InfoService
                     res.[typename]
                         .Add(
                             createReferenceDetails
-                                leaf.ValueText
+                                leaf.ValueId
                                 leaf.Position
                                 isOutgoing
                                 referenceLabel
@@ -1265,7 +1265,7 @@ type InfoService
 
                     newArr.Add(
                         createReferenceDetails
-                            leaf.ValueText
+                            leaf.ValueId
                             leaf.Position
                             isOutgoing
                             referenceLabel
@@ -1288,8 +1288,8 @@ type InfoService
                         res.[typename]
                             .Add(
                                 createReferenceDetailsValue
-                                    typeValue
-                                    leaf.ValueText
+                                    (StringResource.stringManager.InternIdentifierToken typeValue)
+                                    leaf.ValueId
                                     leaf.Position
                                     isOutgoing
                                     referenceLabel
@@ -1303,8 +1303,8 @@ type InfoService
 
                         newArr.Add(
                             createReferenceDetailsValue
-                                typeValue
-                                leaf.ValueText
+                                (StringResource.stringManager.InternIdentifierToken typeValue)
+                                leaf.ValueId
                                 leaf.Position
                                 isOutgoing
                                 referenceLabel
@@ -1322,14 +1322,14 @@ type InfoService
 
                 if res.ContainsKey(typename) then
                     res.[typename]
-                        .Add(createReferenceDetails leaf.Key leaf.Position isOutgoing referenceLabel TypeDef assocType)
+                        .Add(createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDef assocType)
 
                     res
                 else
                     let newArr = ResizeArray<ReferenceDetails>()
 
                     newArr.Add(
-                        createReferenceDetails leaf.Key leaf.Position isOutgoing referenceLabel TypeDef assocType
+                        createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDef assocType
                     )
 
                     res.TryAdd(typename, newArr) |> ignore
@@ -1341,7 +1341,7 @@ type InfoService
                     res.[typename]
                         .Add(
                             createReferenceDetails
-                                leaf.Key
+                                leaf.KeyId
                                 leaf.Position
                                 isOutgoing
                                 referenceLabel
@@ -1354,7 +1354,7 @@ type InfoService
                     let newArr = ResizeArray<ReferenceDetails>()
 
                     newArr.Add(
-                        createReferenceDetails leaf.Key leaf.Position isOutgoing referenceLabel TypeDefFuzzy assocType
+                        createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDefFuzzy assocType
                     )
 
                     res.TryAdd(typename, newArr) |> ignore
@@ -1378,7 +1378,7 @@ type InfoService
                     res.[typename]
                         .Add(
                             createReferenceDetails
-                                leafvalue.ValueText
+                                leafvalue.ValueId
                                 leafvalue.Position
                                 isOutgoing
                                 referenceLabel
@@ -1392,7 +1392,7 @@ type InfoService
 
                     newArr.Add(
                         createReferenceDetails
-                            leafvalue.ValueText
+                            leafvalue.ValueId
                             leafvalue.Position
                             isOutgoing
                             referenceLabel
@@ -1420,14 +1420,14 @@ type InfoService
 
                 if res.ContainsKey(typename) then
                     res.[typename]
-                        .Add(createReferenceDetails node.Key node.Position isOutgoing referenceLabel TypeDef assocType)
+                        .Add(createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType)
 
                     res
                 else
                     let newArr = ResizeArray<ReferenceDetails>()
 
                     newArr.Add(
-                        createReferenceDetails node.Key node.Position isOutgoing referenceLabel TypeDef assocType
+                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
                     )
 
                     res.TryAdd(typename, newArr) |> ignore
@@ -1439,7 +1439,7 @@ type InfoService
                     res.[typename]
                         .Add(
                             createReferenceDetails
-                                node.Key
+                                node.KeyId
                                 node.Position
                                 isOutgoing
                                 referenceLabel
@@ -1452,7 +1452,7 @@ type InfoService
                     let newArr = ResizeArray<ReferenceDetails>()
 
                     newArr.Add(
-                        createReferenceDetails node.Key node.Position isOutgoing referenceLabel TypeDefFuzzy assocType
+                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDefFuzzy assocType
                     )
 
                     res.TryAdd(typename, newArr) |> ignore
@@ -1462,14 +1462,14 @@ type InfoService
 
                 if res.ContainsKey(typename) then
                     res.[typename]
-                        .Add(createReferenceDetails node.Key node.Position isOutgoing referenceLabel TypeDef assocType)
+                        .Add(createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType)
 
                     res
                 else
                     let newArr = ResizeArray<ReferenceDetails>()
 
                     newArr.Add(
-                        createReferenceDetails node.Key node.Position isOutgoing referenceLabel TypeDef assocType
+                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
                     )
 
                     res.TryAdd(typename, newArr) |> ignore

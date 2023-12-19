@@ -21,8 +21,8 @@ type ReferenceType =
     | TypeDefFuzzy
 
 type ReferenceDetails =
-    { name: string
-      originalValue: string
+    { name: StringTokens
+      originalValue: StringTokens
       position: range
       isOutgoing: bool
       referenceLabel: string option

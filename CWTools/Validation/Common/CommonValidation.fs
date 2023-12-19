@@ -165,9 +165,9 @@ module CommonValidation =
                         |> Option.defaultValue [])
                     |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                     |> List.map (fun ref ->
-                        {| effectName = ref.name
+                        {| effectName = ref.name.GetString()
                            callSite = ref.position
-                           seParams = findParams ref.position ref.name |})
+                           seParams = findParams ref.position (ref.name.GetString()) |})
                     |> List.groupBy (fun ref -> ref.effectName)
                     |> Map.ofList
                 // eprintfn "ar %A" allRefs
@@ -325,9 +325,9 @@ module CommonValidation =
                         |> Option.defaultValue [])
                     |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                     |> List.map (fun ref ->
-                        {| scriptName = ref.name
+                        {| scriptName = ref.name.GetString()
                            callSite = ref.position
-                           isParams = findParams ref.position ref.name |})
+                           isParams = findParams ref.position (ref.name.GetString()) |})
                     |> List.groupBy (fun ref -> ref.scriptName)
                     |> Map.ofList
                 // eprintfn "ar %A" allRefs
@@ -437,7 +437,7 @@ module CommonValidation =
 
             let findParams (referenceDetails: ReferenceDetails) =
                 //                logInfo (sprintf "vsvp %s" key)
-                let splitString = referenceDetails.originalValue.Split '|' |> List.ofArray
+                let splitString = referenceDetails.originalValue.GetString().Split '|' |> List.ofArray
 
                 let rec getParamsFromArray =
                     function
@@ -489,7 +489,7 @@ module CommonValidation =
                         |> Option.defaultValue [])
                     |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                     |> List.map (fun ref ->
-                        {| effectName = ref.name
+                        {| effectName = ref.name.GetString()
                            callSite = ref.position
                            seParams = findParams ref |})
                     |> List.groupBy (fun ref -> ref.effectName)
@@ -672,7 +672,7 @@ module CommonValidation =
                         checkTypeDef typename (
                             refs
                             |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
-                            |> List.map (fun r -> r.name)
+                            |> List.map (fun r -> r.name.GetString())
                         )
                     )
 
@@ -706,15 +706,15 @@ module CommonValidation =
                     match ref.referenceType with
                     | ReferenceType.TypeDefFuzzy
                     | ReferenceType.TypeDef ->
-                        match modifierTypes |> List.tryFind (fun t -> t.id = ref.name) with
+                        match modifierTypes |> List.tryFind (fun t -> t.id = ref.name.GetString()) with
                         | Some _ -> OK
                         | None ->
                             Invalid(
                                 Guid.NewGuid(),
                                 [ invManual
-                                      (ErrorCodes.UndefinedModifierTypeForModifier ref.name)
+                                      (ErrorCodes.UndefinedModifierTypeForModifier (ref.name.GetString()))
                                       ref.position
-                                      ref.name
+                                      (ref.name.GetString())
                                       None ]
                             )
                     | _ -> OK)
