@@ -218,76 +218,80 @@ type StringResourceManager() =
             res
         else
             lock monitor (fun () ->
-                let ls = s.ToLower().Trim('"')
-                let quoted = s.StartsWith "\"" && s.EndsWith "\""
-                let lok = strings.TryGetValue(ls, &res)
-
-                if lok then
-                    let stringID = i
-                    i <- i + 1
-                    let resn = StringTokens(res.lower, stringID, quoted)
-                    ints.[stringID] <- s
-                    metadata.[stringID] <- metadata.[res.lower]
-                    strings.[s] <- resn
-                    resn
+                let retry = strings.TryGetValue(s, &res)
+                if retry then
+                    res
                 else
-                    let stringID = i
-                    let lowID = i + 1
-                    i <- i + 2
-                    // eprintfn "%A" i
-                    let res = StringTokens(lowID, stringID, quoted)
-                    let resl = StringTokens(lowID, lowID, false)
-                   
+                    let ls = s.ToLower().Trim('"')
+                    let quoted = s.StartsWith "\"" && s.EndsWith "\""
+                    let lok = strings.TryGetValue(ls, &res)
 
-                    let (startsWithAmp,
-                         containsQuestionMark,
-                         containsHat,
-                         containsDoubleDollar,
-                         startsWithSquareBracket,
-                         containsPipe) =
-                        if ls.Length > 0 then
-                            let startsWithAmp = ls.[0] = '@'
-                            let containsQuestionMark = ls.IndexOf('?') >= 0
-                            let containsHat = ls.IndexOf('^') >= 0
-                            let first = ls.IndexOf('$')
-                            let last = ls.LastIndexOf('$')
-                            let containsDoubleDollar = first >= 0 && first <> last
-                            let startsWithSquareBracket = ls.[0] = '[' || ls.[0] = ']'
-                            let containsPipe = ls.IndexOf('|') >= 0
-                            // let quoted =
-                            startsWithAmp,
-                            containsQuestionMark,
-                            containsHat,
-                            containsDoubleDollar,
-                            startsWithSquareBracket,
-                            containsPipe
-                        else
-                            false, false, false, false, false, false
+                    if lok then
+                        let stringID = i
+                        i <- i + 1
+                        let resn = StringTokens(res.lower, stringID, quoted)
+                        ints.[stringID] <- s
+                        metadata.[stringID] <- metadata.[res.lower]
+                        strings.[s] <- resn
+                        resn
+                    else
+                        let stringID = i
+                        let lowID = i + 1
+                        i <- i + 2
+                        // eprintfn "%A" i
+                        let res = StringTokens(lowID, stringID, quoted)
+                        let resl = StringTokens(lowID, lowID, false)
+                       
 
-                    metadata.[lowID] <-
-                        StringMetadata(
-                            startsWithAmp,
-                            containsDoubleDollar,
-                            containsQuestionMark,
-                            containsHat,
-                            startsWithSquareBracket,
-                            containsPipe
-                        )
+                        let (startsWithAmp,
+                             containsQuestionMark,
+                             containsHat,
+                             containsDoubleDollar,
+                             startsWithSquareBracket,
+                             containsPipe) =
+                            if ls.Length > 0 then
+                                let startsWithAmp = ls.[0] = '@'
+                                let containsQuestionMark = ls.IndexOf('?') >= 0
+                                let containsHat = ls.IndexOf('^') >= 0
+                                let first = ls.IndexOf('$')
+                                let last = ls.LastIndexOf('$')
+                                let containsDoubleDollar = first >= 0 && first <> last
+                                let startsWithSquareBracket = ls.[0] = '[' || ls.[0] = ']'
+                                let containsPipe = ls.IndexOf('|') >= 0
+                                // let quoted =
+                                startsWithAmp,
+                                containsQuestionMark,
+                                containsHat,
+                                containsDoubleDollar,
+                                startsWithSquareBracket,
+                                containsPipe
+                            else
+                                false, false, false, false, false, false
 
-                    metadata.[stringID] <-
-                        StringMetadata(
-                            startsWithAmp,
-                            containsDoubleDollar,
-                            containsQuestionMark,
-                            containsHat,
-                            startsWithSquareBracket,
-                            containsPipe
-                        )
-                    ints.[lowID] <- ls
-                    ints.[stringID] <- s
-                    strings.[ls] <- resl
-                    strings.[s] <- res
-                    res)
+                        metadata.[lowID] <-
+                            StringMetadata(
+                                startsWithAmp,
+                                containsDoubleDollar,
+                                containsQuestionMark,
+                                containsHat,
+                                startsWithSquareBracket,
+                                containsPipe
+                            )
+
+                        metadata.[stringID] <-
+                            StringMetadata(
+                                startsWithAmp,
+                                containsDoubleDollar,
+                                containsQuestionMark,
+                                containsHat,
+                                startsWithSquareBracket,
+                                containsPipe
+                            )
+                        ints.[lowID] <- ls
+                        ints.[stringID] <- s
+                        strings.[ls] <- resl
+                        strings.[s] <- res
+                        res)
 
     member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]
     member x.GetLowerStringForIDs(id: StringTokens) = ints.[id.lower]

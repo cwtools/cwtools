@@ -83,6 +83,12 @@ module Types =
             | Bool b -> if b then "yes" else "no"
             | Float f -> f.ToString(CultureInfo.InvariantCulture)
             | Int i -> $"%i{i}"
+        
+        member x.ToStringId() =
+            match x with
+            | String stringTokens -> stringTokens
+            | QString stringTokens -> stringTokens
+            | _ -> StringResource.stringManager.InternIdentifierToken (x.ToString())
 
     and [<CustomEquality; NoComparison; Struct>] PosKeyValue =
         | PosKeyValue of range * KeyValueItem

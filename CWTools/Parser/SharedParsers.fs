@@ -187,12 +187,12 @@ module internal SharedParsers =
         <?> "quoted key"
 
     let valueS =
-        (many1SatisfyL isvaluechar "value character") |>> string  |>> (StringResource.stringManager.InternIdentifierToken) |>> String <?> "string"
+        (many1SatisfyL isvaluechar "value character") |>> string  |>> (fun x -> StringResource.stringManager.InternIdentifierToken x) |>> String <?> "string"
 
     // let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
     let valueQ =
         betweenL (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string"
-        |>> (StringResource.stringManager.InternIdentifierToken) |>>  QString
+        |>> (fun x -> StringResource.stringManager.InternIdentifierToken x) |>>  QString
         <?> "quoted string"
 
     // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
@@ -281,7 +281,7 @@ module internal SharedParsers =
 
     let metaprograming =
         pipe3 (pstring "@\\[") metaprogrammingCharSnippet (ch ']') (fun a b c -> (a + b + string c))
-        |>> (StringResource.stringManager.InternIdentifierToken) |>> String
+        |>> (fun x -> StringResource.stringManager.InternIdentifierToken x) |>> String
     // Complex types
     // =======
 
