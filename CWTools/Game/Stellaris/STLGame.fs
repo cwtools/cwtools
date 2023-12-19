@@ -504,7 +504,6 @@ type STLGame(setupSettings: StellarisSettings) =
             |> Option.defaultValue false
           localisationValidators =
             [ valTechLocs
-              valCompSetLocs
               valPolicies ]
 
         }

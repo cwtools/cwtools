@@ -208,47 +208,7 @@ module STLLocalisationValidation =
                 keyres <&&> innerKeys <&&> gatewayres <&&> flagres <&&> flagdescres)
             |> List.fold (<&&>) OK
 
-
-    let valCompSetLocs: LocalisationValidator =
-        fun _ keys es ->
-            let entities = es.GlobMatchChildren("**/common/component_sets/*.txt")
-
-            entities
-            |> List.map (fun (node: Node) ->
-                let key = node.Key
-
-                let required =
-                    node.Tag "required_component_set"
-                    |> (function
-                    | Some(Bool b) when b = true -> true
-                    | _ -> false)
-
-                match key, required with
-                | "component_set", false -> checkLocNodeTagAdvs keys "" [ ""; "_DESC" ] "key" node
-                | _ -> OK)
-            |> List.fold (<&&>) OK
-
-
-    // let valBuildingLocs : LocalisationValidator =
-    //     fun _ keys es ->
-    //         let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
-    //         let inner =
-    //             fun (node : Node) ->
-    //                 let keyres = checkKeyAndDesc keys node
-    //                 //let failtext = node.Children <&!&> ((checkLocNodeTag keys "text") <&> (checkLocNodeTag keys "fail_text"))
-    //                 //let failtext = node.Children |> List.map ((checkLocNodeTag keys "text") <&> (checkLocNodeTag keys "fail_text")) |> List.fold (<&&>) OK
-    //                 let failtext = node.Children <&!&> (getLocKeys keys ["text"; "fail_text"])
-    //                 keyres <&&> failtext
-    //         entities |> List.map inner |> List.fold (<&&>) OK
-
-    // let valScriptedTriggers : LocalisationValidator =
-    //     fun _ keys es ->
-    //         let entities = es.GlobMatchChildren("**/common/scripted_triggers/*.txt")
-    //         let inner =
-    //             fun (node : Node) ->
-    //                 node.Children <&!&> (getLocKeys keys ["text"; "fail_text"])
-    //         entities |> List.map inner |> List.fold (<&&>) OK
-
+    
     let valPolicies: LocalisationValidator =
         fun _ keys es ->
             let policies = es.GlobMatchChildren("**/common/policies/*.txt")
