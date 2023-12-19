@@ -77,7 +77,7 @@ and Leaf =
         with get () = this._value
         and set value =
             this._value <- value
-            this._valueId <- value.ToStringId()
+            this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
         StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
@@ -87,7 +87,7 @@ and Leaf =
 
     new(key: string, value: Value, pos: range, op: Operator) =
         { KeyId = StringResource.stringManager.InternIdentifierToken(key)
-          _valueId = value.ToStringId()
+          _valueId = StringResource.stringManager.InternIdentifierToken(value.ToString())
           _value = value
           Position = pos
           Operator = op
