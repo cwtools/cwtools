@@ -1,5 +1,6 @@
 ﻿namespace CWTools.Parser
 
+open CWTools.Utilities
 open FParsec
 open CWTools.Utilities.Position
 open Types
@@ -186,12 +187,12 @@ module internal SharedParsers =
         <?> "quoted key"
 
     let valueS =
-        (many1SatisfyL isvaluechar "value character") |>> string |>> String <?> "string"
+        (many1SatisfyL isvaluechar "value character") |>> string  |>> (StringResource.stringManager.InternIdentifierToken) |>> String <?> "string"
 
     // let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
     let valueQ =
         betweenL (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string"
-        |>> QString
+        |>> (StringResource.stringManager.InternIdentifierToken) |>>  QString
         <?> "quoted string"
 
     // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
@@ -280,7 +281,7 @@ module internal SharedParsers =
 
     let metaprograming =
         pipe3 (pstring "@\\[") metaprogrammingCharSnippet (ch ']') (fun a b c -> (a + b + string c))
-        |>> String
+        |>> (StringResource.stringManager.InternIdentifierToken) |>> String
     // Complex types
     // =======
 

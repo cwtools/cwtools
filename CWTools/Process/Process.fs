@@ -7,6 +7,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
 open CWTools.Common.NewScope
+open CWTools.Utilities.StringResource
 
 
 module List =
@@ -261,14 +262,14 @@ and ValueClause(keys: Value[], pos: range) =
     member this.TagText x =
         this.Tag x
         |> function
-            | Some(QString s) -> s
+            | Some(QString s) -> s.GetString()
             | Some s -> s.ToString()
             | None -> ""
 
     member this.TagsText x =
         this.Tags x
         |> Seq.map (function
-            | QString s -> s
+            | QString s -> s.GetString()
             | s -> s.ToString())
 
     member this.SetTag x v =
@@ -315,7 +316,7 @@ and ValueClause(keys: Value[], pos: range) =
                 let keys =
                     vc.Keys
                     |> Array.map (fun k ->
-                        Value(range.Zero, Value.String(StringResource.stringManager.GetStringForID k.normal)))
+                        Value(range.Zero, Value.String(k)))
                     |> List.ofArray
 
                 keys @ [ Value(vc.Position, Value.Clause vc.ToRaw) ]
@@ -509,14 +510,14 @@ and Node(key: string, pos: range) =
     member this.TagText x =
         this.Tag x
         |> function
-            | Some(QString s) -> s
+            | Some(QString s) -> s.GetString()
             | Some s -> s.ToString()
             | None -> ""
 
     member this.TagsText x =
         this.Tags x
         |> Seq.map (function
-            | QString s -> s
+            | QString s -> s.GetString()
             | s -> s.ToString())
 
     member this.SetTag x v =
@@ -545,7 +546,7 @@ and Node(key: string, pos: range) =
                     let keys =
                         vc.Keys
                         |> Array.map (fun k ->
-                            Value(range.Zero, Value.String(StringResource.stringManager.GetStringForID k.normal)))
+                            Value(range.Zero, Value.String(k)))
                         |> List.ofArray
 
                     keys @ [ Value(vc.Position, Value.Clause vc.ToRaw) ]

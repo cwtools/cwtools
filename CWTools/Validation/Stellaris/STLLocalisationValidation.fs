@@ -43,7 +43,7 @@ module STLLocalisationValidation =
         let key =
             leaf.Value
             |> (function
-            | QString s -> s
+            | QString s -> s.GetString()
             | s -> s.ToString())
 
         keys

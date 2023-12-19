@@ -12,6 +12,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
 open System.Threading.Tasks
+open CWTools.Utilities.StringResource
 
 // Fuzzy = prefix/suffix
 type ReferenceType =
@@ -649,6 +650,9 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                         let rec foldOverNode stringReplacer (node: Node) =
                             node.Key <- stringReplacer node.Key
+                            let stringTokenReplace (token : StringTokens) =
+                                let res = stringReplacer (token.GetString())
+                                StringResource.stringManager.InternIdentifierToken res
 
                             node.Values
                             |> List.iter (fun (l: Leaf) ->
@@ -656,16 +660,16 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                                 l.Value
                                 |> (function
-                                | Value.String s -> l.Value <- String(stringReplacer s)
-                                | Value.QString s -> l.Value <- QString(stringReplacer s)
+                                | Value.String s -> l.Value <- String(stringTokenReplace s)
+                                | Value.QString s -> l.Value <- QString(stringTokenReplace s)
                                 | _ -> ()))
 
                             node.LeafValues
                             |> Seq.iter (fun (l: LeafValue) ->
                                 l.Value
                                 |> (function
-                                | Value.String s -> l.Value <- String(stringReplacer s)
-                                | Value.QString s -> l.Value <- QString(stringReplacer s)
+                                | Value.String s -> l.Value <- String(stringTokenReplace s)
+                                | Value.QString s -> l.Value <- QString(stringTokenReplace s)
                                 | _ -> ()))
 
                             node.Children |> List.iter (foldOverNode stringReplacer)
@@ -691,7 +695,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                                     x)
                             // |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             | _ ->
-                                [ LeafValueC(LeafValue(Value.String $"Missing inline_script {scriptName}", n.Position)) ]
+                                [ LeafValueC(LeafValue(Value.String (stringManager.InternIdentifierToken $"Missing inline_script {scriptName}"), n.Position)) ]
                         else
                             replaceCataFun n
                             [ NodeC n ]
@@ -716,7 +720,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                                     x)
                             // |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             | _ ->
-                                [ LeafValueC(LeafValue(Value.String $"Missing inline_script {scriptName}", l.Position)) ]
+                                [ LeafValueC(LeafValue(Value.String ( stringManager.InternIdentifierToken $"Missing inline_script {scriptName}"), l.Position)) ]
                         else
                             [ LeafC l ]
                     | x -> [ x ]

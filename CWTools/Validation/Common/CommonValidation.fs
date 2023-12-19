@@ -2,6 +2,7 @@ namespace CWTools.Validation.Common
 
 open System
 open CWTools.Process
+open CWTools.Utilities
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Process.ProcessCore
@@ -192,16 +193,16 @@ module CommonValidation =
 
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer s)
-                        | Value.QString s -> l.Value <- QString(stringReplacer s)
+                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
                         | _ -> ()))
 
                     node.LeafValues
                     |> Seq.iter (fun (l: LeafValue) ->
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer s)
-                        | Value.QString s -> l.Value <- QString(stringReplacer s)
+                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
                         | _ -> ()))
 
                     node.Children |> List.iter (foldOverNode stringReplacer)
@@ -352,16 +353,16 @@ module CommonValidation =
 
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer s)
-                        | Value.QString s -> l.Value <- QString(stringReplacer s)
+                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
                         | _ -> ()))
 
                     node.LeafValues
                     |> Seq.iter (fun (l: LeafValue) ->
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer s)
-                        | Value.QString s -> l.Value <- QString(stringReplacer s)
+                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
                         | _ -> ()))
 
                     node.Children |> List.iter (foldOverNode stringReplacer)
@@ -516,16 +517,16 @@ module CommonValidation =
 
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer s)
-                        | Value.QString s -> l.Value <- QString(stringReplacer s)
+                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
                         | _ -> ()))
 
                     node.LeafValues
                     |> Seq.iter (fun (l: LeafValue) ->
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer s)
-                        | Value.QString s -> l.Value <- QString(stringReplacer s)
+                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
                         | _ -> ()))
 
                     node.Children |> List.iter (foldOverNode stringReplacer)

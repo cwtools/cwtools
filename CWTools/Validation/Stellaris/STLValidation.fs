@@ -38,7 +38,7 @@ module STLValidation =
                     x.Values
                     |> List.choose (fun v ->
                         match v.Value with
-                        | String s when s.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> Some v
+                        | String s when s.GetMetadata().startsWithAmp -> Some v
                         | _ -> None)
 
                 match values with

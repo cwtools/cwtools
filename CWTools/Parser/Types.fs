@@ -1,5 +1,6 @@
 namespace CWTools.Parser
 
+open CWTools.Utilities
 open CWTools.Utilities.Position
 open FParsec
 open System.Globalization
@@ -57,8 +58,8 @@ module Types =
             let (KeyValueItem(id, v, op)) = x in sprintf "%O %s %O" id (operatorToString op) v
 
     and Value =
-        | String of string
-        | QString of string
+        | String of StringTokens
+        | QString of StringTokens
         | Float of decimal
         | Int of int
         | Bool of bool
@@ -66,22 +67,22 @@ module Types =
 
         override x.ToString() =
             match x with
-            | Clause b -> "{ " + sprintf "%O" b + " }"
-            | QString s -> "\"" + s + "\""
-            | String s -> s
+            | Clause b -> "{ " + $"{b}" + " }"
+            | QString s -> "\"" + StringResource.stringManager.GetStringForIDs s + "\""
+            | String s -> StringResource.stringManager.GetStringForIDs s
             | Bool b -> if b then "yes" else "no"
             | Float f -> f.ToString(CultureInfo.InvariantCulture)
-            | Int i -> sprintf "%i" i
+            | Int i -> $"%i{i}"
 
 
         member x.ToRawString() =
             match x with
-            | Clause b -> "{ " + sprintf "%O" b + " }"
-            | QString s -> s
-            | String s -> s
+            | Clause b -> "{ " + $"{b}" + " }"
+            | QString s -> StringResource.stringManager.GetStringForIDs s
+            | String s -> StringResource.stringManager.GetStringForIDs s
             | Bool b -> if b then "yes" else "no"
             | Float f -> f.ToString(CultureInfo.InvariantCulture)
-            | Int i -> sprintf "%i" i
+            | Int i -> $"%i{i}"
 
     and [<CustomEquality; NoComparison; Struct>] PosKeyValue =
         | PosKeyValue of range * KeyValueItem
