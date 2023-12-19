@@ -1,6 +1,7 @@
 namespace CWTools.Utilities
 
 open System
+open System.Collections.Concurrent
 open System.Collections.Generic
 open CWTools.Utilities.Position
 open System.Globalization
@@ -197,11 +198,11 @@ type StringMetadata =
 [<Sealed>]
 type StringResourceManager() =
     // TODO: Replace with arrays?
-    let strings = new System.Collections.Generic.Dictionary<string, StringTokens>(1024)
-    let ints = new System.Collections.Generic.Dictionary<StringToken, string>(1024)
+    let strings = new ConcurrentDictionary<string, StringTokens>()
+    let ints = new ConcurrentDictionary<StringToken, string>()
 
     let metadata =
-        new System.Collections.Generic.Dictionary<StringToken, StringMetadata>(1024)
+        new ConcurrentDictionary<StringToken, StringMetadata>()
 
     let mutable i = 0
     // let mutable j = 0
@@ -225,9 +226,9 @@ type StringResourceManager() =
                     let stringID = i
                     i <- i + 1
                     let resn = StringTokens(res.lower, stringID, quoted)
-                    strings.[s] <- resn
                     ints.[stringID] <- s
                     metadata.[stringID] <- metadata.[res.lower]
+                    strings.[s] <- resn
                     resn
                 else
                     let stringID = i
@@ -236,10 +237,7 @@ type StringResourceManager() =
                     // eprintfn "%A" i
                     let res = StringTokens(lowID, stringID, quoted)
                     let resl = StringTokens(lowID, lowID, false)
-                    strings.[s] <- res
-                    strings.[ls] <- resl
-                    ints.[lowID] <- ls
-                    ints.[stringID] <- s
+                   
 
                     let (startsWithAmp,
                          containsQuestionMark,
@@ -285,7 +283,10 @@ type StringResourceManager() =
                             startsWithSquareBracket,
                             containsPipe
                         )
-
+                    ints.[lowID] <- ls
+                    ints.[stringID] <- s
+                    strings.[ls] <- resl
+                    strings.[s] <- res
                     res)
 
     member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]

@@ -1,5 +1,6 @@
 module Tests
 
+open CWToolsCLI
 open Expecto
 open Expecto.Logging
 open Expecto.Logging.Message
@@ -547,17 +548,18 @@ let embeddedTests =
         let files = fileManager.AllFilesByPath()
         let resources : IResourceAPI<STLComputedData> = ResourceManager<STLComputedData>(Compute.STL.computeSTLData (fun () -> None), Compute.STL.computeSTLDataUpdate (fun () -> None), Encoding.UTF8, Encoding.GetEncoding(1252), true).Api
         let entities = resources.UpdateFiles(files) |> List.choose (fun (r, e) -> e |> function |Some e2 -> Some (r, e2) |_ -> None) |> List.map (fun (r, (struct (e, _))) -> r, e)
-        let mkPickler (resolver : IPicklerResolver) =
-            let arrayPickler = resolver.Resolve<Leaf array> ()
-            let writer (w : WriteState) (ns : Lazy<Leaf array>) =
-                arrayPickler.Write w "value" (ns.Force())
-            let reader (r : ReadState) =
-                let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
-            Pickler.FromPrimitives(reader, writer)
-        let registry = new CustomPicklerRegistry()
-        do registry.RegisterFactory mkPickler
-        registry.DeclareSerializable<FParsec.Position>()
-        let cache = PicklerCache.FromCustomPicklerRegistry registry
+        // let mkPickler (resolver : IPicklerResolver) =
+        //     let arrayPickler = resolver.Resolve<Leaf array> ()
+        //     let writer (w : WriteState) (ns : Lazy<Leaf array>) =
+        //         arrayPickler.Write w "value" (ns.Force())
+        //     let reader (r : ReadState) =
+        //         let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
+        //     Pickler.FromPrimitives(reader, writer)
+        // let registry = new CustomPicklerRegistry()
+        // do registry.RegisterFactory mkPickler
+        // do registry.RegisterFactory mkConcurrentDictionaryPickler
+        // registry.DeclareSerializable<FParsec.Position>()
+        let cache = Serializer.picklerCache
         let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
         let data = { resources = entities; fileIndexTable = fileIndexTable; files = []; stringResourceManager = StringResource.stringManager}
         let pickle = binarySerializer.Pickle data

@@ -1,5 +1,7 @@
 module CWToolsCLI.Serializer
 
+open System.Collections.Concurrent
+open System.Collections.Generic
 open System.Text
 open CWTools.Common
 open System.IO
@@ -42,8 +44,18 @@ let mkPickler (resolver : IPicklerResolver) =
     let reader (r : ReadState) =
         let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
     Pickler.FromPrimitives(reader, writer)
+let mkConcurrentDictionaryPickler<'a, 'b> (resolver : IPicklerResolver) =
+    let dictionaryPickler = resolver.Resolve<KeyValuePair<_, _> []>()
+    let writer (w : WriteState) (dict : ConcurrentDictionary<'a, 'b>) =
+        dictionaryPickler.Write w "value" (dict.ToArray())
+    let reader (r : ReadState) =
+        let v = dictionaryPickler.Read r "value" in new ConcurrentDictionary<_, _>(v)
+    Pickler.FromPrimitives(reader, writer)
 let registry = new CustomPicklerRegistry()
 do registry.RegisterFactory mkPickler
+do registry.RegisterFactory mkConcurrentDictionaryPickler<int, string>
+do registry.RegisterFactory mkConcurrentDictionaryPickler<int, StringMetadata>
+do registry.RegisterFactory mkConcurrentDictionaryPickler<string, StringTokens>
 registry.DeclareSerializable<FParsec.Position>()
 let picklerCache = PicklerCache.FromCustomPicklerRegistry registry
 let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = picklerCache)
