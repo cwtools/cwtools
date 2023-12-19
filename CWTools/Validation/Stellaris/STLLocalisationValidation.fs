@@ -152,24 +152,6 @@ module STLLocalisationValidation =
         checkLocNodeTagAdvs keys "" [ "" ] tag node
 
 
-
-
-    let valEffectLocs: LocalisationValidator =
-        fun _ keys es ->
-            let fNode =
-                (fun (x: Node) children -> getLocKeys keys [ "custom_tooltip" ] x <&&> children)
-
-            let fCombine = (<&&>)
-            es.AllEffects <&!&> (foldNode2 fNode fCombine OK)
-
-    let valTriggerLocs: LocalisationValidator =
-        fun _ keys es ->
-            let fNode =
-                (fun (x: Node) children -> getLocKeys keys [ "custom_tooltip" ] x <&&> children)
-
-            let fCombine = (<&&>)
-            es.AllTriggers <&!&> (foldNode2 fNode fCombine OK)
-
     let valTechLocs: LocalisationValidator =
         fun _ keys es ->
             let entities = es.GlobMatchChildren("**/common/technology/*.txt")
@@ -247,37 +229,6 @@ module STLLocalisationValidation =
             |> List.fold (<&&>) OK
 
 
-
-    let valCompTempLocs: LocalisationValidator =
-        fun _ keys es ->
-            let entities = es.GlobMatchChildren("**/common/component_templates/*.txt")
-
-            let inner =
-                fun (node: Node) ->
-                    let keyres =
-                        match node.TagText "hidden", node.TagText "type" with
-                        | "yes", _ -> OK
-                        | _, "planet_killer" ->
-                            checkLocNodeTagAdvs keys "" [ ""; "_ACTION"; "_DESC" ] "key" node
-                            <&&> (checkLocNodeTagAdvs keys "FLEETORDER_DESTROY_PLANET_WITH_" [ "" ] "key" node)
-                            <&&> (checkLocNodeTagAdvs keys "MESSAGE_DESC_FOR_" [ "" ] "key" node)
-                        | _ ->
-                            node.Leafs "key"
-                            |> List.ofSeq
-                            |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
-
-                    let auras = Seq.append (node.Childs "friendly_aura") (node.Childs "hostile_aura")
-
-                    let aurares =
-                        auras
-                        |> List.ofSeq
-                        |> List.fold (fun s c -> s <&&> (getLocKeys keys [ "name" ] c)) OK
-
-                    keyres <&&> aurares
-
-            entities |> List.map inner |> List.fold (<&&>) OK
-
-
     // let valBuildingLocs : LocalisationValidator =
     //     fun _ keys es ->
     //         let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
@@ -302,7 +253,6 @@ module STLLocalisationValidation =
         fun _ keys es ->
             let policies = es.GlobMatchChildren("**/common/policies/*.txt")
             let options = policies |> Seq.collect (fun p -> p.Childs "option")
-            let inner = checkLocNodeKeyAdvs keys "policy_" [ ""; "_desc" ]
 
             let oinner =
                 fun (node: Node) ->
@@ -326,4 +276,4 @@ module STLLocalisationValidation =
                         OK
                     <&&> (checkLocNodeTagAdvs keys "" [ ""; "_desc" ] "name" node)
 
-            policies <&!&> inner <&&> (options <&!&> oinner)
+            (options <&!&> oinner)

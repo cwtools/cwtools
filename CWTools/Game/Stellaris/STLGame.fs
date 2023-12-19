@@ -505,10 +505,7 @@ type STLGame(setupSettings: StellarisSettings) =
           localisationValidators =
             [ valTechLocs
               valCompSetLocs
-              valCompTempLocs
-              valPolicies
-              valEffectLocs
-              valTriggerLocs ]
+              valPolicies ]
 
         }
 
