@@ -360,7 +360,7 @@ let perfSTL (b) =
     let stlsettings =
         { rootDirectories =
             [ WorkspaceDirectoryInput.WD
-                  { path = @"C:\Users\Thomas\Documents\Paradox Interactive\Hearts of Iron IV\mod\Test\"
+                  { path = @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\test_mod_inline\"
                     name = "test" } ]
           scriptFolders = folders
           excludeGlobPatterns = None
@@ -510,6 +510,9 @@ let main argv =
         perfSTL (true)
         0
     elif Array.tryHead argv = Some "S" then
+        perfSTL (true)
+        0
+    elif Array.tryHead argv = Some "stl-then-cache" then
         perfSTL (true)
         0
     else
