@@ -1,9 +1,9 @@
 planet_event = {
     is_triggered_only = yes
     desc = {
-        text = "test_required"
+        text = "test"
     }
-    desc = "test_required"
+    desc = "test"
     after ={
         save_global_event_target_as = defined_event
     }
