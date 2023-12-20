@@ -4,6 +4,8 @@
 type_per_file_test = my_ship_no_loc
 type_per_file_test = my_ship
 test = {
+    ## Not sure why two errors
+    #error
     #error
     my_ship_fake = test
 }

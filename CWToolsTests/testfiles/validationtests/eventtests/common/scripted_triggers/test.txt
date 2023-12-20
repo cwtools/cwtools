@@ -5,7 +5,7 @@ standard_archaeological_site_on_roll_failed_range_entry = {
 			"MIN" = $MIN$
 			"MAX" = $MAX$
 			"CLUES" = $CLUES$
-			"CHANCE" = @\[( 2 + ( $MAX$ + $DIE_MAX$ - |$MAX$ - $SCORE$ - $DIE_MAX$| ) - ( $MIN$ + $DIE_MIN$ + |$MIN$ - $SCORE$ - $DIE_MIN$| ) ) / ( 2*( $DIE_MAX$ -  $DIE_MIN$ + 1 ) )]
+			##"CHANCE" = @\[( 2 + ( $MAX$ + $DIE_MAX$ - |$MAX$ - $SCORE$ - $DIE_MAX$| ) - ( $MIN$ + $DIE_MIN$ + |$MIN$ - $SCORE$ - $DIE_MIN$| ) ) / ( 2*( $DIE_MAX$ -  $DIE_MIN$ + 1 ) )]
 			"SCORE" = $SCORE$
 		}
 	}
