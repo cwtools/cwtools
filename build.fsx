@@ -4,7 +4,6 @@ open Fake.DotNet
 // --------------------------------------------------------------------------------------
 
 #r "paket:
-    source https://api.nuget.org/v3/index.json
     nuget FSharp.Core 4.7.0.0
     nuget Microsoft.Build 17.3.2
     nuget Microsoft.Build.Framework 17.3.2
