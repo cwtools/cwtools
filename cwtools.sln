@@ -15,6 +15,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CWToolsDocs", "CWToolsDocs\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CWToolsScripts", "CWToolsScripts\CWToolsScripts.fsproj", "{EA21F6FF-7ADD-4FBC-8F9B-8DF24F76F4C0}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "build", "build\build.fsproj", "{C70093B5-7874-4B09-A5F9-41C47DE603B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,5 +102,17 @@ Global
 		{EA21F6FF-7ADD-4FBC-8F9B-8DF24F76F4C0}.Release|x64.Build.0 = Release|Any CPU
 		{EA21F6FF-7ADD-4FBC-8F9B-8DF24F76F4C0}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA21F6FF-7ADD-4FBC-8F9B-8DF24F76F4C0}.Release|x86.Build.0 = Release|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Debug|x64.Build.0 = Debug|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Debug|x86.Build.0 = Debug|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Release|x64.ActiveCfg = Release|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Release|x64.Build.0 = Release|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Release|x86.ActiveCfg = Release|Any CPU
+		{C70093B5-7874-4B09-A5F9-41C47DE603B5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
