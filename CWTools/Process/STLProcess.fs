@@ -13,6 +13,7 @@ module STLProcess =
         (strict: bool)
         (effects: Effect seq)
         (triggers: Effect seq)
+        (triggersAndEffects : Effect seq)
         (scopedEffects : ScopedEffect seq)
         (root: string)
         (node: Node)
@@ -21,7 +22,6 @@ module STLProcess =
             [ "OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect" ]
 
         let triggerBlockKeys = [ "limit" ] //@ targetKeys
-        let triggersAndEffects = Seq.append effects triggers
 
         let nodeScopes =
             node.Children
@@ -32,9 +32,9 @@ module STLProcess =
                 // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
-                    scriptedTriggerScope strict effects triggers scopedEffects root x
+                    scriptedTriggerScope strict effects triggers triggersAndEffects scopedEffects root x
                 | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
-                    scriptedTriggerScope strict triggers triggers scopedEffects root x
+                    scriptedTriggerScope strict triggers triggers triggersAndEffects scopedEffects root x
                 | x -> Scopes.STL.sourceScope scopedEffects x.Key |> Set.ofList
             // match STLScopes.sourceScope x.Key with
             // | Some v -> v
@@ -148,7 +148,8 @@ module STLProcess =
         (scopedEffects: ScopedEffect seq)
         ((node, comments): Node * string list)
         =
-        let scopes = scriptedTriggerScope (not firstRun) effects triggers scopedEffects node.Key node
+        let triggersAndEffects = Seq.append effects triggers |> Array.ofSeq
+        let scopes = scriptedTriggerScope (not firstRun) effects triggers triggersAndEffects scopedEffects node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node
