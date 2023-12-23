@@ -13,6 +13,7 @@ module STLProcess =
         (strict: bool)
         (effects: Effect seq)
         (triggers: Effect seq)
+        (scopedEffects : ScopedEffect seq)
         (root: string)
         (node: Node)
         =
@@ -31,10 +32,10 @@ module STLProcess =
                 // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
-                    scriptedTriggerScope strict effects triggers root x
+                    scriptedTriggerScope strict effects triggers scopedEffects root x
                 | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
-                    scriptedTriggerScope strict triggers triggers root x
-                | x -> Scopes.STL.sourceScope effects x.Key |> Set.ofList
+                    scriptedTriggerScope strict triggers triggers scopedEffects root x
+                | x -> Scopes.STL.sourceScope scopedEffects x.Key |> Set.ofList
             // match STLScopes.sourceScope x.Key with
             // | Some v -> v
             // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
@@ -144,9 +145,10 @@ module STLProcess =
         (effectType: EffectType)
         (effects: Effect seq)
         (triggers: Effect seq)
+        (scopedEffects: ScopedEffect seq)
         ((node, comments): Node * string list)
         =
-        let scopes = scriptedTriggerScope (not firstRun) effects triggers node.Key node
+        let scopes = scriptedTriggerScope (not firstRun) effects triggers scopedEffects node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node
