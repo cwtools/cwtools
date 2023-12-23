@@ -11,8 +11,8 @@ module STLProcess =
     //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
-        (effects: Effect list)
-        (triggers: Effect list)
+        (effects: Effect seq)
+        (triggers: Effect seq)
         (root: string)
         (node: Node)
         =
@@ -20,6 +20,7 @@ module STLProcess =
             [ "OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect" ]
 
         let triggerBlockKeys = [ "limit" ] //@ targetKeys
+        let triggersAndEffects = Seq.append effects triggers
 
         let nodeScopes =
             node.Children
@@ -47,8 +48,8 @@ module STLProcess =
                     scopeManager.AllScopes |> Set.ofList
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
-                    (effects @ triggers)
-                    |> List.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
+                    triggersAndEffects
+                    |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
                     |> (function
                     | Some e -> e.ScopesSet
                     | None -> Set.empty))
@@ -141,8 +142,8 @@ module STLProcess =
     let getScriptedTriggerScope
         (firstRun: bool)
         (effectType: EffectType)
-        (effects: Effect list)
-        (triggers: Effect list)
+        (effects: Effect seq)
+        (triggers: Effect seq)
         ((node, comments): Node * string list)
         =
         let scopes = scriptedTriggerScope (not firstRun) effects triggers node.Key node

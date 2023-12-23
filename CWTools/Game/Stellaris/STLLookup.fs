@@ -58,11 +58,13 @@ module STLLookup =
         let ff () =
             i <- i + 1
             let before = final
+            let vanillaAndFinal = Seq.append vanillaTriggers final
 
+            // let mergedTriggers = 
             final <-
                 rawTriggers
                 |> PSeq.map (fun t ->
-                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger final (vanillaTriggers @ final) t)
+                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger final vanillaAndFinal t)
                     :> Effect)
                 |> List.ofSeq
 

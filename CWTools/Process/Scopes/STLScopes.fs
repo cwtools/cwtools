@@ -37,7 +37,7 @@ module STL =
     let changeScope: bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> PrefixOptimisedStringSet -> string -> ScopeContext -> ScopeResult =
         Scopes.createChangeScope oneToOneScopes (Scopes.simpleVarPrefixFun "var:") true
 
-    let sourceScope (effects: Effect list) (key: string) =
+    let sourceScope (effects: Effect seq) (key: string) =
         let key =
             if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then
                 key.Substring(7)
@@ -55,10 +55,10 @@ module STL =
             | None ->
                 let effect =
                     effects
-                    |> List.choose (function
+                    |> Seq.choose (function
                         | :? ScopedEffect as e -> Some e
                         | _ -> None)
-                    |> List.tryFind (fun e -> e.Name.lower = nextKey.lower)
+                    |> Seq.tryFind (fun e -> e.Name.lower = nextKey.lower)
 
                 match effect with
                 | None -> None
