@@ -148,7 +148,7 @@ module STLProcess =
         (scopedEffects: ScopedEffect seq)
         ((node, comments): Node * string list)
         =
-        let triggersAndEffects = Seq.append effects triggers |> Array.ofSeq
+        let triggersAndEffects = Seq.append effects triggers
         let scopes = scriptedTriggerScope (not firstRun) effects triggers triggersAndEffects scopedEffects node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
