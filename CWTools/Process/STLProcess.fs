@@ -14,7 +14,7 @@ module STLProcess =
         (strict: bool)
         (vanillaTriggersAndEffects : Map<StringToken, Set<Scope>>)
         (newTriggersAndEffects : Map<StringToken, Set<Scope>>)
-        (scopedEffects : ScopedEffect seq)
+        (scopedEffects : Map<StringToken, Scope list>)
         (root: string)
         (node: Node)
         =
@@ -146,7 +146,7 @@ module STLProcess =
     let getScriptedTriggerScope
         (firstRun: bool)
         (effectType: EffectType)
-        (scopedEffects: ScopedEffect seq)
+        (scopedEffects: Map<StringLowerToken, Scope list>)
         (vanillaTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
         (newTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
         ((node, comments): Node * string list)

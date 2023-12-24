@@ -51,8 +51,10 @@ module STLLookup =
                 | _ -> None)
             |> List.collect getChildrenWithComments
 
-        let scopedEffects = vanillaTriggers |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> Array.ofSeq
+        let scopedEffects = vanillaTriggers
+                                |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                                |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
+                                |> Map.ofSeq
                                 
         let vanillaTriggerMap =
                 vanillaTriggers
@@ -102,7 +104,8 @@ module STLLookup =
             |> List.collect getChildrenWithComments
 
         let scopedEffects = vanillaEffects |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> Array.ofSeq
+                                |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
+                                |> Map.ofSeq
         let vanillaBothMap =
                 Seq.append vanillaEffects scriptedTriggers
                 |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))

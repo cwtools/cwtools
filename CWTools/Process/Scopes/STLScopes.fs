@@ -8,7 +8,7 @@ open CWTools.Utilities.Utils2
 
 module STL =
     open CWTools.Utilities.Utils
-    open Microsoft.FSharp.Collections.Tagged
+    // open Microsoft.FSharp.Collections.Tagged
 
     let defaultDesc = "Scope (/context) switch"
 
@@ -37,7 +37,7 @@ module STL =
     let changeScope: bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> PrefixOptimisedStringSet -> string -> ScopeContext -> ScopeResult =
         Scopes.createChangeScope oneToOneScopes (Scopes.simpleVarPrefixFun "var:") true
 
-    let sourceScope (effects: ScopedEffect seq) (key: string) =
+    let sourceScope (effects: Map<StringLowerToken, Scope list>) (key: string) =
         let key =
             if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then
                 key.Substring(7)
@@ -46,17 +46,18 @@ module STL =
 
         let keys = key.Split('.') |> List.ofArray
 
-        let inner (nextKey: string) =
+        let inner (nextKey: string) : Scope list option =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             let nextKey = StringResource.stringManager.InternIdentifierToken nextKey
 
             match onetoone with
             | Some _ -> None
             | None ->
-                match (effects
-                       |> Seq.tryFind (fun e -> e.Name.lower = nextKey.lower)) with
-                | None -> None
-                | Some e -> Some e.Scopes
+                Map.tryFind nextKey.lower effects
+                // match (effects
+                       // |> Seq.tryFind (fun e -> e.Name.lower = nextKey.lower)) with
+                // | None -> None
+                // | Some e -> Some e.Scopes
 
         keys
         |> List.fold
