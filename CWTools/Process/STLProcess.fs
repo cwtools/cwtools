@@ -12,9 +12,8 @@ module STLProcess =
     //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
-        (effects: Effect seq)
-        (triggers: Effect seq)
-        (triggersAndEffects : Map<StringToken, Set<Scope>>)
+        (vanillaTriggersAndEffects : Map<StringToken, Set<Scope>>)
+        (newTriggersAndEffects : Map<StringToken, Set<Scope>>)
         (scopedEffects : ScopedEffect seq)
         (root: string)
         (node: Node)
@@ -33,9 +32,9 @@ module STLProcess =
                 // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
-                    scriptedTriggerScope strict effects triggers triggersAndEffects scopedEffects root x
+                    scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
                 | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
-                    scriptedTriggerScope strict triggers triggers triggersAndEffects scopedEffects root x
+                    scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
                 | x -> Scopes.STL.sourceScope scopedEffects x.Key |> Set.ofList
             // match STLScopes.sourceScope x.Key with
             // | Some v -> v
@@ -50,8 +49,9 @@ module STLProcess =
                     scopeManager.AllScopes |> Set.ofList
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
-                    triggersAndEffects
+                    vanillaTriggersAndEffects
                     |> Map.tryFind x.KeyId.normal
+                    |> Option.orElse (Map.tryFind x.KeyId.normal newTriggersAndEffects)
                     |> Option.defaultValue Set.empty)
                     // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
                     // |> (function
@@ -146,13 +146,12 @@ module STLProcess =
     let getScriptedTriggerScope
         (firstRun: bool)
         (effectType: EffectType)
-        (effects: Effect seq)
-        (triggers: Effect seq)
         (scopedEffects: ScopedEffect seq)
-        (triggerAndEffectMap : Map<StringToken, Set<Scope>>)
+        (vanillaTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
+        (newTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
         ((node, comments): Node * string list)
         =
-        let scopes = scriptedTriggerScope (not firstRun) effects triggers triggerAndEffectMap scopedEffects node.Key node
+        let scopes = scriptedTriggerScope (not firstRun) vanillaTriggerAndEffectMap newTriggerAndEffectMap scopedEffects node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node

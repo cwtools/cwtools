@@ -51,21 +51,25 @@ module STLLookup =
                 | _ -> None)
             |> List.collect getChildrenWithComments
 
-        let mutable final = vanillaTriggers
+        let scopedEffects = vanillaTriggers |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                                |> Array.ofSeq
+                                
+        let vanillaTriggerMap =
+                vanillaTriggers
+                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                |> Map.ofSeq
+        let mutable final : Effect list = List.empty
         let mutable i = 0
         let mutable first = true
 
         let ff () =
             i <- i + 1
             let before = final
-            let vanillaAndFinal = Seq.append vanillaTriggers final
-                                    |> Array.ofSeq
-            let scopedEffects = final |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> Array.ofSeq
-            let effectsInput = final
-            let triggersInput = vanillaAndFinal
+            // let vanillaAndFinal = Seq.append vanillaTriggers final
+                                    // |> Array.ofSeq
             let triggerAndEffectMap =
-                Seq.append effectsInput triggersInput
+                final
+                // Seq.append effectsInput triggersInput
                 |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
                 |> Map.ofSeq
 
@@ -73,7 +77,7 @@ module STLLookup =
             final <-
                 rawTriggers
                 |> PSeq.map (fun t ->
-                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger effectsInput triggersInput scopedEffects triggerAndEffectMap t)
+                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger scopedEffects vanillaTriggerMap triggerAndEffectMap t)
                     :> Effect)
                 |> List.ofSeq
 
@@ -97,23 +101,27 @@ module STLLookup =
                 | _ -> None)
             |> List.collect getChildrenWithComments
 
-        let mutable final = vanillaEffects
+        let scopedEffects = vanillaEffects |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                                |> Array.ofSeq
+        let vanillaBothMap =
+                Seq.append vanillaEffects scriptedTriggers
+                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                |> Map.ofSeq
+        let mutable final : Effect list = List.empty
         let mutable i = 0
         let mutable first = true
 
         let ff () =
             i <- i + 1
             let before = final
-            let vanillaAndFinal = Seq.append final vanillaEffects
-                                    |> Array.ofSeq
+            // let vanillaAndFinal = Seq.append final 
+                                    // |> Array.ofSeq
 
-            let scopedEffects = vanillaAndFinal |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> Array.ofSeq
-            let effectsInput = vanillaAndFinal
-            let triggersInput = scriptedTriggers
+            // let effectsInput = vanillaAndFinal
+            // let triggersInput = scriptedTriggers
             
-            let triggerAndEffectMap =
-                Seq.append effectsInput triggersInput
+            let newFoundMap =
+                final
                 |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
                 |> Map.ofSeq
             final <-
@@ -122,10 +130,9 @@ module STLLookup =
                     (STLProcess.getScriptedTriggerScope
                         first
                         EffectType.Effect
-                        effectsInput
-                        triggersInput
                         scopedEffects
-                        triggerAndEffectMap
+                        vanillaBothMap
+                        newFoundMap
                         e)
                     :> Effect)
                 |> List.ofSeq
