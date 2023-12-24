@@ -62,12 +62,18 @@ module STLLookup =
                                     |> Array.ofSeq
             let scopedEffects = final |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                                 |> Array.ofSeq
+            let effectsInput = final
+            let triggersInput = vanillaAndFinal
+            let triggerAndEffectMap =
+                Seq.append effectsInput triggersInput
+                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                |> Map.ofSeq
 
             // let mergedTriggers = 
             final <-
                 rawTriggers
                 |> PSeq.map (fun t ->
-                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger final vanillaAndFinal scopedEffects t)
+                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger effectsInput triggersInput scopedEffects triggerAndEffectMap t)
                     :> Effect)
                 |> List.ofSeq
 
@@ -103,15 +109,23 @@ module STLLookup =
 
             let scopedEffects = vanillaAndFinal |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                                 |> Array.ofSeq
+            let effectsInput = vanillaAndFinal
+            let triggersInput = scriptedTriggers
+            
+            let triggerAndEffectMap =
+                Seq.append effectsInput triggersInput
+                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                |> Map.ofSeq
             final <-
                 rawEffects
                 |> PSeq.map (fun e ->
                     (STLProcess.getScriptedTriggerScope
                         first
                         EffectType.Effect
-                        vanillaAndFinal
-                        scriptedTriggers
+                        effectsInput
+                        triggersInput
                         scopedEffects
+                        triggerAndEffectMap
                         e)
                     :> Effect)
                 |> List.ofSeq

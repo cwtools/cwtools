@@ -3,6 +3,7 @@ namespace CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System
+open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Common
 
@@ -13,7 +14,7 @@ module STLProcess =
         (strict: bool)
         (effects: Effect seq)
         (triggers: Effect seq)
-        (triggersAndEffects : Effect seq)
+        (triggersAndEffects : Map<StringToken, Set<Scope>>)
         (scopedEffects : ScopedEffect seq)
         (root: string)
         (node: Node)
@@ -50,10 +51,12 @@ module STLProcess =
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
                     triggersAndEffects
-                    |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
-                    |> (function
-                    | Some e -> e.ScopesSet
-                    | None -> Set.empty))
+                    |> Map.tryFind x.KeyId.normal
+                    |> Option.defaultValue Set.empty)
+                    // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
+                    // |> (function
+                    // | Some e -> e.ScopesSet
+                    // | None -> Set.empty))
 
         let combinedScopes =
             nodeScopes @ valueScopes
@@ -146,10 +149,10 @@ module STLProcess =
         (effects: Effect seq)
         (triggers: Effect seq)
         (scopedEffects: ScopedEffect seq)
+        (triggerAndEffectMap : Map<StringToken, Set<Scope>>)
         ((node, comments): Node * string list)
         =
-        let triggersAndEffects = Seq.append effects triggers
-        let scopes = scriptedTriggerScope (not firstRun) effects triggers triggersAndEffects scopedEffects node.Key node
+        let scopes = scriptedTriggerScope (not firstRun) effects triggers triggerAndEffectMap scopedEffects node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node
