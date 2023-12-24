@@ -137,7 +137,8 @@ module CK2Localisation =
                 { key = k
                   value = None
                   desc = v
-                  position = p })
+                  position = p
+                  errorRange = None })
             |> Map.ofSeq
 
         let values lang =

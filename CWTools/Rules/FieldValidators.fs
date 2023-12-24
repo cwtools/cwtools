@@ -459,7 +459,8 @@ module internal FieldValidators =
                     { CWTools.Localisation.Entry.key = "inline"
                       CWTools.Localisation.Entry.value = None
                       CWTools.Localisation.Entry.desc = key
-                      CWTools.Localisation.Entry.position = leafornode.Position }
+                      CWTools.Localisation.Entry.position = leafornode.Position
+                      CWTools.Localisation.Entry.errorRange = None }
 
                 let proc =
                     processLocalisation (defaultLang, Collections.Map.ofList [ "inline", entry ])

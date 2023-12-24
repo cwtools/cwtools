@@ -10,7 +10,8 @@ type Entry =
     { key: string
       value: char option
       desc: string
-      position: range }
+      position: range
+      errorRange : range option }
 
 type GetDesc = string -> string
 type GetKeys = string list
