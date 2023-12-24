@@ -13,8 +13,8 @@ module STLProcess =
     //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
-        (vanillaTriggersAndEffects : Dictionary<StringToken, Set<Scope>>)
-        (newTriggersAndEffects : Map<StringToken, Set<Scope>>)
+        (vanillaTriggersAndEffects : Dictionary<StringToken, Scope list>)
+        (newTriggersAndEffects : Map<StringToken, Scope list>)
         (scopedEffects : Map<StringToken, Scope list>)
         (root: string)
         (node: Node)
@@ -51,9 +51,10 @@ module STLProcess =
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
-                    | true, scopeSet -> scopeSet
+                    | true, scopeSet -> scopeSet |> Set.ofList
                     | false, _ -> 
                        (Map.tryFind x.KeyId.normal newTriggersAndEffects)
+                        |> Option.map Set.ofList
                     |> Option.defaultValue Set.empty)
                     // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
                     // |> (function
@@ -149,8 +150,8 @@ module STLProcess =
         (firstRun: bool)
         (effectType: EffectType)
         (scopedEffects: Map<StringLowerToken, Scope list>)
-        (vanillaTriggerAndEffectDict : Dictionary<StringToken, Set<Scope>>)
-        (newTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
+        (vanillaTriggerAndEffectDict : Dictionary<StringToken, Scope list>)
+        (newTriggerAndEffectMap : Map<StringToken, Scope list>)
         ((node, comments): Node * string list)
         =
         let scopes = scriptedTriggerScope (not firstRun) vanillaTriggerAndEffectDict newTriggerAndEffectMap scopedEffects node.Key node

@@ -58,8 +58,8 @@ module STLLookup =
                                 |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
                                 |> Map.ofSeq
                                 
-        let vanillaTriggerDictionary = Dictionary<StringToken, Set<Scope>>()
-        vanillaTriggers |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.ScopesSet)
+        let vanillaTriggerDictionary = Dictionary<StringToken, Scope list>()
+        vanillaTriggers |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.Scopes)
         // let vanillaTriggerMap =
                 // vanillaTriggers
                 // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
@@ -75,7 +75,7 @@ module STLLookup =
             let triggerAndEffectMap =
                 final
                 // Seq.append effectsInput triggersInput
-                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                |> Seq.map (fun e -> (e.Name.normal, e.Scopes))
                 |> Map.ofSeq
 
             // let mergedTriggers = 
@@ -109,9 +109,9 @@ module STLLookup =
         let scopedEffects = vanillaEffects |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                                 |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
                                 |> Map.ofSeq
-        let vanillaBothDictionary = Dictionary<StringToken, Set<Scope>>()
+        let vanillaBothDictionary = Dictionary<StringToken, Scope list>()
         Seq.append vanillaEffects scriptedTriggers
-            |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <-  x.ScopesSet)
+            |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <-  x.Scopes)
         // let vanillaBothMap =
                 // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
                 // |> Map.ofSeq
@@ -130,7 +130,7 @@ module STLLookup =
             
             let newFoundMap =
                 final
-                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                |> Seq.map (fun e -> (e.Name.normal, e.Scopes))
                 |> Map.ofSeq
             final <-
                 rawEffects

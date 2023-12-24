@@ -552,7 +552,6 @@ type ReferenceHint =
 type Effect internal (name, scopes, effectType, refHint) =
     member val Name: StringTokens = name
     member val Scopes: Scope list = scopes
-    member this.ScopesSet = this.Scopes |> Set.ofList
     member val Type: EffectType = effectType
     member val RefHint: ReferenceHint option = refHint
 
