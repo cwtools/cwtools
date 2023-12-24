@@ -48,7 +48,7 @@ module YAMLLocalisationParser =
             let errorRange = if endofValid <> e then Some (getRange endofValid e) else None
             { key = k
               value = v
-              desc = validDesc + "ZZZ" + invalidDesc
+              desc = validDesc + invalidDesc
               position = getRange s e
               errorRange = errorRange })
         <?> "entry"
