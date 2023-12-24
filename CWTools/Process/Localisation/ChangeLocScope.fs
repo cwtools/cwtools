@@ -39,7 +39,8 @@ type LocEntry =
       refs: string list
       commands: string list
       jominiCommands: JominiLocCommand list list
-      scopes: LocContextResult list }
+      scopes: LocContextResult list
+      errorRanges : range option }
 
 type LegacyLocDynamicsSettings =
     {

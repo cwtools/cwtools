@@ -121,6 +121,11 @@ module LocalisationString =
         (keys: (Lang * LocKeySet) list)
         (api: (Lang * Map<string, LocEntry>) list)
         =
+        let validateInvalidChars _ (e: LocEntry) =
+            match e.errorRanges with
+            | None -> OK
+            | Some value ->
+                Invalid(Guid.NewGuid(), [ invManual (ErrorCodes.LocInvalidChars e.key) value e.key None ])
         let validateQuotes _ (e: LocEntry) =
             let desc = e.desc.Trim()
             // let lastHash = desc.LastIndexOf "#"
@@ -196,7 +201,8 @@ module LocalisationString =
                   |> Map.toList
                   |> List.map snd
                   |> List.fold (<&&>) OK)
-            <&&> (m |> Map.map validateQuotes |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
+            <&&> (m |> Map.map (validateQuotes ) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
+            <&&> (m |> Map.map (validateInvalidChars ) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
 
 
         let validateReplaceMe (lang, m: Map<string, LocEntry>) =
@@ -246,7 +252,8 @@ module LocalisationString =
                     | _ -> None)
               commands = commands
               jominiCommands = []
-              scopes = commands |> List.map (fun s -> localisationCommandValidator defaultContext s) }
+              scopes = commands |> List.map (fun s -> localisationCommandValidator defaultContext s)
+              errorRanges = m.errorRange }
 
         api
         |> (fun (lang, entries) -> lang, entries |> Map.map (fun _ entry -> processEntry entry))
@@ -286,7 +293,8 @@ module LocalisationString =
               jominiCommands = commands
               scopes =
                 commands
-                |> List.map (fun s -> localisationCommandValidator eventtargets setvariables s) }
+                |> List.map (fun s -> localisationCommandValidator eventtargets setvariables s)
+              errorRanges = m.errorRange }
 
         api
         |> (fun (lang, entries) -> lang, entries |> Map.map (fun _ entry -> processEntry entry))

@@ -539,6 +539,11 @@ type ErrorCodes =
               Severity = severity
               Message = "This usage of inline_script results in an error, see related" }
 
+    static member LocInvalidChars =
+        fun key ->
+            { ID = "CW275"
+              Severity = Severity.Warning
+              Message = $"Localisation key %s{key} contains unexpected characters, and may not render correctly" }
     static member RulesError =
         fun error severity ->
             { ID = "CW998"
