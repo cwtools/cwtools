@@ -1,8 +1,10 @@
 namespace CWTools.Games.Stellaris
 
+open System.Collections.Generic
 open CWTools.Process
 open CWTools.Games
 open CWTools.Common
+open CWTools.Utilities
 open FSharp.Collections.ParallelSeq
 
 module STLLookup =
@@ -56,10 +58,11 @@ module STLLookup =
                                 |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
                                 |> Map.ofSeq
                                 
-        let vanillaTriggerMap =
-                vanillaTriggers
-                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
-                |> Map.ofSeq
+        let vanillaTriggerDictionary = Dictionary<StringToken, Set<Scope>>()
+        vanillaTriggers |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.ScopesSet)
+        // let vanillaTriggerMap =
+                // vanillaTriggers
+                // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
         let mutable final : Effect list = List.empty
         let mutable i = 0
         let mutable first = true
@@ -79,7 +82,7 @@ module STLLookup =
             final <-
                 rawTriggers
                 |> PSeq.map (fun t ->
-                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger scopedEffects vanillaTriggerMap triggerAndEffectMap t)
+                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger scopedEffects vanillaTriggerDictionary triggerAndEffectMap t)
                     :> Effect)
                 |> List.ofSeq
 
@@ -106,10 +109,12 @@ module STLLookup =
         let scopedEffects = vanillaEffects |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                                 |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
                                 |> Map.ofSeq
-        let vanillaBothMap =
-                Seq.append vanillaEffects scriptedTriggers
-                |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
-                |> Map.ofSeq
+        let vanillaBothDictionary = Dictionary<StringToken, Set<Scope>>()
+        Seq.append vanillaEffects scriptedTriggers
+            |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <-  x.ScopesSet)
+        // let vanillaBothMap =
+                // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+                // |> Map.ofSeq
         let mutable final : Effect list = List.empty
         let mutable i = 0
         let mutable first = true
@@ -134,7 +139,7 @@ module STLLookup =
                         first
                         EffectType.Effect
                         scopedEffects
-                        vanillaBothMap
+                        vanillaBothDictionary
                         newFoundMap
                         e)
                     :> Effect)

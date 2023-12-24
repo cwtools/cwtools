@@ -1,5 +1,6 @@
 namespace CWTools.Process
 
+open System.Collections.Generic
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System
@@ -12,7 +13,7 @@ module STLProcess =
     //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
-        (vanillaTriggersAndEffects : Map<StringToken, Set<Scope>>)
+        (vanillaTriggersAndEffects : Dictionary<StringToken, Set<Scope>>)
         (newTriggersAndEffects : Map<StringToken, Set<Scope>>)
         (scopedEffects : Map<StringToken, Scope list>)
         (root: string)
@@ -49,9 +50,10 @@ module STLProcess =
                     scopeManager.AllScopes |> Set.ofList
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
-                    vanillaTriggersAndEffects
-                    |> Map.tryFind x.KeyId.normal
-                    |> Option.orElse (Map.tryFind x.KeyId.normal newTriggersAndEffects)
+                    match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
+                    | true, scopeSet -> scopeSet
+                    | false, _ -> 
+                       (Map.tryFind x.KeyId.normal newTriggersAndEffects)
                     |> Option.defaultValue Set.empty)
                     // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
                     // |> (function
@@ -147,11 +149,11 @@ module STLProcess =
         (firstRun: bool)
         (effectType: EffectType)
         (scopedEffects: Map<StringLowerToken, Scope list>)
-        (vanillaTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
+        (vanillaTriggerAndEffectDict : Dictionary<StringToken, Set<Scope>>)
         (newTriggerAndEffectMap : Map<StringToken, Set<Scope>>)
         ((node, comments): Node * string list)
         =
-        let scopes = scriptedTriggerScope (not firstRun) vanillaTriggerAndEffectMap newTriggerAndEffectMap scopedEffects node.Key node
+        let scopes = scriptedTriggerScope (not firstRun) vanillaTriggerAndEffectDict newTriggerAndEffectMap scopedEffects node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node
