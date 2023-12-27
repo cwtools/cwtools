@@ -192,9 +192,10 @@ module internal FieldValidators =
                     if es.ContainsKey(trimQuote key) then
                         errors
                     else
+                        let defaultValue = "???"
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
-                                $"Expecting a \"%s{desc}\" value, e.g. %A{es.StringValues |> Seq.head}"
+                                $"Expecting a \"%s{desc}\" value, e.g. %A{es.StringValues |> Seq.tryHead |> Option.defaultValue defaultValue}"
                                 severity)
                             leafornode
                         <&&&> errors

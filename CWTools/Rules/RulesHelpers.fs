@@ -4,6 +4,7 @@ open System
 open System.IO
 open CWTools.Games
 open CWTools.Process
+open CWTools.Utilities
 open CWTools.Utilities.Utils2
 open FSharp.Collections.ParallelSeq
 open CWTools.Utilities.Utils
@@ -151,34 +152,35 @@ let getTypesFromDefinitions
               subtypes = sts }))
 
 let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) =
-    let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\", "/"), e)
-
+    let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"
+    let enumNameKeyId = StringResource.stringManager.InternIdentifierToken "enum_name"
+    let nameKeyId = StringResource.stringManager.InternIdentifierToken "name"
     let rec inner (enumtree: Node) (node: Node) =
         // log (sprintf "gece %A %A %A" (node.ToRaw) (enumtree.ToRaw) (node.Position.FileName))
         // log (sprintf "gecee %A %A" enumtree.Key node.Key)
         let childRes =
             let einner (enumtreeNode: Node) =
-                let key = enumtreeNode.Key
-                let isScalar = key == "scalar" || key == "enum_name" || key = "name"
+                let key = enumtreeNode.KeyId
+                let isScalar = key.lower = scalarKeyId.lower || key.lower = enumNameKeyId.lower || key.lower = nameKeyId.lower
                 // log (sprintf "gecee2 %A %A %A" enumtreeNode.Key node.Key isScalar)
 
                 let enumnameRes =
-                    if key == "enum_name" then
-                        node.Children |> List.map (fun n -> n.Key.Trim([| '\"' |]), Some n.Position)
+                    if key.lower = enumNameKeyId.lower then
+                        node.Nodes |> Seq.map (fun n -> n.Key.Trim([| '\"' |]), Some n.Position)
                     else
-                        []
+                        Seq.empty
 
                 let innerRes =
                     if isScalar then
-                        node.Children |> List.collect (inner enumtreeNode)
+                        node.Nodes |> Seq.collect (inner enumtreeNode)
                     else
-                        node.Children
-                        |> List.filter (fun c -> c.Key == key)
-                        |> List.collect (inner enumtreeNode)
+                        node.Nodes
+                        |> Seq.filter (fun c -> c.KeyId.lower = key.lower)
+                        |> Seq.collect (inner enumtreeNode)
 
-                enumnameRes @ innerRes
+                seq { yield! enumnameRes; yield! innerRes }
 
-            enumtree.Children |> List.collect einner
+            enumtree.Nodes |> Seq.collect einner
         // match enumtree.Children with
         // |head::_ ->
         //     let keyRes =
@@ -225,7 +227,11 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                         |> List.ofSeq
                 | None -> []
 
-        childRes @ leafValueRes @ leafRes
+        seq {
+            yield! childRes
+            yield! leafValueRes
+            yield! leafRes
+        }
 
     let innerStart (enumtree: Node) (node: Node) = inner enumtree node
     //enumtree.Children |> List.collect (fun e -> node.Children |> List.collect (inner e ))
@@ -233,25 +239,25 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         // let cpath = complexenum.path.Replace("\\","/")
         // log (sprintf "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath)))
         let values =
-            entities
-            |> List.choose (fun (path, e) ->
-                let pathDir = (Path.GetDirectoryName path).Replace("\\", "/")
-                let file = Path.GetFileName path
+            es
+            |> Seq.choose (fun e ->
+                let pathDir = (Path.GetDirectoryName e.logicalpath)
+                let file = Path.GetFileName e.logicalpath
 
                 if CWTools.Rules.FieldValidators.checkPathDir complexenum.pathOptions pathDir file then
                     Some e.entity
                 else
                     None)
-            |> List.collect (fun e ->
+            |> Seq.collect (fun e ->
                 if complexenum.start_from_root then
                     innerStart complexenum.nameTree e
                 else
-                    e.Children |> List.collect (innerStart complexenum.nameTree))
+                    e.Nodes |> Seq.collect (innerStart complexenum.nameTree))
         // log "%A %A" complexenum.name values
         { key = complexenum.name
-          values = values |> List.map fst
+          values = values |> Seq.map fst |> List.ofSeq
           description = complexenum.description
-          valuesWithRange = values }
+          valuesWithRange = values |> List.ofSeq }
 
     complexenums
     |> List.toSeq
