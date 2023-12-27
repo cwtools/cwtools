@@ -190,33 +190,30 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         // // TODO: Also check Leaves/leafvalues here when both are defined
         // |[] -> []
         let leafValueRes =
-            if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueText == "enum_name") then
+            if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueId.lower = enumNameKeyId.lower) then
                 node.LeafValues
                 |> Seq.map (fun lv -> lv.ValueText.Trim([| '\"' |]), Some lv.Position)
-                |> List.ofSeq
             else
-                []
+                Seq.empty
 
         let leafRes =
-            match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueText == "enum_name") with
+            match enumtree.Leaves |> Seq.tryFind (fun l -> l.ValueId.lower = enumNameKeyId.lower) with
             | Some leaf ->
                 let k = leaf.Key
                 // log (sprintf "gecel %A %A" k node.Leaves)
                 if k == "scalar" then
                     node.Leaves
                     |> Seq.map (fun l -> l.ValueText.Trim([| '\"' |]), Some l.Position)
-                    |> List.ofSeq
                 else
-                    node.TagsText k |> Seq.map (fun k -> k.Trim([| '\"' |]), None) |> List.ofSeq
+                    node.TagsText k |> Seq.map (fun k -> k.Trim([| '\"' |]), None)
             | None ->
-                match enumtree.Leaves |> Seq.tryFind (fun l -> l.Key == "enum_name") with
+                match enumtree.Leaves |> Seq.tryFind (fun l -> l.KeyId.lower = enumNameKeyId.lower) with
                 | Some leaf ->
                     let vt = leaf.ValueText
                     // log (sprintf "gecel %A %A" vt node.Leaves)
                     if vt == "scalar" then
                         node.Leaves
                         |> Seq.map (fun l -> l.Key.Trim([| '\"' |]), Some l.Position)
-                        |> List.ofSeq
                     else
                         node.Leaves
                         |> Seq.choose (fun l ->
@@ -224,8 +221,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                                 Some(l.Key.Trim([| '\"' |]), Some l.Position)
                             else
                                 None)
-                        |> List.ofSeq
-                | None -> []
+                | None -> Seq.empty
 
         seq {
             yield! childRes
@@ -241,7 +237,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         let values =
             es
             |> Seq.choose (fun e ->
-                let pathDir = (Path.GetDirectoryName e.logicalpath)
+                let pathDir = (Path.GetDirectoryName e.logicalpath).Replace("\\", "/")
                 let file = Path.GetFileName e.logicalpath
 
                 if CWTools.Rules.FieldValidators.checkPathDir complexenum.pathOptions pathDir file then
