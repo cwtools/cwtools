@@ -191,6 +191,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             ()
 
     let refreshConfig () =
+        let timer = System.Diagnostics.Stopwatch()
+        let endToEndTimer = System.Diagnostics.Stopwatch()
+        timer.Start()
+        endToEndTimer.Start()
         let rulesWrapper = RulesWrapper(lookup.configRules)
         /// Enums
         let complexEnumDefs =
@@ -257,8 +261,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
             newTypeMap
 
-        let timer = System.Diagnostics.Stopwatch()
-        timer.Start()
+        logDiag $"Pre-refresh types time: %0.3f{float timer.ElapsedMilliseconds / 1000.0}"
+        timer.Restart()
         let mutable i = 0
         let mutable beforeCount = tempTypeMap |> Map.values |> Seq.sumBy (_.Count)
 
@@ -267,7 +271,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             i <- i + 1
             //TODO: Only refresh the types which have subtypes that depend on other types
             tempTypeMap <- refreshTypeInfo ()
-            log (sprintf "Refresh types time: %i" timer.ElapsedMilliseconds)
+            logDiag $"Refresh types time: %0.3f{float timer.ElapsedMilliseconds / 1000.0}"
             timer.Restart()
             let afterCount = tempTypeMap |> Map.values |> Seq.sumBy (_.Count)
             let complete = beforeCount = afterCount || i > 5
@@ -467,6 +471,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
         debugChecks ()
+        logInfo $"Refresh all lookups: %0.3f{float endToEndTimer.ElapsedMilliseconds / 1000.0}s"
         ruleValidationService, infoService, completionService
 
     member __.LoadBaseConfig(rulesSettings) = loadBaseConfig rulesSettings
