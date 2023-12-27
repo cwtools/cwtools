@@ -131,7 +131,7 @@ type InfoService
     let aliasKeyMap =
         rootRules.Aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> HashSet<StringToken>))
         |> Map.ofList
     let monitor = new Object()
 

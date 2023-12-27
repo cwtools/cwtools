@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Generic
 open CWTools.Rules
 open CWTools.Process.Localisation
 open CWTools.Process
@@ -96,7 +97,7 @@ type RuleValidationService
         rootRules.Aliases
         |> Map.toList
         |> List.map (fun (key, rules) ->
-            key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
+            key, (rules |> Seq.collect ruleToCompletionListHelper |> HashSet<StringToken>))
         |> Map.ofList
 
     // let isValidValue (value : Value) =

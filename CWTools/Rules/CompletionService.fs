@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Generic
 open CWTools.Common
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities.Utils2
@@ -112,7 +113,7 @@ type CompletionService
     let aliasKeyMap =
         rootRules.Aliases
         |> Map.toList
-        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> Collections.Set.ofSeq))
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> HashSet<StringToken>))
         |> Map.ofList
 
     let linkMap = links

@@ -30,7 +30,7 @@ type CheckFieldParams =
       changeScope: ChangeScope
       anyScope: Scope
       defaultLang: Lang
-      aliasKeyList: Collections.Map<string, Collections.Set<StringToken>>
+      aliasKeyList: Collections.Map<string, HashSet<StringToken>>
       processLocalisation:
           Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>
       validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult }
@@ -1016,7 +1016,7 @@ module internal FieldValidators =
         | _ -> false
 
     let checkAliasValueKeysField
-        (aliasKeyList: Collections.Map<string, Collections.Set<StringToken>>)
+        (aliasKeyList: Collections.Map<string, HashSet<StringToken>>)
         aliasKey
         (ids: StringTokens)
         severity
@@ -1027,7 +1027,7 @@ module internal FieldValidators =
 
         match aliasKeyList |> Map.tryFind aliasKey with
         | Some values ->
-            if values |> Set.contains ids.lower then
+            if values.Contains ids.lower then
                 errors
             else
                 inv (ErrorCodes.ConfigRulesUnexpectedAliasKeyValue aliasKey key severity) leafornode
@@ -1037,14 +1037,14 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkAliasValueKeysFieldNE
-        (aliasKeyList: Collections.Map<string, Collections.Set<StringToken>>)
+        (aliasKeyList: Collections.Map<string, HashSet<StringToken>>)
         aliasKey
         (ids: StringTokens)
         =
         let key = getOriginalKey ids
 
         match aliasKeyList |> Map.tryFind aliasKey with
-        | Some values -> values |> Set.contains ids.lower
+        | Some values -> values.Contains ids.lower
         | None -> true
 
     let rec checkField
