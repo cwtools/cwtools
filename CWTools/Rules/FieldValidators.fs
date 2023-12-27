@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Generic
 open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils2
@@ -1229,7 +1230,7 @@ module internal FieldValidators =
 
     let inline validateTypeLocalisation
         (typedefs: TypeDefinition list)
-        (invertedTypeMap: Collections.Map<string, string list>)
+        (invertedTypeMap: IDictionary<string, ResizeArray<string>>)
         localisation
         (typeKey: string)
         (key: string)
@@ -1239,12 +1240,13 @@ module internal FieldValidators =
         let typename = typenames.[0]
 
         let actualSubtypes =
-            match invertedTypeMap |> Map.tryFind key with
-            | Some keytypes ->
+            match invertedTypeMap.TryGetValue key with
+            | true, keytypes ->
                 keytypes
-                |> List.filter (fun kt -> kt.StartsWith(typename + ".", StringComparison.OrdinalIgnoreCase))
-                |> List.map (fun kt -> kt.Split('.').[1])
-            | None -> []
+                |> Seq.filter (fun kt -> kt.StartsWith(typename + ".", StringComparison.OrdinalIgnoreCase))
+                |> Seq.map (fun kt -> kt.Split('.').[1])
+                |> Seq.toList
+            | false, _ -> []
 
         match typedefs |> List.tryFind (fun t -> t.name == typename) with
         | None -> OK

@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Generic
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities
 open CWTools.Utilities.Utils2
@@ -77,19 +78,19 @@ type InfoService
         varMap.TryFind "variable"
         |> Option.defaultValue (PrefixOptimisedStringSet())
 
-    let inner (map: Collections.Map<string, string list>) (subtype: string) (set: PrefixOptimisedStringSet) =
+    let inner (map: IDictionary<string, ResizeArray<string>>) (subtype: string) (set: PrefixOptimisedStringSet) =
         // set.Values
         set.IdValues |> Seq.map (fun i -> stringManager.GetStringForID i.normal)
-        |> Seq.fold
-            (fun m v ->
-                Map.tryFind v m
-                |> function
-                    | Some ts -> Map.add v (subtype :: ts) m
-                    | None -> Map.add v [ subtype ] m)
-            map
+        |> Seq.iter
+            (fun v ->
+                match map.TryGetValue v with
+                | true, l -> l.Add subtype
+                | false, _ -> map[v] <- ResizeArray<string>(); map[v].Add subtype)
 
-    let invertedTypeMap =
-        types |> Map.toList |> List.fold (fun m (t, set) -> inner m t set) Map.empty
+    let invertedTypeMap : IDictionary<string, ResizeArray<string>> =
+        let map = Dictionary<string, ResizeArray<string>>()
+        types |> Map.toSeq |> Seq.iter (fun (t, set) -> inner map t set)
+        map
 
     let defaultKeys =
         localisation
