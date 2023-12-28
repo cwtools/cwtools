@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System.Collections.Generic
 open CWTools.Common
 open CWTools.Rules
 open CWTools.Utilities
@@ -54,18 +55,21 @@ module Helpers =
 
         //TODO crazy inefficient! Done for every link
         let aliasKeyMap =
+            let resDict = Dictionary<string, Set<string>>()
             lookup.configRules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule(a, rs) -> Some(a, rs)
                 | _ -> None)
-            |> List.groupBy fst
-            |> Seq.map (fun (k, vs) ->
-                k,
-                vs
-                |> Seq.map snd
-                |> Seq.collect ruleToCompletionListHelper
-                |> Collections.Set.ofSeq)
-            |> Map.ofSeq
+            |> Seq.groupBy fst
+            |> Seq.iter (fun (k, vs) ->
+                resDict[k] <- 
+                    vs
+                    |> Seq.map snd
+                    |> Seq.collect ruleToCompletionListHelper
+                    |> Collections.Set.ofSeq
+                )
+            resDict
+            // |> Map.ofSeq
 
         let convertSourceRuleType (lookup: Lookup) (link: EventTargetDataLink) =
             match link.sourceRuleType.Trim() with
@@ -96,8 +100,9 @@ module Helpers =
             | x when x.StartsWith "alias_keys_field[" ->
                 let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
 
-                match aliasname |> Option.bind (fun x -> Map.tryFind x aliasKeyMap) with
-                | Some vs -> vs |> Set.toList |> List.map (fun x -> x, None)
+                match aliasname |> Option.map (fun x -> aliasKeyMap.TryGetValue x) with
+                | Some (true, vs) -> vs |> Set.toList |> List.map (fun x -> x, None)
+                | Some (false, _)
                 | None ->
                     log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
                     []
