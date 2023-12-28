@@ -7,6 +7,7 @@ open CWTools.Rules
 open CWTools.Utilities
 open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
+
 let private updateScriptedTriggers (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
     let vanillaTriggers =
         let se = [] |> List.map (fun e -> e :> Effect)
@@ -52,7 +53,7 @@ let private updateScriptedEffects (lookup: Lookup) (rules: RootRule list) (embed
         se @ ve
 
     vanillaEffects
-    
+
 let refreshConfigAfterHook
     (addScriptFormulaScope: bool)
     (wildcardLinks: bool)
@@ -75,7 +76,7 @@ let refreshConfigAfterHook
                 Effect(v, scriptFormulaScopes, EffectType.ValueTrigger, Some(TypeRef("script_value", v))))
         | None -> []
 
-   
+
 
     let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
         typesMap.Add(
@@ -98,7 +99,7 @@ let refreshConfigAfterHook
 
     lookup.allCoreLinks <- ts @ es @ ls
 
-let loadConfigRulesHook (addModifiersWithScopes : Lookup -> RootRule list) rules (lookup: Lookup) embedded =
+let loadConfigRulesHook (addModifiersWithScopes: Lookup -> RootRule list) rules (lookup: Lookup) embedded =
     let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
         let addRequiredScopesE (s: StringTokens) (o: Options) =
             let newScopes =
@@ -161,8 +162,8 @@ let loadConfigRulesHook (addModifiersWithScopes : Lookup -> RootRule list) rules
             | AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
                 [ AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) ]
             | x -> [ x ])
-        
-    
+
+
     // let addModifiersWithScopes (lookup: Lookup) =
     //     let modifierOptions (modifier: ActualModifier) =
     //         let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
@@ -179,7 +180,7 @@ let loadConfigRulesHook (addModifiersWithScopes : Lookup -> RootRule list) rules
     //             "modifier",
     //             NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
     //         ))
-    //     
+    //
     let ts = updateScriptedTriggers lookup rules embedded
     let es = updateScriptedEffects lookup rules embedded
     let ls = updateEventTargetLinks embedded
@@ -189,7 +190,7 @@ let loadConfigRulesHook (addModifiersWithScopes : Lookup -> RootRule list) rules
     addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
 
-let refreshConfigBeforeFirstTypesHook (lookup: JominiLookup) (resources: IResourceAPI<JominiComputedData>) _ =
+let refreshConfigBeforeFirstTypesHook (lookup: Lookup) (resources: IResourceAPI<ScriptedEffectComputedData>) _ =
     let modifierEnums =
         { key = "modifiers"
           values = lookup.coreModifiers |> List.map (fun m -> m.tag)
@@ -221,9 +222,7 @@ let refreshConfigBeforeFirstTypesHook (lookup: JominiLookup) (resources: IResour
     lookup.enumDefs <-
         lookup.enumDefs
         |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
-        |> Map.add
-            scriptedEffectParmasD.key
-            (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
+        |> Map.add scriptedEffectParmasD.key (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
         |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
 let refreshConfigAfterVarDefHook (addScriptFormulaScope: bool) (lookup: Lookup) _ (embedded: EmbeddedSettings) =

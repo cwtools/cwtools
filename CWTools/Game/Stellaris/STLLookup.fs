@@ -8,32 +8,6 @@ open CWTools.Utilities
 open FSharp.Collections.ParallelSeq
 
 module STLLookup =
-    type STLComputedData
-        (
-            eventids,
-            referencedtypes,
-            hastechs,
-            definedvariable,
-            withRulesData,
-            effectBlocks,
-            triggersBlocks,
-            scriptedeffectparams,
-            savedEventTargets
-        ) =
-        inherit
-            ComputedData(
-                referencedtypes,
-                definedvariable,
-                withRulesData,
-                effectBlocks,
-                triggersBlocks,
-                savedEventTargets
-            )
-
-        member __.Eventids: string list = eventids
-        member __.Hastechs: string list = hastechs
-        member __.ScriptedEffectParams: string list option = scriptedeffectparams
-
     let getChildrenWithComments (root: Node) =
         let findComment t s (a: Child) =
             match (s, a) with
@@ -53,17 +27,22 @@ module STLLookup =
                 | _ -> None)
             |> List.collect getChildrenWithComments
 
-        let scopedEffects = vanillaTriggers
-                                |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
-                                |> Map.ofSeq
-                                
+        let scopedEffects =
+            vanillaTriggers
+            |> Seq.choose (function
+                | :? ScopedEffect as e -> Some e
+                | _ -> None)
+            |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
+            |> Map.ofSeq
+
         let vanillaTriggerDictionary = Dictionary<StringToken, Scope list>()
-        vanillaTriggers |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.Scopes)
+
+        vanillaTriggers
+        |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.Scopes)
         // let vanillaTriggerMap =
-                // vanillaTriggers
-                // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
-        let mutable final : Effect list = List.empty
+        // vanillaTriggers
+        // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+        let mutable final: Effect list = List.empty
         let mutable i = 0
         let mutable first = true
 
@@ -71,18 +50,24 @@ module STLLookup =
             i <- i + 1
             let before = final
             // let vanillaAndFinal = Seq.append vanillaTriggers final
-                                    // |> Array.ofSeq
+            // |> Array.ofSeq
             let triggerAndEffectMap =
                 final
                 // Seq.append effectsInput triggersInput
                 |> Seq.map (fun e -> (e.Name.normal, e.Scopes))
                 |> Map.ofSeq
 
-            // let mergedTriggers = 
+            // let mergedTriggers =
             final <-
                 rawTriggers
                 |> PSeq.map (fun t ->
-                    (STLProcess.getScriptedTriggerScope first EffectType.Trigger scopedEffects vanillaTriggerDictionary triggerAndEffectMap t)
+                    (STLProcess.getScriptedTriggerScope
+                        first
+                        EffectType.Trigger
+                        scopedEffects
+                        vanillaTriggerDictionary
+                        triggerAndEffectMap
+                        t)
                     :> Effect)
                 |> List.ofSeq
 
@@ -106,32 +91,36 @@ module STLLookup =
                 | _ -> None)
             |> List.collect getChildrenWithComments
 
-        let scopedEffects = vanillaEffects |> Seq.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
-                                |> Map.ofSeq
+        let scopedEffects =
+            vanillaEffects
+            |> Seq.choose (function
+                | :? ScopedEffect as e -> Some e
+                | _ -> None)
+            |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
+            |> Map.ofSeq
+
         let vanillaBothDictionary = Dictionary<StringToken, Scope list>()
+
         Seq.append vanillaEffects scriptedTriggers
-            |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <-  x.Scopes)
+        |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <- x.Scopes)
         // let vanillaBothMap =
-                // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
-                // |> Map.ofSeq
-        let mutable final : Effect list = List.empty
+        // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
+        // |> Map.ofSeq
+        let mutable final: Effect list = List.empty
         let mutable i = 0
         let mutable first = true
 
         let ff () =
             i <- i + 1
             let before = final
-            // let vanillaAndFinal = Seq.append final 
-                                    // |> Array.ofSeq
+            // let vanillaAndFinal = Seq.append final
+            // |> Array.ofSeq
 
             // let effectsInput = vanillaAndFinal
             // let triggersInput = scriptedTriggers
-            
-            let newFoundMap =
-                final
-                |> Seq.map (fun e -> (e.Name.normal, e.Scopes))
-                |> Map.ofSeq
+
+            let newFoundMap = final |> Seq.map (fun e -> (e.Name.normal, e.Scopes)) |> Map.ofSeq
+
             final <-
                 rawEffects
                 |> PSeq.map (fun e ->
@@ -150,5 +139,5 @@ module STLLookup =
 
         while (not (ff ())) do
             ()
-            
+
         final, vanillaEffects

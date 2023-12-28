@@ -151,9 +151,7 @@ module EU4 =
 module STL =
     open CWTools.Process
     open CWTools.Process.ProcessCore
-    open CWTools.Games.Stellaris.STLLookup
     open CWTools.Utilities.Utils
-    open CWTools.Common.STLConstants
 
     let getAllTechPrereqs (e: Entity) =
         let fNode =
@@ -179,12 +177,6 @@ module STL =
         // eprintfn "csd %s" e.logicalpath
         let withRulesData = infoService().IsSome
 
-        let eventIds =
-            if e.entityType = EntityType.Events then
-                e.entity.Children
-                |> List.choose (fun ee -> if ee.Has "id" then Some(ee.TagText "id") else None)
-            else
-                []
         // let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         let res =
             (if infoService().IsSome then
@@ -199,7 +191,6 @@ module STL =
         // let referencedtypes = (if infoService().IsSome then Some ((infoService().Value.GetReferencedTypes )(e)) else None)
         // let definedvariable = (if infoService().IsSome then Some ((infoService().Value.GetDefinedVariables )(e)) else None)
         // let effectBlocks, triggersBlocks = (if infoService().IsSome then let (e, t) = ((infoService().Value.GetEffectBlocks )(e)) in Some e, Some t else None, None)
-        let hastechs = getAllTechPrereqs e
         let scriptedeffectparams = Some(EU4.getScriptedEffectParamsEntity e)
 
         let referencedtypes =
@@ -214,14 +205,12 @@ module STL =
             |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
 
         STLComputedData(
-            eventIds,
             referencedtypes,
-            hastechs,
             definedvariable,
+            scriptedeffectparams,
             withRulesData,
             effectBlocks,
             triggersBlocks,
-            scriptedeffectparams,
             savedEventTargets
         )
 

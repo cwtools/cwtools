@@ -61,7 +61,7 @@ type HOI4ComputedData = ComputedData
 type CK2ComputedData = ComputedData
 type VIC2ComputedData = ComputedData
 
-type JominiComputedData
+type ScriptedEffectComputedData
     (
         referencedtypes,
         definedvariable,
@@ -75,6 +75,9 @@ type JominiComputedData
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
     member __.ScriptedEffectParams: string list option = scriptedeffectparams
+
+type STLComputedData = ScriptedEffectComputedData
+type JominiComputedData = ScriptedEffectComputedData
 
 type IRComputedData = JominiComputedData
 type CK3ComputedData = JominiComputedData
@@ -650,7 +653,8 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                         let rec foldOverNode stringReplacer (node: Node) =
                             node.Key <- stringReplacer node.Key
-                            let stringTokenReplace (token : StringTokens) =
+
+                            let stringTokenReplace (token: StringTokens) =
                                 let res = stringReplacer (token.GetString())
                                 StringResource.stringManager.InternIdentifierToken res
 
@@ -695,7 +699,14 @@ type ResourceManager<'T when 'T :> ComputedData>
                                     x)
                             // |Some scriptNode -> [CommentC (n.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             | _ ->
-                                [ LeafValueC(LeafValue(Value.String (stringManager.InternIdentifierToken $"Missing inline_script {scriptName}"), n.Position)) ]
+                                [ LeafValueC(
+                                      LeafValue(
+                                          Value.String(
+                                              stringManager.InternIdentifierToken $"Missing inline_script {scriptName}"
+                                          ),
+                                          n.Position
+                                      )
+                                  ) ]
                         else
                             replaceCataFun n
                             [ NodeC n ]
@@ -720,7 +731,14 @@ type ResourceManager<'T when 'T :> ComputedData>
                                     x)
                             // |Some scriptNode -> [CommentC (l.Position, $"Dummy comment to replace empty inline_script {scriptName}")]
                             | _ ->
-                                [ LeafValueC(LeafValue(Value.String ( stringManager.InternIdentifierToken $"Missing inline_script {scriptName}"), l.Position)) ]
+                                [ LeafValueC(
+                                      LeafValue(
+                                          Value.String(
+                                              stringManager.InternIdentifierToken $"Missing inline_script {scriptName}"
+                                          ),
+                                          l.Position
+                                      )
+                                  ) ]
                         else
                             [ LeafC l ]
                     | x -> [ x ]

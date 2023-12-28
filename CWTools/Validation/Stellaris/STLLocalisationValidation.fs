@@ -1,5 +1,6 @@
 namespace CWTools.Validation.Stellaris
 
+open CWTools.Games
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Process

@@ -547,8 +547,9 @@ module STLValidation =
 
 
 
-    let validateTechnologies: STLStructureValidator =
-        fun os es ->
+    let validateTechnologies: STLFileValidator =
+        fun resourceAPI es ->
+            let os = resourceAPI.AllEntities() |> EntitySet
             // let timer = new System.Diagnostics.Stopwatch()
             // timer.Start()
             let getPrereqs (b: Node) : obj list =
@@ -592,12 +593,20 @@ module STLValidation =
                 |> Set.ofList
 
             let hastechs =
-                (es.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
-                @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
+                resourceAPI.AllEntities()
+                |> Seq.collect (fun struct (a, b) ->
+                    b.Force().Referencedtypes
+                    |> Option.bind (Map.tryFind "technology")
+                    |> Option.defaultValue [])
+                |> Seq.map (fun x -> x.name.GetString())
+
+            // let hastechs =
+            // (es.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
+            // @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().Hastechs))
             // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()
             let allPrereqs =
                 hastechs
-                |> List.fold (fun (set: Collections.Set<string>) key -> set.Add key) allPrereqs
+                |> Seq.fold (fun (set: Collections.Set<string>) key -> set.Add key) allPrereqs
             //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
             // log "Tech validator time: %i" timer.ElapsedMilliseconds; timer.Restart()

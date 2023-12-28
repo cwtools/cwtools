@@ -1,5 +1,6 @@
 namespace CWTools.Games.Stellaris
 
+open CWTools.Game
 open CWTools.Parser
 open CWTools.Process
 open CWTools.Utilities.Position
@@ -19,7 +20,6 @@ open CWTools.Utilities
 open CWTools.Validation.Stellaris.Graphics
 open CWTools.Games
 open CWTools.Games.Stellaris
-open CWTools.Games.Stellaris.STLLookup
 open CWTools.Rules
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Process.Scopes.Scopes
@@ -27,7 +27,6 @@ open System.Text
 open CWTools.Games.LanguageFeatures
 open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
-open FSharp.Collections.ParallelSeq
 open System.IO
 open CWTools.Process.Localisation
 
@@ -290,46 +289,7 @@ module STLGameFunctions =
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
 
-    let refreshConfigBeforeFirstTypesHook
-        (lookup: STLLookup)
-        (resources: IResourceAPI<STLComputedData>)
-        (embeddedSettings: EmbeddedSettings)
-        =
-        let modifierEnums =
-            { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
-              description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
 
-        let scriptedEffectKeys =
-            (resources.AllEntities()
-             |> PSeq.map (fun struct (e, l) ->
-                 (l.Force().ScriptedEffectParams
-                  |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
-             |> List.ofSeq
-             |> List.collect id)
-
-        let scriptedEffectParmas =
-            { key = "scripted_effect_params"
-              description = "Scripted effect parameter"
-              values = scriptedEffectKeys
-              valuesWithRange = scriptedEffectKeys |> List.map (fun x -> x, None) }
-
-        let parmasDValues = scriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
-
-        let scriptedEffectParmasD =
-            { key = "scripted_effect_params_dollar"
-              description = "Scripted effect parameter"
-              values = parmasDValues
-              valuesWithRange = parmasDValues |> List.map (fun x -> x, None) }
-
-        lookup.enumDefs <-
-            lookup.enumDefs
-            |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
-            |> Map.add
-                scriptedEffectParmasD.key
-                (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
-            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
     let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
         typesMap.Add(
@@ -471,7 +431,6 @@ type STLGame(setupSettings: StellarisSettings) =
         { validators =
             [ validateVariables, "var"
               valTechnology, "tech"
-              validateTechnologies, "tech2"
               validateShipDesigns, "designs"
               validateIfElse, "ifelse2"
               validatePlanetKillers, "pk"
@@ -486,7 +445,7 @@ type STLGame(setupSettings: StellarisSettings) =
           experimentalValidators = [ valSectionGraphics, "sections"; valComponentGraphics, "component" ]
           heavyExperimentalValidators = [ getEventChains, "event chains" ]
           experimental = setupSettings.validation.experimental
-          fileValidators = []
+          fileValidators = [ validateTechnologies, "tech2" ]
           lookupValidators = (validateEconomicCatAIBudget, "aibudget") :: commonValidationRules
           lookupFileValidators =
             [ valScriptedEffectParams, "scripted_effects"
@@ -581,7 +540,7 @@ type STLGame(setupSettings: StellarisSettings) =
           defaultLang = STL STLLang.Default
           oneToOneScopesNames = oneToOneScopesNames
           loadConfigRulesHook = loadConfigRulesHook
-          refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
+          refreshConfigBeforeFirstTypesHook = Hooks.refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
           locFunctions = processLocalisationFunction }
