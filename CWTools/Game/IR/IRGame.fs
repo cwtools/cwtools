@@ -106,59 +106,7 @@ module IRGameFunctions =
                 )
             ))
 
-    let updateScriptedTriggers (lookup: IRLookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
-        let vanillaTriggers =
-            let se = [] |> List.map (fun e -> e :> Effect)
-            let vt = embeddedSettings.triggers |> List.map (fun e -> e :> Effect)
-            se @ vt
 
-        let vanillaTriggerNames = vanillaTriggers |> List.map (_.Name)
-
-        let effects =
-            rules
-            |> List.choose (function
-                | AliasRule("trigger", r) -> Some r
-                | _ -> None)
-
-        let ruleToTrigger (r, o) =
-            let name =
-                match r with
-                | LeafRule(SpecificField(SpecificValue n), _) when not (List.contains n vanillaTriggerNames) ->
-                    Some(StringResource.stringManager.GetStringForID n.normal)
-                | NodeRule(SpecificField(SpecificValue n), _) when not (List.contains n vanillaTriggerNames) ->
-                    Some(StringResource.stringManager.GetStringForID n.normal)
-                | _ -> None
-
-            let effectType =
-                if o.comparison then
-                    EffectType.ValueTrigger
-                else
-                    EffectType.Trigger
-
-            name
-            |> Option.map (fun name ->
-                DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
-
-        let extraFromRules =
-            (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect))
-
-        vanillaTriggers @ extraFromRules
-
-    let updateScriptedEffects (lookup: IRLookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
-        let vanillaEffects =
-            let se = scopedEffects |> List.map (fun e -> e :> Effect)
-            let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
-            se @ ve
-
-        vanillaEffects
-
-
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
-        typesMap.Add(
-            "modifier",
-            lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-        )
 
     let updateProvinces (game: GameObject) =
         let provinceFile =
@@ -214,77 +162,6 @@ module IRGameFunctions =
                 |> List.ofArray
 
             game.Lookup.IRcharacters <- chars
-
-    let addScriptFormulaLinks (lookup: IRLookup) =
-        match lookup.typeDefInfo |> Map.tryFind "script_value" with
-        | Some vs ->
-            let values = vs |> List.map (fun tdi -> tdi.id)
-            values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
-        | None -> []
-
-    let addTriggerDocsScopes (lookup: IRLookup) (rules: RootRule list) =
-        let addRequiredScopesE (s: StringTokens) (o: Options) =
-            let newScopes =
-                match o.requiredScopes with
-                | [] ->
-                    lookup.effectsMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.map (fun se -> se.Scopes)
-                    |> Option.defaultValue []
-                | x -> x
-
-            let innerScope =
-                match o.pushScope with
-                | None ->
-                    lookup.effectsMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.bind (function
-                        | :? DocEffect as se -> Some se
-                        | _ -> None)
-                    |> Option.bind (fun se -> se.Target)
-                | x -> x
-
-            { o with
-                requiredScopes = newScopes
-                pushScope = innerScope }
-
-        let addRequiredScopesT (s: StringTokens) (o: Options) =
-            let newScopes =
-                match o.requiredScopes with
-                | [] ->
-                    lookup.triggersMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.map (fun se -> se.Scopes)
-                    |> Option.defaultValue []
-                | x -> x
-
-            let innerScope =
-                match o.pushScope with
-                | None ->
-                    lookup.triggersMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.bind (function
-                        | :? DocEffect as se -> Some se
-                        | _ -> None)
-                    |> Option.bind (fun se -> se.Target)
-                | x -> x
-
-            { o with
-                requiredScopes = newScopes
-                pushScope = innerScope }
-
-        rules
-        |> List.collect (function
-            | AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
-            | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
-            | AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
-            | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
-            | AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) ]
-            | AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) ]
-            | x -> [ x ])
-
 
 
     let refreshConfigBeforeFirstTypesHook (lookup: IRLookup) _ _ =

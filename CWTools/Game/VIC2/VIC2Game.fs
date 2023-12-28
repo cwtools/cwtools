@@ -77,61 +77,6 @@ module VIC2GameFunctions =
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
             ))
 
-    let updateScriptedTriggers (lookup: VIC2Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
-        let vanillaTriggers =
-            let se = [] |> List.map (fun e -> e :> Effect)
-            let vt = embeddedSettings.triggers |> List.map (fun e -> e :> Effect)
-            se @ vt
-
-        let vanillaTriggerNames = vanillaTriggers |> List.map _.Name
-
-        let effects =
-            rules
-            |> List.choose (function
-                | AliasRule("trigger", r) -> Some r
-                | _ -> None)
-
-        let ruleToTrigger (r, o) =
-            let name =
-                match r with
-                | LeafRule(SpecificField(SpecificValue n), _) when not (List.contains n vanillaTriggerNames) ->
-                    Some(StringResource.stringManager.GetStringForID n.normal)
-                | NodeRule(SpecificField(SpecificValue n), _) when not (List.contains n vanillaTriggerNames) ->
-                    Some(StringResource.stringManager.GetStringForID n.normal)
-                | _ -> None
-
-            let effectType =
-                if o.comparison then
-                    EffectType.ValueTrigger
-                else
-                    EffectType.Trigger
-
-            name
-            |> Option.map (fun name ->
-                DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
-
-        let extraFromRules =
-            (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect))
-
-        vanillaTriggers @ extraFromRules
-
-    let updateScriptedEffects (lookup: VIC2Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
-        let vanillaEffects =
-            let se = scopedEffects |> List.map (fun e -> e :> Effect)
-            let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
-            se @ ve
-
-        vanillaEffects
-
-
-
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
-        typesMap.Add(
-            "modifier",
-            lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-        )
-
     let updateProvinces (game: GameObject) =
         let provinceFile =
             game.Resources.GetResources()
@@ -155,15 +100,6 @@ module VIC2GameFunctions =
                 |> List.ofArray
 
             game.Lookup.VIC2provinces <- provinces
-
-    let addScriptFormulaLinks (lookup: VIC2Lookup) =
-        match lookup.typeDefInfo |> Map.tryFind "script_value" with
-        | Some vs ->
-            let values = vs |> List.map (fun tdi -> tdi.id)
-            values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
-        | None -> []
-
-   
 
 
 
