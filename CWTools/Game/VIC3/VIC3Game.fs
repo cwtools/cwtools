@@ -1,5 +1,6 @@
 namespace CWTools.Games.VIC3
 
+open CWTools.Game
 open CWTools.Localisation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -52,8 +53,6 @@ module VIC3GameFunctions =
 
 
     let addModifiersWithScopes (lookup: Lookup) =
-        let modifierCategoryToScopesMap () = Map.empty
-
         let modifierOptions (modifier: ActualModifier) =
             let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
 
@@ -120,24 +119,6 @@ module VIC3GameFunctions =
 
         vanillaEffects
 
-
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
-        typesMap.Add(
-            "modifier",
-            lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-        )
-
-    let addScriptFormulaLinks (lookup: Lookup) =
-        match lookup.typeDefInfo |> Map.tryFind "script_value" with
-        | Some vs ->
-            let values = vs |> List.map (fun tdi -> tdi.id)
-
-            values
-            |> List.map (fun v ->
-                Effect(v, [ scopeManager.AnyScope ], EffectType.ValueTrigger, Some(TypeRef("script_value", v))))
-        | None -> []
-
     let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
         let addRequiredScopesE (s: StringTokens) (o: Options) =
             let newScopes =
@@ -202,6 +183,8 @@ module VIC3GameFunctions =
             | x -> [ x ])
 
 
+    let updateModifiers (game: GameObject) =
+        game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
     let loadConfigRulesHook rules (lookup: Lookup) embedded =
         let ts = updateScriptedTriggers lookup rules embedded
@@ -249,33 +232,6 @@ module VIC3GameFunctions =
                 scriptedEffectParmasD.key
                 (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
             |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
-
-    let refreshConfigAfterFirstTypesHook (lookup: Lookup) _ (embedded: EmbeddedSettings) =
-        addModifiersFromCoreAndTypes lookup embedded
-        lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
-
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
-
-        lookup.allCoreLinks <- ts @ es @ ls
-
-    let refreshConfigAfterVarDefHook (lookup: Lookup) (resources: IResourceAPI<_>) (embedded: EmbeddedSettings) =
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
-
-        lookup.allCoreLinks <- ts @ es @ ls
 
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
@@ -472,10 +428,10 @@ type VIC3Game(setupSettings: VIC3Settings) =
           defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
           defaultLang = VIC3 VIC3Lang.English
           oneToOneScopesNames = CWTools.Process.Scopes.VIC3.oneToOneScopesNames
-          loadConfigRulesHook = loadConfigRulesHook
+          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
-          refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
-          refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+          refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
+          refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction } 
 
     let scriptFolders = [ "common"; "events" ]

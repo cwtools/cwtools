@@ -1,5 +1,6 @@
 namespace CWTools.Games.VIC2
 
+open CWTools.Game
 open CWTools.Localisation
 open CWTools.Utilities.Utils2
 open CWTools.Validation
@@ -78,13 +79,11 @@ module VIC2GameFunctions =
 
     let updateScriptedTriggers (lookup: VIC2Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
         let vanillaTriggers =
-            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let se = [] |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers |> List.map (fun e -> e :> Effect)
             se @ vt
 
-        let vanillaTriggerNames =
-            vanillaTriggers
-            |> List.map _.Name
+        let vanillaTriggerNames = vanillaTriggers |> List.map _.Name
 
         let effects =
             rules
@@ -164,78 +163,9 @@ module VIC2GameFunctions =
             values |> List.map (fun v -> Effect(v, [], EffectType.ValueTrigger))
         | None -> []
 
-    let addTriggerDocsScopes (lookup: VIC2Lookup) (rules: RootRule list) =
-        let addRequiredScopesE (s: StringTokens) (o: Options) =
-            let newScopes =
-                match o.requiredScopes with
-                | [] ->
-                    lookup.effectsMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.map (fun se -> se.Scopes)
-                    |> Option.defaultValue []
-                | x -> x
-
-            let innerScope =
-                match o.pushScope with
-                | None ->
-                    lookup.effectsMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.bind (function
-                        | :? DocEffect as se -> Some se
-                        | _ -> None)
-                    |> Option.bind (fun se -> se.Target)
-                | x -> x
-
-            { o with
-                requiredScopes = newScopes
-                pushScope = innerScope }
-
-        let addRequiredScopesT (s: StringTokens) (o: Options) =
-            let newScopes =
-                match o.requiredScopes with
-                | [] ->
-                    lookup.triggersMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.map (fun se -> se.Scopes)
-                    |> Option.defaultValue []
-                | x -> x
-
-            let innerScope =
-                match o.pushScope with
-                | None ->
-                    lookup.triggersMap.TryFind(StringResource.stringManager.GetStringForID s.normal)
-                    |> Option.bind (function
-                        | :? DocEffect as se -> Some se
-                        | _ -> None)
-                    |> Option.bind (fun se -> se.Target)
-                | x -> x
-
-            { o with
-                requiredScopes = newScopes
-                pushScope = innerScope }
-
-        rules
-        |> List.collect (function
-            | AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
-            | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
-            | AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
-            | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
-            | AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) ]
-            | AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) ]
-            | x -> [ x ])
+   
 
 
-
-    let loadConfigRulesHook rules (lookup: VIC2Lookup) embedded =
-        let ts = updateScriptedTriggers lookup rules embedded
-        let es = updateScriptedEffects lookup rules embedded
-        let ls = updateEventTargetLinks embedded
-        lookup.allCoreLinks <- ts @ es @ ls
-        // eprintfn "crh %A" ts
-        addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup: VIC2Lookup) _ _ =
         let modifierEnums =
@@ -254,32 +184,6 @@ module VIC2GameFunctions =
             lookup.enumDefs
             |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.valuesWithRange)
-
-    let refreshConfigAfterFirstTypesHook (lookup: VIC2Lookup) _ (embedded: EmbeddedSettings) =
-        lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
-
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
-
-        lookup.allCoreLinks <- ts @ es @ ls
-
-    let refreshConfigAfterVarDefHook (lookup: VIC2Lookup) (resources: IResourceAPI<_>) (embedded: EmbeddedSettings) =
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
-
-        lookup.allCoreLinks <- ts @ es @ ls
 
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
@@ -358,7 +262,7 @@ type VIC2Game(setupSettings: VIC2Settings) =
           heavyExperimentalValidators = []
           experimental = false
           fileValidators = []
-          lookupValidators = commonValidationRules 
+          lookupValidators = commonValidationRules
           lookupFileValidators = []
           useRules = true
           debugRulesOnly = false
@@ -440,11 +344,11 @@ type VIC2Game(setupSettings: VIC2Settings) =
           defaultContext = defaultContext
           defaultLang = VIC2 VIC2Lang.English
           oneToOneScopesNames = oneToOneScopesNames
-          loadConfigRulesHook = loadConfigRulesHook
+          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
-          refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
-          refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          locFunctions = processLocalisationFunction } 
+          refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook false
+          refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook false
+          locFunctions = processLocalisationFunction }
 
     let game =
         GameObject<VIC2ComputedData, VIC2Lookup>.CreateGame

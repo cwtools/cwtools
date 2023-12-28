@@ -1,5 +1,6 @@
 namespace CWTools.Games.CK3
 
+open CWTools.Game
 open CWTools.Localisation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -244,32 +245,6 @@ module CK3GameFunctions =
                 (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
             |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
-    let refreshConfigAfterFirstTypesHook (lookup: Lookup) _ (embedded: EmbeddedSettings) =
-        lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
-
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
-
-        lookup.allCoreLinks <- ts @ es @ ls
-
-    let refreshConfigAfterVarDefHook (lookup: Lookup) (resources: IResourceAPI<_>) (embedded: EmbeddedSettings) =
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
-
-        lookup.allCoreLinks <- ts @ es @ ls
-
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
         // updateScriptedEffects()
@@ -469,10 +444,10 @@ type CK3Game(setupSettings: CK3Settings) =
           defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
           defaultLang = CK3 CK3Lang.English
           oneToOneScopesNames = CWTools.Process.Scopes.CK3.oneToOneScopesNames
-          loadConfigRulesHook = loadConfigRulesHook
+          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
-          refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
-          refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
+          refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
+          refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }
 
     let scriptFolders = []

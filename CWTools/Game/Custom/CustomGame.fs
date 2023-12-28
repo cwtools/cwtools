@@ -1,5 +1,6 @@
 namespace CWTools.Games.Custom
 
+open CWTools.Game
 open CWTools.Localisation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -72,10 +73,7 @@ module CustomGameFunctions =
             let vt = embeddedSettings.triggers |> List.map (fun e -> e :> Effect)
             se @ vt
 
-        let vanillaTriggerNames =
-            vanillaTriggers
-            |> List.map _.Name
-            |> Set.ofList
+        let vanillaTriggerNames = vanillaTriggers |> List.map _.Name |> Set.ofList
 
         let effects =
             rules
@@ -243,31 +241,6 @@ module CustomGameFunctions =
                 (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
             |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
-    let refreshConfigAfterFirstTypesHook (lookup: Lookup) _ (embedded: EmbeddedSettings) =
-        lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
-
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
-
-        lookup.allCoreLinks <- ts @ es @ ls
-
-    let refreshConfigAfterVarDefHook (lookup: Lookup) (resources: IResourceAPI<_>) (embedded: EmbeddedSettings) =
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
-
-        lookup.allCoreLinks <- ts @ es @ ls
 
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
@@ -450,6 +423,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
 
     let processLocalisationFunction lookup =
         (createJominiLocalisationFunctions jominiLocDataTypes lookup)
+
     let rulesManagerSettings =
         { rulesSettings = settings.rules
           useFormulas = true
@@ -462,11 +436,11 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
           defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
           defaultLang = Custom CustomLang.English
           oneToOneScopesNames = CWTools.Process.Scopes.IR.oneToOneScopesNames
-          loadConfigRulesHook = loadConfigRulesHook
+          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
-          refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
-          refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          locFunctions = processLocalisationFunction } 
+          refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
+          refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
+          locFunctions = processLocalisationFunction }
 
     let scriptFolders = []
 

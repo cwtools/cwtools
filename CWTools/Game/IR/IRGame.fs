@@ -1,5 +1,6 @@
 namespace CWTools.Games.IR
 
+open CWTools.Game
 open CWTools.Localisation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
@@ -107,13 +108,11 @@ module IRGameFunctions =
 
     let updateScriptedTriggers (lookup: IRLookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
         let vanillaTriggers =
-            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let se = [] |> List.map (fun e -> e :> Effect)
             let vt = embeddedSettings.triggers |> List.map (fun e -> e :> Effect)
             se @ vt
 
-        let vanillaTriggerNames =
-            vanillaTriggers
-            |> List.map (_.Name)
+        let vanillaTriggerNames = vanillaTriggers |> List.map (_.Name)
 
         let effects =
             rules
@@ -288,14 +287,6 @@ module IRGameFunctions =
 
 
 
-    let loadConfigRulesHook rules (lookup: IRLookup) embedded =
-        let ts = updateScriptedTriggers lookup rules embedded
-        let es = updateScriptedEffects lookup rules embedded
-        let ls = updateEventTargetLinks embedded
-        lookup.allCoreLinks <- ts @ es @ ls
-        // eprintfn "crh %A" ts
-        addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
-
     let refreshConfigBeforeFirstTypesHook (lookup: IRLookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
@@ -321,31 +312,6 @@ module IRGameFunctions =
             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.valuesWithRange)
             |> Map.add charEnums.key (charEnums.description, charEnums.valuesWithRange)
 
-    let refreshConfigAfterFirstTypesHook (lookup: IRLookup) _ (embedded: EmbeddedSettings) =
-        lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
-
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded true
-
-        lookup.allCoreLinks <- ts @ es @ ls
-
-    let refreshConfigAfterVarDefHook (lookup: IRLookup) (resources: IResourceAPI<_>) (embedded: EmbeddedSettings) =
-        let ts =
-            updateScriptedTriggers lookup lookup.configRules embedded
-            @ addScriptFormulaLinks lookup
-
-        let es = updateScriptedEffects lookup lookup.configRules embedded
-
-        let ls =
-            updateEventTargetLinks embedded @ addDataEventTargetLinks lookup embedded false
-
-        lookup.allCoreLinks <- ts @ es @ ls
 
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
@@ -464,7 +430,7 @@ type IRGame(setupSettings: IRSettings) =
           heavyExperimentalValidators = []
           experimental = false
           fileValidators = []
-          lookupValidators = commonValidationRules 
+          lookupValidators = commonValidationRules
           lookupFileValidators = []
           useRules = true
           debugRulesOnly = false
@@ -529,11 +495,11 @@ type IRGame(setupSettings: IRSettings) =
           defaultContext = defaultContext
           defaultLang = IR IRLang.English
           oneToOneScopesNames = oneToOneScopesNames
-          loadConfigRulesHook = loadConfigRulesHook
+          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
-          refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
-          refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          locFunctions = processLocalisationFunction } 
+          refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook false
+          refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook false
+          locFunctions = processLocalisationFunction }
 
     let game =
         GameObject<IRComputedData, IRLookup>.CreateGame
