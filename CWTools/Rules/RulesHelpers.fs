@@ -1,6 +1,7 @@
 module CWTools.Rules.RulesHelpers
 
 open System
+open System.Collections.Generic
 open System.IO
 open CWTools.Games
 open CWTools.Process
@@ -126,30 +127,45 @@ let getTypesFromDefinitions
                |> List.ofSeq
                |> List.map (fun lv -> def.name, (v, lv.Value.ToString(), lv.Position, [], []))))
 
-    let results =
-        types
-        |> Seq.ofList
-        |> PSeq.collect getTypeInfo
-        |> List.ofSeq
-        |> List.fold
-            (fun m (n, k) ->
-                if Map.containsKey n m then
-                    Map.add n (k :: m.[n]) m
-                else
-                    Map.add n [ k ] m)
-            Map.empty
+    let resDict = Dictionary<_, _>()
+    // let results =
+    types
+    |> Seq.ofList
+    |> PSeq.collect getTypeInfo
+    |> Seq.iter (fun (n, k) ->
+        if resDict.ContainsKey n then
+            resDict[n] <- k :: resDict[n]
+        else
+            resDict[n] <- [ k ]
+        )
+        // |> List.ofSeq
+        // |> List.fold
+            // (fun m (n, k) ->
+                // if Map.containsKey n m then
+                    // Map.add n (k :: m.[n]) m
+                // else
+                    // Map.add n [ k ] m)
+            // Map.empty
 
     types
     |> List.map (fun t -> t.name)
-    |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m) results
-    |> Map.map (fun _ vs ->
+    // |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m) results
+    |> List.iter (fun k -> if resDict.ContainsKey k then () else resDict[k] <- [])
+    
+    resDict
+    // |> Seq.map
+    |> Seq.map (fun kv ->
+        let k = kv.Key
+        let vs = kv.Value
+        k,
         vs
-        |> List.map (fun (v, n, r, el, sts) ->
-            { TypeDefInfo.validate = v
-              id = n
-              range = r
-              explicitLocalisation = el
-              subtypes = sts }))
+            |> List.map (fun (v, n, r, el, sts) ->
+                { TypeDefInfo.validate = v
+                  id = n
+                  range = r
+                  explicitLocalisation = el
+                  subtypes = sts }))
+    |> Map.ofSeq
 
 let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) =
     let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"

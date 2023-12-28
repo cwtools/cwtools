@@ -55,7 +55,7 @@ module Helpers =
 
         //TODO crazy inefficient! Done for every link
         let aliasKeyMap =
-            let resDict = Dictionary<string, Set<string>>()
+            let resDict = Dictionary<string, string list>()
             lookup.configRules
             |> Seq.choose (function
                 | AliasRule(a, rs) -> Some(a, rs)
@@ -66,7 +66,7 @@ module Helpers =
                     vs
                     |> Seq.map snd
                     |> Seq.collect ruleToCompletionListHelper
-                    |> Collections.Set.ofSeq
+                    |> List.ofSeq
                 )
             resDict
             // |> Map.ofSeq
@@ -101,7 +101,7 @@ module Helpers =
                 let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
 
                 match aliasname |> Option.map (fun x -> aliasKeyMap.TryGetValue x) with
-                | Some (true, vs) -> vs |> Set.toList |> List.map (fun x -> x, None)
+                | Some (true, vs) -> vs |> List.map (fun x -> x, None)
                 | Some (false, _)
                 | None ->
                     log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
