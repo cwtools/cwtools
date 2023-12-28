@@ -4,8 +4,6 @@ open CWTools.Common
 open CWTools.Rules
 open CWTools.Process.Scopes
 open CWTools.Utilities.Position
-open CWTools.Utilities.Utils
-open Microsoft.FSharp.Collections.Tagged
 open Files
 open CWTools.Process.Localisation
 
@@ -19,51 +17,34 @@ type Lookup() =
         _allCoreLinks
         |> List.filter (fun l -> l.Type = EffectType.Trigger || l.Type = EffectType.ValueTrigger)
 
-    let mutable _triggersMap: Lazy<EffectMap> =
-        lazy
-            (EffectMap()) 
+    let mutable _triggersMap: Lazy<EffectMap> = lazy (EffectMap())
 
     let resetTriggers () =
-        _triggersMap <-
-            lazy
-                (_triggers ()
-                 |> EffectMap.FromList)
+        _triggersMap <- lazy (_triggers () |> EffectMap.FromList)
 
     let _effects () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Effect)
 
-    let mutable _effectsMap: Lazy<EffectMap> =
-        lazy EffectMap()
+    let mutable _effectsMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetEffects () =
-        _effectsMap <-
-            lazy
-                (_effects ()
-                 |> (fun l -> EffectMap.FromList(l)))
+        _effectsMap <- lazy (_effects () |> (fun l -> EffectMap.FromList(l)))
 
     let _eventTargetLinks () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Link)
 
-    let mutable _eventTargetLinksMap: Lazy<EffectMap> =
-        lazy EffectMap()
+    let mutable _eventTargetLinksMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetEventTargetLinks () =
-        _eventTargetLinksMap <-
-            lazy
-                (_eventTargetLinks ()
-                 |> EffectMap.FromList)
+        _eventTargetLinksMap <- lazy (_eventTargetLinks () |> EffectMap.FromList)
 
     let _valueTriggers () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.ValueTrigger)
 
-    let mutable _valueTriggersMap: Lazy<EffectMap> =
-        lazy EffectMap()
+    let mutable _valueTriggersMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetValueTriggers () =
-        _valueTriggersMap <-
-            lazy
-                (_valueTriggers ()
-                 |> EffectMap.FromList)
+        _valueTriggersMap <- lazy (_valueTriggers () |> EffectMap.FromList)
 
     member __.allCoreLinks
         with get () = _allCoreLinks
@@ -127,7 +108,6 @@ type HOI4Lookup() =
 
 type STLLookup() =
     inherit Lookup()
-    member val STLScriptedEffectKeys: string list = [] with get, set
 
 type IRLookup() =
     inherit JominiLookup()

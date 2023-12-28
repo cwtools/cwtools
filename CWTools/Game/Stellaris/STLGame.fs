@@ -7,7 +7,6 @@ open CWTools.Utilities.Utils2
 open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
-open CWTools.Utilities.StringResource
 open CWTools.Localisation
 open CWTools.Localisation.STL
 open CWTools.Common
@@ -302,23 +301,21 @@ module STLGameFunctions =
               description = "Modifiers"
               valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
 
-        lookup.STLScriptedEffectKeys <-
-            "scaled_skill"
-            :: (resources.AllEntities()
-                |> PSeq.map (fun struct (e, l) ->
-                    (l.Force().ScriptedEffectParams
-                     |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
-                |> List.ofSeq
-                |> List.collect id)
+        let scriptedEffectKeys =
+            (resources.AllEntities()
+             |> PSeq.map (fun struct (e, l) ->
+                 (l.Force().ScriptedEffectParams
+                  |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+             |> List.ofSeq
+             |> List.collect id)
 
         let scriptedEffectParmas =
             { key = "scripted_effect_params"
               description = "Scripted effect parameter"
-              values = lookup.STLScriptedEffectKeys
-              valuesWithRange = lookup.STLScriptedEffectKeys |> List.map (fun x -> x, None) }
+              values = scriptedEffectKeys
+              valuesWithRange = scriptedEffectKeys |> List.map (fun x -> x, None) }
 
-        let parmasDValues =
-            lookup.STLScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+        let parmasDValues = scriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
 
         let scriptedEffectParmasD =
             { key = "scripted_effect_params_dollar"
@@ -502,9 +499,7 @@ type STLGame(setupSettings: StellarisSettings) =
             setupSettings.rules
             |> Option.map (fun o -> o.debugRulesOnly)
             |> Option.defaultValue false
-          localisationValidators =
-            [ valTechLocs
-              valPolicies ]
+          localisationValidators = [ valTechLocs; valPolicies ]
 
         }
 

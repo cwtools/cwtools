@@ -6,8 +6,6 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
-open CWTools.Utilities.Position
-open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Rules
@@ -66,45 +64,6 @@ module CK3GameFunctions =
                 "modifier",
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
             ))
-
-    let refreshConfigBeforeFirstTypesHook (lookup: JominiLookup) (resources: IResourceAPI<JominiComputedData>) _ =
-        let modifierEnums =
-            { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
-              description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
-
-        lookup.ScriptedEffectKeys <-
-            (resources.AllEntities()
-             |> PSeq.map (fun struct (e, l) ->
-                 (l.Force().ScriptedEffectParams
-                  |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
-             |> List.ofSeq
-             |> List.collect id)
-
-        let scriptedEffectParmas =
-            { key = "scripted_effect_params"
-              description = "Scripted effect parameter"
-              values = lookup.ScriptedEffectKeys
-              valuesWithRange = lookup.ScriptedEffectKeys |> List.map (fun x -> x, None) }
-
-        let paramsDValues =
-            lookup.ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
-
-        let scriptedEffectParmasD =
-            { key = "scripted_effect_params_dollar"
-              description = "Scripted effect parameter"
-              values = paramsDValues
-              valuesWithRange = paramsDValues |> List.map (fun x -> x, None) }
-
-        lookup.enumDefs <-
-            lookup.enumDefs
-            |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
-            |> Map.add
-                scriptedEffectParmasD.key
-                (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
-            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
-
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
         // updateScriptedEffects()
@@ -223,7 +182,7 @@ type CK3Game(setupSettings: CK3Settings) =
           heavyExperimentalValidators = []
           experimental = false
           fileValidators = []
-          lookupValidators = commonValidationRules 
+          lookupValidators = commonValidationRules
           lookupFileValidators = []
           useRules = true
           debugRulesOnly = false
@@ -290,7 +249,7 @@ type CK3Game(setupSettings: CK3Settings) =
         (createJominiLocalisationFunctions jominiLocDataTypes lookup)
 
     // let validationLocalisationCommandFunction lookup =
-        // createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
+    // createJominiLocalisationFunctions jominiLocDataTypes lookup |> snd
 
     let rulesManagerSettings =
         { rulesSettings = settings.rules
@@ -305,7 +264,7 @@ type CK3Game(setupSettings: CK3Settings) =
           defaultLang = CK3 CK3Lang.English
           oneToOneScopesNames = CWTools.Process.Scopes.CK3.oneToOneScopesNames
           loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
-          refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
+          refreshConfigBeforeFirstTypesHook = Hooks.refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }

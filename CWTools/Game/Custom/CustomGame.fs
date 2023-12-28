@@ -6,8 +6,6 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
-open CWTools.Utilities.Position
-open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Rules
@@ -64,46 +62,6 @@ module CustomGameFunctions =
                 "modifier",
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
             ))
-
-
-    let refreshConfigBeforeFirstTypesHook (lookup: JominiLookup) (resources: IResourceAPI<JominiComputedData>) _ =
-        let modifierEnums =
-            { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
-              description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
-
-        lookup.ScriptedEffectKeys <-
-            (resources.AllEntities()
-             |> PSeq.map (fun struct (e, l) ->
-                 (l.Force().ScriptedEffectParams
-                  |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
-             |> List.ofSeq
-             |> List.collect id)
-
-        let scriptedEffectParmas =
-            { key = "scripted_effect_params"
-              description = "Scripted effect parameter"
-              values = lookup.ScriptedEffectKeys
-              valuesWithRange = lookup.ScriptedEffectKeys |> List.map (fun x -> x, None) }
-
-        let paramsDValues =
-            lookup.ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
-
-        let scriptedEffectParmasD =
-            { key = "scripted_effect_params_dollar"
-              description = "Scripted effect parameter"
-              values = paramsDValues
-              valuesWithRange = paramsDValues |> List.map (fun x -> x, None) }
-
-        lookup.enumDefs <-
-            lookup.enumDefs
-            |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
-            |> Map.add
-                scriptedEffectParmasD.key
-                (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
-            |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
-
 
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
@@ -300,7 +258,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
           defaultLang = Custom CustomLang.English
           oneToOneScopesNames = CWTools.Process.Scopes.IR.oneToOneScopesNames
           loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
-          refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
+          refreshConfigBeforeFirstTypesHook = Hooks.refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }

@@ -6,6 +6,7 @@ open CWTools.Games.Helpers
 open CWTools.Rules
 open CWTools.Utilities
 open CWTools.Utilities.Position
+open FSharp.Collections.ParallelSeq
 let private updateScriptedTriggers (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
     let vanillaTriggers =
         let se = [] |> List.map (fun e -> e :> Effect)
@@ -186,6 +187,44 @@ let loadConfigRulesHook (addModifiersWithScopes : Lookup -> RootRule list) rules
     lookup.coreModifiers <- embedded.modifiers
     // eprintfn "crh %A" ts
     addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
+
+
+let refreshConfigBeforeFirstTypesHook (lookup: JominiLookup) (resources: IResourceAPI<JominiComputedData>) _ =
+    let modifierEnums =
+        { key = "modifiers"
+          values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+          description = "Modifiers"
+          valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+
+    let scriptedEffectKeys =
+        (resources.AllEntities()
+         |> PSeq.map (fun struct (e, l) ->
+             (l.Force().ScriptedEffectParams
+              |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+         |> List.ofSeq
+         |> List.collect id)
+
+    let scriptedEffectParmas =
+        { key = "scripted_effect_params"
+          description = "Scripted effect parameter"
+          values = scriptedEffectKeys
+          valuesWithRange = scriptedEffectKeys |> List.map (fun x -> x, None) }
+
+    let paramsDValues = scriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+
+    let scriptedEffectParmasD =
+        { key = "scripted_effect_params_dollar"
+          description = "Scripted effect parameter"
+          values = paramsDValues
+          valuesWithRange = paramsDValues |> List.map (fun x -> x, None) }
+
+    lookup.enumDefs <-
+        lookup.enumDefs
+        |> Map.add scriptedEffectParmas.key (scriptedEffectParmas.description, scriptedEffectParmas.valuesWithRange)
+        |> Map.add
+            scriptedEffectParmasD.key
+            (scriptedEffectParmasD.description, scriptedEffectParmasD.valuesWithRange)
+        |> Map.add modifierEnums.key (modifierEnums.description, modifierEnums.valuesWithRange)
 
 let refreshConfigAfterVarDefHook (addScriptFormulaScope: bool) (lookup: Lookup) _ (embedded: EmbeddedSettings) =
     refreshConfigAfterHook addScriptFormulaScope false lookup embedded
