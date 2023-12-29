@@ -4,7 +4,6 @@ open CWTools.Game
 open CWTools.Localisation
 open CWTools.Utilities.Utils2
 open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.CK2Localisation
@@ -18,7 +17,6 @@ open CWTools.Process.Scopes.CK2
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.LocalisationString
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open System

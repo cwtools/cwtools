@@ -4,8 +4,6 @@ open CWTools.Common.HOI4Constants
 open CWTools.Game
 open CWTools.Localisation
 open CWTools.Utilities.Utils2
-open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.HOI4

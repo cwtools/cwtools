@@ -3,13 +3,9 @@ namespace CWTools.Games.VIC2
 open CWTools.Game
 open CWTools.Localisation
 open CWTools.Utilities.Utils2
-open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.VIC2Localisation
-open CWTools.Utilities.Position
-open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Rules
@@ -18,7 +14,6 @@ open CWTools.Process.Scopes.VIC2
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.LocalisationString
 open System
 open CWTools.Games.Helpers
 open CWTools.Parser

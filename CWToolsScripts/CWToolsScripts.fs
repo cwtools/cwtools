@@ -1,6 +1,5 @@
 namespace CWToolsScripts
 open System.Text
-open CWTools.Games.Stellaris.STLLookup
 open CWTools.Utilities.StringResource
 open CWTools.Games.Files
 open FSharp.Data
@@ -13,7 +12,6 @@ module CWToolsScripts =
     open System.IO
 
     open CWTools.Common
-    open FParsec
     open CWTools.Parser
     open CWTools.Rules
     open CWTools.Utilities
@@ -414,8 +412,6 @@ module CWToolsScripts =
             let res = effects |> List.filter (fun t -> Set.contains t.name undefinedEffects) |> eout
             File.WriteAllText(@"C:\Users\Thomas\git\cwtools-hoi4-config\\Config\effects_new.cwt", res)
         0
-    open FSharp.Data
-    open FSharp.Data.JsonExtensions
     let generateHOI4Modifiers() =
         let docs = File.ReadAllText(@"C:\Users\Thomas\git\cwtools-hoi4-config\Config\script_documentation.json")
         let json = JsonValue.Parse docs

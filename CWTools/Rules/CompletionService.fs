@@ -4,7 +4,6 @@ open System.Collections.Generic
 open CWTools.Common
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities.Utils2
-open Microsoft.FSharp.Collections.Tagged
 open CWTools.Utilities.Utils
 open CWTools.Process.Localisation
 open CWTools.Process

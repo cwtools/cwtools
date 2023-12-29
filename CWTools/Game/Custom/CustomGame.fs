@@ -2,17 +2,13 @@ namespace CWTools.Games.Custom
 
 open CWTools.Game
 open CWTools.Localisation
-open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-open CWTools.Rules
 open CWTools.Process.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
 

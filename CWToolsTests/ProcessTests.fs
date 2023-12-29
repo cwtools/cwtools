@@ -5,34 +5,22 @@ open FParsec
 open CWTools.Common
 open CWTools.Process
 open CWTools.Parser
-open CWTools.Parser.Types
 open CWTools.Rules
 // open CWTools.Rules.RulesParser
 open CWTools.Games
-open CWTools.Process.ProcessCore
 open System.IO
-open System.Reflection
-open CWTools.Parser.DocsParser
-open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
-open System
-open CWTools.Process.STLProcess
 open CWTools.Utilities.Position
 open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Utils2
 open CWTools.Utilities
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
-open CWTools.Games.Stellaris.STLLookup
-open CWTools.Validation
 
-open CWTools.Validation.Stellaris
 open CWTools.Process.Scopes.STL
 open CWTools.Process.Scopes
 open CWTools.Process.Scopes.Scopes
-open CWTools.Common.NewScope
 open CWTools.Rules.RulesWrapper
 
 

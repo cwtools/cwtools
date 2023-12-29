@@ -11,7 +11,6 @@ open CWTools.Parser
 open System.IO
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
-open CWTools.Games.Stellaris.STLLookup
 open System.Threading
 open System.Globalization
 open CWTools.Common.STLConstants

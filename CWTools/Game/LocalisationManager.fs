@@ -3,7 +3,6 @@ namespace CWTools.Games
 open CWTools.Common
 open CWTools.Localisation
 open CWTools.Utilities.Utils
-open CWTools.Process.Localisation
 open FSharp.Collections.ParallelSeq
 
 

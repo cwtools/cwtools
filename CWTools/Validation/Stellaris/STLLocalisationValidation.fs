@@ -7,7 +7,6 @@ open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
 open CWTools.Common
-open CWTools.Games.Stellaris.STLLookup
 open System
 
 module STLLocalisationValidation =

@@ -4,7 +4,6 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Process
 open CWTools.Process.ProcessCore
-open CWTools.Common.STLConstants
 open CWTools.Utilities.Utils
 open System
 open QuickGraph

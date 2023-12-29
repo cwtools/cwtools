@@ -1,14 +1,11 @@
 ﻿module CWToolsScripts.Vic3
 
-open System
 
 open System.IO
-open System.Security.Cryptography
 
 open System.Text
 open CWTools.Common
 open CWTools.Parser
-open FParsec
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 open CWTools.Rules

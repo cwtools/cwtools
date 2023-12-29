@@ -5,8 +5,6 @@ open CWTools.Process.Scopes
 open CWTools.Utilities.Utils2
 
 module CK3 =
-    open CWTools.Utilities.Utils
-    open Microsoft.FSharp.Collections.Tagged
 
     let defaultDesc = "Scope (/context) switch"
 

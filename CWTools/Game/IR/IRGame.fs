@@ -2,8 +2,6 @@ namespace CWTools.Games.IR
 
 open CWTools.Game
 open CWTools.Localisation
-open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.IR
@@ -15,7 +13,6 @@ open CWTools.Process.Scopes.IR
 open CWTools.Process.Scopes.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.LocalisationString
 open System
 open CWTools.Games.Helpers
 open CWTools.Parser

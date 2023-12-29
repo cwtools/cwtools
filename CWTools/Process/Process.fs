@@ -7,7 +7,6 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
 open CWTools.Common.NewScope
-open CWTools.Utilities.StringResource
 
 
 module List =

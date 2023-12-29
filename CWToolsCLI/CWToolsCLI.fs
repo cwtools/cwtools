@@ -3,23 +3,11 @@ open System.Text
 open CWTools.Common
 open System.IO
 open CWTools.Parser
-open CWTools
 open FParsec
-open System.Diagnostics.Tracing
 open System.Reflection
-open CWTools.Localisation
-open CWTools.Localisation.STL
 open CWTools.Games.Files
-open CWTools.Common.STLConstants
 open CWTools.Games
-open CWTools.Validation.Stellaris
-open MBrace.FsPickler
-open CWTools.Process
-open CWTools.Utilities.Position
 open System
-open FSharpPlus.Control
-open Pastel
-open System.Drawing
 open Reporters.Reporters
 open Reporters
 

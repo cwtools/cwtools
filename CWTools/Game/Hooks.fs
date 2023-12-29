@@ -200,23 +200,6 @@ let loadConfigRulesHook rules (lookup: Lookup) embedded =
             | x -> [ x ])
 
 
-    // let addModifiersWithScopes (lookup: Lookup) =
-    //     let modifierOptions (modifier: ActualModifier) =
-    //         let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
-    //
-    //         { Options.DefaultOptions with
-    //             requiredScopes = requiredScopes }
-    //
-    //     let processField =
-    //         RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
-    //
-    //     lookup.coreModifiers
-    //     |> List.map (fun c ->
-    //         AliasRule(
-    //             "modifier",
-    //             NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-    //         ))
-    //
     let ts = updateScriptedTriggers lookup rules embedded
     let es = updateScriptedEffects lookup rules embedded
     let ls = updateEventTargetLinks embedded

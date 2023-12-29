@@ -721,7 +721,6 @@ module CommonValidation =
             | _ -> OK
 
 
-    open CWTools.Utilities
 
     let private intern x =
         (CWTools.Utilities.StringResource.stringManager.InternIdentifierToken x).lower

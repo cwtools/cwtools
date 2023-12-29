@@ -2,22 +2,15 @@ namespace CWTools.Games.CK3
 
 open CWTools.Game
 open CWTools.Localisation
-open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-open CWTools.Rules
 open CWTools.Process.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
-open CWTools.Utilities.Utils
-open FSharp.Collections.ParallelSeq
-open CWTools.Process.Localisation
 
 module CK3GameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>

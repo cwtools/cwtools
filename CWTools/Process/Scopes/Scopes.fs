@@ -2,13 +2,10 @@ namespace CWTools.Process.Scopes
 
 open System
 open System.Collections.Generic
-open System.Globalization
 open CWTools.Common
 open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.Utils2
-open Microsoft.FSharp.Collections.Tagged
-open VDS.Common.Tries
 
 
 // type EffectMapSparseTrie() =

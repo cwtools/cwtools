@@ -6,7 +6,6 @@ open CWTools.Games
 open CWTools.Common
 open System.IO
 open CWTools.Validation.Common.CommonValidation
-open CWTools.Rules
 open CWTools.Process.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures

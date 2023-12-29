@@ -5,8 +5,6 @@ open CWTools.Process.Scopes
 open CWTools.Utilities.Utils2
 
 module HOI4 =
-    open CWTools.Utilities.Utils
-    open Microsoft.FSharp.Collections.Tagged
 
 
 

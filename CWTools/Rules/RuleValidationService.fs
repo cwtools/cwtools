@@ -11,7 +11,6 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities
 open CWTools.Common
-open Microsoft.FSharp.Collections.Tagged
 open System.IO
 open QuickGraph
 open System

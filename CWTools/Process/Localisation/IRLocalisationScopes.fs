@@ -2,7 +2,6 @@ namespace CWTools.Process.Localisation
 
 open CWTools.Process.Scopes
 open CWTools.Common
-open CWTools.Utilities.Utils
 open CWTools.Process.Scopes.Scopes
 
 module IR =

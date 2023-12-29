@@ -2,33 +2,26 @@ module Tests
 
 open CWToolsCLI
 open Expecto
-open Expecto.Logging
-open Expecto.Logging.Message
 open CWTools.Games
 open FParsec
 open CWTools.Common
 open CWTools.Process
 open CWTools.Parser
-open CWTools.Parser.Types
 open CWTools.Process.ProcessCore
 open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
-open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
 open System
 open CWTools.Utilities.Position
 open CWTools.Utilities
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
-open CWTools.Games.Stellaris.STLLookup
 open System.Threading
 open System.Globalization
-open CWTools.Validation.Stellaris
 open MBrace.FsPickler
 open System.Text
 open CWTools.Parser.CKPrinter
-open CWTools.Common.NewScope
 open CWTools.Utilities.Utils
 
 

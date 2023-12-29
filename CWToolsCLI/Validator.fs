@@ -1,22 +1,11 @@
 namespace CWToolsCLI
-open CWTools.Common.STLConstants
-open CWTools.Games.Stellaris
-open CWTools.Games.Stellaris.STLLookup
-open CWTools.Games.HOI4
-open CWTools.Games.EU4
-open CWTools.Games.CK2
-open CWTools.Games.VIC2
-open CWTools.Games.Custom
 open Chiron.Builder
 open Chiron
 open CWTools.Utilities.Position
 open System.Security.Cryptography
 open System.Text
 module Validator =
-    open CWTools
     open CWTools.Games
-    open CWTools.Parser
-    open CWTools.Localisation
     open CWTools.Common
     open CWTools.Games.Files
 
