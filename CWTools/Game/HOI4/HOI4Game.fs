@@ -1,6 +1,7 @@
 namespace CWTools.Games.HOI4
 
 open CWTools.Common.HOI4Constants
+open CWTools.Game
 open CWTools.Localisation
 open CWTools.Utilities.Utils2
 open CWTools.Validation
@@ -56,16 +57,6 @@ module HOI4GameFunctions =
         { scriptedLocCommands = lookup.scriptedLoc |> Seq.map (fun s -> s, [ scopeManager.AnyScope ]) |> Array.ofSeq
           eventTargets = eventtargets |> Seq.map (fun s -> s, scopeManager.AnyScope) |> Array.ofSeq
           setVariables = definedvars }
-
-    let globalLocalisation (game: GameObject) =
-        let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-
-        game.Lookup.proccessedLoc
-        |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys
-        <&&> globalTypeLoc
-        |> (function
-        | Invalid(_, es) -> es
-        | _ -> [])
 
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
@@ -457,7 +448,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
              Encoding.UTF8,
              Encoding.GetEncoding(1252),
              validationSettings,
-             globalLocalisation,
+             Hooks.globalLocalisation,
              (fun _ _ -> ()),
              ".yml",
              rulesManagerSettings)
@@ -494,7 +485,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
         member __.LocalisationErrors(force: bool, forceGlobal: bool) =
-            getLocalisationErrors game globalLocalisation (force, forceGlobal)
+            getLocalisationErrors game Hooks.globalLocalisation (force, forceGlobal)
 
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() = resources.GetResources()

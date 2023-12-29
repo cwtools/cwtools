@@ -44,23 +44,6 @@ module VIC2GameFunctions =
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup: Lookup) =
-        let modifierOptions (modifier: ActualModifier) =
-            let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
-
-            { Options.DefaultOptions with
-                requiredScopes = requiredScopes }
-
-        let processField =
-            RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
-
-        lookup.coreModifiers
-        |> List.map (fun c ->
-            AliasRule(
-                "modifier",
-                NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-            ))
-
     let updateProvinces (game: GameObject) =
         let provinceFile =
             game.Resources.GetResources()
@@ -252,7 +235,7 @@ type VIC2Game(setupSettings: VIC2Settings) =
           defaultContext = defaultContext
           defaultLang = VIC2 VIC2Lang.English
           oneToOneScopesNames = oneToOneScopesNames
-          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
+          loadConfigRulesHook = Hooks.loadConfigRulesHook
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook false
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook false

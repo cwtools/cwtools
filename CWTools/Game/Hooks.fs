@@ -117,7 +117,25 @@ let refreshConfigAfterHook
 
     lookup.allCoreLinks <- ts @ es @ ls
 
-let loadConfigRulesHook (addModifiersWithScopes: Lookup -> RootRule list) rules (lookup: Lookup) embedded =
+let private addModifiersWithScopes (lookup: Lookup) =
+    let modifierOptions (modifier: ActualModifier) =
+        let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
+
+        { Options.DefaultOptions with
+            requiredScopes = requiredScopes }
+
+    let processField =
+        RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
+
+    (lookup.coreModifiers
+     |> List.map (fun c ->
+         AliasRule(
+             "modifier",
+             NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
+         )))
+    @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
+    
+let loadConfigRulesHook rules (lookup: Lookup) embedded =
     let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
         let addRequiredScopesE (s: StringTokens) (o: Options) =
             let newScopes =

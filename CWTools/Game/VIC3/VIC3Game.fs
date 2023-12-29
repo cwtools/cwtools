@@ -16,43 +16,8 @@ open CWTools.Parser
 module VIC3GameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>
 
-
-
-
-    let addModifiersWithScopes (lookup: Lookup) =
-        let modifierOptions (modifier: ActualModifier) =
-            let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
-
-            { Options.DefaultOptions with
-                requiredScopes = requiredScopes }
-
-        let processField =
-            RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
-
-        (lookup.coreModifiers
-         |> List.map (fun c ->
-             AliasRule(
-                 "modifier",
-                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-             )))
-        @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
-
     let afterInit (game: GameObject) =
-        // updateScriptedTriggers()
-        // updateScriptedEffects()
-        // updateStaticodifiers()
-        // updateScriptedLoc(game)
-        // updateDefinedVariables()
-        // updateProvinces(game)
-        // updateCharacters(game)
-        // updateModifiers(game)
         ()
-    // updateLegacyGovernments(game)
-    // updateTechnologies()
-    // game.LocalisationManager.UpdateAllLocalisation()
-    // updateTypeDef game game.Settings.rules
-    // game.LocalisationManager.UpdateAllLocalisation()
-
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =
@@ -232,7 +197,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
           defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
           defaultLang = VIC3 VIC3Lang.English
           oneToOneScopesNames = CWTools.Process.Scopes.VIC3.oneToOneScopesNames
-          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
+          loadConfigRulesHook = Hooks.loadConfigRulesHook
           refreshConfigBeforeFirstTypesHook = Hooks.refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true

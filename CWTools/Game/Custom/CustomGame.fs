@@ -22,23 +22,6 @@ module CustomGameFunctions =
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup: Lookup) =
-        let modifierOptions (modifier: ActualModifier) =
-            let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
-
-            { Options.DefaultOptions with
-                requiredScopes = requiredScopes }
-
-        let processField =
-            RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
-
-        lookup.coreModifiers
-        |> List.map (fun c ->
-            AliasRule(
-                "modifier",
-                NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-            ))
-
     let afterInit (game: GameObject) =
         updateModifiers (game)
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
@@ -217,7 +200,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
           defaultContext = CWTools.Process.Scopes.Scopes.defaultContext
           defaultLang = Custom CustomLang.English
           oneToOneScopesNames = CWTools.Process.Scopes.IR.oneToOneScopesNames
-          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
+          loadConfigRulesHook = Hooks.loadConfigRulesHook
           refreshConfigBeforeFirstTypesHook = Hooks.refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook true
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true

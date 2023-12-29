@@ -329,19 +329,9 @@ module CK2GameFunctions =
 
 
     let afterInit (game: GameObject) =
-        // updateScriptedTriggers()
-        // updateScriptedEffects()
-        // updateStaticodifiers()
-        // updateScriptedLoc(game)
-        // updateDefinedVariables()
         updateModifiers (game)
-        // updateLegacyGovernments(game)
-        // updateTechnologies()
         updateLandedTitles (game)
         updateProvinces (game)
-    // game.LocalisationManager.UpdateAllLocalisation()
-    // updateTypeDef game game.Settings.rules
-    // game.LocalisationManager.UpdateAllLocalisation()
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         configs

@@ -25,27 +25,6 @@ module IRGameFunctions =
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let addModifiersWithScopes (lookup: Lookup) =
-        let modifierOptions (modifier: ActualModifier) =
-            let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
-
-            { Options.DefaultOptions with
-                requiredScopes = requiredScopes }
-
-        lookup.coreModifiers
-        |> List.map (fun c ->
-            AliasRule(
-                "modifier",
-                NewRule(
-                    LeafRule(
-                        CWTools.Rules.RulesParser.specificField c.tag,
-                        ValueField(ValueType.Float(-1E+12M, 1E+12M))
-                    ),
-                    modifierOptions c
-                )
-            ))
-
-
 
     let updateProvinces (game: GameObject) =
         let provinceFile =
@@ -299,7 +278,7 @@ type IRGame(setupSettings: IRSettings) =
           defaultContext = defaultContext
           defaultLang = IR IRLang.English
           oneToOneScopesNames = oneToOneScopesNames
-          loadConfigRulesHook = Hooks.loadConfigRulesHook addModifiersWithScopes
+          loadConfigRulesHook = Hooks.loadConfigRulesHook
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = Hooks.refreshConfigAfterFirstTypesHook false
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook false
