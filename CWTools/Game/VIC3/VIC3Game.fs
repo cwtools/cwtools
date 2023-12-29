@@ -2,8 +2,6 @@ namespace CWTools.Games.VIC3
 
 open CWTools.Game
 open CWTools.Localisation
-open CWTools.Validation
-open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open System.IO
@@ -12,42 +10,13 @@ open CWTools.Rules
 open CWTools.Process.Scopes
 open System.Text
 open CWTools.Games.LanguageFeatures
-open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open CWTools.Parser
-open CWTools.Utilities.Utils
-open FSharp.Collections.ParallelSeq
-open CWTools.Process.Localisation
 
 module VIC3GameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>
 
-    let globalLocalisation (game: GameObject) =
-        let validateProcessedLocalisation
-            : ((Lang * LocKeySet) list -> (Lang * Map<string, LocEntry>) list -> ValidationResult) =
-            validateProcessedLocalisationBase []
 
-        let locParseErrors =
-            game.LocalisationManager.LocalisationAPIs()
-            <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
-
-        let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-
-        game.Lookup.proccessedLoc
-        |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys
-        <&&> locParseErrors
-        <&&> globalTypeLoc
-        |> (function
-        | Invalid(_, es) -> es
-        | _ -> [])
-
-    let updateScriptedLoc (game: GameObject) = ()
-
-    let addModifiersFromCoreAndTypes (lookup: Lookup) (embeddedSettings: EmbeddedSettings) =
-        let typeGeneratedModifiers =
-            RulesHelpers.generateModifiersFromTypes lookup.typeDefs lookup.typeDefInfo
-
-        lookup.coreModifiers <- embeddedSettings.modifiers @ typeGeneratedModifiers
 
 
     let addModifiersWithScopes (lookup: Lookup) =
@@ -67,6 +36,7 @@ module VIC3GameFunctions =
                  NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
              )))
         @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
+
     let afterInit (game: GameObject) =
         // updateScriptedTriggers()
         // updateScriptedEffects()
@@ -284,7 +254,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
               Encoding.UTF8,
               Encoding.GetEncoding(1252),
               validationSettings,
-              globalLocalisation,
+              Hooks.globalLocalisation,
               (fun _ _ -> ()),
               ".yml",
               rulesManagerSettings))
@@ -316,7 +286,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
         member __.LocalisationErrors(force: bool, forceGlobal: bool) =
-            getLocalisationErrors game globalLocalisation (force, forceGlobal)
+            getLocalisationErrors game Hooks.globalLocalisation (force, forceGlobal)
 
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() = resources.GetResources()

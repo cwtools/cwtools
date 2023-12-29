@@ -7,8 +7,6 @@ open CWTools.Validation.ValidationCore
 open CWTools.Games
 open CWTools.Common
 open CWTools.Localisation.IR
-open CWTools.Utilities.Position
-open CWTools.Utilities
 open System.IO
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Rules
@@ -24,65 +22,6 @@ open CWTools.Parser
 
 module IRGameFunctions =
     type GameObject = GameObject<IRComputedData, IRLookup>
-
-    // let createLocalisationFunctions (localisationSettings : LocalisationEmbeddedSettings) =
-    //     fun (lookup : Lookup) ->
-    //         let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-    //         let localisationCommandValidator = createJominiLocalisationCommandValidator dataTypes
-    //         let validateLocalisationCommand = validateJominiLocalisationCommandsBase localisationCommandValidator
-    //         let localisationCommandValidatorDefaultContext = localisationCommandValidator defaultContext
-    //         let processLocalisation = processJominiLocalisationBase localisationCommandValidatorDefaultContext
-    //         let eventtargets =
-    //             lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
-    //                                      |> List.distinct
-    //                                      |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
-    //         let definedvars =
-    //             (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-    //         processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars
-
-
-    // let processLocalisationFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
-    //     let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-    //     let localisationCommandValidator = createJominiLocalisationCommandValidator dataTypes
-    //     let localisationCommandValidatorDefaultContext = localisationCommandValidator defaultContext
-    //     let processLocalisation = processJominiLocalisationBase localisationCommandValidatorDefaultContext
-    //     let eventtargets =
-    //         lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
-    //                                  |> List.distinct
-    //                                  |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
-    //     let definedvars =
-    //         (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-    //     processLocalisation eventtargets definedvars
-
-    // let validateLocalisationCommandFunction (localisationSettings : LocalisationEmbeddedSettings) (lookup : Lookup) =
-    //     let dataTypes = localisationSettings |> function | Jomini dts -> dts | _ -> { promotes = Map.empty; functions = Map.empty; dataTypes = Map.empty; dataTypeNames = Set.empty }
-    //     let localisationCommandValidator = createJominiLocalisationCommandValidator dataTypes
-    //     let validateLocalisationCommand = validateJominiLocalisationCommandsBase localisationCommandValidator
-    //     let eventtargets =
-    //         lookup.savedEventTargets |> Seq.map (fun (a, _, c) -> (a, c)) |> List.ofSeq
-    //                                  |> List.distinct
-    //                                  |> List.fold (fun map (k, s) -> if Map.containsKey k map then Map.add k (s::map.[k]) map else Map.add k ([s]) map) Map.empty
-    //     let definedvars =
-    //         (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-    //     validateLocalisationCommand eventtargets definedvars
-
-    let globalLocalisation (game: GameObject) =
-        let locParseErrors =
-            game.LocalisationManager.LocalisationAPIs()
-            <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
-
-        let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-
-        game.Lookup.proccessedLoc
-        |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys
-        <&&> locParseErrors
-        <&&> globalTypeLoc
-        |> (function
-        | Invalid(_, es) -> es
-        | _ -> [])
-
-    let updateScriptedLoc (game: GameObject) = ()
-
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
@@ -191,21 +130,9 @@ module IRGameFunctions =
 
 
     let afterInit (game: GameObject) =
-        // updateScriptedTriggers()
-        // updateScriptedEffects()
-        // updateStaticodifiers()
-        // updateScriptedLoc(game)
-        // updateDefinedVariables()
         updateProvinces (game)
         updateCharacters (game)
         updateModifiers (game)
-
-    // updateLegacyGovernments(game)
-    // updateTechnologies()
-    // game.LocalisationManager.UpdateAllLocalisation()
-    // updateTypeDef game game.Settings.rules
-    // game.LocalisationManager.UpdateAllLocalisation()
-
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =
@@ -392,7 +319,7 @@ type IRGame(setupSettings: IRSettings) =
               Encoding.UTF8,
               Encoding.GetEncoding(1252),
               validationSettings,
-              globalLocalisation,
+              Hooks.globalLocalisation,
               (fun _ _ -> ()),
               ".yml",
               rulesManagerSettings))
@@ -424,7 +351,7 @@ type IRGame(setupSettings: IRSettings) =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
         member __.LocalisationErrors(force: bool, forceGlobal: bool) =
-            getLocalisationErrors game globalLocalisation (force, forceGlobal)
+            getLocalisationErrors game Hooks.globalLocalisation (force, forceGlobal)
 
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() = resources.GetResources()

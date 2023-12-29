@@ -56,20 +56,17 @@ module Helpers =
         //TODO crazy inefficient! Done for every link
         let aliasKeyMap =
             let resDict = Dictionary<string, string list>()
+
             lookup.configRules
             |> Seq.choose (function
                 | AliasRule(a, rs) -> Some(a, rs)
                 | _ -> None)
             |> Seq.groupBy fst
             |> Seq.iter (fun (k, vs) ->
-                resDict[k] <- 
-                    vs
-                    |> Seq.map snd
-                    |> Seq.collect ruleToCompletionListHelper
-                    |> List.ofSeq
-                )
+                resDict[k] <- vs |> Seq.map snd |> Seq.collect ruleToCompletionListHelper |> List.ofSeq)
+
             resDict
-            // |> Map.ofSeq
+        // |> Map.ofSeq
 
         let convertSourceRuleType (lookup: Lookup) (link: EventTargetDataLink) =
             match link.sourceRuleType.Trim() with
@@ -101,8 +98,8 @@ module Helpers =
                 let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
 
                 match aliasname |> Option.map (fun x -> aliasKeyMap.TryGetValue x) with
-                | Some (true, vs) -> vs |> List.map (fun x -> x, None)
-                | Some (false, _)
+                | Some(true, vs) -> vs |> List.map (fun x -> x, None)
+                | Some(false, _)
                 | None ->
                     log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
                     []
@@ -259,7 +256,8 @@ module Helpers =
     open CWTools.Process.Localisation
     open CWTools.Validation
 
-    let hardcodedLocalisation = [ "playername"; "prov" ]
+    // let hardcodedLocalisation = [ "playername"; "prov" ]
+    let hardcodedLocalisation = []
 
     let validateProcessedLocalisation
         : ((Lang * LocKeySet) list -> (Lang * Map<string, LocEntry>) list -> ValidationResult) =

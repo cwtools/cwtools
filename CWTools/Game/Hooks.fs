@@ -7,6 +7,24 @@ open CWTools.Rules
 open CWTools.Utilities
 open CWTools.Utilities.Position
 open FSharp.Collections.ParallelSeq
+open CWTools.Validation.LocalisationString
+open CWTools.Validation
+open CWTools.Validation.ValidationCore
+
+let globalLocalisation (game: GameObject<_, _>) =
+    let locParseErrors =
+        game.LocalisationManager.LocalisationAPIs()
+        <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
+
+    let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
+
+    game.Lookup.proccessedLoc
+    |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys
+    <&&> locParseErrors
+    <&&> globalTypeLoc
+    |> (function
+    | Invalid(_, es) -> es
+    | _ -> [])
 
 let private updateScriptedTriggers (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
     let vanillaTriggers =

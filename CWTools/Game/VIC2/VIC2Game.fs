@@ -40,22 +40,6 @@ module VIC2GameFunctions =
           eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
           setVariables = definedvars |> LowerCaseStringSet }
 
-    let globalLocalisation (game: GameObject) =
-        let locParseErrors =
-            game.LocalisationManager.LocalisationAPIs()
-            <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
-
-        let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
-
-        game.Lookup.proccessedLoc
-        |> validateProcessedLocalisation game.LocalisationManager.taggedLocalisationKeys
-        <&&> locParseErrors
-        <&&> globalTypeLoc
-        |> (function
-        | Invalid(_, es) -> es
-        | _ -> [])
-
-    let updateScriptedLoc (game: GameObject) = ()
 
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
@@ -122,20 +106,8 @@ module VIC2GameFunctions =
             |> Map.add provinceEnums.key (provinceEnums.description, provinceEnums.valuesWithRange)
 
     let afterInit (game: GameObject) =
-        // updateScriptedTriggers()
-        // updateScriptedEffects()
-        // updateStaticodifiers()
-        // updateScriptedLoc(game)
-        // updateDefinedVariables()
         updateProvinces (game)
         updateModifiers (game)
-
-    // updateLegacyGovernments(game)
-    // updateTechnologies()
-    // game.LocalisationManager.UpdateAllLocalisation()
-    // updateTypeDef game game.Settings.rules
-    // game.LocalisationManager.UpdateAllLocalisation()
-
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =
@@ -300,7 +272,7 @@ type VIC2Game(setupSettings: VIC2Settings) =
               Encoding.UTF8,
               Encoding.GetEncoding(1252),
               validationSettings,
-              globalLocalisation,
+              Hooks.globalLocalisation,
               (fun _ _ -> ()),
               ".yml",
               rulesManagerSettings))
@@ -332,7 +304,7 @@ type VIC2Game(setupSettings: VIC2Settings) =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
         member __.LocalisationErrors(force: bool, forceGlobal: bool) =
-            getLocalisationErrors game globalLocalisation (force, forceGlobal)
+            getLocalisationErrors game Hooks.globalLocalisation (force, forceGlobal)
 
         member __.Folders() = fileManager.AllFolders()
         member __.AllFiles() = resources.GetResources()
