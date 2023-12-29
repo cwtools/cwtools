@@ -134,7 +134,7 @@ let private addModifiersWithScopes (lookup: Lookup) =
              NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
          )))
     @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
-    
+
 let loadConfigRulesHook rules (lookup: Lookup) embedded =
     let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
         let addRequiredScopesE (s: StringTokens) (o: Options) =

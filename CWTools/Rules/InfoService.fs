@@ -70,23 +70,24 @@ type InfoService
         |> Seq.toList
 
 
-// |> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
-//|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+    // |> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+    //|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
 
     let varSet =
-        varMap.TryFind "variable"
-        |> Option.defaultValue (PrefixOptimisedStringSet())
+        varMap.TryFind "variable" |> Option.defaultValue (PrefixOptimisedStringSet())
 
     let inner (map: IDictionary<string, ResizeArray<string>>) (subtype: string) (set: PrefixOptimisedStringSet) =
         // set.Values
-        set.IdValues |> Seq.map (fun i -> stringManager.GetStringForID i.normal)
-        |> Seq.iter
-            (fun v ->
-                match map.TryGetValue v with
-                | true, l -> l.Add subtype
-                | false, _ -> map[v] <- ResizeArray<string>(); map[v].Add subtype)
+        set.IdValues
+        |> Seq.map (fun i -> stringManager.GetStringForID i.normal)
+        |> Seq.iter (fun v ->
+            match map.TryGetValue v with
+            | true, l -> l.Add subtype
+            | false, _ ->
+                map[v] <- ResizeArray<string>()
+                map[v].Add subtype)
 
-    let invertedTypeMap : IDictionary<string, ResizeArray<string>> =
+    let invertedTypeMap: IDictionary<string, ResizeArray<string>> =
         let map = Dictionary<string, ResizeArray<string>>()
         types |> Map.toSeq |> Seq.iter (fun (t, set) -> inner map t set)
         map
@@ -108,22 +109,21 @@ type InfoService
         | LeafRule(NewField.TypeField(TypeType.Simple t), _), _
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             types.TryFind(t)
-            |> Option.map (fun s ->
-                s.IdValues |> Seq.map _.lower)
+            |> Option.map (fun s -> s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue (Seq.empty)
         | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             types.TryFind(t)
             |> Option.map (fun s ->
-                s.IdValues |> Seq.map (fun i ->
+                s.IdValues
+                |> Seq.map (fun i ->
                     let s = stringManager.GetStringForID i.normal
                     stringManager.InternIdentifierToken(p + s + suff).lower))
             |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
-            |> Option.map (fun (_, s) ->
-                s.IdValues |> Seq.map _.lower)
+            |> Option.map (fun (_, s) -> s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue Seq.empty
         | _ -> Seq.empty
 
@@ -132,6 +132,7 @@ type InfoService
         |> Map.toList
         |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> HashSet<StringToken>))
         |> Map.ofList
+
     let monitor = new Object()
 
     let memoizeRulesInner memFunction =
@@ -573,7 +574,8 @@ type InfoService
         let resultForType (child: Node option) (typedef: TypeDefinition) =
             match child with
             | Some c ->
-                let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                let typerules =
+                    rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
 
                 match typerules, typedef.type_per_file with
                 | [ (n, (NodeRule(l, rs), o)) ], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
@@ -592,7 +594,8 @@ type InfoService
                     )
                 | _ -> None
             | None ->
-                let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
+                let typerules =
+                    rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
 
                 match typerules with
                 | [ (n, (NodeRule(l, rs), o)) ] ->
@@ -1322,7 +1325,9 @@ type InfoService
 
                 if res.ContainsKey(typename) then
                     res.[typename]
-                        .Add(createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDef assocType)
+                        .Add(
+                            createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDef assocType
+                        )
 
                     res
                 else
@@ -1420,7 +1425,9 @@ type InfoService
 
                 if res.ContainsKey(typename) then
                     res.[typename]
-                        .Add(createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType)
+                        .Add(
+                            createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
+                        )
 
                     res
                 else
@@ -1462,7 +1469,9 @@ type InfoService
 
                 if res.ContainsKey(typename) then
                     res.[typename]
-                        .Add(createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType)
+                        .Add(
+                            createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
+                        )
 
                     res
                 else
@@ -1697,7 +1706,7 @@ type InfoService
 
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
-      //  asdasdads // Try building a specialized fold which builds a single array instead of folding
+    //  asdasdads // Try building a specialized fold which builds a single array instead of folding
 
     let singleDepthFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect depthInfoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath

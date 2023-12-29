@@ -51,7 +51,17 @@ module UtilityParser =
                 else
                     EffectType.Link
 
-            SimpleLink(ScopedEffect(StringResource.stringManager.InternIdentifierToken name, inputScopes, Some outputScope, effectType, desc, "", true))
+            SimpleLink(
+                ScopedEffect(
+                    StringResource.stringManager.InternIdentifierToken name,
+                    inputScopes,
+                    Some outputScope,
+                    effectType,
+                    desc,
+                    "",
+                    true
+                )
+            )
 
     let loadEventTargetLinks anyScope parseScope allScopes filename fileString =
         let parsed = CKParser.parseString fileString filename

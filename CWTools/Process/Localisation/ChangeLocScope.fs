@@ -40,7 +40,7 @@ type LocEntry =
       commands: string list
       jominiCommands: JominiLocCommand list list
       scopes: LocContextResult list
-      errorRanges : range option }
+      errorRanges: range option }
 
 type LegacyLocDynamicsSettings =
     {
@@ -141,10 +141,8 @@ module ChangeLocScope =
                     | _, _, true -> LocContextResult.Found(context.CurrentScope.ToString())
                     | None, false, false ->
                         let firstPart = nextKey.Split('@').[0]
-                        match
-                            staticSettings.usesVariableCommands,
-                            dynamicSettings.setVariables.Contains firstPart
-                        with
+
+                        match staticSettings.usesVariableCommands, dynamicSettings.setVariables.Contains firstPart with
                         | true, true -> LocContextResult.Found(context.CurrentScope.ToString())
                         | false, true -> LocContextResult.VariableScope context
                         | _, false -> LocNotFound nextKey

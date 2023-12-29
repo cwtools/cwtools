@@ -19,6 +19,7 @@ open CWTools.Parser
 
 module IRGameFunctions =
     type GameObject = GameObject<IRComputedData, IRLookup>
+
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 

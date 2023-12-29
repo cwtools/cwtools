@@ -180,8 +180,7 @@ and NewField =
         | ScalarField sv -> "Field of any value"
         | SpecificField(SpecificValue sv) -> $"Field of %s{stringManager.GetStringForID sv.normal}"
         | VariableGetField sv -> $"Field of \"%s{sv}\" value"
-        | VariableField(isint, is32bit, (min, max)) ->
-            $"Field of defined variable or number between {min} and {max}"
+        | VariableField(isint, is32bit, (min, max)) -> $"Field of defined variable or number between {min} and {max}"
         | _ -> $"Field of %A{x}"
 
 and RuleType =

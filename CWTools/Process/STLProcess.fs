@@ -13,9 +13,9 @@ module STLProcess =
     //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
-        (vanillaTriggersAndEffects : Dictionary<StringToken, Scope list>)
-        (newTriggersAndEffects : Map<StringToken, Scope list>)
-        (scopedEffects : Map<StringToken, Scope list>)
+        (vanillaTriggersAndEffects: Dictionary<StringToken, Scope list>)
+        (newTriggersAndEffects: Map<StringToken, Scope list>)
+        (scopedEffects: Map<StringToken, Scope list>)
         (root: string)
         (node: Node)
         =
@@ -52,14 +52,14 @@ module STLProcess =
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
                     | true, scopeSet -> scopeSet |> Set.ofList
-                    | false, _ -> 
-                       (Map.tryFind x.KeyId.normal newTriggersAndEffects)
+                    | false, _ ->
+                        (Map.tryFind x.KeyId.normal newTriggersAndEffects)
                         |> Option.map Set.ofList
-                    |> Option.defaultValue Set.empty)
-                    // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
-                    // |> (function
-                    // | Some e -> e.ScopesSet
-                    // | None -> Set.empty))
+                        |> Option.defaultValue Set.empty)
+        // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
+        // |> (function
+        // | Some e -> e.ScopesSet
+        // | None -> Set.empty))
 
         let combinedScopes =
             nodeScopes @ valueScopes
@@ -150,11 +150,19 @@ module STLProcess =
         (firstRun: bool)
         (effectType: EffectType)
         (scopedEffects: Map<StringLowerToken, Scope list>)
-        (vanillaTriggerAndEffectDict : Dictionary<StringToken, Scope list>)
-        (newTriggerAndEffectMap : Map<StringToken, Scope list>)
+        (vanillaTriggerAndEffectDict: Dictionary<StringToken, Scope list>)
+        (newTriggerAndEffectMap: Map<StringToken, Scope list>)
         ((node, comments): Node * string list)
         =
-        let scopes = scriptedTriggerScope (not firstRun) vanillaTriggerAndEffectDict newTriggerAndEffectMap scopedEffects node.Key node
+        let scopes =
+            scriptedTriggerScope
+                (not firstRun)
+                vanillaTriggerAndEffectDict
+                newTriggerAndEffectMap
+                scopedEffects
+                node.Key
+                node
+
         let commentString = comments |> List.truncate 5 |> String.concat ("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node

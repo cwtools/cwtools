@@ -11,7 +11,7 @@ type Entry =
       value: char option
       desc: string
       position: range
-      errorRange : range option }
+      errorRange: range option }
 
 type GetDesc = string -> string
 type GetKeys = string list

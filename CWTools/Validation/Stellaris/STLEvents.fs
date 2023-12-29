@@ -471,4 +471,3 @@ module STLEventValidation =
                     chains |> List.choose (fun c -> if c.Length > 500 then None else Some c)
 
                 filteredChains <&!!&> checkEventChain seffects sinits projectsWithTags globals
-

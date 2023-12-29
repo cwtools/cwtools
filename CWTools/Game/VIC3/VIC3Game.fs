@@ -15,8 +15,7 @@ open CWTools.Parser
 module VIC3GameFunctions =
     type GameObject = GameObject<JominiComputedData, JominiLookup>
 
-    let afterInit (game: GameObject) =
-        ()
+    let afterInit (game: GameObject) = ()
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =

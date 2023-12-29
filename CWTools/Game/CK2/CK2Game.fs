@@ -392,7 +392,7 @@ type CK2Game(setupSettings: CK2Settings) =
           heavyExperimentalValidators = []
           experimental = false
           fileValidators = []
-          lookupValidators = commonValidationRules 
+          lookupValidators = commonValidationRules
           lookupFileValidators = []
           useRules = true
           debugRulesOnly = false
@@ -480,7 +480,7 @@ type CK2Game(setupSettings: CK2Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          locFunctions = processLocalisationFunction } 
+          locFunctions = processLocalisationFunction }
 
     let game =
         GameObject.CreateGame

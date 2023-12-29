@@ -34,7 +34,16 @@ module STL =
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
 
-    let changeScope: bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> PrefixOptimisedStringSet -> string -> ScopeContext -> ScopeResult =
+    let changeScope
+        : bool
+              -> bool
+              -> EffectMap
+              -> EffectMap
+              -> ScopedEffect list
+              -> PrefixOptimisedStringSet
+              -> string
+              -> ScopeContext
+              -> ScopeResult =
         Scopes.createChangeScope oneToOneScopes (Scopes.simpleVarPrefixFun "var:") true
 
     let sourceScope (effects: Map<StringLowerToken, Scope list>) (key: string) =
@@ -52,12 +61,11 @@ module STL =
 
             match onetoone with
             | Some _ -> None
-            | None ->
-                Map.tryFind nextKey.lower effects
-                // match (effects
-                       // |> Seq.tryFind (fun e -> e.Name.lower = nextKey.lower)) with
-                // | None -> None
-                // | Some e -> Some e.Scopes
+            | None -> Map.tryFind nextKey.lower effects
+        // match (effects
+        // |> Seq.tryFind (fun e -> e.Name.lower = nextKey.lower)) with
+        // | None -> None
+        // | Some e -> Some e.Scopes
 
         keys
         |> List.fold

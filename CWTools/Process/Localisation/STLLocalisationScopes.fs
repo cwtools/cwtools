@@ -74,8 +74,7 @@ module STL =
             if localisationLinks |> List.isEmpty then
                 scopedLocEffectsMap ()
             else
-                let locLinks =
-                    (scopedLocEffects @ eventTargetLinks)
+                let locLinks = (scopedLocEffects @ eventTargetLinks)
 
                 EffectMap.FromList(locLinks)
 

@@ -88,22 +88,21 @@ type CompletionService
         | LeafRule(NewField.TypeField(TypeType.Simple t), _), _
         | NodeRule(NewField.TypeField(TypeType.Simple t), _), _ ->
             typesMap.TryFind(t)
-            |> Option.map (fun s ->
-                s.IdValues |> Seq.map _.lower)
+            |> Option.map (fun s -> s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue (Seq.empty)
         | LeafRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _
         | NodeRule(NewField.TypeField(TypeType.Complex(p, t, suff)), _), _ ->
             typesMap.TryFind(t)
             |> Option.map (fun s ->
-                s.IdValues |> Seq.map (fun i ->
+                s.IdValues
+                |> Seq.map (fun i ->
                     let s = stringManager.GetStringForID i.normal
                     stringManager.InternIdentifierToken(p + s + suff).lower))
             |> Option.defaultValue Seq.empty
         | LeafRule(NewField.ValueField(Enum e), _), _
         | NodeRule(NewField.ValueField(Enum e), _), _ ->
             enums.TryFind(e)
-            |> Option.map (fun (_, s) ->
-                s.IdValues |> Seq.map _.lower)
+            |> Option.map (fun (_, s) -> s.IdValues |> Seq.map _.lower)
             |> Option.defaultValue Seq.empty
         | _ -> Seq.empty
 
@@ -127,8 +126,7 @@ type CompletionService
     let valueTriggerMap = valueTriggers
 
     let varSet =
-        varMap.TryFind "variable"
-        |> Option.defaultValue (PrefixOptimisedStringSet())
+        varMap.TryFind "variable" |> Option.defaultValue (PrefixOptimisedStringSet())
 
     let getAllKeysInFile (root: Node) =
         let fNode =
@@ -148,7 +146,11 @@ type CompletionService
         match field with
         | ValueField(Enum e) ->
             enums.TryFind(e)
-            |> Option.bind (fun (_, s) -> if s.Count = 0 then None else Some (s.StringValues |> Seq.head))
+            |> Option.bind (fun (_, s) ->
+                if s.Count = 0 then
+                    None
+                else
+                    Some(s.StringValues |> Seq.head))
             |> Option.defaultValue "x"
         | ValueField v ->
             FieldValidators.getValidValues v

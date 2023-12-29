@@ -193,16 +193,36 @@ module CommonValidation =
 
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
-                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.String s ->
+                            l.Value <-
+                                String(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
+                        | Value.QString s ->
+                            l.Value <-
+                                QString(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
                         | _ -> ()))
 
                     node.LeafValues
                     |> Seq.iter (fun (l: LeafValue) ->
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
-                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.String s ->
+                            l.Value <-
+                                String(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
+                        | Value.QString s ->
+                            l.Value <-
+                                QString(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
                         | _ -> ()))
 
                     node.Children |> List.iter (foldOverNode stringReplacer)
@@ -353,16 +373,36 @@ module CommonValidation =
 
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
-                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.String s ->
+                            l.Value <-
+                                String(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
+                        | Value.QString s ->
+                            l.Value <-
+                                QString(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
                         | _ -> ()))
 
                     node.LeafValues
                     |> Seq.iter (fun (l: LeafValue) ->
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
-                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.String s ->
+                            l.Value <-
+                                String(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
+                        | Value.QString s ->
+                            l.Value <-
+                                QString(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
                         | _ -> ()))
 
                     node.Children |> List.iter (foldOverNode stringReplacer)
@@ -437,7 +477,8 @@ module CommonValidation =
 
             let findParams (referenceDetails: ReferenceDetails) =
                 //                logInfo (sprintf "vsvp %s" key)
-                let splitString = referenceDetails.originalValue.GetString().Split '|' |> List.ofArray
+                let splitString =
+                    referenceDetails.originalValue.GetString().Split '|' |> List.ofArray
 
                 let rec getParamsFromArray =
                     function
@@ -517,16 +558,36 @@ module CommonValidation =
 
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
-                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.String s ->
+                            l.Value <-
+                                String(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
+                        | Value.QString s ->
+                            l.Value <-
+                                QString(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
                         | _ -> ()))
 
                     node.LeafValues
                     |> Seq.iter (fun (l: LeafValue) ->
                         l.Value
                         |> (function
-                        | Value.String s -> l.Value <- String(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
-                        | Value.QString s -> l.Value <- QString(stringReplacer (s.GetString()) |> StringResource.stringManager.InternIdentifierToken)
+                        | Value.String s ->
+                            l.Value <-
+                                String(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
+                        | Value.QString s ->
+                            l.Value <-
+                                QString(
+                                    stringReplacer (s.GetString())
+                                    |> StringResource.stringManager.InternIdentifierToken
+                                )
                         | _ -> ()))
 
                     node.Children |> List.iter (foldOverNode stringReplacer)
@@ -658,10 +719,7 @@ module CommonValidation =
             let checkTypeDef (typename) (refs: string list) (typedef: TypeDefInfo) =
                 match List.contains typedef.id refs with
                 | true -> None
-                | false ->
-                    Some(
-                        invManual (ErrorCodes.UnusedType typename typedef.id) typedef.range typedef.id None
-                    )
+                | false -> Some(invManual (ErrorCodes.UnusedType typename typedef.id) typedef.range typedef.id None)
 
             let checkType (typename: string, typedefs: TypeDefInfo list) =
                 match allReferences |> Map.tryFind typename with
@@ -669,11 +727,11 @@ module CommonValidation =
                 | Some refs ->
                     typedefs
                     |> List.choose (
-                        checkTypeDef typename (
-                            refs
-                            |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
-                            |> List.map (fun r -> r.name.GetString())
-                        )
+                        checkTypeDef
+                            typename
+                            (refs
+                             |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
+                             |> List.map (fun r -> r.name.GetString()))
                     )
 
             match typeInfos |> List.collect checkType with
@@ -712,7 +770,7 @@ module CommonValidation =
                             Invalid(
                                 Guid.NewGuid(),
                                 [ invManual
-                                      (ErrorCodes.UndefinedModifierTypeForModifier (ref.name.GetString()))
+                                      (ErrorCodes.UndefinedModifierTypeForModifier(ref.name.GetString()))
                                       ref.position
                                       (ref.name.GetString())
                                       None ]

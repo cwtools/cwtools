@@ -35,8 +35,7 @@ module HOI4 =
               true
           ) ]
 
-    let scopedLocEffectsMap () =
-        EffectMap.FromList(scopedLocEffects ())
+    let scopedLocEffectsMap () = EffectMap.FromList(scopedLocEffects ())
 
 
     let locPrimaryScopes () =

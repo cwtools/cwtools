@@ -323,7 +323,7 @@ type EU4Game(setupSettings: EU4Settings) =
           heavyExperimentalValidators = []
           experimental = false
           fileValidators = []
-          lookupValidators = commonValidationRules 
+          lookupValidators = commonValidationRules
           lookupFileValidators = [ valScriptedEffectParams, "scripted_effects" ]
           useRules = true
           debugRulesOnly = false
@@ -411,7 +411,7 @@ type EU4Game(setupSettings: EU4Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          locFunctions = processLocalisationFunction } 
+          locFunctions = processLocalisationFunction }
 
     let game =
         GameObject.CreateGame

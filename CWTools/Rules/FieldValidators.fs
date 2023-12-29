@@ -19,7 +19,7 @@ type CheckFieldParams =
     { varMap: Collections.Map<string, PrefixOptimisedStringSet>
       enumsMap: Collections.Map<string, string * PrefixOptimisedStringSet>
       typesMap: Collections.Map<string, PrefixOptimisedStringSet>
-      linkMap: EffectMap 
+      linkMap: EffectMap
       wildcardLinks: ScopedEffect list
       valueTriggerMap: EffectMap
       varSet: PrefixOptimisedStringSet
@@ -123,9 +123,7 @@ module internal FieldValidators =
                 if key == "yes" || key == "no" then
                     errors
                 else
-                    inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting yes or no, got %s{key}" severity)
-                        leafornode
+                    inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting yes or no, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.Int(min, max) ->
                 match TryParser.parseIntWithDecimal key with
@@ -146,9 +144,7 @@ module internal FieldValidators =
                             errors
                         else
                             inv
-                                (ErrorCodes.ConfigRulesUnexpectedValue
-                                    $"Expecting an integer, got %s{key}"
-                                    severity)
+                                (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting an integer, got %s{key}" severity)
                                 leafornode
                             <&&&> errors
                     | None ->
@@ -175,9 +171,7 @@ module internal FieldValidators =
                             errors
                         else
                             inv
-                                (ErrorCodes.ConfigRulesUnexpectedValue
-                                    $"Expecting a float, got %s{key}"
-                                    severity)
+                                (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a float, got %s{key}" severity)
                                 leafornode
                             <&&&> errors
                     | None ->
@@ -192,6 +186,7 @@ module internal FieldValidators =
                         errors
                     else
                         let defaultValue = "???"
+
                         inv
                             (ErrorCodes.ConfigRulesUnexpectedValue
                                 $"Expecting a \"%s{desc}\" value, e.g. %A{es.StringValues |> Seq.tryHead |> Option.defaultValue defaultValue}"
@@ -231,9 +226,7 @@ module internal FieldValidators =
                 if ok then
                     errors
                 else
-                    inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity)
-                        leafornode
+                    inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.DateTime ->
                 let parts = key.Split([| '.' |])
@@ -263,9 +256,7 @@ module internal FieldValidators =
                 if ok then
                     errors
                 else
-                    inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity)
-                        leafornode
+                    inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.CK2DNA ->
                 if key.Length = 11 && key |> Seq.forall Char.IsLetter then
@@ -290,9 +281,7 @@ module internal FieldValidators =
 
                 if (parts.Length <> 4) then
                     inv
-                        (ErrorCodes.ConfigRulesUnexpectedValue
-                            $"Expecting a family names value, got %s{key}"
-                            severity)
+                        (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a family names value, got %s{key}" severity)
                         leafornode
                     <&&&> errors
                 else
@@ -577,7 +566,12 @@ module internal FieldValidators =
             inv (ErrorCodes.CustomError $"Unknown type referenced %s{fieldType}" Severity.Error) leafornode
             <&&&> errors
 
-    let checkTypeFieldNE (typesMap: Collections.Map<_, PrefixOptimisedStringSet>) severity (typetype: TypeType) (ids: StringTokens) =
+    let checkTypeFieldNE
+        (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        severity
+        (typetype: TypeType)
+        (ids: StringTokens)
+        =
         let isComplex, fieldType =
             match typetype with
             | TypeType.Simple t -> false, t
@@ -652,9 +646,7 @@ module internal FieldValidators =
                 errors
             else if value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]) then
                 errors
-            else if
-                (let result = values.FindPredecessor(value) in result <> null)
-            then
+            else if (let result = values.FindPredecessor(value) in result <> null) then
                 errors
             else
                 inv
@@ -671,7 +663,12 @@ module internal FieldValidators =
                 leafornode
             <&&&> errors
 
-    let checkVariableGetFieldNE (varMap: Collections.Map<_, PrefixOptimisedStringSet>) severity (varName: string) (ids: StringTokens) =
+    let checkVariableGetFieldNE
+        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        severity
+        (varName: string)
+        (ids: StringTokens)
+        =
         let key = getLowerKey ids
 
         match varMap.TryFind varName with
@@ -685,9 +682,9 @@ module internal FieldValidators =
                 || (value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]))
                 || (values.FindSuccessor(value) <> null)
         | None -> false
-        // var:asd
+    // var:asd
     // var:asdasd
-    
+
     // var -> var.StartsWith (var:asd)
     // var:asd -> var:asdasd.StartsWith(var:asd)
 

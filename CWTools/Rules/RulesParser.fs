@@ -1559,8 +1559,8 @@ module RulesConsistencyValidation =
                     Some(key + "." + subtype)
                 | _ -> None)
             |> List.ofSeq
-        if missing |> List.isEmpty |> not
-        then
+
+        if missing |> List.isEmpty |> not then
             logWarning $"The following types were referenced in rules but not defined in rules %A{missing}"
 
 

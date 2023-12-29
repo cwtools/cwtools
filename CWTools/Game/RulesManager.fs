@@ -51,7 +51,10 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> =
       refreshConfigAfterFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterVarDefHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       locFunctions:
-          'L -> ((Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>) * (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)) }
+          'L
+              -> ((Lang * Collections.Map<string, CWTools.Localisation.Entry>
+                  -> Lang * Collections.Map<string, LocEntry>) *
+              (LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)) }
 
 type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (
@@ -143,11 +146,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let mutable tempTypes = []
     let mutable tempValues = Map.empty
 
-    let mutable tempTypeMap =
-        [ ("", PrefixOptimisedStringSet()) ] |> Map.ofList
+    let mutable tempTypeMap = [ ("", PrefixOptimisedStringSet()) ] |> Map.ofList
 
-    let mutable tempEnumMap =
-        [ ("", ("", PrefixOptimisedStringSet())) ] |> Map.ofList
+    let mutable tempEnumMap = [ ("", ("", PrefixOptimisedStringSet())) ] |> Map.ofList
 
     let mutable rulesDataGenerated = false
 
@@ -170,8 +171,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         lookup.typeDefs <- types
         // let rulesWithMod = rules @ addModifiersWithScopes(game)
         let rulesPostHook = settings.loadConfigRulesHook rules lookup embeddedSettings
-        if rulesSettings.debugMode
-        then
+
+        if rulesSettings.debugMode then
             RulesConsistencyValidation.checkForUndefinedTypes rulesPostHook lookup.typeDefs
         // lookup.configRules <- rulesWithMod
         lookup.configRules <- rulesPostHook
@@ -196,6 +197,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         timer.Start()
         endToEndTimer.Start()
         let rulesWrapper = RulesWrapper(lookup.configRules)
+
         /// Enums
         let complexEnumDefs =
             getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct (e, _) -> e))
@@ -227,9 +229,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         let refreshTypeInfo () =
             let processLoc, validateLoc = settings.locFunctions lookup
+
             let tempRuleValidationService =
                 RuleValidationService(
-                    rulesWrapper, 
+                    rulesWrapper,
                     lookup.typeDefs,
                     tempTypeMap,
                     tempEnumMap,
@@ -255,8 +258,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             let newTypeMap =
                 lookup.typeDefInfo
                 |> Map.toSeq
-                |> PSeq.map (fun (k, s) ->
-                    k, s |> List.map _.id |> createStringSet)
+                |> PSeq.map (fun (k, s) -> k, s |> List.map _.id |> createStringSet)
                 |> Map.ofSeq
 
             newTypeMap
@@ -283,6 +285,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             ()
 
         let processLoc, validateLoc = settings.locFunctions lookup
+
         let tempRuleValidationService =
             RuleValidationService(
                 rulesWrapper,
@@ -313,11 +316,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempTypeMap <-
             lookup.typeDefInfo
             |> Map.toSeq
-            |> PSeq.map (fun (k, s) ->
-                k, s |> List.map _.id |> createStringSet)
+            |> PSeq.map (fun (k, s) -> k, s |> List.map _.id |> createStringSet)
             |> Map.ofSeq
 
         let processLoc, validateLoc = settings.locFunctions lookup
+
         let tempInfoService =
             InfoService(
                 rulesWrapper,
@@ -408,6 +411,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                       dataTypeNames = Set.empty }
 
         let processLoc, validateLoc = settings.locFunctions lookup
+
         let completionService =
             CompletionService(
                 rulesWrapper,

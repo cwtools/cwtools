@@ -136,48 +136,53 @@ let getTypesFromDefinitions
         if resDict.ContainsKey n then
             resDict[n] <- k :: resDict[n]
         else
-            resDict[n] <- [ k ]
-        )
-        // |> List.ofSeq
-        // |> List.fold
-            // (fun m (n, k) ->
-                // if Map.containsKey n m then
-                    // Map.add n (k :: m.[n]) m
-                // else
-                    // Map.add n [ k ] m)
-            // Map.empty
+            resDict[n] <- [ k ])
+    // |> List.ofSeq
+    // |> List.fold
+    // (fun m (n, k) ->
+    // if Map.containsKey n m then
+    // Map.add n (k :: m.[n]) m
+    // else
+    // Map.add n [ k ] m)
+    // Map.empty
 
     types
     |> List.map (fun t -> t.name)
     // |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m) results
     |> List.iter (fun k -> if resDict.ContainsKey k then () else resDict[k] <- [])
-    
+
     resDict
     // |> Seq.map
     |> Seq.map (fun kv ->
         let k = kv.Key
         let vs = kv.Value
+
         k,
         vs
-            |> List.map (fun (v, n, r, el, sts) ->
-                { TypeDefInfo.validate = v
-                  id = n
-                  range = r
-                  explicitLocalisation = el
-                  subtypes = sts }))
+        |> List.map (fun (v, n, r, el, sts) ->
+            { TypeDefInfo.validate = v
+              id = n
+              range = r
+              explicitLocalisation = el
+              subtypes = sts }))
     |> Map.ofSeq
 
 let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) =
     let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"
     let enumNameKeyId = StringResource.stringManager.InternIdentifierToken "enum_name"
     let nameKeyId = StringResource.stringManager.InternIdentifierToken "name"
+
     let rec inner (enumtree: Node) (node: Node) =
         // log (sprintf "gece %A %A %A" (node.ToRaw) (enumtree.ToRaw) (node.Position.FileName))
         // log (sprintf "gecee %A %A" enumtree.Key node.Key)
         let childRes =
             let einner (enumtreeNode: Node) =
                 let key = enumtreeNode.KeyId
-                let isScalar = key.lower = scalarKeyId.lower || key.lower = enumNameKeyId.lower || key.lower = nameKeyId.lower
+
+                let isScalar =
+                    key.lower = scalarKeyId.lower
+                    || key.lower = enumNameKeyId.lower
+                    || key.lower = nameKeyId.lower
                 // log (sprintf "gecee2 %A %A %A" enumtreeNode.Key node.Key isScalar)
 
                 let enumnameRes =
@@ -194,7 +199,10 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                         |> Seq.filter (fun c -> c.KeyId.lower = key.lower)
                         |> Seq.collect (inner enumtreeNode)
 
-                seq { yield! enumnameRes; yield! innerRes }
+                seq {
+                    yield! enumnameRes
+                    yield! innerRes
+                }
 
             enumtree.Nodes |> Seq.collect einner
         // match enumtree.Children with
@@ -206,7 +214,10 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         // // TODO: Also check Leaves/leafvalues here when both are defined
         // |[] -> []
         let leafValueRes =
-            if enumtree.LeafValues |> Seq.exists (fun lv -> lv.ValueId.lower = enumNameKeyId.lower) then
+            if
+                enumtree.LeafValues
+                |> Seq.exists (fun lv -> lv.ValueId.lower = enumNameKeyId.lower)
+            then
                 node.LeafValues
                 |> Seq.map (fun lv -> lv.ValueText.Trim([| '\"' |]), Some lv.Position)
             else
@@ -218,8 +229,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                 let k = leaf.Key
                 // log (sprintf "gecel %A %A" k node.Leaves)
                 if k == "scalar" then
-                    node.Leaves
-                    |> Seq.map (fun l -> l.ValueText.Trim([| '\"' |]), Some l.Position)
+                    node.Leaves |> Seq.map (fun l -> l.ValueText.Trim([| '\"' |]), Some l.Position)
                 else
                     node.TagsText k |> Seq.map (fun k -> k.Trim([| '\"' |]), None)
             | None ->
@@ -228,8 +238,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                     let vt = leaf.ValueText
                     // log (sprintf "gecel %A %A" vt node.Leaves)
                     if vt == "scalar" then
-                        node.Leaves
-                        |> Seq.map (fun l -> l.Key.Trim([| '\"' |]), Some l.Position)
+                        node.Leaves |> Seq.map (fun l -> l.Key.Trim([| '\"' |]), Some l.Position)
                     else
                         node.Leaves
                         |> Seq.choose (fun l ->

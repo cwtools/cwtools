@@ -18,8 +18,7 @@ module CK3GameFunctions =
     let updateModifiers (game: GameObject) =
         game.Lookup.coreModifiers <- game.Settings.embedded.modifiers
 
-    let afterInit (game: GameObject) =
-        updateModifiers (game)
+    let afterInit (game: GameObject) = updateModifiers (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         let scopeDefinitions =

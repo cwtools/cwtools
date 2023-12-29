@@ -231,7 +231,10 @@ module Files =
                 // let path = let index = path.IndexOf(normalisedScopeDirectory) in if index >= 0 then path.Substring(index + normalisedScopeDirectoryLength) else path
                 // log "conv2 %A" path
                 //let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
-                if path.StartsWith("gfx\\", StringComparison.Ordinal) || path.StartsWith("gfx/", StringComparison.Ordinal) then
+                if
+                    path.StartsWith("gfx\\", StringComparison.Ordinal)
+                    || path.StartsWith("gfx/", StringComparison.Ordinal)
+                then
                     path
                 else
                     let pathContains (part: string) =
@@ -273,7 +276,11 @@ module Files =
             | ".asset"
             | ".map" ->
                 let rootedpath =
-                    filepath.Substring(filepath.IndexOf(normalisedPath, StringComparison.Ordinal) + normalisedPathLength + 1)
+                    filepath.Substring(
+                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
+                        + normalisedPathLength
+                        + 1
+                    )
 
                 if fileLength > ((int64 maxFileSizeMB) * 1000000L) then
                     None
@@ -296,7 +303,11 @@ module Files =
             | ".otf"
             | ".wav" ->
                 let rootedpath =
-                    filepath.Substring(filepath.IndexOf(normalisedPath, StringComparison.Ordinal) + normalisedPathLength + 1)
+                    filepath.Substring(
+                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
+                        + normalisedPathLength
+                        + 1
+                    )
 
                 Some(
                     FileResourceInput
@@ -307,7 +318,11 @@ module Files =
             | ".yml"
             | ".csv" ->
                 let rootedpath =
-                    filepath.Substring(filepath.IndexOf(normalisedPath, StringComparison.Ordinal) + normalisedPathLength + 1)
+                    filepath.Substring(
+                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
+                        + normalisedPathLength
+                        + 1
+                    )
 
                 Some(
                     FileWithContentResourceInput

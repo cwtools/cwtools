@@ -208,7 +208,7 @@ module STLLocalisationValidation =
                 keyres <&&> innerKeys <&&> gatewayres <&&> flagres <&&> flagdescres)
             |> List.fold (<&&>) OK
 
-    
+
     let valPolicies: LocalisationValidator =
         fun _ keys es ->
             let policies = es.GlobMatchChildren("**/common/policies/*.txt")

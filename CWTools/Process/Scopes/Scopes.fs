@@ -25,25 +25,30 @@ open CWTools.Utilities.Utils2
 //         effects |> Seq.iter (fun x -> tree.Add(x.Name, x))
 //         tree
 
-type EffectDictionary(effects : Effect seq) =
+type EffectDictionary(effects: Effect seq) =
 
-    let dictionary : Dictionary<int, Effect> = Dictionary<int, Effect>()
+    let dictionary: Dictionary<int, Effect> = Dictionary<int, Effect>()
+
     do
         for e in effects do
             dictionary[e.Name.lower] <- e
+
     new() = EffectDictionary(Seq.empty)
-    member this.TryFind(key : StringTokens) : Effect option =
+
+    member this.TryFind(key: StringTokens) : Effect option =
         // let lowerKey = key.ToLowerInvariant()
         let found, value = dictionary.TryGetValue key.lower
         if found then Some value else None
-    member this.TryFind(key : string) =
+
+    member this.TryFind(key: string) =
         let s = StringResource.stringManager.InternIdentifierToken key
         this.TryFind s
-    member this.Values with get () = dictionary.Values
+
+    member this.Values = dictionary.Values
     // static member FromListE(effects : Effect seq) =
-        // EffectDictionary(effects)
-    static member FromList(effects : #Effect seq) : EffectDictionary =
-        EffectDictionary (effects |> Seq.map (fun e -> e :> Effect))
+    // EffectDictionary(effects)
+    static member FromList(effects: #Effect seq) : EffectDictionary =
+        EffectDictionary(effects |> Seq.map (fun e -> e :> Effect))
 
 type EffectMap = EffectDictionary
 
@@ -79,7 +84,15 @@ type ScopeResult =
     | ValueFound of refHint: ReferenceHint option
 
 type ChangeScope =
-    bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> PrefixOptimisedStringSet -> string -> ScopeContext -> ScopeResult
+    bool
+        -> bool
+        -> EffectMap
+        -> EffectMap
+        -> ScopedEffect list
+        -> PrefixOptimisedStringSet
+        -> string
+        -> ScopeContext
+        -> ScopeResult
 
 module Scopes =
 
@@ -189,7 +202,11 @@ module Scopes =
 
                         let wildcardScopeMatch =
                             wildcardLinks
-                            |> List.tryFind (fun l -> nextKey.StartsWith(StringResource.stringManager.GetStringForID l.Name.normal, StringComparison.OrdinalIgnoreCase))
+                            |> List.tryFind (fun l ->
+                                nextKey.StartsWith(
+                                    StringResource.stringManager.GetStringForID l.Name.normal,
+                                    StringComparison.OrdinalIgnoreCase
+                                ))
                         // let effect = (effects @ triggers)
                         //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                         //             |> List.tryFind (fun e -> e.Name == nextKey)

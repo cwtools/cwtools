@@ -47,7 +47,8 @@ type RuleValidationService
     let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
     let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
-    let varSet = varMap.TryFind "variable" |> Option.defaultValue (PrefixOptimisedStringSet())
+    let varSet =
+        varMap.TryFind "variable" |> Option.defaultValue (PrefixOptimisedStringSet())
 
     let wildCardLinks =
         linkMap.Values
@@ -95,8 +96,7 @@ type RuleValidationService
     let aliasKeyMap =
         rootRules.Aliases
         |> Map.toList
-        |> List.map (fun (key, rules) ->
-            key, (rules |> Seq.collect ruleToCompletionListHelper |> HashSet<StringToken>))
+        |> List.map (fun (key, rules) -> key, (rules |> Seq.collect ruleToCompletionListHelper |> HashSet<StringToken>))
         |> Map.ofList
 
     // let isValidValue (value : Value) =

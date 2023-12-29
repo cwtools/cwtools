@@ -316,8 +316,7 @@ and ValueClause(keys: Value[], pos: range) =
             | ValueClauseC vc ->
                 let keys =
                     vc.Keys
-                    |> Array.map (fun k ->
-                        Value(range.Zero, Value.String(k)))
+                    |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
                     |> List.ofArray
 
                 keys @ [ Value(vc.Position, Value.Clause vc.ToRaw) ]
@@ -546,8 +545,7 @@ and Node(key: string, pos: range) =
                 | ValueClauseC vc ->
                     let keys =
                         vc.Keys
-                        |> Array.map (fun k ->
-                            Value(range.Zero, Value.String(k)))
+                        |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
                         |> List.ofArray
 
                     keys @ [ Value(vc.Position, Value.Clause vc.ToRaw) ]

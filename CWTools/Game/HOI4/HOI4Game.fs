@@ -32,27 +32,36 @@ module HOI4GameFunctions =
                     lookup.varDefInfo.TryFind "event_target"
                     |> Option.defaultValue []
                     |> Seq.map fst
-                yield! lookup.varDefInfo.TryFind "global_event_target"
-                          |> Option.defaultValue []
-                          |> Seq.map fst
-                yield! lookup.typeDefInfo.TryFind "state"
-                          |> Option.defaultValue []
-                          |> Seq.map (_.id)
-                yield! lookup.enumDefs.TryFind "country_tags"
-                          |> Option.map (fun x -> (snd x) |> Seq.map fst)
-                          |> Option.defaultValue Seq.empty
+
+                yield!
+                    lookup.varDefInfo.TryFind "global_event_target"
+                    |> Option.defaultValue []
+                    |> Seq.map fst
+
+                yield! lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> Seq.map (_.id)
+
+                yield!
+                    lookup.enumDefs.TryFind "country_tags"
+                    |> Option.map (fun x -> (snd x) |> Seq.map fst)
+                    |> Option.defaultValue Seq.empty
             }
 
         let definedvars =
             seq {
                 yield! (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> Seq.map fst)
                 yield! (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> Seq.map fst)
-                yield! (lookup.varDefInfo.TryFind "exiled_ruler"
-                   |> Option.defaultValue []
-                   |> Seq.map fst)
-            } |> LowerCaseStringSet
 
-        { scriptedLocCommands = lookup.scriptedLoc |> Seq.map (fun s -> s, [ scopeManager.AnyScope ]) |> Array.ofSeq
+                yield!
+                    (lookup.varDefInfo.TryFind "exiled_ruler"
+                     |> Option.defaultValue []
+                     |> Seq.map fst)
+            }
+            |> LowerCaseStringSet
+
+        { scriptedLocCommands =
+            lookup.scriptedLoc
+            |> Seq.map (fun s -> s, [ scopeManager.AnyScope ])
+            |> Array.ofSeq
           eventTargets = eventtargets |> Seq.map (fun s -> s, scopeManager.AnyScope) |> Array.ofSeq
           setVariables = definedvars }
 
@@ -430,7 +439,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
           refreshConfigBeforeFirstTypesHook = refreshConfigBeforeFirstTypesHook
           refreshConfigAfterFirstTypesHook = refreshConfigAfterFirstTypesHook
           refreshConfigAfterVarDefHook = refreshConfigAfterVarDefHook
-          locFunctions = processLocalisationFunction } 
+          locFunctions = processLocalisationFunction }
 
     let game =
         GameObject.CreateGame

@@ -573,12 +573,18 @@ type Effect internal (name, scopes, effectType, refHint) =
                     List.compareWith compare x.Scopes y.Scopes
             | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
 
-    override x.ToString() = sprintf "%s: %A" (StringResource.stringManager.GetStringForIDs x.Name) x.Scopes
-    new(name : StringTokens, scopes, effectType) = Effect(name, scopes, effectType, None)
-    new(name : string, scopes, effectType) = Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, None)
-    new(name : string, scopes, effectType, refHint) = Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
+    override x.ToString() =
+        sprintf "%s: %A" (StringResource.stringManager.GetStringForIDs x.Name) x.Scopes
 
-type ScriptedEffect(name : StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
+    new(name: StringTokens, scopes, effectType) = Effect(name, scopes, effectType, None)
+
+    new(name: string, scopes, effectType) =
+        Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, None)
+
+    new(name: string, scopes, effectType, refHint) =
+        Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
+
+type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
     member val Comments: string = comments
     member val GlobalEventTargets: string list = globals
@@ -590,8 +596,8 @@ type ScriptedEffect(name : StringTokens, scopes, effectType, comments, globals, 
         | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
         | _ -> false
 
-    
-    override x.GetHashCode() = 
+
+    override x.GetHashCode() =
         hash (x.Name, x.Scopes, x.Type, x.Comments, x.GlobalEventTargets, x.SavedEventTargets, x.UsedEventTargets)
 
     interface System.IComparable with
@@ -600,7 +606,7 @@ type ScriptedEffect(name : StringTokens, scopes, effectType, comments, globals, 
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
             | _ -> invalidArg "yobj" "cannot compare values of different types"
 
-type DocEffect(name : StringTokens, scopes, target, effectType, desc, usage, refHint) =
+type DocEffect(name: StringTokens, scopes, target, effectType, desc, usage, refHint) =
     inherit Effect(name, scopes, effectType, refHint)
     member val Desc: string = desc
     member val Usage: string = usage
@@ -616,9 +622,9 @@ type DocEffect(name : StringTokens, scopes, target, effectType, desc, usage, ref
             && x.Usage = y.Usage
         | _ -> false
 
-    override x.GetHashCode() = 
+    override x.GetHashCode() =
         hash (x.Name, x.Scopes, x.Type, x.Desc, x.Usage, x.Target)
-    
+
 
     interface System.IComparable with
         member x.CompareTo yobj =
@@ -632,15 +638,42 @@ type DocEffect(name : StringTokens, scopes, target, effectType, desc, usage, ref
 
         let target = rawEffect.targets |> List.collect parseScopes |> List.tryHead
 
-        DocEffect(StringResource.stringManager.InternIdentifierToken rawEffect.name, scopes, target, effectType, rawEffect.desc, rawEffect.usage)
+        DocEffect(
+            StringResource.stringManager.InternIdentifierToken rawEffect.name,
+            scopes,
+            target,
+            effectType,
+            rawEffect.desc,
+            rawEffect.usage
+        )
 
     new(name, scopes, target, effectType, desc, usage) = DocEffect(name, scopes, target, effectType, desc, usage, None)
-    new(name : string, scopes, target, effectType, desc, usage) = DocEffect(StringResource.stringManager.InternIdentifierToken name, scopes, target, effectType, desc, usage, None)
-    new(name : string, scopes, target, effectType, desc, usage, refHint) = DocEffect(StringResource.stringManager.InternIdentifierToken name, scopes, target, effectType, desc, usage, refHint)
+
+    new(name: string, scopes, target, effectType, desc, usage) =
+        DocEffect(
+            StringResource.stringManager.InternIdentifierToken name,
+            scopes,
+            target,
+            effectType,
+            desc,
+            usage,
+            None
+        )
+
+    new(name: string, scopes, target, effectType, desc, usage, refHint) =
+        DocEffect(
+            StringResource.stringManager.InternIdentifierToken name,
+            scopes,
+            target,
+            effectType,
+            desc,
+            usage,
+            refHint
+        )
 
 type ScopedEffect
     (
-        name : StringTokens,
+        name: StringTokens,
         scopes,
         inner,
         effectType,
@@ -697,7 +730,7 @@ type ScopedEffect
             refHint
         )
 
-    new(name : string, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+    new(name: string, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
         ScopedEffect(
             StringResource.stringManager.InternIdentifierToken name,
             scopes,
@@ -710,9 +743,10 @@ type ScopedEffect
             scopeonlynoteffect,
             false,
             false,
-            None)
-        // ScopedEffect((StringResource.stringManager.InternIdentifierToken name), scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
-    new(name : StringTokens, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+            None
+        )
+    // ScopedEffect((StringResource.stringManager.InternIdentifierToken name), scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
+    new(name: StringTokens, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
         ScopedEffect(name, scopes, inner, effectType, desc, usage, true, [], scopeonlynoteffect, false, false, None)
 
     new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =

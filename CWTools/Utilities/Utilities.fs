@@ -201,8 +201,7 @@ type StringResourceManager() =
     let strings = new ConcurrentDictionary<string, StringTokens>()
     let ints = new ConcurrentDictionary<StringToken, string>()
 
-    let metadata =
-        new ConcurrentDictionary<StringToken, StringMetadata>()
+    let metadata = new ConcurrentDictionary<StringToken, StringMetadata>()
 
     let mutable i = 0
     // let mutable j = 0
@@ -219,6 +218,7 @@ type StringResourceManager() =
         else
             lock monitor (fun () ->
                 let retry = strings.TryGetValue(s, &res)
+
                 if retry then
                     res
                 else
@@ -241,7 +241,7 @@ type StringResourceManager() =
                         // eprintfn "%A" i
                         let res = StringTokens(lowID, stringID, quoted)
                         let resl = StringTokens(lowID, lowID, false)
-                       
+
 
                         let (startsWithAmp,
                              containsQuestionMark,
@@ -287,6 +287,7 @@ type StringResourceManager() =
                                 startsWithSquareBracket,
                                 containsPipe
                             )
+
                         ints.[lowID] <- ls
                         ints.[stringID] <- s
                         strings.[ls] <- resl
@@ -300,14 +301,17 @@ type StringResourceManager() =
 
 module StringResource =
     let mutable stringManager = StringResourceManager()
+
 type StringTokens with
+
     member this.GetString() =
         StringResource.stringManager.GetStringForIDs this
+
     member this.GetMetadata() =
         StringResource.stringManager.GetMetadataForID this.normal
 
 module Utils2 =
-    
+
     type LowerStringSparseTrie() =
         inherit
             AbstractTrie<string, char, string>(
@@ -319,29 +323,35 @@ module Utils2 =
 
         override this.CreateRoot(key) =
             new SparseCharacterTrieNode<string>(null, key)
-        
+
         member this.AddWithIDs(key, value) =
             base.Add(key, value)
             idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
-        
+
         member _.IdValues = idValueList
-        member _.StringValues = idValueList |> Seq.map (fun i -> StringResource.stringManager.GetStringForIDs i)
+
+        member _.StringValues =
+            idValueList |> Seq.map (fun i -> StringResource.stringManager.GetStringForIDs i)
+
         member _.Count = idValueList.Count
-            
+
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type PrefixOptimisedStringSet = LowerStringSparseTrie
-    type LowerCaseStringSet(strings : string seq) =
+
+    type LowerCaseStringSet(strings: string seq) =
         let dictionary = HashSet<string>()
+
         do
             for e in strings do
                 dictionary.Add(e.ToLowerInvariant()) |> ignore
+
         new() = LowerCaseStringSet(Seq.empty)
-        member this.Contains (x : string) = dictionary.Contains(x.ToLowerInvariant())
+
+        member this.Contains(x: string) =
+            dictionary.Contains(x.ToLowerInvariant())
 
     let createStringSet items =
         let newSet = PrefixOptimisedStringSet()
 
-        items
-        |> Seq.iter (fun x ->
-            newSet.AddWithIDs(x, x))
+        items |> Seq.iter (fun x -> newSet.AddWithIDs(x, x))
         newSet

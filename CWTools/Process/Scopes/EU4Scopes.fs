@@ -60,5 +60,14 @@ module EU4 =
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
 
-    let changeScope: bool -> bool -> EffectMap -> EffectMap -> ScopedEffect list -> PrefixOptimisedStringSet -> string -> ScopeContext -> ScopeResult =
+    let changeScope
+        : bool
+              -> bool
+              -> EffectMap
+              -> EffectMap
+              -> ScopedEffect list
+              -> PrefixOptimisedStringSet
+              -> string
+              -> ScopeContext
+              -> ScopeResult =
         Scopes.createChangeScope oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:") false

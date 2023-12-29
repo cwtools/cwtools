@@ -33,8 +33,7 @@ module VIC2 =
           // ScopedEffect("Overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "", true);
           ]
 
-    let scopedLocEffectsMap () =
-        EffectMap.FromList(scopedLocEffects ())
+    let scopedLocEffectsMap () = EffectMap.FromList(scopedLocEffects ())
 
 
     let locPrimaryScopes () =

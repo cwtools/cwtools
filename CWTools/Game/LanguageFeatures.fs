@@ -129,7 +129,8 @@ module LanguageFeatures =
                     | _ -> None
                 | None -> None
             | Some(_, (_, Some(TypeRef(t, tv)), _)) ->
-                lookup.typeDefInfo |> Map.tryFind t
+                lookup.typeDefInfo
+                |> Map.tryFind t
                 |> Option.defaultValue []
                 |> List.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
             | Some(_, (_, Some(EnumRef(enumName, enumValue)), _)) ->
@@ -583,7 +584,9 @@ module LanguageFeatures =
                       abbreviation = abbrev })
 
             let allInternalOrOutgoingRefNames =
-                allInternalOrOutgoingRefs |> List.map (fun (r, _, _, _) -> r.GetString()) |> List.distinct
+                allInternalOrOutgoingRefs
+                |> List.map (fun (r, _, _, _) -> r.GetString())
+                |> List.distinct
 
             let allTypeNamesInFiles = typesDefinedInFiles |> List.map (fun (k, n, r, _, _) -> n)
 
@@ -611,7 +614,8 @@ module LanguageFeatures =
                         data.Force().Referencedtypes
                         |> Option.map (
                             getSourceTypes
-                            >> List.map (fun (_, v, r, isOutgoing, refLabel, _) -> (v.GetString(), r, isOutgoing, refLabel))
+                            >> List.map (fun (_, v, r, isOutgoing, refLabel, _) ->
+                                (v.GetString(), r, isOutgoing, refLabel))
                         )
                         |> Option.defaultValue [])
                     |> List.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)

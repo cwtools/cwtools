@@ -16,5 +16,5 @@ type RulesWrapper(rules: RootRule list) =
             | TypeRule(k, rs) -> Some(k, rs)
             | _ -> None)
 
-    member this.Aliases with get() = aliases
-    member this.TypeRules with get() = typeRules
+    member this.Aliases = aliases
+    member this.TypeRules = typeRules

@@ -124,8 +124,8 @@ module LocalisationString =
         let validateInvalidChars _ (e: LocEntry) =
             match e.errorRanges with
             | None -> OK
-            | Some value ->
-                Invalid(Guid.NewGuid(), [ invManual (ErrorCodes.LocInvalidChars e.key) value e.key None ])
+            | Some value -> Invalid(Guid.NewGuid(), [ invManual (ErrorCodes.LocInvalidChars e.key) value e.key None ])
+
         let validateQuotes _ (e: LocEntry) =
             let desc = e.desc.Trim()
             // let lastHash = desc.LastIndexOf "#"
@@ -201,8 +201,16 @@ module LocalisationString =
                   |> Map.toList
                   |> List.map snd
                   |> List.fold (<&&>) OK)
-            <&&> (m |> Map.map (validateQuotes ) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
-            <&&> (m |> Map.map (validateInvalidChars ) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
+            <&&> (m
+                  |> Map.map (validateQuotes)
+                  |> Map.toList
+                  |> List.map snd
+                  |> List.fold (<&&>) OK)
+            <&&> (m
+                  |> Map.map (validateInvalidChars)
+                  |> Map.toList
+                  |> List.map snd
+                  |> List.fold (<&&>) OK)
 
 
         let validateReplaceMe (lang, m: Map<string, LocEntry>) =

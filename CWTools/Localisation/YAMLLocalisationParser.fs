@@ -37,20 +37,33 @@ module YAMLLocalisationParser =
     //let desc = pipe2 (pchar '"') (many ((attempt stringThenEscaped) <|> manyCharsTill anyChar (pchar '"')) |>> List.reduce (+)) (fun a b -> string a + b)
     //let desc = between (pchar '"') (pchar '"') (charsTillString "\"" false 10000) .>> spaces <?> "desc"
     //let desc = pipe3 (pchar '"' |>> string) (many (attempt stringThenEscaped) |>> List.fold (+) "")  (manyCharsTill (noneOf ['§']) (pchar '"')) (fun a b c -> string a + b + c) <?> "string"
-    let desc = many1Satisfy isLocValueChar .>>. getPosition .>>. restOfLine false <?> "desc"
+    let desc =
+        many1Satisfy isLocValueChar .>>. getPosition .>>. restOfLine false <?> "desc"
+
     let value = digit .>> spaces <?> "version"
 
     let getRange (start: FParsec.Position) (endp: FParsec.Position) =
         mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
 
     let entry =
-        pipe5 getPosition key (opt value) desc (getPosition .>> spaces) (fun s k v ((validDesc, endofValid), invalidDesc) e ->
-            let errorRange = if endofValid <> e then Some (getRange endofValid e) else None
-            { key = k
-              value = v
-              desc = validDesc + invalidDesc
-              position = getRange s e
-              errorRange = errorRange })
+        pipe5
+            getPosition
+            key
+            (opt value)
+            desc
+            (getPosition .>> spaces)
+            (fun s k v ((validDesc, endofValid), invalidDesc) e ->
+                let errorRange =
+                    if endofValid <> e then
+                        Some(getRange endofValid e)
+                    else
+                        None
+
+                { key = k
+                  value = v
+                  desc = validDesc + invalidDesc
+                  position = getRange s e
+                  errorRange = errorRange })
         <?> "entry"
 
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
