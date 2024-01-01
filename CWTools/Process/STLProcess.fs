@@ -27,16 +27,16 @@ module STLProcess =
         let nodeScopes =
             node.Children
             |> List.map (function
-                | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
+                | x when x.Key = root -> scopeManager.AllScopes |> HashSet<Scope>
                 | x when x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
-                    scopeManager.AllScopes |> Set.ofList
+                    scopeManager.AllScopes |> HashSet<Scope>
                 // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
                 | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
-                | x -> Scopes.STL.sourceScope scopedEffects x.Key |> Set.ofList
+                | x -> Scopes.STL.sourceScope scopedEffects x.Key |> HashSet<Scope>
             // match STLScopes.sourceScope x.Key with
             // | Some v -> v
             // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
@@ -47,15 +47,15 @@ module STLProcess =
             //|> List.filter (fun v -> v.Key.StartsWith("@"))
             |> List.map (function
                 | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) ->
-                    scopeManager.AllScopes |> Set.ofList
-                | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
+                    scopeManager.AllScopes |> HashSet<Scope>
+                | x when x.Key = root -> scopeManager.AllScopes |> HashSet<Scope>
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
-                    | true, scopeSet -> scopeSet |> Set.ofList
+                    | true, scopeSet -> scopeSet |> HashSet<Scope>
                     | false, _ ->
                         (Map.tryFind x.KeyId.normal newTriggersAndEffects)
-                        |> Option.map Set.ofList
-                        |> Option.defaultValue Set.empty)
+                        |> Option.map HashSet<Scope>
+                        |> Option.defaultValue (HashSet<Scope>()))
         // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
         // |> (function
         // | Some e -> e.ScopesSet
@@ -64,14 +64,14 @@ module STLProcess =
         let combinedScopes =
             nodeScopes @ valueScopes
             |> List.map (function
-                | x when Set.isEmpty x ->
+                | x when x.Count = 0 ->
                     (if strict then
-                         Set.empty
+                         HashSet<Scope>()
                      else
-                         scopeManager.AllScopes |> Set.ofList)
+                         scopeManager.AllScopes |> HashSet<Scope>)
                 | x -> x)
 
-        combinedScopes |> List.fold Set.intersect (scopeManager.AllScopes |> Set.ofList)
+        combinedScopes |> List.fold (fun x y -> x.IntersectWith y; x) (scopeManager.AllScopes |> HashSet<Scope>)
     //combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
 
     let findAllUsedEventTargets (event: Node) =
@@ -170,7 +170,7 @@ module STLProcess =
 
         ScriptedEffect(
             node.KeyId,
-            scopes |> Set.toList,
+            scopes |> Seq.toList,
             effectType,
             commentString,
             globals |> Set.toList,
