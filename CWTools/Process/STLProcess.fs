@@ -13,9 +13,9 @@ module STLProcess =
     //TODO remove all this
     let rec scriptedTriggerScope
         (strict: bool)
-        (vanillaTriggersAndEffects: Dictionary<StringToken, Scope list>)
-        (newTriggersAndEffects: Map<StringToken, Scope list>)
-        (scopedEffects: Map<StringToken, Scope list>)
+        (vanillaTriggersAndEffects: Dictionary<StringToken, HashSet<Scope>>)
+        (newTriggersAndEffects: Map<StringToken, HashSet<Scope>>)
+        (scopedEffects: Map<StringToken, HashSet<Scope>>)
         (root: string)
         (node: Node)
         =
@@ -36,7 +36,7 @@ module STLProcess =
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
                 | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
-                | x -> Scopes.STL.sourceScope scopedEffects x.Key |> HashSet<Scope>
+                | x -> Scopes.STL.sourceScope scopedEffects x.Key
             // match STLScopes.sourceScope x.Key with
             // | Some v -> v
             // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
@@ -51,10 +51,9 @@ module STLProcess =
                 | x when x.Key = root -> scopeManager.AllScopesHashSet
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
-                    | true, scopeSet -> scopeSet |> HashSet<Scope>
+                    | true, scopeSet -> scopeSet
                     | false, _ ->
                         (Map.tryFind x.KeyId.normal newTriggersAndEffects)
-                        |> Option.map HashSet<Scope>
                         |> Option.defaultValue (HashSet<Scope>()))
         // |> Seq.tryFind (fun e -> e.Name.normal = x.KeyId.normal)
         // |> (function
@@ -149,9 +148,9 @@ module STLProcess =
     let getScriptedTriggerScope
         (firstRun: bool)
         (effectType: EffectType)
-        (scopedEffects: Map<StringLowerToken, Scope list>)
-        (vanillaTriggerAndEffectDict: Dictionary<StringToken, Scope list>)
-        (newTriggerAndEffectMap: Map<StringToken, Scope list>)
+        (scopedEffects: Map<StringLowerToken, HashSet<Scope>>)
+        (vanillaTriggerAndEffectDict: Dictionary<StringToken, HashSet<Scope>>)
+        (newTriggerAndEffectMap: Map<StringToken, HashSet<Scope>>)
         ((node, comments): Node * string list)
         =
         let scopes =

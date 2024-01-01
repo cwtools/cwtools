@@ -1,6 +1,7 @@
 namespace CWTools.Process.Scopes
 
 open System
+open System.Collections.Generic
 open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Utilities
@@ -46,7 +47,7 @@ module STL =
               -> ScopeResult =
         Scopes.createChangeScope oneToOneScopes (Scopes.simpleVarPrefixFun "var:") true
 
-    let sourceScope (effects: Map<StringLowerToken, Scope list>) (key: string) =
+    let sourceScope (effects: Map<StringLowerToken, HashSet<Scope>>) (key: string) =
         let key =
             if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then
                 key.Substring(7)
@@ -55,7 +56,7 @@ module STL =
 
         let keys = key.Split('.') |> List.ofArray
 
-        let inner (nextKey: string) : Scope list option =
+        let inner (nextKey: string) : HashSet<Scope> option =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             let nextKey = StringResource.stringManager.InternIdentifierToken nextKey
 
@@ -74,4 +75,4 @@ module STL =
                 | Some e -> Some e
                 | None -> inner k)
             None
-        |> Option.defaultValue scopeManager.AllScopes
+        |> Option.defaultValue scopeManager.AllScopesHashSet

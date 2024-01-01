@@ -32,13 +32,13 @@ module STLLookup =
             |> Seq.choose (function
                 | :? ScopedEffect as e -> Some e
                 | _ -> None)
-            |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
+            |> Seq.map (fun x -> (x.Name.lower, x.Scopes |> HashSet<Scope>))
             |> Map.ofSeq
 
-        let vanillaTriggerDictionary = Dictionary<StringToken, Scope list>()
+        let vanillaTriggerDictionary = Dictionary<StringToken, HashSet<Scope>>()
 
         vanillaTriggers
-        |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.Scopes)
+        |> Seq.iter (fun x -> vanillaTriggerDictionary[x.Name.normal] <- x.Scopes |> HashSet<Scope>)
         // let vanillaTriggerMap =
         // vanillaTriggers
         // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
@@ -54,7 +54,7 @@ module STLLookup =
             let triggerAndEffectMap =
                 final
                 // Seq.append effectsInput triggersInput
-                |> Seq.map (fun e -> (e.Name.normal, e.Scopes))
+                |> Seq.map (fun e -> (e.Name.normal, e.Scopes |> HashSet<Scope>))
                 |> Map.ofSeq
 
             // let mergedTriggers =
@@ -96,13 +96,13 @@ module STLLookup =
             |> Seq.choose (function
                 | :? ScopedEffect as e -> Some e
                 | _ -> None)
-            |> Seq.map (fun x -> (x.Name.lower, x.Scopes))
+            |> Seq.map (fun x -> (x.Name.lower, x.Scopes |> HashSet<Scope>))
             |> Map.ofSeq
 
-        let vanillaBothDictionary = Dictionary<StringToken, Scope list>()
+        let vanillaBothDictionary = Dictionary<StringToken, HashSet<Scope>>()
 
         Seq.append vanillaEffects scriptedTriggers
-        |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <- x.Scopes)
+        |> Seq.iter (fun x -> vanillaBothDictionary[x.Name.normal] <- x.Scopes |> HashSet<Scope>)
         // let vanillaBothMap =
         // |> Seq.map (fun e -> (e.Name.normal, e.ScopesSet))
         // |> Map.ofSeq
@@ -119,7 +119,7 @@ module STLLookup =
             // let effectsInput = vanillaAndFinal
             // let triggersInput = scriptedTriggers
 
-            let newFoundMap = final |> Seq.map (fun e -> (e.Name.normal, e.Scopes)) |> Map.ofSeq
+            let newFoundMap = final |> Seq.map (fun e -> (e.Name.normal, e.Scopes |> HashSet<Scope>)) |> Map.ofSeq
 
             final <-
                 rawEffects
