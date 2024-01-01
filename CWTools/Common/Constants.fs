@@ -234,6 +234,7 @@ module rec NewScope =
         let mutable initialized = false
         let mutable dict = Dictionary<string, Scope>()
         let mutable reverseDict = Dictionary<Scope, ScopeInput>()
+        let mutable allScopesHashSet = HashSet<Scope>()
         let mutable groupDict = Map<string, Scope list>(Seq.empty)
         let mutable complexEquality = false
         let mutable matchesSet = Set<Scope * Scope>(Seq.empty)
@@ -312,6 +313,8 @@ module rec NewScope =
                 scopeGroups
                 |> List.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
                 |> Map.ofList
+            
+            allScopesHashSet <- reverseDict.Keys |> HashSet<Scope>
 
         member this.GetName(scope: Scope) =
             let found, value = reverseDict.TryGetValue scope
@@ -322,7 +325,8 @@ module rec NewScope =
                 log (sprintf "Unexpected scope %O" scope.tag)
                 ""
 
-        member this.AllScopes = reverseDict.Keys |> List.ofSeq
+        member this.AllScopes = allScopesHashSet |> List.ofSeq
+        member this.AllScopesHashSet = allScopesHashSet
         member this.AnyScope = anyScope
         member this.InvalidScope = invalidScope
         member this.ParseScope = parseScope

@@ -27,9 +27,9 @@ module STLProcess =
         let nodeScopes =
             node.Children
             |> List.map (function
-                | x when x.Key = root -> scopeManager.AllScopes |> HashSet<Scope>
+                | x when x.Key = root -> scopeManager.AllScopesHashSet
                 | x when x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
-                    scopeManager.AllScopes |> HashSet<Scope>
+                    scopeManager.AllScopesHashSet
                 // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
@@ -47,8 +47,8 @@ module STLProcess =
             //|> List.filter (fun v -> v.Key.StartsWith("@"))
             |> List.map (function
                 | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) ->
-                    scopeManager.AllScopes |> HashSet<Scope>
-                | x when x.Key = root -> scopeManager.AllScopes |> HashSet<Scope>
+                    scopeManager.AllScopesHashSet
+                | x when x.Key = root -> scopeManager.AllScopesHashSet
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
                     | true, scopeSet -> scopeSet |> HashSet<Scope>
@@ -68,10 +68,10 @@ module STLProcess =
                     (if strict then
                          HashSet<Scope>()
                      else
-                         scopeManager.AllScopes |> HashSet<Scope>)
+                         scopeManager.AllScopesHashSet)
                 | x -> x)
 
-        combinedScopes |> List.fold (fun x y -> x.IntersectWith y; x) (scopeManager.AllScopes |> HashSet<Scope>)
+        combinedScopes |> List.fold (fun x y -> y.IntersectWith x; y) (scopeManager.AllScopesHashSet)
     //combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
 
     let findAllUsedEventTargets (event: Node) =
