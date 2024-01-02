@@ -697,14 +697,19 @@ module ProcessCore =
 
     let foldNode2 fNode fCombine acc (node: Node) =
         let rec loop nodes cont =
-            match nodes with
-            | x: Node :: tail ->
-                loop x.Children (fun accChildren ->
-                    let resNode = fNode x accChildren
-                    loop tail (fun accTail -> cont (fCombine resNode accTail)))
-            | [] -> cont acc
+            if Seq.isEmpty (nodes : Node seq) then
+                cont acc
+                else
+                    let head = Seq.head nodes
+                    let tail = Seq.tail nodes
+            // match nodes with
+            // | x: Node :: tail ->
+                    loop head.Children (fun accChildren ->
+                        let resNode = fNode head accChildren
+                        loop tail (fun accTail -> cont (fCombine resNode accTail)))
+            // | [] -> cont acc
 
-        loop [ node ] id
+        loop (seq { yield node }) id
 
     let foldClause2 fNode fCombine acc (node: IClause) =
         let rec loop nodes cont =
