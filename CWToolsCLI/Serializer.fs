@@ -33,6 +33,14 @@ let mkPickler (resolver : IPicklerResolver) =
     let reader (r : ReadState) =
         let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
     Pickler.FromPrimitives(reader, writer)
+    
+let mkNodeArrayPickler (resolver : IPicklerResolver) =
+    let arrayPickler = resolver.Resolve<Node array> ()
+    let writer (w : WriteState) (ns : Lazy<Node array>) =
+        arrayPickler.Write w "value" (ns.Force())
+    let reader (r : ReadState) =
+        let v = arrayPickler.Read r "value" in Lazy<Node array>.CreateFromValue v
+    Pickler.FromPrimitives(reader, writer)
 let mkConcurrentDictionaryPickler<'a, 'b> (resolver : IPicklerResolver) =
     let dictionaryPickler = resolver.Resolve<KeyValuePair<_, _> []>()
     let writer (w : WriteState) (dict : ConcurrentDictionary<'a, 'b>) =
@@ -42,6 +50,7 @@ let mkConcurrentDictionaryPickler<'a, 'b> (resolver : IPicklerResolver) =
     Pickler.FromPrimitives(reader, writer)
 let registry = new CustomPicklerRegistry()
 do registry.RegisterFactory mkPickler
+do registry.RegisterFactory mkNodeArrayPickler
 do registry.RegisterFactory mkConcurrentDictionaryPickler<int, string>
 do registry.RegisterFactory mkConcurrentDictionaryPickler<int, StringMetadata>
 do registry.RegisterFactory mkConcurrentDictionaryPickler<string, StringTokens>

@@ -365,6 +365,7 @@ and Node(key: string, pos: range) =
 
     let mutable all: Child array = Array.empty
     let mutable _leaves: Lazy<Leaf array> = lazy Array.empty
+    let mutable _nodes: Lazy<Node array> = lazy Array.empty
 
     let reset () =
         _leaves <-
@@ -373,8 +374,14 @@ and Node(key: string, pos: range) =
                  |> Array.choose (function
                      | LeafC l -> Some l
                      | _ -> None))
-
+        _nodes <-
+            lazy
+                (all
+                 |> Array.choose (function
+                     | NodeC n -> Some n
+                     | _ -> None))
     let leaves () = _leaves.Force()
+    let nodes () = _nodes.Force()
 
     do reset ()
 
@@ -435,13 +442,9 @@ and Node(key: string, pos: range) =
             all <- (value |> List.toArray)
             reset ()
 
-    member this.Nodes =
-        all
-        |> Seq.choose (function
-            | NodeC n -> Some n
-            | _ -> None)
+    member this.Nodes = nodes()
 
-    member this.Children = this.Nodes |> List.ofSeq
+    member this.Children = nodes() |> List.ofArray
 
     member this.Leaves =
         all
@@ -696,32 +699,34 @@ module ProcessCore =
         let newAcc = fNode acc node
         node.Children |> Seq.fold recurse newAcc
 
-    // let foldNode2 fNode fCombine acc (node: Node) =
-    //     let rec loop nodes cont =
-    //         match nodes with
-    //         | x: Node :: tail ->
-    //                 loop x.Children (fun accChildren ->
-    //                     let resNode = fNode x accChildren
-    //                     loop tail (fun accTail -> cont (fCombine resNode accTail)))
-    //         | [] -> cont acc
-    //
-    //     loop [node] id
+    let foldNode2 fNode fCombine acc (node: Node) =
+        let rec loop (nodes : Node seq) cont =
+            if Seq.isEmpty nodes then
+                cont acc
+            else
+                let head = Seq.head nodes
+                let tail = Seq.tail nodes
+                loop head.Nodes (fun accChildren ->
+                    let resNode = fNode head accChildren
+                    loop tail (fun accTail -> cont (fCombine resNode accTail)))
+    
+        loop [node] id
 
     
     
-    
-    let foldNode2 fNode fCombine acc (node: Node) =
-        let rec loop nodes cont =
-            if LazyList.isEmpty (nodes : LazyList<Node>) then
-                cont acc
-                else
-                    let head = LazyList.head nodes
-                    let tail = LazyList.tail nodes
-                    loop (head.Nodes |> LazyList.ofSeq) (fun accChildren ->
-                        let resNode = fNode head accChildren
-                        loop tail (fun accTail -> cont (fCombine resNode accTail)))
-    
-        loop (seq { yield node } |> LazyList.ofSeq) id
+    //
+    // let foldNode2 fNode fCombine acc (node: Node) =
+    //     let rec loop nodes cont =
+    //         if LazyList.isEmpty (nodes : LazyList<Node>) then
+    //             cont acc
+    //             else
+    //                 let head = LazyList.head nodes
+    //                 let tail = LazyList.tail nodes
+    //                 loop (head.Nodes |> LazyList.ofSeq) (fun accChildren ->
+    //                     let resNode = fNode head accChildren
+    //                     loop tail (fun accTail -> cont (fCombine resNode accTail)))
+    //
+    //     loop (seq { yield node } |> LazyList.ofSeq) id
         
     let foldClause2 fNode fCombine acc (node: IClause) =
         let rec loop nodes cont =
