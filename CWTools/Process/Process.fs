@@ -7,6 +7,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open CWTools.Utilities
 open CWTools.Common.NewScope
+open FSharpx.Collections
 
 
 module List =
@@ -695,22 +696,33 @@ module ProcessCore =
         let newAcc = fNode acc node
         node.Children |> Seq.fold recurse newAcc
 
+    // let foldNode2 fNode fCombine acc (node: Node) =
+    //     let rec loop nodes cont =
+    //         match nodes with
+    //         | x: Node :: tail ->
+    //                 loop x.Children (fun accChildren ->
+    //                     let resNode = fNode x accChildren
+    //                     loop tail (fun accTail -> cont (fCombine resNode accTail)))
+    //         | [] -> cont acc
+    //
+    //     loop [node] id
+
+    
+    
+    
     let foldNode2 fNode fCombine acc (node: Node) =
         let rec loop nodes cont =
-            if Seq.isEmpty (nodes : Node seq) then
+            if LazyList.isEmpty (nodes : LazyList<Node>) then
                 cont acc
                 else
-                    let head = Seq.head nodes
-                    let tail = Seq.tail nodes
-            // match nodes with
-            // | x: Node :: tail ->
-                    loop head.Children (fun accChildren ->
+                    let head = LazyList.head nodes
+                    let tail = LazyList.tail nodes
+                    loop (head.Nodes |> LazyList.ofSeq) (fun accChildren ->
                         let resNode = fNode head accChildren
                         loop tail (fun accTail -> cont (fCombine resNode accTail)))
-            // | [] -> cont acc
-
-        loop (seq { yield node }) id
-
+    
+        loop (seq { yield node } |> LazyList.ofSeq) id
+        
     let foldClause2 fNode fCombine acc (node: IClause) =
         let rec loop nodes cont =
             match nodes with
