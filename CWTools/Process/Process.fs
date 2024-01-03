@@ -699,19 +699,30 @@ module ProcessCore =
         let newAcc = fNode acc node
         node.Children |> Seq.fold recurse newAcc
 
-    let foldNode2 fNode fCombine acc (node: Node) =
-        let rec loop (nodes : Node seq) cont =
-            if Seq.isEmpty nodes then
-                cont acc
-            else
-                let head = Seq.head nodes
-                let tail = Seq.tail nodes
-                loop head.Nodes (fun accChildren ->
-                    let resNode = fNode head accChildren
-                    loop tail (fun accTail -> cont (fCombine resNode accTail)))
-    
-        loop [node] id
+    // let foldNode2 fNode fCombine acc (node: Node) =
+    //     let rec loop (nodes : Node seq) cont =
+    //         if Seq.isEmpty nodes then
+    //             cont acc
+    //         else
+    //             let head = Seq.head nodes
+    //             let tail = Seq.tail nodes
+    //             loop head.Nodes (fun accChildren ->
+    //                 let resNode = fNode head accChildren
+    //                 loop tail (fun accTail -> cont (fCombine resNode accTail)))
+    //
+    //     loop [node] id
 
+    let foldNode2 fNode fCombine acc (node: Node) =
+        let rec loop nodes cont =
+            nodes
+            |> Array.fold (fun accNode (x : Node) ->
+                loop x.Nodes (fun accChildren ->
+                    let resNode = fNode x accChildren
+                    fCombine resNode accNode)
+                ) acc
+            |> cont
+
+        loop [|node|] id
     
     
     //
