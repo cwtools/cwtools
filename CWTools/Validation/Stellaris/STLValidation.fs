@@ -349,7 +349,7 @@ module STLValidation =
                 [ yield
                       { ActualModifier.tag = "country_resource_max_" + k + "_add"
                         category = modifierCategoryManager.ParseModifier () "Countries" }
-                  yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f k))
+                  // yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f k))
                   yield! (baseEconCategoryModifiersCreates |> List.collect (fun f -> f ("_" + k))) ])
 
         let srModifiers =
