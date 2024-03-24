@@ -2,8 +2,12 @@
 
 Fake.Core
 Fake.Core.Target
-Fake.Core.Environment
-Fake.Core.UserInput
-Fake.DotNet.Cli
 Fake.IO.FileSystem
+Fake.DotNet.Cli
+Fake.DotNet.Paket
+Fake.JavaScript.Npm
+Fake.Core.UserInput
 Fake.Core.ReleaseNotes
+Fake.Tools.Git
+Fake.Api.GitHub
+FSharp.Collections.ParallelSeq

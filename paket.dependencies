@@ -21,3 +21,26 @@ nuget SharpZipLib
 nuget CWTools 0.4.0-alpha
 nuget VDS.Common
 github giraffe-fsharp/Giraffe:612aa186c68101f532196817f67ebaa083c16146 src/Giraffe/GiraffeViewEngine.fs
+
+group build
+    source https://api.nuget.org/v3/index.json
+    storage: none
+    framework: net8.0
+
+    #nuget FSharp.Core 4.7.0.0
+    #nuget Microsoft.Build 17.3.2
+    #nuget Microsoft.Build.Framework 17.3.2
+    #nuget Microsoft.Build.Tasks.Core 17.3.2
+    #nuget Microsoft.Build.Utilities.Core 17.3.2
+    nuget Fake.Core
+    nuget Fake.Core.Target
+    nuget Fake.IO.FileSystem
+    nuget Fake.DotNet.Cli
+    nuget Fake.DotNet.Paket
+    nuget Fake.JavaScript.Npm
+    nuget Fake.Core.UserInput
+    nuget Fake.Tools.Git
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.Api.GitHub
+    nuget FSharp.Collections.ParallelSeq
+    nuget MSBuild.StructuredLogger >= 2.1.784
