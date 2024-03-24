@@ -1,23 +1,42 @@
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      username:
+        description: Github username of the person triggering the release
+        default: "tboby"
+        required: true
+      email:
+        description: Email of the person triggering the release
+        default: "th.boby@gmail.com"
+        required: true
 
-name: cwtools-cli-release
+
+name: Release
 
 jobs:
   release:
-    name: Release tool
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v3
       with:
-        dotnet-version: 6.0.x
+        ref: ${{ github.head_ref }}
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
     - name: Set chmod
       run: chmod +x ./build.sh
-    - name: Publish
-      run: /bin/sh ./build.sh PublishTool
+    - name: Test and Pack
+      run: /bin/sh ./build.sh PackTools
+    - name: upload artifact package
+      uses: actions/upload-artifact@v2
+      with:
+        name: cwtools-nugets
+        path: pkgs/
+    - name: Publish Release
       env:
-        NUGET_ACCESS_KEY: ${{ secrets.NUGET_ACCESS_KEY }}
+        github-user: ${{ github.event.inputs.username }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        user-email: ${{ github.event.inputs.email }}
+      run: dotnet run --project build -- -t ReleaseGitHub
