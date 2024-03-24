@@ -203,7 +203,7 @@ let initTargets () =
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
-    // "Clean" ==>
+    "Clean" ==>
     "Build" ==> "Test" ==> "PackLibs" ==> "PackTools" ==> "Push" ==> "ReleaseGitHub"
     |> ignore
 
