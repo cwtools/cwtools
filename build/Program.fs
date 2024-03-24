@@ -102,9 +102,16 @@ let buildAll () =
 let args =
     { MSBuild.CliArguments.Create() with
         Properties = [ "VersionPrefix", releaseNotesData.NugetVersion ] }
+
 let packAllLibs () =
     libraryProjects
-    |> Seq.iter (fun path -> DotNet.pack (fun p -> { p with OutputPath = Some pkgPath; MSBuildParams = args }) path)
+    |> Seq.iter (fun path ->
+        DotNet.pack
+            (fun p ->
+                { p with
+                    OutputPath = Some pkgPath
+                    MSBuildParams = args })
+            path)
 
 let packAllTools () =
 
@@ -116,6 +123,16 @@ let packAllTools () =
                     OutputPath = Some pkgPath
                     MSBuildParams = args })
             path)
+
+let pushAll () =
+    !!(pkgPath + "*.nupkg")
+    |> Seq.iter (
+        DotNet.nugetPush (fun p ->
+            { p with
+                PushParams =
+                    { p.PushParams with
+                        ApiKey = Some nugetToken.Value } })
+    )
 
 // let setVersion (release: ReleaseNotes.ReleaseNotes) releaseDir =
 //     let versionString = $"%O{release.NugetVersion}"
@@ -182,11 +199,14 @@ let initTargets () =
     Target.create "Test" (fun _ -> testAll ())
     Target.create "PackLibs" (fun _ -> packAllLibs ())
     Target.create "PackTools" (fun _ -> packAllTools ())
+    Target.create "Push" (fun _ -> pushAll ())
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
     // "Clean" ==>
-    "Build" ==> "Test" ==> "PackLibs" ==> "PackTools" |> ignore
+    "Build" ==> "Test" ==> "PackLibs" ==> "PackTools" ==> "Push" ==> "ReleaseGitHub"
+    |> ignore
+
 [<EntryPoint>]
 let main argv =
     argv
