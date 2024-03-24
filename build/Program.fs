@@ -131,7 +131,8 @@ let pushAll () =
             { p with
                 PushParams =
                     { p.PushParams with
-                        ApiKey = Some nugetToken.Value } })
+                        ApiKey = Some nugetToken.Value
+                        Source = "https://api.nuget.org/v3/index.json" } })
     )
 
 // let setVersion (release: ReleaseNotes.ReleaseNotes) releaseDir =
