@@ -46,4 +46,4 @@ group build
     nuget Fake.Core.ReleaseNotes
     nuget Fake.Api.GitHub
     nuget FSharp.Collections.ParallelSeq
-    nuget MSBuild.StructuredLogger >= 2.1.784
+    nuget MSBuild.StructuredLogger
