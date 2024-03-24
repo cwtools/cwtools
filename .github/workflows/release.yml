@@ -38,5 +38,6 @@ jobs:
       env:
         github-user: ${{ github.event.inputs.username }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         user-email: ${{ github.event.inputs.email }}
       run: dotnet run --project build -- -t ReleaseGitHub
