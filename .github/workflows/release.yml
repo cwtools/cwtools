@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: cwtools-nugets
-        path: pkgs/
+        path: pkg/
     - name: Publish Release
       env:
         github-user: ${{ github.event.inputs.username }}
