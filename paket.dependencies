@@ -21,6 +21,9 @@ nuget SharpZipLib
 nuget CWTools 0.4.0-alpha
 nuget VDS.Common
 github giraffe-fsharp/Giraffe:612aa186c68101f532196817f67ebaa083c16146 src/Giraffe/GiraffeViewEngine.fs
+nuget Microsoft.NET.Test.Sdk
+nuget YoloDev.Expecto.TestSdk
+
 
 group build
     source https://api.nuget.org/v3/index.json

@@ -1,3 +1,5 @@
+## New in 0.0.1-alpha (Released 2024/03/24)
+* Test release
 ## New in 0.4.0-alpha4 (Released 2020/05/06)
 * Add get types helper
 ## New in 0.4.0-alpha3 (Released 2020/04/20)

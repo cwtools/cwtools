@@ -6,7 +6,6 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <PaketCommand>dotnet paket</PaketCommand>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-    <PackageVersion>0.0.16-alpha2</PackageVersion>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>cwtools</ToolCommandName>
     <PackageIconUrl>https://raw.githubusercontent.com/tboby/cwtools-vscode/master/docs/cwtools_logo.png</PackageIconUrl>

@@ -9,6 +9,7 @@
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+        <GenerateProgramFile>false</GenerateProgramFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
