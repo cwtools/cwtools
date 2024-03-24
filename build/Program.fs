@@ -125,7 +125,7 @@ let packAllTools () =
             path)
 
 let pushAll () =
-    !!(pkgPath + "*.nupkg")
+    !!(pkgPath </> "*.nupkg")
     |> Seq.iter (
         DotNet.nugetPush (fun p ->
             { p with
@@ -203,8 +203,13 @@ let initTargets () =
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
-    "Clean" ==>
-    "Build" ==> "Test" ==> "PackLibs" ==> "PackTools" ==> "Push" ==> "ReleaseGitHub"
+    "Clean"
+    ==> "Build"
+    ==> "Test"
+    ==> "PackLibs"
+    ==> "PackTools"
+    ==> "Push"
+    ==> "ReleaseGitHub"
     |> ignore
 
 [<EntryPoint>]
