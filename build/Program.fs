@@ -209,6 +209,8 @@ let buildTargetTree () =
 
 [<EntryPoint>]
 let main argv =
+    Microsoft.Build.Logging.StructuredLogger.Strings.Initialize()
+
     argv
     |> Array.toList
     |> Context.FakeExecutionContext.Create false "build.fsx"
