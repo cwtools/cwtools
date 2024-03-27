@@ -1054,6 +1054,7 @@ module private RulesParserImpl =
                "path"
                "path_strict"
                "path_file"
+               "path_extension"
                "starts_with"
                "severity"
                "unique" |]
