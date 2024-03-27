@@ -697,7 +697,7 @@ module internal FieldValidators =
         errors
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace("\\", "/")
+        let file = (trimQuote key).Replace("\\", "/").Replace("//","/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
@@ -725,7 +725,7 @@ module internal FieldValidators =
         (extension: string option)
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace("\\", "/")
+        let file = (trimQuote key).Replace("\\", "/").Replace("//","/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
