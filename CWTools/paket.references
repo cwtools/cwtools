@@ -5,3 +5,4 @@ DotNet.Glob
 FSharpx.Collections
 Sandwych.QuickGraph.Core
 VDS.Common
+System.Text.Encoding.CodePages

@@ -464,7 +464,6 @@ let main argv =
         { defaultConfig with
             runInParallel = false }
 
-    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
     CultureInfo.DefaultThreadCurrentCulture <- CultureInfo("ru-RU")
     CultureInfo.DefaultThreadCurrentUICulture <- CultureInfo("ru-RU")
     Thread.CurrentThread.CurrentCulture <- CultureInfo("ru-RU")

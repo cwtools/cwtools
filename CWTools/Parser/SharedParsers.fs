@@ -1,5 +1,6 @@
 ﻿namespace CWTools.Parser
 
+open System.Text
 open CWTools.Utilities
 open FParsec
 open CWTools.Utilities.Position
@@ -7,6 +8,9 @@ open Types
 open CWTools.Utilities.Utils
 
 module internal SharedParsers =
+
+    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
+
     let (<!>) (p: Parser<_, _>) label : Parser<_, _> =
         fun stream ->
             log (sprintf "%A: Entering %s" stream.Position label)

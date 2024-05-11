@@ -579,7 +579,6 @@ module CWToolsScripts =
 
     [<EntryPoint>]
     let main argv =
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
         CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
 
         if Array.tryHead argv = Some "ir" then
