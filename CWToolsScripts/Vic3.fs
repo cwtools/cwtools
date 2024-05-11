@@ -6,7 +6,6 @@ open System.IO
 open System.Text
 open CWTools.Common
 open CWTools.Parser
-Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 open CWTools.Rules
 open CWTools.Utilities

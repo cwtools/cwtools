@@ -43,9 +43,6 @@ namespace CWToolsCSTests
             return new MyNode { Key = n.Key, Nodes = nodes, Values = values, KeyValues = leaves};
         }
         public static MyNode MapToMyNode() {
-            //Support UTF-8
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
             //Parse event file
             var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
 
@@ -61,9 +58,6 @@ namespace CWToolsCSTests
     {
         static void Main(string[] args)
         {
-            //Support UTF-8
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
             //Parse event file
             // var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
             var text2 = File.ReadAllText("./testevent2.txt");

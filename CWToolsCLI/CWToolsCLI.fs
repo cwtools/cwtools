@@ -433,7 +433,6 @@ module CWToolsCLI =
         
     [<EntryPoint>]
     let main argv =
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
         let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter(),
                                                     checkStructure = false)
