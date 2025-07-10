@@ -1,5 +1,8 @@
-Expecto
 FParsec
 System.Text.Encoding.CodePages
 FsPickler
 FSharpx.Collections
+NUnit
+NUnit.Analyzers
+NUnit3TestAdapter
+Microsoft.NET.Test.Sdk
