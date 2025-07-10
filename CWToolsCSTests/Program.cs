@@ -56,7 +56,7 @@ namespace CWToolsCSTests
     }
     class Program
     {
-        static void Main(string[] args)
+        static void main(string[] args)
         {
             //Parse event file
             // var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");

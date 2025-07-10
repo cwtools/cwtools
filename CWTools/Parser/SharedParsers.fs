@@ -144,7 +144,7 @@ module internal SharedParsers =
         betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
 
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
-    let escapedChar = (pstring "\\\"" <|> pstring "\\") |>> string
+    let escapedChar = (stringReturn "\\\"" "\"" <|> pstring "\\")
     let metaprogrammingCharSnippet = many1Satisfy (fun c -> c <> ']' && c <> '\\')
 
     let getRange (start: FParsec.Position) (endp: FParsec.Position) =
