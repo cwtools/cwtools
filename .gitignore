@@ -78,3 +78,5 @@ dotnetcore
 
 .fake
 .ionide
+publish/
+BenchmarkTests/
