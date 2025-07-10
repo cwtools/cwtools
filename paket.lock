@@ -62,14 +62,14 @@ NUGET
       Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
     Microsoft.Testing.Extensions.TrxReport.Abstractions (1.7.3) - restriction: >= net8.0
       Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
-    Microsoft.Testing.Extensions.VSTestBridge (1.7.3) - restriction: >= net8.0
+    Microsoft.Testing.Extensions.VSTestBridge (1.7.3) - restriction: || (>= net462) (>= netcoreapp3.1)
       Microsoft.Testing.Extensions.Telemetry (>= 1.7.3) - restriction: >= netstandard2.0
       Microsoft.Testing.Extensions.TrxReport.Abstractions (>= 1.7.3) - restriction: >= netstandard2.0
       Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
       Microsoft.TestPlatform.AdapterUtilities (>= 17.13) - restriction: >= netstandard2.0
       Microsoft.TestPlatform.ObjectModel (>= 17.13) - restriction: >= netstandard2.0
     Microsoft.Testing.Platform (1.7.3) - restriction: >= net8.0
-    Microsoft.Testing.Platform.MSBuild (1.7.3) - restriction: >= net8.0
+    Microsoft.Testing.Platform.MSBuild (1.7.3) - restriction: || (>= net462) (>= netcoreapp3.1)
       Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
     Microsoft.TestPlatform.AdapterUtilities (17.14.1) - restriction: >= net8.0
     Microsoft.TestPlatform.ObjectModel (17.14.1) - restriction: >= net8.0
@@ -129,6 +129,14 @@ NUGET
       System.Xml.XDocument (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.1) (< netstandard1.2) (< win8)) (&& (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= netstandard1.0) (< portable-net45+win8+wpa81) (< wp8)) (&& (< netstandard1.5) (>= uap10.0) (< uap10.1))
     Newtonsoft.Json (13.0.3) - restriction: >= net8.0
     NuGet.CommandLine (6.14)
+    NUnit (4.3.2)
+      System.Memory (>= 4.6) - restriction: >= net462
+      System.Threading.Tasks.Extensions (>= 4.5.4) - restriction: >= net462
+      System.ValueTuple (>= 4.5) - restriction: >= net462
+    NUnit.Analyzers (4.9.2)
+    NUnit3TestAdapter (5.0)
+      Microsoft.Testing.Extensions.VSTestBridge (>= 1.5.3) - restriction: || (>= net462) (>= netcoreapp3.1)
+      Microsoft.Testing.Platform.MSBuild (>= 1.5.3) - restriction: || (>= net462) (>= netcoreapp3.1)
     Pastel (6.0.1)
       System.Memory (>= 4.6) - restriction: >= net462
       System.Runtime.InteropServices.RuntimeInformation (>= 4.3) - restriction: >= net462
@@ -550,7 +558,7 @@ NUGET
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
       Microsoft.NETCore.Targets (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
       System.Runtime (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
-    System.Threading.Tasks.Extensions (4.6.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net40) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net40) (< netstandard1.2) (>= netstandard1.3) (< win8)) (&& (< monoandroid) (< net40) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< monoandroid) (< net40) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monoandroid) (< net40) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net40) (>= net46) (< netstandard1.4)) (&& (< net40) (>= netstandard1.3) (< portable-net45+win8+wpa81)) (&& (< netstandard1.5) (>= uap10.0) (< win8) (< wpa81)) (&& (>= netstandard2.0) (< netstandard2.1))
+    System.Threading.Tasks.Extensions (4.6.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net40) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net40) (< netstandard1.2) (>= netstandard1.3) (< win8)) (&& (< monoandroid) (< net40) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< monoandroid) (< net40) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monoandroid) (< net40) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net40) (>= net46) (< netstandard1.4)) (&& (< net40) (>= netstandard1.3) (< portable-net45+win8+wpa81)) (>= net462) (&& (< netstandard1.5) (>= uap10.0) (< win8) (< wpa81)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< netcoreapp2.1) (>= netstandard2.0) (< netstandard2.1))
     System.Threading.Timer (4.3) - restriction: || (&& (< net40) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net40) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net40) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net40) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net40) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (< netstandard1.5) (>= uap10.0) (< uap10.1))
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: && (< monoandroid) (< monotouch) (< net451) (>= netstandard1.2) (< win81) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
