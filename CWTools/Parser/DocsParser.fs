@@ -10,9 +10,10 @@ module DocsParser =
 
     let private idChar = letter <|> digit <|> anyOf [ '_' ]
     let private isvaluechar = SharedParsers.isvaluechar
+    let private maxChars = 4000
 
     let private header =
-        skipCharsTillString "DOCUMENTATION ==" true 2000 .>> SharedParsers.ws
+        skipCharsTillString "DOCUMENTATION ==" true maxChars .>> SharedParsers.ws
         <?> "header"
 
     let private name =
@@ -21,10 +22,10 @@ module DocsParser =
         <?> "name"
 
     let private usage =
-        charsTillString "Supported scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
+        charsTillString "Supported scopes:" true maxChars .>> SharedParsers.ws <?> "usage"
 
     let private usageC =
-        charsTillString "Supported Scopes:" true 2000 .>> SharedParsers.ws <?> "usage"
+        charsTillString "Supported Scopes:" true maxChars .>> SharedParsers.ws <?> "usage"
 
     let private scope =
         many1Satisfy (fun c -> isvaluechar c || c = '?' || c = '(' || c = ')')
