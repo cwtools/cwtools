@@ -55,7 +55,7 @@ module YAMLLocalisationParser =
 
     let file =
         spaces
-        >>. many (attempt comment)
+        >>. skipMany (attempt comment)
         >>. pipe2 key (many ((attempt comment >>% None) <|> (entry |>> Some)) .>> eof) (fun k es ->
             { key = k; entries = List.choose id es })
         <?> "file"
