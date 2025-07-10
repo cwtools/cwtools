@@ -29,16 +29,16 @@ NUGET
       NETStandard.Library (>= 1.6.1) - restriction: && (< net40) (>= netstandard1.6)
     FSharp.Collections.ParallelSeq (1.2)
       FSharp.Core (>= 5.0) - restriction: >= netstandard2.0
-    FSharp.Compiler.Service (43.8.200)
-      FSharp.Core (8.0.200) - restriction: >= netstandard2.0
+    FSharp.Compiler.Service (43.9.100)
+      FSharp.Core (9.0.100) - restriction: >= netstandard2.0
       System.Buffers (>= 4.5.1) - restriction: >= netstandard2.0
-      System.Collections.Immutable (>= 7.0) - restriction: >= netstandard2.0
-      System.Diagnostics.DiagnosticSource (>= 7.0.2) - restriction: >= netstandard2.0
+      System.Collections.Immutable (>= 8.0) - restriction: >= netstandard2.0
+      System.Diagnostics.DiagnosticSource (>= 8.0) - restriction: >= netstandard2.0
       System.Memory (>= 4.5.5) - restriction: >= netstandard2.0
       System.Reflection.Emit (>= 4.7) - restriction: >= netstandard2.0
-      System.Reflection.Metadata (>= 7.0) - restriction: >= netstandard2.0
+      System.Reflection.Metadata (>= 8.0) - restriction: >= netstandard2.0
       System.Runtime.CompilerServices.Unsafe (>= 6.0) - restriction: >= netstandard2.0
-    FSharp.Core (8.0.200)
+    FSharp.Core (9.0.100)
     FSharp.Data (3.0.1)
       FSharp.Core (>= 4.0.0.1) - restriction: >= net45
       FSharp.Core (>= 4.3.4) - restriction: && (< net45) (>= netstandard2.0)
