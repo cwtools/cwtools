@@ -1,6 +1,7 @@
 namespace CWTools.Localisation
 
 open CWTools.Common
+open CWTools.Parser.SharedParsers
 open CWTools.Utilities.Position
 open System.Collections.Generic
 open System.IO
@@ -23,9 +24,12 @@ module YAMLLocalisationParser =
         || (c >= '\u3000' && c <= '\u30FF')
         || (c >= '\uFF00' && c <= '\uFFEF')
 
-    let key = many1Satisfy ((=) ':' >> not) .>> pchar ':' .>> spaces <?> "key"
-    let desc =
-        many1Satisfy isLocValueChar .>>. getPosition .>>. restOfLine false <?> "desc"
+    let key = many1Satisfy ((=) ':' >> not) .>> skipChar ':' .>> spaces <?> "key"
+
+    let private desc =
+        between (skipChar '"') (skipChar '"') (manyStrings (quotedCharSnippet <|> escapedChar))
+        .>>. getPosition
+        <?> "desc"
 
     let value = digit .>> spaces <?> "version"
 
@@ -33,32 +37,26 @@ module YAMLLocalisationParser =
         mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
 
     let entry =
-        pipe5
-            getPosition
-            key
-            (opt value)
-            desc
-            (getPosition .>> spaces)
-            (fun s k v ((validDesc, endofValid), invalidDesc) e ->
-                let errorRange =
-                    if endofValid <> e then
-                        Some(getRange endofValid e)
-                    else
-                        None
+        pipe5 getPosition key (opt value) desc (getPosition .>> spaces) (fun s k v (validDesc, endofValid) e ->
+            let errorRange =
+                if endofValid <> e then
+                    Some(getRange endofValid e)
+                else
+                    None
 
-                { key = k
-                  value = v
-                  desc = validDesc + invalidDesc
-                  position = getRange s e
-                  errorRange = errorRange })
+            { key = k
+              value = v
+              desc = validDesc
+              position = getRange s e
+              errorRange = errorRange })
         <?> "entry"
 
-    let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
+    let comment = skipChar '#' >>. skipRestOfLine true .>> spaces <?> "comment"
 
     let file =
         spaces
         >>. many (attempt comment)
-        >>. pipe2 key (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es ->
+        >>. pipe2 key (many ((attempt comment >>% None) <|> (entry |>> Some)) .>> eof) (fun k es ->
             { key = k; entries = List.choose id es })
         <?> "file"
 
