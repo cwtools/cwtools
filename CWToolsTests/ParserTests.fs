@@ -85,4 +85,12 @@ let tests =
                 match res with
                 | Success(_) -> ()
                 | Failure(e, _, _) -> failwithf "Parsing failed %A" e
+            testCase "trigger docs long" 
+            <| fun () ->
+                let file =
+                    "testfiles/parsertests/stellarisnewdocs/trigger_docs_long.log"
+                let res = DocsParser.parseDocsFile file
+                match res with
+                | Success(_) -> ()
+                | Failure(e, _, _) -> failwithf "Parsing failed %A" e
         ]
