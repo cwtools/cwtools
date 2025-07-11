@@ -158,14 +158,14 @@ module internal SharedParsers =
 
     // Base types
     // =======
-    let oppLTE = skipString "<=" |>> (fun _ -> Operator.LessThanOrEqual)
-    let oppGTE = skipString ">=" |>> (fun _ -> Operator.GreaterThanOrEqual)
-    let oppNE = skipString "!=" |>> (fun _ -> Operator.NotEqual)
-    let oppEE = skipString "==" |>> (fun _ -> Operator.EqualEqual)
-    let oppQE = skipString "?=" |>> (fun _ -> Operator.QuestionEqual)
-    let oppLT = skipChar '<' |>> (fun _ -> Operator.LessThan)
-    let oppGT = skipChar '>' |>> (fun _ -> Operator.GreaterThan)
-    let oppE = skipChar '=' |>> (fun _ -> Operator.Equals)
+    let oppLTE = skipString "<=" >>% Operator.LessThanOrEqual
+    let oppGTE = skipString ">=" >>% Operator.GreaterThanOrEqual
+    let oppNE = skipString "!=" >>% Operator.NotEqual
+    let oppEE = skipString "==" >>% Operator.EqualEqual
+    let oppQE = skipString "?=" >>% Operator.QuestionEqual
+    let oppLT = skipChar '<' >>% Operator.LessThan
+    let oppGT = skipChar '>' >>% Operator.GreaterThan
+    let oppE = skipChar '=' >>% Operator.Equals
 
     let operator =
         choiceL [ oppLTE; oppGTE; oppNE; oppEE; oppLT; oppGT; oppE; oppQE ] "operator"
@@ -198,18 +198,17 @@ module internal SharedParsers =
 
     // let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
     let valueQ =
-        betweenL (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string"
+        betweenL (skipChar '"') (skipChar '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string"
         |>> (fun x -> StringResource.stringManager.InternIdentifierToken x)
         |>> QString
         <?> "quoted string"
 
-    // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
-    //                 ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(false)))
+    // case sensitivity
     let valueBYes =
-        skipString "yes" .>> nextCharSatisfiesNot isvaluechar |>> (fun _ -> Bool(true))
+        skipString "yes" .>> nextCharSatisfiesNot isvaluechar >>% Bool(true)
 
     let valueBNo =
-        skipString "no" .>> nextCharSatisfiesNot isvaluechar |>> (fun _ -> Bool(false))
+        skipString "no" .>> nextCharSatisfiesNot isvaluechar >>% Bool(false)
 
     let valueI = pint64 .>> nextCharSatisfiesNot isvaluechar |>> int |>> Int
     let valueF = pfloat .>> nextCharSatisfiesNot isvaluechar |>> decimal |>> Float
@@ -362,10 +361,10 @@ module internal SharedParsers =
     := pipe5 getPosition (keyQ <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
         KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
 
-    let alle = ws >>. many statement .>> eof |>> (fun f -> (ParsedFile f))
+    let alle = ws >>. many statement .>> eof |>> ParsedFile
 
     let valuelist =
-        many1 ((comment |>> Comment) <|> (leafValue |>> (fun (a, b) -> Value(a, b))))
+        many1 ((comment |>> Comment) <|> (leafValue |>> Value))
         .>> eof
 
     let statementlist = (many statement) .>> eof
