@@ -144,7 +144,7 @@ module internal SharedParsers =
         betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
 
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
-    let escapedChar = (pstring "\\\"" <|> pstring "\\") |>> string
+    let escapedChar = (pstring "\\\"" <|> pstring "\\")
     let metaprogrammingCharSnippet = many1Satisfy (fun c -> c <> ']' && c <> '\\')
 
     let getRange (start: FParsec.Position) (endp: FParsec.Position) =
@@ -178,7 +178,7 @@ module internal SharedParsers =
         <?> "operator 1"
 
     let comment =
-        parseWithPosition (skipChar '#' >>. restOfLine true .>> ws |>> string)
+        parseWithPosition (skipChar '#' >>. restOfLine true .>> ws)
         <?> "comment"
 
     let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"
@@ -192,7 +192,6 @@ module internal SharedParsers =
 
     let valueS =
         (many1SatisfyL isvaluechar "value character")
-        |>> string
         |>> (fun x -> StringResource.stringManager.InternIdentifierToken x)
         |>> String
         <?> "string"
