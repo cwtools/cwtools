@@ -44,6 +44,7 @@ type HOI4Lang =
     | Polish = 5
     | Braz_Por = 6
     | Default = 7 //Default doesnt' exist!
+    | Chinese = 8
 
 type EU4Lang =
     | English = 0
