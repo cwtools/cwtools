@@ -1,6 +1,7 @@
 namespace CWTools.Localisation
 
 open CWTools.Common
+open CWTools.Parser.SharedParsers
 open CWTools.Utilities.Position
 open System.Collections.Generic
 open System.IO
@@ -8,13 +9,6 @@ open CWTools.Utilities.Utils
 
 module YAMLLocalisationParser =
     open FParsec
-
-    // type Entry = {
-    //     key : string
-    //     value : char option
-    //     desc : string
-    //     position : Position
-    // }
 
     type LocFile = { key: string; entries: Entry list }
 
@@ -30,48 +24,39 @@ module YAMLLocalisationParser =
         || (c >= '\u3000' && c <= '\u30FF')
         || (c >= '\uFF00' && c <= '\uFFEF')
 
-    //let key = charsTillString ":" true 1000 .>> spaces <?> "key"
-    let key = many1Satisfy ((=) ':' >> not) .>> pchar ':' .>> spaces <?> "key"
-    //let descInner = (charsTillString "§")
-    //let stringThenEscaped = pipe2 (manyCharsTill (noneOf ['"']) (pchar '§')) (manyCharsTill anyChar (pstring "§!")) (+) <?> "escaped"
-    //let desc = pipe2 (pchar '"') (many ((attempt stringThenEscaped) <|> manyCharsTill anyChar (pchar '"')) |>> List.reduce (+)) (fun a b -> string a + b)
-    //let desc = between (pchar '"') (pchar '"') (charsTillString "\"" false 10000) .>> spaces <?> "desc"
-    //let desc = pipe3 (pchar '"' |>> string) (many (attempt stringThenEscaped) |>> List.fold (+) "")  (manyCharsTill (noneOf ['§']) (pchar '"')) (fun a b c -> string a + b + c) <?> "string"
-    let desc =
-        many1Satisfy isLocValueChar .>>. getPosition .>>. restOfLine false <?> "desc"
+    let key = many1Satisfy ((=) ':' >> not) .>> skipChar ':' .>> spaces <?> "key"
+
+    let private desc =
+        between (skipChar '"') (skipChar '"') (manyStrings (quotedCharSnippet <|> escapedChar))
+        .>>. getPosition
+        <?> "desc"
 
     let value = digit .>> spaces <?> "version"
 
-    let getRange (start: FParsec.Position) (endp: FParsec.Position) =
+    let getRange (start: Position) (endp: Position) =
         mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
 
     let entry =
-        pipe5
-            getPosition
-            key
-            (opt value)
-            desc
-            (getPosition .>> spaces)
-            (fun s k v ((validDesc, endofValid), invalidDesc) e ->
-                let errorRange =
-                    if endofValid <> e then
-                        Some(getRange endofValid e)
-                    else
-                        None
+        pipe5 getPosition key (opt value) desc (getPosition .>> spaces) (fun s k v (validDesc, endofValid) e ->
+            let errorRange =
+                if endofValid <> e then
+                    Some(getRange endofValid e)
+                else
+                    None
 
-                { key = k
-                  value = v
-                  desc = validDesc + invalidDesc
-                  position = getRange s e
-                  errorRange = errorRange })
+            { key = k
+              value = v
+              desc = validDesc
+              position = getRange s e
+              errorRange = errorRange })
         <?> "entry"
 
-    let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
+    let comment = skipChar '#' >>. skipRestOfLine true .>> spaces <?> "comment"
 
     let file =
         spaces
-        >>. many (attempt comment)
-        >>. pipe2 key (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es ->
+        >>. skipMany (attempt comment)
+        >>. pipe2 key (many ((attempt comment >>% None) <|> (entry |>> Some)) .>> eof) (fun k es ->
             { key = k; entries = List.choose id es })
         <?> "file"
 
@@ -81,27 +66,6 @@ module YAMLLocalisationParser =
     let parseLocText text name = runParserOnString file () name text
 
     type YAMLLocalisationService<'L>(files: (string * string) list, keyToLanguage, gameLang) =
-        // let localisationFolder : string = localisationSettings.folder
-        // let language : CK2Lang =
-        //     match localisationSettings.language with
-        //         | CK2 l -> l
-        //         | _ -> failwith "Wrong language for localisation"
-
-        // let languageKey =
-        //     match language with
-        //     |CK2Lang.English -> "l_english"
-        //     |CK2Lang.French -> "l_french"
-        //     |CK2Lang.Spanish -> "l_spanish"
-        //     |CK2Lang.German -> "l_german"
-        //     |_ -> failwith "Unknown language enum value"
-
-        // let keyToLanguage =
-        //     function
-        //     |"l_english" -> Some EU4Lang.English
-        //     |"l_french" -> Some EU4Lang.French
-        //     |"l_spanish" -> Some EU4Lang.Spanish
-        //     |"l_german" -> Some EU4Lang.German
-        //     |_ -> None
         let mutable results: Results =
             upcast new Dictionary<string, bool * int * string * Position option>()
 
@@ -120,16 +84,6 @@ module YAMLLocalisationParser =
                 | None -> (true, entries.Length, "", None)
             | Failure(msg, p, _) -> (false, 0, msg, Some p.Position)
 
-        // let addFile f =
-        //     match parseLocFile f with
-        //     | Success({key = key; entries = entries}, _, _) ->
-        //         match keyToLanguage key with
-        //         |Some l ->
-        //             let es = entries |> List.map (fun e -> e, CK2 l)
-        //             records <- es@records; (true, es.Length, "")
-        //         |None -> (true, entries.Length, "")
-        //     | Failure(msg, _, _) -> (false, 0, msg)
-        // let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
         let addFiles (x: (string * string) list) =
             List.map (fun (f, t) -> (f, addFile f t)) x
 
@@ -159,13 +113,6 @@ module YAMLLocalisationParser =
             records <- recordsL |> Array.ofList
             recordsL <- []
 
-
-        // do
-        //     match Directory.Exists(localisationFolder) with
-        //     | true ->
-        //                 let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
-        //                 results <- addFiles files |> dict
-        //     | false -> ()
         new(localisationSettings: LocalisationSettings<'L>) =
             log (sprintf "Loading %s localisation in %s" localisationSettings.gameName localisationSettings.folder)
 
@@ -190,9 +137,7 @@ module YAMLLocalisationParser =
             | false ->
                 log (sprintf "%s not found" localisationSettings.folder)
                 YAMLLocalisationService([], localisationSettings.keyToLanguage, localisationSettings.gameToLang)
-        //new (settings : CK2Settings) = HOI4LocalisationService(settings.HOI4Directory.localisationDirectory, settings.ck2Language)
 
-        //new (settings : CK2Settings) = EU4LocalisationService(settings.EU4Directory.localisationDirectory, settings.ck2Language)
         member __.Api lang =
             { new ILocalisationAPI with
                 member __.Results = results

@@ -7,11 +7,6 @@
     <PaketCommand>dotnet paket</PaketCommand>
   </PropertyGroup>
   <ItemGroup>
-    <!-- <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" /> -->
-    <!-- <PackageReference Include="FParsec" Version="1.0.4-RC3" /> -->
-    <!-- <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" /> -->
-    <!-- <PackageReference Include="cwtools" Version="0.3.0"/>
-    <PackageReference Include="FSharp.Core" Version="4.5.0"/> -->
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
     <Name>CWTools.fsproj</Name>
     </ProjectReference>
