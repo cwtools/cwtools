@@ -320,19 +320,20 @@ and ValueClause(keys: Value[], pos: range) =
         with set value = _keys <- value
 
     member this.ToRaw: Statement list =
-        this.All
-        |> List.collect (function
-            | NodeC n -> [ n.ToRaw ]
-            | LeafValueC lv -> [ lv.ToRaw ]
-            | LeafC l -> [ l.ToRaw ]
-            | ValueClauseC vc ->
-                let keys =
-                    vc.Keys
-                    |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
-                    |> List.ofArray
+        let children = ResizeArray<Statement>(all.Length)
 
-                keys @ [ Value(vc.Position, Value.Clause vc.ToRaw) ]
-            | CommentC(r, c) -> [ (Comment(r, c)) ])
+        for child in this.AllArray do
+            match child with
+            | CommentC c -> children.Add(Comment c)
+            | NodeC n -> children.Add(n.ToRaw)
+            | LeafValueC lv -> children.Add(lv.ToRaw)
+            | LeafC l -> children.Add(l.ToRaw)
+            | ValueClauseC vc ->
+                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
+                children.AddRange(keys)
+                children.Add(Value(vc.Position, Value.Clause vc.ToRaw))
+
+        children |> List.ofSeq
 
     static member Create() = ValueClause()
 
@@ -560,22 +561,20 @@ and Node(key: string, pos: range) =
             | _ -> None)
 
     member this.ToRaw: Statement =
-        let children =
-            this.All
-            |> List.collect (function
-                | NodeC n -> [ n.ToRaw ]
-                | LeafValueC lv -> [ lv.ToRaw ]
-                | LeafC l -> [ l.ToRaw ]
-                | ValueClauseC vc ->
-                    let keys =
-                        vc.Keys
-                        |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
-                        |> List.ofArray
+        let children = ResizeArray<Statement>(all.Length)
 
-                    keys @ [ Value(vc.Position, Value.Clause vc.ToRaw) ]
-                | CommentC c -> [ (Comment c) ])
+        for child in this.AllArray do
+            match child with
+            | CommentC c -> children.Add(Comment c)
+            | NodeC n -> children.Add(n.ToRaw)
+            | LeafValueC lv -> children.Add(lv.ToRaw)
+            | LeafC l -> children.Add(l.ToRaw)
+            | ValueClauseC vc ->
+                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
+                children.AddRange(keys)
+                children.Add(Value(vc.Position, Value.Clause vc.ToRaw))
 
-        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key this.Key, Clause children, Operator.Equals)))
+        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key this.Key, Clause(List.ofSeq children), Operator.Equals)))
 
     static member Create key = Node(key)
 

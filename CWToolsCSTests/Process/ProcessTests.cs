@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CWTools.CSharp;
 using CWTools.Parser;
 using CWTools.Process;
@@ -24,7 +25,11 @@ public sealed class ProcessTests
     [SetUp]
     public void Setup()
     {
-        _root = Parsers.ProcessStatements("", "", Parsers.ParseScriptFile("", Text).GetResult());
+        _root = Parsers.ProcessStatements(
+            "test",
+            "",
+            Parsers.ParseScriptFile("", Text).GetResult()
+        );
     }
 
     [Test]
@@ -146,5 +151,16 @@ public sealed class ProcessTests
             Assert.That(key2.Operator, Is.EqualTo(Types.Operator.Equals));
             Assert.That(key3.Operator, Is.EqualTo(Types.Operator.GreaterThan));
         }
+    }
+
+    [Test]
+    public void ToRawTest()
+    {
+        Assert.That(
+            _root.ToRaw.PrettyPrint(),
+            Is.EqualTo(
+                "test = {\n\t# comment1\n\tkey1 = value1\n\tkey2 = \"value2\"\n\tkey3 > 1\n\tnode1 = {\n\t\tkey2 = value2\n\t}\n}\n"
+            )
+        );
     }
 }
