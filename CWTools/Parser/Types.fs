@@ -64,6 +64,9 @@ module Types =
         | Int of int
         | Bool of bool
         | Clause of Statement list
+        
+        static member CreateString(s: string) =
+            String(StringResource.stringManager.InternIdentifierToken(s))
 
         override x.ToString() =
             match x with
