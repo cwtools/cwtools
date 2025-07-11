@@ -37,8 +37,15 @@ public sealed class ProcessTests
     public void CommentsTest()
     {
         var comments = _root.Comments.ToArray();
+
         Assert.That(comments, Has.Length.EqualTo(1));
         Assert.That(comments[0].Item2, Is.EqualTo(" comment1"));
+    }
+
+    [Test]
+    public void NodesTest()
+    {
+        Assert.That(_root.Nodes.ToArray(), Has.Length.EqualTo(1));
     }
 
     [Test]
@@ -77,6 +84,7 @@ public sealed class ProcessTests
     public void LeafValuesTest()
     {
         var leaf = LeafValue.Create(Types.Value.CreateString("value"));
+
         using (Assert.EnterMultipleScope())
         {
             Assert.That(leaf.Value.ToRawString(), Is.EqualTo("value"));
@@ -89,6 +97,7 @@ public sealed class ProcessTests
     public void NodeTest()
     {
         var node = new Node("key1", Position.range.Zero);
+
         using (Assert.EnterMultipleScope())
         {
             Assert.That(node.Key, Is.EqualTo("key1"));
