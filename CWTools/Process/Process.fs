@@ -91,7 +91,7 @@ and Leaf =
           Position = pos
           Operator = op
           Trivia = None }
-    //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
+
     new(keyvalueitem: KeyValueItem, ?pos: range) =
         let (KeyValueItem(Key(key), value, op)) = keyvalueitem
         Leaf(key, value, pos |> Option.defaultValue range.Zero, op)
@@ -111,7 +111,7 @@ and LeafValue(value: Value, ?pos: range) =
     member val Trivia: Trivia option = None with get, set
     member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToString()) with get, set
     member val private _value = value with get, set
-    // val mutable private _value : Value = value
+
     member this.Value
         with get () = this._value
         and set value =
@@ -198,45 +198,57 @@ and ValueClause(keys: Value[], pos: range) =
             reset ()
 
     member this.Nodes =
-        all
-        |> Seq.choose (function
-            | NodeC n -> Some n
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | NodeC node -> yield node
+                | _ -> ()
+        }
 
     member this.Children = this.Nodes |> List.ofSeq
 
     member this.Leaves =
-        all
-        |> Seq.choose (function
-            | LeafC l -> Some l
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | LeafC leaf -> yield leaf
+                | _ -> ()
+        }
 
     member this.Values = this.Leaves |> List.ofSeq
 
     member this.Comments =
-        all
-        |> Seq.choose (function
-            | CommentC c -> Some c
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | CommentC comment -> yield comment
+                | _ -> ()
+        }
 
     member this.LeafValues =
-        all
-        |> Seq.choose (function
-            | LeafValueC lv -> Some lv
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | LeafValueC leafValue -> yield leafValue
+                | _ -> ()
+        }
 
     member this.ValueClauses =
-        all
-        |> Seq.choose (function
-            | ValueClauseC vc -> Some vc
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | ValueClauseC valueClause -> yield valueClause
+                | _ -> ()
+        }
 
     member this.Clauses =
-        all
-        |> Seq.choose (function
-            | ValueClauseC vc -> Some(vc :> IClause)
-            | NodeC n -> Some(n :> IClause)
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | ValueClauseC vc -> yield vc :> IClause
+                | NodeC n -> yield n :> IClause
+                | _ -> ()
+        }
 
     member this.Has x = all |> (Seq.exists (bothFind x))
 
@@ -435,45 +447,57 @@ and Node(key: string, pos: range) =
             reset ()
 
     member this.Nodes =
-        all
-        |> Seq.choose (function
-            | NodeC n -> Some n
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | NodeC node -> yield node
+                | _ -> ()
+        }
 
     member this.Children = this.Nodes |> List.ofSeq
 
     member this.Leaves =
-        all
-        |> Seq.choose (function
-            | LeafC l -> Some l
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | LeafC leaf -> yield leaf
+                | _ -> ()
+        }
 
     member this.Values = this.Leaves |> List.ofSeq
 
     member this.Comments =
-        all
-        |> Seq.choose (function
-            | CommentC c -> Some c
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | CommentC comment -> yield comment
+                | _ -> ()
+        }
 
     member this.LeafValues =
-        all
-        |> Seq.choose (function
-            | LeafValueC lv -> Some lv
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | LeafValueC leafValue -> yield leafValue
+                | _ -> ()
+        }
 
     member this.ValueClauses =
-        all
-        |> Seq.choose (function
-            | ValueClauseC vc -> Some vc
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | ValueClauseC valueClause -> yield valueClause
+                | _ -> ()
+        }
 
     member this.Clauses =
-        all
-        |> Seq.choose (function
-            | ValueClauseC vc -> Some(vc :> IClause)
-            | NodeC n -> Some(n :> IClause)
-            | _ -> None)
+        seq {
+            for child in all do
+                match child with
+                | ValueClauseC vc -> yield vc :> IClause
+                | NodeC n -> yield n :> IClause
+                | _ -> ()
+        }
 
     member this.Has x = all |> (Array.exists (bothFind x))
     member this.HasById x = all |> (Array.exists (bothFindId x))
