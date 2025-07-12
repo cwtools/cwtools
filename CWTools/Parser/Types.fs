@@ -102,7 +102,11 @@ module Types =
             | QString stringTokens -> stringTokens
             | _ -> StringResource.stringManager.InternIdentifierToken(x.ToString())
 
-    and [<CustomEquality; NoComparison; Struct>] PosKeyValue =
+    and
+#if NET5_0_OR_GREATER
+        [<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
+        [<CustomEquality; NoComparison; Struct>] PosKeyValue =
         | PosKeyValue of range * KeyValueItem
 
         override x.Equals(y) =
@@ -136,8 +140,6 @@ module Types =
             | Comment(r, c) -> c.GetHashCode()
             | KeyValue kv -> kv.GetHashCode()
             | Value(r, v) -> v.GetHashCode()
-
-
 
     [<StructuralEquality; NoComparison>]
     type ParsedFile = ParsedFile of Statement list
