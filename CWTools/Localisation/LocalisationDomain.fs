@@ -5,7 +5,6 @@ open CWTools.Common
 open CWTools.Utilities.Position
 open FParsec
 
-[<Struct>]
 type Entry =
     { key: string
       value: char option

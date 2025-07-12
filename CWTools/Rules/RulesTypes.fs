@@ -51,7 +51,6 @@ type PathOptions =
       pathFile: string option
       pathExtension: string option }
 
-[<Struct>]
 type ValueType =
     | Enum of enumc: string
     | Float of minmax: (decimal * decimal)
@@ -81,10 +80,16 @@ type ValueType =
         | IRFamilyName -> "IRFamilyName"
         | STLNameFormat x -> $"STLNameFormat %s{x}"
 
+#if NET5_0_OR_GREATER
+[<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
 [<Struct>]
 type SpecificValue = SpecificValue of valuec: StringTokens
 
 [<Struct>]
+#if NET5_0_OR_GREATER
+[<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
 type ScalarValue = | ScalarValue
 
 type TypeType =
