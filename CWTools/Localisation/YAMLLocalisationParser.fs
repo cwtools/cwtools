@@ -185,6 +185,7 @@ module HOI4 =
         | "l_polish" -> Some HOI4Lang.Polish
         | "l_braz_por" -> Some HOI4Lang.Braz_Por
         | "l_simp_chinese" -> Some HOI4Lang.Chinese
+        | "l_japanese" -> Some HOI4Lang.Japanese
         | _ -> None
 
     let HOI4LocalisationService (files: (string * string) list) =
