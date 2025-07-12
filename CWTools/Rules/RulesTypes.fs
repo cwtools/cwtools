@@ -51,10 +51,6 @@ type PathOptions =
       pathFile: string option
       pathExtension: string option }
 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<Struct>]
 type ValueType =
     | Enum of enumc: string
     | Float of minmax: (decimal * decimal)
