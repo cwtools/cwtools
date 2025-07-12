@@ -151,7 +151,7 @@ type FileWithContentResourceInput =
       filepath: string
       logicalpath: string
       validate: bool }
-// [<Struct>]
+
 type Entity =
     { filepath: string
       logicalpath: string

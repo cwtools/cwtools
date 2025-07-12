@@ -7,6 +7,9 @@ open System.Globalization
 
 [<AutoOpen>]
 module Types =
+#if NET5_0_OR_GREATER
+    [<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
     [<Struct>]
     type Position =
         | Position of FParsec.Position
@@ -44,12 +47,18 @@ module Types =
         | Operator.QuestionEqual -> "?="
         | x -> failwith (sprintf "Unknown enum value %A" x)
 
+#if NET5_0_OR_GREATER
+    [<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
     [<Struct>]
     type Key =
         | Key of string
 
         override x.ToString() = let (Key v) = x in sprintf "%s" v
 
+#if NET5_0_OR_GREATER
+    [<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
     [<Struct>]
     type KeyValueItem =
         | KeyValueItem of Key * Value * Operator

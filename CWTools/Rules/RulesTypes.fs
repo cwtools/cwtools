@@ -51,6 +51,9 @@ type PathOptions =
       pathFile: string option
       pathExtension: string option }
 
+#if NET5_0_OR_GREATER
+[<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
 [<Struct>]
 type ValueType =
     | Enum of enumc: string
@@ -81,10 +84,16 @@ type ValueType =
         | IRFamilyName -> "IRFamilyName"
         | STLNameFormat x -> $"STLNameFormat %s{x}"
 
+#if NET5_0_OR_GREATER
+[<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
 [<Struct>]
 type SpecificValue = SpecificValue of valuec: StringTokens
 
 [<Struct>]
+#if NET5_0_OR_GREATER
+[<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
 type ScalarValue = | ScalarValue
 
 type TypeType =
