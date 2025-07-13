@@ -54,8 +54,6 @@ type IClause =
     abstract member Tag: string -> Value option
     abstract member TagText: string -> string
 
-
-
 and Leaf =
     val mutable KeyId: StringTokens
     // val mutable Key : string
@@ -141,7 +139,7 @@ and LeafValue(value: Value, ?pos: range) =
 and Child =
     | NodeC of node: Node
     | LeafC of leaf: Leaf
-    | CommentC of comment: (range * string)
+    | CommentC of comment: Comment
     | LeafValueC of leafvalue: LeafValue
     | ValueClauseC of valueclause: ValueClause
 
@@ -324,7 +322,7 @@ and ValueClause(keys: Value[], pos: range) =
 
         for child in this.AllArray do
             match child with
-            | CommentC c -> children.Add(Comment c)
+            | CommentC c -> children.Add(CommentStatement c)
             | NodeC n -> children.Add(n.ToRaw)
             | LeafValueC lv -> children.Add(lv.ToRaw)
             | LeafC l -> children.Add(l.ToRaw)
@@ -565,7 +563,7 @@ and Node(key: string, pos: range) =
 
         for child in this.AllArray do
             match child with
-            | CommentC c -> children.Add(Comment c)
+            | CommentC c -> children.Add(CommentStatement c)
             | NodeC n -> children.Add(n.ToRaw)
             | LeafValueC lv -> children.Add(lv.ToRaw)
             | LeafC l -> children.Add(l.ToRaw)
@@ -681,7 +679,7 @@ module ProcessCore =
             match statement with
             | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k), Clause(sl), _))) -> NodeC(lookupNode k pos c sl)
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
-            | Comment(r, c) -> CommentC(r, c)
+            | CommentStatement(comment) -> CommentC(comment)
             | Value(pos, Value.Clause sl) -> lookupVC pos c sl [||]
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
 

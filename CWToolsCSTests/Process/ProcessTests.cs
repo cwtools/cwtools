@@ -44,7 +44,7 @@ public sealed class ProcessTests
         var comments = _root.Comments.ToArray();
 
         Assert.That(comments, Has.Length.EqualTo(1));
-        Assert.That(comments[0].Item2, Is.EqualTo(" comment1"));
+        Assert.That(comments[0].Comment, Is.EqualTo(" comment1"));
     }
 
     [Test]
@@ -130,7 +130,7 @@ public sealed class ProcessTests
         Assert.That(children[4].IsNodeC, Is.True);
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(common.comment.Item2, Is.EqualTo(" comment1"));
+            Assert.That(common.comment.Comment, Is.EqualTo(" comment1"));
             Assert.That(leaf1.leaf.Key, Is.EqualTo("key1"));
             Assert.That(leaf2.leaf.Key, Is.EqualTo("key2"));
             Assert.That(leaf3.leaf.Key, Is.EqualTo("key3"));

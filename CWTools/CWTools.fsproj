@@ -9,6 +9,7 @@
         <Compile Include="AssemblyInfo.fs"/>
         <Compile Include="Utilities/Position.fs"/>
         <Compile Include="Utilities/Utilities.fs"/>
+        <Compile Include="Process\Comment.fs" />
         <Compile Include="Common/Constants.fs"/>
         <Compile Include="Common/STLConstants.fs"/>
         <Compile Include="Common/EU4Constants.fs"/>
@@ -98,7 +99,6 @@
         <Compile Include="CSharp/Parsers.fs"/>
         <Compile Include="CSharp/Helpers.fs"/>
         <Compile Include="CSharp/Extensions.fs"/>
-        <Compile Include="ExtensionPoints/StatementVisitor.fs"/>
         <Compile Include="Game\VIC3\VIC3Game.fs"/>
     </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>

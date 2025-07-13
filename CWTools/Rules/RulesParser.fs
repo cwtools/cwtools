@@ -48,9 +48,9 @@ module private RulesParserImpl =
         let findComments (t: range) s (a: Child) =
             match struct (s, a) with
             | struct (struct (b, c), _) when b -> struct (b, c)
-            | struct ((_, c), CommentC(_, nc)) when nc.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
-                struct (false, nc :: c)
-            | struct ((_, c), CommentC(_, _)) -> struct (false, c)
+            | struct ((_, c), CommentC comment) when comment.Comment.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
+                struct (false, comment.Comment :: c)
+            | struct ((_, c), CommentC _) -> struct (false, c)
             | struct ((_, c), NodeC n) when n.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), LeafC v) when v.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), LeafValueC v) when v.Position.Code = t.Code -> struct (true, c)

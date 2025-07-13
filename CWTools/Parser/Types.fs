@@ -1,5 +1,6 @@
 namespace CWTools.Parser
 
+open CWTools.Process
 open CWTools.Utilities
 open CWTools.Utilities.Position
 open FParsec
@@ -121,7 +122,7 @@ module Types =
             let (PosKeyValue(_, k)) = x in k.GetHashCode()
 
     and [<CustomEquality; NoComparison>] Statement =
-        | Comment of range * string
+        | CommentStatement of Comment
         | KeyValue of PosKeyValue
         | Value of range * Value
 
@@ -129,7 +130,7 @@ module Types =
             match y with
             | :? Statement as y ->
                 match x, y with
-                | Comment(r1, s1), Comment(r2, s2) -> s1 = s2 && r1 = r2
+                | CommentStatement comment1, CommentStatement comment2 -> comment1 = comment2
                 | KeyValue kv1, KeyValue kv2 -> kv1 = kv2
                 | Value(r1, v1), Value(r2, v2) -> r1 = r2 && v1 = v2
                 | _ -> false
@@ -137,7 +138,7 @@ module Types =
 
         override x.GetHashCode() =
             match x with
-            | Comment(r, c) -> c.GetHashCode()
+            | CommentStatement comment -> comment.GetHashCode()
             | KeyValue kv -> kv.GetHashCode()
             | Value(r, v) -> v.GetHashCode()
 

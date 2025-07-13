@@ -1,6 +1,7 @@
 ﻿namespace CWTools.Parser
 
 open System.Text
+open CWTools.Process
 open CWTools.Utilities
 open FParsec
 open CWTools.Utilities.Position
@@ -257,7 +258,7 @@ module internal SharedParsers =
         pipe3 getPosition (value .>> ws) getPosition (fun a b c -> (getRange a c, b))
 
     let statement =
-        comment |>> Comment
+        comment |>> fun (p,c) -> CommentStatement({Position=p;Comment=c})
         <|> (attempt (leafValue .>> notFollowedBy operatorLookahead |>> Value))
         <|> keyValue
         <?> "statement"
@@ -304,7 +305,7 @@ module internal SharedParsers =
     let alle = ws >>. many statement .>> eof |>> ParsedFile
 
     let valueList =
-        many1 ((comment |>> Comment) <|> (leafValue |>> Value))
+        many1 ((comment |>> fun (p,c) -> CommentStatement({Position=p;Comment=c})) <|> (leafValue |>> Value))
         .>> eof
 
     let statementList = (many statement) .>> eof
