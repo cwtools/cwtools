@@ -176,16 +176,16 @@ and ValueClause(keys: Value[], pos: range) =
     member val Position = pos
     member val Scope: Scope = scopeManager.AnyScope with get, set
     member val Trivia: Trivia option = None with get, set
-    member __.AllChildren = all |> ResizeArray<Child>
+    member _.AllChildren = all |> ResizeArray<Child>
 
-    member __.AllChildren
+    member _.AllChildren
         with set (value: ResizeArray<Child>) =
             all <- (value |> Seq.toArray)
             reset ()
 
-    member __.AllArray = all
+    member _.AllArray = all
 
-    member __.AllArray
+    member _.AllArray
         with set value =
             all <- value
             reset ()
@@ -252,20 +252,20 @@ and ValueClause(keys: Value[], pos: range) =
 
     member this.Has x = all |> (Seq.exists (bothFind x))
 
-    member __.Tag x =
+    member _.Tag x =
         leaves ()
         |> Array.tryPick (function
             | l when l.Key == x -> Some l.Value
             | _ -> None)
 
-    member __.Leafs x =
+    member _.Leafs x =
         leaves ()
         |> Array.choose (function
             | l when l.Key == x -> Some l
             | _ -> None)
         |> Array.toSeq
 
-    member __.Tags x =
+    member _.Tags x =
         leaves ()
         |> Array.choose (function
             | l when l.Key == x -> Some l.Value
@@ -314,9 +314,9 @@ and ValueClause(keys: Value[], pos: range) =
         else
             None
 
-    member __.Keys = _keys
+    member _.Keys = _keys
 
-    member __.Keys
+    member _.Keys
         with set value = _keys <- value
 
     member this.ToRaw: Statement list =
@@ -426,16 +426,16 @@ and Node(key: string, pos: range) =
 
     member this.IsComplex = this.KeyPrefixId.IsSome || this.ValuePrefixId.IsSome
 
-    member __.AllChildren = all |> ResizeArray<Child>
+    member _.AllChildren = all |> ResizeArray<Child>
 
-    member __.AllChildren
+    member _.AllChildren
         with set (value: ResizeArray<Child>) =
             all <- (value |> Seq.toArray)
             reset ()
 
-    member __.AllArray = all
+    member _.AllArray = all
 
-    member __.AllArray
+    member _.AllArray
         with set value =
             all <- value
             reset ()
@@ -503,29 +503,29 @@ and Node(key: string, pos: range) =
     member this.Has x = all |> (Array.exists (bothFind x))
     member this.HasById x = all |> (Array.exists (bothFindId x))
 
-    member __.Tag x =
+    member _.Tag x =
         leaves ()
         |> Array.tryPick (function
             | l when l.Key == x -> Some l.Value
             | _ -> None)
 
-    member __.TagById x =
+    member _.TagById x =
         leaves ()
         |> Array.tryPick (function
             | l when l.KeyId.lower = x -> Some l.ValueId
             | _ -> None)
 
-    member __.Leafs x =
+    member _.Leafs x =
         leaves ()
         |> Array.choose (function
             | l when l.Key == x -> Some l
             | _ -> None)
         |> Array.toSeq
 
-    member __.LeafsById x =
+    member _.LeafsById x =
         leaves () |> Array.filter (fun l -> l.KeyId.lower = x) |> Array.toSeq
 
-    member __.Tags x =
+    member _.Tags x =
         leaves ()
         |> Array.choose (function
             | l when l.Key == x -> Some l.Value
@@ -640,23 +640,22 @@ module ProcessCore =
             | Some(Value(_, v2)), Some(Value(_, v1)), Value(pos, Clause sl) ->
                 None, None, (lookupVC pos context sl [| v2; v1 |]) :: (acc |> List.skip 2)
             | Some(Value(_, v2)), Some(KeyValue(PosKeyValue(_, KeyValueItem(Key(k), v1, _)))), Value(pos, Clause sl) ->
-                let node: Node = lookupN k pos context sl
+                let node: Node = lookupNode k pos context sl
                 node.KeyPrefix <- Some(v2.ToRawString())
                 node.ValuePrefix <- Some(v1.ToRawString())
                 None, None, (NodeC node) :: (acc |> List.skip 2)
             | _, Some(Value(pos, v2)), KeyValue(PosKeyValue(pos2, KeyValueItem(Key(k), Clause sl, _))) when
                 pos.StartLine = pos2.StartLine
                 ->
-                let node = lookupN k pos2 context sl
+                let node = lookupNode k pos2 context sl
                 node.KeyPrefix <- Some(v2.ToRawString())
                 None, None, (NodeC node) :: (acc |> List.skip 1)
-            //     None, None,
             | _ -> backone, Some next, (processNodeInner context next) :: acc
 
-        and lookupN =
+        and lookupNode =
             (fun (key: string) (pos: range) (context: LookupContext) (sl: Statement list) ->
                 let n = Node(key, pos)
-                // let children = sl |> List.map (fun e -> (processNodeInner context e))
+
                 let children =
                     sl
                     |> List.fold (nodeWindowFun context) (None, None, [])
@@ -668,7 +667,7 @@ module ProcessCore =
         and lookupVC =
             (fun (pos: range) (context: LookupContext) (sl: Statement list) keys ->
                 let vc = ValueClause(keys, pos)
-                //let children = sl |> List.map (fun e -> (processNodeInner context e))
+
                 let children =
                     sl
                     |> List.fold (nodeWindowFun context) (None, None, [])
@@ -680,16 +679,15 @@ module ProcessCore =
         and processNodeInner (c: LookupContext) statement =
             //log "%A" node.Key
             match statement with
-            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k), Clause(sl), _))) -> NodeC(lookupN k pos c sl)
+            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k), Clause(sl), _))) -> NodeC(lookupNode k pos c sl)
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
             | Comment(r, c) -> CommentC(r, c)
             | Value(pos, Value.Clause sl) -> lookupVC pos c sl [||]
             | Value(pos, v) -> LeafValueC(LeafValue(v, pos))
-        // member __.ProcessNode() = processNode id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
-        // member __.ProcessNode() = (fun key pos sl -> (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other}) (KeyValue(PosKeyValue(pos, KeyValueItem(Key(key) , Clause(sl), Operator.Equals)))))
-        member __.ProcessNode() =
+
+        member _.ProcessNode() =
             (fun key pos sl ->
-                lookupN
+                lookupNode
                     key
                     pos
                     { complete = false
@@ -699,9 +697,9 @@ module ProcessCore =
                       entityType = EntityType.Other }
                     sl)
 
-        member __.ProcessNode(entityType: EntityType) =
+        member _.ProcessNode(entityType: EntityType) =
             (fun key pos sl ->
-                lookupN
+                lookupNode
                     key
                     pos
                     { complete = false
@@ -758,7 +756,6 @@ module ProcessCore =
                             )))
 
                 y
-            // cont(fCombine resNode accTail) ))
             | [] ->
                 let x = cont Seq.empty
                 x
@@ -799,18 +796,18 @@ module ProcessCore =
         let rec loop nodes cont =
             match nodes with
             | x: Node :: tail ->
-                loop x.Children (fun accChildren ->
+                loop x.Children (fun _ ->
                     let resNode = fNode x
                     loop tail (fun accTail -> cont (resNode :: accTail)))
             | [] -> cont []
 
-        loop [ node ] id //|> List.collect
+        loop [ node ] id
 
     let foldNode7 fNode (node: Node) =
         let rec loop acc (node: Node) =
             let resNode = fNode node acc
             node.Children |> List.fold loop resNode
-        //| [] -> acc
+
         loop [] node
 
     let foldNode8 fNode fCombine acc (node: Node) =
@@ -819,7 +816,7 @@ module ProcessCore =
             | (x: Node) ->
                 let resNode = fNode x acc
                 x.Children |> List.map (loop resNode) |> fCombine
-        //| [] -> acc
+
         loop acc node
 
     let rec foldNodeWithState fNode acc (node: Node) =
@@ -829,7 +826,6 @@ module ProcessCore =
         match res with
         | None -> (node.Children |> List.collect (recurse newAcc))
         | Some e -> e :: (node.Children |> List.collect (recurse newAcc))
-    //res::(node.Children |> List.collect (recurse newAcc))
 
     let rec cata fNode (node: Node) : 'r =
         let recurse = cata fNode
