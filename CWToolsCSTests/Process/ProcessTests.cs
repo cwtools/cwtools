@@ -117,12 +117,12 @@ public sealed class ProcessTests
     public void ChildrenOrderTest()
     {
         var children = _root.AllArray;
-        var common = children[0].comment;
-        var leaf1 = children[1].leaf;
-        var leaf2 = children[2].leaf;
-        var leaf3 = children[3].leaf;
-        var node = children[4].node;
-
+        var common = (Child.CommentC)children[0];
+        var leaf1 = (Child.LeafC)children[1];
+        var leaf2 = (Child.LeafC)children[2];
+        var leaf3 = (Child.LeafC)children[3];
+        var node = (Child.NodeC)children[4];
+        
         Assert.That(children[0].IsCommentC, Is.True);
         Assert.That(children[1].IsLeafC, Is.True);
         Assert.That(children[2].IsLeafC, Is.True);
@@ -130,11 +130,11 @@ public sealed class ProcessTests
         Assert.That(children[4].IsNodeC, Is.True);
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(common.Item2, Is.EqualTo(" comment1"));
-            Assert.That(leaf1.Key, Is.EqualTo("key1"));
-            Assert.That(leaf2.Key, Is.EqualTo("key2"));
-            Assert.That(leaf3.Key, Is.EqualTo("key3"));
-            Assert.That(node.Key, Is.EqualTo("node1"));
+            Assert.That(common.comment.Item2, Is.EqualTo(" comment1"));
+            Assert.That(leaf1.leaf.Key, Is.EqualTo("key1"));
+            Assert.That(leaf2.leaf.Key, Is.EqualTo("key2"));
+            Assert.That(leaf3.leaf.Key, Is.EqualTo("key3"));
+            Assert.That(node.node.Key, Is.EqualTo("node1"));
         }
     }
 

@@ -138,7 +138,7 @@ and LeafValue(value: Value, ?pos: range) =
             and set v = this.Trivia <- v
 
 
-and [<Struct>] Child =
+and Child =
     | NodeC of node: Node
     | LeafC of leaf: Leaf
     | CommentC of comment: (range * string)
