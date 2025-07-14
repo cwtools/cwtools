@@ -56,9 +56,6 @@ module private RulesParserImpl =
             | struct ((_, c), LeafValueC v) when v.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code -> struct (true, c)
             | _ -> struct (false, [])
-        // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
-        // | ((_, _), _) -> (false, [])
-        //let fNode = (fun (node:Node) (children) ->
         let one =
             clause.Leaves
             |> Seq.map (fun e ->

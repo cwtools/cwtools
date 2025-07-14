@@ -323,16 +323,12 @@ module internal FieldValidators =
         (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
         (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
-        (severity: Severity)
-        (vt: CWTools.Rules.ValueType)
+        (vt: ValueType)
         (ids: StringTokens)
         =
-        // if key |> firstCharEqualsAmp then true else
         let key = getLowerKey ids
 
         (match vt with
-         // | ValueType.Scalar ->
-         //     true
          | ValueType.Bool -> key == "yes" || key == "no"
          | ValueType.Int(min, max) ->
              match TryParser.parseIntWithDecimal key with
@@ -568,7 +564,6 @@ module internal FieldValidators =
 
     let checkTypeFieldNE
         (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        severity
         (typetype: TypeType)
         (ids: StringTokens)
         =
@@ -576,11 +571,6 @@ module internal FieldValidators =
             match typetype with
             | TypeType.Simple t -> false, t
             | Complex(_, t, _) -> true, t
-
-        let typeKeyMap v =
-            match typetype with
-            | TypeType.Simple t -> v
-            | Complex(p, _, s) -> p + v + s
 
         let key = getLowerKey ids
 
@@ -595,15 +585,6 @@ module internal FieldValidators =
                     match typetype with
                     | TypeType.Simple t -> Some value
                     | Complex(p, _, s) ->
-                        // match value.IndexOf(p, StringComparison.OrdinalIgnoreCase), value.LastIndexOf(s, StringComparison.OrdinalIgnoreCase) with
-                        // | -1, -1 ->
-                        //     None
-                        // | fi, -1 ->
-                        //     Some (value.Substring(p.Length))
-                        // | -1, si ->
-                        //     Some (value.Substring(0, si))
-                        // | fi, si ->
-                        //     Some (value.Substring(p.Length, (si - p.Length)))
                         match
                             value.StartsWith(p, StringComparison.OrdinalIgnoreCase),
                             value.EndsWith(s, StringComparison.OrdinalIgnoreCase),
@@ -615,15 +596,6 @@ module internal FieldValidators =
                         | true, true, n -> Some(value.Substring(p.Length, n))
 
                 value |> Option.map values.ContainsKey |> Option.defaultValue false
-        // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-        // match isComplex with
-        // | true ->
-        //     values.ToList() |> List.map typeKeyMap |> List.exists ((==) value)
-        // | false ->
-        //     values.Contains value
-        // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-
-        //let values = values typeKeyMap values
         | None -> false
 
     let checkVariableGetField
@@ -1160,8 +1132,8 @@ module internal FieldValidators =
             true
         else
             match field with
-            | ValueField vt -> checkValidValueNE p.varMap p.enumsMap p.localisation severity vt keyIDs
-            | TypeField t -> checkTypeFieldNE p.typesMap severity t keyIDs
+            | ValueField vt -> checkValidValueNE p.varMap p.enumsMap p.localisation vt keyIDs
+            | TypeField t -> checkTypeFieldNE p.typesMap t keyIDs
             | ScopeField s ->
                 checkScopeFieldNE
                     p.linkMap
