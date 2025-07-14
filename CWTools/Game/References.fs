@@ -23,14 +23,6 @@ type References<'T when 'T :> ComputedData>
 
     let localisation () =
         localisation
-        |> List.filter (fun l ->
-            l.GetLang = (STL STLLang.English)
-            || l.GetLang = (HOI4 HOI4Lang.English)
-            || l.GetLang = (EU4 EU4Lang.English)
-            || l.GetLang = (CK2 CK2Lang.English)
-            || l.GetLang = (IR IRLang.English)
-            || l.GetLang = (VIC2 VIC2Lang.English)
-            || l.GetLang = (Custom CustomLang.English))
         |> List.collect (fun l -> l.ValueMap |> Map.toList)
 
     member __.ModifierNames = modifiers ()
