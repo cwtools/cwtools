@@ -418,16 +418,16 @@ type ResourceManager<'T when 'T :> ComputedData>
         let res = CKParser.parseString filetext (System.String.Intern(filename))
 
         match res with
-        | Success(_, _, _) -> res
-        | Failure(_, _, _) ->
+        | Success _ -> res
+        | Failure _ ->
             let res2 =
                 CKParser.parseString
                     (changeEncoding filetext encoding fallbackencoding)
                     (System.String.Intern(filename))
 
             match res2 with
-            | Success(_, _, _) -> res2
-            | Failure(_, _, _) -> res
+            | Success _ -> res2
+            | Failure _ -> res
 
     let parseFileThenEntity (file: ResourceInput) =
         match file with
@@ -799,23 +799,12 @@ type ResourceManager<'T when 'T :> ComputedData>
         |> Map.toSeq
         |> PSeq.iter (fun (_, (struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
 
-    let rand = new System.Random()
-
-    let swap (a: _[]) x y =
-        let tmp = a.[x]
-        a.[x] <- a.[y]
-        a.[y] <- tmp
-
-    // shuffle an array (in-place)
-    let shuffle a =
-        Array.iteri (fun i _ -> swap a i (rand.Next(i, Array.length a))) a
-
     let forceEagerData () =
         entitiesMap
         |> Map.toArray
-        |> (fun a ->
-            shuffle a
-            a)
+        |> (fun array ->
+            Array.randomShuffleInPlace array
+            array)
         |> PSeq.iter (fun (_, (struct (e, l))) -> (l.Force() |> ignore))
 
     let forceRecompute () =
