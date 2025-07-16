@@ -163,10 +163,8 @@ module private RulesParserImpl =
         | None -> None
 
     let private getPathOptions (node: Node) =
-        let path =
-            (node.TagsText "path")
-            |> List.ofSeq
-            |> List.map (fun s -> s.Replace("game/", "").Replace("game\\", ""))
+        let paths = (node.TagsText "path")
+        paths |> Array.iteri (fun i path -> paths[i] <- path.Replace("game/", "").Replace("game\\", ""))
 
         let pathStrict = node.TagText "path_strict" == "yes"
 
@@ -182,7 +180,7 @@ module private RulesParserImpl =
             else
                 None
 
-        { paths = path
+        { paths = paths
           pathStrict = pathStrict
           pathFile = pathFile
           pathExtension = pathExtension }

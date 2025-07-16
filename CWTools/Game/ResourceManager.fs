@@ -187,7 +187,7 @@ type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type GetFileNames = unit -> string list
+type GetFileNames = unit -> string array
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -209,7 +209,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         enableInlineScripts
     ) =
     let memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_, _>()
+        let dict = Dictionary<_, _>()
 
         fun n ->
             match dict.TryGetValue(keyFunction (n)) with
@@ -494,7 +494,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         }
 
     let updateOverwrite () =
-        let filelist = fileMap |> Map.toList |> List.map snd
+        let filelist = fileMap.Values |> Seq.toList
 
         let entities =
             filelist
@@ -874,14 +874,13 @@ type ResourceManager<'T when 'T :> ComputedData>
         |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
         |> List.filter (fun struct (e, _) -> e.validate)
 
-    let getFileNames () =
-        fileMap
-        |> Map.toList
-        |> List.map snd
-        |> List.map (function
+    let getFileNames() : string array =
+        fileMap.Values
+        |> Seq.map (function
             | EntityResource(_, r) -> r.logicalpath
             | FileResource(_, r) -> r.logicalpath
             | FileWithContentResource(_, r) -> r.logicalpath)
+        |> Seq.toArray
 
     member __.ManualProcessResource = parseFileThenEntity >> snd
 

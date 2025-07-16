@@ -107,7 +107,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member __.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
     member __.LocalisationAPIs() : (bool * ILocalisationAPI) list =
-        localisationAPIMap |> Map.toList |> List.map snd
+        localisationAPIMap.Values |> Seq.toList
 
     member __.LocalisationFileNames() : string list =
         localisationAPIMap

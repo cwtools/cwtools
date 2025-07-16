@@ -46,7 +46,7 @@ type Options =
           errorIfOnlyMatch = None }
 
 type PathOptions =
-    { paths: string list
+    { paths: string array
       pathStrict: bool
       pathFile: string option
       pathExtension: string option }

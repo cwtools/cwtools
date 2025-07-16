@@ -66,7 +66,7 @@ let getTypesFromDefinitions
                     def.name :: subtypes
                     |> List.map (fun s -> s, (v, key, n.Position, getExplicitLocalisationKeys n def, rawSubtypes))
 
-                if CWTools.Rules.FieldValidators.typekeyfilter def filterKey prefixKey then
+                if FieldValidators.typekeyfilter def filterKey prefixKey then
                     result
                 else
                     []
@@ -98,9 +98,7 @@ let getTypesFromDefinitions
                             n.ClauseList |> List.collect (skiprootkey tail)
                         else
                             []
-                    // n.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
                     | AnyKey :: tail -> n.ClauseList |> List.collect (skiprootkey tail)
-                // n.Children |> List.collect (fun c -> c.Children |> List.collect (skiprootkey tail))
                 match def.type_per_file, def.skipRootKey with
                 | true, _ ->
                     let rawSubtypes, subtypes =
@@ -121,42 +119,30 @@ let getTypesFromDefinitions
                          rawSubtypes))
                 | false, [] -> (e.Clauses |> List.ofSeq |> List.collect inner)
                 | false, srk -> e.Clauses |> List.ofSeq |> List.collect (skiprootkey srk)
-            // |false, _ ->
             childres
             @ (e.LeafValues
                |> List.ofSeq
                |> List.map (fun lv -> def.name, (v, lv.Value.ToString(), lv.Position, [], []))))
 
-    let resDict = Dictionary<_, _>()
-    // let results =
+    let resDict = Dictionary<string, _>()
+
     types
     |> Seq.ofList
     |> PSeq.collect getTypeInfo
     |> Seq.iter (fun (n, k) ->
-        if resDict.ContainsKey n then
-            resDict[n] <- k :: resDict[n]
+        let mutable value: (bool * string * Position.range * (string * string * bool) list * string list) list = Unchecked.defaultof<_>
+        if resDict.TryGetValue(n, &value) then
+            resDict[n] <- k :: value
         else
             resDict[n] <- [ k ])
-    // |> List.ofSeq
-    // |> List.fold
-    // (fun m (n, k) ->
-    // if Map.containsKey n m then
-    // Map.add n (k :: m.[n]) m
-    // else
-    // Map.add n [ k ] m)
-    // Map.empty
 
     types
-    |> List.map (fun t -> t.name)
-    // |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m) results
-    |> List.iter (fun k -> if resDict.ContainsKey k then () else resDict[k] <- [])
+    |> List.iter (fun typeDefinition -> if resDict.ContainsKey typeDefinition.name then () else resDict[typeDefinition.name] <- [])
 
     resDict
-    // |> Seq.map
     |> Seq.map (fun kv ->
         let k = kv.Key
         let vs = kv.Value
-
         k,
         vs
         |> List.map (fun (v, n, r, el, sts) ->
@@ -167,7 +153,7 @@ let getTypesFromDefinitions
               subtypes = sts }))
     |> Map.ofSeq
 
-let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) =
+let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) : EnumDefinition list =
     let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"
     let enumNameKeyId = StringResource.stringManager.InternIdentifierToken "enum_name"
     let nameKeyId = StringResource.stringManager.InternIdentifierToken "name"
@@ -219,7 +205,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                 |> Seq.exists (fun lv -> lv.ValueId.lower = enumNameKeyId.lower)
             then
                 node.LeafValues
-                |> Seq.map (fun lv -> lv.ValueText.Trim([| '\"' |]), Some lv.Position)
+                |> Seq.map (fun lv -> lv.ValueText.Trim('\"'), Some lv.Position)
             else
                 Seq.empty
 
@@ -229,21 +215,21 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                 let k = leaf.Key
                 // log (sprintf "gecel %A %A" k node.Leaves)
                 if k == "scalar" then
-                    node.Leaves |> Seq.map (fun l -> l.ValueText.Trim([| '\"' |]), Some l.Position)
+                    node.Leaves |> Seq.map (fun l -> l.ValueText.Trim('\"'), Some l.Position)
                 else
-                    node.TagsText k |> Seq.map (fun k -> k.Trim([| '\"' |]), None)
+                    node.TagsText k |> Seq.map (fun k -> k.Trim('\"'), None)
             | None ->
                 match enumtree.Leaves |> Seq.tryFind (fun l -> l.KeyId.lower = enumNameKeyId.lower) with
                 | Some leaf ->
                     let vt = leaf.ValueText
                     // log (sprintf "gecel %A %A" vt node.Leaves)
                     if vt == "scalar" then
-                        node.Leaves |> Seq.map (fun l -> l.Key.Trim([| '\"' |]), Some l.Position)
+                        node.Leaves |> Seq.map (fun l -> l.Key.Trim('\"'), Some l.Position)
                     else
                         node.Leaves
                         |> Seq.choose (fun l ->
                             if l.ValueText == vt then
-                                Some(l.Key.Trim([| '\"' |]), Some l.Position)
+                                Some(l.Key.Trim('\"'), Some l.Position)
                             else
                                 None)
                 | None -> Seq.empty
@@ -322,7 +308,7 @@ let getDefinedVariables (infoService: InfoService) (es: Entity list) =
 let getEntitiesWithoutTypes (types: TypeDefinition list) (es: Entity list) =
     let checkEntity (entity: Entity) =
         let path = entity.logicalpath
-        let dir = (Path.GetDirectoryName path).Replace("\\", "/")
+        let dir = (Path.GetDirectoryName path).Replace('\\', '/')
         let file = Path.GetFileName path
         let checkPathDir = (fun a b c -> FieldValidators.checkPathDir c a b)
 

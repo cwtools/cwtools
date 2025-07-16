@@ -43,19 +43,17 @@ module internal FieldValidators =
     open CWTools.Validation.ValidationCore
     open CWTools.Rules
 
-
-
     let checkPathDir (pathOptions: PathOptions) (pathDir: string) (file: string) =
         match pathOptions.pathStrict with
-        | true -> pathOptions.paths |> List.exists (fun tp -> pathDir == tp.Replace("\\", "/"))
+        | true -> pathOptions.paths |> Array.exists (fun tp -> pathDir == tp.Replace('\\', '/'))
         | false ->
             pathOptions.paths
-            |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\", "/"), StringComparison.OrdinalIgnoreCase))
+            |> Array.exists (fun tp -> pathDir.StartsWith(tp.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase))
         && match pathOptions.pathFile with
            | Some f -> file == f
            | None -> true
         && match pathOptions.pathExtension with
-           | Some ext -> Path.GetExtension file == ext
+           | Some extension -> Path.GetExtension(file.AsSpan()).Equals(extension, StringComparison.OrdinalIgnoreCase)
            | None -> true
 
     let getValidValues =
@@ -285,15 +283,15 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
                 else
-                    (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN
+                    (LocalisationValidation.checkLocKeysLeafOrNodeN
                         keys
                         ids
                         parts.[0]
                         leafornode
                         errors)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
             | ValueType.STLNameFormat var ->
                 match varMap.TryFind var with
                 | Some vars ->
@@ -1010,8 +1008,6 @@ module internal FieldValidators =
         aliasKey
         (ids: StringTokens)
         =
-        let key = getOriginalKey ids
-
         match aliasKeyList |> Map.tryFind aliasKey with
         | Some values -> values.Contains ids.lower
         | None -> true
@@ -1145,10 +1141,10 @@ module internal FieldValidators =
                     ctx
                     s
                     keyIDs
-            | LocalisationField(synced, isInline) -> true
+            | LocalisationField _ -> true
             | FilepathField(prefix, extension) -> checkFilepathFieldNE p.files keyIDs prefix extension
             | IconField folder -> checkIconFieldNE p.files folder keyIDs
-            | VariableSetField v -> true
+            | VariableSetField _ -> true
             | VariableGetField v -> checkVariableGetFieldNE p.varMap severity v keyIDs
             | VariableField(isInt, is32Bit, (min, max)) ->
                 checkVariableFieldNE

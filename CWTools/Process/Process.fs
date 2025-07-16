@@ -528,7 +528,6 @@ and Node(key: string, pos: range) =
         |> Array.choose (function
             | l when l.Key == x -> Some l.Value
             | _ -> None)
-        |> Array.toSeq
 
     member this.TagText x =
         this.Tag x
@@ -537,9 +536,9 @@ and Node(key: string, pos: range) =
             | Some s -> s.ToString()
             | None -> ""
 
-    member this.TagsText x =
-        this.Tags x
-        |> Seq.map (function
+    member this.TagsText (leafKey: string) : string array =
+        this.Tags leafKey
+        |> Array.map (function
             | QString s -> s.GetString()
             | s -> s.ToString())
 

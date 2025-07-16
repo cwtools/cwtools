@@ -444,7 +444,7 @@ module LanguageFeatures =
           enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> List.map fst)
           varDefs = lookup.varDefInfo
           loc = localisation.LocalisationKeys()
-          files = resources.Api.GetFileNames() |> Set.ofList
+          files = resources.Api.GetFileNames() |> Set.ofArray
           scriptedLoc = lookup.scriptedLoc }
 
 
