@@ -1,6 +1,7 @@
 namespace CWTools.Games
 
 open System.Collections.Generic
+open System.Runtime.CompilerServices
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -101,6 +102,7 @@ type FileResult =
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
+[<Struct;IsReadOnly>]
 type Overwrite =
     | No
     | Overwrote
