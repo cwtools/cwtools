@@ -21,7 +21,7 @@ type ILocalisationAPI =
     abstract Results: Results
     abstract ValueMap: Map<string, Entry>
     abstract Values: IDictionary<string, string>
-    abstract GetKeys: string list
+    abstract GetKeys: string array
     abstract GetDesc: string -> string
     abstract GetLang: Lang
 
