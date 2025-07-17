@@ -176,6 +176,7 @@ module CWToolsCLI =
         | [<Inherit>]CacheFile of path : string
         | [<Inherit>]CacheType of cacheType : CacheTypes
         | [<Inherit>]RulesPath of path : string
+        | [<Inherit>]Compression of CompressionOptions.Compression
         | DocsPath of string
         | [<CustomCommandLine("validate")>] Validate of ParseResults<ValidateArgs>
         | [<CustomCommandLine("list")>] List of ParseResults<ListArgs>
@@ -200,6 +201,7 @@ module CWToolsCLI =
                 | CacheFile _ -> "path to the cache file"
                 | RulesPath _ -> "path to the cwt rules"
                 | CacheType _ -> "type of cache file"
+                | Compression _ -> "compression type for output files (none|bz2, default: none)"
 
 
     let getEffectsAndTriggers docsPath =
@@ -382,7 +384,7 @@ module CWToolsCLI =
         |Failure(msg,_,_) -> false, msg
 
 
-    let serialize game directory scope modFilter cachePath rulesPath  (results : ParseResults<_>) =
+    let serialize game directory scope modFilter cachePath rulesPath compression (results : ParseResults<_>) =
         let cacheType = results.TryGetResult <@ OutputCacheType @> |> Option.defaultValue CacheTypes.Full
         let outputCacheFileName = results.TryGetResult <@ OutputCacheFile @>
         match cacheType with
@@ -392,19 +394,19 @@ module CWToolsCLI =
             let filename =
                 match game with
                 |Game.STL ->
-                    Serializer.serializeSTL ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeSTL ([WD {path = directory; name = "undefined"}]) outputCacheFileName compression
                 |Game.HOI4 ->
-                    Serializer.serializeHOI4 ({path = directory; name = "undefined"}) outputCacheFileName
+                    Serializer.serializeHOI4 ({path = directory; name = "undefined"}) outputCacheFileName compression
                 |Game.IR ->
-                    Serializer.serializeIR ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeIR ([WD {path = directory; name = "undefined"}]) outputCacheFileName compression
                 |Game.CK2 ->
-                    Serializer.serializeCK2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeCK2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName compression
                 |Game.EU4 ->
-                    Serializer.serializeEU4 ({path = directory; name = "undefined"}) outputCacheFileName
+                    Serializer.serializeEU4 ({path = directory; name = "undefined"}) outputCacheFileName compression
                 |Game.VIC2 ->
-                    Serializer.serializeVIC2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeVIC2 ([WD {path = directory; name = "undefined"}]) outputCacheFileName compression
                 |Game.CK3 ->
-                    Serializer.serializeCK3 ([WD {path = directory; name = "undefined"}]) outputCacheFileName
+                    Serializer.serializeCK3 ([WD {path = directory; name = "undefined"}]) outputCacheFileName compression
                 |Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
             eprintfn "Full cache file created at %s, relative to CWD" filename
         // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
@@ -447,10 +449,11 @@ module CWToolsCLI =
         let cachePath = results.TryGetResult <@ CacheFile @>
         let rulesPath = results.TryGetResult <@ RulesPath @>
         let cacheType = results.TryGetResult <@ CacheType @> |> Option.defaultValue CacheTypes.Full
+        let compression = results.TryGetResult <@ Compression @> |> Option.defaultValue CompressionOptions.NoCompression
         match results.GetSubCommand() with
         | List r -> list game directory scope modFilter docsPath rulesPath r; 0
         | Validate r -> validate game directory scope modFilter docsPath cachePath rulesPath cacheType r
-        | Serialize r -> serialize game directory scope modFilter cachePath rulesPath r ;0
+        | Serialize r -> serialize game directory scope modFilter cachePath rulesPath compression r ;0
         | Format f -> format f; 0
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"; 1
