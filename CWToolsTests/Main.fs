@@ -394,14 +394,11 @@ let perfSTL (b) =
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
     ()
 
-let perfHOI4 (b) =
+let perfHOI4Vanilla (b) =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     scopeManager.ReInit(defaultScopeInputs, [])
-
-    let cached, cachedFiles =
-        Serializer.deserialize @"C:\Users\Thomas\Git\cwtools-vscode\.cwtools\hoi4.cwb"
 
     let configs =
         CWToolsCLI.getConfigFiles (None, Some @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config")
@@ -413,7 +410,57 @@ let perfHOI4 (b) =
     let hoi4settings =
         { rootDirectories =
             [ WorkspaceDirectoryInput.WD
-                  { path = @"D:\Git\Hearts of Iron IV\Millennium_Dawn"
+                  { path = @"D:\Games\Steam\steamapps\common\Hearts of Iron IV"
+                    name = "test" } ]
+          scriptFolders = folders
+          excludeGlobPatterns = None
+          embedded = FromConfig([], [])
+          validation =
+            { validateVanilla = true
+              langs = [ Lang.HOI4 HOI4Lang.English ]
+              experimental = false }
+          rules =
+            Some
+                { ruleFiles = configs
+                  validateRules = true
+                  debugRulesOnly = false
+                  debugMode = false }
+          modFilter = None
+          maxFileSize = None }
+
+    let game = CWTools.Games.HOI4.HOI4Game(hoi4settings) :> IGame<HOI4ComputedData>
+    eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+
+    if b then
+        let errors = game.ValidationErrors() |> List.map (fun e -> e.range)
+        eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+        let testVals = game.AllEntities()
+        eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+        game.RefreshCaches()
+        eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+        ()
+    else
+        ()
+let perfHOI4 (b) =
+    CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
+    let timer = new System.Diagnostics.Stopwatch()
+    timer.Start()
+    scopeManager.ReInit(defaultScopeInputs, [])
+
+    let cached, cachedFiles =
+        Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb.bz2"
+
+    let configs =
+        CWToolsCLI.getConfigFiles (None, Some @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config")
+
+    let folders = configs |> List.tryPick getFolderList
+
+    let hoi4modpath = "Main.files.hoi4.modifiers"
+
+    let hoi4settings =
+        { rootDirectories =
+            [ WorkspaceDirectoryInput.WD
+                  { path = @"D:\Synced\Git\Third Party\Hearts of Iron IV\Millennium_Dawn"
                     name = "test" } ]
           scriptFolders = folders
           excludeGlobPatterns = None
@@ -463,6 +510,7 @@ let main argv =
     let config =
         { defaultConfig with
             runInParallel = false }
+    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
     CultureInfo.DefaultThreadCurrentCulture <- CultureInfo("ru-RU")
     CultureInfo.DefaultThreadCurrentUICulture <- CultureInfo("ru-RU")
@@ -499,6 +547,10 @@ let main argv =
     elif Array.tryHead argv = Some "j" then
         perfHOI4 (true)
         perfHOI4 (true)
+        0
+    elif Array.tryHead argv = Some "jj" then
+        perfHOI4Vanilla(true)
+        perfHOI4Vanilla(true)
         0
     elif Array.tryHead argv = Some "k" then
         perfHOI4 (true)
