@@ -29,6 +29,9 @@ let getCachePath (results: ParseResults<PerformanceArgs>) =
 let getFilePath (results: ParseResults<PerformanceArgs>) =
     results.TryGetResult File_Path
 
+let getMode (results: ParseResults<PerformanceArgs>) =
+    results.TryGetResult Mode
+
 // Run performance test and handle results
 let runPerfTest testName testFunc =
     try
@@ -48,26 +51,23 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
     let configPath = getConfigPath results
     let cachePath = getCachePath results
     let filePath = getFilePath results
+    let mode = getMode results
     
     // Default to running validation tests
     let runTests = true
     
-    if results.Contains Stellaris_Manual then
-        runPerfTest "Stellaris Manual Test" (perfStellarisManualTest gamePath configPath runTests)
-    elif results.Contains Stellaris_Verbose then
-        runPerfTest "Stellaris Verbose Test" (perfStellarisVerboseTest gamePath configPath runTests)
-    elif results.Contains Stellaris_ModCached then
-        runPerfTest "Stellaris ModCached Test" (perfStellarisModCached gamePath configPath cachePath runTests)
-    elif results.Contains EU4_Vanilla then
-        runPerfTest "EU4 Vanilla Test" (perfEU4Vanilla gamePath configPath cachePath runTests)
-    elif results.Contains EU4_Custom then
-        runPerfTest "EU4 Custom Test" (perfEU4Custom gamePath configPath cachePath runTests)
-    elif results.Contains HOI4_Vanilla then
-        runPerfTest "HOI4 Vanilla Test" (perfHOI4Vanilla gamePath configPath cachePath runTests)
-    elif results.Contains HOI4_ModCached then
-        runPerfTest "HOI4 ModCached Test" (perfHOI4ModCached gamePath configPath cachePath runTests)
-    elif results.Contains CK3_Vanilla then
-        runPerfTest "CK3 Vanilla Test" (perfCK3Vanilla gamePath configPath cachePath runTests)
+    if results.Contains Stellaris then
+        let modeStr = defaultArg mode "verbose"
+        runPerfTest (sprintf "Stellaris Test (%s)" modeStr) (perfStellaris gamePath configPath cachePath mode runTests)
+    elif results.Contains EU4 then
+        let modeStr = defaultArg mode "vanilla"
+        runPerfTest (sprintf "EU4 Test (%s)" modeStr) (perfEU4 gamePath configPath cachePath mode runTests)
+    elif results.Contains HOI4 then
+        let cacheInfo = if cachePath.IsSome then " (cached)" else ""
+        runPerfTest (sprintf "HOI4 Test%s" cacheInfo) (perfHOI4 gamePath configPath cachePath mode runTests)
+    elif results.Contains CK3 then
+        let cacheInfo = if cachePath.IsSome then " (cached)" else ""
+        runPerfTest (sprintf "CK3 Test%s" cacheInfo) (perfCK3 gamePath configPath cachePath mode runTests)
     elif results.Contains Parse_Test then
         runPerfTest "Parse Test" (test filePath)
     else
