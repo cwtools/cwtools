@@ -16,12 +16,68 @@ open FParsec
 open CWTools.Games.Stellaris
 open CWTools.Common.STLConstants
 open CWToolsCLI
+open System
 
 // Performance result record
 type PerfResult = {
     ElapsedMilliseconds: int64
     ErrorCount: int
 }
+
+// Centralized path configuration
+type PathConfig = {
+    SteamRoot: string
+    GitRoot: string
+    UserHome: string
+    CacheRoot: string
+}
+
+// Create default path configuration
+let createDefaultPathConfig () =
+    let userHome = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+    let steamRoot = @"D:\Games\Steam\steamapps\common"
+    let gitRoot = Path.Combine(userHome, "Git")
+    let cacheRoot = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "cache")
+    
+    {
+        SteamRoot = steamRoot
+        GitRoot = gitRoot
+        UserHome = userHome
+        CacheRoot = cacheRoot
+    }
+
+// Create path configuration with custom roots
+let createPathConfig (steamRoot: string option) (gitRoot: string option) =
+    let defaultConfig = createDefaultPathConfig()
+    {
+        SteamRoot = defaultArg steamRoot defaultConfig.SteamRoot
+        GitRoot = defaultArg gitRoot defaultConfig.GitRoot
+        UserHome = defaultConfig.UserHome
+        CacheRoot = defaultConfig.CacheRoot
+    }
+
+// Game-specific default path builders
+let getDefaultGamePaths (config: PathConfig) = 
+    let stellarisRoot = Path.Combine(config.SteamRoot, "Stellaris")
+    let stellarisConfig = Path.Combine(config.GitRoot, "cwtools-stl-config")
+    let stellarisCache = Path.Combine(config.CacheRoot, "stl.cwb")
+    
+    let eu4Root = Path.Combine(config.SteamRoot, "Europa Universalis IV")
+    let eu4Config = Path.Combine(config.GitRoot, "cwtools-eu4-config")
+    let eu4Cache = Path.Combine(config.CacheRoot, "eu4.cwb")
+    
+    let hoi4Root = Path.Combine(config.SteamRoot, "Hearts of Iron IV")
+    let hoi4Config = Path.Combine(config.GitRoot, "cwtools-hoi4-config", "Config")
+    let hoi4Cache = Path.Combine(config.CacheRoot, "hoi4.cwb")
+    
+    let ck3Root = Path.Combine(config.SteamRoot, "Crusader Kings III", "game")
+    let ck3Config = Path.Combine(config.GitRoot, "cwtools-ck3-config")
+    let ck3Cache = Path.Combine(config.CacheRoot, "ck3.cwb")
+    
+    (stellarisRoot, stellarisConfig, stellarisCache),
+    (eu4Root, eu4Config, eu4Cache),
+    (hoi4Root, hoi4Config, hoi4Cache),
+    (ck3Root, ck3Config, ck3Cache)
 
 // Updated performance runner that returns structured data
 let perfRunnerWithResult (buildGame: unit -> IGame<_>) runValidation =
@@ -127,11 +183,14 @@ let buildHoi4Settings rootDir configPath useCache cachePath =
       maxFileSize = None }
 
 // Unified Stellaris performance test runner
-let perfStellaris rootDir configPath (cachePath: string option) (modPath: string option) runTests =
+let perfStellaris rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) runTests =
+    let pathConfig = createPathConfig steamRoot gitRoot
+    let (defaultStellarisRoot, defaultStellarisConfig, defaultStellarisCache), _, _, _ = getDefaultGamePaths pathConfig
+    
     let useCache = cachePath.IsSome
-    let defaultRootDir = defaultArg rootDir "./CWToolsTests/testfiles/performancetest2/"
-    let defaultConfigPath = defaultArg configPath "./CWToolsTests/testfiles/performancetest2/.cwtools"
-    let defaultCachePath = defaultArg cachePath @"C:\Users\Thomas\Git\cwtools-vscode\.cwtools\stl.cwb"
+    let defaultRootDir = defaultArg rootDir defaultStellarisRoot
+    let defaultConfigPath = defaultArg configPath defaultStellarisConfig
+    let defaultCachePath = defaultArg cachePath defaultStellarisCache
     
     // Enable verbose logging by default
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
@@ -147,11 +206,14 @@ let perfStellaris rootDir configPath (cachePath: string option) (modPath: string
         STLGame(finalSettings) :> IGame<_>) runTests
 
 // Unified EU4 performance test runner
-let perfEU4 rootDir configPath (cachePath: string option) (modPath: string option) runTests =
+let perfEU4 rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) runTests =
+    let pathConfig = createPathConfig steamRoot gitRoot
+    let _, (defaultEu4Root, defaultEu4Config, defaultEu4Cache), _, _ = getDefaultGamePaths pathConfig
+    
     let useCache = cachePath.IsSome
-    let defaultRootDir = defaultArg rootDir @"D:\Games\Steam\steamapps\common\Europa Universalis IV"
-    let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\git\cwtools-eu4-config\\"
-    let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\eu4.cwb"
+    let defaultRootDir = defaultArg rootDir defaultEu4Root
+    let defaultConfigPath = defaultArg configPath defaultEu4Config
+    let defaultCachePath = defaultArg cachePath defaultEu4Cache
     
     perfRunnerWithResult (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
@@ -164,11 +226,14 @@ let perfEU4 rootDir configPath (cachePath: string option) (modPath: string optio
         EU4Game(finalSettings) :> IGame<_>) runTests
 
 // Unified CK3 performance test runner
-let perfCK3 rootDir configPath (cachePath: string option) (modPath: string option) runTests =
+let perfCK3 rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) runTests =
+    let pathConfig = createPathConfig steamRoot gitRoot
+    let _, _, _, (defaultCk3Root, defaultCk3Config, defaultCk3Cache) = getDefaultGamePaths pathConfig
+    
     let useCache = cachePath.IsSome
-    let defaultRootDir = defaultArg rootDir @"D:\Games\Steam\steamapps\common\Crusader Kings III\game"
-    let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\git\cwtools-ck3-config\\"
-    let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\ck3.cwb"
+    let defaultRootDir = defaultArg rootDir defaultCk3Root
+    let defaultConfigPath = defaultArg configPath defaultCk3Config
+    let defaultCachePath = defaultArg cachePath defaultCk3Cache
     
     perfRunnerWithResult (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
@@ -181,11 +246,14 @@ let perfCK3 rootDir configPath (cachePath: string option) (modPath: string optio
         CK3Game(finalSettings) :> IGame<_>) runTests
 
 // Unified HOI4 performance test runner
-let perfHOI4 rootDir configPath (cachePath: string option) (modPath: string option) runTests =
+let perfHOI4 rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) runTests =
+    let pathConfig = createPathConfig steamRoot gitRoot
+    let _, _, (defaultHoi4Root, defaultHoi4Config, defaultHoi4Cache), _ = getDefaultGamePaths pathConfig
+    
     let useCache = cachePath.IsSome
-    let defaultRootDir = defaultArg rootDir @"D:\Games\Steam\steamapps\common\Hearts of Iron IV"
-    let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config"
-    let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb"
+    let defaultRootDir = defaultArg rootDir defaultHoi4Root
+    let defaultConfigPath = defaultArg configPath defaultHoi4Config
+    let defaultCachePath = defaultArg cachePath defaultHoi4Cache
     
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
     perfRunnerWithResult (fun () ->
@@ -197,4 +265,24 @@ let perfHOI4 rootDir configPath (cachePath: string option) (modPath: string opti
             | Some mp -> { settings with rootDirectories = settings.rootDirectories @ [WD { path = mp; name = "mod" }] }
             | None -> settings
         HOI4Game(finalSettings) :> IGame<_>) runTests
+
+// Simple test function for parsing individual files
+let test (filePath: string) =
+    let timer = Stopwatch()
+    timer.Start()
+    
+    if File.Exists(filePath) then
+        let content = File.ReadAllText(filePath)
+        let result = CWTools.Parser.CKParser.parseString content "test"
+        timer.Stop()
+        match result with
+        | Success _ -> 
+            { ElapsedMilliseconds = timer.ElapsedMilliseconds; ErrorCount = 0 }
+        | Failure(error, _, _) -> 
+            eprintfn "Parse error: %s" error
+            { ElapsedMilliseconds = timer.ElapsedMilliseconds; ErrorCount = 1 }
+    else
+        timer.Stop()
+        eprintfn "File not found: %s" filePath
+        { ElapsedMilliseconds = timer.ElapsedMilliseconds; ErrorCount = 1 }
 

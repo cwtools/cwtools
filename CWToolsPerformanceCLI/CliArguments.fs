@@ -14,6 +14,8 @@ type PerformanceArgs =
     | [<AltCommandLine("-c")>] Config_Path of string
     | [<AltCommandLine("-p")>] Cache_Path of string
     | [<AltCommandLine("-mod-path")>] Mod_Path of string
+    | [<AltCommandLine("-steam-root")>] Steam_Root of string
+    | [<AltCommandLine("-git-root")>] Git_Root of string
     interface IArgParserTemplate with
         member s.Usage =
             match s with
@@ -26,3 +28,5 @@ type PerformanceArgs =
             | Config_Path _ -> "Path to config directory"
             | Cache_Path _ -> "Path to optional .cwb cache file"
             | Mod_Path _ -> "Path to optional mod directory"
+            | Steam_Root _ -> "Path to Steam installation root (overrides default)"
+            | Git_Root _ -> "Path to Git projects root (overrides default)"

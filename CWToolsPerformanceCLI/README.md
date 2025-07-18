@@ -75,6 +75,8 @@ The CLI accepts several optional path parameters to customize test locations:
 - **`--config-path` / `-c`**: Path to config directory (contains .cwt rule files)
 - **`--cache-path` / `-p`**: Path to optional .cwb cache file
 - **`--mod-path` / `-mod-path`**: Path to mod directory (tests vanilla + mod together)
+- **`--steam-root` / `-steam-root`**: Path to Steam installation root (overrides default)
+- **`--git-root` / `-git-root`**: Path to Git projects root (overrides default)
 
 ## Usage Examples
 
@@ -117,6 +119,12 @@ The CLI accepts several optional path parameters to customize test locations:
 .\CWToolsPerformanceCLI.exe --eu4 --mod-path "C:\Mods\MyEU4Mod"
 .\CWToolsPerformanceCLI.exe --hoi4 --mod-path "C:\Mods\MyHOI4Mod"
 .\CWToolsPerformanceCLI.exe --ck3 --mod-path "C:\Mods\MyCK3Mod"
+
+# Override Steam root for different installation
+.\CWToolsPerformanceCLI.exe --eu4 --steam-root "C:\Program Files (x86)\Steam\steamapps\common"
+
+# Override Git root for different project location
+.\CWToolsPerformanceCLI.exe --stellaris --git-root "D:\Projects"
 ```
 
 ### Advanced Examples
@@ -152,27 +160,33 @@ Running Stellaris Test (verbose)...
 
 ## Default Paths
 
-When optional path parameters are not provided, the CLI uses these default paths:
+When optional path parameters are not provided, the CLI uses these default paths. These are derived from a centralized path configuration consisting of `SteamRoot`, `GitRoot`, `UserHome`, and `CacheRoot`. Users can modify these roots to change default paths:
+
+### Central Roots:
+- **SteamRoot**: `D:\Games\Steam\steamapps\common` (can be overridden with `--steam-root`)
+- **GitRoot**: `C:\Users\Thomas\Git` (can be overridden with `--git-root`)
+- **UserHome**: [User's Home Directory]
+- **CacheRoot**: `[ExecutableDirectory]\cache`
 
 ### Stellaris
-- **Root**: `./CWToolsTests/testfiles/performancetest2/`
-- **Config**: `./CWToolsTests/testfiles/performancetest2/.cwtools`
-- **Cache**: `C:\Users\Thomas\Git\cwtools-vscode\.cwtools\stl.cwb`
+- **Root**: Derived from internal constants
+- **Config**: Derived from internal constants
+- **Cache**: Uses `GitRoot`
 
 ### EU4
-- **Root**: `D:\Games\Steam\steamapps\common\Europa Universalis IV`
-- **Config**: `C:\Users\Thomas\git\cwtools-eu4-config\`
-- **Cache**: `D:\Synced\Git\Personal\cwtools\CWToolsCLI\eu4.cwb`
+- **Root**: Uses `SteamRoot`
+- **Config**: Uses `GitRoot`
+- **Cache**: Uses `CacheRoot`
 
 ### HOI4
-- **Root**: `D:\Games\Steam\steamapps\common\Hearts of Iron IV`
-- **Config**: `C:\Users\Thomas\Git\cwtools-hoi4-config\Config`
-- **Cache**: `D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb`
+- **Root**: Uses `SteamRoot`
+- **Config**: Uses `GitRoot`
+- **Cache**: Uses `CacheRoot`
 
 ### CK3
-- **Root**: `D:\Games\Steam\steamapps\common\Crusader Kings III\game`
-- **Config**: `C:\Users\Thomas\git\cwtools-ck3-config\`
-- **Cache**: `D:\Synced\Git\Personal\cwtools\CWToolsCLI\ck3.cwb`
+- **Root**: Uses `SteamRoot`
+- **Config**: Uses `GitRoot`
+- **Cache**: Uses `CacheRoot`
 
 ### Alternative Test Paths
 
