@@ -18,6 +18,8 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="perf_functions\perf_common.fs" />
+        <Compile Include="perf_functions\PerfFunctions.fs" />
         <Compile Include="Tests.fs"/>
         <Compile Include="ProcessTests.fs"/>
         <Compile Include="ParserTests.fs"/>
