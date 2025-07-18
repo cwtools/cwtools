@@ -13,8 +13,7 @@ type PerformanceArgs =
     | [<AltCommandLine("-g")>] Game_Path of string
     | [<AltCommandLine("-c")>] Config_Path of string
     | [<AltCommandLine("-p")>] Cache_Path of string
-    | [<AltCommandLine("-f")>] File_Path of string
-    | [<AltCommandLine("-m")>] Mode of string
+    | [<AltCommandLine("-mod-path")>] Mod_Path of string
     interface IArgParserTemplate with
         member s.Usage =
             match s with
@@ -26,5 +25,4 @@ type PerformanceArgs =
             | Game_Path _ -> "Path to game installation directory"
             | Config_Path _ -> "Path to config directory"
             | Cache_Path _ -> "Path to optional .cwb cache file"
-            | File_Path _ -> "Path to file for parsing test"
-            | Mode _ -> "Test mode (stellaris: manual/verbose/cached, eu4: vanilla/custom)"
+            | Mod_Path _ -> "Path to optional mod directory"
