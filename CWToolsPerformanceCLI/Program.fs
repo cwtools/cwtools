@@ -26,9 +26,15 @@ let getConfigPath (results: ParseResults<PerformanceArgs>) =
 let getCachePath (results: ParseResults<PerformanceArgs>) =
     results.TryGetResult Cache_Path
 
+
 let getModPath (results: ParseResults<PerformanceArgs>) =
     results.TryGetResult Mod_Path
 
+let getSteamRoot (results: ParseResults<PerformanceArgs>) =
+    results.TryGetResult Steam_Root
+
+let getGitRoot (results: ParseResults<PerformanceArgs>) =
+    results.TryGetResult Git_Root
 
 // Run performance test and handle results
 let runPerfTest testName testFunc =
@@ -48,25 +54,26 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
     let gamePath = getGamePath results
     let configPath = getConfigPath results
     let cachePath = getCachePath results
-    let filePath = getFilePath results
     let modPath = getModPath results
+    let steamRoot = getSteamRoot results
+    let gitRoot = getGitRoot results
     // Default to running validation tests
     let runTests = true
     
     if results.Contains Stellaris then
-        let modInfo = match modPath with Some _ -e " + mod" | None -e ""
-        runPerfTest (sprintf "Stellaris Test %s" modInfo) (perfStellaris gamePath configPath cachePath modPath runTests)
+        let modInfo = match modPath with Some _  -> " + mod" | None -> ""
+        runPerfTest (sprintf "Stellaris Test %s" modInfo) (perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot runTests)
     elif results.Contains EU4 then
-        let modInfo = match modPath with Some _ -e " + mod" | None -e ""
-        runPerfTest (sprintf "EU4 Test %s" modInfo) (perfEU4 gamePath configPath cachePath modPath runTests)
+        let modInfo = match modPath with Some _ -> " + mod" | None -> ""
+        runPerfTest (sprintf "EU4 Test %s" modInfo) (perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot runTests)
     elif results.Contains HOI4 then
         let cacheInfo = if cachePath.IsSome then " (cached)" else ""
         let modInfo = match modPath with Some _ -> " + mod" | None -> ""
-        runPerfTest (sprintf "HOI4 Test%s%s" cacheInfo modInfo) (perfHOI4 gamePath configPath cachePath modPath runTests)
+        runPerfTest (sprintf "HOI4 Test%s%s" cacheInfo modInfo) (perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot runTests)
     elif results.Contains CK3 then
         let cacheInfo = if cachePath.IsSome then " (cached)" else ""
         let modInfo = match modPath with Some _ -> " + mod" | None -> ""
-        runPerfTest (sprintf "CK3 Test%s%s" cacheInfo modInfo) (perfCK3 gamePath configPath cachePath modPath runTests)
+        runPerfTest (sprintf "CK3 Test%s%s" cacheInfo modInfo) (perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot runTests)
     else
         eprintfn "No valid command specified. Use --help for usage information."
         1
