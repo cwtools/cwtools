@@ -66,7 +66,7 @@ let main argv =
             | _ -> true)
         
         match benchmarkResults with
-        | [ Stellaris ] -> Benchmarks.runStellarisTest gamePath configPath cachePath
+        | [ Stellaris ] -> Benchmarks.runStellarisTest Benchmarks.Advanced gamePath configPath cachePath
         | [ EU4 ] -> Benchmarks.runEU4Test gamePath configPath cachePath
         | [ HOI4 ] -> Benchmarks.runHOI4Test gamePath configPath cachePath
         | [ CK3 ] -> Benchmarks.runCK3Test gamePath configPath cachePath

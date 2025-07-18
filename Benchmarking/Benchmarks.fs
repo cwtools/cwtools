@@ -166,43 +166,45 @@ let runWithTimer description action =
         printfn "%s failed after %i ms: %s" description timer.ElapsedMilliseconds ex.Message
         reraise()
 
-let runStellarisTest gamePathOpt configPathOpt cachePathOpt =
-    let gamePath = getGamePath "stellaris" gamePathOpt
-    let configPath = getConfigPath "stellaris" configPathOpt
+// Common game test configuration
+type GameTestConfig = {
+    GameType: string
+    TestName: string
+    GamePath: string option
+    ConfigPath: string option
+    CachePath: string option
+    ValidateVanilla: bool
+    Experimental: bool
+    EnableVerboseLogging: bool
+}
+
+// Generic game test runner that accepts a settings builder function
+let runGameTestWithCustomSettings config settingsBuilder gameConstructor resultPrinter =
+    let gamePath = getGamePath config.GameType config.GamePath
+    let configPath = getConfigPath config.GameType config.ConfigPath
     
-    runWithTimer "Stellaris performance test" (fun () ->
+    runWithTimer config.TestName (fun () ->
+        if config.EnableVerboseLogging then
+            CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
+        
         scopeManager.ReInit(defaultScopeInputs, [])
         let configs = getConfigFiles configPath
         let folders = configs |> List.tryPick getFolderList
         
-        let settings = {
-            rootDirectories = [ WD { name = "test"; path = gamePath } ]
-            modFilter = None
-            validation = {
-                validateVanilla = true
-                experimental = false
-                langs = [ STL STLLang.English ]
-            }
-            rules = 
-                if List.isEmpty configs then None
-                else Some {
-                    validateRules = true
-                    ruleFiles = configs
-                    debugRulesOnly = false
-                    debugMode = false
-                }
-            embedded = FromConfig([], [])
-            scriptFolders = folders
-            excludeGlobPatterns = None
-            maxFileSize = None
-        }
+        let cached, cachedFiles = 
+            match config.CachePath with
+            | Some _ -> tryLoadCache config.CachePath
+            | None -> ([], [])
         
-        let game = STLGame(settings) :> IGame<STLComputedData>
-        let _errors = game.ValidationErrors() |> List.map (fun e -> e.range)
-        let _entities = game.AllEntities()
-        game.RefreshCaches()
-        printfn "Stellaris test completed with %i errors" (_errors |> List.length)
+        let settings = settingsBuilder gamePath configs folders cached cachedFiles config
+        
+        let game = gameConstructor settings
+        let errors = (game :> IGame<_>).ValidationErrors() |> List.map (fun e -> e.range)
+        let _ = (game :> IGame<_>).AllEntities()
+        (game :> IGame<_>).RefreshCaches()
+        resultPrinter errors
     )
+
 
 let runEU4Test gamePathOpt configPathOpt cachePathOpt =
     let gamePath = getGamePath "eu4" gamePathOpt
@@ -429,83 +431,60 @@ let runModdedHOI4Test gamePathOpt configPathOpt cacheFilePathOpt =
         printfn "Modded HOI4 test completed with %i errors" (errors |> List.length)
     )
 
-// Basic Stellaris benchmark (perf from Main.fs)
-let runBasicStellarisTest gamePathOpt configPathOpt cachePathOpt =
+// Unified Stellaris benchmark function
+type StellarisTestVariant =
+    | Basic
+    | Enhanced
+    | Advanced
+
+let runStellarisTest variant gamePathOpt configPathOpt cachePathOpt =
+    let (testName, defaultGamePath, defaultConfigPath, validateVanilla, experimental, enableVerboseLogging, useCache, useTriggerDocs) =
+        match variant with
+        | Basic -> ("Basic Stellaris performance test", "./testfiles/performancetest/", "./testfiles/performancetest2/.cwtools", false, true, false, false, true)
+        | Enhanced -> ("Enhanced Stellaris performance test", "./testfiles/performancetest2/", "./testfiles/performancetest2/.cwtools", false, true, true, false, false)
+        | Advanced -> ("Advanced Stellaris performance test", "./testfiles/performancetest2/", "./testfiles/performancetest2/.cwtools", true, false, true, true, false)
+    
     let gamePath = 
         match gamePathOpt with
         | Some path when Directory.Exists path -> path
-        | _ -> "./testfiles/performancetest/"
+        | _ -> defaultGamePath
     
     let configPath = 
         match configPathOpt with
         | Some path when Directory.Exists path -> path
-        | _ -> "./testfiles/performancetest2/.cwtools"
+        | _ -> defaultConfigPath
     
-    runWithTimer "Basic Stellaris performance test" (fun () ->
-        let triggers, effects =
-            DocsParser.parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt"
-            |> (function
-            | Success(p, _, _) -> (DocsParser.processDocs (scopeManager.ParseScopes)) p)
-
+    runWithTimer testName (fun () ->
+        if enableVerboseLogging then
+            CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
+            scopeManager.ReInit(defaultScopeInputs, [])
+        
         let configFiles = getConfigFiles configPath
         
-        let settings = {
-            rootDirectories = [ WD { name = "test"; path = gamePath } ]
-            modFilter = None
-            validation = {
-                validateVanilla = false
-                experimental = true
-                langs = [ STL STLLang.English ]
-            }
-            rules = 
-                if List.isEmpty configFiles then None
-                else Some {
-                    validateRules = true
-                    ruleFiles = configFiles
-                    debugRulesOnly = false
-                    debugMode = false
-                }
-            embedded = 
+        let embedded = 
+            if useTriggerDocs then
+                let triggers, effects =
+                    DocsParser.parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt"
+                    |> (function
+                    | Success(p, _, _) -> (DocsParser.processDocs (scopeManager.ParseScopes)) p
+                    | Failure(_, _, _) -> ([], []))
                 ManualSettings {
                     emptyEmbeddedSettings with
                         triggers = triggers
                         effects = effects
                 }
-            scriptFolders = None
-            excludeGlobPatterns = None
-            maxFileSize = None
-        }
-        
-        let stl = STLGame(settings) :> IGame<STLComputedData>
-        let _errors = stl.ValidationErrors() |> List.map (fun e -> e.range)
-        let _entities = stl.AllEntities()
-        printfn "Basic Stellaris test completed with %i errors" (_errors |> List.length)
-    )
-
-// Enhanced Stellaris benchmark (perf2 from Main.fs)
-let runEnhancedStellarisTest gamePathOpt configPathOpt cachePathOpt =
-    let gamePath = 
-        match gamePathOpt with
-        | Some path when Directory.Exists path -> path
-        | _ -> "./testfiles/performancetest2/"
-    
-    let configPath = 
-        match configPathOpt with
-        | Some path when Directory.Exists path -> path
-        | _ -> "./testfiles/performancetest2/.cwtools"
-    
-    runWithTimer "Enhanced Stellaris performance test" (fun () ->
-        CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-        scopeManager.ReInit(defaultScopeInputs, [])
-        
-        let configFiles = getConfigFiles configPath
+            elif useCache then
+                let cached, cachedFiles = tryLoadCache cachePathOpt
+                FromConfig(cachedFiles, cached)
+            else
+                FromConfig(configFiles, [])
         
         let settings = {
             rootDirectories = [ WD { name = "test"; path = gamePath } ]
             modFilter = None
             validation = {
-                validateVanilla = false
-                experimental = true
+                validateVanilla = validateVanilla
+                experimental = experimental
                 langs = [ STL STLLang.English ]
             }
             rules = 
@@ -516,7 +495,7 @@ let runEnhancedStellarisTest gamePathOpt configPathOpt cachePathOpt =
                     debugRulesOnly = false
                     debugMode = false
                 }
-            embedded = FromConfig(configFiles, [])
+            embedded = embedded
             scriptFolders = None
             excludeGlobPatterns = None
             maxFileSize = None
@@ -525,48 +504,14 @@ let runEnhancedStellarisTest gamePathOpt configPathOpt cachePathOpt =
         let stl = STLGame(settings) :> IGame<STLComputedData>
         let _errors = stl.ValidationErrors() |> List.map (fun e -> e.range)
         let _entities = stl.AllEntities()
-        stl.RefreshCaches()
-        printfn "Enhanced Stellaris test completed with %i errors" (_errors |> List.length)
+        
+        if enableVerboseLogging then
+            stl.RefreshCaches()
+        
+        printfn "%s completed with %i errors" testName (_errors |> List.length)
     )
 
-// Advanced Stellaris benchmark (perfSTL from Main.fs)
-let runAdvancedStellarisTest gamePathOpt configPathOpt cachePathOpt =
-    let gamePath = getGamePath "stellaris" gamePathOpt
-    let configPath = getConfigPath "stellaris" configPathOpt
-    
-    runWithTimer "Advanced Stellaris performance test" (fun () ->
-        CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-        scopeManager.ReInit(defaultScopeInputs, [])
-        
-        let cached, cachedFiles = tryLoadCache cachePathOpt
-        
-        let configs = getConfigFiles configPath
-        let folders = configs |> List.tryPick getFolderList
-        
-        let settings = {
-            rootDirectories = [ WD { name = "test"; path = gamePath } ]
-            modFilter = None
-            validation = {
-                validateVanilla = true
-                experimental = false
-                langs = [ STL STLLang.English ]
-            }
-            rules = 
-                Some {
-                    validateRules = true
-                    ruleFiles = configs
-                    debugRulesOnly = false
-                    debugMode = false
-                }
-            embedded = FromConfig(cachedFiles, cached)
-            scriptFolders = folders
-            excludeGlobPatterns = None
-            maxFileSize = None
-        }
-        
-        let game = STLGame(settings) :> IGame<STLComputedData>
-        let _errors = game.ValidationErrors() |> List.map (fun e -> e.range)
-        let _entities = game.AllEntities()
-        game.RefreshCaches()
-        printfn "Advanced Stellaris test completed with %i errors" (_errors |> List.length)
-    )
+// Wrapper functions for backward compatibility
+let runBasicStellarisTest = runStellarisTest Basic
+let runEnhancedStellarisTest = runStellarisTest Enhanced
+let runAdvancedStellarisTest = runStellarisTest Advanced
