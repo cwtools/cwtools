@@ -100,51 +100,51 @@ let main argv =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
 
     if Array.tryHead argv = Some "p" then
-        perf (true)
+        perfStellarisManualTest (true)
         0
     elif Array.tryHead argv = Some "u" then
-        perf2 (true)
-        perf2 (true)
+        perfStellarisVerboseTest (true)
+        perfStellarisVerboseTest (true)
         0
     elif Array.tryHead argv = Some "i" then
-        perf2 (true)
+        perfStellarisVerboseTest (true)
         0
     elif Array.tryHead argv = Some "o" then
-        perf (false)
+        perfStellarisManualTest (false)
         0
     elif Array.tryHead argv = Some "q" then
-        perf3 (true)
+        perfEU4Vanilla (true)
         0
     elif Array.tryHead argv = Some "y" then
-        perf4 (true)
+        perfEU4Custom (true)
         0
     elif Array.tryHead argv = Some "z" then
-        perf5 (true)
+        perfCK3Vanilla (true)
         0
     elif Array.tryHead argv = Some "t" then
         test ()
         test ()
         0
     elif Array.tryHead argv = Some "j" then
-        perfHOI4 (true)
-        perfHOI4 (true)
+        perfHOI4ModCached (true)
+        perfHOI4ModCached (true)
         0
     elif Array.tryHead argv = Some "jj" then
         perfHOI4Vanilla(true)
         perfHOI4Vanilla(true)
         0
     elif Array.tryHead argv = Some "k" then
-        perfHOI4 (true)
+        perfHOI4ModCached (true)
         0
     elif Array.tryHead argv = Some "s" then
-        perfSTL (true)
-        perfSTL (true)
+        perfStellarisModCached (true)
+        perfStellarisModCached (true)
         0
     elif Array.tryHead argv = Some "S" then
-        perfSTL (true)
+        perfStellarisModCached (true)
         0
     elif Array.tryHead argv = Some "stl-then-cache" then
-        perfSTL (true)
+        perfStellarisModCached (true)
         0
     else
         Tests.runTestsInAssemblyWithCLIArgs [ Sequenced; CLIArguments.Summary ] argv
