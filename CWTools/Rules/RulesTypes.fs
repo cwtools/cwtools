@@ -4,6 +4,7 @@ open CWTools.Common
 open CWTools.Utilities
 open CWTools.Process
 open CWTools.Utilities.StringResource
+open Shared;
 
 type ReplaceScopes =
     { root: Scope option
@@ -44,12 +45,6 @@ type Options =
           valueRequiredQuotes = false
           typeHint = None
           errorIfOnlyMatch = None }
-
-type PathOptions =
-    { paths: string array
-      pathStrict: bool
-      pathFile: string option
-      pathExtension: string option }
 
 type ValueType =
     | Enum of enumc: string

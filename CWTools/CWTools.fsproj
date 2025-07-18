@@ -101,5 +101,9 @@
         <Compile Include="CSharp/Extensions.fs"/>
         <Compile Include="Game\VIC3\VIC3Game.fs"/>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj" />
+      <ProjectReference Include="..\Shared\Shared.fsproj" />
+    </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>
 </Project>

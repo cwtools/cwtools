@@ -13,6 +13,7 @@ open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
 open CWTools.Rules
+open Shared
 
 module private RulesParserImpl =
     let internal specificFieldFromString x =

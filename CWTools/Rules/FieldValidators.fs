@@ -9,6 +9,7 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
 open System.IO
 open CWTools.Process.Localisation
+open Shared;
 
 type RuleContext =
     { subtypes: string list
@@ -43,19 +44,44 @@ module internal FieldValidators =
     open CWTools.Validation.ValidationCore
     open CWTools.Rules
 
-    let checkPathDir (pathOptions: PathOptions) (pathDir: string) (file: string) =
+    let checkPathDir (pathOptions: PathOptions) (pathDir: string) (fileName: string) =
         match pathOptions.pathStrict with
         | true -> pathOptions.paths |> Array.exists (fun tp -> pathDir == tp.Replace('\\', '/'))
         | false ->
             pathOptions.paths
             |> Array.exists (fun tp -> pathDir.StartsWith(tp.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase))
         && match pathOptions.pathFile with
-           | Some f -> file == f
+           | Some file -> fileName == file
            | None -> true
         && match pathOptions.pathExtension with
-           | Some extension -> Path.GetExtension(file.AsSpan()).Equals(extension, StringComparison.OrdinalIgnoreCase)
+           | Some extension -> Path.GetExtension(fileName.AsSpan()).Equals(extension, StringComparison.OrdinalIgnoreCase)
            | None -> true
 
+    let checkPathDirSpan (pathOptions: PathOptions) (pathDir: ReadOnlySpan<char>) (fileName: ReadOnlySpan<char>) =
+        match pathOptions.pathStrict with
+        | true ->
+            let mutable found = false
+            let mutable i = 0
+            while not found && i < pathOptions.paths.Length do
+                let tp = pathOptions.paths[i].Replace('\\', '/')
+                found <- pathDir.Equals(tp, StringComparison.OrdinalIgnoreCase)
+                i <- i + 1
+            found
+        | false ->
+            let mutable found = false
+            let mutable i = 0
+            while not found && i < pathOptions.paths.Length do
+                let tp = pathOptions.paths[i].Replace('\\', '/')
+                found <- pathDir.StartsWith(tp, StringComparison.OrdinalIgnoreCase)
+                i <- i + 1
+            found
+        && match pathOptions.pathFile with
+           | Some file -> fileName.Equals(file, StringComparison.OrdinalIgnoreCase)
+           | None -> true
+        && match pathOptions.pathExtension with
+           | Some extension -> Path.GetExtension(fileName).Equals(extension, StringComparison.OrdinalIgnoreCase)
+           | None -> true
+    
     let getValidValues =
         function
         | ValueType.Bool -> Some [ "yes"; "no" ]

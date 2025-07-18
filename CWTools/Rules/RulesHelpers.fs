@@ -20,7 +20,9 @@ let getTypesFromDefinitions
     let entities =
         es
         |> List.map (fun e ->
-            (Path.GetDirectoryName e.logicalpath).Replace("\\", "/"), e, (Path.GetFileName e.logicalpath), e.validate)
+            let dir = Memory<char>(Array.zeroCreate e.logicalpath.Length)
+            Path.GetDirectoryName(e.logicalpath.AsSpan()).Replace(dir.Span, '\\', '/')
+            dir, e, Path.GetFileName(e.logicalpath), e.validate)
 
     let getExplicitLocalisationKeys (entity: IClause) (typeDef: TypeDefinition) =
         typeDef.localisation
@@ -31,7 +33,7 @@ let getTypesFromDefinitions
     let getTypeInfo (def: TypeDefinition) =
         entities
         |> List.choose (fun (path, e, file, validate) ->
-            if FieldValidators.checkPathDir def.pathOptions path file then
+            if FieldValidators.checkPathDirSpan def.pathOptions path.Span (file.AsSpan()) then
                 Some(e.entity, file, validate)
             else
                 None)
@@ -173,7 +175,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
 
                 let enumnameRes =
                     if key.lower = enumNameKeyId.lower then
-                        node.Nodes |> Seq.map (fun n -> n.Key.Trim([| '\"' |]), Some n.Position)
+                        node.Nodes |> Seq.map (fun n -> n.Key.Trim('\"'), Some n.Position)
                     else
                         Seq.empty
 
@@ -243,8 +245,6 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
     let innerStart (enumtree: Node) (node: Node) = inner enumtree node
     //enumtree.Children |> List.collect (fun e -> node.Children |> List.collect (inner e ))
     let getEnumInfo (complexenum: ComplexEnumDef) =
-        // let cpath = complexenum.path.Replace("\\","/")
-        // log (sprintf "cpath %A %A" cpath (entities |> List.map (fun (_, e) -> e.logicalpath)))
         let values =
             es
             |> Seq.choose (fun e ->
