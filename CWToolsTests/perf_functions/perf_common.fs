@@ -1,94 +1,55 @@
+
 module PerfCommon
 
-open CWTools.Parser.DocsParser
-open CWTools.Games
-open System.IO
 open System.Diagnostics
-open CWTools.Games.Files
+open System.IO
 open CWTools.Common
-open CWTools.Parser
-open FParsec
+open CWTools.Games
+open CWTools.Games.Files
 open CWTools.Games.Stellaris
-open CWTools.Common.STLConstants
-open CWToolsCLI
 
-// Helper functions from Main.fs
+// Directory helpers
 let rec getAllFolders dirs =
-    if Seq.isEmpty dirs then
-        Seq.empty
-    else
-        seq {
-            yield! dirs |> Seq.collect Directory.EnumerateDirectories
-            yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders
-        }
+    if Seq.isEmpty dirs then Seq.empty
+    else seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories; yield! getAllFolders (dirs |> Seq.collect Directory.EnumerateDirectories) }
 
-let getAllFoldersUnion dirs =
-    seq {
-        yield! dirs
-        yield! getAllFolders dirs
-    }
+let getAllFoldersUnion dirs = seq { yield! dirs; yield! getAllFolders dirs }
 
 let getFolderList (filename: string, filetext: string) =
     if Path.GetFileName filename = "folders.cwt" then
-        Some(
-            filetext.Split(([| "\r\n"; "\r"; "\n" |]), System.StringSplitOptions.None)
-            |> List.ofArray
-            |> List.filter (fun s -> s <> "")
-        )
-    else
-        None
+        Some (filetext.Split([| "\r\n"; "\r"; "\n" |], System.StringSplitOptions.None) |> List.ofArray |> List.filter ((<>) ""))
+    else None
 
+// Empty settings
 let emptyEmbeddedSettings =
-    { triggers = []
-      effects = []
-      modifiers = []
-      embeddedFiles = []
-      cachedResourceData = []
-      localisationCommands = Legacy([], [], [])
-      eventTargetLinks = []
-      cachedRuleMetadata = None
-      featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
+    { EmbeddedSettings.triggers = []; effects = []; modifiers = []; embeddedFiles = []; cachedResourceData = []; localisationCommands = Legacy([], [], []); eventTargetLinks = []; cachedRuleMetadata = None; featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
 
-let emptyStellarisSettings (rootDirectory) =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+let emptyStellarisSettings rootDirectory =
+    { StellarisSettings.rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
       modFilter = None
-      validation =
-        { validateVanilla = false
-          experimental = true
-          langs = [ STL STLLang.English ] }
+      validation = { validateVanilla = false; experimental = true; langs = [ STL STLLang.English ] }
       rules = None
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
       maxFileSize = None }
 
+// Config file helpers
 let enumerateConfigFiles basePath extensions =
-    if Directory.Exists basePath then
-        getAllFoldersUnion ([ basePath ] |> Seq.ofList)
-        |> Seq.collect Directory.EnumerateFiles
-        |> Seq.filter (fun f -> extensions |> List.contains (Path.GetExtension f))
-        |> List.ofSeq
-    else
-        []
+    if Directory.Exists basePath then getAllFoldersUnion [basePath] |> Seq.collect Directory.EnumerateFiles |> Seq.filter (fun f -> extensions |> List.contains (Path.GetExtension f)) |> List.ofSeq else []
 
-let readConfigFiles files =
-    files |> List.map (fun f -> (f, File.ReadAllText(f)))
+let readConfigFiles files = files |> List.map (fun f -> f, File.ReadAllText f)
 
-let perfRunner (buildGame : unit -> IGame<_>) runValidation =
+// Performance runner
+let perfRunner (buildGame: unit -> IGame<_>) runValidation =
     let timer = Stopwatch()
     timer.Start()
-    let game = buildGame ()
+    let game = buildGame()
     if runValidation then
         let errors = game.ValidationErrors() |> List.map (fun e -> e.range)
         let testVals = game.AllEntities()
         game.RefreshCaches()
-        eprintfn "Elapsed Time: %i, %i errors" timer.ElapsedMilliseconds (errors |> List.length)
-    else
-        ()
+        eprintfn "Elapsed Time: %i, %i errors" timer.ElapsedMilliseconds errors.Length
+    else ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
 
-let createPerfRunner scopeInit settingsFactory gameCtor =
-    perfRunner (fun () ->
-        scopeManager.ReInit(defaultScopeInputs, [])
-        gameCtor (settingsFactory()) :> IGame<_>
-    )

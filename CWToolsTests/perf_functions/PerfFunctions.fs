@@ -1,5 +1,8 @@
 module PerfFunctions
 
+open CWTools.Games.CK3
+open CWTools.Games.EU4
+open CWTools.Games.HOI4
 open PerfCommon
 open CWTools.Parser.DocsParser
 open CWTools.Games
@@ -13,37 +16,32 @@ open CWTools.Games.Stellaris
 open CWTools.Common.STLConstants
 open CWToolsCLI
 
-// Stellaris performance functions - unified function
+// Unified Stellaris settings builder
 let buildStlSettings rootDir configPath useManual useCached cachePath =
     let triggers, effects =
         if useManual then
             parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt"
             |> function
-               | Success(p, _, _) -> (DocsParser.processDocs (scopeManager.ParseScopes)) p
-               | Failure(_, _, _) -> ([], [])
+                | Success(p, _, _) -> DocsParser.processDocs scopeManager.ParseScopes p
+                | Failure _ -> [], []
         else
             [], []
-           
+
     let configs, cachedData =
         if useCached then
             let cached, cachedFiles = Serializer.deserialize cachePath
             CWToolsCLI.getConfigFiles (None, Some configPath), Some(cached, cachedFiles)
         else
-            enumerateConfigFiles configPath [".cwt"]
-            |> readConfigFiles, None
-    
+            enumerateConfigFiles configPath [".cwt"] |> readConfigFiles, None
+
     let embedded =
         match useCached, useManual with
-        | true, _ -> 
-            let cached, cachedFiles = cachedData.Value
-            FromConfig(cachedFiles, cached)
-        | false, true ->
-            ManualSettings { emptyEmbeddedSettings with triggers = triggers; effects = effects }
-        | false, false ->
-            FromConfig(configs, [])
-    
+        | true, _ -> let cached, cachedFiles = cachedData.Value in FromConfig(cachedFiles, cached)
+        | false, true -> ManualSettings { emptyEmbeddedSettings with triggers = triggers; effects = effects }
+        | _ -> FromConfig(configs, [])
+
     let folders = configs |> List.tryPick getFolderList
-    
+
     if useCached then
         { rootDirectories = [ WorkspaceDirectoryInput.WD { path = rootDir; name = "test" } ]
           scriptFolders = folders
@@ -54,44 +52,37 @@ let buildStlSettings rootDir configPath useManual useCached cachePath =
           modFilter = None
           maxFileSize = None }
     else
-        { (emptyStellarisSettings rootDir) with 
+        { emptyStellarisSettings rootDir with
             embedded = embedded
             scriptFolders = folders
             rules = Some { validateRules = true; ruleFiles = configs; debugRulesOnly = false; debugMode = false } }
 
-// Legacy wrapper for cached settings
+// Legacy Stellaris cached settings
 let buildStlCachedSettings rootDir configPath cachePath =
     buildStlSettings rootDir configPath false true cachePath
 
-let perf runTests =
+// Stellaris performance runners
+let perfStellarisManualTest runTests =
     perfRunner (fun () -> STLGame(buildStlSettings "./testfiles/performancetest/" "./testfiles/performancetest2/.cwtools" true false "") :> IGame<_>) runTests
 
-let perf2 runTests =
+let perfStellarisVerboseTest runTests =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-    let buildGame () =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildStlSettings "./testfiles/performancetest2/" "./testfiles/performancetest2/.cwtools" false false ""
-        STLGame(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        STLGame(buildStlSettings "./testfiles/performancetest2/" "./testfiles/performancetest2/.cwtools" false false "") :> IGame<_>) runTests
 
-let perfSTL runTests =
+let perfStellarisModCached runTests =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-    let buildGame () =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildStlSettings @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\test_mod_inline\\" @"C:\Users\Thomas\Git\cwtools-stellaris-config\config" false true @"C:\Users\Thomas\Git\cwtools-vscode\.cwtools\stl.cwb"
-        CWTools.Games.Stellaris.STLGame(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        STLGame(buildStlSettings @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\test_mod_inline\\" @"C:\Users\Thomas\Git\cwtools-stellaris-config\config" false true @"C:\Users\Thomas\Git\cwtools-vscode\.cwtools\stl.cwb") :> IGame<_>) runTests
 
-// EU4 performance functions
+// EU4 settings and runner
 let buildEu4Settings rootDir configPath useCache =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList
-    let embedded = if useCache then
-                      let cached, cachedFiles = Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\eu4.cwb"
-                      FromConfig(cachedFiles, cached)
-                   else
-                      FromConfig([], [])
-    { CWTools.Games.EU4.EU4Settings.rootDirectories = [ WD { WorkspaceDirectory.name = "Europa Universalis IV"; path = rootDir } ]
+    let embedded = if useCache then let cached, cachedFiles = Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\eu4.cwb" in FromConfig(cachedFiles, cached) else FromConfig([], [])
+    { rootDirectories = [ WD { name = "Europa Universalis IV"; path = rootDir } ]
       modFilter = None
       scriptFolders = folders
       excludeGlobPatterns = None
@@ -100,30 +91,22 @@ let buildEu4Settings rootDir configPath useCache =
       embedded = embedded
       maxFileSize = None }
 
-let perf3 runTests =
-    let buildGame () =
+let perfEU4Vanilla runTests =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildEu4Settings @"D:\Games\Steam\steamapps\common\Europa Universalis IV" @"C:\Users\Thomas\git\cwtools-eu4-config\\" false
-        CWTools.Games.EU4.EU4Game(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        EU4Game(buildEu4Settings @"D:\Games\Steam\steamapps\common\Europa Universalis IV" @"C:\Users\Thomas\git\cwtools-eu4-config\\" false) :> IGame<_>) runTests
 
-let perf4 runTests =
-    let buildGame () =
+let perfEU4Custom runTests =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildEu4Settings @"./testfiles/custom/files" @".\testfiles/custom/rules/" false
-        CWTools.Games.EU4.EU4Game(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        EU4Game(buildEu4Settings @"./testfiles/custom/files" @".\testfiles/custom/rules/" false) :> IGame<_>) runTests
 
-// CK3 performance functions
+// CK3 settings and runner
 let buildCk3Settings rootDir configPath useCache =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList
-    let embedded = if useCache then
-                      let cached, cachedFiles = Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\ck3.cwb"
-                      FromConfig(cachedFiles, cached)
-                   else
-                      FromConfig([], [])
-    { CWTools.Games.CK3.CK3Settings.rootDirectories = [ WD { WorkspaceDirectory.name = "Crusader Kings III"; path = rootDir } ]
+    let embedded = if useCache then let cached, cachedFiles = Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\ck3.cwb" in FromConfig(cachedFiles, cached) else FromConfig([], [])
+    { rootDirectories = [ WD { name = "Crusader Kings III"; path = rootDir } ]
       modFilter = None
       scriptFolders = folders
       excludeGlobPatterns = None
@@ -132,23 +115,17 @@ let buildCk3Settings rootDir configPath useCache =
       embedded = embedded
       maxFileSize = None }
 
-let perf5 runTests =
-    let buildGame () =
+let perfCK3Vanilla runTests =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildCk3Settings @"D:\Games\Steam\steamapps\common\Crusader Kings III\game" @"C:\Users\Thomas\git\cwtools-ck3-config\\" false
-        CWTools.Games.CK3.CK3Game(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        CK3Game(buildCk3Settings @"D:\Games\Steam\steamapps\common\Crusader Kings III\game" @"C:\Users\Thomas\git\cwtools-ck3-config\\" false) :> IGame<_>) runTests
 
-// HOI4 performance functions
+// HOI4 settings and runners
 let buildHoi4Settings rootDir configPath useCache =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList
-    let embedded = if useCache then
-                      let cached, cachedFiles = Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb"
-                      FromConfig(cachedFiles, cached)
-                   else
-                      FromConfig([], [])
-    { rootDirectories = [ WorkspaceDirectoryInput.WD { path = rootDir; name = "test" } ]
+    let embedded = if useCache then let cached, cachedFiles = Serializer.deserialize @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb" in FromConfig(cachedFiles, cached) else FromConfig([], [])
+    { rootDirectories = [ WD { path = rootDir; name = "test" } ]
       scriptFolders = folders
       excludeGlobPatterns = None
       embedded = embedded
@@ -157,18 +134,14 @@ let buildHoi4Settings rootDir configPath useCache =
       modFilter = None
       maxFileSize = None }
 
-let perfHOI4 runTests =
+let perfHOI4ModCached runTests =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-    let buildGame () =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildHoi4Settings @"D:\Synced\Git\Third Party\Hearts of Iron IV\Millennium_Dawn" @"D:\Synced\Git\Personal\cwtools-hoi4-config\Config" true
-        CWTools.Games.HOI4.HOI4Game(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        HOI4Game(buildHoi4Settings @"D:\Synced\Git\Third Party\Hearts of Iron IV\Millennium_Dawn" @"D:\Synced\Git\Personal\cwtools-hoi4-config\Config" true) :> IGame<_>) runTests
 
 let perfHOI4Vanilla runTests =
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-    let buildGame () =
+    perfRunner (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        let settings = buildHoi4Settings @"D:\Games\Steam\steamapps\common\Hearts of Iron IV" @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config" false
-        CWTools.Games.HOI4.HOI4Game(settings) :> IGame<_>
-    perfRunner buildGame runTests
+        HOI4Game(buildHoi4Settings @"D:\Games\Steam\steamapps\common\Hearts of Iron IV" @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config" false) :> IGame<_>) runTests
