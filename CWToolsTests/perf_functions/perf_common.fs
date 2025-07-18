@@ -86,3 +86,9 @@ let perfRunner (buildGame : unit -> IGame<_>) runValidation =
     else
         ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+
+let createPerfRunner scopeInit settingsFactory gameCtor =
+    perfRunner (fun () ->
+        scopeManager.ReInit(defaultScopeInputs, [])
+        gameCtor (settingsFactory()) :> IGame<_>
+    )
