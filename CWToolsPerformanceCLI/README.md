@@ -35,20 +35,25 @@ dotnet build CWToolsPerformanceCLI.fsproj
 ### Game-Specific Performance Tests
 
 #### Stellaris
-- **`--stellaris-manual` / `-stl-manual`**: Run Stellaris performance test in manual mode
-- **`--stellaris-verbose` / `-stl-verbose`**: Run Stellaris performance test in verbose mode  
-- **`--stellaris-modcached` / `-stl-modcached`**: Run Stellaris performance test with mod caching
+- **`--stellaris` / `-stellaris`**: Run Stellaris performance test
+  - Use `--mode manual` for manual mode
+  - Use `--mode verbose` for verbose mode (default)
+  - Use `--mode cached` for mod caching
+  - Automatically uses caching when `--cache-path` is provided
 
 #### Europa Universalis IV (EU4)
-- **`--eu4-vanilla` / `-eu4-vanilla`**: Run EU4 vanilla performance test
-- **`--eu4-custom` / `-eu4-custom`**: Run EU4 custom performance test
+- **`--eu4` / `-eu4`**: Run EU4 performance test
+  - Use `--mode vanilla` for vanilla test (default)
+  - Use `--mode custom` for custom test with test files
+  - Automatically uses caching when `--cache-path` is provided
 
 #### Hearts of Iron IV (HOI4)
-- **`--hoi4-vanilla` / `-hoi4-vanilla`**: Run HOI4 vanilla performance test
-- **`--hoi4-modcached` / `-hoi4-modcached`**: Run HOI4 performance test with mod caching
+- **`--hoi4` / `-hoi4`**: Run HOI4 performance test
+  - Automatically detects vanilla vs. cached based on cache path parameter
 
 #### Crusader Kings III (CK3)
-- **`--ck3-vanilla` / `-ck3-vanilla`**: Run CK3 vanilla performance test
+- **`--ck3` / `-ck3`**: Run CK3 performance test
+  - Automatically uses caching when `--cache-path` is provided
 
 #### General Testing
 - **`--parse-test` / `-parse-test`**: Run parsing test on a specific file
@@ -61,33 +66,55 @@ The CLI accepts several optional path parameters to customize test locations:
 - **`--config-path` / `-c`**: Path to config directory (contains .cwt rule files)
 - **`--cache-path` / `-p`**: Path to optional .cwb cache file
 - **`--file-path` / `-f`**: Path to file for parsing test
+- **`--mode` / `-m`**: Test mode (varies by game)
 
 ## Usage Examples
 
 ### Basic Game Tests
 
 ```powershell
-# Run Stellaris manual test with default paths
-.\CWToolsPerformanceCLI.exe --stellaris-manual
+# Run Stellaris test with default mode (verbose)
+.\CWToolsPerformanceCLI.exe --stellaris
 
-# Run EU4 vanilla test with default paths  
-.\CWToolsPerformanceCLI.exe --eu4-vanilla
+# Run Stellaris in manual mode
+.\CWToolsPerformanceCLI.exe --stellaris --mode manual
 
-# Run HOI4 with mod caching
-.\CWToolsPerformanceCLI.exe --hoi4-modcached
+# Run EU4 test with default mode (vanilla)
+.\CWToolsPerformanceCLI.exe --eu4
+
+# Run EU4 in custom mode
+.\CWToolsPerformanceCLI.exe --eu4 --mode custom
+
+# Run HOI4 vanilla test
+.\CWToolsPerformanceCLI.exe --hoi4
+
+# Run HOI4 with caching (when cache path is provided)
+.\CWToolsPerformanceCLI.exe --hoi4 -p "C:\Cache\hoi4.cwb"
+
+# Run CK3 test
+.\CWToolsPerformanceCLI.exe --ck3
 ```
 
 ### Tests with Custom Paths
 
 ```powershell
 # Stellaris test with custom game and config paths
-.\CWToolsPerformanceCLI.exe --stellaris-verbose -g "C:\Games\Stellaris" -c "C:\Config\stellaris-config"
+.\CWToolsPerformanceCLI.exe --stellaris -g "C:\Games\Stellaris" -c "C:\Config\stellaris-config"
+
+# Stellaris manual mode with custom paths
+.\CWToolsPerformanceCLI.exe --stellaris --mode manual -g "C:\Games\Stellaris" -c "C:\Config\stellaris-config"
 
 # EU4 test with custom paths and cache
-.\CWToolsPerformanceCLI.exe --eu4-vanilla -g "D:\Games\EU4" -c "D:\Config\eu4-config" -p "D:\Cache\eu4.cwb"
+.\CWToolsPerformanceCLI.exe --eu4 -g "D:\Games\EU4" -c "D:\Config\eu4-config" -p "D:\Cache\eu4.cwb"
+
+# EU4 custom mode with test files
+.\CWToolsPerformanceCLI.exe --eu4 --mode custom -c "D:\Config\eu4-config"
 
 # HOI4 test with all custom paths
-.\CWToolsPerformanceCLI.exe --hoi4-vanilla -g "C:\Games\HOI4" -c "C:\Config\hoi4-config" -p "C:\Cache\hoi4.cwb"
+.\CWToolsPerformanceCLI.exe --hoi4 -g "C:\Games\HOI4" -c "C:\Config\hoi4-config" -p "C:\Cache\hoi4.cwb"
+
+# CK3 test with custom paths
+.\CWToolsPerformanceCLI.exe --ck3 -g "D:\Games\CK3" -c "D:\Config\ck3-config" -p "D:\Cache\ck3.cwb"
 ```
 
 ### File Parsing Tests
@@ -104,10 +131,10 @@ The CLI accepts several optional path parameters to customize test locations:
 
 ```powershell
 # Stellaris mod testing with caching
-.\CWToolsPerformanceCLI.exe -stl-modcached -g "C:\Users\Username\Documents\Paradox Interactive\Stellaris\mod\my_mod" -c "C:\Config\stellaris-config" -p "C:\Cache\stellaris.cwb"
+.\CWToolsPerformanceCLI.exe --stellaris --mode cached -g "C:\Users\Username\Documents\Paradox Interactive\Stellaris\mod\my_mod" -c "C:\Config\stellaris-config" -p "C:\Cache\stellaris.cwb"
 
-# CK3 vanilla test with custom installation
-.\CWToolsPerformanceCLI.exe -ck3-vanilla -g "D:\Games\Steam\steamapps\common\Crusader Kings III\game" -c "D:\Config\ck3-config"
+# CK3 test with custom installation
+.\CWToolsPerformanceCLI.exe --ck3 -g "D:\Games\Steam\steamapps\common\Crusader Kings III\game" -c "D:\Config\ck3-config"
 ```
 
 ## Output and Results
@@ -120,8 +147,8 @@ The CLI provides detailed performance metrics including:
 
 Example output:
 ```
-Running Stellaris Manual Test...
-✓ Stellaris Manual Test completed successfully
+Running Stellaris Test (verbose)...
+✓ Stellaris Test (verbose) completed successfully
   Elapsed: 2847ms, Errors: 0
 ```
 
@@ -130,20 +157,21 @@ Running Stellaris Manual Test...
 When optional path parameters are not provided, the CLI uses these default paths:
 
 ### Stellaris
-- **Manual mode**: `./CWToolsTests/testfiles/performancetest/`
-- **Verbose mode**: `./CWToolsTests/testfiles/performancetest2/`
-- **Mod cached**: User's Stellaris mod directory
+- **Manual mode** (`--mode manual`): `./CWToolsTests/testfiles/performancetest/`
+- **Verbose mode** (`--mode verbose`, default): `./CWToolsTests/testfiles/performancetest2/`
+- **Cached mode** (`--mode cached`): User's Stellaris mod directory
 
 ### EU4
-- **Vanilla**: Steam installation path
-- **Custom**: `./CWToolsTests/testfiles/custom/files`
+- **Vanilla mode** (`--mode vanilla`, default): Steam installation path
+- **Custom mode** (`--mode custom`): `./CWToolsTests/testfiles/custom/files`
 
 ### HOI4
-- **Vanilla**: Steam installation path
-- **Mod cached**: Mod directory path
+- **Default**: Steam installation path
+- **Caching**: Automatically enabled when cache path parameter is provided
 
 ### CK3
-- **Vanilla**: Steam installation path
+- **Default**: Steam installation path
+- **Caching**: Automatically enabled when cache path parameter is provided
 
 ## Error Handling
 
@@ -160,6 +188,10 @@ The CLI includes comprehensive error handling:
 - Cache files (.cwb) significantly improve performance for repeated tests
 - All time measurements are in milliseconds
 - The CLI sets culture to Russian (ru-RU) for proper text encoding
+- **Automatic caching**: All games automatically detect whether to use caching based on the presence of the `--cache-path` parameter
+- **Mode parameter**: Different games support different modes via the `--mode` parameter
+- **Stellaris modes**: manual, verbose (default), cached
+- **EU4 modes**: vanilla (default), custom
 
 ## Getting Help
 

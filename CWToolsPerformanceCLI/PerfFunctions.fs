@@ -126,73 +126,69 @@ let buildHoi4Settings rootDir configPath useCache cachePath =
       modFilter = None
       maxFileSize = None }
 
-// Stellaris performance test runners with parameterized paths and structured return
-let perfStellarisManualTest rootDir configPath runTests =
-    let defaultRootDir = defaultArg rootDir "./CWToolsTests/testfiles/performancetest/"
-    let defaultConfigPath = defaultArg configPath "./CWToolsTests/testfiles/performancetest2/.cwtools"
-    perfRunnerWithResult (fun () -> STLGame(buildStlSettings defaultRootDir defaultConfigPath true false "") :> IGame<_>) runTests
-
-let perfStellarisVerboseTest rootDir configPath runTests =
-    let defaultRootDir = defaultArg rootDir "./CWToolsTests/testfiles/performancetest2/"
-    let defaultConfigPath = defaultArg configPath "./CWToolsTests/testfiles/performancetest2/.cwtools"
-    CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-    perfRunnerWithResult (fun () ->
-        scopeManager.ReInit(defaultScopeInputs, [])
-        STLGame(buildStlSettings defaultRootDir defaultConfigPath false false "") :> IGame<_>) runTests
-
-let perfStellarisModCached rootDir configPath cachePath runTests =
-    let defaultRootDir = defaultArg rootDir @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\test_mod_inline\\"
-    let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\Git\cwtools-stellaris-config\config"
+// Unified Stellaris performance test runner
+let perfStellaris rootDir configPath (cachePath: string option) mode runTests =
+    let testMode = defaultArg mode "verbose"
+    let useCache = cachePath.IsSome
+    let useManual = testMode = "manual"
+    
+    let defaultRootDir, defaultConfigPath = 
+        match testMode with
+        | "manual" -> "./CWToolsTests/testfiles/performancetest/", "./CWToolsTests/testfiles/performancetest2/.cwtools"
+        | "cached" -> @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\test_mod_inline\\", @"C:\Users\Thomas\Git\cwtools-stellaris-config\config"
+        | _ -> "./CWToolsTests/testfiles/performancetest2/", "./CWToolsTests/testfiles/performancetest2/.cwtools"
+    
+    let actualRootDir = defaultArg rootDir defaultRootDir
+    let actualConfigPath = defaultArg configPath defaultConfigPath
     let defaultCachePath = defaultArg cachePath @"C:\Users\Thomas\Git\cwtools-vscode\.cwtools\stl.cwb"
-    CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
+    
+    if testMode <> "manual" then
+        CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
+    
     perfRunnerWithResult (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        STLGame(buildStlSettings defaultRootDir defaultConfigPath false true defaultCachePath) :> IGame<_>) runTests
+        STLGame(buildStlSettings actualRootDir actualConfigPath useManual useCache defaultCachePath) :> IGame<_>) runTests
 
-// EU4 performance test runners with parameterized paths and structured return
-let perfEU4Vanilla rootDir configPath cachePath runTests =
-    let defaultRootDir = defaultArg rootDir @"D:\Games\Steam\steamapps\common\Europa Universalis IV"
-    let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\git\cwtools-eu4-config\\"
+// Unified EU4 performance test runner
+let perfEU4 rootDir configPath (cachePath: string option) mode runTests =
+    let testMode = defaultArg mode "vanilla"
+    let useCache = cachePath.IsSome
+    
+    let defaultRootDir, defaultConfigPath = 
+        match testMode with
+        | "custom" -> @"./CWToolsTests/testfiles/custom/files", @".\CWToolsTests/testfiles/custom/rules\"
+        | _ -> @"D:\Games\Steam\steamapps\common\Europa Universalis IV", @"C:\Users\Thomas\git\cwtools-eu4-config\\"
+    
+    let actualRootDir = defaultArg rootDir defaultRootDir
+    let actualConfigPath = defaultArg configPath defaultConfigPath
     let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\eu4.cwb"
+    
     perfRunnerWithResult (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        EU4Game(buildEu4Settings defaultRootDir defaultConfigPath false defaultCachePath) :> IGame<_>) runTests
+        EU4Game(buildEu4Settings actualRootDir actualConfigPath useCache defaultCachePath) :> IGame<_>) runTests
 
-let perfEU4Custom rootDir configPath cachePath runTests =
-    let defaultRootDir = defaultArg rootDir @"./CWToolsTests/testfiles/custom/files"
-    let defaultConfigPath = defaultArg configPath @".\CWToolsTests/testfiles/custom/rules\"
-    let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\eu4.cwb"
-    perfRunnerWithResult (fun () ->
-        scopeManager.ReInit(defaultScopeInputs, [])
-        EU4Game(buildEu4Settings defaultRootDir defaultConfigPath false defaultCachePath) :> IGame<_>) runTests
-
-// CK3 performance test runners with parameterized paths and structured return
-let perfCK3Vanilla rootDir configPath cachePath runTests =
+// Unified CK3 performance test runner
+let perfCK3 rootDir configPath (cachePath: string option) mode runTests =
+    let useCache = cachePath.IsSome
     let defaultRootDir = defaultArg rootDir @"D:\Games\Steam\steamapps\common\Crusader Kings III\game"
     let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\git\cwtools-ck3-config\\"
     let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\ck3.cwb"
+    
     perfRunnerWithResult (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        CK3Game(buildCk3Settings defaultRootDir defaultConfigPath false defaultCachePath) :> IGame<_>) runTests
+        CK3Game(buildCk3Settings defaultRootDir defaultConfigPath useCache defaultCachePath) :> IGame<_>) runTests
 
-// HOI4 performance test runners with parameterized paths and structured return
-let perfHOI4ModCached rootDir configPath cachePath runTests =
-    let defaultRootDir = defaultArg rootDir @"D:\Synced\Git\Third Party\Hearts of Iron IV\Millennium_Dawn"
-    let defaultConfigPath = defaultArg configPath @"D:\Synced\Git\Personal\cwtools-hoi4-config\Config"
-    let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb"
-    CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
-    perfRunnerWithResult (fun () ->
-        scopeManager.ReInit(defaultScopeInputs, [])
-        HOI4Game(buildHoi4Settings defaultRootDir defaultConfigPath true defaultCachePath) :> IGame<_>) runTests
-
-let perfHOI4Vanilla rootDir configPath cachePath runTests =
+// Unified HOI4 performance test runner
+let perfHOI4 rootDir configPath (cachePath: string option) mode runTests =
+    let useCache = cachePath.IsSome
     let defaultRootDir = defaultArg rootDir @"D:\Games\Steam\steamapps\common\Hearts of Iron IV"
     let defaultConfigPath = defaultArg configPath @"C:\Users\Thomas\Git\cwtools-hoi4-config\Config"
     let defaultCachePath = defaultArg cachePath @"D:\Synced\Git\Personal\cwtools\CWToolsCLI\hoi4.cwb"
+    
     CWTools.Utilities.Utils.loglevel <- CWTools.Utilities.Utils.LogLevel.Verbose
     perfRunnerWithResult (fun () ->
         scopeManager.ReInit(defaultScopeInputs, [])
-        HOI4Game(buildHoi4Settings defaultRootDir defaultConfigPath false defaultCachePath) :> IGame<_>) runTests
+        HOI4Game(buildHoi4Settings defaultRootDir defaultConfigPath useCache defaultCachePath) :> IGame<_>) runTests
 
 // Simple test runner with parameterized paths and structured return
 let test filePath =
