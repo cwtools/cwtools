@@ -15,15 +15,8 @@ open CWTools.Common
 let getTypesFromDefinitions
     (ruleapplicator: RuleValidationService option)
     (types: TypeDefinition list)
-    (es: Entity list)
+    (entities: Entity list)
     =
-    let entities =
-        es
-        |> List.map (fun e ->
-            let dir = Memory<char>(Array.zeroCreate e.logicalpath.Length)
-            Path.GetDirectoryName(e.logicalpath.AsSpan()).Replace(dir.Span, '\\', '/')
-            dir, e, Path.GetFileName(e.logicalpath), e.validate)
-
     let getExplicitLocalisationKeys (entity: IClause) (typeDef: TypeDefinition) =
         typeDef.localisation
         |> List.choose (fun ld -> ld.explicitField |> Option.map (fun ef -> ld.name, ef, ld.primary))
@@ -32,12 +25,12 @@ let getTypesFromDefinitions
 
     let getTypeInfo (def: TypeDefinition) =
         entities
-        |> List.choose (fun (path, e, file, validate) ->
-            if FieldValidators.checkPathDirSpan def.pathOptions path.Span (file.AsSpan()) then
-                Some(e.entity, file, validate)
+        |> List.choose (fun e ->
+            if CSharpHelpers.FieldValidators.CheckPathDir(def.pathOptions, e.logicalpath) then
+                Some(e.entity, Path.GetFileNameWithoutExtension e.logicalpath, e.validate)
             else
                 None)
-        |> List.collect (fun (e, f, v) ->
+        |> List.collect (fun (e, fileNameWithoutExtension, v) ->
             let inner (n: IClause) =
                 let rawSubtypes, subtypes =
                     match ruleapplicator with
@@ -115,7 +108,7 @@ let getTypesFromDefinitions
                     |> List.map (fun s ->
                         s,
                         (v,
-                         Path.GetFileNameWithoutExtension f,
+                         fileNameWithoutExtension,
                          e.Position,
                          getExplicitLocalisationKeys e def,
                          rawSubtypes))

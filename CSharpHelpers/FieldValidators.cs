@@ -8,8 +8,9 @@ public static class FieldValidators
     {
         bool exists = false;
         var span = fullPath.AsSpan();
-        var directory = new Span<char>(new char[span.Length]);
-        Path.GetDirectoryName(span).Replace(directory, '\\', '/');
+        var dirSpan = Path.GetDirectoryName(span);
+        var directory = new Span<char>(new char[dirSpan.Length]);
+        dirSpan.Replace(directory, '\\', '/');
 
         if (pathOptions.pathStrict)
         {
