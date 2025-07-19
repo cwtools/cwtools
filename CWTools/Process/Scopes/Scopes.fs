@@ -36,7 +36,6 @@ type EffectDictionary(effects: Effect seq) =
     new() = EffectDictionary(Seq.empty)
 
     member this.TryFind(key: StringTokens) : Effect option =
-        // let lowerKey = key.ToLowerInvariant()
         let found, value = dictionary.TryGetValue key.lower
         if found then Some value else None
 
@@ -45,8 +44,6 @@ type EffectDictionary(effects: Effect seq) =
         this.TryFind s
 
     member this.Values = dictionary.Values
-    // static member FromListE(effects : Effect seq) =
-    // EffectDictionary(effects)
     static member FromList(effects: #Effect seq) : EffectDictionary =
         EffectDictionary(effects |> Seq.map (fun e -> e :> Effect))
 
@@ -140,8 +137,6 @@ module Scopes =
         | Some ps -> ps :: context
 
     let createJominiChangeScope oneToOneScopes (varPrefixFun: string -> string * bool) =
-        // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
-        // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         let amp = [| '@' |]
 
         (fun
@@ -162,7 +157,7 @@ module Scopes =
             if
                 key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
                 || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
-                || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith('@')
             then
                 NewScope(
                     { Root = source.Root
@@ -179,19 +174,15 @@ module Scopes =
                         let x = key.Split(amp, 2) in x.[0], x.[1], true
                     else
                         key, "", false
-                // let ampersandSplit = if key.Contains('@') then key.Split(amp, 2) else
                 let keys = key.Split('.')
                 let keylength = keys.Length - 1
                 let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
 
                 let inner (context: ScopeContext, changed: bool) (nextKey: string) (last: bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
-                    // eprintfn "o2o %A" onetoone
                     match onetoone with
                     | Some(_, f) -> f (context, false), NewScope(f (context, false) |> fst, [], None)
                     | None ->
-                        // let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
-                        // let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
                         let eventTargetLinkMatch =
                             eventTargetLinks.TryFind nextKey
                             |> Option.bind (function
@@ -207,11 +198,6 @@ module Scopes =
                                     StringResource.stringManager.GetStringForID l.Name.normal,
                                     StringComparison.OrdinalIgnoreCase
                                 ))
-                        // let effect = (effects @ triggers)
-                        //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                        //             |> List.tryFind (fun e -> e.Name == nextKey)
-                        // if skipEffect then (context, false), NotFound else
-                        // eprintfn "vsm %A" valueScopeMatch
                         match eventTargetLinkMatch |> Option.orElse wildcardScopeMatch, valueScopeMatch with
                         | _, Some e ->
                             if last then
@@ -277,7 +263,7 @@ module Scopes =
                             | None -> inner2 (c, b) k l
                             | Some(NewScope(x, i, rh)) -> inner2 (x, b) k l
                             | Some x -> (c, b), Some x)
-                        ((source, false), None) // |> snd |> Option.defaultValue (NotFound)
+                        ((source, false), None)
 
                 let res2 =
                     match res with
@@ -308,7 +294,7 @@ module Scopes =
                                 | None -> inner2 (c, b) k l
                                 | Some(NewScope(x, i, rh)) -> inner2 (x, b) k l
                                 | Some x -> (c, b), Some x)
-                            ((source, false), None) // |> snd |> Option.defaultValue (NotFound)
+                            ((source, false), None)
 
                     let tres2 =
                         match tres with
@@ -332,8 +318,6 @@ module Scopes =
                     | VarFound, _ -> VarFound
                     | _, _ -> NotFound
                 else
-                    // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
-                    // x
                     res2)
 
     let createChangeScope
@@ -341,8 +325,6 @@ module Scopes =
         (varPrefixFun: string -> string * bool)
         (hoi4TargetedHardcodedVariables: bool)
         =
-        // let varStartsWith = (fun (k : string) -> k.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
-        // let varSubstring = (fun (k : string) -> k.Substring(varPrefix.Length ))
         (fun
             (varLHS: bool)
             (skipEffect: bool)
@@ -360,7 +342,7 @@ module Scopes =
 
             if
                 key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase)
-                || key.StartsWith("@", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith('@')
             then
                 NewScope(
                     { Root = source.Root
@@ -378,8 +360,6 @@ module Scopes =
                     match onetoone with
                     | Some(_, f) -> f (context, (first, false)), NewScope(f (context, (false, false)) |> fst, [], None)
                     | None ->
-                        // let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope  -> Some e |_ -> None)
-                        // let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect<'T> as e when not e.IsValueScope -> Some e |_ -> None)
                         let eventTargetLinkMatch =
                             eventTargetLinks.TryFind nextKey
                             |> Option.bind (function
@@ -387,10 +367,6 @@ module Scopes =
                                 | _ -> None)
 
                         let valueScopeMatch = valueTriggers.TryFind nextKey
-                        // let effect = (effects @ triggers)
-                        //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                        //             |> List.tryFind (fun e -> e.Name == nextKey)
-                        // if skipEffect then (context, false), NotFound else
                         match
                             first && nextKey.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase),
                             eventTargetLinkMatch,
@@ -571,11 +547,7 @@ module Scopes =
                             | VarFound, _ -> VarFound
                             | _, _ -> NotFound
                     else
-                        // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
-                        // x
                         res2
                 | _ -> rawRes2)
-
-
 
     let defaultDesc = "Scope (/context) switch"

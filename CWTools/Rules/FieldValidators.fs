@@ -9,6 +9,7 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
 open System.IO
 open CWTools.Process.Localisation
+open Shared;
 
 type RuleContext =
     { subtypes: string list
@@ -43,21 +44,44 @@ module internal FieldValidators =
     open CWTools.Validation.ValidationCore
     open CWTools.Rules
 
-
-
-    let checkPathDir (pathOptions: PathOptions) (pathDir: string) (file: string) =
+    let checkPathDir (pathOptions: PathOptions) (pathDir: string) (fileName: string) =
         match pathOptions.pathStrict with
-        | true -> pathOptions.paths |> List.exists (fun tp -> pathDir == tp.Replace("\\", "/"))
+        | true -> pathOptions.paths |> Array.exists (fun tp -> pathDir == tp.Replace('\\', '/'))
         | false ->
             pathOptions.paths
-            |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\", "/"), StringComparison.OrdinalIgnoreCase))
+            |> Array.exists (fun tp -> pathDir.StartsWith(tp.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase))
         && match pathOptions.pathFile with
-           | Some f -> file == f
+           | Some file -> fileName == file
            | None -> true
         && match pathOptions.pathExtension with
-           | Some ext -> Path.GetExtension file == ext
+           | Some extension -> Path.GetExtension(fileName.AsSpan()).Equals(extension, StringComparison.OrdinalIgnoreCase)
            | None -> true
 
+    let checkPathDirSpan (pathOptions: PathOptions) (pathDir: ReadOnlySpan<char>) (fileName: ReadOnlySpan<char>) =
+        match pathOptions.pathStrict with
+        | true ->
+            let mutable found = false
+            let mutable i = 0
+            while not found && i < pathOptions.paths.Length do
+                let tp = pathOptions.paths[i].Replace('\\', '/')
+                found <- pathDir.Equals(tp, StringComparison.OrdinalIgnoreCase)
+                i <- i + 1
+            found
+        | false ->
+            let mutable found = false
+            let mutable i = 0
+            while not found && i < pathOptions.paths.Length do
+                let tp = pathOptions.paths[i].Replace('\\', '/')
+                found <- pathDir.StartsWith(tp, StringComparison.OrdinalIgnoreCase)
+                i <- i + 1
+            found
+        && match pathOptions.pathFile with
+           | Some file -> fileName.Equals(file, StringComparison.OrdinalIgnoreCase)
+           | None -> true
+        && match pathOptions.pathExtension with
+           | Some extension -> Path.GetExtension(fileName).Equals(extension, StringComparison.OrdinalIgnoreCase)
+           | None -> true
+    
     let getValidValues =
         function
         | ValueType.Bool -> Some [ "yes"; "no" ]
@@ -285,15 +309,15 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
                 else
-                    (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN
+                    (LocalisationValidation.checkLocKeysLeafOrNodeN
                         keys
                         ids
                         parts.[0]
                         leafornode
                         errors)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
             | ValueType.STLNameFormat var ->
                 match varMap.TryFind var with
                 | Some vars ->
@@ -323,16 +347,12 @@ module internal FieldValidators =
         (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
         (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
-        (severity: Severity)
-        (vt: CWTools.Rules.ValueType)
+        (vt: ValueType)
         (ids: StringTokens)
         =
-        // if key |> firstCharEqualsAmp then true else
         let key = getLowerKey ids
 
         (match vt with
-         // | ValueType.Scalar ->
-         //     true
          | ValueType.Bool -> key == "yes" || key == "no"
          | ValueType.Int(min, max) ->
              match TryParser.parseIntWithDecimal key with
@@ -568,7 +588,6 @@ module internal FieldValidators =
 
     let checkTypeFieldNE
         (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        severity
         (typetype: TypeType)
         (ids: StringTokens)
         =
@@ -576,11 +595,6 @@ module internal FieldValidators =
             match typetype with
             | TypeType.Simple t -> false, t
             | Complex(_, t, _) -> true, t
-
-        let typeKeyMap v =
-            match typetype with
-            | TypeType.Simple t -> v
-            | Complex(p, _, s) -> p + v + s
 
         let key = getLowerKey ids
 
@@ -595,15 +609,6 @@ module internal FieldValidators =
                     match typetype with
                     | TypeType.Simple t -> Some value
                     | Complex(p, _, s) ->
-                        // match value.IndexOf(p, StringComparison.OrdinalIgnoreCase), value.LastIndexOf(s, StringComparison.OrdinalIgnoreCase) with
-                        // | -1, -1 ->
-                        //     None
-                        // | fi, -1 ->
-                        //     Some (value.Substring(p.Length))
-                        // | -1, si ->
-                        //     Some (value.Substring(0, si))
-                        // | fi, si ->
-                        //     Some (value.Substring(p.Length, (si - p.Length)))
                         match
                             value.StartsWith(p, StringComparison.OrdinalIgnoreCase),
                             value.EndsWith(s, StringComparison.OrdinalIgnoreCase),
@@ -615,15 +620,6 @@ module internal FieldValidators =
                         | true, true, n -> Some(value.Substring(p.Length, n))
 
                 value |> Option.map values.ContainsKey |> Option.defaultValue false
-        // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-        // match isComplex with
-        // | true ->
-        //     values.ToList() |> List.map typeKeyMap |> List.exists ((==) value)
-        // | false ->
-        //     values.Contains value
-        // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-
-        //let values = values typeKeyMap values
         | None -> false
 
     let checkVariableGetField
@@ -1038,8 +1034,6 @@ module internal FieldValidators =
         aliasKey
         (ids: StringTokens)
         =
-        let key = getOriginalKey ids
-
         match aliasKeyList |> Map.tryFind aliasKey with
         | Some values -> values.Contains ids.lower
         | None -> true
@@ -1160,8 +1154,8 @@ module internal FieldValidators =
             true
         else
             match field with
-            | ValueField vt -> checkValidValueNE p.varMap p.enumsMap p.localisation severity vt keyIDs
-            | TypeField t -> checkTypeFieldNE p.typesMap severity t keyIDs
+            | ValueField vt -> checkValidValueNE p.varMap p.enumsMap p.localisation vt keyIDs
+            | TypeField t -> checkTypeFieldNE p.typesMap t keyIDs
             | ScopeField s ->
                 checkScopeFieldNE
                     p.linkMap
@@ -1173,10 +1167,10 @@ module internal FieldValidators =
                     ctx
                     s
                     keyIDs
-            | LocalisationField(synced, isInline) -> true
+            | LocalisationField _ -> true
             | FilepathField(prefix, extension) -> checkFilepathFieldNE p.files keyIDs prefix extension
             | IconField folder -> checkIconFieldNE p.files folder keyIDs
-            | VariableSetField v -> true
+            | VariableSetField _ -> true
             | VariableGetField v -> checkVariableGetFieldNE p.varMap severity v keyIDs
             | VariableField(isInt, is32Bit, (min, max)) ->
                 checkVariableFieldNE

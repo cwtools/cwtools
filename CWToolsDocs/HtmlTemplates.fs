@@ -9,7 +9,7 @@ let createTableOfContents (types: TypeDefinition list) =
         types
         |> List.groupBy (fun td ->
             td.pathOptions.paths
-            |> List.tryHead
+            |> Array.tryHead
             |> Option.map (fun s -> s.Split('/').[0])
             |> Option.defaultValue "")
 
@@ -441,7 +441,7 @@ let typeBlock (enums: EnumDefinition list) ((typeDef: TypeDefinition), ((ruleTyp
         div
             []
             (typeDef.pathOptions.paths
-             |> List.map ((sprintf "path: %s") >> str))
+             |> Array.map ((sprintf "path: %s") >> str) |> Array.toList)
         // div [] (typeDef.subtypes |> List.map (fun st -> st.name |> str))
         div [] ([ description ] |> List.choose id)
         table

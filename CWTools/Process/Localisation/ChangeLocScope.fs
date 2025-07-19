@@ -29,8 +29,6 @@ type JominiLocCommandParam =
 
 and JominiLocCommand = Command of string * JominiLocCommandParam list
 
-
-[<Struct>]
 type LocEntry =
     { key: string
       value: char option

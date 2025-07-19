@@ -9,7 +9,7 @@ open CWTools.Common
 module DocsParser =
 
     let private idChar = letter <|> digit <|> anyOf [ '_' ]
-    let private isvaluechar = SharedParsers.isvaluechar
+    let private isvaluechar = SharedParsers.isValueChar
     let private maxChars = 4000
 
     let private header =
@@ -99,7 +99,7 @@ module JominiParser =
         pipe4 p1 p2 p3 (tuple3 p4 p5 p6) (fun x1 x2 x3 (x4, x5, x6) -> f x1 x2 x3 x4 x5 x6)
 
     let private idChar = letter <|> digit <|> anyOf [ '_' ]
-    let private isvaluechar = SharedParsers.isvaluechar
+    let private isvaluechar = SharedParsers.isValueChar
 
     let private header =
         skipCharsTillString "Event Target Documentation:" true 2000 .>> SharedParsers.ws
@@ -372,7 +372,7 @@ module DataTypeParser =
 module StellarisModifierParser =
 
 
-    let private isvaluechar = SharedParsers.isvaluechar
+    let private isvaluechar = SharedParsers.isValueChar
 
     let private str s =
         pstring s .>> SharedParsers.ws <?> ("string " + s)

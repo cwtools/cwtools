@@ -47,19 +47,21 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             allLocs |> Map.ofSeq
 
-        this.localisationKeys <-
+        let groupedLocalisation =
             allLocalisation ()
-            |> List.groupBy (fun l -> l.GetLang)
-            |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> Set.ofList)
+            |> List.groupBy _.GetLang
+        
+        this.localisationKeys <-
+            groupedLocalisation
+            |> List.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
 
         this.taggedLocalisationKeys <-
-            allLocalisation ()
-            |> List.groupBy (fun l -> l.GetLang)
+            groupedLocalisation
             |> List.map (fun (k, g) ->
                 k,
                 g
-                |> List.collect (fun ls -> ls.GetKeys)
-                |> List.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+                |> Seq.collect _.GetKeys
+                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
         let loc = parseLocFile locFile |> Option.defaultValue []
@@ -70,19 +72,21 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         localisationAPIMap <- newMap
 
-        this.localisationKeys <-
+        let groupedLocalisation =
             allLocalisation ()
-            |> List.groupBy (fun l -> l.GetLang)
-            |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> Set.ofList)
+            |> List.groupBy _.GetLang
+
+        this.localisationKeys <-
+            groupedLocalisation
+            |> List.map (fun (k, g) -> k, g |> Seq.collect (fun ls -> ls.GetKeys) |> Set.ofSeq)
 
         this.taggedLocalisationKeys <-
-            allLocalisation ()
-            |> List.groupBy (fun l -> l.GetLang)
+            groupedLocalisation
             |> List.map (fun (k, g) ->
                 k,
                 g
-                |> List.collect (fun ls -> ls.GetKeys)
-                |> List.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+                |> Seq.collect (fun ls -> ls.GetKeys)
+                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
 
     let updateProcessedLocalisation () =
         let validatableEntries =
@@ -107,12 +111,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member __.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
     member __.LocalisationAPIs() : (bool * ILocalisationAPI) list =
-        localisationAPIMap |> Map.toList |> List.map snd
+        localisationAPIMap.Values |> Seq.toList
 
     member __.LocalisationFileNames() : string list =
         localisationAPIMap
         |> Map.toList
-        |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f (a.GetKeys |> List.length))
+        |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f a.GetKeys.Length)
 
     member this.LocalisationKeys() = this.localisationKeys
 

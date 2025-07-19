@@ -13,6 +13,7 @@ open CWTools.Utilities.Utils
 open System
 open CWTools.Parser
 open CWTools.Rules
+open Shared
 
 module private RulesParserImpl =
     let internal specificFieldFromString x =
@@ -48,17 +49,14 @@ module private RulesParserImpl =
         let findComments (t: range) s (a: Child) =
             match struct (s, a) with
             | struct (struct (b, c), _) when b -> struct (b, c)
-            | struct ((_, c), CommentC(_, nc)) when nc.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
-                struct (false, nc :: c)
-            | struct ((_, c), CommentC(_, _)) -> struct (false, c)
+            | struct ((_, c), CommentC comment) when comment.Comment.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
+                struct (false, comment.Comment :: c)
+            | struct ((_, c), CommentC _) -> struct (false, c)
             | struct ((_, c), NodeC n) when n.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), LeafC v) when v.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), LeafValueC v) when v.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code -> struct (true, c)
             | _ -> struct (false, [])
-        // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
-        // | ((_, _), _) -> (false, [])
-        //let fNode = (fun (node:Node) (children) ->
         let one =
             clause.Leaves
             |> Seq.map (fun e ->
@@ -166,10 +164,8 @@ module private RulesParserImpl =
         | None -> None
 
     let private getPathOptions (node: Node) =
-        let path =
-            (node.TagsText "path")
-            |> List.ofSeq
-            |> List.map (fun s -> s.Replace("game/", "").Replace("game\\", ""))
+        let paths = (node.TagsText "path")
+        paths |> Array.iteri (fun i path -> paths[i] <- path.Replace("game/", "").Replace("game\\", ""))
 
         let pathStrict = node.TagText "path_strict" == "yes"
 
@@ -185,7 +181,7 @@ module private RulesParserImpl =
             else
                 None
 
-        { paths = path
+        { paths = paths
           pathStrict = pathStrict
           pathFile = pathFile
           pathExtension = pathExtension }

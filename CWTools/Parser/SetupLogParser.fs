@@ -9,7 +9,7 @@ open CWTools.Common.STLConstants
 
 module SetupLogParser =
 
-    let private isvaluechar = SharedParsers.isvaluechar
+    let private isvaluechar = SharedParsers.isValueChar
 
     let private str s =
         pstring s .>> SharedParsers.ws <?> ("string " + s)

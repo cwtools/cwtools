@@ -556,26 +556,10 @@ type ErrorCodes =
               Severity = severity
               Message = error }
 
-// open System.Runtime.CompilerServices
-// [<Extension>]
-// type Utils () =
-//     [<Extension>]
-//     static member Equals(x : List<CWError>, y : List<CWError>) =
-//         let rec inner (x : List<CWError>) (y : List<CWError>) =
-//             let mutable x = x
-//             let xe = x.IsEmpty
-//             let ye = y.IsEmpty
-//             if xe && ye then true else
-//             if xe <> ye then false else
-//             let xs = x.Tail
-//             let ys = y.Tail
-//             if xs.IsEmpty <> ys.IsEmpty then false
-//             else
-//                 if x.Head = y.Head then inner xs ys
-//                 else false
-//         inner x y
-
-[<CustomEqualityAttribute; NoComparisonAttribute; Struct>]
+#if NET5_0_OR_GREATER
+[<System.Runtime.CompilerServices.IsReadOnly>]
+#endif
+[<CustomEquality; NoComparison; Struct>]
 type ValidationResult =
     | OK
     | Invalid of Guid * CWError list

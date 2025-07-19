@@ -78,7 +78,7 @@ module VIC2Localisation =
             | _ -> x.ENGLISH
 
         let getKeys () =
-            csvFallback |> Seq.map (snd >> (fun f -> f.``#CODE``)) |> List.ofSeq
+            csvFallback |> Seq.map (snd >> (fun f -> f.``#CODE``)) |> Seq.toArray
 
         let valueMap lang =
             let one = csv |> Seq.map (fun (p, r) -> (p, r.``#CODE``, getForLang lang r))

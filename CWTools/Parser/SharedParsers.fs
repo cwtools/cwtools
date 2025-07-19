@@ -1,6 +1,7 @@
 ﻿namespace CWTools.Parser
 
 open System.Text
+open CWTools.Process
 open CWTools.Utilities
 open FParsec
 open CWTools.Utilities.Position
@@ -90,8 +91,8 @@ module internal SharedParsers =
            '|'
            magicChar |]
 
-    let isAnyofidCharArray = isAnyOf idCharArray
-    let isidchar = fun c -> isLetter c || isDigit c || isAnyofidCharArray c
+    let isAnyOfIdCharArray = isAnyOf idCharArray
+    let isIdChar = fun c -> isLetter c || isDigit c || isAnyOfIdCharArray c
 
     let valueCharArray =
         [| '_'
@@ -124,8 +125,7 @@ module internal SharedParsers =
            magicChar |]
 
     let isAnyValueChar = isAnyOf valueCharArray
-    let isvaluechar = fun c -> isLetter c || isDigit c || isAnyValueChar c
-
+    let isValueChar = fun c -> isLetter c || isDigit c || isAnyValueChar c
 
     // Utility parsers
     // =======
@@ -139,7 +139,6 @@ module internal SharedParsers =
 
     let chSkip c =
         skipChar c .>> ws <?> ("skip char " + string c)
-    // let clause inner = between (chSkip '{') (skipChar '}') inner
     let clause inner =
         betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
 
@@ -158,89 +157,65 @@ module internal SharedParsers =
 
     // Base types
     // =======
-    let oppLTE = skipString "<=" |>> (fun _ -> Operator.LessThanOrEqual)
-    let oppGTE = skipString ">=" |>> (fun _ -> Operator.GreaterThanOrEqual)
-    let oppNE = skipString "!=" |>> (fun _ -> Operator.NotEqual)
-    let oppEE = skipString "==" |>> (fun _ -> Operator.EqualEqual)
-    let oppQE = skipString "?=" |>> (fun _ -> Operator.QuestionEqual)
-    let oppLT = skipChar '<' |>> (fun _ -> Operator.LessThan)
-    let oppGT = skipChar '>' |>> (fun _ -> Operator.GreaterThan)
-    let oppE = skipChar '=' |>> (fun _ -> Operator.Equals)
+    let oppLTE = skipString "<=" >>% Operator.LessThanOrEqual
+    let oppGTE = skipString ">=" >>% Operator.GreaterThanOrEqual
+    let oppNE = skipString "!=" >>% Operator.NotEqual
+    let oppEE = skipString "==" >>% Operator.EqualEqual
+    let oppQE = skipString "?=" >>% Operator.QuestionEqual
+    let oppLT = skipChar '<' >>% Operator.LessThan
+    let oppGT = skipChar '>' >>% Operator.GreaterThan
+    let oppE = skipChar '=' >>% Operator.Equals
 
     let operator =
         choiceL [ oppLTE; oppGTE; oppNE; oppEE; oppLT; oppGT; oppE; oppQE ] "operator"
         .>> ws
 
-    // let opp = new OperatorPrecedenceParser<float,unit,unit>()
-    // let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
     let operatorLookahead =
         choice [ chSkip '='; chSkip '>'; chSkip '<'; chSkip '!'; strSkip "?=" ]
         <?> "operator 1"
 
     let comment =
-        parseWithPosition (skipChar '#' >>. restOfLine true .>> ws |>> string)
+        parseWithPosition (skipChar '#' >>. restOfLine true .>> ws)
         <?> "comment"
 
-    let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"
+    let key = (many1SatisfyL isIdChar "id character") .>> ws |>> Key <?> "id"
 
-    let keyQ =
+    let keyQStr =
         between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar))
         .>> ws
         |>> (fun s -> "\"" + s + "\"")
         |>> Key
         <?> "quoted key"
 
-    let valueS =
-        (many1SatisfyL isvaluechar "value character")
-        |>> string
+    let valueStr =
+        (many1SatisfyL isValueChar "value character")
         |>> (fun x -> StringResource.stringManager.InternIdentifierToken x)
         |>> String
         <?> "string"
 
-    // let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
-    let valueQ =
-        betweenL (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string"
+    let valueQStr =
+        betweenL (skipChar '"') (skipChar '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string"
         |>> (fun x -> StringResource.stringManager.InternIdentifierToken x)
         |>> QString
         <?> "quoted string"
 
-    // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
-    //                 ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(false)))
+    // "yes" and "no" are case-sensitive.
     let valueBYes =
-        skipString "yes" .>> nextCharSatisfiesNot isvaluechar |>> (fun _ -> Bool(true))
+        skipString "yes" .>> nextCharSatisfiesNot isValueChar >>% Bool(true)
 
     let valueBNo =
-        skipString "no" .>> nextCharSatisfiesNot isvaluechar |>> (fun _ -> Bool(false))
+        skipString "no" .>> nextCharSatisfiesNot isValueChar >>% Bool(false)
 
-    let valueI = pint64 .>> nextCharSatisfiesNot isvaluechar |>> int |>> Int
-    let valueF = pfloat .>> nextCharSatisfiesNot isvaluechar |>> decimal |>> Float
-
-    let hsv3 =
-        clause (
-            pipe3
-                ((parseWithPosition valueF .>> ws) .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (fun a b c -> Clause [ Statement.Value a; Statement.Value b; Statement.Value c ])
-        )
-
-    let hsv4 =
-        clause (
-            pipe4
-                (parseWithPosition valueF .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (fun a b c d -> Clause [ Statement.Value a; Statement.Value b; Statement.Value c; Statement.Value d ])
-        )
+    let valueInt = pint64 .>> nextCharSatisfiesNot isValueChar |>> int |>> Int
+    let valueFloat = pfloat .>> nextCharSatisfiesNot isValueChar |>> decimal |>> Float
 
     let hsvI =
         clause (
             pipe4
-                (parseWithPosition valueF .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (parseWithPosition valueF .>> ws)
-                (opt (parseWithPosition valueF .>> ws))
+                (parseWithPosition valueFloat .>> ws)
+                (parseWithPosition valueFloat .>> ws)
+                (parseWithPosition valueFloat .>> ws)
+                (opt (parseWithPosition valueFloat .>> ws))
                 (fun a b c d ->
                     match (a, b, c, d) with
                     | a, b, c, Some d ->
@@ -254,35 +229,15 @@ module internal SharedParsers =
     let rgbI =
         clause (
             pipe4
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (opt (parseWithPosition valueI .>> ws))
+                (parseWithPosition valueInt .>> ws)
+                (parseWithPosition valueInt .>> ws)
+                (parseWithPosition valueInt .>> ws)
+                (opt (parseWithPosition valueInt .>> ws))
                 (fun a b c d ->
                     match (a, b, c, d) with
                     | a, b, c, Some d ->
                         Clause [ Statement.Value a; Statement.Value b; Statement.Value c; Statement.Value d ]
                     | a, b, c, None -> Clause [ Statement.Value a; Statement.Value b; Statement.Value c ])
-        )
-
-
-    let rgb3 =
-        clause (
-            pipe3
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (fun a b c -> Clause [ Statement.Value a; Statement.Value b; Statement.Value c ])
-        )
-
-    let rgb4 =
-        clause (
-            pipe4
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (parseWithPosition valueI .>> ws)
-                (fun a b c d -> Clause [ Statement.Value a; Statement.Value b; Statement.Value c; Statement.Value d ])
         )
 
     let rgb = strSkip "rgb" >>. rgbI .>> ws
@@ -296,44 +251,32 @@ module internal SharedParsers =
     // =======
 
     // Recursive types
-    let keyvalue, keyvalueimpl = createParserForwardedToRef ()
+    let keyValue, keyvalueimpl = createParserForwardedToRef ()
     let (value: Parser<Value, unit>), valueimpl = createParserForwardedToRef ()
 
     let leafValue =
-        pipe3 getPosition (value .>> ws) getPosition (fun a b c -> (getRange a c, b)) // |>> (fun (p, v) -> p, (Value v)))
+        pipe3 getPosition (value .>> ws) getPosition (fun a b c -> (getRange a c, b))
 
     let statement =
-        comment |>> Comment
+        comment |>> fun (p,c) -> CommentStatement({Position=p;Comment=c})
         <|> (attempt (leafValue .>> notFollowedBy operatorLookahead |>> Value))
-        <|> keyvalue
+        <|> keyValue
         <?> "statement"
 
-    let valueBlock =
-        clause (many1 ((leafValue |>> Value) <|> (comment |>> Comment))) |>> Clause
-        <?> "value clause"
-
-    let valueClause = clause (many statement) |>> Clause //<?> "statement clause"
+    let valueClause = clause (many statement) |>> Clause
 
     let valueCustom: Parser<Value, unit> =
         let vcP = valueClause
-        let vbP = attempt valueBlock
-        let iP = attempt valueI
-        let fP = attempt valueF
-        let byP = attempt valueBYes <|> valueS
-        let bnP = attempt valueBNo <|> valueS
+        let iP = attempt valueInt
+        let fP = attempt valueFloat
+        let byP = attempt valueBYes <|> valueStr
+        let bnP = attempt valueBNo <|> valueStr
         let mpP = metaprograming
 
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
             | '{' -> vcP stream
-            // let vc = (vcP stream)
-            // if vc.Status = Ok then vc else
-            //     let vb = (vbP stream)
-            //    //vb
-            //     if vb.Status <> Ok then valueClause stream else vb
-            // let vb = (attempt valueBlock stream)
-            // if vb.Status = Ok then vb else valueClause stream
-            | '"' -> valueQ stream
+            | '"' -> valueQStr stream
             | x when isDigit x || x = '-' ->
                 let i = (iP stream)
 
@@ -341,7 +284,7 @@ module internal SharedParsers =
                     i
                 else
                     let f = (fP stream)
-                    if f.Status = Ok then f else valueS stream
+                    if f.Status = Ok then f else valueStr stream
             | _ ->
                 match stream.PeekString 3, stream.PeekString 2 with
                 | "rgb", _ -> rgb stream
@@ -351,23 +294,19 @@ module internal SharedParsers =
                 | "yes", _ -> byP stream
                 | _, "no" -> bnP stream
                 | "@\\[", _ -> mpP stream
-                | _ -> valueS stream
-    //| _ -> choice [(attempt valueB); valueS] stream
-    //choiceL [(attempt valueB); (attempt hsv); (attempt rgb); valueS] "value" stream
-
-
+                | _ -> valueStr stream
 
     valueimpl := valueCustom <?> "value"
 
     keyvalueimpl
-    := pipe5 getPosition (keyQ <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
+    := pipe5 getPosition (keyQStr <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
         KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
 
-    let alle = ws >>. many statement .>> eof |>> (fun f -> (ParsedFile f))
+    let alle = ws >>. many statement .>> eof |>> ParsedFile
 
-    let valuelist =
-        many1 ((comment |>> Comment) <|> (leafValue |>> (fun (a, b) -> Value(a, b))))
+    let valueList =
+        many1 ((comment |>> fun (p,c) -> CommentStatement({Position=p;Comment=c})) <|> (leafValue |>> Value))
         .>> eof
 
-    let statementlist = (many statement) .>> eof
-    let all = ws >>. ((attempt valuelist) <|> statementlist)
+    let statementList = (many statement) .>> eof
+    let all = ws >>. ((attempt valueList) <|> statementList)
