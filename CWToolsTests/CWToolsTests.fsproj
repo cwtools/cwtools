@@ -25,10 +25,12 @@
     <ItemGroup>
         <EmbeddedResource Include="testfiles/embeddedtest/embedded/**"/>
         <EmbeddedResource Include="testfiles/overwritetest/embedded/**"/>
+        <None Include="dotnet.config"/>
         <None Include="testfiles/configtests/**"/>
         <None Include="testfiles/validationtests/**"/>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="testconfig.json" />
         <Folder Include="testfiles\configtests\ruleswithglobaltests\STL"/>
     </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>

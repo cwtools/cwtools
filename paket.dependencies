@@ -26,7 +26,7 @@ nuget NUnit
 nuget NUnit.Analyzers
 nuget NUnit3TestAdapter
 nuget YoloDev.Expecto.TestSdk
-
+nuget Microsoft.Testing.Platform.MSBuild
 
 group build
     source https://api.nuget.org/v3/index.json
