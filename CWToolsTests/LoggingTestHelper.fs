@@ -1,7 +1,6 @@
 ﻿module LogCaptureTest
 
 open Expecto
-open Expecto.Logging
 open System.Text
 
 /// Runs a test with log capture, only showing logs if the test fails
@@ -22,7 +21,7 @@ let testWithCapturedLogs name testFunc =
         // Override the logging functions to capture output
         let captureLog level msg =
             // Call original logger
-            testLogger.logSimple (Message.event level msg)
+            // testLogger.logSimple (Message.event level msg)
             // Also capture to our StringBuilder
             logCapture.AppendLine(sprintf "[%A] %s" level msg) |> ignore
             

@@ -1,7 +1,7 @@
 source https://api.nuget.org/v3/index.json
 //cache ./nupkgs versions: all
 
-nuget Expecto >= 5.0 #
+nuget Expecto 11.0.0-alpha8
 nuget FParsec 1.1.1
 nuget FSharp.Data 3.0.1 #
 nuget FSharp.Collections.ParallelSeq #
