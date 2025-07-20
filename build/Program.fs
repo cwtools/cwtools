@@ -83,13 +83,7 @@ let pkgPath = Path.GetFullPath "./pkg"
 // --------------------------------------------------------------------------------------
 
 let testAll () =
-    let res =
-        DotNet.exec (DotNet.Options.withWorkingDirectory "./CWToolsTests") "run" ""
-
-    match res.ExitCode with
-    | 0 -> ()
-    | _ -> failwithf "Tests failed with exit code %d" res.ExitCode
-
+    DotNet.test (fun settings -> { settings with RunSettingsArguments = Some"Expecto.parallel=false"; Configuration = DotNet.BuildConfiguration.Release  }) "CWToolsTests/CWToolsTests.fsproj"
     DotNet.test id "CWToolsCSTests/CWToolsCSTests.csproj"
 
 // testProjects |> Seq.iter (fun p -> DotNet.test (DotNet.Options.withWorkingDirectory p) p)
