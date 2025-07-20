@@ -19,13 +19,13 @@ let tests =
         testCase "localisation folder" <| fun () ->
             let folder = "testfiles/localisationtests/localisation/"
             let parsed = STLLocalisationServiceFromFolder(folder).Api (STL STLLang.English)
-            eprintfn "%A" parsed.Results
+            // eprintfn "%A" parsed.Results
             ()
         testCase "localisation simple" <| fun () ->
             let parsed = STLLocalisationServiceFromFolder("testfiles/localisationtests/localisation").Api (STL STLLang.English)
             let expectedValues = dict [("required", "\"test_required\""); ("test_required_desc", "\"test_required\"")]
             Expect.equal (parsed.Values |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) (expectedValues |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) "Not equal"
-            eprintfn "%A" parsed.Values
+            // eprintfn "%A" parsed.Values
             ()
         testCase "localisation CK2" <| fun () ->
             let files = ["testfiles/CK2/Localisation/SwordOfIslam.csv", File.ReadAllText "testfiles/CK2/Localisation/SwordOfIslam.csv"]

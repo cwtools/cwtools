@@ -458,13 +458,13 @@ let testsv =
                 let be = { entity = bnode; rawEntity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors/test.txt"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
                 let ruleapplicator = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value)], [], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
                 let typeinfo = CWTools.Rules.RulesHelpers.getTypesFromDefinitions (Some ruleapplicator) [shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value] [be] |> Map.toSeq |> Seq.map (fun (k, s) -> k, createStringSet (s |> List.map _.id)) |> Map.ofSeq
-                eprintfn "%A" typeinfo
+                // eprintfn "%A" typeinfo
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
                 let comp = CompletionService(RulesWrapper [TypeRule ("ship_size", shipsizeLazy.Value)], [shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value], typeinfo, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, [], changeScope, defaultContext, (scopeManager.ParseScope() "Any"), [], STL STLLang.Default, emptyDataTypesLazy.Value, processLocalisationLazy.Value, validateLocalisationLazy.Value)
                 let res = comp.Complete(pos, entity, None)
-                eprintfn "res4 %A" res
+                // eprintfn "res4 %A" res
                 let suggestions = res |> Seq.map (function |Simple (c, _, _) -> c |Snippet (l, _, _, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
