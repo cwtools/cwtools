@@ -198,14 +198,15 @@ let initTargets () =
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
-    "Clean"
-    ==> "Build"
-    ==> "Test"
+    "Test"
     ==> "PackLibs"
     ==> "PackTools"
     ==> "Push"
     ==> "ReleaseGitHub"
     |> ignore
+    "Build" ?=> "Test" |> ignore
+    "Build" ==> "PackLibs" |> ignore
+    "Clean" ?=> "PackLibs" |> ignore
 
 [<EntryPoint>]
 let main argv =
