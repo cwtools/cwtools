@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <OutputType>Library</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <PaketCommand>dotnet paket</PaketCommand>
@@ -9,7 +9,6 @@
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-        <GenerateProgramFile>false</GenerateProgramFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
@@ -21,7 +20,6 @@
         <Compile Include="Tests.fs"/>
         <Compile Include="ProcessTests.fs"/>
         <Compile Include="ParserTests.fs"/>
-        <Compile Include="Main.fs"/>
         <None Include="App.config"/>
     </ItemGroup>
     <ItemGroup>
