@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Library</OutputType>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <PaketCommand>dotnet paket</PaketCommand>
@@ -26,11 +26,12 @@
         <EmbeddedResource Include="testfiles/embeddedtest/embedded/**"/>
         <EmbeddedResource Include="testfiles/overwritetest/embedded/**"/>
         <None Include="dotnet.config"/>
-        <None Include="testfiles/configtests/**"/>
-        <None Include="testfiles/validationtests/**"/>
+        <None Include="testfiles\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="testconfig.json" />
+        <Content Include="testconfig.json"/>
         <Folder Include="testfiles\configtests\ruleswithglobaltests\STL"/>
     </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>
