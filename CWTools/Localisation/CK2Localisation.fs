@@ -123,7 +123,7 @@ module CK2Localisation =
         //     |_ -> x.ENGLISH
 
         let getKeys () =
-            csv |> Seq.map (snd >> (fun f -> f.Code)) |> List.ofSeq
+            csv |> Seq.map (snd >> (fun f -> f.Code)) |> Seq.toArray
 
         let valueMap lang =
             let one = csv |> Seq.map (fun (p, r) -> (p, r.Code, getForLang lang r))

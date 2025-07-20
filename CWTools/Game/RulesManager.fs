@@ -201,13 +201,12 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         /// Enums
         let complexEnumDefs =
             getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct (e, _) -> e))
-        // let modifierEnums = { key = "modifiers"; values = lookup.coreModifiers |> List.map (fun m -> m.Tag); description = "Modifiers" }
-        let allEnums = simpleEnums @ complexEnumDefs // @ [modifierEnums] @ [{ key = "provinces"; description = "provinces"; values = lookup.CK2provinces}]
+        let allEnums = simpleEnums @ complexEnumDefs
 
         let newEnumDefs =
             allEnums
-            |> List.map (fun e -> (e.key, (e.description, e.valuesWithRange)))
-            |> Map.ofList
+            |> Seq.map (fun e -> (e.key, (e.description, e.valuesWithRange)))
+            |> Map.ofSeq
 
         lookup.enumDefs <- addEmbeddedEnumDefData newEnumDefs
 
@@ -222,10 +221,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         /// First pass type defs
         let loc = addEmbeddedLoc languages localisation.localisationKeys
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofList)
+        let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofArray)
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let allentities = resources.AllEntities() |> List.map (fun struct (e, _) -> e)
+        let allEntities = resources.AllEntities() |> List.map (fun struct (e, _) -> e)
 
         let refreshTypeInfo () =
             let processLoc, validateLoc = settings.locFunctions lookup
@@ -250,7 +249,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 )
 
             let typeDefInfo =
-                getTypesFromDefinitions (Some tempRuleValidationService) tempTypes allentities
+                getTypesFromDefinitions (Some tempRuleValidationService) tempTypes allEntities
 
             let newTypeDefInfo = typeDefInfo
             lookup.typeDefInfo <- addEmbeddedTypeDefData newTypeDefInfo // |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))

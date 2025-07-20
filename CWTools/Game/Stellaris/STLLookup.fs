@@ -12,7 +12,7 @@ module STLLookup =
         let findComment t s (a: Child) =
             match (s, a) with
             | (b, c), _ when b -> (b, c)
-            | (_, c), CommentC(_, nc) -> (false, nc :: c)
+            | (_, c), CommentC(comment) -> (false, comment.Comment :: c)
             | (_, c), NodeC n when n.Key = t -> (true, c)
             | (_, _), _ -> (false, [])
 

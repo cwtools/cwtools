@@ -261,41 +261,10 @@ type RuleValidationService
         // TODO: Memoize expanded rules depending  on ctx.subtypes ad rules?
         let noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificDict, leafSpecificDict =
             memoizeRules rules ctx.subtypes
-        // let subtypedrules =
-        //     rules |> Array.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else [||]) | x -> [||]))
-        // let expandedbaserules =
-        //     rules |> Array.collect (
-        //         function
-        //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-        //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-        //         |x -> [||])
-        // let expandedsubtypedrules =
-        //     subtypedrules |> Array.collect (
-        //         function
-        //         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-        //         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [||])
-        //         |x -> [||])
-        // let expandedrules = seq { yield! rules; yield! subtypedrules; yield! expandedbaserules; yield! expandedsubtypedrules } sprintfn "%s is unexpected in %s"
-        // match quoted, optionRequiredQuotes with
-        // | true, _ -> true
-        // | false, true -> false
-        // | _ -> true
 
         let inline valueFun innerErrors (leaf: Leaf) =
             let key = leaf.Key
             let keyIds = leaf.KeyId
-            // let createDefault =
-            // if enforceCardinality && (leaf.Key.[0] <> '@') then
-            // (fun () ->
-            // inv
-            // (ErrorCodes.ConfigRulesUnexpectedPropertyNode
-            // $"%s{key} is unexpected in %s{startNode.Key}"
-            // severity)
-            // leaf
-            // <&&&> innerErrors
-            // )
-            // else
-            // (fun () -> innerErrors
             let inline createDefault () =
                 if enforceCardinality && (leaf.Key.[0] <> '@') then
                     inv
@@ -321,7 +290,7 @@ type RuleValidationService
 
             rs
             |> Seq.filter (function
-                | LeafRule(l, r), o ->
+                | LeafRule(l, _), o ->
                     checkQuotes leaf.KeyId.quoted o.keyRequiredQuotes
                     && FieldValidators.checkLeftField p Severity.Error ctx l keyIds
                 | _ -> false)
@@ -426,14 +395,10 @@ type RuleValidationService
             | NodeRule(SpecificField(SpecificValue key), _), opts
             | LeafRule(SpecificField(SpecificValue key), _), opts ->
                 let leafcount =
-                    clause.Leaves
-                    |> Seq.filter (fun leaf -> leaf.KeyId.lower = key.lower)
-                    |> Seq.length
+                    clause.Leaves |> Seq.sumBy(fun leaf -> if leaf.KeyId.lower = key.lower then 1 else 0)
 
                 let childcount =
-                    clause.Nodes
-                    |> Seq.filter (fun child -> child.KeyId.lower = key.lower)
-                    |> Seq.length
+                    clause.Nodes |> Seq.sumBy(fun child -> if child.KeyId.lower = key.lower then 1 else 0)
 
                 let total = leafcount + childcount
 
@@ -453,7 +418,7 @@ type RuleValidationService
                 else if opts.max < total then
                     inv
                         (ErrorCodes.ConfigRulesWrongNumber
-                            $"Too many %s{StringResource.stringManager.GetStringForID key.normal}, expecting at most %i{opts.max}"
+                            $"Too many %s{stringManager.GetStringForID key.normal}, expecting at most %i{opts.max}"
                             Severity.Warning)
                         clause
                     <&&&> innerErrors
@@ -464,9 +429,7 @@ type RuleValidationService
             | LeafValueRule(AliasField _), _ -> innerErrors
             | NodeRule(l, _), opts ->
                 let total =
-                    clause.Nodes
-                    |> Seq.filter (fun child -> FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId)
-                    |> Seq.length
+                    clause.Nodes |> Seq.sumBy(fun child -> if FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId then 1 else 0)
 
                 if opts.min > total then
                     let minSeverity =
@@ -491,8 +454,7 @@ type RuleValidationService
             | LeafRule(l, r), opts ->
                 let total =
                     clause.Leaves
-                    |> Seq.filter (fun leaf -> FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId)
-                    |> Seq.length
+                    |> Seq.sumBy(fun leaf -> if FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId then 1 else 0)
 
                 if opts.min > total then
                     let minSeverity =
@@ -517,10 +479,7 @@ type RuleValidationService
             | LeafValueRule(l), opts ->
                 let total =
                     clause.LeafValues
-                    |> List.ofSeq
-                    |> List.filter (fun leafvalue ->
-                        FieldValidators.checkLeftField p Severity.Error ctx l leafvalue.ValueId)
-                    |> List.length
+                    |> Seq.sumBy(fun leafValue -> if FieldValidators.checkLeftField p Severity.Error ctx l leafValue.ValueId then 1 else 0)
 
                 if opts.min > total then
                     let minSeverity =
@@ -907,7 +866,7 @@ type RuleValidationService
         let firstPushScope = res |> List.tryPick (fun s -> s.pushScope)
         firstPushScope, res |> List.map (fun s -> s.name)
 
-    let rootId = StringResource.stringManager.InternIdentifierToken "root"
+    let rootId = stringManager.InternIdentifierToken "root"
 
     let applyNodeRuleRoot (typedef: TypeDefinition) (rules: NewRule list) (options: Options) (node: IClause) =
         let pushScope, subtypes = testSubtype typedef.subtypes node
@@ -942,7 +901,7 @@ type RuleValidationService
     let normalTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file |> not)
 
     let validate ((path, root): string * Node) =
-        let pathDir = (Path.GetDirectoryName path).Replace("\\", "/")
+        let pathDir = (Path.GetDirectoryName path).Replace('\\', '/')
         let file = Path.GetFileName path
 
         let skiprootkey (skipRootKey: SkipRootKey) (n: IClause) =
@@ -974,7 +933,7 @@ type RuleValidationService
 
                 match typerules |> List.tryHead with
                 | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
-                    (StringResource.stringManager.GetStringForID x.normal) == typedef.name
+                    (stringManager.GetStringForID x.normal) == typedef.name
                     ->
                     if FieldValidators.typekeyfilter typedef filterKey prefixKey then
                         applyNodeRuleRoot typedef rs o n
@@ -1032,11 +991,3 @@ type RuleValidationService
 
     member this.RuleValidateEntity = (fun e -> validate (e.logicalpath, e.entity))
     member this.ManualRuleValidate = validate
-// {
-//     applyNodeRule = (fun (rule, node) -> applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node)
-//     testSubtype = (fun ((subtypes), (node)) -> testSubtype subtypes node)
-//     ruleValidate = (fun () -> (fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate))
-// }
-
-
-// type InfoService(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, ruleValidationService : IRuleValidationService<_>, changeScope, defaultContext, anyScope) =
