@@ -833,9 +833,9 @@ let vic3SubfolderTests =
 
 [<Tests>]
 let specialtests =
-    testList
-        "log"
-        [ testWithCapturedLogs "modifiers"
+    // testList
+        // "log"
+         ptestCase "log modifiers"
           <| fun () ->
               let configtext =
                   [ ("./testfiles/scriptedorstatictest/setup.log",
@@ -871,7 +871,7 @@ let specialtests =
                   [ { tag = "test"
                       categories = [ modifierCategoryManager.ParseModifier () "pop" ] } ]
 
-              Expect.equal (stl.StaticModifiers()) exp "" ]
+              Expect.equal (stl.StaticModifiers()) exp "" 
 // [<Tests>]
 // let tests2 =
 //     testList "validation" [

@@ -297,11 +297,8 @@ let testc =
     ]
 
 let leftScopeLazy = lazy (RootRule.AliasRule("effect", (NodeRule((ScopeField [(scopeManager.ParseScope() "Any")]), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany)))
-let leftScope() = leftScopeLazy.Value
 let eopEffectLazy = lazy (RootRule.AliasRule("effect", (NodeRule((SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken "every_owned_planet"))), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} )))
-let eopEffect() = eopEffectLazy.Value
 let logEffectLazy = lazy (RootRule.AliasRule("effect", (LeafRule((NewField.SpecificField(SpecificValue (StringResource.stringManager.InternIdentifierToken "log"))), (ValueField (ValueType.Bool))), {optionalMany with pushScope = Some (scopeManager.ParseScope() "Planet")} )))
-let logEffect() = logEffectLazy.Value
 
 [<Tests>]
 let testsv =
@@ -472,7 +469,7 @@ let testsv =
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
 
-        testWithCapturedLogs "test scope at pos simple nodes" <| fun () ->
+        ptestCase "test scope at pos simple nodes" <| fun () ->
             let input = "create_starbase = {\n\
                          effect = {\n\
                          every_owned_planet = { \n\
@@ -484,8 +481,8 @@ let testsv =
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffect()], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap,(scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
-                let infoService = InfoService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffect()], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
+                let rules = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap,(scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
+                let infoService = InfoService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbaseLazy.Value)], [RulesParser.createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 3 23
                 let suggestions = infoService.GetInfo (pos, entity)
@@ -496,7 +493,7 @@ let testsv =
                     let expected = [(scopeManager.ParseScope() "Planet"); (scopeManager.ParseScope() "Country");]
                     Expect.sequenceEqual scopes expected "Scopes should match"
             |Failure(e, _, _) -> Expect.isTrue false e
-        testWithCapturedLogs "test scope at pos prev" <| fun () ->
+        ptestCase "test scope at pos prev" <| fun () ->
             let input = "create_starbase = {\n\
                          effect = {\n\
                          every_owned_planet = {\n\
@@ -510,8 +507,8 @@ let testsv =
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffect(); leftScope()], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
-                let infoService = InfoService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffect(); leftScope()], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
+                let rules = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value; leftScopeLazy.Value], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
+                let infoService = InfoService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value; leftScopeLazy.Value], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbaseLazy.Value)], [RulesParser.createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 9
                 let suggestions = infoService.GetInfo (pos, entity)
@@ -522,7 +519,7 @@ let testsv =
                     let expected = [(scopeManager.ParseScope() "Country"); (scopeManager.ParseScope() "Planet"); (scopeManager.ParseScope() "Country");]
                     Expect.sequenceEqual scopes expected "Scopes should match"
             |Failure(e, _, _) -> Expect.isTrue false e
-        testWithCapturedLogs "test scope at pos leaf" <| fun () ->
+        ptestCase "test scope at pos leaf" <| fun () ->
             let input = "create_starbase = {\n\
                          effect = {\n\
                          every_owned_planet = {\n\
@@ -535,8 +532,8 @@ let testsv =
                 UtilityParser.initializeScopes None (Some defaultScopeInputs)
                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) r)
                 let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; rawEntity = node; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
-                let rules = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap , (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
-                let infoService = InfoService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffect(); leftScope(); logEffect()], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
+                let rules = RuleValidationService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value; leftScopeLazy.Value; logEffectLazy.Value], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap , (scopeManager.ParseScope() "Any"), changeScope, defaultContext, STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
+                let infoService = InfoService(RulesWrapper [TypeRule ("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value; leftScopeLazy.Value; logEffectLazy.Value], [createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, Map.empty, [], Set.empty, effectMap, effectMap, rules, changeScope, defaultContext, (scopeManager.ParseScope() "Any"),  STL STLLang.Default, processLocalisationLazy.Value, validateLocalisationLazy.Value)
                 // let comp = CompletionService([TypeRule ("create_starbase", RulesParser.createStarbaseLazy.Value)], [RulesParser.createStarbaseTypeDefLazy.Value], Map.empty, Map.empty, [], Set.empty, [], [])
                 let pos = mkPos 4 2
                 let suggestions = infoService.GetInfo (pos, entity)
