@@ -150,7 +150,7 @@ let getNodeComments (clause: IClause) =
 // [<Tests>]
 // let testsConfig =
 //     testList "testFindComments" [
-//         ftestCase "basic" <| fun () ->
+//         ftestWithCapturedLogs "basic" <| fun () ->
 //             let testString = """
 // #error
 // test = test
@@ -318,14 +318,14 @@ let tests =
                    |> List.tryHead
                    |> Option.map (sprintf "%A")
                    |> Option.defaultValue "")
-              // yield testCase "parse" <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+              // yield testWithCapturedLogs "parse" <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
               Expect.isEmpty
                   (stl.ParserErrors())
                   (stl.ParserErrors()
                    |> List.tryHead
                    |> Option.map (sprintf "%A")
                    |> Option.defaultValue "")
-              // yield testCase "parse2" <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+              // yield testWithCapturedLogs "parse2" <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
               //eprintfn "%A" testLocKeys
               // eprintfn "%A" entities
               //eprintfn "%A" errors
@@ -341,8 +341,8 @@ let tests =
                   Expect.isEmpty extra (sprintf "Incorrect required %s" file)
 
               testLocKeys |> List.iter (fun (f, t) -> inner (f, t))
-          // yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
-          testCase "with loc"
+          // yield! testLocKeys |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
+          testWithCapturedLogs "with loc"
           <| fun () ->
               let configtext =
                   [ "./testfiles/localisationtests/test.cwt", File.ReadAllText "./testfiles/localisationtests/test.cwt" ]
@@ -382,7 +382,7 @@ let tests =
                    |> List.tryHead
                    |> Option.map (sprintf "%A")
                    |> Option.defaultValue "")
-              // yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+              // yield testWithCapturedLogs "parse" <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
               let errors = stl.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
 
@@ -397,14 +397,14 @@ let tests =
                   Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
 
               testLocKeys |> List.iter (fun (f, t) -> inner (f, t))
-              // yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+              // yield! testLocKeys |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
               // eprintfn "%A" (stl.LocalisationErrors(true))
               let globalLocError =
                   stl.LocalisationErrors(true, true)
                   |> List.filter (fun e -> List.contains (e.code) locErrorCodes)
 
               Expect.hasCountOf globalLocError 10u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
-          // yield testCase "globalLoc" <| fun () ->
+          // yield testWithCapturedLogs "globalLoc" <| fun () ->
           // Expect.hasCountOf globalLocError 10u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
           ]
 
@@ -439,7 +439,7 @@ let configFilesFromDir folder =
     |> List.map (fun f -> f, File.ReadAllText f)
 
 let testFolder folder testsname config configValidate configfile configOnly configLoc stl (culture: string) =
-    testCase (folder + testsname + culture)
+    testWithCapturedLogs (folder + testsname + culture)
     <| fun () ->
         Thread.CurrentThread.CurrentCulture <- CultureInfo(culture)
         Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture)
@@ -716,10 +716,10 @@ let testFolder folder testsname config configValidate configfile configOnly conf
              |> List.tryHead
              |> Option.map (sprintf "%A")
              |> Option.defaultValue "")
-        // yield testCase (sprintf "parse %s" folder) <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+        // yield testWithCapturedLogs (sprintf "parse %s" folder) <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
         testVals |> List.iter inner
-        // yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
-        // yield! completionVals |> List.map (fun (f, t) -> testCase ("Completion " + f.ToString()) <| fun() -> completionTestPerFile game (f, t))
+        // yield! testVals |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
+        // yield! completionVals |> List.map (fun (f, t) -> testWithCapturedLogs ("Completion " + f.ToString()) <| fun() -> completionTestPerFile game (f, t))
         completionVals |> List.iter (completionTestPerFile game)
 
 let testSubdirectories stl rulesonly dir =
@@ -816,7 +816,7 @@ let vic3SubfolderTests =
 let specialtests =
     testList
         "log"
-        [ testCase "modifiers"
+        [ testWithCapturedLogs "modifiers"
           <| fun () ->
               let configtext =
                   [ ("./testfiles/scriptedorstatictest/setup.log",
@@ -868,7 +868,7 @@ let specialtests =
 //             let extras = remove_all fileErrors expected
 //             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
 //             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
-//         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+//         yield! testVals |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
 
 //     ]
 
@@ -887,7 +887,7 @@ let specialtests =
 //             let extras = remove_all fileErrors expected
 //             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
 //             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
-//         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+//         yield! testVals |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
 //     ]
 
 let rec replaceFirst predicate value =
@@ -1049,7 +1049,7 @@ let embeddedTests =
 
 [<Tests>]
 let overwriteTests =
-    testCase "overwrite"
+    testWithCapturedLogs "overwrite"
     <| fun () ->
         // eprintfn "%A" filelist
         let configtext =
@@ -1127,7 +1127,7 @@ let overwriteTests =
 // [<Tests>]
 // let logTests =
 //     testList "logs" [
-//         testCase "logFile" <| fun () ->
+//         testWithCapturedLogs "logFile" <| fun () ->
 //             let logs = parseLogsFile "./testfiles/parsertests/setup.log"
 //             match logs with
 //             |Success((s, m), _, _) ->
