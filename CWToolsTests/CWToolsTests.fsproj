@@ -17,10 +17,10 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="LoggingTestHelper.fs"/>
         <Compile Include="Tests.fs"/>
         <Compile Include="ProcessTests.fs"/>
         <Compile Include="ParserTests.fs"/>
-        <None Include="App.config"/>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="testfiles/embeddedtest/embedded/**"/>
