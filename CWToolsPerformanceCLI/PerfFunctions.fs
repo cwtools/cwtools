@@ -11,7 +11,6 @@ open System.Diagnostics
 open CWTools.Games.Files
 open CWTools.Common
 open CWTools.Parser
-open CWTools.Parser.CKParser
 open FParsec
 open CWTools.Games.Stellaris
 open CWTools.Common.STLConstants
@@ -59,7 +58,7 @@ let createPathConfig (steamRoot: string option) (gitRoot: string option) =
 // Game-specific default path builders
 let getDefaultGamePaths (config: PathConfig) = 
     let stellarisRoot = Path.Combine(config.SteamRoot, "Stellaris")
-    let stellarisConfig = Path.Combine(config.GitRoot, "cwtools-stl-config")
+    let stellarisConfig = Path.Combine(config.GitRoot, "cwtools-stellaris-config", "config")
     let stellarisCache = Path.Combine(config.CacheRoot, "stl.cwb")
     
     let eu4Root = Path.Combine(config.SteamRoot, "Europa Universalis IV")
@@ -89,6 +88,9 @@ let perfRunnerWithResult (buildGame: unit -> IGame<_>) runValidation =
             let errors = game.ValidationErrors() |> List.map (fun e -> e.range)
             let testVals = game.AllEntities()
             game.RefreshCaches()
+            game.ForceRecompute()
+            game.RefreshCaches()
+            game.ValidationErrors() |> ignore
             errors.Length
         else
             0
