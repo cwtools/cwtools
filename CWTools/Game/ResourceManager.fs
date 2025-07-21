@@ -394,7 +394,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         file,
         match file with
         | EntityResource(_,
-                         { result = Pass(s)
+                         { result = Pass _
                            filepath = f
                            validate = v
                            logicalpath = l }) ->
