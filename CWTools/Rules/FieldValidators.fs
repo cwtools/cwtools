@@ -1,6 +1,7 @@
 namespace CWTools.Rules
 
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils2
@@ -196,47 +197,14 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.Date ->
-                let parts = key.Split('.')
-
-                let ok =
-                    (parts.Length = 3)
-                    && parts.[0].Length <= 4
-                    && Int32.TryParse(parts.[0]) |> fst
-                    && Int32.TryParse(parts.[1]) |> fst
-                    && Int32.Parse(parts.[1]) <= 12
-                    && Int32.TryParse(parts.[2]) |> fst
-                    && Int32.Parse(parts.[2]) <= 31
-
+                let ok = FieldValidatorsCs.IsValidDate(key)
                 if ok then
                     errors
                 else
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.DateTime ->
-                let parts = key.Split('.')
-
-                let ok =
-                    match parts.Length with
-                    | 3 ->
-                        (parts.Length = 3)
-                        && parts.[0].Length <= 4
-                        && Int32.TryParse(parts.[0]) |> fst
-                        && Int32.TryParse(parts.[1]) |> fst
-                        && Int32.Parse(parts.[1]) <= 12
-                        && Int32.TryParse(parts.[2]) |> fst
-                        && Int32.Parse(parts.[2]) <= 31
-                    | 4 ->
-                        (parts.Length = 4)
-                        && parts.[0].Length <= 4
-                        && Int32.TryParse(parts.[0]) |> fst
-                        && Int32.TryParse(parts.[1]) |> fst
-                        && Int32.Parse(parts.[1]) <= 12
-                        && Int32.TryParse(parts.[2]) |> fst
-                        && Int32.Parse(parts.[2]) <= 31
-                        && Int32.TryParse(parts.[3]) |> fst
-                        && Int32.Parse(parts.[3]) <= 24
-                    | _ -> false
-
+                let ok = FieldValidatorsCs.IsValidDateTime(key)
                 if ok then
                     errors
                 else
@@ -336,40 +304,8 @@ module internal FieldValidators =
          //     // if trimQuote key == s then true else false
          //     id = s.lower
          | ValueType.Percent -> key.EndsWith('%')
-         | ValueType.Date ->
-             let parts = key.Split('.')
-
-             (parts.Length = 3)
-             && parts[0].Length <= 4
-             && Int32.TryParse(parts[0]) |> fst
-             && Int32.TryParse(parts[1]) |> fst
-             && Int32.Parse(parts[1]) <= 12
-             && Int32.TryParse(parts[2]) |> fst
-             && Int32.Parse(parts[2]) <= 31
-         | ValueType.DateTime ->
-             let parts = key.Split('.')
-
-             match parts.Length with
-             | 3 ->
-                 (parts.Length = 3)
-                 && parts.[0].Length <= 4
-                 && Int32.TryParse(parts[0]) |> fst
-                 && Int32.TryParse(parts[1]) |> fst
-                 && Int32.Parse(parts[1]) <= 12
-                 && Int32.TryParse(parts[2]) |> fst
-                 && Int32.Parse(parts[2]) <= 31
-             | 4 ->
-                 (parts.Length = 4)
-                 && parts.[0].Length <= 4
-                 && Int32.TryParse(parts[0]) |> fst
-                 && Int32.TryParse(parts[1]) |> fst
-                 && Int32.Parse(parts[1]) <= 12
-                 && Int32.TryParse(parts[2]) |> fst
-                 && Int32.Parse(parts[2]) <= 31
-                 && Int32.TryParse(parts[3]) |> fst
-                 && Int32.Parse(parts[3]) <= 24
-             | _ -> false
-
+         | ValueType.Date -> FieldValidatorsCs.IsValidDate(key)
+         | ValueType.DateTime -> FieldValidatorsCs.IsValidDateTime(key)
          | ValueType.CK2DNA -> key.Length = 11 && key |> Seq.forall Char.IsLetter
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
