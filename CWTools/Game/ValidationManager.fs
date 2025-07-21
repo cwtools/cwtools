@@ -307,7 +307,7 @@ type ValidationManager<'T when 'T :> ComputedData>
             // let validateLocEntry (locentry : LocEntry<_>) =
             // locentry.
             // services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
-            values |> List.filter (fun (s, _) -> s.Contains(".") |> not)
+            values |> List.filter (fun (s, _) -> s.Contains('.') |> not)
             <&!&> (fun (key, range) ->
                 let fakeLeaf = LeafValue(Value.Bool true, range)
                 let lockey = locdef.prefix + key + locdef.suffix
@@ -323,7 +323,7 @@ type ValidationManager<'T when 'T :> ComputedData>
                 <&!&> validateLoc values
 
         let validateSubType (typename: string) (values: (string * range) list) =
-            let splittype = typename.Split([| '.' |], 2)
+            let splittype = typename.Split('.', 2)
 
             if splittype.Length > 1 then
                 match services.lookup.typeDefs |> List.tryFind (fun td -> td.name = splittype.[0]) with

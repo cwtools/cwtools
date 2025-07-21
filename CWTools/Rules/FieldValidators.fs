@@ -188,7 +188,7 @@ module internal FieldValidators =
             //     // if trimQuote key == s then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode])
             //     if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
             | ValueType.Percent ->
-                if key.EndsWith("%") then
+                if key.EndsWith('%') then
                     errors
                 else
                     inv
@@ -196,7 +196,7 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.Date ->
-                let parts = key.Split([| '.' |])
+                let parts = key.Split('.')
 
                 let ok =
                     (parts.Length = 3)
@@ -213,7 +213,7 @@ module internal FieldValidators =
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.DateTime ->
-                let parts = key.Split([| '.' |])
+                let parts = key.Split('.')
 
                 let ok =
                     match parts.Length with
@@ -261,7 +261,7 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.IRFamilyName ->
-                let parts = key.Split([| '.' |])
+                let parts = key.Split('.')
 
                 if (parts.Length <> 4) then
                     inv
@@ -337,49 +337,49 @@ module internal FieldValidators =
          //     id = s.lower
          | ValueType.Percent -> key.EndsWith("%")
          | ValueType.Date ->
-             let parts = key.Split([| '.' |])
+             let parts = key.Split('.')
 
              (parts.Length = 3)
              && parts.[0].Length <= 4
-             && Int32.TryParse(parts.[0]) |> fst
-             && Int32.TryParse(parts.[1]) |> fst
-             && Int32.Parse(parts.[1]) <= 12
-             && Int32.TryParse(parts.[2]) |> fst
-             && Int32.Parse(parts.[2]) <= 31
+             && Int32.TryParse(parts[0]) |> fst
+             && Int32.TryParse(parts[1]) |> fst
+             && Int32.Parse(parts[1]) <= 12
+             && Int32.TryParse(parts[2]) |> fst
+             && Int32.Parse(parts[2]) <= 31
          | ValueType.DateTime ->
-             let parts = key.Split([| '.' |])
+             let parts = key.Split('.')
 
              match parts.Length with
              | 3 ->
                  (parts.Length = 3)
                  && parts.[0].Length <= 4
-                 && Int32.TryParse(parts.[0]) |> fst
-                 && Int32.TryParse(parts.[1]) |> fst
-                 && Int32.Parse(parts.[1]) <= 12
-                 && Int32.TryParse(parts.[2]) |> fst
-                 && Int32.Parse(parts.[2]) <= 31
+                 && Int32.TryParse(parts[0]) |> fst
+                 && Int32.TryParse(parts[1]) |> fst
+                 && Int32.Parse(parts[1]) <= 12
+                 && Int32.TryParse(parts[2]) |> fst
+                 && Int32.Parse(parts[2]) <= 31
              | 4 ->
                  (parts.Length = 4)
                  && parts.[0].Length <= 4
-                 && Int32.TryParse(parts.[0]) |> fst
-                 && Int32.TryParse(parts.[1]) |> fst
-                 && Int32.Parse(parts.[1]) <= 12
-                 && Int32.TryParse(parts.[2]) |> fst
-                 && Int32.Parse(parts.[2]) <= 31
-                 && Int32.TryParse(parts.[3]) |> fst
-                 && Int32.Parse(parts.[3]) <= 24
+                 && Int32.TryParse(parts[0]) |> fst
+                 && Int32.TryParse(parts[1]) |> fst
+                 && Int32.Parse(parts[1]) <= 12
+                 && Int32.TryParse(parts[2]) |> fst
+                 && Int32.Parse(parts[2]) <= 31
+                 && Int32.TryParse(parts[3]) |> fst
+                 && Int32.Parse(parts[3]) <= 24
              | _ -> false
 
          | ValueType.CK2DNA -> key.Length = 11 && key |> Seq.forall Char.IsLetter
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
-             let parts = key.Split([| '.' |])
+             let parts = key.Split('.')
 
              (parts.Length = 4)
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[0]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[1]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[2]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[3]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[0]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[1]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[2]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[3]
          | ValueType.STLNameFormat var ->
              match varMap.TryFind var with
              | Some vars ->
@@ -1187,8 +1187,8 @@ module internal FieldValidators =
         (key: string)
         leafornode
         =
-        let typenames = typeKey.Split('.')
-        let typename = typenames.[0]
+        let typeNames = typeKey.Split('.')
+        let typename = typeNames[0]
 
         let actualSubtypes =
             match invertedTypeMap.TryGetValue key with
@@ -1216,8 +1216,8 @@ module internal FieldValidators =
 
             let subtype =
                 let subtypes =
-                    (if typenames.Length > 1 then
-                         typenames.[1] :: actualSubtypes
+                    (if typeNames.Length > 1 then
+                         typeNames.[1] :: actualSubtypes
                      else
                          actualSubtypes)
                     |> List.distinct

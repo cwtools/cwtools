@@ -144,12 +144,12 @@ module private RulesParserImpl =
     let private getAliasSettingsFromString (full: string) =
         match getSettingFromString full "alias" with
         | Some s ->
-            let split = s.Split([| ":" |], 2, StringSplitOptions.None)
+            let split = s.Split(':', 2)
 
             if split.Length < 2 then
                 None
             else
-                Some(split.[0], split.[1])
+                Some(split[0], split[1])
         | None -> None
 
     let private getSingleAliasSettingsFromString (full: string) =
