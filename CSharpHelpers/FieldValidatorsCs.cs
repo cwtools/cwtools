@@ -6,9 +6,15 @@ public static class FieldValidatorsCs
 {
     public static bool CheckPathDir(PathOptions pathOptions, string fullPath)
     {
+        // to prevent stack overflow, chosen a relatively conservative array size.
+        const int maxStackSize = 256;
+
         var span = fullPath.AsSpan();
         var dirSpan = Path.GetDirectoryName(span);
-        var directory = new Span<char>(new char[dirSpan.Length]);
+        Span<char> directory =
+            dirSpan.Length > maxStackSize
+                ? new char[dirSpan.Length]
+                : stackalloc char[dirSpan.Length];
         dirSpan.Replace(directory, '\\', '/');
 
         return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
@@ -81,5 +87,11 @@ public static class FieldValidatorsCs
         }
 
         return exists && isValidFileName && isValidExtension;
+    }
+
+    public static ReadOnlySpan<Range> Split(string key, Span<Range> destination, char separator)
+    {
+        int length = key.AsSpan().Split(destination, separator);
+        return destination[..length];
     }
 }
