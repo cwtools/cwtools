@@ -1,0 +1,5 @@
+﻿{
+  "platformOptions": {
+    "Expecto.parallel": "false"
+  }
+}

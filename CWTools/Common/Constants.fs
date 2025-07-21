@@ -44,6 +44,8 @@ type HOI4Lang =
     | Polish = 5
     | Braz_Por = 6
     | Default = 7 //Default doesnt' exist!
+    | Chinese = 8
+    | Japanese = 9
 
 type EU4Lang =
     | English = 0
@@ -150,7 +152,9 @@ module LangHelpers =
           HOI4 HOI4Lang.Spanish
           HOI4 HOI4Lang.Russian
           HOI4 HOI4Lang.Polish
-          HOI4 HOI4Lang.Braz_Por ]
+          HOI4 HOI4Lang.Braz_Por
+          HOI4 HOI4Lang.Chinese
+          HOI4 HOI4Lang.Japanese ]
 
     let allEU4Langs =
         [ EU4 EU4Lang.English

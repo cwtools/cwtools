@@ -9,7 +9,6 @@
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-        <GenerateProgramFile>false</GenerateProgramFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
@@ -18,19 +17,21 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="LoggingTestHelper.fs"/>
         <Compile Include="Tests.fs"/>
         <Compile Include="ProcessTests.fs"/>
         <Compile Include="ParserTests.fs"/>
-        <Compile Include="Main.fs"/>
-        <None Include="App.config"/>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="testfiles/embeddedtest/embedded/**"/>
         <EmbeddedResource Include="testfiles/overwritetest/embedded/**"/>
-        <None Include="testfiles/configtests/**"/>
-        <None Include="testfiles/validationtests/**"/>
+        <None Include="dotnet.config"/>
+        <None Include="testfiles\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="testconfig.json"/>
         <Folder Include="testfiles\configtests\ruleswithglobaltests\STL"/>
 
         <Content Include="testfiles\**">
