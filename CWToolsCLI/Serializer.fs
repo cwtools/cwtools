@@ -24,6 +24,7 @@ open CWTools.Games.VIC2
 open CWTools.Games.Custom
 open CWTools.Games.IR
 open System.IO.Compression
+open CWToolsCLI.CompressionOptions
 
 
 let mkPickler (resolver : IPicklerResolver) =
@@ -112,7 +113,7 @@ let addDLCs (workspaceDirectory: WorkspaceDirectory) =
         []
 
 let serialize gameDirName scriptFolders cacheDirectory = ()
-let serializeSTL folder outputFileName =
+let serializeSTL folder outputFileName compression =
     let fileManager = FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -127,13 +128,14 @@ let serializeSTL folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "stl.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "stl.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
     //File.Create()
     //File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
 
-let serializeEU4 folder outputFileName =
+let serializeEU4 folder outputFileName compression =
     let folders = (WD folder ) :: (addDLCs folder)
     let fileManager = FileManager(folders, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
@@ -149,11 +151,12 @@ let serializeEU4 folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "eu4.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "eu4.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
 
-let serializeHOI4 folder outputFileName =
+let serializeHOI4 folder outputFileName compression =
     let folders = (WD folder ) :: (addDLCs folder)
     let fileManager = FileManager(folders, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
@@ -169,11 +172,12 @@ let serializeHOI4 folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "hoi4.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "hoi4.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
 
-let serializeCK2 folder outputFileName =
+let serializeCK2 folder outputFileName compression =
     let fileManager = FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -188,11 +192,12 @@ let serializeCK2 folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "ck2.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "ck2.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
 
-let serializeIR folder outputFileName =
+let serializeIR folder outputFileName compression =
     let fileManager = FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -207,11 +212,12 @@ let serializeIR folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "ir.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "ir.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
 
-let serializeCK3 folder outputFileName =
+let serializeCK3 folder outputFileName compression =
     let fileManager = FileManager(folder, Some "", CK3Constants.scriptFolders, "crusader kings iii", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -226,11 +232,12 @@ let serializeCK3 folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "ck3.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "ck3.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
 
-let serializeVIC2 folder outputFileName =
+let serializeVIC2 folder outputFileName compression =
     let fileManager = FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
     let files = fileManager.AllFilesByPath()
     let computefun : unit -> InfoService option = (fun () -> (None))
@@ -245,8 +252,9 @@ let serializeVIC2 folder outputFileName =
                                          |_ -> None)
     let data = { resources = entities; fileIndexTable = fileIndexTable; files = files; stringResourceManager = StringResource.stringManager}
     let pickle = binarySerializer.Pickle data
-    let filename = outputFileName |> Option.defaultValue "vic2.cwb.bz2"
-    compressAndWrite pickle (filename)
+    let baseFilename = outputFileName |> Option.defaultValue "vic2.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
     filename
 
 let deserialize path =
