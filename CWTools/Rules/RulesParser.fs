@@ -103,7 +103,7 @@ module private RulesParserImpl =
     let private getFloatSettingFromString (full: string) =
         match getSettingFromString full "float" with
         | Some s ->
-            let split = s.Split([| ".." |], 2, StringSplitOptions.None)
+            let split = s.Split("..", 2, StringSplitOptions.None)
 
             let parseDecimal (s: string) =
                 match s, Decimal.TryParse s with
@@ -124,7 +124,7 @@ module private RulesParserImpl =
     let private getIntSettingFromString (full: string) =
         match getSettingFromString full "int" with
         | Some s ->
-            let split = s.Split([| ".." |], 2, StringSplitOptions.None)
+            let split = s.Split("..", 2)
 
             let parseInt (s: string) =
                 match s, Int32.TryParse s with
@@ -155,7 +155,7 @@ module private RulesParserImpl =
     let private getSingleAliasSettingsFromString (full: string) =
         match getSettingFromString full "single_alias" with
         | Some s ->
-            let split = s.Split([| ":" |], 2, StringSplitOptions.None)
+            let split = s.Split(':', 2)
 
             if split.Length < 2 then
                 None
@@ -287,13 +287,13 @@ module private RulesParserImpl =
             | Some c ->
                 let nums =
                     c
-                        .Substring(c.IndexOf "=" + 1)
+                        .Substring(c.IndexOf '=' + 1)
                         .Trim()
-                        .Split([| ".." |], 2, StringSplitOptions.None)
+                        .Split("..", 2)
 
                 try
                     let minText, strictMin =
-                        if nums.[0].StartsWith "~" then
+                        if nums.[0].StartsWith '~' then
                             nums.[0].Substring(1), false
                         else
                             nums.[0], true
@@ -313,18 +313,18 @@ module private RulesParserImpl =
 
         let pushScope =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
-            | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+            | Some s -> s.Substring(s.IndexOf '=' + 1).Trim() |> parseScope |> Some
             | None -> None
 
         let reqScope =
             match comments |> List.tryFind (fun s -> s.StartsWith("# scope =")) with
             | Some s ->
-                let rhs = s.Substring(s.IndexOf "=" + 1).Trim()
+                let rhs = s.Substring(s.IndexOf '=' + 1).Trim()
 
-                match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                match rhs.StartsWith('{') && rhs.EndsWith('}') with
                 | true ->
                     rhs.Trim('{', '}')
-                    |> (fun s -> s.Split([| ' ' |]))
+                    |> (fun s -> s.Split(' '))
                     |> Array.filter (fun s -> s <> "")
                     |> Array.map parseScope
                     |> List.ofArray
@@ -395,10 +395,10 @@ module private RulesParserImpl =
         | "date_field" -> ValueField Date
         | "datetime_field" -> ValueField DateTime
         | x when fastStartsWith x "<" && fastEndsWith x ">" -> TypeField(TypeType.Simple(x.Trim([| '<'; '>' |])))
-        | x when x.Contains "<" && x.Contains ">" ->
+        | x when x.Contains '<' && x.Contains '>' ->
             let x = x.Trim('"')
-            let prefixI = x.IndexOf "<"
-            let suffixI = x.IndexOf ">"
+            let prefixI = x.IndexOf '<'
+            let suffixI = x.IndexOf '>'
 
             TypeField(
                 TypeType.Complex(
@@ -596,7 +596,7 @@ module private RulesParserImpl =
             match key with
             | x when x.StartsWith "subtype[" ->
                 match getSettingFromString x "subtype" with
-                | Some st when st.StartsWith "!" -> SubtypeRule(st.Substring(1), false, innerRules)
+                | Some st when st.StartsWith '!' -> SubtypeRule(st.Substring(1), false, innerRules)
                 | Some st -> SubtypeRule(st, true, innerRules)
                 | None -> failwith $"Invalid subtype string %s{x}"
             | _ when node.KeyPrefixId.IsSome && node.ValuePrefixId.IsSome -> NodeRule(JominiGuiField, innerRules)
@@ -867,7 +867,7 @@ module private RulesParserImpl =
                 let key = loc.Key
                 let value = loc.Value.ToRawString()
 
-                match value.IndexOf "$" with
+                match value.IndexOf '$' with
                 | -1 ->
                     Some
                         { name = key
@@ -918,7 +918,7 @@ module private RulesParserImpl =
                     | Some d -> Some(d.Trim('#'))
                     | None -> None
 
-                match value.IndexOf "$" with
+                match value.IndexOf '$' with
                 | -1 ->
                     Some
                         { TypeModifier.prefix = ""
@@ -979,13 +979,13 @@ module private RulesParserImpl =
                 let onlyIfNot =
                     match comments |> List.tryFind (fun s -> s.Contains "only_if_not") with
                     | Some c ->
-                        let valid = c.Contains "="
+                        let valid = c.Contains '='
 
                         if valid then
-                            let rhs = c.Substring(c.IndexOf "=" + 1).Trim()
+                            let rhs = c.Substring(c.IndexOf '=' + 1).Trim()
 
                             let values =
-                                match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                                match rhs.StartsWith('{') && rhs.EndsWith('}') with
                                 | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
                                 | false -> [ rhs ]
 
@@ -1150,7 +1150,7 @@ module private RulesParserImpl =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 | Some c ->
                     //log "c %A" c
-                    let valid = c.Contains "=" || c.Contains "<>"
+                    let valid = c.Contains '=' || c.Contains "<>"
 
                     if valid then
                         let negative = c.Contains "<>"
@@ -1159,10 +1159,10 @@ module private RulesParserImpl =
                             if negative then
                                 c.Substring(c.IndexOf "<>" + 2).Trim()
                             else
-                                c.Substring(c.IndexOf "=" + 1).Trim()
+                                c.Substring(c.IndexOf '=' + 1).Trim()
 
                         let values =
-                            match rhs.StartsWith("{") && rhs.EndsWith("}") with
+                            match rhs.StartsWith('{') && rhs.EndsWith('}') with
                             | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
                             | false -> [ rhs ]
 
@@ -1174,14 +1174,14 @@ module private RulesParserImpl =
             let graphData =
                 match comments |> List.tryFind (fun s -> s.Contains "graph_related_types") with
                 | Some c ->
-                    let valid = c.Contains "="
+                    let valid = c.Contains '='
 
                     if valid then
-                        let rhs = c.Substring(c.IndexOf "=" + 1).Trim()
+                        let rhs = c.Substring(c.IndexOf '=' + 1).Trim()
 
                         let values =
-                            match rhs.StartsWith("{") && rhs.EndsWith("}") with
-                            | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
+                            match rhs.StartsWith('{') && rhs.EndsWith('}') with
+                            | true -> rhs.Trim('{', '}') |> (fun s -> s.Split(' ')) |> List.ofArray
                             | false -> [ rhs ]
 
                         values
@@ -1304,7 +1304,7 @@ module private RulesParserImpl =
             let values =
                 node.LeafValues
                 |> List.ofSeq
-                |> List.map (fun lv -> lv.Value.ToString().Trim([| '\"' |]))
+                |> List.map (fun lv -> lv.Value.ToString().Trim('\"'))
 
             match enumname with
             | Some en -> Some(en, values)

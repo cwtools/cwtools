@@ -335,12 +335,12 @@ module internal FieldValidators =
          // | ValueType.Specific s ->
          //     // if trimQuote key == s then true else false
          //     id = s.lower
-         | ValueType.Percent -> key.EndsWith("%")
+         | ValueType.Percent -> key.EndsWith('%')
          | ValueType.Date ->
              let parts = key.Split('.')
 
              (parts.Length = 3)
-             && parts.[0].Length <= 4
+             && parts[0].Length <= 4
              && Int32.TryParse(parts[0]) |> fst
              && Int32.TryParse(parts[1]) |> fst
              && Int32.Parse(parts[1]) <= 12

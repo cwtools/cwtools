@@ -15,6 +15,8 @@ public static class FieldValidatorsCs
             dirSpan.Length > maxStackSize
                 ? new char[dirSpan.Length]
                 : stackalloc char[dirSpan.Length];
+
+        // TODO: use Vector check?
         dirSpan.Replace(directory, '\\', '/');
 
         return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
