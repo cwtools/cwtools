@@ -1,6 +1,7 @@
 namespace CWTools.Rules
 
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Common
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities.Utils2
@@ -13,7 +14,6 @@ open CWTools.Utilities
 open System
 open CWTools.Games
 open CWTools.Utilities.Position
-open System.IO
 open CWTools.Utilities.StringResource
 
 type CompletionContext =
@@ -971,8 +971,7 @@ type CompletionService
         let scopeContext = Option.defaultValue defaultContext scopeContext
         let path = getRulePath pos [] entity.entity |> List.rev
         //        log (sprintf "%A" path)
-        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName entity.logicalpath
+
         // log "%A" typedefs
         // log "%A" pos
         // log "%A" entity.logicalpath
@@ -985,10 +984,7 @@ type CompletionService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
-
-        let getCompletion typerules fixedpath =
-            getCompletionFromPath typerules fixedpath
+            |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
 
         let allUsedKeys =
             getAllKeysInFile entity.entity @ globalScriptVariables |> Set.ofList

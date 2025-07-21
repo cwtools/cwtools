@@ -1,6 +1,7 @@
 namespace CWTools.Rules
 
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities
 open CWTools.Utilities.Utils2
@@ -532,9 +533,6 @@ type InfoService
             | _, _, Some lv -> Some(LeafValueC lv, (field, options))
             | None, None, None -> None
 
-        let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName logicalpath
-
         let childMatch =
             node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
         // eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
@@ -614,7 +612,7 @@ type InfoService
                 | _ -> None
 
         typedefs
-        |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+        |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, logicalpath))
         |> List.fold (fun acc t -> Option.orElseWith (fun () -> resultForType childMatch t) acc) None
     // match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
     // |Some c, Some typedef ->
@@ -727,9 +725,6 @@ type InfoService
         // | _, NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
         // | _ -> newCtx, (Some options, None, Some (NodeC node))
 
-        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName entity.logicalpath
-
         let childMatch =
             entity.entity.Children
             |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
@@ -738,7 +733,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+                |> List.tryFind (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -915,9 +910,6 @@ type InfoService
             | _, NodeRule(_, f) -> newCtx, (Some options, None, Some(NodeC node))
             | _ -> newCtx, (Some options, None, Some(NodeC node))
 
-        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName entity.logicalpath
-
         let childMatch =
             entity.entity.Children
             |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
@@ -928,7 +920,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+                |> List.tryFind (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -976,7 +968,6 @@ type InfoService
             let inner (child: Child) =
                 match child with
                 | NodeC c ->
-                    let key = c.Key
                     let keyId = c.KeyId
                     let found, value = nodeSpecificDict.TryGetValue keyId.lower
 
@@ -1000,7 +991,6 @@ type InfoService
                         | ValueClauseRule rs, o -> Some struct (ValueClauseC vc, ((ValueClauseRule rs), o))
                         | _ -> None)
                 | LeafC leaf ->
-                    let key = leaf.Key
                     let keyId = leaf.KeyId
                     let found, value = leafSpecificDict.TryGetValue keyId.lower
 
@@ -1019,7 +1009,6 @@ type InfoService
                                  None)
                         | _ -> None)
                 | LeafValueC leafvalue ->
-                    let key = leafvalue.Key
                     let keyId = leafvalue.ValueId
 
                     leafvaluerules
@@ -1033,9 +1022,6 @@ type InfoService
                 | CommentC _ -> Seq.empty
 
             node.AllArray |> Seq.collect inner
-
-        let pathDir = (Path.GetDirectoryName path).Replace("\\", "/")
-        let file = Path.GetFileName path
 
         let skiprootkey (skipRootKey: SkipRootKey) (n: Node) =
             match skipRootKey with
@@ -1080,7 +1066,7 @@ type InfoService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+            |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, path))
 
         let rec infoServiceSkipRoot rs o (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) acc (n: Node) =
             match skipRootKeyStack with

@@ -2,16 +2,25 @@
 
 namespace CSharpHelpers;
 
-public static class FieldValidators
+public static class FieldValidatorsCs
 {
     public static bool CheckPathDir(PathOptions pathOptions, string fullPath)
     {
-        bool exists = false;
         var span = fullPath.AsSpan();
         var dirSpan = Path.GetDirectoryName(span);
         var directory = new Span<char>(new char[dirSpan.Length]);
         dirSpan.Replace(directory, '\\', '/');
 
+        return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
+    }
+
+    public static bool CheckPathDir(
+        PathOptions pathOptions,
+        ReadOnlySpan<char> directory,
+        ReadOnlySpan<char> fileName
+    )
+    {
+        bool exists = false;
         if (pathOptions.pathStrict)
         {
             foreach (string path in pathOptions.paths)
@@ -32,8 +41,7 @@ public static class FieldValidators
             foreach (string path in pathOptions.paths)
             {
                 if (
-                    MemoryExtensions.StartsWith(
-                        directory,
+                    directory.StartsWith(
                         path.Replace('\\', '/'),
                         StringComparison.OrdinalIgnoreCase
                     )
@@ -52,7 +60,6 @@ public static class FieldValidators
         }
         else
         {
-            var fileName = Path.GetFileName(span);
             isValidFileName = fileName.Equals(
                 pathOptions.pathFile.Value,
                 StringComparison.OrdinalIgnoreCase
@@ -66,7 +73,7 @@ public static class FieldValidators
         }
         else
         {
-            var extension = Path.GetExtension(span);
+            var extension = Path.GetExtension(fileName);
             isValidExtension = extension.Equals(
                 pathOptions.pathExtension.Value,
                 StringComparison.OrdinalIgnoreCase
