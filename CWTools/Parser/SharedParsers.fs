@@ -296,10 +296,9 @@ module internal SharedParsers =
                 | "@\\[", _ -> mpP stream
                 | _ -> valueStr stream
 
-    valueimpl := valueCustom <?> "value"
+    valueimpl.Value <- valueCustom <?> "value"
 
-    keyvalueimpl
-    := pipe5 getPosition (keyQStr <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
+    keyvalueimpl.Value <- pipe5 getPosition (keyQStr <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
         KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
 
     let alle = ws >>. many statement .>> eof |>> ParsedFile
