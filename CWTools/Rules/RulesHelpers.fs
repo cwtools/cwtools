@@ -26,7 +26,7 @@ let getTypesFromDefinitions
     let getTypeInfo (def: TypeDefinition) =
         entities
         |> List.choose (fun e ->
-            if CSharpHelpers.FieldValidatorsCs.CheckPathDir(def.pathOptions, e.logicalpath) then
+            if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(def.pathOptions, e.logicalpath) then
                 Some(e.entity, Path.GetFileNameWithoutExtension e.logicalpath, e.validate)
             else
                 None)
@@ -241,7 +241,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         let values =
             es
             |> Seq.choose (fun e ->
-                if CSharpHelpers.FieldValidatorsCs.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
+                if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
                     Some e.entity
                 else
                     None)

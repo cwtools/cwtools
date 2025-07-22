@@ -943,7 +943,7 @@ type RuleValidationService
 
             let pathFilteredTypes =
                 typedefs
-                |> List.filter (fun t -> CSharpHelpers.FieldValidatorsCs.CheckPathDir(t.pathOptions, directory, fileName))
+                |> List.filter (fun t -> CSharpHelpers.FieldValidatorsHelper.CheckPathDir(t.pathOptions, directory, fileName))
 
             let rec validateTypeSkipRoot (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) (n: IClause) =
                 let prefixKey =

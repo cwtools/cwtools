@@ -987,7 +987,7 @@ type CompletionService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, dir, fileName))
+            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, dir, fileName))
 
         let allUsedKeys =
             getAllKeysInFile entity.entity @ globalScriptVariables |> Set.ofList

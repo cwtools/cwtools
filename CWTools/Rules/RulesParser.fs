@@ -338,17 +338,17 @@ module private RulesParserImpl =
 
         let referenceDetails =
             match comments |> List.tryFind (fun s -> s.Contains("outgoingReferenceLabel")) with
-            | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> (fun s -> true, s) |> Some
+            | Some s -> s.Substring(s.IndexOf '=' + 1).Trim() |> (fun s -> true, s) |> Some
             | None ->
                 match comments |> List.tryFind (fun s -> s.Contains("incomingReferenceLabel")) with
-                | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> (fun s -> false, s) |> Some
+                | Some s -> s.Substring(s.IndexOf '=' + 1).Trim() |> (fun s -> false, s) |> Some
                 | None -> None
 
         let comparison = operator = Operator.EqualEqual
 
         let errorIfMatched =
             match comments |> List.tryFind (fun s -> s.Contains("error_if_only_match")) with
-            | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> Some
+            | Some s -> s.Substring(s.IndexOf '=' + 1).Trim() |> Some
             | None -> None
 
         { min = min

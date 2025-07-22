@@ -612,7 +612,7 @@ type InfoService
                 | _ -> None
 
         typedefs
-        |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, logicalpath))
+        |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, logicalpath))
         |> List.fold (fun acc t -> Option.orElseWith (fun () -> resultForType childMatch t) acc) None
     // match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
     // |Some c, Some typedef ->
@@ -733,7 +733,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
+                |> List.tryFind (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -920,7 +920,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
+                |> List.tryFind (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -1066,7 +1066,7 @@ type InfoService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, path))
+            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, path))
 
         let rec infoServiceSkipRoot rs o (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) acc (n: Node) =
             match skipRootKeyStack with
