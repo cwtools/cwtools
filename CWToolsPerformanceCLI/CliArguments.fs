@@ -1,10 +1,8 @@
 module CliArguments
 
 open Argu
+open CWTools.Games
 
-type TestMode =
-    | SetupGame
-    | Full
 // Define the CLI arguments
 [<CliPrefix(CliPrefix.DoubleDash)>]
 type PerformanceArgs =
@@ -19,7 +17,7 @@ type PerformanceArgs =
     | [<AltCommandLine("-mod-path")>] Mod_Path of string
     | [<AltCommandLine("-steam-root")>] Steam_Root of string
     | [<AltCommandLine("-git-root")>] Git_Root of string
-    | [<AltCommandLine("-test-mode")>] Test_Mode of TestMode
+    | [<AltCommandLine("-test-mode")>] Test_Mode of StopPoint
 
     interface IArgParserTemplate with
         member s.Usage =

@@ -4,7 +4,7 @@ open System.Text
 open System.Threading
 open System.Globalization
 open Argu
-open CWToolsPerformanceCLI.Piecemeal
+open CWTools.Games
 open CliArguments
 open CWToolsPerformanceCLI.PerfFunctions
 
@@ -30,7 +30,7 @@ let getSteamRoot (results: ParseResults<PerformanceArgs>) = results.TryGetResult
 
 let getGitRoot (results: ParseResults<PerformanceArgs>) = results.TryGetResult Git_Root
 
-let getTestMode (results: ParseResults<PerformanceArgs>) = results.TryGetResult Test_Mode
+let getTestMode (results: ParseResults<PerformanceArgs>) = results.TryGetResult Test_Mode |> Option.defaultValue (StopPoint.Full)
 
 // Run performance test and handle results
 let runPerfTest testName testFunc =
@@ -51,22 +51,19 @@ let getTestFunction (results: ParseResults<PerformanceArgs>) =
     let modPath = getModPath results
     let steamRoot = getSteamRoot results
     let gitRoot = getGitRoot results
+    let stopPoint = getTestMode results
 
     match
-        results.TryGetResult Test_Mode,
         results.Contains Stellaris,
         results.Contains HOI4,
         results.Contains CK3,
         results.Contains EU4
     with
-    | Some Full, true, false, false, false -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot true 
-    | Some SetupGame, true, false, false, false -> perfStellarisBuildGame gamePath configPath cachePath modPath steamRoot gitRoot
-    | Some Full, false, true, false, false -> perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot true
-    // | Some SetupGame, false, true, false, false -> perfHOI4BuildGame gamePath configPath cachePath modPath steamRoot gitRoot |> ignore
-    | Some Full, false, false, true, false -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot true
-    // | Some SetupGame, false, false, true, false -> perfCK3BuildGame gamePath configPath cachePath modPath steamRoot gitRoot |> ignore
-    | Some Full, false, false, false, true -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot true
-    // | Some SetupGame, false, false, false, true -> perfEU4BuildGame gamePath configPath cachePath modPath steamRoot gitRoot |> ignore
+    | true, _, _, _ -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true 
+    | _, true, _, _ -> perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, true, _ -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, _, true -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | false, false, false, false -> failwith "Please select a game!"
 // Main program logic
 let runCommand (results: ParseResults<PerformanceArgs>) =
     // Default to running validation tests
