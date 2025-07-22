@@ -26,7 +26,7 @@ let getTypesFromDefinitions
     let getTypeInfo (def: TypeDefinition) =
         entities
         |> List.choose (fun e ->
-            if CSharpHelpers.FieldValidators.CheckPathDir(def.pathOptions, e.logicalpath) then
+            if CSharpHelpers.FieldValidatorsCs.CheckPathDir(def.pathOptions, e.logicalpath) then
                 Some(e.entity, Path.GetFileNameWithoutExtension e.logicalpath, e.validate)
             else
                 None)
@@ -241,10 +241,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         let values =
             es
             |> Seq.choose (fun e ->
-                let pathDir = (Path.GetDirectoryName e.logicalpath).Replace("\\", "/")
-                let file = Path.GetFileName e.logicalpath
-
-                if CWTools.Rules.FieldValidators.checkPathDir complexenum.pathOptions pathDir file then
+                if CSharpHelpers.FieldValidatorsCs.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
                     Some e.entity
                 else
                     None)
@@ -297,20 +294,6 @@ let getDefinedVariables (infoService: InfoService) (es: Entity list) =
             Collections.Map.empty
 
     results
-
-let getEntitiesWithoutTypes (types: TypeDefinition list) (es: Entity list) =
-    let checkEntity (entity: Entity) =
-        let path = entity.logicalpath
-        let dir = (Path.GetDirectoryName path).Replace('\\', '/')
-        let file = Path.GetFileName path
-        let checkPathDir = (fun a b c -> FieldValidators.checkPathDir c a b)
-
-        if types |> List.exists (fun t -> checkPathDir dir file t.pathOptions) then
-            None
-        else
-            Some entity.logicalpath
-
-    es |> List.choose checkEntity
 
 let expandPredefinedValues
     (types: Map<string, PrefixOptimisedStringSet>)

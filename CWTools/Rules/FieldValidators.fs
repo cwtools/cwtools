@@ -1,15 +1,14 @@
 namespace CWTools.Rules
 
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils2
 open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
-open System.IO
 open CWTools.Process.Localisation
-open Shared;
 
 type RuleContext =
     { subtypes: string list
@@ -44,44 +43,6 @@ module internal FieldValidators =
     open CWTools.Validation.ValidationCore
     open CWTools.Rules
 
-    let checkPathDir (pathOptions: PathOptions) (pathDir: string) (fileName: string) =
-        match pathOptions.pathStrict with
-        | true -> pathOptions.paths |> Array.exists (fun tp -> pathDir == tp.Replace('\\', '/'))
-        | false ->
-            pathOptions.paths
-            |> Array.exists (fun tp -> pathDir.StartsWith(tp.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase))
-        && match pathOptions.pathFile with
-           | Some file -> fileName == file
-           | None -> true
-        && match pathOptions.pathExtension with
-           | Some extension -> Path.GetExtension(fileName.AsSpan()).Equals(extension, StringComparison.OrdinalIgnoreCase)
-           | None -> true
-
-    let checkPathDirSpan (pathOptions: PathOptions) (pathDir: ReadOnlySpan<char>) (fileName: ReadOnlySpan<char>) =
-        match pathOptions.pathStrict with
-        | true ->
-            let mutable found = false
-            let mutable i = 0
-            while not found && i < pathOptions.paths.Length do
-                let tp = pathOptions.paths[i].Replace('\\', '/')
-                found <- pathDir.Equals(tp, StringComparison.OrdinalIgnoreCase)
-                i <- i + 1
-            found
-        | false ->
-            let mutable found = false
-            let mutable i = 0
-            while not found && i < pathOptions.paths.Length do
-                let tp = pathOptions.paths[i].Replace('\\', '/')
-                found <- pathDir.StartsWith(tp, StringComparison.OrdinalIgnoreCase)
-                i <- i + 1
-            found
-        && match pathOptions.pathFile with
-           | Some file -> fileName.Equals(file, StringComparison.OrdinalIgnoreCase)
-           | None -> true
-        && match pathOptions.pathExtension with
-           | Some extension -> Path.GetExtension(fileName).Equals(extension, StringComparison.OrdinalIgnoreCase)
-           | None -> true
-    
     let getValidValues =
         function
         | ValueType.Bool -> Some [ "yes"; "no" ]
@@ -119,9 +80,7 @@ module internal FieldValidators =
 
     let getStringMetadata (key: StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
-    let quoteArray = [| '\"' |]
-    let ampArray = [| '@' |]
-    let trimQuote (s: string) = s.Trim(quoteArray)
+    let inline trimQuote (s: string) = s.Trim('\"')
     let getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
@@ -228,7 +187,7 @@ module internal FieldValidators =
             //     // if trimQuote key == s then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode])
             //     if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
             | ValueType.Percent ->
-                if key.EndsWith("%") then
+                if key.EndsWith('%') then
                     errors
                 else
                     inv
@@ -236,47 +195,14 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.Date ->
-                let parts = key.Split([| '.' |])
-
-                let ok =
-                    (parts.Length = 3)
-                    && parts.[0].Length <= 4
-                    && Int32.TryParse(parts.[0]) |> fst
-                    && Int32.TryParse(parts.[1]) |> fst
-                    && Int32.Parse(parts.[1]) <= 12
-                    && Int32.TryParse(parts.[2]) |> fst
-                    && Int32.Parse(parts.[2]) <= 31
-
+                let ok = FieldValidatorsCs.IsValidDate(key)
                 if ok then
                     errors
                 else
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.DateTime ->
-                let parts = key.Split([| '.' |])
-
-                let ok =
-                    match parts.Length with
-                    | 3 ->
-                        (parts.Length = 3)
-                        && parts.[0].Length <= 4
-                        && Int32.TryParse(parts.[0]) |> fst
-                        && Int32.TryParse(parts.[1]) |> fst
-                        && Int32.Parse(parts.[1]) <= 12
-                        && Int32.TryParse(parts.[2]) |> fst
-                        && Int32.Parse(parts.[2]) <= 31
-                    | 4 ->
-                        (parts.Length = 4)
-                        && parts.[0].Length <= 4
-                        && Int32.TryParse(parts.[0]) |> fst
-                        && Int32.TryParse(parts.[1]) |> fst
-                        && Int32.Parse(parts.[1]) <= 12
-                        && Int32.TryParse(parts.[2]) |> fst
-                        && Int32.Parse(parts.[2]) <= 31
-                        && Int32.TryParse(parts.[3]) |> fst
-                        && Int32.Parse(parts.[3]) <= 24
-                    | _ -> false
-
+                let ok = FieldValidatorsCs.IsValidDateTime(key)
                 if ok then
                     errors
                 else
@@ -301,7 +227,7 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.IRFamilyName ->
-                let parts = key.Split([| '.' |])
+                let parts = key.Split('.')
 
                 if (parts.Length <> 4) then
                     inv
@@ -375,51 +301,19 @@ module internal FieldValidators =
          // | ValueType.Specific s ->
          //     // if trimQuote key == s then true else false
          //     id = s.lower
-         | ValueType.Percent -> key.EndsWith("%")
-         | ValueType.Date ->
-             let parts = key.Split([| '.' |])
-
-             (parts.Length = 3)
-             && parts.[0].Length <= 4
-             && Int32.TryParse(parts.[0]) |> fst
-             && Int32.TryParse(parts.[1]) |> fst
-             && Int32.Parse(parts.[1]) <= 12
-             && Int32.TryParse(parts.[2]) |> fst
-             && Int32.Parse(parts.[2]) <= 31
-         | ValueType.DateTime ->
-             let parts = key.Split([| '.' |])
-
-             match parts.Length with
-             | 3 ->
-                 (parts.Length = 3)
-                 && parts.[0].Length <= 4
-                 && Int32.TryParse(parts.[0]) |> fst
-                 && Int32.TryParse(parts.[1]) |> fst
-                 && Int32.Parse(parts.[1]) <= 12
-                 && Int32.TryParse(parts.[2]) |> fst
-                 && Int32.Parse(parts.[2]) <= 31
-             | 4 ->
-                 (parts.Length = 4)
-                 && parts.[0].Length <= 4
-                 && Int32.TryParse(parts.[0]) |> fst
-                 && Int32.TryParse(parts.[1]) |> fst
-                 && Int32.Parse(parts.[1]) <= 12
-                 && Int32.TryParse(parts.[2]) |> fst
-                 && Int32.Parse(parts.[2]) <= 31
-                 && Int32.TryParse(parts.[3]) |> fst
-                 && Int32.Parse(parts.[3]) <= 24
-             | _ -> false
-
+         | ValueType.Percent -> key.EndsWith('%')
+         | ValueType.Date -> FieldValidatorsCs.IsValidDate(key)
+         | ValueType.DateTime -> FieldValidatorsCs.IsValidDateTime(key)
          | ValueType.CK2DNA -> key.Length = 11 && key |> Seq.forall Char.IsLetter
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
-             let parts = key.Split([| '.' |])
+             let parts = key.Split('.')
 
              (parts.Length = 4)
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[0]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[1]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[2]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[3]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[0]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[1]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[2]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[3]
          | ValueType.STLNameFormat var ->
              match varMap.TryFind var with
              | Some vars ->
@@ -1227,8 +1121,8 @@ module internal FieldValidators =
         (key: string)
         leafornode
         =
-        let typenames = typeKey.Split('.')
-        let typename = typenames.[0]
+        let typeNames = typeKey.Split('.')
+        let typename = typeNames[0]
 
         let actualSubtypes =
             match invertedTypeMap.TryGetValue key with
@@ -1256,8 +1150,8 @@ module internal FieldValidators =
 
             let subtype =
                 let subtypes =
-                    (if typenames.Length > 1 then
-                         typenames.[1] :: actualSubtypes
+                    (if typeNames.Length > 1 then
+                         typeNames.[1] :: actualSubtypes
                      else
                          actualSubtypes)
                     |> List.distinct

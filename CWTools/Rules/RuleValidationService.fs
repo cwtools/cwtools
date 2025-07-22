@@ -901,14 +901,14 @@ type RuleValidationService
     let normalTypeDefs = typedefs |> List.filter (fun td -> td.type_per_file |> not)
 
     let validate ((path, root): string * Node) =
-        let pathDir = (Path.GetDirectoryName path).Replace('\\', '/')
-        let file = Path.GetFileName path
-
         let skiprootkey (skipRootKey: SkipRootKey) (n: IClause) =
             match skipRootKey with
             | SpecificKey key -> n.Key == key
             | AnyKey -> true
             | MultipleKeys(keys, shouldMatch) -> (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
+
+        let directory = Path.GetDirectoryName(path).Replace('\\', '/')
+        let fileName = Path.GetFileName(path)
 
         let inner (typedefs: TypeDefinition list) (node: IClause) =
             let validateType (typedef: TypeDefinition) (n: IClause) =
@@ -943,7 +943,7 @@ type RuleValidationService
 
             let pathFilteredTypes =
                 typedefs
-                |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+                |> List.filter (fun t -> CSharpHelpers.FieldValidatorsCs.CheckPathDir(t.pathOptions, directory, fileName))
 
             let rec validateTypeSkipRoot (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) (n: IClause) =
                 let prefixKey =

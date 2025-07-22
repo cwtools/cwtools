@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Runtime.CompilerServices
 open CWTools.Common
 open CWTools.Utilities
 open CWTools.Process
@@ -50,7 +51,7 @@ type ValueType =
     | Enum of enumc: string
     | Float of minmax: (decimal * decimal)
     | Bool
-    | Int of minmaxi: (int * int)
+    | Int of minmaxi: struct (int * int)
     | Percent
     | Date
     | DateTime
@@ -75,22 +76,17 @@ type ValueType =
         | IRFamilyName -> "IRFamilyName"
         | STLNameFormat x -> $"STLNameFormat %s{x}"
 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<Struct>]
+[<Struct; IsReadOnly>]
 type SpecificValue = SpecificValue of valuec: StringTokens
 
-[<Struct>]
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
+[<Struct; IsReadOnly>]
 type ScalarValue = | ScalarValue
 
 type TypeType =
     | Simple of name: string
     | Complex of prefix: string * name: string * suffix: string
 
+[<Struct; IsReadOnly>]
 type Marker =
     | ColourField
     | IRCountryTag
