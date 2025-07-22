@@ -65,7 +65,8 @@ let emptyStellarisSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
 let emptyImperatorSettings (rootDirectory) =
     { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
@@ -78,7 +79,8 @@ let emptyImperatorSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
 let emptyVictoriaSettings (rootDirectory) =
     { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
@@ -91,7 +93,8 @@ let emptyVictoriaSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
 let getAllTestLocs node =
     let fNode =
