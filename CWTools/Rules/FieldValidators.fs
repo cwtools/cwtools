@@ -80,9 +80,7 @@ module internal FieldValidators =
 
     let getStringMetadata (key: StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
-    let quoteArray = [| '\"' |]
-    let ampArray = [| '@' |]
-    let trimQuote (s: string) = s.Trim(quoteArray)
+    let inline trimQuote (s: string) = s.Trim('\"')
     let getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
