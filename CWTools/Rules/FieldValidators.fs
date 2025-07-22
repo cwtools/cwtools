@@ -195,14 +195,14 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.Date ->
-                let ok = FieldValidatorsCs.IsValidDate(key)
+                let ok = FieldValidatorsHelper.IsValidDate(key)
                 if ok then
                     errors
                 else
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.DateTime ->
-                let ok = FieldValidatorsCs.IsValidDateTime(key)
+                let ok = FieldValidatorsHelper.IsValidDateTime(key)
                 if ok then
                     errors
                 else
@@ -247,15 +247,13 @@ module internal FieldValidators =
             | ValueType.STLNameFormat var ->
                 match varMap.TryFind var with
                 | Some vars ->
-                    let refs =
-                        System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>")
-                        |> Seq.cast<System.Text.RegularExpressions.Match>
+                    let refs = FieldValidatorsHelper.StlNameFormatRegex().Matches(key)
 
                     let refs =
                         refs
-                        |> Seq.map (fun m -> m.Groups.[1])
+                        |> Seq.map _.Groups.[1]
                         |> Seq.cast<Text.RegularExpressions.Capture>
-                        |> Seq.map (fun c -> c.Value)
+                        |> Seq.map _.Value
 
                     let res = refs |> Seq.exists (vars.ContainsKey >> not)
 
@@ -302,8 +300,8 @@ module internal FieldValidators =
          //     // if trimQuote key == s then true else false
          //     id = s.lower
          | ValueType.Percent -> key.EndsWith('%')
-         | ValueType.Date -> FieldValidatorsCs.IsValidDate(key)
-         | ValueType.DateTime -> FieldValidatorsCs.IsValidDateTime(key)
+         | ValueType.Date -> FieldValidatorsHelper.IsValidDate(key)
+         | ValueType.DateTime -> FieldValidatorsHelper.IsValidDateTime(key)
          | ValueType.CK2DNA -> key.Length = 11 && key |> Seq.forall Char.IsLetter
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
@@ -318,19 +316,17 @@ module internal FieldValidators =
              match varMap.TryFind var with
              | Some vars ->
                  let refs =
-                     System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>")
-                     |> Seq.cast<System.Text.RegularExpressions.Match>
+                     FieldValidatorsHelper.StlNameFormatRegex().Matches(key)
 
                  let res =
                      refs
-                     |> Seq.map (fun m -> m.Groups.[1])
+                     |> Seq.map _.Groups[1]
                      |> Seq.cast<Text.RegularExpressions.Capture>
-                     |> Seq.map (fun c -> c.Value)
+                     |> Seq.map _.Value
                      |> Seq.exists (vars.ContainsKey >> not)
 
                  res |> not
              | None -> false
-
         )
         || firstCharEqualsAmp ids.lower
 
