@@ -110,7 +110,7 @@ module internal FieldValidators =
                     <&&&> errors
             | ValueType.Int(min, max) ->
                 match TryParser.parseIntWithDecimal key with
-                | Some i ->
+                | ValueSome i ->
                     if i <= max && i >= min then
                         errors
                     else
@@ -120,7 +120,7 @@ module internal FieldValidators =
                                 severity)
                             leafornode
                         <&&&> errors
-                | None ->
+                | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
                         if es.ContainsKey(trimQuote key) then
@@ -137,7 +137,7 @@ module internal FieldValidators =
                         <&&&> errors
             | ValueType.Float(min, max) ->
                 match TryParser.parseDecimal key with
-                | Some f ->
+                | ValueSome f ->
                     if f <= max && f >= min then
                         errors
                     else
@@ -147,7 +147,7 @@ module internal FieldValidators =
                                 severity)
                             leafornode
                         <&&&> errors
-                | None ->
+                | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
                         if es.ContainsKey(trimQuote key) then
@@ -280,15 +280,15 @@ module internal FieldValidators =
          | ValueType.Bool -> key == "yes" || key == "no"
          | ValueType.Int(min, max) ->
              match TryParser.parseIntWithDecimal key with
-             | Some i -> i <= max && i >= min
-             | None ->
+             | ValueSome i -> i <= max && i >= min
+             | ValueNone ->
                  match enumsMap.TryFind "static_values" with
                  | Some(_, es) -> es.ContainsKey(trimQuote key)
                  | None -> false
          | ValueType.Float(min, max) ->
              match TryParser.parseDecimal key with
-             | Some f -> f <= max && f >= min
-             | None ->
+             | ValueSome f -> f <= max && f >= min
+             | ValueNone ->
                  match enumsMap.TryFind "static_values" with
                  | Some(_, es) -> es.ContainsKey(trimQuote key)
                  | None -> false
@@ -739,12 +739,12 @@ module internal FieldValidators =
                 TryParser.parseInt key,
                 changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
             with
-            | _, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-            | Some f, _, _ when (not isInt) && min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) ->
+            | _, ValueSome i, _ when isInt && min <= decimal i && max >= decimal i -> errors
+            | ValueSome f, _, _ when (not isInt) && min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) ->
                 errors
-            | Some f, _, _ when min <= f && max >= f ->
+            | ValueSome f, _, _ when min <= f && max >= f ->
                 inv ErrorCodes.ConfigRulesVariableTooSmall leafornode <&&&> errors
-            | Some f, _, _ when isInt -> inv ErrorCodes.ConfigRulesVariableIntOnly leafornode <&&&> errors
+            | ValueSome f, _, _ when isInt -> inv ErrorCodes.ConfigRulesVariableIntOnly leafornode <&&&> errors
             | _, _, VarFound -> errors
             | _, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
             //TODO: Better error messages for scope instead of variable
@@ -794,8 +794,8 @@ module internal FieldValidators =
                 TryParser.parseInt key,
                 changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
             with
-            | _, Some i, _ -> isInt && min <= decimal i && max >= decimal i
-            | Some f, _, _ -> min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3)))
+            | _, ValueSome i, _ -> isInt && min <= decimal i && max >= decimal i
+            | ValueSome f, _, _ -> min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3)))
             | _, _, VarFound -> true
             | _, _, VarNotFound s -> false
             // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
@@ -836,8 +836,8 @@ module internal FieldValidators =
             changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
         with
         | true, _, _, _ -> errors
-        | _, _, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-        | _, Some f, _, _ when min <= f && max >= f -> errors
+        | _, _, ValueSome i, _ when isInt && min <= decimal i && max >= decimal i -> errors
+        | _, ValueSome f, _, _ when min <= f && max >= f -> errors
         | _, _, _, VarFound -> errors
         | _, _, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         | _, _, _, ValueFound _ -> errors
@@ -883,8 +883,8 @@ module internal FieldValidators =
             changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
         with
         | true, _, _, _ -> true
-        | _, _, Some i, _ -> isInt && min <= decimal i && max >= decimal i
-        | _, Some f, _, _ -> min <= f && max >= f
+        | _, _, ValueSome i, _ -> isInt && min <= decimal i && max >= decimal i
+        | _, ValueSome f, _, _ -> min <= f && max >= f
         | _, _, _, VarFound -> true
         | _, _, _, VarNotFound s -> false
         | _, _, _, ValueFound _ -> true
