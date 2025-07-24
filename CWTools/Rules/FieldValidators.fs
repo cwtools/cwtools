@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
 open CSharpHelpers
 open CWTools.Common
@@ -16,9 +17,9 @@ type RuleContext =
       warningOnly: bool }
 
 type CheckFieldParams =
-    { varMap: Collections.Map<string, PrefixOptimisedStringSet>
-      enumsMap: Collections.Map<string, string * PrefixOptimisedStringSet>
-      typesMap: Collections.Map<string, PrefixOptimisedStringSet>
+    { varMap: FrozenDictionary<string, PrefixOptimisedStringSet>
+      enumsMap: FrozenDictionary<string, string * PrefixOptimisedStringSet>
+      typesMap: FrozenDictionary<string, PrefixOptimisedStringSet>
       linkMap: EffectMap
       wildcardLinks: ScopedEffect list
       valueTriggerMap: EffectMap
@@ -85,8 +86,8 @@ module internal FieldValidators =
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
     let checkValidValue
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
         (vt: CWTools.Rules.ValueType)
@@ -268,8 +269,8 @@ module internal FieldValidators =
 
 
     let checkValidValueNE
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (vt: ValueType)
         (ids: StringTokens)
@@ -408,7 +409,7 @@ module internal FieldValidators =
                 temp
     // let memoizedComplexTypes (typetype : TypeType) (values : StringSet)
     let checkTypeField
-        (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (typesMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
         (typetype: TypeType)
         (ids: StringTokens)
@@ -477,7 +478,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkTypeFieldNE
-        (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (typesMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         (typetype: TypeType)
         (ids: StringTokens)
         =
@@ -513,7 +514,7 @@ module internal FieldValidators =
         | None -> false
 
     let checkVariableGetField
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
         (varName: string)
         (ids: StringTokens)
@@ -550,7 +551,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkVariableGetFieldNE
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
         (varName: string)
         (ids: StringTokens)
@@ -803,7 +804,7 @@ module internal FieldValidators =
             | _ -> false
 
     let checkValueScopeField
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
@@ -859,7 +860,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkValueScopeFieldNE
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)

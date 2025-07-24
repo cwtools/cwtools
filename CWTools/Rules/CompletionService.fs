@@ -16,6 +16,7 @@ open System
 open CWTools.Games
 open CWTools.Utilities.Position
 open CWTools.Utilities.StringResource
+open System.Collections.Frozen
 
 type CompletionContext =
     | NodeLHS
@@ -47,9 +48,9 @@ type CompletionService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -70,7 +71,8 @@ type CompletionService
 
     //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
     let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
-    let types = types |> Map.map (fun _ s -> s.StringValues |> List.ofSeq)
+    let types: FrozenDictionary<string, string list> =
+        (types |> Seq.map(fun pair -> KeyValuePair(pair.Key, pair.Value.StringValues |> List.ofSeq))).ToFrozenDictionary()
 
     let defaultKeys =
         localisation
@@ -776,8 +778,8 @@ type CompletionService
 
         let p =
             { varMap = varMap
-              enumsMap = enumsMap
-              typesMap = typesMap
+              enumsMap = enumsMap.ToFrozenDictionary()
+              typesMap = typesMap.ToFrozenDictionary()
               linkMap = linkMap
               valueTriggerMap = valueTriggerMap
               varSet = varSet

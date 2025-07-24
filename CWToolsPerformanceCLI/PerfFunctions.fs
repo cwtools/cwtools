@@ -168,7 +168,7 @@ let buildCk3Settings rootDir configPath useCache cachePath =
       embedded = embedded
       maxFileSize = None }
 
-// HOI4 settings builder with parameterized paths
+/// HOI4 settings builder with parameterized paths
 let buildHoi4Settings rootDir configPath useCache cachePath =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList

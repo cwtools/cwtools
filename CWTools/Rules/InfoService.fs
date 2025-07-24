@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
 open CSharpHelpers
 open CWTools.Rules.RulesWrapper
@@ -18,6 +19,7 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open System.Collections.Concurrent
 open CWTools.Utilities.StringResource
+open CSharpHelpers
 
 module Test =
     let inline mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
@@ -46,9 +48,9 @@ type InfoService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -90,7 +92,7 @@ type InfoService
 
     let invertedTypeMap: IDictionary<string, ResizeArray<string>> =
         let map = Dictionary<string, ResizeArray<string>>()
-        types |> Map.toSeq |> Seq.iter (fun (t, set) -> inner map t set)
+        types |> Seq.iter (fun pair -> inner map pair.Key pair.Value)
         map
 
     let defaultKeys =
@@ -778,7 +780,7 @@ type InfoService
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
-                match Map.tryFind "static_values" enums with
+                match enums.TryFind "static_values" with
                 | Some(_, ss) ->
                     if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
@@ -1171,7 +1173,7 @@ type InfoService
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
-                match Map.tryFind "static_values" enums with
+                match enums.TryFind "static_values" with
                 | Some(_, ss) ->
                     if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
@@ -1675,14 +1677,14 @@ type InfoService
             match field with
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
                 let value = leaf.ValueText
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
                     res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
                 let value = leaf.Key
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1706,7 +1708,7 @@ type InfoService
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
                 let value = leafvalue.ValueText
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1717,7 +1719,7 @@ type InfoService
             match field with
             | NodeRule(TypeField(TypeType.Simple t), _) ->
                 let value = node.Key
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else

@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System.Collections.Generic
 open CWTools.Rules
 open CWTools.Common
 open CWTools.Utilities.Position
@@ -10,6 +11,7 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities.Utils2
 open CWTools.Rules.RulesHelpers
 open System.IO
+open System.Collections.Frozen
 open CWTools.Parser.UtilityParser
 open CWTools.Rules.RulesWrapper
 
@@ -233,9 +235,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 RuleValidationService(
                     rulesWrapper,
                     lookup.typeDefs,
-                    tempTypeMap,
-                    tempEnumMap,
-                    Collections.Map.empty,
+                    tempTypeMap.ToFrozenDictionary(),
+                    tempEnumMap.ToFrozenDictionary(),
+                    FrozenDictionary.Empty,
                     loc,
                     files,
                     lookup.eventTargetLinksMap,
@@ -289,9 +291,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             RuleValidationService(
                 rulesWrapper,
                 lookup.typeDefs,
-                tempTypeMap,
-                tempEnumMap,
-                Collections.Map.empty,
+                tempTypeMap.ToFrozenDictionary(),
+                tempEnumMap.ToFrozenDictionary(),
+                FrozenDictionary.Empty,
                 loc,
                 files,
                 lookup.eventTargetLinksMap,
@@ -324,9 +326,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             InfoService(
                 rulesWrapper,
                 lookup.typeDefs,
-                tempTypeMap,
-                tempEnumMap,
-                Collections.Map.empty,
+                tempTypeMap.ToFrozenDictionary(),
+                tempEnumMap.ToFrozenDictionary(),
+                FrozenDictionary.Empty,
                 loc,
                 files,
                 lookup.eventTargetLinksMap,
@@ -390,11 +392,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         //|> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) tempValues
         settings.refreshConfigAfterVarDefHook lookup resources embeddedSettings
 
-        let varMap =
-            lookup.varDefInfo
+        let varMap: FrozenDictionary<string,PrefixOptimisedStringSet> =
+            (lookup.varDefInfo
             |> Map.toSeq
-            |> PSeq.map (fun (k, s) -> k, s |> List.map fst |> createStringSet)
-            |> Map.ofSeq
+            |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> List.map fst |> createStringSet))).ToFrozenDictionary()
 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -415,8 +416,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             CompletionService(
                 rulesWrapper,
                 lookup.typeDefs,
-                tempTypeMap,
-                tempEnumMap,
+                tempTypeMap.ToFrozenDictionary(),
+                tempEnumMap.ToFrozenDictionary(),
                 varMap,
                 loc,
                 files,
@@ -437,8 +438,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             RuleValidationService(
                 rulesWrapper,
                 lookup.typeDefs,
-                tempTypeMap,
-                tempEnumMap,
+                tempTypeMap.ToFrozenDictionary(),
+                tempEnumMap.ToFrozenDictionary(),
                 varMap,
                 loc,
                 files,
@@ -456,9 +457,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             InfoService(
                 rulesWrapper,
                 lookup.typeDefs,
-                tempTypeMap,
-                tempEnumMap,
-                varMap,
+                tempTypeMap.ToFrozenDictionary(),
+                tempEnumMap.ToFrozenDictionary(),
+                varMap.ToFrozenDictionary(),
                 loc,
                 files,
                 lookup.eventTargetLinksMap,

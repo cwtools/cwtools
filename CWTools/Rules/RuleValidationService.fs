@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
 open CWTools.Rules
 open CWTools.Process.Localisation
@@ -17,6 +18,7 @@ open System
 open CWTools.Process.Scopes
 open CWTools.Games
 open CWTools.Utilities.StringResource
+open CSharpHelpers
 
 // let inline ruleValidationServiceCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
 // let inline ruleValidationServiceCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
@@ -24,9 +26,9 @@ type RuleValidationService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
