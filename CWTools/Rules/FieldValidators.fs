@@ -530,7 +530,7 @@ module internal FieldValidators =
                 errors
             else if values.ContainsKey value then
                 errors
-            else if value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]) then
+            else if value.Contains('@') && values.ContainsKey(value.Split('@')[0]) then
                 errors
             else if (let result = values.FindPredecessor(value) in result <> null) then
                 errors
@@ -565,7 +565,7 @@ module internal FieldValidators =
                 true
             else
                 values.ContainsKey value
-                || (value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]))
+                || (value.Contains('@') && values.ContainsKey(value.Split('@')[0]))
                 || (values.FindSuccessor(value) <> null)
         | None -> false
     // var:asd
@@ -583,7 +583,7 @@ module internal FieldValidators =
         errors
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace("\\", "/").Replace("//","/")
+        let file = (trimQuote key).Replace('\\', '/').Replace("//","/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
@@ -611,7 +611,7 @@ module internal FieldValidators =
         (extension: string option)
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace("\\", "/").Replace("//","/")
+        let file = (trimQuote key).Replace('\\', '/').Replace("//","/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
@@ -654,9 +654,8 @@ module internal FieldValidators =
         leafornode
         errors
         =
-        // let key = key.Trim([|'"';' '|])
         let key = getOriginalKey ids
-        let key = key.Trim([| '"' |])
+        let key = key.Trim('"')
         let scope = ctx.scopes
 
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
@@ -693,7 +692,7 @@ module internal FieldValidators =
         =
         // log "scope %s %A"key ctx
         let key = getOriginalKey ids
-        let key = key.Trim([| '"' |])
+        let key = key.Trim('"')
         let scope = ctx.scopes
 
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
