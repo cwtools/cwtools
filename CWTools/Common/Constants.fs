@@ -2,6 +2,7 @@ namespace CWTools.Common
 
 open System.Collections.Generic
 open System
+open System.Runtime.CompilerServices
 open CWTools.Utilities
 
 type Game =
@@ -541,6 +542,7 @@ type StaticModifier =
     { tag: string
       categories: ModifierCategory list }
 
+[<Struct; IsReadOnly>]
 type EffectType =
     | Effect
     | Trigger
