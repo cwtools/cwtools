@@ -150,7 +150,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     let mutable tempTypeMap = [ ("", PrefixOptimisedStringSet()) ] |> Map.ofList
 
-    let mutable tempEnumMap = [ ("", ("", PrefixOptimisedStringSet())) ] |> Map.ofList
+    let mutable tempEnumMap: FrozenDictionary<string,string * PrefixOptimisedStringSet> = FrozenDictionary.Empty
 
     let mutable rulesDataGenerated = false
 
@@ -215,10 +215,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         settings.refreshConfigBeforeFirstTypesHook lookup resources embeddedSettings
 
         tempEnumMap <-
-            lookup.enumDefs
+            (lookup.enumDefs
             |> Map.toSeq
-            |> PSeq.map (fun (k, (d, s)) -> k, (d, s |> List.map fst |> createStringSet))
-            |> Map.ofSeq
+            |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> List.map fst |> createStringSet)))).ToFrozenDictionary()
+            
 
         /// First pass type defs
         let loc = addEmbeddedLoc languages localisation.localisationKeys
@@ -236,7 +236,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     rulesWrapper,
                     lookup.typeDefs,
                     tempTypeMap.ToFrozenDictionary(),
-                    tempEnumMap.ToFrozenDictionary(),
+                    tempEnumMap,
                     FrozenDictionary.Empty,
                     loc,
                     files,
@@ -292,7 +292,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap.ToFrozenDictionary(),
-                tempEnumMap.ToFrozenDictionary(),
+                tempEnumMap,
                 FrozenDictionary.Empty,
                 loc,
                 files,
@@ -327,7 +327,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap.ToFrozenDictionary(),
-                tempEnumMap.ToFrozenDictionary(),
+                tempEnumMap,
                 FrozenDictionary.Empty,
                 loc,
                 files,
@@ -417,7 +417,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap.ToFrozenDictionary(),
-                tempEnumMap.ToFrozenDictionary(),
+                tempEnumMap,
                 varMap,
                 loc,
                 files,
@@ -439,7 +439,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap.ToFrozenDictionary(),
-                tempEnumMap.ToFrozenDictionary(),
+                tempEnumMap,
                 varMap,
                 loc,
                 files,
@@ -458,8 +458,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 rulesWrapper,
                 lookup.typeDefs,
                 tempTypeMap.ToFrozenDictionary(),
-                tempEnumMap.ToFrozenDictionary(),
-                varMap.ToFrozenDictionary(),
+                tempEnumMap,
+                varMap,
                 loc,
                 files,
                 lookup.eventTargetLinksMap,
