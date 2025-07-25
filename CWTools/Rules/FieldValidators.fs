@@ -1,13 +1,14 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Common
 open CWTools.Process.Scopes
 open CWTools.Utilities.Utils2
 open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
-open System.IO
 open CWTools.Process.Localisation
 
 type RuleContext =
@@ -16,9 +17,9 @@ type RuleContext =
       warningOnly: bool }
 
 type CheckFieldParams =
-    { varMap: Collections.Map<string, PrefixOptimisedStringSet>
-      enumsMap: Collections.Map<string, string * PrefixOptimisedStringSet>
-      typesMap: Collections.Map<string, PrefixOptimisedStringSet>
+    { varMap: FrozenDictionary<string, PrefixOptimisedStringSet>
+      enumsMap: FrozenDictionary<string, string * PrefixOptimisedStringSet>
+      typesMap: FrozenDictionary<string, PrefixOptimisedStringSet>
       linkMap: EffectMap
       wildcardLinks: ScopedEffect list
       valueTriggerMap: EffectMap
@@ -42,21 +43,6 @@ module internal FieldValidators =
     open CWTools.Validation
     open CWTools.Validation.ValidationCore
     open CWTools.Rules
-
-
-
-    let checkPathDir (pathOptions: PathOptions) (pathDir: string) (file: string) =
-        match pathOptions.pathStrict with
-        | true -> pathOptions.paths |> List.exists (fun tp -> pathDir == tp.Replace("\\", "/"))
-        | false ->
-            pathOptions.paths
-            |> List.exists (fun tp -> pathDir.StartsWith(tp.Replace("\\", "/"), StringComparison.OrdinalIgnoreCase))
-        && match pathOptions.pathFile with
-           | Some f -> file == f
-           | None -> true
-        && match pathOptions.pathExtension with
-           | Some ext -> Path.GetExtension file == ext
-           | None -> true
 
     let getValidValues =
         function
@@ -95,15 +81,13 @@ module internal FieldValidators =
 
     let getStringMetadata (key: StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
-    let quoteArray = [| '\"' |]
-    let ampArray = [| '@' |]
-    let trimQuote (s: string) = s.Trim(quoteArray)
+    let inline trimQuote (s: string) = s.Trim('\"')
     let getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
     let checkValidValue
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
         (vt: CWTools.Rules.ValueType)
@@ -127,7 +111,7 @@ module internal FieldValidators =
                     <&&&> errors
             | ValueType.Int(min, max) ->
                 match TryParser.parseIntWithDecimal key with
-                | Some i ->
+                | ValueSome i ->
                     if i <= max && i >= min then
                         errors
                     else
@@ -137,7 +121,7 @@ module internal FieldValidators =
                                 severity)
                             leafornode
                         <&&&> errors
-                | None ->
+                | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
                         if es.ContainsKey(trimQuote key) then
@@ -154,7 +138,7 @@ module internal FieldValidators =
                         <&&&> errors
             | ValueType.Float(min, max) ->
                 match TryParser.parseDecimal key with
-                | Some f ->
+                | ValueSome f ->
                     if f <= max && f >= min then
                         errors
                     else
@@ -164,7 +148,7 @@ module internal FieldValidators =
                                 severity)
                             leafornode
                         <&&&> errors
-                | None ->
+                | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
                         if es.ContainsKey(trimQuote key) then
@@ -204,7 +188,7 @@ module internal FieldValidators =
             //     // if trimQuote key == s then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leafornode])
             //     if id = s.lower then errors else inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" (StringResource.stringManager.GetStringForID(s.normal))) severity) leafornode <&&&> errors
             | ValueType.Percent ->
-                if key.EndsWith("%") then
+                if key.EndsWith('%') then
                     errors
                 else
                     inv
@@ -212,47 +196,14 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.Date ->
-                let parts = key.Split([| '.' |])
-
-                let ok =
-                    (parts.Length = 3)
-                    && parts.[0].Length <= 4
-                    && Int32.TryParse(parts.[0]) |> fst
-                    && Int32.TryParse(parts.[1]) |> fst
-                    && Int32.Parse(parts.[1]) <= 12
-                    && Int32.TryParse(parts.[2]) |> fst
-                    && Int32.Parse(parts.[2]) <= 31
-
+                let ok = FieldValidatorsHelper.IsValidDate(key)
                 if ok then
                     errors
                 else
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.DateTime ->
-                let parts = key.Split([| '.' |])
-
-                let ok =
-                    match parts.Length with
-                    | 3 ->
-                        (parts.Length = 3)
-                        && parts.[0].Length <= 4
-                        && Int32.TryParse(parts.[0]) |> fst
-                        && Int32.TryParse(parts.[1]) |> fst
-                        && Int32.Parse(parts.[1]) <= 12
-                        && Int32.TryParse(parts.[2]) |> fst
-                        && Int32.Parse(parts.[2]) <= 31
-                    | 4 ->
-                        (parts.Length = 4)
-                        && parts.[0].Length <= 4
-                        && Int32.TryParse(parts.[0]) |> fst
-                        && Int32.TryParse(parts.[1]) |> fst
-                        && Int32.Parse(parts.[1]) <= 12
-                        && Int32.TryParse(parts.[2]) |> fst
-                        && Int32.Parse(parts.[2]) <= 31
-                        && Int32.TryParse(parts.[3]) |> fst
-                        && Int32.Parse(parts.[3]) <= 24
-                    | _ -> false
-
+                let ok = FieldValidatorsHelper.IsValidDateTime(key)
                 if ok then
                     errors
                 else
@@ -277,7 +228,7 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
             | ValueType.IRFamilyName ->
-                let parts = key.Split([| '.' |])
+                let parts = key.Split('.')
 
                 if (parts.Length <> 4) then
                     inv
@@ -285,27 +236,25 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
                 else
-                    (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN
+                    (LocalisationValidation.checkLocKeysLeafOrNodeN
                         keys
                         ids
                         parts.[0]
                         leafornode
                         errors)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
-                    |> (CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
             | ValueType.STLNameFormat var ->
                 match varMap.TryFind var with
                 | Some vars ->
-                    let refs =
-                        System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>")
-                        |> Seq.cast<System.Text.RegularExpressions.Match>
+                    let refs = FieldValidatorsHelper.StlNameFormatRegex().Matches(key)
 
                     let refs =
                         refs
-                        |> Seq.map (fun m -> m.Groups.[1])
+                        |> Seq.map _.Groups.[1]
                         |> Seq.cast<Text.RegularExpressions.Capture>
-                        |> Seq.map (fun c -> c.Value)
+                        |> Seq.map _.Value
 
                     let res = refs |> Seq.exists (vars.ContainsKey >> not)
 
@@ -320,31 +269,27 @@ module internal FieldValidators =
 
 
     let checkValidValueNE
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
-        (severity: Severity)
-        (vt: CWTools.Rules.ValueType)
+        (vt: ValueType)
         (ids: StringTokens)
         =
-        // if key |> firstCharEqualsAmp then true else
         let key = getLowerKey ids
 
         (match vt with
-         // | ValueType.Scalar ->
-         //     true
          | ValueType.Bool -> key == "yes" || key == "no"
          | ValueType.Int(min, max) ->
              match TryParser.parseIntWithDecimal key with
-             | Some i -> i <= max && i >= min
-             | None ->
+             | ValueSome i -> i <= max && i >= min
+             | ValueNone ->
                  match enumsMap.TryFind "static_values" with
                  | Some(_, es) -> es.ContainsKey(trimQuote key)
                  | None -> false
          | ValueType.Float(min, max) ->
              match TryParser.parseDecimal key with
-             | Some f -> f <= max && f >= min
-             | None ->
+             | ValueSome f -> f <= max && f >= min
+             | ValueNone ->
                  match enumsMap.TryFind "static_values" with
                  | Some(_, es) -> es.ContainsKey(trimQuote key)
                  | None -> false
@@ -355,68 +300,34 @@ module internal FieldValidators =
          // | ValueType.Specific s ->
          //     // if trimQuote key == s then true else false
          //     id = s.lower
-         | ValueType.Percent -> key.EndsWith("%")
-         | ValueType.Date ->
-             let parts = key.Split([| '.' |])
-
-             (parts.Length = 3)
-             && parts.[0].Length <= 4
-             && Int32.TryParse(parts.[0]) |> fst
-             && Int32.TryParse(parts.[1]) |> fst
-             && Int32.Parse(parts.[1]) <= 12
-             && Int32.TryParse(parts.[2]) |> fst
-             && Int32.Parse(parts.[2]) <= 31
-         | ValueType.DateTime ->
-             let parts = key.Split([| '.' |])
-
-             match parts.Length with
-             | 3 ->
-                 (parts.Length = 3)
-                 && parts.[0].Length <= 4
-                 && Int32.TryParse(parts.[0]) |> fst
-                 && Int32.TryParse(parts.[1]) |> fst
-                 && Int32.Parse(parts.[1]) <= 12
-                 && Int32.TryParse(parts.[2]) |> fst
-                 && Int32.Parse(parts.[2]) <= 31
-             | 4 ->
-                 (parts.Length = 4)
-                 && parts.[0].Length <= 4
-                 && Int32.TryParse(parts.[0]) |> fst
-                 && Int32.TryParse(parts.[1]) |> fst
-                 && Int32.Parse(parts.[1]) <= 12
-                 && Int32.TryParse(parts.[2]) |> fst
-                 && Int32.Parse(parts.[2]) <= 31
-                 && Int32.TryParse(parts.[3]) |> fst
-                 && Int32.Parse(parts.[3]) <= 24
-             | _ -> false
-
+         | ValueType.Percent -> key.EndsWith('%')
+         | ValueType.Date -> FieldValidatorsHelper.IsValidDate(key)
+         | ValueType.DateTime -> FieldValidatorsHelper.IsValidDateTime(key)
          | ValueType.CK2DNA -> key.Length = 11 && key |> Seq.forall Char.IsLetter
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
-             let parts = key.Split([| '.' |])
+             let parts = key.Split('.')
 
              (parts.Length = 4)
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[0]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[1]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[2]
-             && CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts.[3]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[0]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[1]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[2]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[3]
          | ValueType.STLNameFormat var ->
              match varMap.TryFind var with
              | Some vars ->
                  let refs =
-                     System.Text.RegularExpressions.Regex.Matches(key, @"<([^>]*)>")
-                     |> Seq.cast<System.Text.RegularExpressions.Match>
+                     FieldValidatorsHelper.StlNameFormatRegex().Matches(key)
 
                  let res =
                      refs
-                     |> Seq.map (fun m -> m.Groups.[1])
+                     |> Seq.map _.Groups[1]
                      |> Seq.cast<Text.RegularExpressions.Capture>
-                     |> Seq.map (fun c -> c.Value)
+                     |> Seq.map _.Value
                      |> Seq.exists (vars.ContainsKey >> not)
 
                  res |> not
              | None -> false
-
         )
         || firstCharEqualsAmp ids.lower
 
@@ -498,7 +409,7 @@ module internal FieldValidators =
                 temp
     // let memoizedComplexTypes (typetype : TypeType) (values : StringSet)
     let checkTypeField
-        (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (typesMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
         (typetype: TypeType)
         (ids: StringTokens)
@@ -567,8 +478,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkTypeFieldNE
-        (typesMap: Collections.Map<_, PrefixOptimisedStringSet>)
-        severity
+        (typesMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         (typetype: TypeType)
         (ids: StringTokens)
         =
@@ -576,11 +486,6 @@ module internal FieldValidators =
             match typetype with
             | TypeType.Simple t -> false, t
             | Complex(_, t, _) -> true, t
-
-        let typeKeyMap v =
-            match typetype with
-            | TypeType.Simple t -> v
-            | Complex(p, _, s) -> p + v + s
 
         let key = getLowerKey ids
 
@@ -595,15 +500,6 @@ module internal FieldValidators =
                     match typetype with
                     | TypeType.Simple t -> Some value
                     | Complex(p, _, s) ->
-                        // match value.IndexOf(p, StringComparison.OrdinalIgnoreCase), value.LastIndexOf(s, StringComparison.OrdinalIgnoreCase) with
-                        // | -1, -1 ->
-                        //     None
-                        // | fi, -1 ->
-                        //     Some (value.Substring(p.Length))
-                        // | -1, si ->
-                        //     Some (value.Substring(0, si))
-                        // | fi, si ->
-                        //     Some (value.Substring(p.Length, (si - p.Length)))
                         match
                             value.StartsWith(p, StringComparison.OrdinalIgnoreCase),
                             value.EndsWith(s, StringComparison.OrdinalIgnoreCase),
@@ -615,19 +511,10 @@ module internal FieldValidators =
                         | true, true, n -> Some(value.Substring(p.Length, n))
 
                 value |> Option.map values.ContainsKey |> Option.defaultValue false
-        // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-        // match isComplex with
-        // | true ->
-        //     values.ToList() |> List.map typeKeyMap |> List.exists ((==) value)
-        // | false ->
-        //     values.Contains value
-        // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-
-        //let values = values typeKeyMap values
         | None -> false
 
     let checkVariableGetField
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
         (varName: string)
         (ids: StringTokens)
@@ -644,7 +531,7 @@ module internal FieldValidators =
                 errors
             else if values.ContainsKey value then
                 errors
-            else if value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]) then
+            else if value.Contains('@') && values.ContainsKey(value.Split('@')[0]) then
                 errors
             else if (let result = values.FindPredecessor(value) in result <> null) then
                 errors
@@ -664,7 +551,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkVariableGetFieldNE
-        (varMap: Collections.Map<_, PrefixOptimisedStringSet>)
+        (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
         (varName: string)
         (ids: StringTokens)
@@ -679,7 +566,7 @@ module internal FieldValidators =
                 true
             else
                 values.ContainsKey value
-                || (value.Contains("@") && values.ContainsKey(value.Split([| '@' |]).[0]))
+                || (value.Contains('@') && values.ContainsKey(value.Split('@')[0]))
                 || (values.FindSuccessor(value) <> null)
         | None -> false
     // var:asd
@@ -697,7 +584,7 @@ module internal FieldValidators =
         errors
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace("\\", "/").Replace("//","/")
+        let file = (trimQuote key).Replace('\\', '/').Replace("//","/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
@@ -725,7 +612,7 @@ module internal FieldValidators =
         (extension: string option)
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace("\\", "/").Replace("//","/")
+        let file = (trimQuote key).Replace('\\', '/').Replace("//","/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
@@ -768,9 +655,8 @@ module internal FieldValidators =
         leafornode
         errors
         =
-        // let key = key.Trim([|'"';' '|])
         let key = getOriginalKey ids
-        let key = key.Trim([| '"' |])
+        let key = key.Trim('"')
         let scope = ctx.scopes
 
         match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
@@ -807,7 +693,7 @@ module internal FieldValidators =
         =
         // log "scope %s %A"key ctx
         let key = getOriginalKey ids
-        let key = key.Trim([| '"' |])
+        let key = key.Trim('"')
         let scope = ctx.scopes
 
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
@@ -853,12 +739,12 @@ module internal FieldValidators =
                 TryParser.parseInt key,
                 changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
             with
-            | _, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-            | Some f, _, _ when (not isInt) && min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) ->
+            | _, ValueSome i, _ when isInt && min <= decimal i && max >= decimal i -> errors
+            | ValueSome f, _, _ when (not isInt) && min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) ->
                 errors
-            | Some f, _, _ when min <= f && max >= f ->
+            | ValueSome f, _, _ when min <= f && max >= f ->
                 inv ErrorCodes.ConfigRulesVariableTooSmall leafornode <&&&> errors
-            | Some f, _, _ when isInt -> inv ErrorCodes.ConfigRulesVariableIntOnly leafornode <&&&> errors
+            | ValueSome f, _, _ when isInt -> inv ErrorCodes.ConfigRulesVariableIntOnly leafornode <&&&> errors
             | _, _, VarFound -> errors
             | _, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
             //TODO: Better error messages for scope instead of variable
@@ -908,8 +794,8 @@ module internal FieldValidators =
                 TryParser.parseInt key,
                 changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
             with
-            | _, Some i, _ -> isInt && min <= decimal i && max >= decimal i
-            | Some f, _, _ -> min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3)))
+            | _, ValueSome i, _ -> isInt && min <= decimal i && max >= decimal i
+            | ValueSome f, _, _ -> min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3)))
             | _, _, VarFound -> true
             | _, _, VarNotFound s -> false
             // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
@@ -918,7 +804,7 @@ module internal FieldValidators =
             | _ -> false
 
     let checkValueScopeField
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
@@ -950,8 +836,8 @@ module internal FieldValidators =
             changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
         with
         | true, _, _, _ -> errors
-        | _, _, Some i, _ when isInt && min <= decimal i && max >= decimal i -> errors
-        | _, Some f, _, _ when min <= f && max >= f -> errors
+        | _, _, ValueSome i, _ when isInt && min <= decimal i && max >= decimal i -> errors
+        | _, ValueSome f, _, _ when min <= f && max >= f -> errors
         | _, _, _, VarFound -> errors
         | _, _, _, VarNotFound s -> inv (ErrorCodes.ConfigRulesUnsetVariable s) leafornode <&&&> errors
         | _, _, _, ValueFound _ -> errors
@@ -974,7 +860,7 @@ module internal FieldValidators =
             <&&&> errors
 
     let checkValueScopeFieldNE
-        (enumsMap: Collections.Map<_, string * PrefixOptimisedStringSet>)
+        (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
@@ -997,8 +883,8 @@ module internal FieldValidators =
             changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
         with
         | true, _, _, _ -> true
-        | _, _, Some i, _ -> isInt && min <= decimal i && max >= decimal i
-        | _, Some f, _, _ -> min <= f && max >= f
+        | _, _, ValueSome i, _ -> isInt && min <= decimal i && max >= decimal i
+        | _, ValueSome f, _, _ -> min <= f && max >= f
         | _, _, _, VarFound -> true
         | _, _, _, VarNotFound s -> false
         | _, _, _, ValueFound _ -> true
@@ -1038,8 +924,6 @@ module internal FieldValidators =
         aliasKey
         (ids: StringTokens)
         =
-        let key = getOriginalKey ids
-
         match aliasKeyList |> Map.tryFind aliasKey with
         | Some values -> values.Contains ids.lower
         | None -> true
@@ -1160,8 +1044,8 @@ module internal FieldValidators =
             true
         else
             match field with
-            | ValueField vt -> checkValidValueNE p.varMap p.enumsMap p.localisation severity vt keyIDs
-            | TypeField t -> checkTypeFieldNE p.typesMap severity t keyIDs
+            | ValueField vt -> checkValidValueNE p.varMap p.enumsMap p.localisation vt keyIDs
+            | TypeField t -> checkTypeFieldNE p.typesMap t keyIDs
             | ScopeField s ->
                 checkScopeFieldNE
                     p.linkMap
@@ -1173,10 +1057,10 @@ module internal FieldValidators =
                     ctx
                     s
                     keyIDs
-            | LocalisationField(synced, isInline) -> true
+            | LocalisationField _ -> true
             | FilepathField(prefix, extension) -> checkFilepathFieldNE p.files keyIDs prefix extension
             | IconField folder -> checkIconFieldNE p.files folder keyIDs
-            | VariableSetField v -> true
+            | VariableSetField _ -> true
             | VariableGetField v -> checkVariableGetFieldNE p.varMap severity v keyIDs
             | VariableField(isInt, is32Bit, (min, max)) ->
                 checkVariableFieldNE
@@ -1233,8 +1117,8 @@ module internal FieldValidators =
         (key: string)
         leafornode
         =
-        let typenames = typeKey.Split('.')
-        let typename = typenames.[0]
+        let typeNames = typeKey.Split('.')
+        let typename = typeNames[0]
 
         let actualSubtypes =
             match invertedTypeMap.TryGetValue key with
@@ -1262,8 +1146,8 @@ module internal FieldValidators =
 
             let subtype =
                 let subtypes =
-                    (if typenames.Length > 1 then
-                         typenames.[1] :: actualSubtypes
+                    (if typeNames.Length > 1 then
+                         typeNames.[1] :: actualSubtypes
                      else
                          actualSubtypes)
                     |> List.distinct

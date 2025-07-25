@@ -1,6 +1,7 @@
 namespace CWTools.Games
 
 open System.Collections.Generic
+open System.Runtime.CompilerServices
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -101,6 +102,7 @@ type FileResult =
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
+[<Struct;IsReadOnly>]
 type Overwrite =
     | No
     | Overwrote
@@ -151,7 +153,7 @@ type FileWithContentResourceInput =
       filepath: string
       logicalpath: string
       validate: bool }
-// [<Struct>]
+
 type Entity =
     { filepath: string
       logicalpath: string
@@ -187,7 +189,7 @@ type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type GetFileNames = unit -> string list
+type GetFileNames = unit -> string array
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -209,7 +211,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         enableInlineScripts
     ) =
     let memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_, _>()
+        let dict = Dictionary<_, _>()
 
         fun n ->
             match dict.TryGetValue(keyFunction (n)) with
@@ -392,7 +394,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         file,
         match file with
         | EntityResource(_,
-                         { result = Pass(s)
+                         { result = Pass _
                            filepath = f
                            validate = v
                            logicalpath = l }) ->
@@ -418,16 +420,16 @@ type ResourceManager<'T when 'T :> ComputedData>
         let res = CKParser.parseString filetext (System.String.Intern(filename))
 
         match res with
-        | Success(_, _, _) -> res
-        | Failure(_, _, _) ->
+        | Success _ -> res
+        | Failure _ ->
             let res2 =
                 CKParser.parseString
                     (changeEncoding filetext encoding fallbackencoding)
                     (System.String.Intern(filename))
 
             match res2 with
-            | Success(_, _, _) -> res2
-            | Failure(_, _, _) -> res
+            | Success _ -> res2
+            | Failure _ -> res
 
     let parseFileThenEntity (file: ResourceInput) =
         match file with
@@ -494,7 +496,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         }
 
     let updateOverwrite () =
-        let filelist = fileMap |> Map.toList |> List.map snd
+        let filelist = fileMap.Values |> Seq.toList
 
         let entities =
             filelist
@@ -799,23 +801,12 @@ type ResourceManager<'T when 'T :> ComputedData>
         |> Map.toSeq
         |> PSeq.iter (fun (_, (struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
 
-    let rand = new System.Random()
-
-    let swap (a: _[]) x y =
-        let tmp = a.[x]
-        a.[x] <- a.[y]
-        a.[y] <- tmp
-
-    // shuffle an array (in-place)
-    let shuffle a =
-        Array.iteri (fun i _ -> swap a i (rand.Next(i, Array.length a))) a
-
     let forceEagerData () =
         entitiesMap
         |> Map.toArray
-        |> (fun a ->
-            shuffle a
-            a)
+        |> (fun array ->
+            Array.randomShuffleInPlace array
+            array)
         |> PSeq.iter (fun (_, (struct (e, l))) -> (l.Force() |> ignore))
 
     let forceRecompute () =
@@ -885,14 +876,13 @@ type ResourceManager<'T when 'T :> ComputedData>
         |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
         |> List.filter (fun struct (e, _) -> e.validate)
 
-    let getFileNames () =
-        fileMap
-        |> Map.toList
-        |> List.map snd
-        |> List.map (function
+    let getFileNames() : string array =
+        fileMap.Values
+        |> Seq.map (function
             | EntityResource(_, r) -> r.logicalpath
             | FileResource(_, r) -> r.logicalpath
             | FileWithContentResource(_, r) -> r.logicalpath)
+        |> Seq.toArray
 
     member __.ManualProcessResource = parseFileThenEntity >> snd
 

@@ -1,6 +1,8 @@
 namespace CWTools.Rules
 
 open System.Collections.Generic
+open System.IO
+open CSharpHelpers
 open CWTools.Common
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities.Utils2
@@ -13,8 +15,8 @@ open CWTools.Utilities
 open System
 open CWTools.Games
 open CWTools.Utilities.Position
-open System.IO
 open CWTools.Utilities.StringResource
+open System.Collections.Frozen
 
 type CompletionContext =
     | NodeLHS
@@ -46,9 +48,9 @@ type CompletionService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -69,7 +71,8 @@ type CompletionService
 
     //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
     let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
-    let types = types |> Map.map (fun _ s -> s.StringValues |> List.ofSeq)
+    let types: FrozenDictionary<string, string list> =
+        (types |> Seq.map(fun pair -> KeyValuePair(pair.Key, pair.Value.StringValues |> List.ofSeq))).ToFrozenDictionary()
 
     let defaultKeys =
         localisation
@@ -775,8 +778,8 @@ type CompletionService
 
         let p =
             { varMap = varMap
-              enumsMap = enumsMap
-              typesMap = typesMap
+              enumsMap = enumsMap.ToFrozenDictionary()
+              typesMap = typesMap.ToFrozenDictionary()
               linkMap = linkMap
               valueTriggerMap = valueTriggerMap
               varSet = varSet
@@ -971,8 +974,9 @@ type CompletionService
         let scopeContext = Option.defaultValue defaultContext scopeContext
         let path = getRulePath pos [] entity.entity |> List.rev
         //        log (sprintf "%A" path)
-        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName entity.logicalpath
+
+        let dir = Path.GetDirectoryName(entity.logicalpath).Replace('\\', '/')
+        let fileName = Path.GetFileName(entity.logicalpath)
         // log "%A" typedefs
         // log "%A" pos
         // log "%A" entity.logicalpath
@@ -985,10 +989,7 @@ type CompletionService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
-
-        let getCompletion typerules fixedpath =
-            getCompletionFromPath typerules fixedpath
+            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, dir, fileName))
 
         let allUsedKeys =
             getAllKeysInFile entity.entity @ globalScriptVariables |> Set.ofList

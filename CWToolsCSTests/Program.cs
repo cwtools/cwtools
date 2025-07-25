@@ -1,7 +1,5 @@
 ﻿using System;
 using CWTools.Parser;
-using System.Text;
-using Microsoft.FSharp.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CWTools.Process;
@@ -37,10 +35,10 @@ namespace CWToolsCSTests
         }
 
         public static MyNode ToMyNode(Node n) {
-            var nodes = n.AllChildren.Where(x => x.IsNodeC).Select(x => ToMyNode(x.node)).ToList();
-            var leaves = n.AllChildren.Where(x => x.IsLeafC).Select(x => ToMyKeyValue(x.leaf)).ToList();
-            var values = n.AllChildren.Where(x => x.IsLeafValueC).Select(x => ToMyValue(x.leafvalue)).ToList();
-            return new MyNode { Key = n.Key, Nodes = nodes, Values = values, KeyValues = leaves};
+            // var nodes = n.AllChildren.Where(x => x.IsNodeC).Select(x => ToMyNode(x.node)).ToList();
+            // var leaves = n.AllChildren.Where(x => x.IsLeafC).Select(x => ToMyKeyValue(x.leaf)).ToList();
+            // var values = n.AllChildren.Where(x => x.IsLeafValueC).Select(x => ToMyValue(x.leafvalue)).ToList();
+            return new MyNode { };
         }
         public static MyNode MapToMyNode() {
             //Parse event file

@@ -115,8 +115,8 @@ module TryParser =
     let tryParseWith tryParseFunc =
         tryParseFunc
         >> function
-            | true, v -> Some v
-            | false, _ -> None
+            | true, v -> ValueSome v
+            | false, _ -> ValueNone
 
     let parseDate: string -> _ = tryParseWith System.DateTime.TryParse
     let parseInt: string -> _ = tryParseWith System.Int32.TryParse

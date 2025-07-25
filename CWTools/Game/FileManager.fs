@@ -214,7 +214,7 @@ module Files =
 
         let convertPathToLogicalPath =
             fun (path: string) ->
-                let path = path.Replace("\\", "/")
+                let path = path.Replace('\\', '/')
                 // log "conv %A" path
                 let checkDirectories (pathToCheck: string) =
                     expandedRootDirectories

@@ -92,21 +92,20 @@ module YAMLLocalisationParser =
             |> Array.choose (function
                 | struct (r, l) when l = lang -> Some r
                 | _ -> None)
-            |> List.ofArray
 
         let valueMap lang =
-            recordsLang lang |> List.map (fun r -> (r.key, r)) |> Map.ofList
+            recordsLang lang |> Array.map (fun r -> (r.key, r)) |> Map.ofArray
 
         let values l =
-            recordsLang l |> List.map (fun r -> (r.key, r.desc)) |> dict
+            recordsLang l |> Array.map (fun r -> (r.key, r.desc)) |> dict
 
         let getDesc l x =
             recordsLang l
-            |> List.tryPick (fun r -> if r.key = x then Some r.desc else None)
+            |> Array.tryPick (fun r -> if r.key = x then Some r.desc else None)
             |> Option.defaultValue x
 
         let getKeys l =
-            recordsLang l |> List.map (fun r -> r.key)
+            recordsLang l |> Array.map _.key
 
         do
             results <- addFiles files |> dict

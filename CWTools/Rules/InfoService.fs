@@ -1,6 +1,8 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities
 open CWTools.Utilities.Utils2
@@ -17,6 +19,7 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open System.Collections.Concurrent
 open CWTools.Utilities.StringResource
+open CSharpHelpers
 
 module Test =
     let inline mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
@@ -45,9 +48,9 @@ type InfoService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -89,7 +92,7 @@ type InfoService
 
     let invertedTypeMap: IDictionary<string, ResizeArray<string>> =
         let map = Dictionary<string, ResizeArray<string>>()
-        types |> Map.toSeq |> Seq.iter (fun (t, set) -> inner map t set)
+        types |> Seq.iter (fun pair -> inner map pair.Key pair.Value)
         map
 
     let defaultKeys =
@@ -532,9 +535,6 @@ type InfoService
             | _, _, Some lv -> Some(LeafValueC lv, (field, options))
             | None, None, None -> None
 
-        let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName logicalpath
-
         let childMatch =
             node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
         // eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
@@ -614,7 +614,7 @@ type InfoService
                 | _ -> None
 
         typedefs
-        |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+        |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, logicalpath))
         |> List.fold (fun acc t -> Option.orElseWith (fun () -> resultForType childMatch t) acc) None
     // match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
     // |Some c, Some typedef ->
@@ -727,9 +727,6 @@ type InfoService
         // | _, NodeRule (_, f) -> newCtx, (Some options, None, Some (NodeC node))
         // | _ -> newCtx, (Some options, None, Some (NodeC node))
 
-        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName entity.logicalpath
-
         let childMatch =
             entity.entity.Children
             |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
@@ -738,7 +735,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+                |> List.tryFind (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -783,7 +780,7 @@ type InfoService
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
-                match Map.tryFind "static_values" enums with
+                match enums.TryFind "static_values" with
                 | Some(_, ss) ->
                     if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
@@ -915,9 +912,6 @@ type InfoService
             | _, NodeRule(_, f) -> newCtx, (Some options, None, Some(NodeC node))
             | _ -> newCtx, (Some options, None, Some(NodeC node))
 
-        let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\", "/")
-        let file = Path.GetFileName entity.logicalpath
-
         let childMatch =
             entity.entity.Children
             |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
@@ -928,7 +922,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+                |> List.tryFind (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -976,7 +970,6 @@ type InfoService
             let inner (child: Child) =
                 match child with
                 | NodeC c ->
-                    let key = c.Key
                     let keyId = c.KeyId
                     let found, value = nodeSpecificDict.TryGetValue keyId.lower
 
@@ -1000,7 +993,6 @@ type InfoService
                         | ValueClauseRule rs, o -> Some struct (ValueClauseC vc, ((ValueClauseRule rs), o))
                         | _ -> None)
                 | LeafC leaf ->
-                    let key = leaf.Key
                     let keyId = leaf.KeyId
                     let found, value = leafSpecificDict.TryGetValue keyId.lower
 
@@ -1019,7 +1011,6 @@ type InfoService
                                  None)
                         | _ -> None)
                 | LeafValueC leafvalue ->
-                    let key = leafvalue.Key
                     let keyId = leafvalue.ValueId
 
                     leafvaluerules
@@ -1033,9 +1024,6 @@ type InfoService
                 | CommentC _ -> Seq.empty
 
             node.AllArray |> Seq.collect inner
-
-        let pathDir = (Path.GetDirectoryName path).Replace("\\", "/")
-        let file = Path.GetFileName path
 
         let skiprootkey (skipRootKey: SkipRootKey) (n: Node) =
             match skipRootKey with
@@ -1080,7 +1068,7 @@ type InfoService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file)
+            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, path))
 
         let rec infoServiceSkipRoot rs o (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) acc (n: Node) =
             match skipRootKeyStack with
@@ -1185,7 +1173,7 @@ type InfoService
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
-                match Map.tryFind "static_values" enums with
+                match enums.TryFind "static_values" with
                 | Some(_, ss) ->
                     if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
@@ -1284,14 +1272,13 @@ type InfoService
 
                 match refHint with
                 | Some(TypeRef(typeName, typeValue)) ->
-                    // |Field.TypeField t ->
                     let typename = typeName.Split('.').[0]
 
                     if res.ContainsKey(typename) then
                         res.[typename]
                             .Add(
                                 createReferenceDetailsValue
-                                    (StringResource.stringManager.InternIdentifierToken typeValue)
+                                    (stringManager.InternIdentifierToken typeValue)
                                     leaf.ValueId
                                     leaf.Position
                                     isOutgoing
@@ -1318,9 +1305,7 @@ type InfoService
                         res.TryAdd(typename, newArr) |> ignore
                         res
                 | _ -> res
-            // res |> (fun m -> m.Add(typename, (leaf.ValueText, leaf.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
             | LeafRule(TypeField(TypeType.Simple t), _) ->
-                // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
 
                 if res.ContainsKey(typename) then
@@ -1376,7 +1361,6 @@ type InfoService
 
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
-                // |Field.TypeField t ->
                 let typename = t.Split('.').[0]
 
                 if res.ContainsKey(typename) then
@@ -1487,18 +1471,12 @@ type InfoService
 
         let fValueClause _ _ _ = res
 
-        let fCombine a b =
-            (a |> List.choose id) @ (b |> List.choose id)
-
-        // let ctx = typedefs |> List.fold (fun (a : Collections.Map<string, (string * range) list>) t -> a.Add(t.name, [])) Collections.Map.empty
         fLeaf, fLeafValue, fComment, fNode, fValueClause, res
-    // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-    // res
 
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
         let getVariableFromString (v: string) (s: string) =
             if v = "variable" then
-                s.Split('@').[0].Split('.') |> Array.last |> (fun s -> s.Split('?').[0])
+                s.Split('@').[0].Split('.') |> Array.last |> _.Split('?').[0]
             else
                 s.Split('@').[0]
 
@@ -1564,7 +1542,6 @@ type InfoService
         fLeaf, fLeafValue, fComment, fNode, fValueClause, Map.empty
 
     let getSavedScopesInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
-        // let getVariableFromString (v : string) (s : string) = if v = "variable" then s.Split('@').[0].Split('.') |> Array.last else s.Split('@').[0]
         let fLeaf (ctx: RuleContext) (res: ResizeArray<string * range * Scope>) (leaf: Leaf) ((field, _): NewRule) =
             match field with
             | LeafRule(_, VariableSetField "event_target") ->
@@ -1591,7 +1568,6 @@ type InfoService
             =
             match field with
             | NodeRule(VariableSetField v, _) -> res.Add(node.Key, node.Position, ctx.scopes.CurrentScope)
-            //                res |> (fun m -> m.Add(v, (m.TryFind(v) |> Option.defaultValue (new ResizeArray<_>()) |> (fun i -> i.Add((getVariableFromString v node.Key, node.Position)); i) )))
             | _ -> ()
 
             res
@@ -1600,8 +1576,6 @@ type InfoService
         let fValueClause _ res _ _ = res
 
         fLeaf, fLeafValue, fComment, fNode, fValueClause, (fun () -> new ResizeArray<_>())
-
-
 
     let getEffectsInEntity = //(ctx) (entity : Entity) =
         let fLeaf res (leaf: Leaf) ((field, _): NewRule) = res
@@ -1646,44 +1620,16 @@ type InfoService
         let fComment res _ _ = res
 
         fLeaf, fLeafValue, fComment, fNode, fValueClause, ([], false)
-    // let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-    // res
-    // let getDefVarFolder =
-    //     let (fLeaf, fLeafValue, fComment, fNode, fValueClause, acc) = getDefVarInEntity
-    //     let ctx = defaultContext
-    //     let fLeaf = fOtherContextAugmenter fLeaf
-    //     let fLeafValue = fOtherContextAugmenter fLeafValue
-    //     let fComment = fOtherContextAugmenter fComment
-    //     let fNode = fNodeContextAugmenter fNode
-    //     let fValueClause = (fun c r vc rul -> c, fValueClause r vc rul)
-    //     fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
-    // foldCollect depthInfoService fLeaf fLeafValue fComment fNode fValueClause acc (entity.entity) (entity.logicalpath)
 
     let augmentFolder (fLeaf, fLeafValue, fComment, fNode, fValueClause, acc) =
-        // let fLeaf = fOtherContextAugmenter fLeaf
-        // let fLeafValue = fOtherContextAugmenter fLeafValue
-        // let fComment = fOtherContextAugmenter fComment
         let fNode = fNodeContextAugmenter fNode
-        // let fValueClause = (fun c r vc rul -> c, fValueClause r vc rul)
         fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
 
-    // let augmentFolder2 (fLeaf, fLeafValue, fComment, (fNode : Collections.Map<string,ResizeArray<string * range>> -> Node -> _), fValueClause, acc) =
-    //     let fLeaf = fOtherContextAugmenter fLeaf
-    //     let fLeafValue = fOtherContextAugmenter fLeafValue
-    //     let fComment = fOtherContextAugmenter fComment
-    //     let fNode = fNodeContextAugmenter fNode
-    //     let fValueClause = (fun c r vc rul -> c, fValueClause r vc rul)
-    //     fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
-
-    // let x = augmentFolder2 getDefVarInEntity
     let allFolds entity =
         let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx =
             Test.mergeFolds getTriggersInEntity getEffectsInEntity
             |> Test.mergeFolds getDefVarInEntity
             |> Test.mergeFolds (getTypesInEntity ())
-        // |> augmentFolder
-        // |> Test.mergeFolds2 (getDefVarFolder)
-        //|> Test.mergeFolds getDefVarInEntity
         let types, (defvars, (effects, triggers)) =
             foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
 
@@ -1706,7 +1652,7 @@ type InfoService
 
     let singleFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
-    //  asdasdads // Try building a specialized fold which builds a single array instead of folding
+    // Try building a specialized fold which builds a single array instead of folding
 
     let singleDepthFold (fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx) entity =
         foldCollect depthInfoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
@@ -1730,29 +1676,15 @@ type InfoService
         let fLeaf (res: ValidationResult) (leaf: Leaf) ((field, _): NewRule) =
             match field with
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
-                // |Field.TypeField t ->
-                let typename = t.Split('.').[0]
                 let value = leaf.ValueText
-                // let sets =
-                //     typesMap
-                //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                //     |> Map.toSeq |> Seq.map fst
-                // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
                     res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
-                // |Field.TypeField t ->
-                let typename = t.Split('.').[0]
                 let value = leaf.Key
-                // let sets =
-                //     typesMap
-                //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                //     |> Map.toSeq |> Seq.map fst
-                // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leaf) <&&> res
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1775,15 +1707,8 @@ type InfoService
         let fLeafValue (res: ValidationResult) (leafvalue: LeafValue) (field, _) =
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
-                // |Field.TypeField t ->
-                let typename = t.Split('.').[0]
                 let value = leafvalue.ValueText
-                // let sets =
-                //     typesMap
-                //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                //     |> Map.toSeq |> Seq.map fst
-                // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value leafvalue) <&&> res
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1793,15 +1718,8 @@ type InfoService
         let fNode (res: ValidationResult) (node: Node) (field, _) =
             match field with
             | NodeRule(TypeField(TypeType.Simple t), _) ->
-                // |Field.TypeField t ->
-                let typename = t.Split('.').[0]
                 let value = node.Key
-                // let sets =
-                //     typesMap
-                //     |> Map.filter (fun key values -> key.StartsWith(t, StringComparison.OrdinalIgnoreCase) && values.Contains(value))
-                //     |> Map.toSeq |> Seq.map fst
-                // sets <&!&> (fun s -> validateTypeLocalisation typedefs invertedTypeMap localisation s value node) <&&> res
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else
@@ -1824,9 +1742,6 @@ type InfoService
         let fComment res _ _ = res
         let fValueClause res _ _ = res
 
-        let fCombine a b =
-            (a |> List.choose id) @ (b |> List.choose id)
-
         let ctx = OK
 
         let res =
@@ -1834,8 +1749,6 @@ type InfoService
 
         res
 
-
-    //((fun (pos, entity) -> (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)), (fun (entity) -> getTypesInEntity entity))
     member __.GetInfo(pos: pos, entity: Entity) =
         (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)
 
@@ -1851,5 +1764,3 @@ type InfoService
         (singleFold getEffectsInEntity entity), (singleFold getTriggersInEntity entity)
 
     member __.BatchFolds(entity: Entity) = allFolds entity
-
-// type InfoService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleValidationService : RuleValidationService) =

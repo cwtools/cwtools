@@ -115,9 +115,9 @@ let getNodeComments (clause: IClause) =
     let findComments t s (a: Child) =
         match (s, a) with
         | ((b, c), _) when b -> (b, c)
-        | ((_, c), CommentC(_, nc)) when nc.StartsWith("#") -> (false, c)
-        | ((_, c), CommentC(_, nc)) when nc.StartsWith("@") -> (false, c)
-        | ((_, c), CommentC(_, nc)) -> (false, nc :: c)
+        | (_, c), CommentC comment when comment.Comment.StartsWith('#') -> (false, c)
+        | (_, c), CommentC comment when comment.Comment.StartsWith('@') -> (false, c)
+        | (_, c), CommentC comment -> (false, comment.Comment :: c)
         | ((_, c), NodeC n) when n.Position = t -> (true, c)
         | ((_, c), LeafC v) when v.Position = t -> (true, c)
         | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
@@ -140,8 +140,7 @@ let getNodeComments (clause: IClause) =
                     e.Position,
                     clause.AllArray
                     |> Array.fold (findComments e.Position) (false, [])
-                    |> snd
-                    |> (fun l -> (l)))
+                    |> snd)
                 |> List.ofSeq
 
             let three =
@@ -189,7 +188,7 @@ let getCompletionTests (clause: IClause) =
     let findComments t s (a: Child) =
         match (s, a) with
         | ((b, c), _) when b -> (b, c)
-        | ((_, c), CommentC(_, nc)) when nc.StartsWith("@") -> (false, nc :: c)
+        | ((_, c), CommentC comment) when comment.Comment.StartsWith('@') -> (false, comment.Comment :: c)
         | ((_, c), CommentC _) -> (false, c)
         | ((_, c), NodeC n) when n.Position = t -> (true, c)
         | ((_, c), LeafC v) when v.Position = t -> (true, c)
@@ -213,8 +212,7 @@ let getCompletionTests (clause: IClause) =
                     e.Position,
                     clause.AllArray
                     |> Array.fold (findComments e.Position) (false, [])
-                    |> snd
-                    |> (fun l -> (l)))
+                    |> snd)
                 |> List.ofSeq
 
             let three =
