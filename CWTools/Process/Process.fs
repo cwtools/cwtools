@@ -823,21 +823,3 @@ module ProcessCore =
         match res with
         | None -> (node.Children |> List.collect (recurse newAcc))
         | Some e -> e :: (node.Children |> List.collect (recurse newAcc))
-
-    let rec cata fNode (node: Node) : 'r =
-        let recurse = cata fNode
-        fNode node (node.Children |> Seq.map recurse)
-
-    let rec cataNodeIter fNode (node: Node) =
-        let recurse = cataNodeIter fNode
-        if fNode node then () else node.Nodes |> Seq.iter recurse
-
-    let rec cataIter fChild (child: Child) =
-        let recurse = cataIter fChild
-
-        if fChild child then
-            ()
-        else
-            match child with
-            | NodeC node -> node.AllArray |> Array.iter recurse
-            | _ -> ()
