@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System
 open System.Collections.Generic
 open CWTools.Rules
 open CWTools.Common
@@ -159,8 +160,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let loadBaseConfig (rulesSettings: RulesSettings) =
         let rules, types, enums, complexenums, values =
             rulesSettings.ruleFiles
-            |> List.filter (fun (fn, ft) -> Path.GetExtension fn == ".cwt")
-            |> CWTools.Rules.RulesParser.parseConfigs
+            |> List.filter (fun (fn, _) -> Path.GetExtension(fn.AsSpan()).Equals(".cwt", StringComparison.OrdinalIgnoreCase))
+            |> RulesParser.parseConfigs
                 settings.parseScope
                 settings.allScopes
                 settings.anyScope
