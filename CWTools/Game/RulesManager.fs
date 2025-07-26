@@ -187,14 +187,6 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         rulesDataGenerated <- false
     // log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
 
-    let debugChecks () =
-        if debugMode then
-            // let filesWithoutTypes = getEntitiesWithoutTypes lookup.typeDefs (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            // filesWithoutTypes |> List.iter (fun x -> logDiag $"File without type %s{x}")
-            ()
-        else
-            ()
-
     let refreshConfig () =
         let timer = System.Diagnostics.Stopwatch()
         let endToEndTimer = System.Diagnostics.Stopwatch()
@@ -479,7 +471,6 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             )
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
-        debugChecks ()
         logInfo $"Refresh all lookups: %0.3f{float endToEndTimer.ElapsedMilliseconds / 1000.0}s"
         ruleValidationService, infoService, completionService
 
