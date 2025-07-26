@@ -141,9 +141,6 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         | None -> id
         | Some md -> fun (newSet: Set<string>) -> Set.union newSet md.files
 
-
-    let mutable tempEffects = []
-    let mutable tempTriggers = []
     let mutable simpleEnums = []
     let mutable complexEnums = []
     let mutable tempTypes = []
