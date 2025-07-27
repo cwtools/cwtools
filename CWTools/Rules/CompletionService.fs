@@ -742,7 +742,7 @@ type CompletionService
                 |> Option.defaultValue []
                 |> List.map CompletionResponse.CreateSimple
             | NewField.LocalisationField(s, _) ->
-                match s, value.Contains "[" with
+                match s, value.Contains '[' with
                 | false, true -> (allPossibles |> List.map CompletionResponse.CreateSimple)
                 | true, _ ->
                     localisation
@@ -781,8 +781,8 @@ type CompletionService
 
         let p =
             { varMap = varMap
-              enumsMap = enumsMap.ToFrozenDictionary()
-              typesMap = typesMap.ToFrozenDictionary()
+              enumsMap = enumsMap
+              typesMap = typesMap
               linkMap = linkMap
               valueTriggerMap = valueTriggerMap
               varSet = varSet
