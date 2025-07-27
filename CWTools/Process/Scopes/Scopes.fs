@@ -55,8 +55,6 @@ type EffectDictionary(effects: Effect seq) =
 
 type EffectMap = EffectDictionary
 
-type UsageScopeContext = Scope list
-
 type ScopeContext =
     { Root: Scope
       From: Scope list
