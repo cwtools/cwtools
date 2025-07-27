@@ -3,12 +3,12 @@
 type RulesWrapper(rules: RootRule list) =
     let aliases =
         rules
-        |> List.choose (function
+        |> Seq.choose (function
             | AliasRule(a, rs) -> Some(a, rs)
             | _ -> None)
-        |> List.groupBy fst
-        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
-        |> Collections.Map.ofList
+        |> Seq.groupBy fst
+        |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd)
+        |> Map.ofSeq
 
     let typeRules =
         rules
