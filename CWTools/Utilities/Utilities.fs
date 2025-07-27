@@ -226,7 +226,7 @@ type StringResourceManager() =
                     res
                 else
                     let ls = s.ToLower().Trim('"')
-                    let quoted = s.StartsWith "\"" && s.EndsWith "\""
+                    let quoted = s.StartsWith '\"' && s.EndsWith '\"'
                     let lok = strings.TryGetValue(ls, &res)
 
                     if lok then
