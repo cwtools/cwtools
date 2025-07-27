@@ -7,7 +7,7 @@ type RulesWrapper(rules: RootRule list) =
             | AliasRule(a, rs) -> Some(a, rs)
             | _ -> None)
         |> Seq.groupBy fst
-        |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd)
+        |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd |> List.ofSeq)
         |> Map.ofSeq
 
     let typeRules =
