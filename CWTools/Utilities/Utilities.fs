@@ -4,6 +4,7 @@ open System
 open System.Collections.Concurrent
 open System.Collections.Generic
 open System.Runtime.CompilerServices
+open System.Threading
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
@@ -203,19 +204,17 @@ type StringResourceManager() =
     let metadata = new ConcurrentDictionary<StringToken, StringMetadata>()
 
     let mutable i = 0
-    // let mutable j = 0
-    let monitor = Object()
 
-    member x.InternIdentifierToken(s) =
-        // j <- j + 1
-        // eprintfn "%A" j
+    let lock = Lock()
+    member x.InternIdentifierToken(s: string): StringTokens =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
 
         if ok then
             res
         else
-            lock monitor (fun () ->
+            lock.Enter()
+            try
                 let retry = strings.TryGetValue(s, &res)
 
                 if retry then
@@ -291,7 +290,9 @@ type StringResourceManager() =
                         ints.[stringID] <- s
                         strings.[ls] <- resl
                         strings.[s] <- res
-                        res)
+                        res
+            finally
+                lock.Exit()
 
     member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]
     member x.GetLowerStringForIDs(id: StringTokens) = ints.[id.lower]

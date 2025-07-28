@@ -7,6 +7,7 @@ module CWTools.Utilities.Position
 open System
 open System.IO
 open System.Collections.Generic
+open System.Threading
 open Microsoft.FSharp.Core.Printf
 
 let rec pown32 n =
@@ -146,6 +147,7 @@ let _ = assert (isSyntheticMask = mask64 isSyntheticShift isSyntheticBitCount)
 type FileIndexTable() =
     let indexToFileTable = new ResizeArray<_>(11)
     let fileToIndexTable = new Dictionary<string, int>(11)
+    let lock = Lock()
 
     member t.FileToIndex f =
         let mutable res = 0
@@ -154,7 +156,8 @@ type FileIndexTable() =
         if ok then
             res
         else
-            lock fileToIndexTable (fun () ->
+            lock.Enter()
+            try
                 let mutable res = 0 in
                 let ok = fileToIndexTable.TryGetValue(f, &res) in
 
@@ -164,7 +167,9 @@ type FileIndexTable() =
                     let n = indexToFileTable.Count in
                     indexToFileTable.Add(f)
                     fileToIndexTable.[f] <- n
-                    n)
+                    n
+            finally
+                lock.Exit()
 
     member t.IndexToFile n =
         (if n < 0 then
