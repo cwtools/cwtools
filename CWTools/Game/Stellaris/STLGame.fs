@@ -46,7 +46,7 @@ module STLGameFunctions =
             (lookup.varDefInfo.TryFind "variable"
              |> Option.defaultValue []
              |> Seq.map fst
-             |> LowerCaseStringSet)
+             |> IgnoreCaseStringSet)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)

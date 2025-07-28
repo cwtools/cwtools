@@ -489,8 +489,8 @@ module internal FieldValidators =
 
         let key = getLowerKey ids
 
-        match typesMap.TryFind fieldType with
-        | Some values ->
+        match typesMap.TryFindV fieldType with
+        | ValueSome values ->
             let value = trimQuote key
 
             if firstCharEqualsAmp ids.lower then
@@ -498,20 +498,20 @@ module internal FieldValidators =
             else
                 let value =
                     match typetype with
-                    | TypeType.Simple t -> Some value
+                    | TypeType.Simple _ -> ValueSome value
                     | Complex(p, _, s) ->
                         match
                             value.StartsWith(p, StringComparison.OrdinalIgnoreCase),
                             value.EndsWith(s, StringComparison.OrdinalIgnoreCase),
                             (value.Length - p.Length - s.Length)
                         with
-                        | _, false, _ -> None
-                        | false, _, _ -> None
-                        | _, _, n when n <= 0 -> None
-                        | true, true, n -> Some(value.Substring(p.Length, n))
+                        | _, false, _ -> ValueNone
+                        | false, _, _ -> ValueNone
+                        | _, _, n when n <= 0 -> ValueNone
+                        | true, true, n -> ValueSome(value.Substring(p.Length, n))
 
-                value |> Option.map values.ContainsKey |> Option.defaultValue false
-        | None -> false
+                value |> ValueOption.map values.ContainsKey |> ValueOption.defaultValue false
+        | ValueNone -> false
 
     let checkVariableGetField
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
