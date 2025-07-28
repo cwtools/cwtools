@@ -4,6 +4,7 @@ open System
 open System.Collections.Concurrent
 open System.Collections.Generic
 open System.Runtime.CompilerServices
+open System.Runtime.Serialization
 open System.Threading
 open CWTools.Utilities.Position
 open System.Globalization
@@ -205,7 +206,14 @@ type StringResourceManager() =
 
     let mutable i = 0
 
-    let lock = Lock()
+    [<NonSerialized>]
+    let mutable lock = Lock()
+
+    [<OnDeserialized>]
+    member _.OnDeserialized(_context: StreamingContext) =
+        // Recreate the lock after deserialization
+        lock <- Lock()
+
     member x.InternIdentifierToken(s: string): StringTokens =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)

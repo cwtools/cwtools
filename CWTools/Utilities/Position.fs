@@ -7,6 +7,7 @@ module CWTools.Utilities.Position
 open System
 open System.IO
 open System.Collections.Generic
+open System.Runtime.Serialization
 open System.Threading
 open Microsoft.FSharp.Core.Printf
 
@@ -147,7 +148,13 @@ let _ = assert (isSyntheticMask = mask64 isSyntheticShift isSyntheticBitCount)
 type FileIndexTable() =
     let indexToFileTable = new ResizeArray<_>(11)
     let fileToIndexTable = new Dictionary<string, int>(11)
-    let lock = Lock()
+    [<NonSerialized>]
+    let mutable lock = Lock()
+
+    [<OnDeserialized>]
+    member _.OnDeserialized(_context: StreamingContext) =
+        // Recreate the lock after deserialization
+        lock <- Lock()
 
     member t.FileToIndex f =
         let mutable res = 0
