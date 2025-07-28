@@ -334,7 +334,7 @@ module internal FieldValidators =
     let checkLocalisationField
         (processLocalisation:
             Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>)
-        (validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
+        (validateLocalisation: LocEntry -> ScopeContext -> ValidationResult)
         scopeContext
         (keys: (Lang * Collections.Set<string>) list)
         (defaultKeys: Collections.Set<string>)
@@ -351,9 +351,9 @@ module internal FieldValidators =
         | true, false ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys defaultLang ids key errors
+            LocalisationValidation.checkLocNameN leafornode defaultKeys defaultLang ids key errors
         | false, true ->
-            CWTools.Validation.LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
+            LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
         | false, false ->
             if key.Contains("[") then
                 let entry =
@@ -372,33 +372,11 @@ module internal FieldValidators =
 
                 validateLocalisation proc scopeContext
             else
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
+                LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
         | _ -> errors
 
-    let checkLocalisationFieldNE
-        (processLocalisation:
-            Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>)
-        (validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
-        (keys: (Lang * Collections.Set<string>) list)
-        (defaultKeys: Collections.Set<string>)
-        defaultLang
-        (synced: bool)
-        (isInline: bool)
-        (ids: StringTokens)
-        =
-        let key = trimQuote (getOriginalKey ids)
-
-        match synced, isInline with
-        | true, false ->
-            // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
-            //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.LocalisationValidation.checkLocNameNE defaultKeys defaultLang ids key
-        | false, true -> CWTools.Validation.LocalisationValidation.checkLocKeysInlineLeafOrNodeNE keys ids key
-        | false, false -> CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids key
-        | _ -> false
-
     let memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_, _>()
+        let dict = Dictionary<_, _>()
 
         fun n ->
             match dict.TryGetValue(keyFunction (n)) with
@@ -552,7 +530,6 @@ module internal FieldValidators =
 
     let checkVariableGetFieldNE
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
-        severity
         (varName: string)
         (ids: StringTokens)
         =
@@ -711,7 +688,6 @@ module internal FieldValidators =
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
-        anyScope
         (ctx: RuleContext)
         isInt
         is32Bit
@@ -810,7 +786,6 @@ module internal FieldValidators =
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
-        anyScope
         (ctx: RuleContext)
         isInt
         min
@@ -982,7 +957,6 @@ module internal FieldValidators =
                     p.wildcardLinks
                     p.varSet
                     p.changeScope
-                    p.anyScope
                     ctx
                     isInt
                     is32Bit
@@ -999,7 +973,6 @@ module internal FieldValidators =
                     p.wildcardLinks
                     p.varSet
                     p.changeScope
-                    p.anyScope
                     ctx
                     isInt
                     min
@@ -1061,7 +1034,7 @@ module internal FieldValidators =
             | FilepathField(prefix, extension) -> checkFilepathFieldNE p.files keyIDs prefix extension
             | IconField folder -> checkIconFieldNE p.files folder keyIDs
             | VariableSetField _ -> true
-            | VariableGetField v -> checkVariableGetFieldNE p.varMap severity v keyIDs
+            | VariableGetField v -> checkVariableGetFieldNE p.varMap v keyIDs
             | VariableField(isInt, is32Bit, (min, max)) ->
                 checkVariableFieldNE
                     p.linkMap
