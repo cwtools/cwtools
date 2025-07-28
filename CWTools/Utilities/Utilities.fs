@@ -3,6 +3,7 @@ namespace CWTools.Utilities
 open System
 open System.Collections.Concurrent
 open System.Collections.Generic
+open System.Runtime.CompilerServices
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
@@ -159,44 +160,39 @@ module TryParser =
 type StringToken = int
 type StringLowerToken = int
 
+[<Struct; IsReadOnly>]
 type StringTokens =
-    struct
-        val lower: StringLowerToken
-        val normal: StringToken
-        /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
-        val quoted: bool
+     val lower: StringLowerToken
+     val normal: StringToken
+     /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
+     val quoted: bool
 
-        new(lower, normal, quoted) =
-            { lower = lower
-              normal = normal
-              quoted = quoted }
-    end
+     new(lower, normal, quoted) =
+         { lower = lower
+           normal = normal
+           quoted = quoted }
 
+[<Struct; IsReadOnly>]
 type StringMetadata =
-    struct
-        val startsWithAmp: bool
-        val containsDoubleDollar: bool
-        val containsQuestionMark: bool
-        val containsHat: bool
-        val startsWithSquareBracket: bool
-        val containsPipe: bool
+     val startsWithAmp: bool
+     val containsDoubleDollar: bool
+     val containsQuestionMark: bool
+     val containsHat: bool
+     val startsWithSquareBracket: bool
+     val containsPipe: bool
 
-        new
-            (
-                startsWithAmp,
-                containsDoubleDollar,
-                containsQuestionMark,
-                containsHat,
-                startsWithSquareBracket,
-                containsPipe
-            ) =
-            { startsWithAmp = startsWithAmp
-              containsDoubleDollar = containsDoubleDollar
-              containsQuestionMark = containsQuestionMark
-              containsHat = containsHat
-              startsWithSquareBracket = startsWithSquareBracket
-              containsPipe = containsPipe }
-    end
+     new(startsWithAmp,
+         containsDoubleDollar,
+         containsQuestionMark,
+         containsHat,
+         startsWithSquareBracket,
+         containsPipe) =
+         { startsWithAmp = startsWithAmp
+           containsDoubleDollar = containsDoubleDollar
+           containsQuestionMark = containsQuestionMark
+           containsHat = containsHat
+           startsWithSquareBracket = startsWithSquareBracket
+           containsPipe = containsPipe }
 
 [<Sealed>]
 type StringResourceManager() =
