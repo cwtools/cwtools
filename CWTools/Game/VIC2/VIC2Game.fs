@@ -34,7 +34,7 @@ module VIC2GameFunctions =
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-          setVariables = definedvars |> LowerCaseStringSet }
+          setVariables = definedvars |> IgnoreCaseStringSet }
 
 
     let updateModifiers (game: GameObject) =

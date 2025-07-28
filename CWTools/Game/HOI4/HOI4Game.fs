@@ -56,7 +56,7 @@ module HOI4GameFunctions =
                      |> Option.defaultValue []
                      |> Seq.map fst)
             }
-            |> LowerCaseStringSet
+            |> IgnoreCaseStringSet
 
         { scriptedLocCommands =
             lookup.scriptedLoc

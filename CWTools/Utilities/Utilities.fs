@@ -337,17 +337,18 @@ module Utils2 =
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type PrefixOptimisedStringSet = LowerStringSparseTrie
 
-    type LowerCaseStringSet(strings: string seq) =
-        let dictionary = HashSet<string>()
+    [<Sealed>]
+    type IgnoreCaseStringSet(strings: string seq) =
+        let set = HashSet<string>(StringComparer.OrdinalIgnoreCase)
 
         do
             for e in strings do
-                dictionary.Add(e.ToLowerInvariant()) |> ignore
+                set.Add(e) |> ignore
 
-        new() = LowerCaseStringSet(Seq.empty)
+        new() = IgnoreCaseStringSet(Seq.empty)
 
         member this.Contains(x: string) =
-            dictionary.Contains(x.ToLowerInvariant())
+            set.Contains(x)
 
     let createStringSet items =
         let newSet = PrefixOptimisedStringSet()
