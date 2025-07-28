@@ -355,7 +355,7 @@ module internal FieldValidators =
         | false, true ->
             LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
         | false, false ->
-            if key.Contains("[") then
+            if key.Contains('[') then
                 let entry =
                     { CWTools.Localisation.Entry.key = "inline"
                       CWTools.Localisation.Entry.value = None
