@@ -16,6 +16,7 @@ type PerformanceArgs =
     | [<AltCommandLine("-mod-path")>] Mod_Path of string
     | [<AltCommandLine("-steam-root")>] Steam_Root of string
     | [<AltCommandLine("-git-root")>] Git_Root of string
+
     interface IArgParserTemplate with
         member s.Usage =
             match s with

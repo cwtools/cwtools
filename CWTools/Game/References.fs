@@ -22,8 +22,7 @@ type References<'T when 'T :> ComputedData>
         lookup.effects |> List.map (fun e -> e.Name)
 
     let localisation () =
-        localisation
-        |> List.collect (fun l -> l.ValueMap |> Map.toList)
+        localisation |> List.collect (fun l -> l.ValueMap |> Map.toList)
 
     member __.ModifierNames = modifiers ()
     member __.TriggerNames = triggers ()

@@ -8,9 +8,10 @@ open System.Security.Cryptography
 let rec allFilesUnder baseFolder =
     seq {
         yield! Directory.GetFiles(baseFolder)
+
         for subDir in Directory.GetDirectories(baseFolder) do
             yield! allFilesUnder subDir
-        }
+    }
 
 let MD5 filename =
     use md5 = MD5.Create()
@@ -22,5 +23,6 @@ let outFile = new StreamWriter("out.csv")
 
 allFilesUnder @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\newhorizons3\gfx"
 |> Seq.filter (fun fn -> fn.EndsWith ".mesh")
-|> Seq.iter (fun (fn) -> outFile.WriteLine(sprintf "%A, %A, %A" fn hash fs ))
+|> Seq.iter (fun (fn) -> outFile.WriteLine(sprintf "%A, %A, %A" fn hash fs))
+
 outFile.Flush()

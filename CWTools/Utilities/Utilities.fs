@@ -181,12 +181,15 @@ type StringMetadata =
         val startsWithSquareBracket: bool
         val containsPipe: bool
 
-        new(startsWithAmp,
-            containsDoubleDollar,
-            containsQuestionMark,
-            containsHat,
-            startsWithSquareBracket,
-            containsPipe) =
+        new
+            (
+                startsWithAmp,
+                containsDoubleDollar,
+                containsQuestionMark,
+                containsHat,
+                startsWithSquareBracket,
+                containsPipe
+            ) =
             { startsWithAmp = startsWithAmp
               containsDoubleDollar = containsDoubleDollar
               containsQuestionMark = containsQuestionMark

@@ -64,16 +64,15 @@ let cwtoolsPath = ""
 let cwtoolsProjectName = "CWTools/CWTools.fsproj"
 let cwtoolsCLIProjectName = "CWToolsCLI/CWToolsCLI.fsproj"
 
-let libraryProjects = !! "CWTools/CWTools.fsproj"
+let libraryProjects = !!"CWTools/CWTools.fsproj"
 
 let toolProjects =
-    !! "CWToolsCLI/CWToolsCLI.fsproj"
+    !!"CWToolsCLI/CWToolsCLI.fsproj"
     ++ "CWToolsDocs/CWToolsDocs.fsproj"
     ++ "CWToolsScripts/CWToolsScripts.fsproj"
 
 let testProjects =
-    !! "CWTools.Tests/CWTools.Tests.fsproj"
-    ++ "CWToolsCSTests/CWToolsCSTests.fsproj"
+    !!"CWTools.Tests/CWTools.Tests.fsproj" ++ "CWToolsCSTests/CWToolsCSTests.fsproj"
 
 let pkgPath = Path.GetFullPath "./pkg"
 
@@ -83,7 +82,13 @@ let pkgPath = Path.GetFullPath "./pkg"
 // --------------------------------------------------------------------------------------
 
 let testAll () =
-    DotNet.test (fun settings -> { settings with RunSettingsArguments = Some"Expecto.parallel=false"; Configuration = DotNet.BuildConfiguration.Release  }) "CWToolsTests/CWToolsTests.fsproj"
+    DotNet.test
+        (fun settings ->
+            { settings with
+                RunSettingsArguments = Some "Expecto.parallel=false"
+                Configuration = DotNet.BuildConfiguration.Release })
+        "CWToolsTests/CWToolsTests.fsproj"
+
     DotNet.test id "CWToolsCSTests/CWToolsCSTests.csproj"
 
 // testProjects |> Seq.iter (fun p -> DotNet.test (DotNet.Options.withWorkingDirectory p) p)
@@ -188,7 +193,7 @@ let releaseGithub (release: ReleaseNotes.ReleaseNotes) =
 
 let initTargets () =
     Target.create "Clean"
-    <| fun _ -> !! "./**/bin/" ++ "./**/obj/" -- "./build/**" ++ pkgPath |> Shell.cleanDirs
+    <| fun _ -> !!"./**/bin/" ++ "./**/obj/" -- "./build/**" ++ pkgPath |> Shell.cleanDirs
 
     Target.create "Build" (fun _ -> buildAll ())
     Target.create "Test" (fun _ -> testAll ())
@@ -198,12 +203,7 @@ let initTargets () =
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
-    "Test"
-    ==> "PackLibs"
-    ==> "PackTools"
-    ==> "Push"
-    ==> "ReleaseGitHub"
-    |> ignore
+    "Test" ==> "PackLibs" ==> "PackTools" ==> "Push" ==> "ReleaseGitHub" |> ignore
     "Build" ?=> "Test" |> ignore
     "Build" ==> "PackLibs" |> ignore
     "Clean" ?=> "PackLibs" |> ignore
