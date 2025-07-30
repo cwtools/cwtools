@@ -93,6 +93,13 @@ let testAll () =
 
 // testProjects |> Seq.iter (fun p -> DotNet.test (DotNet.Options.withWorkingDirectory p) p)
 
+let assertOk (result: ProcessResult) =
+    if result.ExitCode <> 0 then
+        failwith $"Error while running restore %A{result.Errors}"
+
+let restoreCheck () =
+    DotNet.exec id "paket" "restore --fail-on-checks --force" |> assertOk
+
 let buildAll () =
     libraryProjects |> Seq.iter (DotNet.build id)
     toolProjects |> Seq.iter (DotNet.build id)
@@ -206,6 +213,7 @@ let initTargets () =
     <| fun _ -> !!"./**/bin/" ++ "./**/obj/" -- "./build/**" ++ pkgPath |> Shell.cleanDirs
 
     Target.create "CheckFormat" (fun _ -> checkFormat ())
+    Target.create "CheckRestore" (fun _ -> restoreCheck ())
     Target.create "Build" (fun _ -> buildAll ())
     Target.create "Test" (fun _ -> testAll ())
     Target.create "PackLibs" (fun _ -> packAllLibs ())
@@ -214,7 +222,7 @@ let initTargets () =
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
-    "CheckFormat" ==> "Build" |> ignore
+    "CheckFormat" ==> "CheckRestore" ==> "Build" |> ignore
     "Test" ==> "PackLibs" ==> "PackTools" ==> "Push" ==> "ReleaseGitHub" |> ignore
     "Build" ?=> "Test" |> ignore
     "Build" ==> "PackLibs" |> ignore
