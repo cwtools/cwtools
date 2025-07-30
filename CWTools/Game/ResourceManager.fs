@@ -102,7 +102,7 @@ type FileResult =
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
-[<Struct;IsReadOnly>]
+[<Struct; IsReadOnly>]
 type Overwrite =
     | No
     | Overwrote
@@ -876,7 +876,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
         |> List.filter (fun struct (e, _) -> e.validate)
 
-    let getFileNames() : string array =
+    let getFileNames () : string array =
         fileMap.Values
         |> Seq.map (function
             | EntityResource(_, r) -> r.logicalpath

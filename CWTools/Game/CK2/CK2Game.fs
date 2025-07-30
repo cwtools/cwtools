@@ -100,8 +100,7 @@ module CK2GameFunctions =
                 | _ -> result
 
         let titleEntities =
-            (EntitySet(game.Resources.AllEntities()))
-                .GlobMatchChildren("**/landed_titles/**/*.txt")
+            (EntitySet(game.Resources.AllEntities())).GlobMatchChildren("**/landed_titles/**/*.txt")
 
         let titles = titleEntities |> List.collect (foldNode7 fNode)
 

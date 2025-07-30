@@ -47,10 +47,8 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             allLocs |> Map.ofSeq
 
-        let groupedLocalisation =
-            allLocalisation ()
-            |> List.groupBy _.GetLang
-        
+        let groupedLocalisation = allLocalisation () |> List.groupBy _.GetLang
+
         this.localisationKeys <-
             groupedLocalisation
             |> List.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
@@ -72,9 +70,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         localisationAPIMap <- newMap
 
-        let groupedLocalisation =
-            allLocalisation ()
-            |> List.groupBy _.GetLang
+        let groupedLocalisation = allLocalisation () |> List.groupBy _.GetLang
 
         this.localisationKeys <-
             groupedLocalisation
@@ -110,8 +106,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member __.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
     member __.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
-    member __.LocalisationAPIs() : (bool * ILocalisationAPI) list =
-        localisationAPIMap.Values |> Seq.toList
+    member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
 
     member __.LocalisationFileNames() : string list =
         localisationAPIMap

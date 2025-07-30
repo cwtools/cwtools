@@ -57,6 +57,7 @@ module private RulesParserImpl =
             | struct ((_, c), LeafValueC v) when v.Position.Code = t.Code -> struct (true, c)
             | struct ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code -> struct (true, c)
             | _ -> struct (false, [])
+
         let one =
             clause.Leaves
             |> Seq.map (fun e ->
@@ -146,10 +147,7 @@ module private RulesParserImpl =
         | Some s ->
             let split = s.Split(':', 2)
 
-            if split.Length < 2 then
-                None
-            else
-                Some(split[0], split[1])
+            if split.Length < 2 then None else Some(split[0], split[1])
         | None -> None
 
     let private getSingleAliasSettingsFromString (full: string) =
@@ -165,7 +163,9 @@ module private RulesParserImpl =
 
     let private getPathOptions (node: Node) =
         let paths = (node.TagsText "path")
-        paths |> Array.iteri (fun i path -> paths[i] <- path.Replace("game/", "").Replace("game\\", ""))
+
+        paths
+        |> Array.iteri (fun i path -> paths[i] <- path.Replace("game/", "").Replace("game\\", ""))
 
         let pathStrict = node.TagText "path_strict" == "yes"
 
@@ -285,11 +285,7 @@ module private RulesParserImpl =
         let min, max, strictmin =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             | Some c ->
-                let nums =
-                    c
-                        .Substring(c.IndexOf '=' + 1)
-                        .Trim()
-                        .Split("..", 2)
+                let nums = c.Substring(c.IndexOf '=' + 1).Trim().Split("..", 2)
 
                 try
                     let minText, strictMin =

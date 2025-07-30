@@ -1,6 +1,5 @@
 namespace CWTools.Parser
 
-open CWTools.Utilities
 open Types
 open FParsec
 
@@ -21,7 +20,7 @@ module CKPrinter =
 
     and private printKeyValue (acc, leadingNewline, prevStart, prevEnd) kv depth =
         match kv with
-        | CommentStatement({Position=r;Comment=c}) ->
+        | CommentStatement({ Position = r; Comment = c }) ->
             if r.StartLine = prevStart && r.StartLine = prevEnd || (not leadingNewline) then
                 acc + (tabs depth) + "#" + c, true, r.StartLine, r.EndLine
             else

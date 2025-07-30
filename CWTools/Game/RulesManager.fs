@@ -148,7 +148,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     let mutable tempTypeMap = [ ("", PrefixOptimisedStringSet()) ] |> Map.ofList
 
-    let mutable tempEnumMap: FrozenDictionary<string,string * PrefixOptimisedStringSet> = FrozenDictionary.Empty
+    let mutable tempEnumMap: FrozenDictionary<string, string * PrefixOptimisedStringSet> =
+        FrozenDictionary.Empty
 
     let mutable rulesDataGenerated = false
 
@@ -193,6 +194,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         /// Enums
         let complexEnumDefs =
             getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct (e, _) -> e))
+
         let allEnums = simpleEnums @ complexEnumDefs
 
         let newEnumDefs =
@@ -206,9 +208,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         tempEnumMap <-
             (lookup.enumDefs
-            |> Map.toSeq
-            |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> List.map fst |> createStringSet)))).ToFrozenDictionary()
-            
+             |> Map.toSeq
+             |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> List.map fst |> createStringSet))))
+                .ToFrozenDictionary()
+
 
         /// First pass type defs
         let loc = addEmbeddedLoc languages localisation.localisationKeys
@@ -382,10 +385,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         //|> Seq.fold (fun m map -> Map.toList map |>  List.fold (fun m2 (n,k) -> if Map.containsKey n m2 then Map.add n ((k |> List.ofSeq)@m2.[n]) m2 else Map.add n (k |> List.ofSeq) m2) m) tempValues
         settings.refreshConfigAfterVarDefHook lookup resources embeddedSettings
 
-        let varMap: FrozenDictionary<string,PrefixOptimisedStringSet> =
+        let varMap: FrozenDictionary<string, PrefixOptimisedStringSet> =
             (lookup.varDefInfo
-            |> Map.toSeq
-            |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> List.map fst |> createStringSet))).ToFrozenDictionary()
+             |> Map.toSeq
+             |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> List.map fst |> createStringSet)))
+                .ToFrozenDictionary()
 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

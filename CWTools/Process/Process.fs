@@ -536,7 +536,7 @@ and Node(key: string, pos: range) =
             | Some s -> s.ToString()
             | None -> ""
 
-    member this.TagsText (leafKey: string) : string array =
+    member this.TagsText(leafKey: string) : string array =
         this.Tags leafKey
         |> Array.map (function
             | QString s -> s.GetString()

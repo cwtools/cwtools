@@ -10,7 +10,6 @@ open CWTools.Utilities.Utils
 open CWTools.Common
 open System
 open CWTools.Utilities.Position
-open System.IO
 open CWTools.Games
 open CWTools.Process.Localisation
 open CWTools.Process
@@ -19,7 +18,6 @@ open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open System.Collections.Concurrent
 open CWTools.Utilities.StringResource
-open CSharpHelpers
 
 module Test =
     let inline mergeFolds (l1, lv1, c1, n1, vc1, ctx1) (l2, lv2, c2, n2, vc2, ctx2) =
@@ -1630,6 +1628,7 @@ type InfoService
             Test.mergeFolds getTriggersInEntity getEffectsInEntity
             |> Test.mergeFolds getDefVarInEntity
             |> Test.mergeFolds (getTypesInEntity ())
+
         let types, (defvars, (effects, triggers)) =
             foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
 
@@ -1677,6 +1676,7 @@ type InfoService
             match field with
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
                 let value = leaf.ValueText
+
                 if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
@@ -1684,6 +1684,7 @@ type InfoService
                     res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
                 let value = leaf.Key
+
                 if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
@@ -1708,6 +1709,7 @@ type InfoService
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
                 let value = leafvalue.ValueText
+
                 if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
@@ -1719,6 +1721,7 @@ type InfoService
             match field with
             | NodeRule(TypeField(TypeType.Simple t), _) ->
                 let value = node.Key
+
                 if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res

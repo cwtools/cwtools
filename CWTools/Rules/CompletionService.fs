@@ -71,8 +71,11 @@ type CompletionService
 
     //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
     let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+
     let types: FrozenDictionary<string, string list> =
-        (types |> Seq.map(fun pair -> KeyValuePair(pair.Key, pair.Value.StringValues |> List.ofSeq))).ToFrozenDictionary()
+        (types
+         |> Seq.map (fun pair -> KeyValuePair(pair.Key, pair.Value.StringValues |> List.ofSeq)))
+            .ToFrozenDictionary()
 
     let defaultKeys =
         localisation

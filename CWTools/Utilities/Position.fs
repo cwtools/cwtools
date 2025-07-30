@@ -10,13 +10,6 @@ open System.Collections.Generic
 open System.Runtime.Serialization
 open System.Threading
 open Microsoft.FSharp.Core.Printf
-// open Internal.Utilities
-// open Microsoft.FSharp.Compiler.AbstractIL
-// open Microsoft.FSharp.Compiler.AbstractIL.Internal
-// open Microsoft.FSharp.Compiler.AbstractIL.Internal.Library
-// open Microsoft.FSharp.Compiler
-// open Microsoft.FSharp.Compiler.Lib
-// open Microsoft.FSharp.Compiler.Lib.Bits
 
 let rec pown32 n =
     if n = 0 then 0 else (pown32 (n - 1) ||| (1 <<< (n - 1)))
@@ -39,8 +32,7 @@ let posBitCount = lineBitCount + columnBitCount
 let _ = assert (posBitCount <= 32)
 let posColumnMask = mask32 0 columnBitCount
 let lineColumnMask = mask32 columnBitCount lineBitCount
-let inline (lsr) (x: int) (y: int) = int32 (uint32 x >>> y)
- 
+
 #if NET5_0_OR_GREATER
 [<System.Runtime.CompilerServices.IsReadOnly>]
 #endif
@@ -53,7 +45,7 @@ type pos(code: int32) =
         let p = (c &&& posColumnMask) ||| ((l <<< columnBitCount) &&& lineColumnMask)
         pos p
 
-    member p.Line = (code lsr columnBitCount)
+    member p.Line = (int32 (uint32 code >>> columnBitCount))
     member p.Column = (code &&& posColumnMask)
 
     member r.Encoding = code
