@@ -191,10 +191,21 @@ let releaseGithub (release: ReleaseNotes.ReleaseNotes) =
     |> GitHub.publishDraft //releaseDraft
     |> Async.RunSynchronously
 
+let checkFormat () =
+    let result = DotNet.exec id "fantomas" ". --check"
+
+    if result.ExitCode = 0 then
+        Trace.log "No files need formatting"
+    elif result.ExitCode = 99 then
+        failwith "Some files need formatting, run \"dotnet fantomas .\" to resolve this."
+    else
+        Trace.logf "Errors while formatting: %A" result.Errors
+
 let initTargets () =
     Target.create "Clean"
     <| fun _ -> !!"./**/bin/" ++ "./**/obj/" -- "./build/**" ++ pkgPath |> Shell.cleanDirs
 
+    Target.create "CheckFormat" (fun _ -> checkFormat ())
     Target.create "Build" (fun _ -> buildAll ())
     Target.create "Test" (fun _ -> testAll ())
     Target.create "PackLibs" (fun _ -> packAllLibs ())
@@ -203,6 +214,7 @@ let initTargets () =
     Target.create "ReleaseGitHub" (fun _ -> releaseGithub releaseNotesData)
 
 let buildTargetTree () =
+    "CheckFormat" ==> "Build" |> ignore
     "Test" ==> "PackLibs" ==> "PackTools" ==> "Push" ==> "ReleaseGitHub" |> ignore
     "Build" ?=> "Test" |> ignore
     "Build" ==> "PackLibs" |> ignore
