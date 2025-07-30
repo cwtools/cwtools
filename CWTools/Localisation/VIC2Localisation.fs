@@ -1,5 +1,6 @@
 namespace CWTools.Localisation
 
+open CWTools.Utilities.Position.Range
 open FSharp.Data
 open System.IO
 open System.Collections.Generic

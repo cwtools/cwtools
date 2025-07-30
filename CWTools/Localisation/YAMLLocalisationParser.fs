@@ -5,6 +5,7 @@ open CWTools.Parser.SharedParsers
 open CWTools.Utilities.Position
 open System.Collections.Generic
 open System.IO
+open CWTools.Utilities.Position.Range
 open CWTools.Utilities.Utils
 
 module YAMLLocalisationParser =

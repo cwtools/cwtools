@@ -1,11 +1,11 @@
 namespace CWTools.Validation.EU4
 
+open CWTools.Utilities.Position.Range
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Common
 open System
 open System.IO
-open CWTools.Utilities.Position
 
 module EU4LocalisationString =
 

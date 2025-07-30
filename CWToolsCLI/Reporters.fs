@@ -39,7 +39,7 @@ module Reporters =
                 r
                 |> function
                     | ValidationViewModelRow.Error(e) ->
-                        sprintf "%s: %s,%s" (e.category) (e.message) (e.position.ToShortString())
+                        sprintf "%s: %s,%s" (e.category) (e.message) (e.position.ToString())
                     | ValidationViewModelRow.Parse(e) -> sprintf "%s: %s" ("CW001") (e.message))
             |> List.iter (fun es -> sb.AppendLine(sprintf "%s" (es.Pastel(Color.Red))) |> ignore)
 

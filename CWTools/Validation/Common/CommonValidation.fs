@@ -3,6 +3,7 @@ namespace CWTools.Validation.Common
 open System
 open CWTools.Process
 open CWTools.Utilities
+open CWTools.Utilities.Position.Range
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Process.ProcessCore

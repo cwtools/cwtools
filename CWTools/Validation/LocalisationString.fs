@@ -1,5 +1,6 @@
 namespace CWTools.Validation
 
+open CWTools.Utilities.Position.Range
 open FParsec
 open CWTools.Process.Scopes
 open CWTools.Common
@@ -402,7 +403,7 @@ module LocalisationString =
     open CWTools.Games
 
     let validateLocalisationSyntax (results: Results) =
-        let createInvalid error (pos: Position option) =
+        let createInvalid error (pos: FParsec.Position option) =
             { code = "CW001"
               severity = Severity.Error
               range = (getRange pos.Value pos.Value)

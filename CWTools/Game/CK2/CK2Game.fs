@@ -143,51 +143,51 @@ module CK2GameFunctions =
     let createLandedTitleTypes (lookup: CK2Lookup) (map: Map<_, _>) =
         let ells =
             lookup.CK2LandedTitles.[Empire, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landless" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "empire"; "landless" ])
 
         let es =
             lookup.CK2LandedTitles.[Empire, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landed" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "empire"; "landed" ])
 
         let klls =
             lookup.CK2LandedTitles.[Kingdom, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landless" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "kingdom"; "landless" ])
 
         let ks =
             lookup.CK2LandedTitles.[Kingdom, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landed" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "kingdom"; "landed" ])
 
         let dllns =
             lookup.CK2LandedTitles.[Duchy_Normal, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landless" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "duchy"; "duchy_normal"; "landless" ])
 
         let dns =
             lookup.CK2LandedTitles.[Duchy_Normal, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landed" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "duchy"; "duchy_normal"; "landed" ])
 
         let dllhs =
             lookup.CK2LandedTitles.[Duchy_Hired, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landless" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "duchy"; "duchy_hired"; "landless" ])
 
         let dhs =
             lookup.CK2LandedTitles.[Duchy_Hired, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landed" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "duchy"; "duchy_hired"; "landed" ])
 
         let clls =
             lookup.CK2LandedTitles.[County, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landless" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "county"; "landless" ])
 
         let cs =
             lookup.CK2LandedTitles.[County, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landed" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "county"; "landed" ])
 
         let blls =
             lookup.CK2LandedTitles.[Barony, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landless" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "barony"; "landless" ])
 
         let bs =
             lookup.CK2LandedTitles.[Barony, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landed" ])
+            |> List.map (fun e -> createTypeDefInfo false e Range.range0 [] [ "barony"; "landed" ])
 
         map
         |> Map.add "title.empire" (es @ ells)
@@ -275,7 +275,7 @@ module CK2GameFunctions =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> List.map (fun m -> createTypeDefInfo false m.tag Range.range0 [] [])
         )
 
 

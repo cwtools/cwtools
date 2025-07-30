@@ -4,6 +4,7 @@ open System.IO
 open System.Collections.Generic
 open CWTools.Common
 open CWTools.Utilities.Position
+open CWTools.Utilities.Position.Range
 open CWTools.Utilities.Utils
 open FParsec
 

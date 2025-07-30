@@ -52,10 +52,10 @@ module private RulesParserImpl =
             | struct ((_, c), CommentC comment) when comment.Comment.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
                 struct (false, comment.Comment :: c)
             | struct ((_, c), CommentC _) -> struct (false, c)
-            | struct ((_, c), NodeC n) when n.Position.Code = t.Code -> struct (true, c)
-            | struct ((_, c), LeafC v) when v.Position.Code = t.Code -> struct (true, c)
-            | struct ((_, c), LeafValueC v) when v.Position.Code = t.Code -> struct (true, c)
-            | struct ((_, c), ValueClauseC vc) when vc.Position.Code = t.Code -> struct (true, c)
+            | struct ((_, c), NodeC n) when n.Position = t -> struct (true, c)
+            | struct ((_, c), LeafC v) when v.Position = t -> struct (true, c)
+            | struct ((_, c), LeafValueC v) when v.Position = t -> struct (true, c)
+            | struct ((_, c), ValueClauseC vc) when vc.Position = t -> struct (true, c)
             | _ -> struct (false, [])
 
         let one =

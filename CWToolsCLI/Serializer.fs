@@ -54,6 +54,7 @@ do registry.RegisterFactory mkPickler
 do registry.RegisterFactory mkConcurrentDictionaryPickler<int, string>
 do registry.RegisterFactory mkConcurrentDictionaryPickler<int, StringMetadata>
 do registry.RegisterFactory mkConcurrentDictionaryPickler<string, StringTokens>
+do registry.RegisterFactory mkConcurrentDictionaryPickler<string, int>
 registry.DeclareSerializable<FParsec.Position>()
 let picklerCache = PicklerCache.FromCustomPicklerRegistry registry
 
@@ -498,14 +499,14 @@ let deserializeMetadata path =
     { metadata with
         varDefs =
             metadata.varDefs
-            |> Map.map (fun k v -> v |> List.map (fun (s, _) -> (s, range.Zero)))
+            |> Map.map (fun k v -> v |> List.map (fun (s, _) -> (s, Range.range0)))
         typeDefs =
             metadata.typeDefs
             |> Map.map (fun k v ->
                 v
                 |> List.map (fun t ->
                     { t with
-                        range = range.Zero
+                        range = Range.range0
                         validate = false })) }
 
 

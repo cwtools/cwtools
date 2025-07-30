@@ -85,7 +85,7 @@ let tests =
 
               match intermediateParseResult with
               | Success(r, _, _) ->
-                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r
 
                   let printed = CKPrinter.api.prettyPrintStatement node.ToRaw
 

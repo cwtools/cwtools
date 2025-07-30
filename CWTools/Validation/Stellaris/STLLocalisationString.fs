@@ -1,11 +1,11 @@
 namespace CWTools.Validation.Stellaris
 
+open CWTools.Utilities.Position.Range
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
 open CWTools.Common
 open System
 open System.IO
-open CWTools.Utilities.Position
 
 module STLLocalisationString =
 

@@ -3,6 +3,7 @@
 open System.Text
 open CWTools.Process
 open CWTools.Utilities
+open CWTools.Utilities.Position.Range
 open FParsec
 open CWTools.Utilities.Position
 open Types

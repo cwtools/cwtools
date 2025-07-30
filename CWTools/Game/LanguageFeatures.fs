@@ -2,6 +2,7 @@ namespace CWTools.Games
 
 open CWTools.Utilities.Position
 open System.IO
+open CWTools.Utilities.Position.Range
 open Files
 open CWTools.Utilities.Utils
 open CWTools.Process

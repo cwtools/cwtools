@@ -92,7 +92,7 @@ and Leaf =
 
     new(keyvalueitem: KeyValueItem, ?pos: range) =
         let (KeyValueItem(Key(key), value, op)) = keyvalueitem
-        Leaf(key, value, pos |> Option.defaultValue range.Zero, op)
+        Leaf(key, value, pos |> Option.defaultValue Range.range0, op)
 
     static member Create key value = LeafC(Leaf(key, value))
 
@@ -122,7 +122,7 @@ and LeafValue(value: Value, ?pos: range) =
     member this.Key =
         StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
 
-    member val Position = defaultArg pos range.Zero
+    member val Position = defaultArg pos Range.range0
     member this.ToRaw = Value(this.Position, this._value)
     static member Create value = LeafValue value
 
@@ -169,7 +169,7 @@ and ValueClause(keys: Value[], pos: range) =
 
     do reset ()
 
-    new() = ValueClause([||], range.Zero)
+    new() = ValueClause([||], Range.range0)
 
     member val Position = pos
     member val Scope: Scope = scopeManager.AnyScope with get, set
@@ -327,7 +327,7 @@ and ValueClause(keys: Value[], pos: range) =
             | LeafValueC lv -> children.Add(lv.ToRaw)
             | LeafC l -> children.Add(l.ToRaw)
             | ValueClauseC vc ->
-                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
+                let keys = vc.Keys |> Array.map (fun k -> Value(Range.range0, Value.String(k)))
                 children.AddRange(keys)
                 children.Add(Value(vc.Position, Value.Clause vc.ToRaw))
 
@@ -388,7 +388,7 @@ and Node(key: string, pos: range) =
 
     do reset ()
 
-    new(key: string) = Node(key, range.Zero)
+    new(key: string) = Node(key, Range.range0)
 
     member val KeyId: StringTokens = StringResource.stringManager.InternIdentifierToken(key) with get, set
 
@@ -567,7 +567,7 @@ and Node(key: string, pos: range) =
             | LeafValueC lv -> children.Add(lv.ToRaw)
             | LeafC l -> children.Add(l.ToRaw)
             | ValueClauseC vc ->
-                let keys = vc.Keys |> Array.map (fun k -> Value(range.Zero, Value.String(k)))
+                let keys = vc.Keys |> Array.map (fun k -> Value(Range.range0, Value.String(k)))
                 children.AddRange(keys)
                 children.Add(Value(vc.Position, Value.Clause vc.ToRaw))
 

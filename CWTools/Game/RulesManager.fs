@@ -182,7 +182,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         simpleEnums <- enums
         complexEnums <- complexenums
         tempTypes <- types
-        tempValues <- values |> Map.ofList //|> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
+        tempValues <- values |> Map.ofList //|> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, Range.range0))) |> Map.ofList
         rulesDataGenerated <- false
     // log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
 
@@ -358,7 +358,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             tempValues
             |> Map.map (fun k vs -> (expandPredefinedValues tempTypeMap lookup.enumDefs vs))
             |> Map.toList
-            |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero)))
+            |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, Range.range0)))
             |> Map.ofList
 
         let results =

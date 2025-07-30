@@ -175,7 +175,7 @@ let getNodeComments (clause: IClause) =
 //             let parsed = CWTools.Parser.CKParser.parseString testString "test"
 //             match parsed with
 //             |Success(res,_,_) ->
-//                 let node = (STLProcess.shipProcess.ProcessNode() "root" (range.Zero) res)
+//                 let node = (STLProcess.shipProcess.ProcessNode() "root" (Range.range0) res)
 //                 let comments = getNodeComments (node)
 //                 eprintfn "%A" comments
 //             |_ -> ()

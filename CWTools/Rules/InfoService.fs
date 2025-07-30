@@ -5,6 +5,7 @@ open System.Collections.Generic
 open CSharpHelpers
 open CWTools.Rules.RulesWrapper
 open CWTools.Utilities
+open CWTools.Utilities.Position.Range
 open CWTools.Utilities.Utils2
 open CWTools.Utilities.Utils
 open CWTools.Common

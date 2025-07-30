@@ -11,7 +11,7 @@ module Validator =
     open CWTools.Common
     open CWTools.Games.Files
 
-    type range with
+    type Range with
         static member ToJson(r: range) =
             json {
                 do! Json.write "startLine" r.StartLine
@@ -61,7 +61,7 @@ module Validator =
                     do! Json.write "hash" r.hash
                 }
             | Parse r ->
-                let pos = mkRange r.file pos0 pos0 |> Json.serializeWith range.ToJson
+                let pos = Range.mkRange r.file pos0 pos0 |> Json.serializeWith range.ToJson
 
                 json {
                     do! Json.write "category" "CW001"
@@ -137,7 +137,7 @@ module Validator =
     //         // |Game.HOI4 -> HOI4Game(HOI4options) :> IGame<HOI4ComputedData, HOI4Constants.Scope>
     //     let parserErrors = game.ParserErrors
     //     member val folders = game.Folders
-    //     member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e; hash = (createHash f (range.Zero) e)})
+    //     member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e; hash = (createHash f (Range.range0) e)})
     //     member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
     //     member __.allFileList =
     //         game.AllFiles()
@@ -161,7 +161,7 @@ module Validator =
             |> List.map (fun (f, e, p) ->
                 { file = f
                   message = e
-                  hash = (createHash f (range.Zero) e) })
+                  hash = (createHash f (Range.range0) e) })
 
         member __.validationErrorList() =
             game.ValidationErrors()

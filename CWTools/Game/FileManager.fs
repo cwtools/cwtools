@@ -112,7 +112,7 @@ module Files =
                         | Success(p, _, _) -> Some p
                         | _ -> None)
                     |> List.map (
-                        (ProcessCore.processNodeBasic "mod" range.Zero)
+                        (ProcessCore.processNodeBasic "mod" Range.range0)
                         >> (fun s -> s.TagText "name", "../" + (s.TagText "path"))
                     )
 

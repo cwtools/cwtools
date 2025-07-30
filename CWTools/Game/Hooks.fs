@@ -100,7 +100,7 @@ let refreshConfigAfterHook
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> List.map (fun m -> createTypeDefInfo false m.tag Range.range0 [] [])
         )
 
     lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup

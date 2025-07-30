@@ -358,7 +358,7 @@ let testc =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let apply =
                       RuleValidationService(
@@ -439,7 +439,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let enums =
                       [ ("size", ("size", [ "medium"; "large" ]))
@@ -486,7 +486,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let enums =
                       createStarbaseEnumsLazy.Value
@@ -528,7 +528,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let enums =
                       [ ("size", [ "medium"; "large" ]) ]
@@ -574,7 +574,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let enums =
                       [ ("size", ("size", [ "medium"; "large" ])) ]
@@ -624,7 +624,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let enums =
                       [ ("size", ("size", [ "medium"; "large" ])) ]
@@ -674,7 +674,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -736,7 +736,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -809,7 +809,7 @@ let testsv =
 
               match CKParser.parseString filetext "test.txt" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -974,7 +974,7 @@ let testsv =
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
                   UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -1053,7 +1053,7 @@ let testsv =
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
                   UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -1138,7 +1138,7 @@ let testsv =
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
                   UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" (Range.range0) r)
 
                   let entity =
                       { filepath = "events/test.txt"

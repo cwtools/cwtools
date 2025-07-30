@@ -6,6 +6,7 @@ open System.Collections.Generic
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
+open CWTools.Utilities.Position.Range
 open VDS.Common.Tries
 
 module Utils =

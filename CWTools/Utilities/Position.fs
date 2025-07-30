@@ -1,315 +1,62 @@
 // Copyright (c) Microsoft Corporation.  All Rights Reserved.  See License.txt in the project root for license information.
 
-
-/// Anything to do with special names of identifiers and other lexical rules
-module CWTools.Utilities.Position
+// Anything to do with special names of identifiers and other lexical rules
+namespace CWTools.Utilities.Position
 
 open System
 open System.IO
+open System.Collections.Concurrent
 open System.Collections.Generic
 open Microsoft.FSharp.Core.Printf
-// open Internal.Utilities
-// open Microsoft.FSharp.Compiler.AbstractIL
-// open Microsoft.FSharp.Compiler.AbstractIL.Internal
-// open Microsoft.FSharp.Compiler.AbstractIL.Internal.Library
-// open Microsoft.FSharp.Compiler
-// open Microsoft.FSharp.Compiler.Lib
-// open Microsoft.FSharp.Compiler.Lib.Bits
+//-------------------------------------------------------------------------
+// Library: bits
+//------------------------------------------------------------------------
 
-let rec pown32 n =
-    if n = 0 then 0 else (pown32 (n - 1) ||| (1 <<< (n - 1)))
+module Bits =
+    let b0 n = (n &&& 0xFF)
+    let b1 n = ((n >>> 8) &&& 0xFF)
+    let b2 n = ((n >>> 16) &&& 0xFF)
+    let b3 n = ((n >>> 24) &&& 0xFF)
 
-let rec pown64 n =
-    if n = 0 then 0L else (pown64 (n - 1) ||| (1L <<< (n - 1)))
+    let rec pown32 n =
+        if n = 0 then 0 else (pown32 (n - 1) ||| (1 <<< (n - 1)))
 
-let mask32 m n = (pown32 n) <<< m
-let mask64 m n = (pown64 n) <<< m
+    let rec pown64 n =
+        if n = 0 then 0L else (pown64 (n - 1) ||| (1L <<< (n - 1)))
 
-type FileIndex = int32
+    let mask32 m n = (pown32 n) <<< m
+    let mask64 m n = (pown64 n) <<< m
 
-[<Literal>]
-let columnBitCount = 11
+module Pair =
+    let order (compare1: IComparer<'T1>, compare2: IComparer<'T2>) =
+        { new IComparer<struct ('T1 * 'T2)> with
+            member _.Compare((a1, a2), (aa1, aa2)) =
+                let res1 = compare1.Compare(a1, aa1)
+                if res1 <> 0 then res1 else compare2.Compare(a2, aa2) }
 
-[<Literal>]
-let lineBitCount = 21
+module File =
+    let isInvalidPathShim (path: string) =
+        let isInvalidPath (p: string) =
+            if String.IsNullOrEmpty(p) then
+                true
+            else
+                p.IndexOfAny(Path.GetInvalidPathChars()) <> -1
 
-let posBitCount = lineBitCount + columnBitCount
-let _ = assert (posBitCount <= 32)
-let posColumnMask = mask32 0 columnBitCount
-let lineColumnMask = mask32 columnBitCount lineBitCount
-let inline (lsr) (x: int) (y: int) = int32 (uint32 x >>> y)
- 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<Struct; CustomEquality; NoComparison>]
-[<System.Diagnostics.DebuggerDisplay("{Line},{Column}")>]
-type pos(code: int32) =
-    new(l, c) =
-        let l = max 0 l
-        let c = max 0 c
-        let p = (c &&& posColumnMask) ||| ((l <<< columnBitCount) &&& lineColumnMask)
-        pos p
+        let isInvalidFilename (p: string) =
+            if String.IsNullOrEmpty(p) then
+                true
+            else
+                p.IndexOfAny(Path.GetInvalidFileNameChars()) <> -1
 
-    member p.Line = (code lsr columnBitCount)
-    member p.Column = (code &&& posColumnMask)
+        let isInvalidDirectory (d: string) =
+            match d with
+            | Null -> true
+            | NonNull d -> d.IndexOfAny(Path.GetInvalidPathChars()) <> -1
 
-    member r.Encoding = code
-    static member EncodingSize = posBitCount
-    static member Decode(code: int32) : pos = pos code
-
-    override p.Equals(obj) =
-        match obj with
-        | :? pos as p2 -> code = p2.Encoding
-        | _ -> false
-
-    override p.GetHashCode() = hash code
-    override p.ToString() = sprintf "(%d,%d)" p.Line p.Column
-
-[<Literal>]
-let fileIndexBitCount = 16
-
-[<Literal>]
-let startLineBitCount = lineBitCount
-
-[<Literal>]
-let startColumnBitCount = columnBitCount
-
-[<Literal>]
-let heightBitCount = 20 // If necessary, could probably deduct one or two bits here without ill effect.
-
-[<Literal>]
-let endColumnBitCount = columnBitCount
-
-[<Literal>]
-let isSyntheticBitCount = 1
-#if DEBUG
-let _ =
-    assert
-        (fileIndexBitCount
-         + startLineBitCount
-         + startColumnBitCount
-         + heightBitCount
-         + endColumnBitCount
-         + isSyntheticBitCount = 64 + 16)
-#endif
-
-[<Literal>]
-let fileIndexShift = 0
-
-[<Literal>]
-let startLineShift = 0
-
-[<Literal>]
-let startColumnShift = 21
-
-[<Literal>]
-let heightShift = 32
-
-[<Literal>]
-let endColumnShift = 52
-
-[<Literal>]
-let isSyntheticShift = 63
-
-
-[<Literal>]
-let fileIndexMask =
-    0b0000000000000000000000000000000000000000000000000000000000000000L
-
-[<Literal>]
-let startLineMask =
-    0b0000000000000000000000000000000000000000000111111111111111111111L
-
-[<Literal>]
-let startColumnMask =
-    0b0000000000000000000000000000000011111111111000000000000000000000L
-
-[<Literal>]
-let heightMask = 0b0000000000001111111111111111111100000000000000000000000000000000L
-
-[<Literal>]
-let endColumnMask =
-    0b0111111111110000000000000000000000000000000000000000000000000000L
-
-[<Literal>]
-let isSyntheticMask =
-    0b1000000000000000000000000000000000000000000000000000000000000000L
-
-#if DEBUG
-// let _ = assert (startLineShift   = fileIndexShift   + fileIndexBitCount)
-let _ = assert (startColumnShift = startLineShift + startLineBitCount)
-let _ = assert (heightShift = startColumnShift + startColumnBitCount)
-let _ = assert (endColumnShift = heightShift + heightBitCount)
-let _ = assert (isSyntheticShift = endColumnShift + endColumnBitCount)
-// let _ = assert (fileIndexMask =   mask64 0 fileIndexBitCount)
-let _ = assert (startLineMask = mask64 startLineShift startLineBitCount)
-let _ = assert (startColumnMask = mask64 startColumnShift startColumnBitCount)
-let _ = assert (heightMask = mask64 heightShift heightBitCount)
-let _ = assert (endColumnMask = mask64 endColumnShift endColumnBitCount)
-let _ = assert (isSyntheticMask = mask64 isSyntheticShift isSyntheticBitCount)
-#endif
-
-// This is just a standard unique-index table
-type FileIndexTable() =
-    let indexToFileTable = new ResizeArray<_>(11)
-    let fileToIndexTable = new Dictionary<string, int>(11)
-
-    member t.FileToIndex f =
-        let mutable res = 0
-        let ok = fileToIndexTable.TryGetValue(f, &res)
-
-        if ok then
-            res
-        else
-            lock fileToIndexTable (fun () ->
-                let mutable res = 0 in
-                let ok = fileToIndexTable.TryGetValue(f, &res) in
-
-                if ok then
-                    res
-                else
-                    let n = indexToFileTable.Count in
-                    indexToFileTable.Add(f)
-                    fileToIndexTable.[f] <- n
-                    n)
-
-    member t.IndexToFile n =
-        (if n < 0 then
-             failwithf "fileOfFileIndex: negative argument: n = %d\n" n)
-
-        (if n >= indexToFileTable.Count then
-             failwithf "fileOfFileIndex: invalid argument: n = %d\n" n)
-
-        indexToFileTable.[n]
-
-let maxFileIndex = pown32 fileIndexBitCount
-
-// ++GLOBAL MUTABLE STATE
-// WARNING: Global Mutable State, holding a mapping between integers and filenames
-let mutable fileIndexTable = new FileIndexTable()
-
-// If we exceed the maximum number of files we'll start to report incorrect file names
-let fileIndexOfFile f =
-    fileIndexTable.FileToIndex(f) % maxFileIndex
-
-let fileOfFileIndex n = fileIndexTable.IndexToFile(n)
-
-let mkPos l c = pos (l, c)
-
-[<Struct; CustomEquality; NoComparison>]
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-#if DEBUG
-[<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {FileName} IsSynthetic={IsSynthetic} -> {DebugCode}")>]
-#else
-[<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {FileName} IsSynthetic={IsSynthetic}")>]
-#endif
-type range(code: int64, fidx: int16) =
-    static member Zero = range (0L, 0s)
-
-    new(fidx, bl, bc, el, ec) =
-        range (
-            (int64 bl <<< startLineShift)
-            ||| (int64 bc <<< startColumnShift)
-            ||| (int64 (el - bl) <<< heightShift)
-            ||| (int64 ec <<< endColumnShift),
-            int16 fidx
-        )
-
-    new(fidx, b: pos, e: pos) = range (fidx, b.Line, b.Column, e.Line, e.Column)
-
-    member r.StartLine = int32 ((code &&& startLineMask) >>> startLineShift)
-    member r.StartColumn = int32 ((code &&& startColumnMask) >>> startColumnShift)
-    member r.EndLine = int32 ((code &&& heightMask) >>> heightShift) + r.StartLine
-    member r.EndColumn = int32 ((code &&& endColumnMask) >>> endColumnShift)
-    member r.IsSynthetic = int32 ((code &&& isSyntheticMask) >>> isSyntheticShift) <> 0
-    member r.Start = pos (r.StartLine, r.StartColumn)
-    member r.End = pos (r.EndLine, r.EndColumn)
-    member r.FileIndex = int32 (fidx)
-    member m.StartRange = range (m.FileIndex, m.Start, m.Start)
-    member m.EndRange = range (m.FileIndex, m.End, m.End)
-    member r.FileName = fileOfFileIndex r.FileIndex
-#if DEBUG
-    member r.DebugCode =
-        try
-            let endCol = r.EndColumn - 1
-            let startCol = r.StartColumn - 1
-
-            File.ReadAllLines(r.FileName)
-            |> Seq.skip (r.StartLine - 1)
-            |> Seq.take (r.EndLine - r.StartLine + 1)
-            |> String.concat "\n"
-            |> fun s -> s.Substring(startCol + 1, s.LastIndexOf("\n", StringComparison.Ordinal) + 1 - startCol + endCol)
-        with e ->
-            e.ToString()
-#endif
-    member r.MakeSynthetic() = range (code ||| isSyntheticMask, fidx)
-
-    override r.ToString() =
-        sprintf
-            "%s (%d,%d--%d,%d) IsSynthetic=%b"
-            r.FileName
-            r.StartLine
-            r.StartColumn
-            r.EndLine
-            r.EndColumn
-            r.IsSynthetic
-
-    member r.ToShortString() =
-        sprintf "(%d,%d--%d,%d)" r.StartLine r.StartColumn r.EndLine r.EndColumn
-
-    member r.Code = code
-
-    override r.Equals(obj) =
-        match obj with
-        | :? range as r2 -> code = r2.Code
-        | _ -> false
-
-    override r.GetHashCode() = hash code
-
-let memoize (keyFunction: 'a -> 'b) (memFunction: 'a -> 'c) =
-    let dict = new System.Collections.Concurrent.ConcurrentDictionary<'b, 'c>()
-
-    fun n ->
-        match dict.TryGetValue(keyFunction (n)) with
-        | true, v -> v
-        | _ ->
-            let temp = memFunction (n)
-            dict.TryAdd(keyFunction (n), temp) |> ignore
-            temp
-
-
-let mkRangePath (f: string) =
-    if System.IO.Path.IsPathRooted f then
-        try
-            Path.GetFullPath f
-        with _ ->
-            f
-    else
-        f
-
-let mkRangePathMem = memoize id mkRangePath
-
-let mkRange (f: string) b e =
-    // remove relative parts from full path
-    // let normalizedFilePath = if System.IO.Path.IsPathRooted f then try Path.GetFullPath f with _ -> f else f
-    let normalizedFilePath = mkRangePathMem f
-    range (fileIndexOfFile normalizedFilePath, b, e)
-
-let mkFileIndexRange fi b e = range (fi, b, e)
-
-(* end representation, start derived ops *)
-let orderOn p (pxOrder: IComparer<'U>) =
-    { new IComparer<'T> with
-        member __.Compare(x, xx) = pxOrder.Compare(p x, p xx) }
-
-let porder (compare1: IComparer<'T1>, compare2: IComparer<'T2>) =
-    { new IComparer<'T1 * 'T2> with
-        member __.Compare((a1, a2), (aa1, aa2)) =
-            let res1 = compare1.Compare(a1, aa1)
-            if res1 <> 0 then res1 else compare2.Compare(a2, aa2) }
+        isInvalidPath path
+        || let directory = Path.GetDirectoryName path in
+           let fileName = Path.GetFileName path in
+           isInvalidDirectory directory || isInvalidFilename fileName
 
 module Int32 =
     let order = LanguagePrimitives.FastGenericComparer<int>
@@ -317,88 +64,392 @@ module Int32 =
 module String =
     let order = LanguagePrimitives.FastGenericComparer<string>
 
-let posOrder =
-    orderOn (fun (p: pos) -> p.Line, p.Column) (porder (Int32.order, Int32.order))
-(* rangeOrder: not a total order, but enough to sort on ranges *)
-let rangeOrder =
-    orderOn (fun (r: range) -> r.FileName, r.Start) (porder (String.order, posOrder))
 
-let outputPos (os: TextWriter) (m: pos) = fprintf os "(%d,%d)" m.Line m.Column
+open Bits
 
-let outputRange (os: TextWriter) (m: range) =
-    fprintf os "%s%a-%a" m.FileName outputPos m.Start outputPos m.End
+type FileIndex = int32
 
-let boutputPos os (m: pos) = bprintf os "(%d,%d)" m.Line m.Column
+[<AutoOpen>]
+module PosImpl =
+    [<Literal>]
+    let columnBitCount = 22
 
-let boutputRange os (m: range) =
-    bprintf os "%s%a-%a" m.FileName boutputPos m.Start boutputPos m.End
+    [<Literal>]
+    let lineBitCount = 31
 
-let posGt (p1: pos) (p2: pos) =
-    (p1.Line > p2.Line || (p1.Line = p2.Line && p1.Column > p2.Column))
+    let posBitCount = lineBitCount + columnBitCount
 
-let posEq (p1: pos) (p2: pos) =
-    (p1.Line = p2.Line && p1.Column = p2.Column)
+    let posColumnMask = mask64 0 columnBitCount
 
-let posGeq p1 p2 = posEq p1 p2 || posGt p1 p2
-let posLt p1 p2 = posGt p2 p1
+    let lineColumnMask = mask64 columnBitCount lineBitCount
 
-// This is deliberately written in an allocation-free way, i.e. m1.Start, m1.End etc. are not called
-let unionRanges (m1: range) (m2: range) =
-    if m1.FileIndex <> m2.FileIndex then
-        m2
-    else
-        let b =
-            if
-                (m1.StartLine > m2.StartLine
-                 || (m1.StartLine = m2.StartLine && m1.StartColumn > m2.StartColumn))
-            then
-                m2
-            else
-                m1
+[<Struct; CustomEquality; NoComparison>]
+[<System.Diagnostics.DebuggerDisplay("{Line},{Column}")>]
+type Position(code: int64) =
 
-        let e =
-            if
-                (m1.EndLine > m2.EndLine
-                 || (m1.EndLine = m2.EndLine && m1.EndColumn > m2.EndColumn))
-            then
-                m1
-            else
-                m2
+    new(l, c) =
+        let l = max 0 l
+        let c = max 0 c
 
-        range (m1.FileIndex, b.StartLine, b.StartColumn, e.EndLine, e.EndColumn)
+        let p =
+            (int64 c &&& posColumnMask)
+            ||| ((int64 l <<< columnBitCount) &&& lineColumnMask)
 
-let rangeContainsRange (m1: range) (m2: range) =
-    m1.FileIndex = m2.FileIndex && posGeq m2.Start m1.Start && posGeq m1.End m2.End
+        pos p
 
-let rangeContainsPos (m1: range) p = posGeq p m1.Start && posGeq m1.End p
+    member p.Line = int32 (uint64 code >>> columnBitCount)
 
-let rangeBeforePos (m1: range) p = posGeq p m1.End
+    member p.Column = int32 (code &&& posColumnMask)
 
-let rangeN filename line =
-    mkRange filename (mkPos line 0) (mkPos line 0)
+    member r.Encoding = code
 
-let pos0 = mkPos 1 0
-let range0 = rangeN "unknown" 1
-let rangeStartup = rangeN "startup" 1
-let rangeCmdArgs = rangeN "commandLineArgs" 0
+    static member EncodingSize = posBitCount
 
-let trimRangeToLine (r: range) =
-    let startL, startC = r.StartLine, r.StartColumn
-    let endL, _endC = r.EndLine, r.EndColumn
+    static member Decode(code: int64) : pos = Position(code)
 
-    if endL <= startL then
-        r
-    else
-        let endL, endC =
-            startL + 1, 0 (* Trim to the start of the next line (we do not know the end of the current line) *)
+    override p.Equals(obj) =
+        match obj with
+        | :? Position as p2 -> code = p2.Encoding
+        | _ -> false
 
-        range (r.FileIndex, startL, startC, endL, endC)
+    override p.GetHashCode() = hash code
 
-(* For Diagnostics *)
-let stringOfPos (pos: pos) = sprintf "(%d,%d)" pos.Line pos.Column
+    override p.ToString() = sprintf $"(%d{p.Line},%d{p.Column})"
 
-let stringOfRange (r: range) =
-    sprintf "%s%s-%s" r.FileName (stringOfPos r.Start) (stringOfPos r.End)
+    member p.IsAdjacentTo(otherPos: Position) =
+        p.Line = otherPos.Line && p.Column + 1 = otherPos.Column
+
+and pos = Position
+
+[<RequireQualifiedAccess>]
+type NotedSourceConstruct =
+    | None
+    | While
+    | For
+    | InOrTo
+    | Try
+    | Binding
+    | Finally
+    | With
+    | Combine
+    | DelayOrQuoteOrRun
+
+[<AutoOpen>]
+module RangeImpl =
+    [<Literal>]
+    let fileIndexBitCount = 20
+
+    [<Literal>]
+    let startColumnBitCount = columnBitCount // 22
+
+    [<Literal>]
+    let endColumnBitCount = columnBitCount // 22
+
+    [<Literal>]
+    let startLineBitCount = lineBitCount // 31
+
+    [<Literal>]
+    let heightBitCount = 27
+
+    [<Literal>]
+    let isSyntheticBitCount = 1
+
+    [<Literal>]
+    let debugPointKindBitCount = 4
+
+    [<Literal>]
+    let fileIndexShift = 0
+
+    [<Literal>]
+    let startColumnShift = 20
+
+    [<Literal>]
+    let endColumnShift = 42
+
+    [<Literal>]
+    let startLineShift = 0
+
+    [<Literal>]
+    let heightShift = 31
+
+    [<Literal>]
+    let isSyntheticShift = 58
+
+    [<Literal>]
+    let debugPointKindShift = 59
+
+    [<Literal>]
+    let fileIndexMask =
+        0b0000000000000000000000000000000000000000000011111111111111111111L
+
+    [<Literal>]
+    let startColumnMask =
+        0b0000000000000000000000111111111111111111111100000000000000000000L
+
+    [<Literal>]
+    let endColumnMask =
+        0b1111111111111111111111000000000000000000000000000000000000000000L
+
+    [<Literal>]
+    let startLineMask =
+        0b0000000000000000000000000000000001111111111111111111111111111111L
+
+    [<Literal>]
+    let heightMask = 0b0000001111111111111111111111111110000000000000000000000000000000L
+
+    [<Literal>]
+    let isSyntheticMask =
+        0b0000010000000000000000000000000000000000000000000000000000000000L
+
+    [<Literal>]
+    let debugPointKindMask =
+        0b0111100000000000000000000000000000000000000000000000000000000000L
+
+#if DEBUG
+    let _ = assert (posBitCount <= 64)
+    let _ = assert (fileIndexBitCount + startColumnBitCount + endColumnBitCount <= 64)
+
+    let _ =
+        assert
+            (startLineBitCount
+             + heightBitCount
+             + isSyntheticBitCount
+             + debugPointKindBitCount
+             <= 64)
+
+    let _ = assert (startColumnShift = fileIndexShift + fileIndexBitCount)
+    let _ = assert (endColumnShift = startColumnShift + startColumnBitCount)
+
+    let _ = assert (heightShift = startLineShift + startLineBitCount)
+    let _ = assert (isSyntheticShift = heightShift + heightBitCount)
+    let _ = assert (debugPointKindShift = isSyntheticShift + isSyntheticBitCount)
+
+    let _ = assert (fileIndexMask = mask64 fileIndexShift fileIndexBitCount)
+    let _ = assert (startLineMask = mask64 startLineShift startLineBitCount)
+    let _ = assert (startColumnMask = mask64 startColumnShift startColumnBitCount)
+    let _ = assert (heightMask = mask64 heightShift heightBitCount)
+    let _ = assert (endColumnMask = mask64 endColumnShift endColumnBitCount)
+    let _ = assert (isSyntheticMask = mask64 isSyntheticShift isSyntheticBitCount)
+
+    let _ =
+        assert (debugPointKindMask = mask64 debugPointKindShift debugPointKindBitCount)
+#endif
+
+/// A unique-index table for file names.
+type FileIndexTable() =
+    let indexToFileTable = ResizeArray<_>(11)
+    let fileToIndexTable = ConcurrentDictionary<string, int>()
+
+    // Note: we should likely adjust this code to always normalize. However some testing (and possibly some
+    // product behaviour) appears to be sensitive to error messages reporting un-normalized file names.
+    // Currently all names going through 'mkRange' get normalized, while this going through just 'fileIndexOfFile'
+    // do not.  Also any file names which are not put into ranges at all are non-normalized.
+    //
+    // TO move forward we should eventually introduce a new type NormalizedFileName that tracks this invariant.
+    member t.FileToIndex normalize filePath =
+        match fileToIndexTable.TryGetValue filePath with
+        | true, idx -> idx
+        | _ ->
+            // Try again looking for a normalized entry.
+            let normalizedFilePath =
+                if normalize then
+                    if Path.IsPathRooted filePath then
+                        Path.GetFullPath filePath
+                    else
+                        filePath
+                else
+                    filePath
+
+            match fileToIndexTable.TryGetValue normalizedFilePath with
+            | true, idx ->
+                // Record the non-normalized entry if necessary
+                if filePath <> normalizedFilePath then
+                    fileToIndexTable[filePath] <- idx
+
+                // Return the index
+                idx
+
+            | _ ->
+                lock indexToFileTable (fun () ->
+                    // See if it was added on another thread
+                    match fileToIndexTable.TryGetValue normalizedFilePath with
+                    | true, idx -> idx
+                    | _ ->
+                        // Okay it's really not there
+                        let idx = indexToFileTable.Count
+
+                        // Record the normalized entry
+                        indexToFileTable.Add normalizedFilePath
+                        fileToIndexTable[normalizedFilePath] <- idx
+
+                        // Record the non-normalized entry if necessary
+                        if filePath <> normalizedFilePath then
+                            fileToIndexTable[filePath] <- idx
+
+                        // Return the index
+                        idx)
+
+    member t.IndexToFile n =
+        if n < 0 then
+            failwithf $"fileOfFileIndex: negative argument: n = %d{n}\n"
+
+        if n >= indexToFileTable.Count then
+            failwithf $"fileOfFileIndex: invalid argument: n = %d{n}\n"
+
+        indexToFileTable[n]
+
+[<AutoOpen>]
+module FileIndex =
+    let maxFileIndex = pown32 fileIndexBitCount
+
+    // ++GLOBAL MUTABLE STATE
+    // WARNING: Global Mutable State, holding a mapping between integers and filenames
+    let mutable fileIndexTable = FileIndexTable()
+
+    // If we exceed the maximum number of files we'll start to report incorrect file names
+    let fileIndexOfFileAux normalize f =
+        fileIndexTable.FileToIndex normalize f % maxFileIndex
+
+    let fileIndexOfFile filePath = fileIndexOfFileAux false filePath
+
+    let fileOfFileIndex idx = fileIndexTable.IndexToFile idx
+
+    let unknownFileName = "unknown"
+    let startupFileName = "startup"
+    let commandLineArgsFileName = "commandLineArgs"
+
+[<Struct; CustomEquality; NoComparison>]
+[<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {ShortFileName} -> {DebugCode}")>]
+type Range(code1: int64, code2: int64) =
+    static member Zero =
+        range (fileIndexOfFileAux true unknownFileName, (Position(1, 0)), (Position(1, 0)))
+
+
+    new(fIdx, bl, bc, el, ec) =
+        let code1 =
+            ((int64 fIdx) &&& fileIndexMask)
+            ||| ((int64 bc <<< startColumnShift) &&& startColumnMask)
+            ||| ((int64 ec <<< endColumnShift) &&& endColumnMask)
+
+        let code2 =
+            ((int64 bl <<< startLineShift) &&& startLineMask)
+            ||| ((int64 (el - bl) <<< heightShift) &&& heightMask)
+
+        range (code1, code2)
+
+    new(fIdx, b: pos, e: pos) = range (fIdx, b.Line, b.Column, e.Line, e.Column)
+
+    member _.StartLine = int32 (uint64 (code2 &&& startLineMask) >>> startLineShift)
+
+    member _.StartColumn = int32 (uint64 (code1 &&& startColumnMask) >>> startColumnShift)
+
+    member m.EndLine = int32 (uint64 (code2 &&& heightMask) >>> heightShift) + m.StartLine
+
+    member _.EndColumn = int32 (uint64 (code1 &&& endColumnMask) >>> endColumnShift)
+
+    member _.IsSynthetic =
+        int32 (uint64 (code2 &&& isSyntheticMask) >>> isSyntheticShift) <> 0
+
+    member _.NotedSourceConstruct =
+        match int32 (uint64 (code2 &&& debugPointKindMask) >>> debugPointKindShift) with
+        | 1 -> NotedSourceConstruct.While
+        | 2 -> NotedSourceConstruct.For
+        | 3 -> NotedSourceConstruct.Try
+        | 4 -> NotedSourceConstruct.Finally
+        | 5 -> NotedSourceConstruct.Binding
+        | 6 -> NotedSourceConstruct.InOrTo
+        | 7 -> NotedSourceConstruct.With
+        | 8 -> NotedSourceConstruct.Combine
+        | 9 -> NotedSourceConstruct.DelayOrQuoteOrRun
+        | _ -> NotedSourceConstruct.None
+
+    member m.Start = pos (m.StartLine, m.StartColumn)
+
+    member m.End = pos (m.EndLine, m.EndColumn)
+
+    member _.FileIndex = int32 (code1 &&& fileIndexMask)
+
+    member m.StartRange = range (m.FileIndex, m.Start, m.Start)
+
+    member m.EndRange = range (m.FileIndex, m.End, m.End)
+
+    member m.FileName = fileOfFileIndex m.FileIndex
+
+    member m.ShortFileName = Path.GetFileName(fileOfFileIndex m.FileIndex)
+
+    member _.MakeSynthetic() =
+        range (code1, code2 ||| isSyntheticMask)
+
+    member m.IsAdjacentTo(otherRange: Range) =
+        m.FileIndex = otherRange.FileIndex && m.End.Encoding = otherRange.Start.Encoding
+
+    member _.NoteSourceConstruct(kind) =
+        let code =
+            match kind with
+            | NotedSourceConstruct.None -> 0
+            | NotedSourceConstruct.While -> 1
+            | NotedSourceConstruct.For -> 2
+            | NotedSourceConstruct.Try -> 3
+            | NotedSourceConstruct.Finally -> 4
+            | NotedSourceConstruct.Binding -> 5
+            | NotedSourceConstruct.InOrTo -> 6
+            | NotedSourceConstruct.With -> 7
+            | NotedSourceConstruct.Combine -> 8
+            | NotedSourceConstruct.DelayOrQuoteOrRun -> 9
+
+        range (code1, (code2 &&& ~~~debugPointKindMask) ||| (int64 code <<< debugPointKindShift))
+
+    member _.Code1 = code1
+
+    member _.Code2 = code2
+
+    member m.DebugCode =
+        let name = m.FileName
+
+        if
+            name = unknownFileName
+            || name = startupFileName
+            || name = commandLineArgsFileName
+        then
+            name
+        else
+
+            try
+                let endCol = m.EndColumn - 1
+                let startCol = m.StartColumn - 1
+
+                if File.isInvalidPathShim m.FileName then
+                    "path invalid: " + m.FileName
+                elif not (File.Exists m.FileName) then
+                    "nonexistent file: " + m.FileName
+                else
+                    File.ReadLines m.FileName
+                    |> Seq.skip (m.StartLine - 1)
+                    |> Seq.take (m.EndLine - m.StartLine + 1)
+                    |> String.concat "\n"
+                    |> fun s ->
+                        s.Substring(startCol + 1, s.LastIndexOf("\n", StringComparison.Ordinal) + 1 - startCol + endCol)
+            with e ->
+                e.ToString()
+
+    member _.Equals(m2: range) =
+        let code2 = code2 &&& ~~~(debugPointKindMask ||| isSyntheticMask)
+        let rcode2 = m2.Code2 &&& ~~~(debugPointKindMask ||| isSyntheticMask)
+        code1 = m2.Code1 && code2 = rcode2
+
+    override m.Equals(obj) =
+        match obj with
+        | :? range as m2 -> m.Equals(m2)
+        | _ -> false
+
+    override _.GetHashCode() =
+        let code2 = code2 &&& ~~~(debugPointKindMask ||| isSyntheticMask)
+        hash code1 + hash code2
+
+    override r.ToString() =
+        sprintf $"(%d{r.StartLine},%d{r.StartColumn}--%d{r.EndLine},%d{r.EndColumn})"
+
+and range = Range
 
 #if CHECK_LINE0_TYPES // turn on to check that we correctly transform zero-based line counts to one-based line counts
 // Visual Studio uses line counts starting at 0, F# uses them starting at 1
@@ -409,21 +460,182 @@ type Line0 = int<ZeroBasedLineAnnotation>
 #else
 type Line0 = int
 #endif
-type Pos01 = Line0 * int
-type Range01 = Pos01 * Pos01
+
+type Position01 = Line0 * int
+
+type Range01 = Position01 * Position01
 
 module Line =
-    // Visual Studio uses line counts starting at 0, F# uses them starting at 1
+
     let fromZ (line: Line0) = int line + 1
 
     let toZ (line: int) : Line0 =
         LanguagePrimitives.Int32WithMeasure(line - 1)
 
-module Pos =
-    let fromZ (line: Line0) idx = mkPos (Line.fromZ line) idx
+[<AutoOpen>]
+module Position =
+
+    let mkPos line column = Position(line, column)
+
+    let outputPos (os: TextWriter) (m: pos) = fprintf os $"(%d{m.Line},%d{m.Column})"
+
+    let posGt (p1: pos) (p2: pos) =
+        let p1Line = p1.Line
+        let p2Line = p2.Line
+        p1Line > p2Line || p1Line = p2Line && p1.Column > p2.Column
+
+    let posEq (p1: pos) (p2: pos) = p1.Encoding = p2.Encoding
+
+    let posGeq p1 p2 = posEq p1 p2 || posGt p1 p2
+
+    let posLt p1 p2 = posGt p2 p1
+
+    let fromZ (line: Line0) column = mkPos (Line.fromZ line) column
+
     let toZ (p: pos) = (Line.toZ p.Line, p.Column)
 
+    (* For Diagnostics *)
+    let stringOfPos (pos: pos) =
+        sprintf $"(%d{pos.Line},%d{pos.Column})"
+
+    let pos0 = mkPos 1 0
 
 module Range =
-    let toZ (m: range) = Pos.toZ m.Start, Pos.toZ m.End
+    let mkRange filePath startPos endPos =
+        range (fileIndexOfFileAux true filePath, startPos, endPos)
+
+    let equals (r1: range) (r2: range) = r1.Equals(r2)
+
+    let mkFileIndexRange fileIndex startPos endPos = range (fileIndex, startPos, endPos)
+
+    let posOrder =
+        let pairOrder = Pair.order (Int32.order, Int32.order)
+        let lineAndColumn = fun (p: pos) -> struct (p.Line, p.Column)
+
+        { new IComparer<pos> with
+            member _.Compare(x, xx) =
+                pairOrder.Compare(lineAndColumn x, lineAndColumn xx) }
+
+    let rangeOrder =
+        let tripleOrder = Pair.order (String.order, Pair.order (posOrder, posOrder))
+        let fileLineColumn = fun (r: range) -> struct (r.FileName, struct (r.Start, r.End))
+
+        { new IComparer<range> with
+            member _.Compare(x, xx) =
+                tripleOrder.Compare(fileLineColumn x, fileLineColumn xx) }
+
+    let outputRange (os: TextWriter) (m: range) =
+        fprintf os "%s%a-%a" m.FileName outputPos m.Start outputPos m.End
+
+    /// This is deliberately written in an allocation-free way, i.e. m1.Start, m1.End etc. are not called
+    let unionRanges (m1: range) (m2: range) =
+        if m1.FileIndex <> m2.FileIndex then
+            m2
+        else if
+
+            // If all identical then return m1. This preserves NotedSourceConstruct when no merging takes place
+            m1.Code1 = m2.Code1 && m1.Code2 = m2.Code2
+        then
+            m1
+        else
+
+            let start =
+                if
+                    (m1.StartLine > m2.StartLine
+                     || (m1.StartLine = m2.StartLine && m1.StartColumn > m2.StartColumn))
+                then
+                    m2
+                else
+                    m1
+
+            let finish =
+                if
+                    (m1.EndLine > m2.EndLine
+                     || (m1.EndLine = m2.EndLine && m1.EndColumn > m2.EndColumn))
+                then
+                    m1
+                else
+                    m2
+
+            let m =
+                range (m1.FileIndex, start.StartLine, start.StartColumn, finish.EndLine, finish.EndColumn)
+
+            if m1.IsSynthetic || m2.IsSynthetic then
+                m.MakeSynthetic()
+            else
+                m
+
+    let withStartEnd (startPos: Position) (endPos: Position) (r: range) = range (r.FileIndex, startPos, endPos)
+
+    let withStart (startPos: Position) (r: range) = range (r.FileIndex, startPos, r.End)
+
+    let withEnd (endPos: Position) (r: range) = range (r.FileIndex, r.Start, endPos)
+
+    let shiftStart (lineDelta: int) (columnDelta: int) (r: range) =
+        let shiftedStart = mkPos (r.Start.Line + lineDelta) (r.StartColumn + columnDelta)
+        range (r.FileIndex, shiftedStart, r.End)
+
+    let shiftEnd (lineDelta: int) (columnDelta: int) (r: range) =
+        let shiftedEnd = mkPos (r.End.Line + lineDelta) (r.EndColumn + columnDelta)
+        range (r.FileIndex, r.Start, shiftedEnd)
+
+    let rangeContainsRange (m1: range) (m2: range) =
+        m1.FileIndex = m2.FileIndex && posGeq m2.Start m1.Start && posGeq m1.End m2.End
+
+    let rangeContainsPos (m1: range) p = posGeq p m1.Start && posGeq m1.End p
+
+    let rangeBeforePos (m1: range) p = posGeq p m1.End
+
+    let rangeN fileName line =
+        mkRange fileName (mkPos line 0) (mkPos line 0)
+
+    let range0 = rangeN unknownFileName 1
+
+    let rangeStartup = rangeN startupFileName 1
+
+    let rangeCmdArgs = rangeN commandLineArgsFileName 0
+
+    let trimRangeToLine (r: range) =
+        let startL, startC = r.StartLine, r.StartColumn
+        let endL, _endC = r.EndLine, r.EndColumn
+
+        if endL <= startL then
+            r
+        else
+            // Trim to the start of the next line (we do not know the end of the current line)
+            let endL, endC = startL + 1, 0
+            range (r.FileIndex, startL, startC, endL, endC)
+
+    let stringOfRange (r: range) =
+        sprintf $"%s{r.FileName}%s{stringOfPos r.Start}-%s{stringOfPos r.End}"
+
+    let toZ (m: range) = toZ m.Start, toZ m.End
+
     let toFileZ (m: range) = m.FileName, toZ m
+
+    let comparer =
+        { new IEqualityComparer<range> with
+            member _.Equals(x1, x2) = equals x1 x2
+            member _.GetHashCode o = o.GetHashCode() }
+
+    let mkFirstLineOfFile (file: string) =
+        try
+            if not (File.Exists file) then
+                mkRange file (mkPos 1 0) (mkPos 1 80)
+            else
+                let lines = File.ReadLines(file) |> Seq.indexed
+
+                let nonWhiteLine =
+                    lines |> Seq.tryFind (fun (_, s) -> not (String.IsNullOrWhiteSpace s))
+
+                match nonWhiteLine with
+                | Some(i, s) -> mkRange file (mkPos (i + 1) 0) (mkPos (i + 1) s.Length)
+                | None ->
+
+                    let nonEmptyLine = lines |> Seq.tryFind (fun (_, s) -> not (String.IsNullOrEmpty s))
+
+                    match nonEmptyLine with
+                    | Some(i, s) -> mkRange file (mkPos (i + 1) 0) (mkPos (i + 1) s.Length)
+                    | None -> mkRange file (mkPos 1 0) (mkPos 1 80)
+        with _ ->
+            mkRange file (mkPos 1 0) (mkPos 1 80)

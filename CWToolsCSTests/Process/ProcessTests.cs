@@ -1,24 +1,23 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CWTools.CSharp;
 using CWTools.Parser;
 using CWTools.Process;
-using CWTools.Utilities;
 using NUnit.Framework;
+using Range = CWTools.Utilities.Position.Range;
 
 namespace CWToolsCSTests.Process;
 
 public sealed class ProcessTests
 {
     private const string Text = """
-        # comment1
-        key1 = value1
-        key2 = "value2"
-        key3 > 1
-        node1 = {
-            key2 = value2
-        }
-        """;
+                                # comment1
+                                key1 = value1
+                                key2 = "value2"
+                                key3 > 1
+                                node1 = {
+                                    key2 = value2
+                                }
+                                """;
 
     private Node _root;
 
@@ -73,7 +72,7 @@ public sealed class ProcessTests
         var leaf = new Leaf(
             "key1",
             Types.Value.CreateString("value"),
-            Position.range.Zero,
+            Range.Zero,
             Types.Operator.Equals
         );
         using (Assert.EnterMultipleScope())
@@ -101,7 +100,7 @@ public sealed class ProcessTests
     [Test]
     public void NodeTest()
     {
-        var node = new Node("key1", Position.range.Zero);
+        var node = new Node("key1", Range.Zero);
 
         using (Assert.EnterMultipleScope())
         {
@@ -109,7 +108,7 @@ public sealed class ProcessTests
             Assert.That(node.AllArray, Is.Empty);
             Assert.That(node.Leaves, Is.Empty);
             Assert.That(node.Comments, Is.Empty);
-            Assert.That(node.Position, Is.EqualTo(Position.range.Zero));
+            Assert.That(node.Position, Is.EqualTo(Range.Zero));
         }
     }
 
@@ -122,7 +121,7 @@ public sealed class ProcessTests
         var leaf2 = (Child.LeafC)children[2];
         var leaf3 = (Child.LeafC)children[3];
         var node = (Child.NodeC)children[4];
-        
+
         Assert.That(children[0].IsCommentC, Is.True);
         Assert.That(children[1].IsLeafC, Is.True);
         Assert.That(children[2].IsLeafC, Is.True);

@@ -5,6 +5,7 @@ open System.IO
 open CSharpHelpers
 open CWTools.Common
 open CWTools.Rules.RulesWrapper
+open CWTools.Utilities.Position.Range
 open CWTools.Utilities.Utils2
 open CWTools.Utilities.Utils
 open CWTools.Process.Localisation

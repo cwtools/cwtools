@@ -179,7 +179,7 @@ module EU4GameFunctions =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> List.map (fun m -> createTypeDefInfo false m.tag Range.range0 [] [])
         )
 
     let loadConfigRulesHook rules (lookup: Lookup) embedded =
