@@ -52,11 +52,7 @@ module internal FieldValidators =
 
     let checkFileExists (files: Collections.Set<string>) (leaf: Leaf) =
         let file =
-            leaf.ValueText
-                .Trim('"')
-                .Replace("\\", "/")
-                .Replace(".lua", ".shader")
-                .Replace(".tga", ".dds")
+            leaf.ValueText.Trim('"').Replace("\\", "/").Replace(".lua", ".shader").Replace(".tga", ".dds")
 
         if files.Contains file then
             OK
@@ -197,6 +193,7 @@ module internal FieldValidators =
                     <&&&> errors
             | ValueType.Date ->
                 let ok = FieldValidatorsHelper.IsValidDate(key)
+
                 if ok then
                     errors
                 else
@@ -204,6 +201,7 @@ module internal FieldValidators =
                     <&&&> errors
             | ValueType.DateTime ->
                 let ok = FieldValidatorsHelper.IsValidDateTime(key)
+
                 if ok then
                     errors
                 else
@@ -236,12 +234,7 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
                 else
-                    (LocalisationValidation.checkLocKeysLeafOrNodeN
-                        keys
-                        ids
-                        parts.[0]
-                        leafornode
-                        errors)
+                    (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[0] leafornode errors)
                     |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
                     |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
                     |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
@@ -316,8 +309,7 @@ module internal FieldValidators =
          | ValueType.STLNameFormat var ->
              match varMap.TryFind var with
              | Some vars ->
-                 let refs =
-                     FieldValidatorsHelper.StlNameFormatRegex().Matches(key)
+                 let refs = FieldValidatorsHelper.StlNameFormatRegex().Matches(key)
 
                  let res =
                      refs
@@ -327,8 +319,7 @@ module internal FieldValidators =
                      |> Seq.exists (vars.ContainsKey >> not)
 
                  res |> not
-             | None -> false
-        )
+             | None -> false)
         || firstCharEqualsAmp ids.lower
 
     let checkLocalisationField
@@ -584,7 +575,7 @@ module internal FieldValidators =
         errors
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace('\\', '/').Replace("//","/")
+        let file = (trimQuote key).Replace('\\', '/').Replace("//", "/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 
@@ -612,7 +603,7 @@ module internal FieldValidators =
         (extension: string option)
         =
         let key = getOriginalKey ids
-        let file = (trimQuote key).Replace('\\', '/').Replace("//","/")
+        let file = (trimQuote key).Replace('\\', '/').Replace("//", "/")
         let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
         let file = if extension.IsSome then file + extension.Value else file
 

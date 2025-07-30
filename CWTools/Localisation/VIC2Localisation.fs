@@ -10,10 +10,24 @@ open CWTools.Utilities.Utils
 
 module VIC2Localisation =
     type LocalisationEntry =
-        CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";", IgnoreErrors=false, Quote='~', HasHeaders=true, Encoding="1252">
+        CsvProvider<
+            "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x",
+            ";",
+            IgnoreErrors=false,
+            Quote='~',
+            HasHeaders=true,
+            Encoding="1252"
+         >
 
     type LocalisationEntryFallback =
-        CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";", IgnoreErrors=true, Quote='~', HasHeaders=true, Encoding="1252">
+        CsvProvider<
+            "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x",
+            ";",
+            IgnoreErrors=true,
+            Quote='~',
+            HasHeaders=true,
+            Encoding="1252"
+         >
 
     type VIC2LocalisationService(files: (string * string) list) =
         // let localisationFolder : string = localisationSettings.folder

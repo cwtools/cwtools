@@ -80,11 +80,7 @@ module STLProcess =
                 let targetFromString (k: string) = k.Substring(13).Split('.').[0]
 
                 let inner (leaf: Leaf) =
-                    if
-                        leaf.Value
-                            .ToRawString()
-                            .StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
-                    then
+                    if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then
                         Some(leaf.Value.ToRawString() |> targetFromString)
                     else
                         None
@@ -119,9 +115,7 @@ module STLProcess =
                 let inner (leaf: Leaf) =
                     if
                         leaf.Key == "exists"
-                        && leaf.Value
-                            .ToRawString()
-                            .StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
+                        && leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
                     then
                         Some(leaf.Value.ToRawString().Substring(13).Split('.').[0])
                     else

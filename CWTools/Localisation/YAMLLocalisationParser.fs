@@ -104,8 +104,7 @@ module YAMLLocalisationParser =
             |> Array.tryPick (fun r -> if r.key = x then Some r.desc else None)
             |> Option.defaultValue x
 
-        let getKeys l =
-            recordsLang l |> Array.map _.key
+        let getKeys l = recordsLang l |> Array.map _.key
 
         do
             results <- addFiles files |> dict

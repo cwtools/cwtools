@@ -2,8 +2,4 @@
 
 open CWTools.Utilities.Position
 
-type Comment =
-    {
-        Position: range
-        Comment: string
-    }
+type Comment = { Position: range; Comment: string }

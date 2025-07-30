@@ -1,16 +1,18 @@
 namespace CWToolsCLI
+
 open Chiron.Builder
 open Chiron
 open CWTools.Utilities.Position
 open System.Security.Cryptography
 open System.Text
+
 module Validator =
     open CWTools.Games
     open CWTools.Common
     open CWTools.Games.Files
 
     type range with
-        static member ToJson (r:range) =
+        static member ToJson(r: range) =
             json {
                 do! Json.write "startLine" r.StartLine
                 do! Json.write "startColumn" r.StartColumn
@@ -20,35 +22,37 @@ module Validator =
 
     [<StructuredFormatDisplay("{position}\n{category}: {error}")>]
     type ValidationViewModelErrorRow =
-        {
-            category : string
-            message : string
-            position : range
-            severity : Severity
-            hash : string
-        }
-        override x.ToString() = x.category + ", " + x.message + ", " + x.position.ToString()
+        { category: string
+          message: string
+          position: range
+          severity: Severity
+          hash: string }
+
+        override x.ToString() =
+            x.category + ", " + x.message + ", " + x.position.ToString()
 
     type ValidationViewModelParseRow =
-        {
-            file : string
-            message : string
-            hash : string
-        }
+        { file: string
+          message: string
+          hash: string }
+
         override x.ToString() = x.file + "\n" + x.message + "\n"
+
     type ValidationViewModelFileRow =
-        {
-            file : string
-            scope : string
-        }
+        { file: string
+          scope: string }
+
         override x.ToString() = x.file + "," + x.scope.ToString()
+
     type ValidationViewModelRow =
-    |Error of ValidationViewModelErrorRow
-    |Parse of ValidationViewModelParseRow
-        static member ToJson (r:ValidationViewModelRow) =
+        | Error of ValidationViewModelErrorRow
+        | Parse of ValidationViewModelParseRow
+
+        static member ToJson(r: ValidationViewModelRow) =
             match r with
             | Error r ->
                 let pos = r.position |> Json.serializeWith range.ToJson
+
                 json {
                     do! Json.write "category" r.category
                     do! Json.write "message" r.message
@@ -58,6 +62,7 @@ module Validator =
                 }
             | Parse r ->
                 let pos = mkRange r.file pos0 pos0 |> Json.serializeWith range.ToJson
+
                 json {
                     do! Json.write "category" "CW001"
                     do! Json.write "message" r.message
@@ -65,12 +70,18 @@ module Validator =
                     do! Json.write "severity" "error"
                     do! Json.write "hash" r.hash
                 }
+
     let sha = SHA256.Create()
-    let createHash (path : string) (position : range) (message : string) =
+
+    let createHash (path: string) (position: range) (message: string) =
         let combined = path + (position.ToString()) + message
         let hashed = sha.ComputeHash(Encoding.UTF8.GetBytes(combined))
         let sb = StringBuilder()
-        let res = hashed |> Array.fold(fun (acc : StringBuilder) b -> acc.Append(b.ToString("x2"))) sb
+
+        let res =
+            hashed
+            |> Array.fold (fun (acc: StringBuilder) b -> acc.Append(b.ToString("x2"))) sb
+
         res.ToString()
 
     // type STL (dir : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, config) =
@@ -138,14 +149,45 @@ module Validator =
     //     member __.entities() = game.AllEntities()
     //     member __.recompute() = game.ForceRecompute()
 
-    type ErrorGame (dir : string, scope : FilesScope, modFilter : string, config, game : Game, embedded, langs) =
-        let game = Serializer.loadGame (dir, scope, modFilter, config, game, embedded, langs)
+    type ErrorGame(dir: string, scope: FilesScope, modFilter: string, config, game: Game, embedded, langs) =
+        let game =
+            Serializer.loadGame (dir, scope, modFilter, config, game, embedded, langs)
+
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
-        member val parserErrorList = parserErrors() |> List.map (fun (f, e, p) -> {file = f; message = e;  hash = (createHash f (range.Zero) e)})
-        member __.validationErrorList() = game.ValidationErrors() |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
-        member __.allFileList = game.AllFiles() |> List.map (function |EntityResource(f, p) -> {file = p.filepath; scope = p.scope} |FileResource(f, p) -> {file = p.filepath; scope = p.scope} |FileWithContentResource(f, p) -> {file = p.filepath; scope = p.scope})
-        member __.localisationErrorList() = game.LocalisationErrors (true, true) |> List.map (fun e -> {category = e.code ; message = e.message; position = e.range; severity = e.severity; hash = (createHash e.range.FileName e.range e.message )})
+
+        member val parserErrorList =
+            parserErrors ()
+            |> List.map (fun (f, e, p) ->
+                { file = f
+                  message = e
+                  hash = (createHash f (range.Zero) e) })
+
+        member __.validationErrorList() =
+            game.ValidationErrors()
+            |> List.map (fun e ->
+                { category = e.code
+                  message = e.message
+                  position = e.range
+                  severity = e.severity
+                  hash = (createHash e.range.FileName e.range e.message) })
+
+        member __.allFileList =
+            game.AllFiles()
+            |> List.map (function
+                | EntityResource(f, p) -> { file = p.filepath; scope = p.scope }
+                | FileResource(f, p) -> { file = p.filepath; scope = p.scope }
+                | FileWithContentResource(f, p) -> { file = p.filepath; scope = p.scope })
+
+        member __.localisationErrorList() =
+            game.LocalisationErrors(true, true)
+            |> List.map (fun e ->
+                { category = e.code
+                  message = e.message
+                  position = e.range
+                  severity = e.severity
+                  hash = (createHash e.range.FileName e.range e.message) })
+
         member __.recompute() = game.ForceRecompute()
         member val scriptedTriggerList = game.ScriptedTriggers
         member val scriptedEffectList = game.ScriptedEffects
