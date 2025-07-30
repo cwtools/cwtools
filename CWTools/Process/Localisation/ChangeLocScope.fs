@@ -47,7 +47,7 @@ type LegacyLocDynamicsSettings =
         /// Event targets, must be first, can have a scope
         eventTargets: (string * Scope) seq
         /// Variables
-        setVariables: LowerCaseStringSet
+        setVariables: IgnoreCaseStringSet
     }
 
 type LegacyLocStaticSettings =

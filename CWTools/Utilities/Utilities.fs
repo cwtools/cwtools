@@ -3,6 +3,9 @@ namespace CWTools.Utilities
 open System
 open System.Collections.Concurrent
 open System.Collections.Generic
+open System.Runtime.CompilerServices
+open System.Runtime.Serialization
+open System.Threading
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
@@ -159,44 +162,39 @@ module TryParser =
 type StringToken = int
 type StringLowerToken = int
 
+[<Struct; IsReadOnly>]
 type StringTokens =
-    struct
-        val lower: StringLowerToken
-        val normal: StringToken
-        /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
-        val quoted: bool
+     val lower: StringLowerToken
+     val normal: StringToken
+     /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
+     val quoted: bool
 
-        new(lower, normal, quoted) =
-            { lower = lower
-              normal = normal
-              quoted = quoted }
-    end
+     new(lower, normal, quoted) =
+         { lower = lower
+           normal = normal
+           quoted = quoted }
 
+[<Struct; IsReadOnly>]
 type StringMetadata =
-    struct
-        val startsWithAmp: bool
-        val containsDoubleDollar: bool
-        val containsQuestionMark: bool
-        val containsHat: bool
-        val startsWithSquareBracket: bool
-        val containsPipe: bool
+     val startsWithAmp: bool
+     val containsDoubleDollar: bool
+     val containsQuestionMark: bool
+     val containsHat: bool
+     val startsWithSquareBracket: bool
+     val containsPipe: bool
 
-        new
-            (
-                startsWithAmp,
-                containsDoubleDollar,
-                containsQuestionMark,
-                containsHat,
-                startsWithSquareBracket,
-                containsPipe
-            ) =
-            { startsWithAmp = startsWithAmp
-              containsDoubleDollar = containsDoubleDollar
-              containsQuestionMark = containsQuestionMark
-              containsHat = containsHat
-              startsWithSquareBracket = startsWithSquareBracket
-              containsPipe = containsPipe }
-    end
+     new(startsWithAmp,
+         containsDoubleDollar,
+         containsQuestionMark,
+         containsHat,
+         startsWithSquareBracket,
+         containsPipe) =
+         { startsWithAmp = startsWithAmp
+           containsDoubleDollar = containsDoubleDollar
+           containsQuestionMark = containsQuestionMark
+           containsHat = containsHat
+           startsWithSquareBracket = startsWithSquareBracket
+           containsPipe = containsPipe }
 
 [<Sealed>]
 type StringResourceManager() =
@@ -207,26 +205,31 @@ type StringResourceManager() =
     let metadata = new ConcurrentDictionary<StringToken, StringMetadata>()
 
     let mutable i = 0
-    // let mutable j = 0
-    let monitor = Object()
 
-    member x.InternIdentifierToken(s) =
-        // j <- j + 1
-        // eprintfn "%A" j
+    [<NonSerialized>]
+    let mutable lock = Lock()
+
+    [<OnDeserialized>]
+    member _.OnDeserialized(_context: StreamingContext) =
+        // Recreate the lock after deserialization
+        lock <- Lock()
+
+    member x.InternIdentifierToken(s: string): StringTokens =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
 
         if ok then
             res
         else
-            lock monitor (fun () ->
+            lock.Enter()
+            try
                 let retry = strings.TryGetValue(s, &res)
 
                 if retry then
                     res
                 else
                     let ls = s.ToLower().Trim('"')
-                    let quoted = s.StartsWith "\"" && s.EndsWith "\""
+                    let quoted = s.StartsWith '\"' && s.EndsWith '\"'
                     let lok = strings.TryGetValue(ls, &res)
 
                     if lok then
@@ -295,7 +298,9 @@ type StringResourceManager() =
                         ints.[stringID] <- s
                         strings.[ls] <- resl
                         strings.[s] <- res
-                        res)
+                        res
+            finally
+                lock.Exit()
 
     member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]
     member x.GetLowerStringForIDs(id: StringTokens) = ints.[id.lower]
@@ -341,17 +346,18 @@ module Utils2 =
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type PrefixOptimisedStringSet = LowerStringSparseTrie
 
-    type LowerCaseStringSet(strings: string seq) =
-        let dictionary = HashSet<string>()
+    [<Sealed>]
+    type IgnoreCaseStringSet(strings: string seq) =
+        let set = HashSet<string>(StringComparer.OrdinalIgnoreCase)
 
         do
             for e in strings do
-                dictionary.Add(e.ToLowerInvariant()) |> ignore
+                set.Add(e) |> ignore
 
-        new() = LowerCaseStringSet(Seq.empty)
+        new() = IgnoreCaseStringSet(Seq.empty)
 
         member this.Contains(x: string) =
-            dictionary.Contains(x.ToLowerInvariant())
+            set.Contains(x)
 
     let createStringSet items =
         let newSet = PrefixOptimisedStringSet()

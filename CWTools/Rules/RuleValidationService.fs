@@ -123,7 +123,7 @@ type RuleValidationService
 
     let memoizeRulesInner memFunction =
         let dict =
-            new System.Collections.Concurrent.ConcurrentDictionary<_, System.Collections.Generic.Dictionary<_, _>>()
+            new System.Collections.Concurrent.ConcurrentDictionary<_, Dictionary<_, _>>()
 
         fun (rules: NewRule list) (subtypes: string list) ->
             match dict.TryGetValue(rules) with

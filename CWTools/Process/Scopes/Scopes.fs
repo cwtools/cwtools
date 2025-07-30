@@ -1,7 +1,8 @@
 namespace CWTools.Process.Scopes
 
 open System
-open System.Collections.Generic
+open System.Collections.Frozen
+open System.Linq
 open CWTools.Common
 open CWTools.Utilities
 open CWTools.Utilities.Utils
@@ -27,11 +28,11 @@ open CWTools.Utilities.Utils2
 
 type EffectDictionary(effects: Effect seq) =
 
-    let dictionary: Dictionary<int, Effect> = Dictionary<int, Effect>()
+    let mutable dictionary: FrozenDictionary<int, Effect> =
+        FrozenDictionary<int, Effect>.Empty
 
     do
-        for e in effects do
-            dictionary[e.Name.lower] <- e
+        dictionary <- effects.DistinctBy(_.Name.lower).ToFrozenDictionary(_.Name.lower)
 
     new() = EffectDictionary(Seq.empty)
 
@@ -49,8 +50,6 @@ type EffectDictionary(effects: Effect seq) =
         EffectDictionary(effects |> Seq.map (fun e -> e :> Effect))
 
 type EffectMap = EffectDictionary
-
-type UsageScopeContext = Scope list
 
 type ScopeContext =
     { Root: Scope
