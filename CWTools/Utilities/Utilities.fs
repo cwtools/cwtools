@@ -336,7 +336,7 @@ module Utils2 =
         member _.StringValues =
             idValueList |> Seq.map (fun i -> StringResource.stringManager.GetStringForIDs i)
 
-        member _.Count = idValueList.Count
+        member _.IdCount = idValueList.Count
 
     // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type PrefixOptimisedStringSet = LowerStringSparseTrie

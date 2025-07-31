@@ -567,6 +567,9 @@ type Effect internal (name, scopes, effectType, refHint) =
         | :? Effect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
         | _ -> false
 
+    override x.GetHashCode() =
+        hash (name, scopes, effectType, refHint)
+
     interface System.IComparable with
         member x.CompareTo yobj =
             match yobj with

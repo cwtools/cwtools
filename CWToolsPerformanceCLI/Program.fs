@@ -1,5 +1,6 @@
 module Program
 
+open System
 open System.Text
 open System.Threading
 open System.Globalization
@@ -38,8 +39,15 @@ let runPerfTest testName testFunc =
     try
         printfn "Running %s..." testName
         let result = testFunc
+        let memoryAlloc = GC.GetTotalAllocatedBytes true
         printfn "✓ %s completed successfully" testName
-        printfn "  Elapsed: %dms, Errors: %d" result.ElapsedMilliseconds result.ErrorCount
+
+        printfn
+            "  Elapsed: %dms, Errors: %d, Memory Allocated: %d"
+            result.ElapsedMilliseconds
+            result.ErrorCount
+            memoryAlloc
+
         0
     with ex ->
         eprintfn "✗ %s failed: %s" testName ex.Message

@@ -1021,6 +1021,8 @@ module internal FieldValidators =
             | AliasValueKeysField aliasKey ->
                 checkAliasValueKeysField p.aliasKeyList aliasKey keyIDs severity leafornode errors
             | IgnoreField field -> checkField p severity ctx field keyIDs leafornode errors
+            // Should never happen
+            | SingleAliasClauseField _ -> errors
 
     let rec checkFieldNE
         (p: CheckFieldParams)
@@ -1093,6 +1095,8 @@ module internal FieldValidators =
             | ValueScopeMarkerField _ -> false
             | AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeyList aliasKey keyIDs
             | IgnoreField field -> checkFieldNE p severity ctx field keyIDs
+            // Should never happen
+            | SingleAliasClauseField _ -> failwith "todo"
 
     let checkLeftField (p: CheckFieldParams) (severity: Severity) (ctx: RuleContext) (field: NewField) keyIDs =
         checkFieldNE p severity ctx field keyIDs
