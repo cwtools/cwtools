@@ -30,7 +30,8 @@ let getSteamRoot (results: ParseResults<PerformanceArgs>) = results.TryGetResult
 
 let getGitRoot (results: ParseResults<PerformanceArgs>) = results.TryGetResult Git_Root
 
-let getTestMode (results: ParseResults<PerformanceArgs>) = results.TryGetResult Test_Mode |> Option.defaultValue (StopPoint.Full)
+let getTestMode (results: ParseResults<PerformanceArgs>) =
+    results.TryGetResult Test_Mode |> Option.defaultValue (StopPoint.Full)
 
 // Run performance test and handle results
 let runPerfTest testName testFunc =
@@ -53,13 +54,8 @@ let getTestFunction (results: ParseResults<PerformanceArgs>) =
     let gitRoot = getGitRoot results
     let stopPoint = getTestMode results
 
-    match
-        results.Contains Stellaris,
-        results.Contains HOI4,
-        results.Contains CK3,
-        results.Contains EU4
-    with
-    | true, _, _, _ -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true 
+    match results.Contains Stellaris, results.Contains HOI4, results.Contains CK3, results.Contains EU4 with
+    | true, _, _, _ -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
     | _, true, _, _ -> perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
     | _, _, true, _ -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
     | _, _, _, true -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
@@ -69,24 +65,21 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
     // Default to running validation tests
     let runTests = true
     let modPath = getModPath results
+
     if results.Contains Stellaris then
         let modInfo =
             match modPath with
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "Stellaris Test %s" modInfo)
-            (getTestFunction results)
+        runPerfTest (sprintf "Stellaris Test %s" modInfo) (getTestFunction results)
     elif results.Contains EU4 then
         let modInfo =
             match modPath with
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "EU4 Test %s" modInfo)
-            (getTestFunction results)
+        runPerfTest (sprintf "EU4 Test %s" modInfo) (getTestFunction results)
     elif results.Contains HOI4 then
         // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 
@@ -95,9 +88,7 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "HOI4 Test%s" modInfo)
-            (getTestFunction results)
+        runPerfTest (sprintf "HOI4 Test%s" modInfo) (getTestFunction results)
     elif results.Contains CK3 then
         // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 
@@ -106,9 +97,7 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "CK3 Test%s" modInfo)
-            (getTestFunction results)
+        runPerfTest (sprintf "CK3 Test%s" modInfo) (getTestFunction results)
     else
         eprintfn "No valid command specified. Use --help for usage information."
         1

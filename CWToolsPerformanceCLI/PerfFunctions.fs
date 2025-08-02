@@ -55,7 +55,10 @@ let createPathConfig (steamRoot: string option) (gitRoot: string option) =
 // Game-specific default path builders
 let getDefaultGamePaths (config: PathConfig) =
     let stellarisRoot = Path.Combine(config.SteamRoot, "Stellaris")
-    let stellarisConfig = Path.Combine(config.GitRoot, "cwtools-stellaris-config", "config")
+
+    let stellarisConfig =
+        Path.Combine(config.GitRoot, "cwtools-stellaris-config", "config")
+
     let stellarisCache = Path.Combine(config.CacheRoot, "stl.cwb")
 
     let eu4Root = Path.Combine(config.SteamRoot, "Europa Universalis IV")
@@ -145,7 +148,9 @@ let buildStlSettings rootDir configPath useManual useCached cachePath earlyStopM
                   debugMode = false }
           modFilter = None
           maxFileSize = None
-          debugSettings = { DebugSettings.Default with EarlyStop = earlyStopMode } }
+          debugSettings =
+            { DebugSettings.Default with
+                EarlyStop = earlyStopMode } }
     else
         { emptyStellarisSettings rootDir with
             embedded = embedded
@@ -156,7 +161,9 @@ let buildStlSettings rootDir configPath useManual useCached cachePath earlyStopM
                       ruleFiles = configs
                       debugRulesOnly = false
                       debugMode = false }
-            debugSettings = { DebugSettings.Default with EarlyStop = earlyStopMode } }
+            debugSettings =
+                { DebugSettings.Default with
+                    EarlyStop = earlyStopMode } }
 
 // Legacy Stellaris cached settings with parameterized paths
 let buildStlCachedSettings rootDir configPath cachePath =
@@ -192,7 +199,9 @@ let buildEu4Settings rootDir configPath useCache cachePath earlyStopMode =
               debugMode = false }
       embedded = embedded
       maxFileSize = None
-      debugSettings = { DebugSettings.Default with EarlyStop = earlyStopMode } }
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
 
 // CK3 settings builder with parameterized paths
 let buildCk3Settings rootDir configPath useCache cachePath earlyStopMode =
@@ -224,7 +233,9 @@ let buildCk3Settings rootDir configPath useCache cachePath earlyStopMode =
               debugMode = false }
       embedded = embedded
       maxFileSize = None
-      debugSettings = { DebugSettings.Default with EarlyStop = earlyStopMode } }
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
 
 /// HOI4 settings builder with parameterized paths
 let buildHoi4Settings rootDir configPath useCache cachePath earlyStopMode =
@@ -253,10 +264,20 @@ let buildHoi4Settings rootDir configPath useCache cachePath earlyStopMode =
               debugMode = false }
       modFilter = None
       maxFileSize = None
-      debugSettings = { DebugSettings.Default with EarlyStop = earlyStopMode } }
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
 
 // Unified Stellaris performance test runner
-let perfStellaris rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) (debugMode : StopPoint) runTests
+let perfStellaris
+    rootDir
+    configPath
+    (cachePath: string option)
+    (modPath: string option)
+    (steamRoot: string option)
+    (gitRoot: string option)
+    (debugMode: StopPoint)
+    runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
 
@@ -291,7 +312,15 @@ let perfStellaris rootDir configPath (cachePath: string option) (modPath: string
         runTests
 
 // Unified EU4 performance test runner
-let perfEU4 rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) (earlyStopMode : StopPoint) runTests
+let perfEU4
+    rootDir
+    configPath
+    (cachePath: string option)
+    (modPath: string option)
+    (steamRoot: string option)
+    (gitRoot: string option)
+    (earlyStopMode: StopPoint)
+    runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
 
@@ -321,7 +350,15 @@ let perfEU4 rootDir configPath (cachePath: string option) (modPath: string optio
         runTests
 
 // Unified CK3 performance test runner
-let perfCK3 rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) (earlyStopMode : StopPoint) runTests
+let perfCK3
+    rootDir
+    configPath
+    (cachePath: string option)
+    (modPath: string option)
+    (steamRoot: string option)
+    (gitRoot: string option)
+    (earlyStopMode: StopPoint)
+    runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
 
@@ -351,7 +388,15 @@ let perfCK3 rootDir configPath (cachePath: string option) (modPath: string optio
         runTests
 
 // Unified HOI4 performance test runner
-let perfHOI4 rootDir configPath (cachePath: string option) (modPath: string option) (steamRoot: string option) (gitRoot: string option) (earlyStopMode : StopPoint) runTests
+let perfHOI4
+    rootDir
+    configPath
+    (cachePath: string option)
+    (modPath: string option)
+    (steamRoot: string option)
+    (gitRoot: string option)
+    (earlyStopMode: StopPoint)
+    runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
 

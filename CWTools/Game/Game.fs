@@ -38,10 +38,11 @@ type StopPoint =
     | GameAfterInit
     | GameInitialConfigRules
     | Full
-type DebugSettings = {
-    EarlyStop : StopPoint
-}
-with static member Default = { EarlyStop = Full }
+
+type DebugSettings =
+    { EarlyStop: StopPoint }
+
+    static member Default = { EarlyStop = Full }
 
 type GameSetupSettings<'L> =
     { rootDirectories: WorkspaceDirectoryInput list
@@ -53,9 +54,9 @@ type GameSetupSettings<'L> =
       modFilter: string option
       maxFileSize: int option
       debugSettings: DebugSettings }
- 
 
- 
+
+
 
 type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (
@@ -340,6 +341,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     do
         lookup.rootFolders <- settings.rootDirectories
+
         if debugSettings.EarlyStop >= GameInitLoad then
             initialLoad ()
 
@@ -394,8 +396,11 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     static member CreateGame settings afterInit =
         let game = GameObject(settings)
+
         if game.DebugSettings.EarlyStop >= GameAfterInit then
             afterInit game
+
         if game.DebugSettings.EarlyStop >= GameInitialConfigRules then
             game.InitialConfigRules()
+
         game

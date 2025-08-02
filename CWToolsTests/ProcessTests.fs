@@ -26,33 +26,38 @@ open CWTools.Rules.RulesWrapper
 open LogCaptureTest
 
 
-let emptyStellarisSettings (rootDirectory) = {
-    rootDirectories = [WD { name = "test"; path = rootDirectory;}]
-    modFilter = None
-    validation = {
-        validateVanilla = false
-        experimental = true
-        langs = [STL STLLang.English]
-    }
-    rules = None
-    embedded = FromConfig ([], [])
-    scriptFolders = None
-    excludeGlobPatterns = None
-    maxFileSize = None
-    debugSettings = DebugSettings.Default
-}
-let emptyEmbeddedSettings = {
-        triggers = []
-        effects = []
-        modifiers = []
-        embeddedFiles = []
-        cachedResourceData = []
-        localisationCommands = Legacy ([], [], [])
-        eventTargetLinks = []
-        cachedRuleMetadata = None
-        featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default
-}
-let emptyDataTypesLazy = lazy ({ DataTypeParser.JominiLocDataTypes.promotes = Map.empty; DataTypeParser.JominiLocDataTypes.confidentFunctions = Map.empty; DataTypeParser.JominiLocDataTypes.functions = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty; DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty })
+let emptyStellarisSettings (rootDirectory) =
+    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+      modFilter = None
+      validation =
+        { validateVanilla = false
+          experimental = true
+          langs = [ STL STLLang.English ] }
+      rules = None
+      embedded = FromConfig([], [])
+      scriptFolders = None
+      excludeGlobPatterns = None
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
+
+let emptyEmbeddedSettings =
+    { triggers = []
+      effects = []
+      modifiers = []
+      embeddedFiles = []
+      cachedResourceData = []
+      localisationCommands = Legacy([], [], [])
+      eventTargetLinks = []
+      cachedRuleMetadata = None
+      featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
+
+let emptyDataTypesLazy =
+    lazy
+        ({ DataTypeParser.JominiLocDataTypes.promotes = Map.empty
+           DataTypeParser.JominiLocDataTypes.confidentFunctions = Map.empty
+           DataTypeParser.JominiLocDataTypes.functions = Map.empty
+           DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty
+           DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty })
 
 let specificField = RulesParser.specificField
 let optionalMany = RulesParser.optionalMany

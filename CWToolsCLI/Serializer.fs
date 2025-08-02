@@ -530,128 +530,161 @@ let loadGame<'T when 'T :> ComputedData>
     let folders =
         WD { path = dir; name = "game" } :: addDLCs { path = dir; name = "game" }
     // let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
-    let STLoptions : StellarisSettings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = None
-        debugSettings = DebugSettings.Default
-    }
-    let HOI4options : HOI4Settings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default
+    let STLoptions: StellarisSettings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = None
+          debugSettings = DebugSettings.Default }
 
-    }
-    let EU4options : EU4Settings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
+    let HOI4options: HOI4Settings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default
+
         }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default
-    }
-    let CK2options : CK2Settings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default
-    }
-    let VIC2options : VIC2Settings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default
-    }
-    let Customoptions : CustomSettings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default
-    }
-    let IRoptions : IRSettings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default   
-    }
-    let CK3options : CK3Settings = {
-        rootDirectories = folders
-        modFilter = Some modFilter
-        validation = {
-            validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
-            experimental = true
-            langs = langs
-        }
-        rules = Some { ruleFiles = config; validateRules = true; debugRulesOnly = true; debugMode = false }
-        embedded = embedded
-        scriptFolders = None
-        excludeGlobPatterns = None
-        maxFileSize = Some 8
-        debugSettings = DebugSettings.Default  
-    }
-    let game : IGame =
+
+    let EU4options: EU4Settings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let CK2options: CK2Settings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let VIC2options: VIC2Settings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let Customoptions: CustomSettings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let IRoptions: IRSettings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let CK3options: CK3Settings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let game: IGame =
         match game with
         | Game.HOI4 -> HOI4Game(HOI4options) :> IGame
         | Game.STL -> STLGame(STLoptions) :> IGame
