@@ -1,4 +1,5 @@
 open System.Text
+
 #r @"C:\Users\Thomas\.nuget\packages\dotnet.glob\2.0.3\lib\netstandard1.1\DotNet.Glob.dll"
 #r @"C:\Users\Thomas\.nuget\packages\fparsec\1.0.4-rc3\lib\netstandard1.6\FParsec.dll"
 #r @"C:\Users\Thomas\.nuget\packages\fparsec\1.0.4-rc3\lib\netstandard1.6\FParsecCS.dll"
@@ -130,10 +131,12 @@ open System.Security.Cryptography
 
 open CWTools.Parser
 open FParsec
-Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
 
 // let triggers, effects = DocsParser.parseDocsFilesRes @"C:\Users\Thomas\git\cwtools\CWToolsTests\testfiles\validationtests\trigger_docs_2.1.0.txt"
-let links = JominiParser.parseLinksFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/event_targets.log"
+let links =
+    JominiParser.parseLinksFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/event_targets.log"
 
 // let tinner =
 //             """{
@@ -170,52 +173,66 @@ let links = JominiParser.parseLinksFilesRes @"C:\Users\Thomas\git\cwtools/Script
 // File.WriteAllText("triggers.cwt", tout)
 // File.WriteAllText("effects.cwt", eout)
 
-let createLink (n,(d : string),r,w,i,(o : string list option),g) =
+let createLink (n, (d: string), r, w, i, (o: string list option), g) =
     match r with
     | Some _ ->
         let input =
             match i with
             | None -> None
-            | Some [x] ->
-                Some ("input_scopes = " + x)
+            | Some [ x ] -> Some("input_scopes = " + x)
             | Some xs ->
-                Some ("input_scopes = { " + ( String.concat " " (xs |> List.map (fun x -> x.Trim().Replace (" ", "_")))) + " }")
+                Some(
+                    "input_scopes = { "
+                    + (String.concat " " (xs |> List.map (fun x -> x.Trim().Replace(" ", "_"))))
+                    + " }"
+                )
+
         let output =
             match o with
             | None -> None
-            | Some oi -> Some ("output_scope = " + (oi |> List.head))
-        let start = Some (n + " = {\n\t" + "desc = \"" + d + "\"")
+            | Some oi -> Some("output_scope = " + (oi |> List.head))
+
+        let start = Some(n + " = {\n\t" + "desc = \"" + d + "\"")
         let fromData = g |> Option.map (fun _ -> "from_data = yes")
-        let dataSource = g |> Option.map (fun _ -> ( "data_source = <" + n + ">"))
+        let dataSource = g |> Option.map (fun _ -> ("data_source = <" + n + ">"))
+
         let prefix =
             match g with
             | None -> None
-            | Some _ -> Some (sprintf "prefix = %s:" n)
-        ([start; fromData; dataSource; prefix; input; output]
-        |> List.choose id
-        |> String.concat ("\n\t")) + "\n}"
+            | Some _ -> Some(sprintf "prefix = %s:" n)
+
+        ([ start; fromData; dataSource; prefix; input; output ]
+         |> List.choose id
+         |> String.concat ("\n\t"))
+        + "\n}"
     | None ->
         let input =
             match i with
             | None -> None
-            | Some [x] ->
-                Some ("input_scopes = " + x)
+            | Some [ x ] -> Some("input_scopes = " + x)
             | Some xs ->
-                Some ("input_scopes = { " + ( String.concat " " (xs |> List.map (fun x -> x.Trim().Replace (" ", "_")))) + " }")
+                Some(
+                    "input_scopes = { "
+                    + (String.concat " " (xs |> List.map (fun x -> x.Trim().Replace(" ", "_"))))
+                    + " }"
+                )
+
         let output =
             match o with
             | None -> None
-            | Some oi -> Some ("output_scope = " + (oi |> List.head))
-        let start = Some (n + " = {\n\t" + "desc = \"" + d + "\"")
+            | Some oi -> Some("output_scope = " + (oi |> List.head))
+
+        let start = Some(n + " = {\n\t" + "desc = \"" + d + "\"")
         let fromData = g |> Option.map (fun _ -> "from_data = yes")
-        let dataSource = g |> Option.map (fun _ -> ( "data_source = <" + n + ">"))
+        let dataSource = g |> Option.map (fun _ -> ("data_source = <" + n + ">"))
         // let prefix =
         //     match g with
         //     | None -> None
         //     | Some _ -> Some (sprintf "prefix = %s:" n)
-        ([start; fromData; dataSource; input; output;]
-        |> List.choose id
-        |> String.concat ("\n\t")) + "\n}"
+        ([ start; fromData; dataSource; input; output ]
+         |> List.choose id
+         |> String.concat ("\n\t"))
+        + "\n}"
 
 let linksText = links |> List.map createLink
 File.WriteAllLines("links.cwt", linksText)

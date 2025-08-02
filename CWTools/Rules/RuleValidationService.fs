@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
 open CWTools.Rules
 open CWTools.Process.Localisation
@@ -17,6 +18,7 @@ open System
 open CWTools.Process.Scopes
 open CWTools.Games
 open CWTools.Utilities.StringResource
+open CSharpHelpers
 
 // let inline ruleValidationServiceCreator(rootRules : RootRule<_> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), checkLocField :( (Lang * Collections.Set<string> )list -> bool -> string -> _ -> ValidationResult)) =
 // let inline ruleValidationServiceCreator(rootRules : RootRule< ^T> list, typedefs : TypeDefinition<_> list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect<_>,InsensitiveStringComparer>, effects : Map<string,Effect<_>,InsensitiveStringComparer>, anyScope, changeScope, (defaultContext : ScopeContext<_>), defaultLang) =
@@ -24,9 +26,9 @@ type RuleValidationService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -265,6 +267,7 @@ type RuleValidationService
         let inline valueFun innerErrors (leaf: Leaf) =
             let key = leaf.Key
             let keyIds = leaf.KeyId
+
             let inline createDefault () =
                 if enforceCardinality && (leaf.Key.[0] <> '@') then
                     inv
@@ -395,10 +398,12 @@ type RuleValidationService
             | NodeRule(SpecificField(SpecificValue key), _), opts
             | LeafRule(SpecificField(SpecificValue key), _), opts ->
                 let leafcount =
-                    clause.Leaves |> Seq.sumBy(fun leaf -> if leaf.KeyId.lower = key.lower then 1 else 0)
+                    clause.Leaves
+                    |> Seq.sumBy (fun leaf -> if leaf.KeyId.lower = key.lower then 1 else 0)
 
                 let childcount =
-                    clause.Nodes |> Seq.sumBy(fun child -> if child.KeyId.lower = key.lower then 1 else 0)
+                    clause.Nodes
+                    |> Seq.sumBy (fun child -> if child.KeyId.lower = key.lower then 1 else 0)
 
                 let total = leafcount + childcount
 
@@ -429,7 +434,12 @@ type RuleValidationService
             | LeafValueRule(AliasField _), _ -> innerErrors
             | NodeRule(l, _), opts ->
                 let total =
-                    clause.Nodes |> Seq.sumBy(fun child -> if FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId then 1 else 0)
+                    clause.Nodes
+                    |> Seq.sumBy (fun child ->
+                        if FieldValidators.checkLeftField p Severity.Error ctx l child.KeyId then
+                            1
+                        else
+                            0)
 
                 if opts.min > total then
                     let minSeverity =
@@ -454,7 +464,11 @@ type RuleValidationService
             | LeafRule(l, r), opts ->
                 let total =
                     clause.Leaves
-                    |> Seq.sumBy(fun leaf -> if FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId then 1 else 0)
+                    |> Seq.sumBy (fun leaf ->
+                        if FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId then
+                            1
+                        else
+                            0)
 
                 if opts.min > total then
                     let minSeverity =
@@ -479,7 +493,11 @@ type RuleValidationService
             | LeafValueRule(l), opts ->
                 let total =
                     clause.LeafValues
-                    |> Seq.sumBy(fun leafValue -> if FieldValidators.checkLeftField p Severity.Error ctx l leafValue.ValueId then 1 else 0)
+                    |> Seq.sumBy (fun leafValue ->
+                        if FieldValidators.checkLeftField p Severity.Error ctx l leafValue.ValueId then
+                            1
+                        else
+                            0)
 
                 if opts.min > total then
                     let minSeverity =
@@ -943,7 +961,8 @@ type RuleValidationService
 
             let pathFilteredTypes =
                 typedefs
-                |> List.filter (fun t -> CSharpHelpers.FieldValidatorsCs.CheckPathDir(t.pathOptions, directory, fileName))
+                |> List.filter (fun t ->
+                    CSharpHelpers.FieldValidatorsHelper.CheckPathDir(t.pathOptions, directory, fileName))
 
             let rec validateTypeSkipRoot (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) (n: IClause) =
                 let prefixKey =

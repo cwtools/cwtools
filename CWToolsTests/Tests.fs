@@ -140,10 +140,7 @@ let getNodeComments (clause: IClause) =
             let two =
                 clause.Nodes
                 |> Seq.map (fun e ->
-                    e.Position,
-                    clause.AllArray
-                    |> Array.fold (findComments e.Position) (false, [])
-                    |> snd)
+                    e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
                 |> List.ofSeq
 
             let three =
@@ -212,10 +209,7 @@ let getCompletionTests (clause: IClause) =
             let two =
                 clause.Nodes
                 |> Seq.map (fun e ->
-                    e.Position,
-                    clause.AllArray
-                    |> Array.fold (findComments e.Position) (false, [])
-                    |> snd)
+                    e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
                 |> List.ofSeq
 
             let three =
@@ -835,44 +829,44 @@ let vic3SubfolderTests =
 [<Tests>]
 let specialtests =
     // testList
-        // "log"
-         ptestCase "log modifiers"
-          <| fun () ->
-              let configtext =
-                  [ ("./testfiles/scriptedorstatictest/setup.log",
-                     File.ReadAllText "./testfiles/scriptedorstatictest/setup.log") ]
+    // "log"
+    ptestCase "log modifiers"
+    <| fun () ->
+        let configtext =
+            [ ("./testfiles/scriptedorstatictest/setup.log",
+               File.ReadAllText "./testfiles/scriptedorstatictest/setup.log") ]
 
-              let modfile =
-                  SetupLogParser.parseLogsFile "./testfiles/scriptedorstatictest/setup.log"
-              // (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
-              let modifiers =
-                  (modfile
-                   |> (function
-                   | CharParsers.ParserResult.Success(p, _, _) -> SetupLogParser.processLogs p))
+        let modfile =
+            SetupLogParser.parseLogsFile "./testfiles/scriptedorstatictest/setup.log"
+        // (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
+        let modifiers =
+            (modfile
+             |> (function
+             | CharParsers.ParserResult.Success(p, _, _) -> SetupLogParser.processLogs p))
 
-              let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
-              // UtilityParser.initializeScopes None (Some defaultScopeInputs)
-              let stl =
-                  STLGame(
-                      { settings with
-                          rules =
-                              Some
-                                  { ruleFiles = configtext
-                                    validateRules = false
-                                    debugRulesOnly = false
-                                    debugMode = false }
-                          embedded =
-                              ManualSettings
-                                  { emptyEmbeddedSettings with
-                                      modifiers = modifiers } }
-                  )
-                  :> IGame<STLComputedData>
-              // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
-              let exp =
-                  [ { tag = "test"
-                      categories = [ modifierCategoryManager.ParseModifier () "pop" ] } ]
+        let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
+        // UtilityParser.initializeScopes None (Some defaultScopeInputs)
+        let stl =
+            STLGame(
+                { settings with
+                    rules =
+                        Some
+                            { ruleFiles = configtext
+                              validateRules = false
+                              debugRulesOnly = false
+                              debugMode = false }
+                    embedded =
+                        ManualSettings
+                            { emptyEmbeddedSettings with
+                                modifiers = modifiers } }
+            )
+            :> IGame<STLComputedData>
+        // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
+        let exp =
+            [ { tag = "test"
+                categories = [ modifierCategoryManager.ParseModifier () "pop" ] } ]
 
-              Expect.equal (stl.StaticModifiers()) exp "" 
+        Expect.equal (stl.StaticModifiers()) exp ""
 // [<Tests>]
 // let tests2 =
 //     testList "validation" [
@@ -1003,8 +997,7 @@ let embeddedTests =
             |> List.ofArray
             |> List.map (fun f ->
                 fixEmbeddedFileName f,
-                (new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(f)))
-                    .ReadToEnd())
+                (new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(f))).ReadToEnd())
 
         let configtext = configFilesFromDir "./testfiles/embeddedtest/config/"
         let baseSettings = emptyStellarisSettings "./testfiles/embeddedtest/test"
@@ -1096,8 +1089,7 @@ let overwriteTests =
             |> List.ofArray
             |> List.map (fun f ->
                 fixEmbeddedFileName f,
-                (new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(f)))
-                    .ReadToEnd())
+                (new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(f))).ReadToEnd())
 
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
 

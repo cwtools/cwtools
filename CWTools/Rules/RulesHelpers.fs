@@ -26,7 +26,7 @@ let getTypesFromDefinitions
     let getTypeInfo (def: TypeDefinition) =
         entities
         |> List.choose (fun e ->
-            if CSharpHelpers.FieldValidatorsCs.CheckPathDir(def.pathOptions, e.logicalpath) then
+            if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(def.pathOptions, e.logicalpath) then
                 Some(e.entity, Path.GetFileNameWithoutExtension e.logicalpath, e.validate)
             else
                 None)
@@ -94,6 +94,7 @@ let getTypesFromDefinitions
                         else
                             []
                     | AnyKey :: tail -> n.ClauseList |> List.collect (skiprootkey tail)
+
                 match def.type_per_file, def.skipRootKey with
                 | true, _ ->
                     let rawSubtypes, subtypes =
@@ -106,14 +107,10 @@ let getTypesFromDefinitions
 
                     def.name :: subtypes
                     |> List.map (fun s ->
-                        s,
-                        (v,
-                         fileNameWithoutExtension,
-                         e.Position,
-                         getExplicitLocalisationKeys e def,
-                         rawSubtypes))
+                        s, (v, fileNameWithoutExtension, e.Position, getExplicitLocalisationKeys e def, rawSubtypes))
                 | false, [] -> (e.Clauses |> List.ofSeq |> List.collect inner)
                 | false, srk -> e.Clauses |> List.ofSeq |> List.collect (skiprootkey srk)
+
             childres
             @ (e.LeafValues
                |> List.ofSeq
@@ -125,19 +122,26 @@ let getTypesFromDefinitions
     |> Seq.ofList
     |> PSeq.collect getTypeInfo
     |> Seq.iter (fun (n, k) ->
-        let mutable value: (bool * string * Position.range * (string * string * bool) list * string list) list = Unchecked.defaultof<_>
+        let mutable value: (bool * string * Position.range * (string * string * bool) list * string list) list =
+            Unchecked.defaultof<_>
+
         if resDict.TryGetValue(n, &value) then
             resDict[n] <- k :: value
         else
             resDict[n] <- [ k ])
 
     types
-    |> List.iter (fun typeDefinition -> if resDict.ContainsKey typeDefinition.name then () else resDict[typeDefinition.name] <- [])
+    |> List.iter (fun typeDefinition ->
+        if resDict.ContainsKey typeDefinition.name then
+            ()
+        else
+            resDict[typeDefinition.name] <- [])
 
     resDict
     |> Seq.map (fun kv ->
         let k = kv.Key
         let vs = kv.Value
+
         k,
         vs
         |> List.map (fun (v, n, r, el, sts) ->
@@ -199,8 +203,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                 enumtree.LeafValues
                 |> Seq.exists (fun lv -> lv.ValueId.lower = enumNameKeyId.lower)
             then
-                node.LeafValues
-                |> Seq.map (fun lv -> lv.ValueText.Trim('\"'), Some lv.Position)
+                node.LeafValues |> Seq.map (fun lv -> lv.ValueText.Trim('\"'), Some lv.Position)
             else
                 Seq.empty
 
@@ -241,7 +244,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
         let values =
             es
             |> Seq.choose (fun e ->
-                if CSharpHelpers.FieldValidatorsCs.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
+                if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
                     Some e.entity
                 else
                     None)

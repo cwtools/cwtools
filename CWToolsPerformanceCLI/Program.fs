@@ -69,7 +69,6 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
     // Default to running validation tests
     let runTests = true
     let modPath = getModPath results
-
     if results.Contains Stellaris then
         let modInfo =
             match modPath with

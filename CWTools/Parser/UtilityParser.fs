@@ -155,7 +155,7 @@ module UtilityParser =
             |> Option.defaultValue []
 
         { NewScope.ModifierCategoryInput.name = name
-          NewScope.ModifierCategoryInput.internalID = internalID
+          NewScope.ModifierCategoryInput.internalID = if internalID.IsSome then Some internalID.Value else None
           NewScope.ModifierCategoryInput.scopes = scopes }
 
 

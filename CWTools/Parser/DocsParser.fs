@@ -22,10 +22,12 @@ module DocsParser =
         <?> "name"
 
     let private usage =
-        charsTillString "Supported scopes:" true maxChars .>> SharedParsers.ws <?> "usage"
+        charsTillString "Supported scopes:" true maxChars .>> SharedParsers.ws
+        <?> "usage"
 
     let private usageC =
-        charsTillString "Supported Scopes:" true maxChars .>> SharedParsers.ws <?> "usage"
+        charsTillString "Supported Scopes:" true maxChars .>> SharedParsers.ws
+        <?> "usage"
 
     let private scope =
         many1Satisfy (fun c -> isvaluechar c || c = '?' || c = '(' || c = ')')

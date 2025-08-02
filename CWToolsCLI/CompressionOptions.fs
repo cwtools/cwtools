@@ -1,7 +1,6 @@
 module CWToolsCLI.CompressionOptions
 
 open System.IO
-open System.IO.Compression
 open ICSharpCode.SharpZipLib.BZip2
 
 /// Compression algorithm options
@@ -10,7 +9,8 @@ type Compression =
     | Bz2
 
 /// Convert compression type to file extension
-let getExtension = function
+let getExtension =
+    function
     | NoCompression -> ""
     | Bz2 -> ".bz2"
 
@@ -37,19 +37,23 @@ let decompressData (compression: Compression) (data: byte[]) : byte[] =
 /// Write compressed data to file
 let compressAndWriteToFile (compression: Compression) (data: byte[]) (filename: string) : unit =
     let compressedData = compressData compression data
-    let fullFilename = 
+
+    let fullFilename =
         match compression with
         | NoCompression -> filename
         | Bz2 -> filename + getExtension compression
+
     File.WriteAllBytes(fullFilename, compressedData)
 
 /// Read and decompress data from file
 let readAndDecompressFromFile (filename: string) : byte[] =
     let data = File.ReadAllBytes(filename)
-    let compression = 
+
+    let compression =
         match Path.GetExtension(filename).ToLowerInvariant() with
         | ".bz2" -> Bz2
         | _ -> NoCompression
+
     decompressData compression data
 
 /// Detect compression type from file extension

@@ -7,13 +7,13 @@ open CWTools.Utilities
 type S = Severity
 
 let inline checkLocKeyN (leaf: ^a) (keys: Set<string>) (lang: Lang) errors (ids: StringTokens) key =
-    match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+    match key = "" || key.Contains(' ') || (key.StartsWith('[') && key.EndsWith(']')), Set.contains key keys with
     | true, _ -> errors
     | _, true -> errors
     | _, false -> invData (ErrorCodes.MissingLocalisation key lang) leaf (Some key) <&&&> errors
 
 let inline checkLocKeyNE (keys: Set<string>) (lang: Lang) (ids: StringTokens) key =
-    match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+    match key = "" || key.Contains(' ') || (key.StartsWith('[') && key.EndsWith(']')), Set.contains key keys with
     | true, _ -> true
     | _, true -> true
     | _, false -> false
@@ -34,8 +34,8 @@ let inline checkLocKeyInlineNE (keys: Set<string>) (lang: Lang) (ids: StringToke
 
 let inline checkLocNameN (leaf: ^a) (keys: Set<string>) (lang: Lang) (ids: StringTokens) (key: string) errors =
     match
-        (key.Contains "." || key.Contains("_")) && (key.Contains(" ") |> not),
-        key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")),
+        (key.Contains "." || key.Contains('_')) && (key.Contains(' ') |> not),
+        key = "" || key.Contains(' ') || (key.StartsWith('[') && key.EndsWith(']')),
         Set.contains key keys
     with
     | false, _, _ -> errors

@@ -1,11 +1,15 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using Shared;
 
 namespace CSharpHelpers;
 
-public static class FieldValidatorsCs
+public static partial class FieldValidatorsHelper
 {
+    [GeneratedRegex("<([^>]*)>")]
+    public static partial Regex StlNameFormatRegex();
+
     public static bool CheckPathDir(PathOptions pathOptions, string fullPath)
     {
         // to prevent stack overflow, chosen a relatively conservative array size.

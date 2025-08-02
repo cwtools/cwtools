@@ -139,6 +139,7 @@ module internal SharedParsers =
 
     let chSkip c =
         skipChar c .>> ws <?> ("skip char " + string c)
+
     let clause inner =
         betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
 
@@ -175,8 +176,7 @@ module internal SharedParsers =
         <?> "operator 1"
 
     let comment =
-        parseWithPosition (skipChar '#' >>. restOfLine true .>> ws)
-        <?> "comment"
+        parseWithPosition (skipChar '#' >>. restOfLine true .>> ws) <?> "comment"
 
     let key = (many1SatisfyL isIdChar "id character") .>> ws |>> Key <?> "id"
 
@@ -200,11 +200,9 @@ module internal SharedParsers =
         <?> "quoted string"
 
     // "yes" and "no" are case-sensitive.
-    let valueBYes =
-        skipString "yes" .>> nextCharSatisfiesNot isValueChar >>% Bool(true)
+    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot isValueChar >>% Bool(true)
 
-    let valueBNo =
-        skipString "no" .>> nextCharSatisfiesNot isValueChar >>% Bool(false)
+    let valueBNo = skipString "no" .>> nextCharSatisfiesNot isValueChar >>% Bool(false)
 
     let valueInt = pint64 .>> nextCharSatisfiesNot isValueChar |>> int |>> Int
     let valueFloat = pfloat .>> nextCharSatisfiesNot isValueChar |>> decimal |>> Float
@@ -258,7 +256,7 @@ module internal SharedParsers =
         pipe3 getPosition (value .>> ws) getPosition (fun a b c -> (getRange a c, b))
 
     let statement =
-        comment |>> fun (p,c) -> CommentStatement({Position=p;Comment=c})
+        comment |>> fun (p, c) -> CommentStatement({ Position = p; Comment = c })
         <|> (attempt (leafValue .>> notFollowedBy operatorLookahead |>> Value))
         <|> keyValue
         <?> "statement"
@@ -296,16 +294,19 @@ module internal SharedParsers =
                 | "@\\[", _ -> mpP stream
                 | _ -> valueStr stream
 
-    valueimpl := valueCustom <?> "value"
+    valueimpl.Value <- valueCustom <?> "value"
 
-    keyvalueimpl
-    := pipe5 getPosition (keyQStr <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
-        KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
+    keyvalueimpl.Value <-
+        pipe5 getPosition (keyQStr <|> key) operator value (getPosition .>> ws) (fun start id op value endp ->
+            KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value, op))))
 
     let alle = ws >>. many statement .>> eof |>> ParsedFile
 
     let valueList =
-        many1 ((comment |>> fun (p,c) -> CommentStatement({Position=p;Comment=c})) <|> (leafValue |>> Value))
+        many1 (
+            (comment |>> fun (p, c) -> CommentStatement({ Position = p; Comment = c }))
+            <|> (leafValue |>> Value)
+        )
         .>> eof
 
     let statementList = (many statement) .>> eof

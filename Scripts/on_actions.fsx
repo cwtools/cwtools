@@ -1,10 +1,11 @@
 // sets the current directory to be same as the script directory
-System.IO.Directory.SetCurrentDirectory (__SOURCE_DIRECTORY__)
+System.IO.Directory.SetCurrentDirectory(__SOURCE_DIRECTORY__)
 
 // Requires FSharp.Data under script directory
 // nuget install FSharp.Data -o Packages -ExcludeVersion
 #r @"../packages/FSharp.Data/lib/net45/FSharp.Data.dll"
 #r "System.Xml.Linq.dll"
+
 open FSharp.Data
 open System.IO
 
@@ -12,7 +13,8 @@ let eu4 = false
 let hoi4 = false
 let ck2 = true
 
-let hoi4template = """
+let hoi4template =
+    """
 	## replace_scope = { $scopes$ }
 	subtype[$type$] = {
 		## cardinality = 0..1
@@ -27,7 +29,9 @@ let hoi4template = """
 			alias_name[effect] = alias_match_left[effect]
 		}
 	}"""
-let eu4template = """
+
+let eu4template =
+    """
 	## replace_scope = { $scopes$ }
 	subtype[$type$] = {
 		## cardinality = 0..1
@@ -45,7 +49,9 @@ let eu4template = """
 
 		alias_name[effect] = alias_match_left[effect]
 	}"""
-let stltemplate = """
+
+let stltemplate =
+    """
 	## replace_scope = { $scopes$ }
 	subtype[$type$] = {
 		## cardinality = 0..1
@@ -61,7 +67,9 @@ let stltemplate = """
 			int = <$event$>
 		}
 	}"""
-let ck2template = """
+
+let ck2template =
+    """
 	## replace_scope = { $scopes$ }
 	subtype[$type$] = {
 		## cardinality = 0..1
@@ -99,38 +107,60 @@ let ck2template = """
 			alias_name[effect] = alias_match_left[effect]
 		}
 	}"""
-let typetemplate = """
+
+let typetemplate =
+    """
 		## type_key_filter = $key$
 		### $comment$
 		subtype[$key$] = { }"""
+
 let path = Path.GetFullPath(__SOURCE_DIRECTORY__)
 let path2 = path + "/on_actions.csv"
 let rows = CsvFile.Load(path2).Cache().Filter(fun r -> r.Columns.Length > 0)
 let sb = new System.Text.StringBuilder()
-sb.Append """types = {
+
+sb.Append
+    """types = {
 	type[on_action] = {
 		path = "game/common/on_actions"
 		start_from_root = yes"""
+
 for row in rows.Rows do
-  let key = row.GetColumn "key"
-  let comment = row.GetColumn "comment"
-  let output = typetemplate.Replace("$key$", key).Replace("$comment$", comment)
-  sb.Append output
-sb.Append """
+    let key = row.GetColumn "key"
+    let comment = row.GetColumn "comment"
+    let output = typetemplate.Replace("$key$", key).Replace("$comment$", comment)
+    sb.Append output
+
+sb.Append
+    """
 	}
 }
 """
-sb.Append """on_action = {
+
+sb.Append
+    """on_action = {
 	"""
-let template = if eu4 then eu4template else if hoi4 then hoi4template else if ck2 then ck2template else stltemplate
+
+let template =
+    if eu4 then eu4template
+    else if hoi4 then hoi4template
+    else if ck2 then ck2template
+    else stltemplate
+
 for row in rows.Rows do
-  let key = row.GetColumn "key"
-  let scopes = row.GetColumn "scopes"
-  let event = row.GetColumn "event"
-  let eventtext = if event = "" then "event" else "event."+event
-  let output = template.Replace("$type$", key).Replace("$scopes$",scopes).Replace("$event$",eventtext)
-  sb.Append output
-sb.Append """
+    let key = row.GetColumn "key"
+    let scopes = row.GetColumn "scopes"
+    let event = row.GetColumn "event"
+    let eventtext = if event = "" then "event" else "event." + event
+
+    let output =
+        template.Replace("$type$", key).Replace("$scopes$", scopes).Replace("$event$", eventtext)
+
+    sb.Append output
+
+sb.Append
+    """
 }"""
+
 printfn "%s" (sb.ToString())
 File.WriteAllText(path + "/on_actions.cwt", sb.ToString())

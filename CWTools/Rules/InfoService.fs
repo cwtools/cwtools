@@ -1,5 +1,6 @@
 namespace CWTools.Rules
 
+open System.Collections.Frozen
 open System.Collections.Generic
 open CSharpHelpers
 open CWTools.Rules.RulesWrapper
@@ -9,7 +10,6 @@ open CWTools.Utilities.Utils
 open CWTools.Common
 open System
 open CWTools.Utilities.Position
-open System.IO
 open CWTools.Games
 open CWTools.Process.Localisation
 open CWTools.Process
@@ -46,9 +46,9 @@ type InfoService
     (
         rootRules: RulesWrapper,
         typedefs: TypeDefinition list,
-        types: Collections.Map<string, PrefixOptimisedStringSet>,
-        enums: Collections.Map<string, string * PrefixOptimisedStringSet>,
-        varMap: Collections.Map<string, PrefixOptimisedStringSet>,
+        types: FrozenDictionary<string, PrefixOptimisedStringSet>,
+        enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
+        varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
         files: Collections.Set<string>,
         links: EffectMap,
@@ -90,7 +90,7 @@ type InfoService
 
     let invertedTypeMap: IDictionary<string, ResizeArray<string>> =
         let map = Dictionary<string, ResizeArray<string>>()
-        types |> Map.toSeq |> Seq.iter (fun (t, set) -> inner map t set)
+        types |> Seq.iter (fun pair -> inner map pair.Key pair.Value)
         map
 
     let defaultKeys =
@@ -612,7 +612,7 @@ type InfoService
                 | _ -> None
 
         typedefs
-        |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, logicalpath))
+        |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, logicalpath))
         |> List.fold (fun acc t -> Option.orElseWith (fun () -> resultForType childMatch t) acc) None
     // match childMatch, typedefs |> List.tryFind (fun t -> FieldValidators.checkPathDir t.pathOptions pathDir file) with
     // |Some c, Some typedef ->
@@ -733,7 +733,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
+                |> List.tryFind (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -778,7 +778,7 @@ type InfoService
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
-                match Map.tryFind "static_values" enums with
+                match enums.TryFind "static_values" with
                 | Some(_, ss) ->
                     if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
@@ -920,7 +920,7 @@ type InfoService
             match
                 childMatch,
                 typedefs
-                |> List.tryFind (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, entity.logicalpath))
+                |> List.tryFind (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
             with
             | Some c, Some typedef ->
                 let typerules =
@@ -1066,7 +1066,7 @@ type InfoService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidatorsCs.CheckPathDir(t.pathOptions, path))
+            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, path))
 
         let rec infoServiceSkipRoot rs o (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) acc (n: Node) =
             match skipRootKeyStack with
@@ -1171,7 +1171,7 @@ type InfoService
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
-                match Map.tryFind "static_values" enums with
+                match enums.TryFind "static_values" with
                 | Some(_, ss) ->
                     if ss.ContainsKey key then
                         Some(EnumRef("static_values", key))
@@ -1628,6 +1628,7 @@ type InfoService
             Test.mergeFolds getTriggersInEntity getEffectsInEntity
             |> Test.mergeFolds getDefVarInEntity
             |> Test.mergeFolds (getTypesInEntity ())
+
         let types, (defvars, (effects, triggers)) =
             foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
 
@@ -1675,14 +1676,16 @@ type InfoService
             match field with
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
                 let value = leaf.ValueText
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
                     res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
                 let value = leaf.Key
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1706,7 +1709,8 @@ type InfoService
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
                 let value = leafvalue.ValueText
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1717,7 +1721,8 @@ type InfoService
             match field with
             | NodeRule(TypeField(TypeType.Simple t), _) ->
                 let value = node.Key
-                if types |> Map.exists (fun key values -> key == t && values.ContainsKey(value)) then
+
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else

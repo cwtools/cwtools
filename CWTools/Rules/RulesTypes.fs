@@ -5,7 +5,7 @@ open CWTools.Common
 open CWTools.Utilities
 open CWTools.Process
 open CWTools.Utilities.StringResource
-open Shared;
+open Shared
 
 type ReplaceScopes =
     { root: Scope option

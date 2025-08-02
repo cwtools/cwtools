@@ -134,6 +134,10 @@ open System.Security.Cryptography
 open CWTools.Parser
 open FParsec
 
-let loc = CWTools.Localisation.CK2Localisation.CK2LocalisationService(["f:/Games/Steam/steamapps/common/Crusader Kings II/localisation/HolyFury.csv", File.ReadAllText "f:/Games/Steam/steamapps/common/Crusader Kings II/localisation/HolyFury.csv"])
+let loc =
+    CWTools.Localisation.CK2Localisation.CK2LocalisationService(
+        [ "f:/Games/Steam/steamapps/common/Crusader Kings II/localisation/HolyFury.csv",
+          File.ReadAllText "f:/Games/Steam/steamapps/common/Crusader Kings II/localisation/HolyFury.csv" ]
+    )
 
 eprintfn "%A" loc.Results

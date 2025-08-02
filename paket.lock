@@ -1,3 +1,4 @@
+STORAGE: NONE
 NUGET
   remote: https://api.nuget.org/v3/index.json
     Aether (8.3.1) - restriction: || (>= net452) (>= netstandard2.0)
@@ -68,9 +69,9 @@ NUGET
       Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
       Microsoft.TestPlatform.AdapterUtilities (>= 17.13) - restriction: >= netstandard2.0
       Microsoft.TestPlatform.ObjectModel (>= 17.13) - restriction: >= netstandard2.0
-    Microsoft.Testing.Platform (1.7.3) - restriction: >= net8.0
-    Microsoft.Testing.Platform.MSBuild (1.7.3) - restriction: || (>= net462) (>= netcoreapp3.1)
-      Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
+    Microsoft.Testing.Platform (1.8) - restriction: >= netstandard2.0
+    Microsoft.Testing.Platform.MSBuild (1.8)
+      Microsoft.Testing.Platform (>= 1.8) - restriction: >= netstandard2.0
     Microsoft.TestPlatform.AdapterUtilities (17.14.1) - restriction: >= net8.0
     Microsoft.TestPlatform.ObjectModel (17.14.1) - restriction: >= net8.0
       System.Reflection.Metadata (>= 8.0) - restriction: || (>= net462) (>= netstandard2.0)
@@ -595,11 +596,11 @@ NUGET
       System.Threading (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Xml.ReaderWriter (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
     VDS.Common (3.0)
-    YoloDev.Expecto.TestSdk (0.15.3)
+    YoloDev.Expecto.TestSdk (0.15.4)
       Expecto (>= 10.2.2 < 11.0) - restriction: >= net8.0
       FSharp.Core (>= 7.0.200) - restriction: >= net8.0
-      Microsoft.Testing.Extensions.VSTestBridge (>= 1.6.2) - restriction: >= net8.0
-      Microsoft.Testing.Platform.MSBuild (>= 1.6.2) - restriction: >= net8.0
+      Microsoft.Testing.Extensions.VSTestBridge (>= 1.7.3) - restriction: >= net8.0
+      Microsoft.Testing.Platform.MSBuild (>= 1.7.3) - restriction: >= net8.0
 GITHUB
   remote: giraffe-fsharp/Giraffe
     src/Giraffe/GiraffeViewEngine.fs (612aa186c68101f532196817f67ebaa083c16146)

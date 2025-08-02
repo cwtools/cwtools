@@ -44,6 +44,7 @@ type EffectDictionary(effects: Effect seq) =
         this.TryFind s
 
     member this.Values = dictionary.Values
+
     static member FromList(effects: #Effect seq) : EffectDictionary =
         EffectDictionary(effects |> Seq.map (fun e -> e :> Effect))
 
@@ -174,12 +175,14 @@ module Scopes =
                         let x = key.Split(amp, 2) in x.[0], x.[1], true
                     else
                         key, "", false
+
                 let keys = key.Split('.')
                 let keylength = keys.Length - 1
                 let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
 
                 let inner (context: ScopeContext, changed: bool) (nextKey: string) (last: bool) =
                     let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
+
                     match onetoone with
                     | Some(_, f) -> f (context, false), NewScope(f (context, false) |> fst, [], None)
                     | None ->
@@ -198,6 +201,7 @@ module Scopes =
                                     StringResource.stringManager.GetStringForID l.Name.normal,
                                     StringComparison.OrdinalIgnoreCase
                                 ))
+
                         match eventTargetLinkMatch |> Option.orElse wildcardScopeMatch, valueScopeMatch with
                         | _, Some e ->
                             if last then
@@ -367,6 +371,7 @@ module Scopes =
                                 | _ -> None)
 
                         let valueScopeMatch = valueTriggers.TryFind nextKey
+
                         match
                             first && nextKey.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase),
                             eventTargetLinkMatch,

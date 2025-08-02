@@ -115,8 +115,8 @@ module TryParser =
     let tryParseWith tryParseFunc =
         tryParseFunc
         >> function
-            | true, v -> Some v
-            | false, _ -> None
+            | true, v -> ValueSome v
+            | false, _ -> ValueNone
 
     let parseDate: string -> _ = tryParseWith System.DateTime.TryParse
     let parseInt: string -> _ = tryParseWith System.Int32.TryParse
@@ -181,12 +181,15 @@ type StringMetadata =
         val startsWithSquareBracket: bool
         val containsPipe: bool
 
-        new(startsWithAmp,
-            containsDoubleDollar,
-            containsQuestionMark,
-            containsHat,
-            startsWithSquareBracket,
-            containsPipe) =
+        new
+            (
+                startsWithAmp,
+                containsDoubleDollar,
+                containsQuestionMark,
+                containsHat,
+                startsWithSquareBracket,
+                containsPipe
+            ) =
             { startsWithAmp = startsWithAmp
               containsDoubleDollar = containsDoubleDollar
               containsQuestionMark = containsQuestionMark
