@@ -386,6 +386,7 @@ module CWToolsCLI =
                 match cachePath with
                 | Some path -> Metadata(Serializer.deserializeMetadata path)
                 | None -> FromConfig([], [])
+            | _ -> ArgumentOutOfRangeException() |> raise
 
         let hashes =
             match inputHashFile with
@@ -514,9 +515,17 @@ module CWToolsCLI =
                         ([ WD { path = directory; name = "undefined" } ])
                         outputCacheFileName
                         compression
+                | Game.VIC3 ->
+                    Serializer.serializeVIC3
+                        ([ WD { path = directory; name = "undefined" } ])
+                        outputCacheFileName
+                        compression
                 | Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
+                | _ -> ArgumentOutOfRangeException() |> raise
+
 
             eprintfn "Full cache file created at %s, relative to CWD" filename
+        | _ -> ArgumentOutOfRangeException() |> raise
     // let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris", Encoding.UTF8)
     // let files = fileManager.AllFilesByPath()
     // let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
@@ -543,6 +552,7 @@ module CWToolsCLI =
                 let formatted = CKPrinter.printTopLevelKeyValueList sl
                 printf "%s" formatted
             | Failure(msg, _, _), _ -> failwith ("Failed to parse file: " + msg)
+            | CharParsers.ParserResult.Success(statements, unit, position), true -> failwith "Not implemented"
         | None -> failwith "No file found"
 
     [<EntryPoint>]
@@ -592,6 +602,14 @@ module CWToolsCLI =
         | Game _ ->
             failwith "internal error: this code should never be reached"
             1
+        | Scope filesScope -> failwith "subcommand"
+        | ModFilter s -> failwith "subcommand"
+        | CacheFile path -> failwith "subcommand"
+        | CacheType cacheType -> failwith "subcommand"
+        | RulesPath path -> failwith "subcommand"
+        | Compression compression -> failwith "subcommand"
+        | DocsPath s -> failwith "subcommand"
+        | Parse results -> failwith "subcommand"
 
 //printfn "%A" argv
 // return an integer exit code

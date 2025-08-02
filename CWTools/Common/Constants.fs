@@ -13,6 +13,7 @@ type Game =
     | VIC2 = 4
     | IR = 5
     | CK3 = 6
+    | VIC3 = 7
     | Custom = 99
 
 type CK2Lang =

@@ -1023,6 +1023,7 @@ module internal FieldValidators =
             | IgnoreField field -> checkField p severity ctx field keyIDs leafornode errors
             // Should never happen
             | SingleAliasClauseField _ -> errors
+            | JominiGuiField -> errors
 
     let rec checkFieldNE
         (p: CheckFieldParams)
@@ -1097,6 +1098,7 @@ module internal FieldValidators =
             | IgnoreField field -> checkFieldNE p severity ctx field keyIDs
             // Should never happen
             | SingleAliasClauseField _ -> failwith "todo"
+            | JominiGuiField -> false
 
     let checkLeftField (p: CheckFieldParams) (severity: Severity) (ctx: RuleContext) (field: NewField) keyIDs =
         checkFieldNE p severity ctx field keyIDs
