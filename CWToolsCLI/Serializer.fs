@@ -546,7 +546,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = None }
+          maxFileSize = None
+          debugSettings = DebugSettings.Default }
 
     let HOI4options: HOI4Settings =
         { rootDirectories = folders
@@ -565,6 +566,7 @@ let loadGame<'T when 'T :> ComputedData>
           scriptFolders = None
           excludeGlobPatterns = None
           maxFileSize = Some 8
+          debugSettings = DebugSettings.Default
 
         }
 
@@ -584,7 +586,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let CK2options: CK2Settings =
         { rootDirectories = folders
@@ -602,7 +605,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let VIC2options: VIC2Settings =
         { rootDirectories = folders
@@ -620,7 +624,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let Customoptions: CustomSettings =
         { rootDirectories = folders
@@ -638,7 +643,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let IRoptions: IRSettings =
         { rootDirectories = folders
@@ -656,7 +662,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let CK3options: CK3Settings =
         { rootDirectories = folders
@@ -674,7 +681,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let game: IGame =
         match game with

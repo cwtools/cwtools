@@ -26,13 +26,9 @@
         <EmbeddedResource Include="testfiles/embeddedtest/embedded/**"/>
         <EmbeddedResource Include="testfiles/overwritetest/embedded/**"/>
         <None Include="dotnet.config"/>
-        <None Include="testfiles\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
     <ItemGroup>
         <Content Include="testconfig.json"/>
-        <Folder Include="testfiles\configtests\ruleswithglobaltests\STL"/>
 
         <Content Include="testfiles\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

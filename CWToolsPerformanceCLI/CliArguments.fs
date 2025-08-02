@@ -1,6 +1,7 @@
 module CliArguments
 
 open Argu
+open CWTools.Games
 
 // Define the CLI arguments
 [<CliPrefix(CliPrefix.DoubleDash)>]
@@ -16,6 +17,7 @@ type PerformanceArgs =
     | [<AltCommandLine("-mod-path")>] Mod_Path of string
     | [<AltCommandLine("-steam-root")>] Steam_Root of string
     | [<AltCommandLine("-git-root")>] Git_Root of string
+    | [<AltCommandLine("-test-mode")>] Test_Mode of StopPoint
 
     interface IArgParserTemplate with
         member s.Usage =
@@ -31,3 +33,4 @@ type PerformanceArgs =
             | Mod_Path _ -> "Path to optional mod directory"
             | Steam_Root _ -> "Path to Steam installation root (overrides default)"
             | Git_Root _ -> "Path to Git projects root (overrides default)"
+            | Test_Mode _ -> "Test mode, setup game or full"
