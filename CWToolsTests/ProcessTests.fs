@@ -69,7 +69,7 @@ let parseConfig = RulesParser.parseConfig
 let dynamicSettings (_) =
     { CWTools.Process.Localisation.LegacyLocDynamicsSettings.scriptedLocCommands = []
       CWTools.Process.Localisation.LegacyLocDynamicsSettings.eventTargets = []
-      CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = LowerCaseStringSet() }
+      CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = IgnoreCaseStringSet() }
 
 let processLocalisationLazy =
     lazy
