@@ -260,7 +260,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         logDiag $"Pre-refresh types time: %0.3f{float timer.ElapsedMilliseconds / 1000.0}"
         timer.Restart()
         let mutable i = 0
-        let mutable beforeCount = tempTypeMap |> Map.values |> Seq.sumBy (_.IdCount)
+        let mutable beforeCount = tempTypeMap.Values |> Seq.sumBy _.IdCount
 
         let step () =
             //log "%A" current
@@ -269,7 +269,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             tempTypeMap <- refreshTypeInfo ()
             logDiag $"Refresh types time: %0.3f{float timer.ElapsedMilliseconds / 1000.0}"
             timer.Restart()
-            let afterCount = tempTypeMap |> Map.values |> Seq.sumBy (_.IdCount)
+            let afterCount = tempTypeMap.Values |> Seq.sumBy _.IdCount
             let complete = beforeCount = afterCount || i > 5
             beforeCount <- afterCount
             complete
