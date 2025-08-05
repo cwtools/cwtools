@@ -7,6 +7,7 @@ module CWTools.Utilities.Position
 open System
 open System.IO
 open System.Collections.Generic
+open System.Runtime.CompilerServices
 open System.Runtime.Serialization
 open System.Threading
 open Microsoft.FSharp.Core.Printf
@@ -33,10 +34,7 @@ let _ = assert (posBitCount <= 32)
 let posColumnMask = mask32 0 columnBitCount
 let lineColumnMask = mask32 columnBitCount lineBitCount
 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<Struct; CustomEquality; NoComparison>]
+[<Struct; CustomEquality; NoComparison; IsReadOnly>]
 [<System.Diagnostics.DebuggerDisplay("{Line},{Column}")>]
 type pos(code: int32) =
     new(l, c) =
@@ -148,6 +146,7 @@ let _ = assert (isSyntheticMask = mask64 isSyntheticShift isSyntheticBitCount)
 type FileIndexTable() =
     let indexToFileTable = new ResizeArray<_>(11)
     let fileToIndexTable = new Dictionary<string, int>(11)
+
     [<NonSerialized>]
     let mutable lock = Lock()
 
@@ -164,6 +163,7 @@ type FileIndexTable() =
             res
         else
             lock.Enter()
+
             try
                 let mutable res = 0 in
                 let ok = fileToIndexTable.TryGetValue(f, &res) in
@@ -201,10 +201,7 @@ let fileOfFileIndex n = fileIndexTable.IndexToFile(n)
 
 let mkPos l c = pos (l, c)
 
-[<Struct; CustomEquality; NoComparison>]
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
+[<Struct; CustomEquality; NoComparison; IsReadOnly>]
 #if DEBUG
 [<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {FileName} IsSynthetic={IsSynthetic} -> {DebugCode}")>]
 #else
