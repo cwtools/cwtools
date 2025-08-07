@@ -502,8 +502,9 @@ module rec NewScope =
 
     let modifierCategoryManager = ModifierCategoryManager()
 
+    [<Sealed>]
     type ModifierCategory(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = modifierCategoryManager.GetName(x)
 
         override x.Equals(target: obj) =
@@ -526,8 +527,9 @@ module rec NewScope =
 
     type Modifier = ModifierCategory
 
+    [<Sealed>]
     type Scope(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = scopeManager.GetName(x)
 
         override x.Equals(target: obj) =
