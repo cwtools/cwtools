@@ -283,7 +283,7 @@ let memoize (keyFunction: 'a -> 'b) (memFunction: 'a -> 'c) =
 
 
 let mkRangePath (f: string) =
-    if System.IO.Path.IsPathRooted f then
+    if Path.IsPathRooted f then
         try
             Path.GetFullPath f
         with _ ->
@@ -315,25 +315,6 @@ let porder (compare1: IComparer<'T1>, compare2: IComparer<'T2>) =
 module Int32 =
     let order = LanguagePrimitives.FastGenericComparer<int>
 
-module String =
-    let order = LanguagePrimitives.FastGenericComparer<string>
-
-let posOrder =
-    orderOn (fun (p: pos) -> p.Line, p.Column) (porder (Int32.order, Int32.order))
-(* rangeOrder: not a total order, but enough to sort on ranges *)
-let rangeOrder =
-    orderOn (fun (r: range) -> r.FileName, r.Start) (porder (String.order, posOrder))
-
-let outputPos (os: TextWriter) (m: pos) = fprintf os "(%d,%d)" m.Line m.Column
-
-let outputRange (os: TextWriter) (m: range) =
-    fprintf os "%s%a-%a" m.FileName outputPos m.Start outputPos m.End
-
-let boutputPos os (m: pos) = bprintf os "(%d,%d)" m.Line m.Column
-
-let boutputRange os (m: range) =
-    bprintf os "%s%a-%a" m.FileName boutputPos m.Start boutputPos m.End
-
 let posGt (p1: pos) (p2: pos) =
     (p1.Line > p2.Line || (p1.Line = p2.Line && p1.Column > p2.Column))
 
@@ -343,37 +324,10 @@ let posEq (p1: pos) (p2: pos) =
 let posGeq p1 p2 = posEq p1 p2 || posGt p1 p2
 let posLt p1 p2 = posGt p2 p1
 
-// This is deliberately written in an allocation-free way, i.e. m1.Start, m1.End etc. are not called
-let unionRanges (m1: range) (m2: range) =
-    if m1.FileIndex <> m2.FileIndex then
-        m2
-    else
-        let b =
-            if
-                (m1.StartLine > m2.StartLine
-                 || (m1.StartLine = m2.StartLine && m1.StartColumn > m2.StartColumn))
-            then
-                m2
-            else
-                m1
-
-        let e =
-            if
-                (m1.EndLine > m2.EndLine
-                 || (m1.EndLine = m2.EndLine && m1.EndColumn > m2.EndColumn))
-            then
-                m1
-            else
-                m2
-
-        range (m1.FileIndex, b.StartLine, b.StartColumn, e.EndLine, e.EndColumn)
-
 let rangeContainsRange (m1: range) (m2: range) =
     m1.FileIndex = m2.FileIndex && posGeq m2.Start m1.Start && posGeq m1.End m2.End
 
 let rangeContainsPos (m1: range) p = posGeq p m1.Start && posGeq m1.End p
-
-let rangeBeforePos (m1: range) p = posGeq p m1.End
 
 let rangeN filename line =
     mkRange filename (mkPos line 0) (mkPos line 0)
@@ -419,12 +373,3 @@ module Line =
 
     let toZ (line: int) : Line0 =
         LanguagePrimitives.Int32WithMeasure(line - 1)
-
-module Pos =
-    let fromZ (line: Line0) idx = mkPos (Line.fromZ line) idx
-    let toZ (p: pos) = (Line.toZ p.Line, p.Column)
-
-
-module Range =
-    let toZ (m: range) = Pos.toZ m.Start, Pos.toZ m.End
-    let toFileZ (m: range) = m.FileName, toZ m
