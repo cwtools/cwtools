@@ -42,7 +42,7 @@ type GameSetupSettings<'L> =
       modFilter: string option
       maxFileSize: int option }
 
-
+[<Sealed>]
 type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (
         settings: GameSettings<'L>,
