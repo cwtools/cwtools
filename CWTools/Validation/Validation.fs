@@ -691,8 +691,6 @@ module ValidationCore =
     //     let key = (^a : (member Key : string) l)
     //     sev, pos, key.Length, s
 
-    type Validator<'T when 'T :> Node> = 'T -> ValidationResult
-
     let (<&>) f1 f2 x =
         match f1 x, f2 x with
         | OK, OK -> OK
