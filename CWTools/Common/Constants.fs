@@ -2,7 +2,6 @@ namespace CWTools.Common
 
 open System.Collections.Generic
 open System
-open System.Runtime.CompilerServices
 open CWTools.Utilities
 
 type Game =
@@ -545,12 +544,11 @@ type StaticModifier =
     { tag: string
       categories: ModifierCategory list }
 
-[<Struct; IsReadOnly>]
 type EffectType =
-    | Effect
-    | Trigger
-    | Link
-    | ValueTrigger
+    | Effect = 0uy
+    | Trigger = 1uy
+    | Link = 2uy
+    | ValueTrigger = 3uy
 
 type ReferenceHint =
     | TypeRef of typeName: string * typeValue: string
@@ -775,20 +773,18 @@ type ScopedEffect
             None
         )
 
-[<Struct; IsReadOnly>]
 type TitleType =
-    | Empire
-    | Kingdom
-    | Duchy_Hired
-    | Duchy_Normal
-    | County
-    | Barony
+    | Empire = 0uy
+    | Kingdom = 1uy
+    | Duchy_Hired = 2uy
+    | Duchy_Normal = 3uy
+    | County = 4uy
+    | Barony = 5uy
 
-[<Struct; IsReadOnly>]
 type DataLinkType =
-    | Scope
-    | Value
-    | Both
+    | Scope = 0uy
+    | Value = 1uy
+    | Both = 2uy
 
 type EventTargetDataLink =
     { name: string

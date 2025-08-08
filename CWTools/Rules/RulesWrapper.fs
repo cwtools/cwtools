@@ -1,5 +1,6 @@
 ﻿module CWTools.Rules.RulesWrapper
 
+[<Sealed>]
 type RulesWrapper(rules: RootRule list) =
     let aliases =
         rules
