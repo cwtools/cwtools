@@ -30,10 +30,10 @@ open MBrace.FsPickler
 
 
 let logger = Log.create "MyTests"
-CWTools.Utilities.Utils.logDiag <- logger.logSimple << (event Expecto.Logging.LogLevel.Verbose)
-CWTools.Utilities.Utils.logInfo <- logger.logSimple << (event Expecto.Logging.LogLevel.Info)
-CWTools.Utilities.Utils.logWarning <- logger.logSimple << (event Expecto.Logging.LogLevel.Warn)
-CWTools.Utilities.Utils.logError <- logger.logSimple << (event Expecto.Logging.LogLevel.Error)
+logDiag <- logger.logSimple << (event LogLevel.Verbose)
+logInfo <- logger.logSimple << (event LogLevel.Info)
+logWarning <- logger.logSimple << (event LogLevel.Warn)
+logError <- logger.logSimple << (event LogLevel.Error)
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
 
@@ -52,9 +52,9 @@ let emptyEmbeddedSettings =
       localisationCommands = Legacy([], [], [])
       eventTargetLinks = []
       cachedRuleMetadata = None
-      featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
+      featureSettings = UtilityParser.FeatureSettings.Default }
 
-let emptyStellarisSettings (rootDirectory) =
+let emptyStellarisSettings rootDirectory =
     { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
       modFilter = None
       validation =
@@ -65,9 +65,10 @@ let emptyStellarisSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
-let emptyImperatorSettings (rootDirectory) =
+let emptyImperatorSettings rootDirectory =
     { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
       modFilter = None
       validation =
@@ -78,9 +79,10 @@ let emptyImperatorSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
-let emptyVictoriaSettings (rootDirectory) =
+let emptyVictoriaSettings rootDirectory =
     { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
       modFilter = None
       validation =
@@ -91,7 +93,8 @@ let emptyVictoriaSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
 let getAllTestLocs node =
     let fNode =
@@ -114,19 +117,19 @@ let getAllTestLocs node =
 let getNodeComments (clause: IClause) =
     let findComments t s (a: Child) =
         match (s, a) with
-        | ((b, c), _) when b -> (b, c)
+        | (b, c), _ when b -> (b, c)
         | (_, c), CommentC comment when comment.Comment.StartsWith('#') -> (false, c)
         | (_, c), CommentC comment when comment.Comment.StartsWith('@') -> (false, c)
         | (_, c), CommentC comment -> (false, comment.Comment :: c)
-        | ((_, c), NodeC n) when n.Position = t -> (true, c)
-        | ((_, c), LeafC v) when v.Position = t -> (true, c)
-        | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
-        | ((_, c), ValueClauseC vc) when vc.Position = t -> (true, c)
+        | (_, c), NodeC n when n.Position = t -> (true, c)
+        | (_, c), LeafC v when v.Position = t -> (true, c)
+        | (_, c), LeafValueC v when v.Position = t -> (true, c)
+        | (_, c), ValueClauseC vc when vc.Position = t -> (true, c)
         | _ -> (false, [])
     // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
     // | ((_, _), _) -> (false, [])
     let fNode =
-        (fun (clause: IClause) (children) ->
+        (fun (clause: IClause) children ->
             let one =
                 clause.Leaves
                 |> Seq.map (fun e ->
@@ -153,7 +156,7 @@ let getNodeComments (clause: IClause) =
                     e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
 
             let new2 =
-                one @ two @ three @ four |> List.filter (fun (p, c) -> not (List.isEmpty c))
+                one @ two @ three @ four |> List.filter (fun (_, c) -> not (List.isEmpty c))
 
             new2 @ children)
 
@@ -184,18 +187,18 @@ let getNodeComments (clause: IClause) =
 let getCompletionTests (clause: IClause) =
     let findComments t s (a: Child) =
         match (s, a) with
-        | ((b, c), _) when b -> (b, c)
-        | ((_, c), CommentC comment) when comment.Comment.StartsWith('@') -> (false, comment.Comment :: c)
-        | ((_, c), CommentC _) -> (false, c)
-        | ((_, c), NodeC n) when n.Position = t -> (true, c)
-        | ((_, c), LeafC v) when v.Position = t -> (true, c)
-        | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
-        | ((_, c), ValueClauseC vc) when vc.Position = t -> (true, c)
+        | (b, c), _ when b -> (b, c)
+        | (_, c), CommentC comment when comment.Comment.StartsWith('@') -> (false, comment.Comment :: c)
+        | (_, c), CommentC _ -> (false, c)
+        | (_, c), NodeC n when n.Position = t -> (true, c)
+        | (_, c), LeafC v when v.Position = t -> (true, c)
+        | (_, c), LeafValueC v when v.Position = t -> (true, c)
+        | (_, c), ValueClauseC vc when vc.Position = t -> (true, c)
         | _ -> (false, [])
     // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
     // | ((_, _), _) -> (false, [])
     let fNode =
-        (fun (clause: IClause) (children) ->
+        (fun (clause: IClause) children ->
             let one =
                 clause.Leaves
                 |> Seq.map (fun e ->
@@ -222,7 +225,7 @@ let getCompletionTests (clause: IClause) =
                     e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
 
             let new2 =
-                one @ two @ three @ four |> List.filter (fun (p, c) -> not (List.isEmpty c))
+                one @ two @ three @ four |> List.filter (fun (_, c) -> not (List.isEmpty c))
 
             new2 @ children)
 
@@ -233,12 +236,14 @@ let getCompletionTests (clause: IClause) =
         |> (foldClause2 fNode fCombine [])
         |> List.collect (fun (r, sl) -> sl |> List.map (fun s -> r, s))
 
-    let convertResToCompletionTest ((pos: range), (comment: string)) =
-        let [| option; column; text |] = comment.Split(' ', 3)
-        let negate = option = "@!"
-        let lowscore = option = "@?"
-        let pos = mkPos pos.Start.Line (pos.Start.Column + (int column) - 1)
-        pos, text, negate, lowscore
+    let convertResToCompletionTest (pos: range, comment: string) =
+        match comment.Split(' ', 3) with
+        | [| option; column; text |] ->
+            let negate = option = "@!"
+            let lowscore = option = "@?"
+            let pos = mkPos pos.Start.Line (pos.Start.Column + (int column) - 1)
+            pos, text, negate, lowscore
+        | _ -> failwith "invalid comment"
 
     res |> List.map convertResToCompletionTest
 
@@ -249,7 +254,7 @@ let rec remove_first f lst item =
     | _ -> []
 
 let remove_all_by x y f = y |> List.fold (remove_first f) x
-let remove_all x y = remove_all_by x y (id)
+let remove_all x y = remove_all_by x y id
 //y |> List.fold remove_first x
 
 
@@ -259,7 +264,7 @@ let getLocTestInfo node =
 
     let comments =
         getNodeComments node
-        |> List.filter (fun (p, c) -> not (List.isEmpty c))
+        |> List.filter (fun (_, c) -> not (List.isEmpty c))
         |> List.collect (fun (f, c) -> c |> List.map (fun cc -> f, cc))
         |> List.map fst
 
@@ -309,18 +314,15 @@ let tests =
               let testLocKeys =
                   entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
 
-              let nodeComments =
+              let _ =
                   entities
                   |> List.collect (fun struct (e, _) -> getNodeComments e.entity)
                   |> List.map fst
 
-              logInfo (
-                  sprintf
-                      "%A"
-                      (entities
+              logInfo
+                  $"%A{entities
                        |> List.head
-                       |> (fun struct (e, _) -> api.prettyPrintStatement e.entity.ToRaw))
-              )
+                       |> (fun struct (e, _) -> api.prettyPrintStatement e.entity.ToRaw)}"
 
               Expect.isEmpty
                   parseErrors
@@ -346,9 +348,9 @@ let tests =
                   let fileErrors = errors |> List.filter (fun f -> f.FileName = file)
                   let missing = remove_all expected fileErrors
                   let extras = remove_all fileErrors expected
-                  Expect.isEmpty missing (sprintf "Following lines are expected to have an error %A" missing)
-                  Expect.isEmpty extras (sprintf "Following lines are not expected to have an error %A" extras)
-                  Expect.isEmpty extra (sprintf "Incorrect required %s" file)
+                  Expect.isEmpty missing $"Following lines are expected to have an error %A{missing}"
+                  Expect.isEmpty extras $"Following lines are not expected to have an error %A{extras}"
+                  Expect.isEmpty extra $"Incorrect required %s{file}"
 
               testLocKeys |> List.iter (fun (f, t) -> inner (f, t))
           // yield! testLocKeys |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
@@ -400,20 +402,20 @@ let tests =
                   stl.AllEntities()
                   |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
 
-              let inner (file, ((req: range list), (noreq: range list), (nodekeys: range list))) =
+              let inner (file, (req: range list, noreq: range list, _: range list)) =
                   let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
                   let extra = noreq |> List.filter (fun r -> errors |> List.contains r)
-                  Expect.isEmpty missing (sprintf "Missing required despite having key %s" file)
-                  Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
+                  Expect.isEmpty missing $"Missing required despite having key %s{file}"
+                  Expect.isEmpty extra $"Incorrect required %s{file}"
 
               testLocKeys |> List.iter (fun (f, t) -> inner (f, t))
               // yield! testLocKeys |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
               // eprintfn "%A" (stl.LocalisationErrors(true))
               let globalLocError =
                   stl.LocalisationErrors(true, true)
-                  |> List.filter (fun e -> List.contains (e.code) locErrorCodes)
+                  |> List.filter (fun e -> List.contains e.code locErrorCodes)
 
-              Expect.hasCountOf globalLocError 10u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
+              Expect.hasCountOf globalLocError 10u (fun _ -> true) $"wrong number of errors %A{globalLocError}"
           // yield testWithCapturedLogs "globalLoc" <| fun () ->
           // Expect.hasCountOf globalLocError 10u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
           ]
@@ -475,25 +477,21 @@ let testFolder folder testsname config configValidate configfile configOnly conf
             match negate, lowscore with
             | true, _ ->
                 Expect.hasCountOf
-                    (labels)
+                    labels
                     0u
                     ((=) text)
-                    (sprintf "Completion shouldn't contain value %s at %A in %s" text pos filename)
+                    $"Completion shouldn't contain value %s{text} at %A{pos} in %s{filename}"
             | false, true ->
                 //                logInfo (sprintf "ct %A" compRes)
-                let firstLowScore = text, scoreMap.[text]
+                let firstLowScore = text, scoreMap[text]
 
                 Expect.contains
                     lowscorelables
                     text
-                    (sprintf
-                        "Incorrect completion values (missing low score) at %A in %s. Score (%A)"
-                        pos
-                        filename
-                        firstLowScore)
+                    $"Incorrect completion values (missing low score) at %A{pos} in %s{filename}. Score (%A{firstLowScore})"
             | false, false ->
-                Expect.contains labels text (sprintf "Incorrect completion values at %A in %s, %A" pos filename labels)
-                Expect.isNonEmpty labels (sprintf "No completion results, expected %s" text)
+                Expect.contains labels text $"Incorrect completion values at %A{pos} in %s{filename}, %A{labels}"
+                Expect.isNonEmpty labels $"No completion results, expected %s{text}"
 
         let completionTestPerFile (game: IGame) (filename: string, tests) =
             let filetext = File.ReadAllText filename
@@ -549,7 +547,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                     stl.AllEntities()
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
-                (stl :> IGame), errors, testVals, completionTests, (stl.ParserErrors())
+                (stl :> IGame), errors, testVals, completionTests, stl.ParserErrors()
             else if stl = 0 then
                 let configtext =
                     ("./testfiles/configtests/rulestests/IR/triggers.log",
@@ -596,7 +594,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                     ir.AllEntities()
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
-                (ir :> IGame), errors, testVals, completionTests, (ir.ParserErrors())
+                (ir :> IGame), errors, testVals, completionTests, ir.ParserErrors()
             else if stl = 2 then
                 let configtext =
                     ("./testfiles/configtests/rulestests/IR/triggers.log",
@@ -643,7 +641,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                     vic3.AllEntities()
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
-                (vic3 :> IGame), errors, testVals, completionTests, (vic3.ParserErrors())
+                (vic3 :> IGame), errors, testVals, completionTests, vic3.ParserErrors()
             else
                 // let configtext = ("./testfiles/configtests/rulestests/IR/triggers.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/triggers.log")::configtext
                 // let configtext = ("./testfiles/configtests/rulestests/IR/effects.log", File.ReadAllText "./testfiles/configtests/rulestests/IR/effects.log")::configtext
@@ -692,33 +690,29 @@ let testFolder folder testsname config configValidate configfile configOnly conf
                     hoi4.AllEntities()
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
-                (hoi4 :> IGame), errors, testVals, completionTests, (hoi4.ParserErrors())
+                (hoi4 :> IGame), errors, testVals, completionTests, hoi4.ParserErrors()
 
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
         //eprintfn "%A" testVals
         // eprintfn "%A" (stl.AllFiles())
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
-        let inner (file: string, ((nodekeys: range list))) =
+        let inner (file: string, nodekeys: range list) =
             if file.Contains "noerr" then
                 ()
             else
                 let expected = nodekeys |> List.map (fun nk -> "", nk)
                 //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
-                let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file)
+                let fileErrors = errors |> List.filter (fun (_, f) -> f.FileName = file)
                 let fileErrorPositions = fileErrors //|> List.map snd
                 let missing = remove_all_by expected fileErrorPositions snd
                 let extras = remove_all_by fileErrorPositions expected snd
                 //eprintfn "%A" nodekeys
                 Expect.isEmpty
-                    (extras)
-                    (sprintf
-                        "Following lines are not expected to have an error %A, expected %A, actual %A"
-                        extras
-                        expected
-                        fileErrors)
+                    extras
+                    $"Following lines are not expected to have an error %A{extras}, expected %A{expected}, actual %A{fileErrors}"
 
-                Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+                Expect.isEmpty missing $"Following lines are expected to have an error %A{missing}"
         // eprintfn "ss %s %s" folder testsname
         Expect.isEmpty
             parseErrors
@@ -736,7 +730,7 @@ let testSubdirectories stl rulesonly dir =
     let dirs = Directory.EnumerateDirectories dir
 
     dirs
-    |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true (d) rulesonly true stl "en-GB")
+    |> Seq.map (fun d -> testFolder d "detailedconfigrules" true true d rulesonly true stl "en-GB")
 
 [<Tests>]
 let folderTests =
@@ -839,7 +833,8 @@ let specialtests =
         let modifiers =
             (modfile
              |> (function
-             | CharParsers.ParserResult.Success(p, _, _) -> SetupLogParser.processLogs p))
+             | ParserResult.Success(p, _, _) -> SetupLogParser.processLogs p
+             | ParserResult.Failure _ -> failwith "todo"))
 
         let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
         // UtilityParser.initializeScopes None (Some defaultScopeInputs)
@@ -989,7 +984,7 @@ let embeddedTests =
         let cached = unpickled.resources
 
 
-        let embeddedFiles =
+        let _ =
             embeddedFileNames
             |> List.ofArray
             |> List.map (fun f ->
@@ -1030,28 +1025,24 @@ let embeddedTests =
             stlNE.AllEntities()
             |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
-        let einner (file, ((nodekeys: range list))) =
+        let einner (file, _: range list) =
             let fileErrors = eerrors |> List.filter (fun f -> f.FileName = file)
-            Expect.isEmpty (fileErrors) (sprintf "Following lines are not expected to have an error %A" fileErrors)
+            Expect.isEmpty fileErrors $"Following lines are not expected to have an error %A{fileErrors}"
 
         etestVals |> List.iter einner
 
-        let neinner (file, ((nodekeys: range list))) =
+        let neinner (file, nodekeys: range list) =
             let expected = nodekeys |> List.map (fun nk -> "", nk)
-            let fileErrors = neerrors |> List.filter (fun (c, f) -> f.FileName = file)
+            let fileErrors = neerrors |> List.filter (fun (_, f) -> f.FileName = file)
             let fileErrorPositions = fileErrors //|> List.map snd
             let missing = remove_all_by expected fileErrorPositions snd
             let extras = remove_all_by fileErrorPositions expected snd
 
             Expect.isEmpty
-                (extras)
-                (sprintf
-                    "Following lines are not expected to have an error %A, expected %A, actual %A"
-                    extras
-                    expected
-                    fileErrors)
+                extras
+                $"Following lines are not expected to have an error %A{extras}, expected %A{expected}, actual %A{fileErrors}"
 
-            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+            Expect.isEmpty missing $"Following lines are expected to have an error %A{missing}"
 
         netestVals |> List.iter neinner
 
@@ -1068,12 +1059,14 @@ let overwriteTests =
         let triggers, effects =
             parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt"
             |> (function
-            | Success(p, _, _) -> DocsParser.processDocs (scopeManager.ParseScopes) p)
+            | Success(p, _, _) -> processDocs scopeManager.ParseScopes p
+            | ParserResult.Failure _ -> failwith "todo")
 
         let modifiers =
             SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log"
             |> (function
-            | Success(p, _, _) -> SetupLogParser.processLogs p)
+            | Success(p, _, _) -> SetupLogParser.processLogs p
+            | ParserResult.Failure _ -> failwith "todo")
 
         let embeddedFileNames =
             Assembly.GetExecutingAssembly().GetManifestResourceNames()
@@ -1113,22 +1106,18 @@ let overwriteTests =
             stl.AllEntities()
             |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
-        let inner (file, ((nodekeys: range list))) =
+        let inner (file, nodekeys: range list) =
             let expected = nodekeys //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
-            let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file)
+            let fileErrors = errors |> List.filter (fun (_, f) -> f.FileName = file)
             let fileErrorPositions = fileErrors |> List.map snd
             let missing = remove_all expected fileErrorPositions
             let extras = remove_all fileErrorPositions expected
             //eprintfn "%A" fileErrors
             Expect.isEmpty
-                (extras)
-                (sprintf
-                    "Following lines are not expected to have an error %A, all %A, actual %A"
-                    extras
-                    expected
-                    fileErrors)
+                extras
+                $"Following lines are not expected to have an error %A{extras}, all %A{expected}, actual %A{fileErrors}"
 
-            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+            Expect.isEmpty missing $"Following lines are expected to have an error %A{missing}"
 
         testVals |> List.iter inner
 // ]

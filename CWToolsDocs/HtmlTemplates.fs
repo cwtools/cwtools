@@ -121,10 +121,10 @@ let fieldToText (enums: EnumDefinition list) (field: NewField) (postFix: string 
     | SubtypeField _
     | SingleAliasField _
     | MarkerField _
-    | JominiGuiField _
+    | JominiGuiField
     | AliasField _
     | IgnoreField _
-    | IgnoreMarkerField _ -> str ""
+    | IgnoreMarkerField -> str ""
 // | _ -> str ""
 
 let rhsFieldToText (enums: EnumDefinition list) (field: NewField) =
@@ -170,11 +170,11 @@ let rhsFieldToText (enums: EnumDefinition list) (field: NewField) =
     | TypeMarkerField _
     | SubtypeField _
     | SingleAliasField _
-    | JominiGuiField _
+    | JominiGuiField
     | MarkerField _ -> str ""
     | AliasField x -> str (x + " fields")
     | IgnoreField _
-    | IgnoreMarkerField _ -> str ""
+    | IgnoreMarkerField -> str ""
 
 let replaceScopesToText (replaceScopes: ReplaceScopes) =
     let rootText =

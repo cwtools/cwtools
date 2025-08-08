@@ -32,6 +32,18 @@ type EmbeddedSetupSettings =
     | Metadata of cachedRuleMetadata: CachedRuleMetadata
     | ManualSettings of EmbeddedSettings
 
+type StopPoint =
+    | GameCtor
+    | GameInitLoad
+    | GameAfterInit
+    | GameInitialConfigRules
+    | Full
+
+type DebugSettings =
+    { EarlyStop: StopPoint }
+
+    static member Default = { EarlyStop = Full }
+
 type GameSetupSettings<'L> =
     { rootDirectories: WorkspaceDirectoryInput list
       embedded: EmbeddedSetupSettings
@@ -40,7 +52,10 @@ type GameSetupSettings<'L> =
       scriptFolders: string list option
       excludeGlobPatterns: string list option
       modFilter: string option
-      maxFileSize: int option }
+      maxFileSize: int option
+      debugSettings: DebugSettings }
+
+
 
 
 type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
@@ -60,7 +75,8 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         globalLocalisation: GameObject<'T, 'L> -> CWError list,
         afterUpdateFile: GameObject<'T, 'L> -> string -> unit,
         localisationExtension: string,
-        ruleManagerSettings: RuleManagerSettings<'T, 'L>
+        ruleManagerSettings: RuleManagerSettings<'T, 'L>,
+        debugSettings: DebugSettings
     ) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
     let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
@@ -325,7 +341,9 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     do
         lookup.rootFolders <- settings.rootDirectories
-        initialLoad ()
+
+        if debugSettings.EarlyStop >= GameInitLoad then
+            initialLoad ()
 
     member __.RuleValidationService = ruleValidationService
 
@@ -374,9 +392,15 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     member __.ReplaceConfigRules rules = rulesManager.LoadBaseConfig rules
     member __.RefreshCaches() = updateRulesCache ()
     member __.InitialConfigRules() = initialConfigRules ()
+    member private __.DebugSettings = debugSettings
 
     static member CreateGame settings afterInit =
         let game = GameObject(settings)
-        afterInit game
-        game.InitialConfigRules()
+
+        if game.DebugSettings.EarlyStop >= GameAfterInit then
+            afterInit game
+
+        if game.DebugSettings.EarlyStop >= GameInitialConfigRules then
+            game.InitialConfigRules()
+
         game

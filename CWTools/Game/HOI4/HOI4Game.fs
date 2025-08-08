@@ -458,7 +458,8 @@ type HOI4Game(setupSettings: HOI4Settings) =
              Hooks.globalLocalisation,
              (fun _ _ -> ()),
              ".yml",
-             rulesManagerSettings)
+             rulesManagerSettings,
+             setupSettings.debugSettings)
             afterInit
 
     let lookup = game.Lookup

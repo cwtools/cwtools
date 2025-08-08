@@ -498,7 +498,8 @@ type CK2Game(setupSettings: CK2Settings) =
               Hooks.globalLocalisation,
               (fun _ _ -> ()),
               ".csv",
-              rulesManagerSettings))
+              rulesManagerSettings,
+              setupSettings.debugSettings))
             afterInit
 
     let lookup = game.Lookup

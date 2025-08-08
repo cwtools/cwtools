@@ -26,7 +26,7 @@ open CWTools.Rules.RulesWrapper
 open LogCaptureTest
 
 
-let emptyStellarisSettings (rootDirectory) =
+let emptyStellarisSettings rootDirectory =
     { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
       modFilter = None
       validation =
@@ -37,7 +37,8 @@ let emptyStellarisSettings (rootDirectory) =
       embedded = FromConfig([], [])
       scriptFolders = None
       excludeGlobPatterns = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings = DebugSettings.Default }
 
 let emptyEmbeddedSettings =
     { triggers = []
@@ -48,15 +49,15 @@ let emptyEmbeddedSettings =
       localisationCommands = Legacy([], [], [])
       eventTargetLinks = []
       cachedRuleMetadata = None
-      featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
+      featureSettings = UtilityParser.FeatureSettings.Default }
 
 let emptyDataTypesLazy =
     lazy
-        ({ DataTypeParser.JominiLocDataTypes.promotes = Map.empty
-           DataTypeParser.JominiLocDataTypes.confidentFunctions = Map.empty
-           DataTypeParser.JominiLocDataTypes.functions = Map.empty
-           DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty
-           DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty })
+        { DataTypeParser.JominiLocDataTypes.promotes = Map.empty
+          DataTypeParser.JominiLocDataTypes.confidentFunctions = Map.empty
+          DataTypeParser.JominiLocDataTypes.functions = Map.empty
+          DataTypeParser.JominiLocDataTypes.dataTypes = Map.empty
+          DataTypeParser.JominiLocDataTypes.dataTypeNames = Set.empty }
 
 let specificField = RulesParser.specificField
 let optionalMany = RulesParser.optionalMany
@@ -66,14 +67,14 @@ let defaultFloat = RulesParser.defaultFloat
 let defaultInt = RulesParser.defaultInt
 let parseConfig = RulesParser.parseConfig
 
-let dynamicSettings (_) =
+let dynamicSettings _ =
     { CWTools.Process.Localisation.LegacyLocDynamicsSettings.scriptedLocCommands = []
       CWTools.Process.Localisation.LegacyLocDynamicsSettings.eventTargets = []
       CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = LowerCaseStringSet() }
 
 let processLocalisationLazy =
     lazy
-        ((CWTools.Games.Helpers.createLocalisationFunctions
+        ((Helpers.createLocalisationFunctions
             CWTools.Process.Localisation.STL.locStaticSettings
             dynamicSettings
             ([], [], ([], []))
@@ -82,7 +83,7 @@ let processLocalisationLazy =
 
 let validateLocalisationLazy =
     lazy
-        ((CWTools.Games.Helpers.createLocalisationFunctions
+        ((Helpers.createLocalisationFunctions
             CWTools.Process.Localisation.STL.locStaticSettings
             dynamicSettings
             ([], [], ([], []))
@@ -92,7 +93,7 @@ let validateLocalisationLazy =
 let createStarbaseLazy =
     lazy
         (let owner =
-            NewRule(LeafRule(specificField "owner", ScopeField [ (scopeManager.AnyScope) ]), requiredSingle)
+            NewRule(LeafRule(specificField "owner", ScopeField [ scopeManager.AnyScope ]), requiredSingle)
 
          let size =
              NewRule(LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
@@ -105,10 +106,7 @@ let createStarbaseLazy =
 
          let effect =
              NewRule(
-                 NodeRule(
-                     specificField "effect",
-                     [ (LeafRule(AliasField "effect", AliasField "effect")), optionalMany ]
-                 ),
+                 NodeRule(specificField "effect", [ LeafRule(AliasField "effect", AliasField "effect"), optionalMany ]),
                  { optionalSingle with
                      replaceScopes =
                          Some
@@ -126,7 +124,7 @@ let createStarbaseLazy =
 
          rule)
 
-let createStarbaseAliasLazy = lazy (AliasRule("effect", createStarbaseLazy.Value))
+let createStarbaseAliasLazy = lazy AliasRule("effect", createStarbaseLazy.Value)
 
 let createStarbaseEnumsLazy =
     lazy
@@ -137,26 +135,26 @@ let createStarbaseEnumsLazy =
 
 let createStarbaseTypeDefLazy =
     lazy
-        ({ name = "create_starbase"
-           nameField = None
-           pathOptions =
-             { paths = [| "events" |]
-               pathStrict = false
-               pathFile = None
-               pathExtension = None }
-           conditions = None
-           subtypes = []
-           typeKeyFilter = None
-           skipRootKey = []
-           warningOnly = false
-           type_per_file = false
-           localisation = []
-           modifiers = []
-           startsWith = None
-           unique = false
-           graphRelatedTypes = []
-           keyPrefix = None
-           shouldBeReferenced = false })
+        { name = "create_starbase"
+          nameField = None
+          pathOptions =
+            { paths = [| "events" |]
+              pathStrict = false
+              pathFile = None
+              pathExtension = None }
+          conditions = None
+          subtypes = []
+          typeKeyFilter = None
+          skipRootKey = []
+          warningOnly = false
+          type_per_file = false
+          localisation = []
+          modifiers = []
+          startsWith = None
+          unique = false
+          graphRelatedTypes = []
+          keyPrefix = None
+          shouldBeReferenced = false }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
 // # prerequisites: Tech requirements for building.
@@ -254,49 +252,49 @@ let shipsizeLazy =
 
 let shipBehaviorTypeLazy =
     lazy
-        ({ name = "ship_behavior"
-           nameField = Some "name"
-           pathOptions =
-             { paths = [| "common/ship_behaviors" |]
-               pathStrict = false
-               pathFile = None
-               pathExtension = None }
-           conditions = None
-           subtypes = []
-           typeKeyFilter = None
-           skipRootKey = []
-           warningOnly = false
-           type_per_file = false
-           localisation = []
-           modifiers = []
-           startsWith = None
-           unique = false
-           shouldBeReferenced = false
-           graphRelatedTypes = []
-           keyPrefix = None })
+        { name = "ship_behavior"
+          nameField = Some "name"
+          pathOptions =
+            { paths = [| "common/ship_behaviors" |]
+              pathStrict = false
+              pathFile = None
+              pathExtension = None }
+          conditions = None
+          subtypes = []
+          typeKeyFilter = None
+          skipRootKey = []
+          warningOnly = false
+          type_per_file = false
+          localisation = []
+          modifiers = []
+          startsWith = None
+          unique = false
+          shouldBeReferenced = false
+          graphRelatedTypes = []
+          keyPrefix = None }
 
 let shipSizeTypeLazy =
     lazy
-        ({ name = "ship_size"
-           pathOptions =
-             { paths = [| "common/ship_sizes" |]
-               pathStrict = false
-               pathFile = None
-               pathExtension = None }
-           nameField = None
-           conditions = None
-           subtypes = []
-           typeKeyFilter = None
-           skipRootKey = []
-           warningOnly = false
-           type_per_file = false
-           localisation = []
-           modifiers = []
-           startsWith = None
-           unique = false
-           shouldBeReferenced = false
-           graphRelatedTypes = []
-           keyPrefix = None })
+        { name = "ship_size"
+          pathOptions =
+            { paths = [| "common/ship_sizes" |]
+              pathStrict = false
+              pathFile = None
+              pathExtension = None }
+          nameField = None
+          conditions = None
+          subtypes = []
+          typeKeyFilter = None
+          skipRootKey = []
+          warningOnly = false
+          type_per_file = false
+          localisation = []
+          modifiers = []
+          startsWith = None
+          unique = false
+          shouldBeReferenced = false
+          graphRelatedTypes = []
+          keyPrefix = None }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"
 //      name_field = "name"
@@ -334,12 +332,12 @@ let testc =
                           effect = effect\n\
                           }"
 
-              let rules, types, enums, _, _ =
+              let rules, _, _, _, _ =
                   parseConfig
                       (scopeManager.ParseScope())
-                      (scopeManager.AllScopes)
+                      scopeManager.AllScopes
                       (scopeManager.ParseScope () "Any")
-                      (scopeManager.ScopeGroups)
+                      scopeManager.ScopeGroups
                       ""
                       config
 
@@ -358,7 +356,7 @@ let testc =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let apply =
                       RuleValidationService(
@@ -384,45 +382,45 @@ let testc =
                   match errors with
                   | OK -> ()
                   | Invalid(_, es) ->
-                      Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es)
+                      Expect.equal es.Length 1 $"Following lines are not expected to have an error %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
 
           ]
 
 let leftScopeLazy =
     lazy
-        (RootRule.AliasRule(
+        RootRule.AliasRule(
             "effect",
             (NodeRule(
                 (ScopeField [ (scopeManager.ParseScope () "Any") ]),
                 [ LeafRule((AliasField "effect"), (AliasField "Effect")), optionalMany ]
              ),
              optionalMany)
-        ))
+        )
 
 let eopEffectLazy =
     lazy
-        (RootRule.AliasRule(
+        RootRule.AliasRule(
             "effect",
             (NodeRule(
-                (SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken "every_owned_planet"))),
+                SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken "every_owned_planet")),
                 [ LeafRule((AliasField "effect"), (AliasField "Effect")), optionalMany ]
              ),
              { optionalMany with
                  pushScope = Some(scopeManager.ParseScope () "Planet") })
-        ))
+        )
 
 let logEffectLazy =
     lazy
-        (RootRule.AliasRule(
+        RootRule.AliasRule(
             "effect",
             (LeafRule(
-                (NewField.SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken "log"))),
-                (ValueField(ValueType.Bool))
+                NewField.SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken "log")),
+                ValueField(ValueType.Bool)
              ),
              { optionalMany with
                  pushScope = Some(scopeManager.ParseScope () "Planet") })
-        ))
+        )
 
 [<Tests>]
 let testsv =
@@ -439,7 +437,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let enums =
                       [ ("size", ("size", [ "medium"; "large" ]))
@@ -472,7 +470,7 @@ let testsv =
 
                   match errors with
                   | OK -> ()
-                  | Invalid(_, es) -> Expect.isEmpty es (sprintf "should be empty: %A" es)
+                  | Invalid(_, es) -> Expect.isEmpty es $"should be empty: %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
           testWithCapturedLogs "create_starbase fail"
           <| fun () ->
@@ -486,7 +484,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let enums =
                       createStarbaseEnumsLazy.Value
@@ -518,7 +516,7 @@ let testsv =
                   match errors with
                   | OK -> ()
                   | Invalid(_, es) ->
-                      Expect.equal (es.Length) 3 (sprintf "Following lines are not expected to have an error %A" es)
+                      Expect.equal es.Length 3 $"Following lines are not expected to have an error %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
           testWithCapturedLogs "create_starbase min count"
           <| fun () ->
@@ -528,7 +526,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let enums =
                       [ ("size", [ "medium"; "large" ]) ]
@@ -561,7 +559,7 @@ let testsv =
                   match errors with
                   | OK -> ()
                   | Invalid(_, es) ->
-                      Expect.equal 2 (es.Length) (sprintf "Following lines are not expected to have an error %A" es)
+                      Expect.equal 2 es.Length $"Following lines are not expected to have an error %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
           testWithCapturedLogs "create_starbase max count"
           <| fun () ->
@@ -574,7 +572,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let enums =
                       [ ("size", ("size", [ "medium"; "large" ])) ]
@@ -607,7 +605,7 @@ let testsv =
                   match errors with
                   | OK -> ()
                   | Invalid(_, es) ->
-                      Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es)
+                      Expect.equal es.Length 1 $"Following lines are not expected to have an error %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
           testWithCapturedLogs "create_starbase effect in effect"
           <| fun () ->
@@ -624,7 +622,7 @@ let testsv =
 
               match CKParser.parseString input "test" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let enums =
                       [ ("size", ("size", [ "medium"; "large" ])) ]
@@ -659,7 +657,7 @@ let testsv =
                   match errors with
                   | OK -> ()
                   | Invalid(_, es) ->
-                      Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es)
+                      Expect.equal es.Length 0 $"Following lines are not expected to have an error %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
           testWithCapturedLogs "test rhs completion"
           <| fun () ->
@@ -674,7 +672,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -720,7 +718,8 @@ let testsv =
                       comp.Complete(pos, entity, None)
                       |> Seq.map (function
                           | CompletionResponse.Simple(c, _, _) -> c
-                          | Snippet(l, _, _, _, _) -> l)
+                          | Snippet(l, _, _, _, _) -> l
+                          | Detailed _ -> failwith "todo")
                       |> Seq.sort
 
                   let expected = [ "medium"; "large" ] |> Seq.sort
@@ -736,7 +735,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -775,7 +774,8 @@ let testsv =
                       comp.Complete(pos, entity, None)
                       |> Seq.map (function
                           | Simple(c, _, _) -> c
-                          | Snippet(l, _, _, _, _) -> l)
+                          | Snippet(l, _, _, _, _) -> l
+                          | Detailed _ -> failwith "todo")
                       |> Seq.sort
 
                   let expected = [ "size"; "owner"; "building"; "effect"; "module" ] |> Seq.sort
@@ -799,9 +799,9 @@ let testsv =
                   split
                   |> Array.mapi (fun i s ->
                       if i = (pos.Line - 1) then
-                          log (sprintf "%s" s)
+                          log $"%s{s}"
                           let s = s.Insert(pos.Column, magicCharString) in
-                          log (sprintf "%s" s)
+                          log $"%s{s}"
                           s
                       else
                           s)
@@ -809,7 +809,7 @@ let testsv =
 
               match CKParser.parseString filetext "test.txt" with
               | Success(r, _, _) ->
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -846,7 +846,8 @@ let testsv =
                       comp.Complete(pos, entity, None)
                       |> Seq.map (function
                           | Simple(c, _, _) -> c
-                          | Snippet(l, _, _, _, _) -> l)
+                          | Snippet(l, _, _, _, _) -> l
+                          | Detailed _ -> failwith "todo")
                       |> Seq.sort
 
                   let expected = [ "create_starbase"; "create_starbase" ] |> Seq.sort
@@ -905,7 +906,7 @@ let testsv =
                       )
 
                   let typeinfo =
-                      CWTools.Rules.RulesHelpers.getTypesFromDefinitions
+                      RulesHelpers.getTypesFromDefinitions
                           (Some ruleapplicator)
                           [ shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value ]
                           [ be ]
@@ -955,11 +956,16 @@ let testsv =
                       res
                       |> Seq.map (function
                           | Simple(c, _, _) -> c
-                          | Snippet(l, _, _, _, _) -> l)
+                          | Snippet(l, _, _, _, _) -> l
+                          | Detailed _ -> failwith "todo")
                       |> Seq.sort
 
                   let expected = [ "default"; "swarm" ] |> Seq.sort
                   Expect.sequenceEqual suggestions expected "Completion should match"
+
+              | ParserResult.Success _, ParserResult.Failure _ -> failwith "todo"
+              | ParserResult.Failure _, ParserResult.Success _ -> failwith "todo"
+              | ParserResult.Failure _, ParserResult.Failure _ -> failwith "todo"
 
           ptestCase "test scope at pos simple nodes"
           <| fun () ->
@@ -974,7 +980,7 @@ let testsv =
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
                   UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -1053,7 +1059,7 @@ let testsv =
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
                   UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -1138,7 +1144,7 @@ let testsv =
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
                   UtilityParser.initializeScopes None (Some defaultScopeInputs)
-                  let node = (STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r)
+                  let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
                       { filepath = "events/test.txt"
@@ -1279,7 +1285,8 @@ let testsConfig =
                   suggestions
                   |> Seq.map (function
                       | Simple(c, _, _) -> c
-                      | Snippet(l, _, _, _, _) -> l)
+                      | Snippet(l, _, _, _, _) -> l
+                      | Detailed _ -> failwith "todo")
                   |> Seq.sort
 
               let expected = [ "default"; "swarm" ] |> Seq.sort
@@ -1325,18 +1332,20 @@ let testsConfig =
               let pos = mkPos 2 20
               let pos2 = mkPos 2 5
 
-              let suggestions =
+              let _ =
                   stl.Complete pos2 "common/ship_sizes/test.txt" input
                   |> Seq.map (function
                       | Simple(c, _, _) -> c
-                      | Snippet(l, _, _, _, _) -> l)
+                      | Snippet(l, _, _, _, _) -> l
+                      | Detailed _ -> failwith "todo")
                   |> Seq.sort
 
               let suggestions =
                   stl.Complete pos "common/ship_sizes/test.txt" input
                   |> Seq.map (function
                       | Simple(c, _, _) -> c
-                      | Snippet(l, _, _, _, _) -> l)
+                      | Snippet(l, _, _, _, _) -> l
+                      | Detailed _ -> failwith "todo")
                   |> Seq.sort
 
               let expected = [ "default"; "swarm" ] |> Seq.sort
@@ -1387,7 +1396,8 @@ let testsConfig =
                   stl.Complete pos "common/ship_sizes/test.txt" input
                   |> Seq.map (function
                       | Simple(c, _, _) -> c
-                      | Snippet(l, _, _, _, _) -> l)
+                      | Snippet(l, _, _, _, _) -> l
+                      | Detailed _ -> failwith "todo")
                   |> Seq.sort
 
               let expected = [ "tech_one"; "tech_two" ] |> Seq.sort
@@ -1436,7 +1446,8 @@ let testsConfig =
                   stl.Complete pos "common/ship_sizes/test.txt" input
                   |> Seq.map (function
                       | Simple(c, _, _) -> c
-                      | Snippet(l, _, _, _, _) -> l)
+                      | Snippet(l, _, _, _, _) -> l
+                      | Detailed _ -> failwith "todo")
                   |> Seq.sort
 
               let expected =

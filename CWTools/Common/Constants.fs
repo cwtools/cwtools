@@ -13,6 +13,7 @@ type Game =
     | VIC2 = 4
     | IR = 5
     | CK3 = 6
+    | VIC3 = 7
     | Custom = 99
 
 type CK2Lang =
@@ -566,6 +567,9 @@ type Effect internal (name, scopes, effectType, refHint) =
         match y with
         | :? Effect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
         | _ -> false
+
+    override x.GetHashCode() =
+        hash (name, scopes, effectType, refHint)
 
     interface System.IComparable with
         member x.CompareTo yobj =

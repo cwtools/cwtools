@@ -300,7 +300,9 @@ type RuleValidationService
             |> (fun rs ->
                 lazyErrorMerge
                     rs
-                    (fun (LeafRule(l, r), o) -> applyLeafRule ctx o l r leaf)
+                    (function
+                    | (LeafRule(l, r), o) -> applyLeafRule ctx o l r leaf
+                    | _ -> failwith "Unexpected")
                     createDefault
                     innerErrors
                     true)
@@ -340,7 +342,9 @@ type RuleValidationService
             |> (fun rs ->
                 lazyErrorMerge
                     rs
-                    (fun (NodeRule(l, r), o) e -> applyNodeRule enforceCardinality ctx o l r node e)
+                    (function
+                    | (NodeRule(l, r), o) -> applyNodeRule enforceCardinality ctx o l r node
+                    | _ -> failwith "Unexpected")
                     createDefault
                     innerErrors
                     false)
@@ -367,7 +371,9 @@ type RuleValidationService
             |> (fun rs ->
                 lazyErrorMerge
                     rs
-                    (fun (LeafValueRule l, o) e -> applyLeafValueRule ctx o l leafvalue e)
+                    (function
+                    | (LeafValueRule l, o) -> applyLeafValueRule ctx o l leafvalue
+                    | _ -> failwith "Unexpected")
                     createDefault
                     innerErrors
                     true)
@@ -388,7 +394,9 @@ type RuleValidationService
             |> (fun rs ->
                 lazyErrorMerge
                     rs
-                    (fun (ValueClauseRule r, o) e -> applyValueClauseRule enforceCardinality ctx o r valueclause e)
+                    (function
+                    | (ValueClauseRule r, o) -> applyValueClauseRule enforceCardinality ctx o r valueclause
+                    | _ -> failwith "Unexpected")
                     createDefault
                     innerErrors
                     true)
