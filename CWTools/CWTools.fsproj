@@ -81,11 +81,7 @@
         <Compile Include="Game/LanguageFeatures.fs"/>
         <Compile Include="Game/ValidationManager.fs"/>
         <Compile Include="Validation/Common/CommonValidation.fs"/>
-        <Compile Include="Validation/EU4/EU4LocalisationString.fs"/>
-        <Compile Include="Validation/EU4/EU4LocalisationValidation.fs"/>
         <Compile Include="Validation/EU4/EU4Validation.fs"/>
-        <Compile Include="Validation/VIC2/VIC2Validation.fs"/>
-        <Compile Include="Validation/HOI4/HOI4Validation.fs"/>
         <Compile Include="Game/Game.fs"/>
         <Compile Include="Game/Helpers.fs"/>
         <Compile Include="Game/Hooks.fs"/>
