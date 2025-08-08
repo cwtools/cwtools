@@ -81,22 +81,22 @@ module CK2GameFunctions =
         let fNode =
             fun (t: Node) result ->
                 match t.Key with
-                | x when x.StartsWith "e_" && t.TagText "landless" == "yes" -> ((Empire, true), x) :: result
-                | x when x.StartsWith "e_" -> ((Empire, false), x) :: result
-                | x when x.StartsWith "k_" && t.TagText "landless" == "yes" -> ((Kingdom, true), x) :: result
-                | x when x.StartsWith "k_" -> ((Kingdom, false), x) :: result
+                | x when x.StartsWith "e_" && t.TagText "landless" == "yes" -> ((TitleType.Empire, true), x) :: result
+                | x when x.StartsWith "e_" -> ((TitleType.Empire, false), x) :: result
+                | x when x.StartsWith "k_" && t.TagText "landless" == "yes" -> ((TitleType.Kingdom, true), x) :: result
+                | x when x.StartsWith "k_" -> ((TitleType.Kingdom, false), x) :: result
                 | x when x.StartsWith "d_" ->
                     match t.TagText "landless", t.TagText "mercenary", t.TagText "holy_order" with
                     | "yes", "yes", _
-                    | "yes", _, "yes" -> ((Duchy_Hired, true), x) :: result
-                    | "yes", _, _ -> ((Duchy_Normal, true), x) :: result
+                    | "yes", _, "yes" -> ((TitleType.Duchy_Hired, true), x) :: result
+                    | "yes", _, _ -> ((TitleType.Duchy_Normal, true), x) :: result
                     | _, "yes", _
-                    | _, _, "yes" -> ((Duchy_Hired, false), x) :: result
-                    | _ -> ((Duchy_Normal, false), x) :: result
-                | x when x.StartsWith "c_" && t.TagText "landless" == "yes" -> ((County, true), x) :: result
-                | x when x.StartsWith "c_" -> ((County, false), x) :: result
-                | x when x.StartsWith "b_" && t.TagText "landless" == "yes" -> ((Barony, true), x) :: result
-                | x when x.StartsWith "b_" -> ((Barony, false), x) :: result
+                    | _, _, "yes" -> ((TitleType.Duchy_Hired, false), x) :: result
+                    | _ -> ((TitleType.Duchy_Normal, false), x) :: result
+                | x when x.StartsWith "c_" && t.TagText "landless" == "yes" -> ((TitleType.County, true), x) :: result
+                | x when x.StartsWith "c_" -> ((TitleType.County, false), x) :: result
+                | x when x.StartsWith "b_" && t.TagText "landless" == "yes" -> ((TitleType.Barony, true), x) :: result
+                | x when x.StartsWith "b_" -> ((TitleType.Barony, false), x) :: result
                 | _ -> result
 
         let titleEntities =
@@ -126,67 +126,67 @@ module CK2GameFunctions =
             titles |> List.fold inner ([], [], [], [], [], [], [], [], [], [], [], [])
 
         game.Lookup.CK2LandedTitles <-
-            ((Empire, true), ells)
-            :: ((Empire, false), es)
-            :: ((Kingdom, true), klls)
-            :: ((Kingdom, false), ks)
-            :: ((Duchy_Normal, true), dnlls)
-            :: ((Duchy_Normal, false), dns)
-            :: ((Duchy_Hired, true), dhlls)
-            :: ((Duchy_Hired, false), dhs)
-            :: ((County, true), clls)
-            :: ((County, false), cs)
-            :: ((Barony, true), blls)
-            :: [ ((Barony, false), bs) ]
+            ((TitleType.Empire, true), ells)
+            :: ((TitleType.Empire, false), es)
+            :: ((TitleType.Kingdom, true), klls)
+            :: ((TitleType.Kingdom, false), ks)
+            :: ((TitleType.Duchy_Normal, true), dnlls)
+            :: ((TitleType.Duchy_Normal, false), dns)
+            :: ((TitleType.Duchy_Hired, true), dhlls)
+            :: ((TitleType.Duchy_Hired, false), dhs)
+            :: ((TitleType.County, true), clls)
+            :: ((TitleType.County, false), cs)
+            :: ((TitleType.Barony, true), blls)
+            :: [ ((TitleType.Barony, false), bs) ]
             |> Map.ofList
 
     let createLandedTitleTypes (lookup: CK2Lookup) (map: Map<_, _>) =
         let ells =
-            lookup.CK2LandedTitles.[Empire, true]
+            lookup.CK2LandedTitles.[TitleType.Empire, true]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landless" ])
 
         let es =
-            lookup.CK2LandedTitles.[Empire, false]
+            lookup.CK2LandedTitles.[TitleType.Empire, false]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landed" ])
 
         let klls =
-            lookup.CK2LandedTitles.[Kingdom, true]
+            lookup.CK2LandedTitles.[TitleType.Kingdom, true]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landless" ])
 
         let ks =
-            lookup.CK2LandedTitles.[Kingdom, false]
+            lookup.CK2LandedTitles.[TitleType.Kingdom, false]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landed" ])
 
         let dllns =
-            lookup.CK2LandedTitles.[Duchy_Normal, true]
+            lookup.CK2LandedTitles.[TitleType.Duchy_Normal, true]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landless" ])
 
         let dns =
-            lookup.CK2LandedTitles.[Duchy_Normal, false]
+            lookup.CK2LandedTitles.[TitleType.Duchy_Normal, false]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landed" ])
 
         let dllhs =
-            lookup.CK2LandedTitles.[Duchy_Hired, true]
+            lookup.CK2LandedTitles.[TitleType.Duchy_Hired, true]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landless" ])
 
         let dhs =
-            lookup.CK2LandedTitles.[Duchy_Hired, false]
+            lookup.CK2LandedTitles.[TitleType.Duchy_Hired, false]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landed" ])
 
         let clls =
-            lookup.CK2LandedTitles.[County, true]
+            lookup.CK2LandedTitles.[TitleType.County, true]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landless" ])
 
         let cs =
-            lookup.CK2LandedTitles.[County, false]
+            lookup.CK2LandedTitles.[TitleType.County, false]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landed" ])
 
         let blls =
-            lookup.CK2LandedTitles.[Barony, true]
+            lookup.CK2LandedTitles.[TitleType.Barony, true]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landless" ])
 
         let bs =
-            lookup.CK2LandedTitles.[Barony, false]
+            lookup.CK2LandedTitles.[TitleType.Barony, false]
             |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landed" ])
 
         map
