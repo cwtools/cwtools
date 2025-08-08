@@ -42,6 +42,7 @@ module Test =
 
         fLeaf, fLeafValue, fComment, fNode, fValueClause, (ctx1, ctx2)
 
+[<Sealed>]
 type InfoService
     (
         rootRules: RulesWrapper,
