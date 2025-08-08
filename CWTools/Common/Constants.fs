@@ -397,6 +397,7 @@ module rec NewScope =
           internalID: int option
           scopes: Scope list }
 
+    [<Sealed>]
     type ModifierCategoryManager() =
         let mutable initialized = false
         let mutable dict = Dictionary<string, ModifierCategory>()
@@ -557,7 +558,7 @@ module rec NewScope =
     type TypeDefInfo =
         { id: string
           validate: bool
-          range: CWTools.Utilities.Position.range
+          range: Position.range
           explicitLocalisation: (string * string * bool) list
           subtypes: string list }
 
@@ -603,7 +604,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     override x.GetHashCode() =
         hash (name, scopes, effectType, refHint)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y ->
@@ -626,6 +627,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     new(name: string, scopes, effectType, refHint) =
         Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
 
+[<Sealed>]
 type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
     member val Comments: string = comments
@@ -642,7 +644,7 @@ type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, s
     override x.GetHashCode() =
         hash (x.Name, x.Scopes, x.Type, x.Comments, x.GlobalEventTargets, x.SavedEventTargets, x.UsedEventTargets)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -668,7 +670,7 @@ type DocEffect(name: StringTokens, scopes, target, effectType, desc, usage, refH
         hash (x.Name, x.Scopes, x.Type, x.Desc, x.Usage, x.Target)
 
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -807,7 +809,7 @@ type ScopedEffect
             None
         )
 
-
+[<Struct; IsReadOnly>]
 type TitleType =
     | Empire
     | Kingdom
@@ -816,13 +818,11 @@ type TitleType =
     | County
     | Barony
 
+[<Struct; IsReadOnly>]
 type DataLinkType =
     | Scope
     | Value
     | Both
-
-
-
 
 type EventTargetDataLink =
     { name: string
@@ -832,7 +832,7 @@ type EventTargetDataLink =
       dataPrefix: string option
       sourceRuleType: string
       dataLinkType: DataLinkType }
-
+ 
 type EventTargetLink =
     | SimpleLink of ScopedEffect
     | DataLink of EventTargetDataLink

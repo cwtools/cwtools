@@ -5,7 +5,7 @@ open CWTools.Localisation
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 
-
+[<Sealed>]
 type LocalisationManager<'T when 'T :> ComputedData>
     (
         resources: IResourceAPI<'T>,
