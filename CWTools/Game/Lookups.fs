@@ -79,7 +79,7 @@ type Lookup() =
 
     member val proccessedLoc: (Lang * Collections.Map<string, LocEntry>) list = [] with get, set
     member val technologies: (string * string list) list = [] with get, set
-    member val configRules: RootRule list = [] with get, set
+    member val configRules: RootRule array = [||] with get, set
     member val typeDefs: TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)
     member val enumDefs: Collections.Map<string, string * (string * range option) list> = Map.empty with get, set

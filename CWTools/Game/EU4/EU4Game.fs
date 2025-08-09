@@ -24,6 +24,7 @@ open CWTools.Games.Compute.EU4
 open CWTools.Parser
 open System.IO
 open CWTools.Process.Localisation
+open System.Linq
 
 module EU4GameFunctions =
     type GameObject = GameObject<EU4ComputedData, EU4Lookup>
@@ -123,10 +124,10 @@ module EU4GameFunctions =
                 )
             ))
 
-    let updateScriptedEffects (rules: RootRule list) =
+    let updateScriptedEffects (rules: RootRule seq) =
         let effects =
             rules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule("effect", r) -> Some r
                 | _ -> None)
 
@@ -146,13 +147,13 @@ module EU4GameFunctions =
                 ""
             )
 
-        (effects |> List.map ruleToEffect |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.map ruleToEffect |> Seq.cast<Effect> |> Seq.toList)
         @ (scopedEffects () |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers (rules: RootRule list) =
+    let updateScriptedTriggers (rules: RootRule seq) =
         let effects =
             rules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule("trigger", r) -> Some r
                 | _ -> None)
 
@@ -172,7 +173,7 @@ module EU4GameFunctions =
                 ""
             )
 
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.map ruleToTrigger |> Seq.cast<Effect> |> Seq.toList)
         @ (scopedEffects () |> List.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
@@ -182,12 +183,12 @@ module EU4GameFunctions =
             |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
         )
 
-    let loadConfigRulesHook rules (lookup: Lookup) embedded =
+    let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
         let ts = updateScriptedTriggers rules
         let es = updateScriptedEffects rules
         let ls = updateEventTargetLinks embedded
         lookup.allCoreLinks <- ts @ es @ ls
-        rules @ addModifiersWithScopes lookup
+        rules.Concat(addModifiersWithScopes lookup).ToArray()
 
     let refreshConfigBeforeFirstTypesHook (lookup: EU4Lookup) (resources: IResourceAPI<EU4ComputedData>) _ =
         lookup.EU4ScriptedEffectKeys <-

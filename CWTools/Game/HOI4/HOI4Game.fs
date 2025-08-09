@@ -19,6 +19,7 @@ open System
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Process.Localisation
+open System.Linq
 
 module HOI4GameFunctions =
     type GameObject = GameObject<HOI4ComputedData, HOI4Lookup>
@@ -104,10 +105,10 @@ module HOI4GameFunctions =
 
         game.Lookup.scriptedLoc <- rawLocs
 
-    let updateScriptedEffects (rules: RootRule list) (states: _ list) (countries: _ list) =
+    let updateScriptedEffects (rules: RootRule array) (states: _ list) (countries: _ list) =
         let effects =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | AliasRule("effect", r) -> Some r
                 | _ -> None)
 
@@ -153,14 +154,14 @@ module HOI4GameFunctions =
                     true
                 ))
 
-        (effects |> List.map ruleToEffect |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.map ruleToEffect |> Seq.cast<Effect> |> Seq.toList)
         @ (stateEffects |> List.map (fun e -> e :> Effect))
         @ (countryEffects |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers (rules: RootRule list) states countries =
+    let updateScriptedTriggers (rules: RootRule array) states countries =
         let effects =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | AliasRule("trigger", r) -> Some r
                 | _ -> None)
 
@@ -206,7 +207,7 @@ module HOI4GameFunctions =
                     true
                 ))
 
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.map ruleToTrigger |> Seq.cast<Effect> |> Seq.toList)
         @ (stateEffects |> List.map (fun e -> e :> Effect))
         @ (countryEffects |> List.map (fun e -> e :> Effect))
 
@@ -227,9 +228,9 @@ module HOI4GameFunctions =
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
             ))
 
-    let loadConfigRulesHook rules (lookup: Lookup) embedded =
+    let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
-        rules @ addModifiersWithScopes lookup
+        rules.Concat(addModifiersWithScopes lookup).ToArray()
 
     let refreshConfigBeforeFirstTypesHook (lookup: HOI4Lookup) _ _ =
         let provinceEnums =

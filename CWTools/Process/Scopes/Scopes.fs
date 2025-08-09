@@ -51,7 +51,7 @@ type EffectDictionary(effects: Effect seq) =
     member this.Values = dictionary.Values
 
     static member FromList(effects: #Effect seq) : EffectDictionary =
-        EffectDictionary(effects |> Seq.map (fun e -> e :> Effect))
+        EffectDictionary(effects |> Seq.cast<Effect>)
 
 type EffectMap = EffectDictionary
 

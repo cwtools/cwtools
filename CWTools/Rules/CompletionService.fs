@@ -17,6 +17,7 @@ open CWTools.Games
 open CWTools.Utilities.Position
 open CWTools.Utilities.StringResource
 open System.Collections.Frozen
+open System.Linq
 
 type CompletionContext =
     | NodeLHS
@@ -175,8 +176,8 @@ type CompletionService
     let checkIconField (folder: string) =
         files
         |> Collections.Set.filter (fun icon -> icon.StartsWith(folder, StringComparison.OrdinalIgnoreCase))
-        |> Collections.Set.toList
-        |> List.map (fun icon -> icon.Replace(".dds", ""))
+        |> Collections.Set.toArray
+        |> Array.map (fun icon -> icon.Replace(".dds", ""))
     // let value = folder + "/" + key + ".dds"
     // if files.Contains value then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile value) leafornode])
 
@@ -196,20 +197,19 @@ type CompletionService
     //     dataTypes.dataTypes |> Map.tryFind dataType
     //     |> Option.bind (fun dataTypeMap -> dataTypeMap |> Map.tryFind nextKey)
     //     |> Option.map (fun (newType) -> if Set.contains newType dataTypes.dataTypeNames then NewDataType (newType, true) else Found newType)
-    let promotes = dataTypes.promotes |> Map.toList |> List.map fst
-    let functions = dataTypes.functions |> Map.toList |> List.map fst
+    let promotes = dataTypes.promotes.Keys |> Seq.toArray
+    let functions = dataTypes.functions.Keys |> Seq.toArray
 
     let dataTypeFunctions =
-        dataTypes.dataTypes
-        |> Map.toList
-        |> List.map snd
-        |> List.collect (fun l -> l |> Map.toList |> List.map fst)
+        dataTypes.dataTypes.Values
+        |> Seq.collect _.Keys
+        |> Seq.toArray
 
-    let allPossibles = promotes @ functions @ dataTypeFunctions
+    let allPossibles = Array.concat [| promotes; functions; dataTypeFunctions|]
 
     let locCompleteInner (textBeforeCursor: string) =
-        if textBeforeCursor.LastIndexOf "[" > textBeforeCursor.LastIndexOf "]" then
-            (allPossibles |> List.map CompletionResponse.CreateSimple)
+        if textBeforeCursor.LastIndexOf '[' > textBeforeCursor.LastIndexOf ']' then
+            (allPossibles |> Array.map CompletionResponse.CreateSimple)
         else
             // let completionForScopeDotChain (key : string) (startingContext : ScopeContext) innerRules description =
             // let completionForScopeDotChain (key : string) innerRules description =
@@ -236,8 +236,7 @@ type CompletionService
             //         defaultRes
             //let actualText = textBeforeCursor.Substring(textBeforeCursor.LastIndexOf "[" + 1)
             //Some (completionForScopeDotChain actualText )
-            []
-
+            [||]
 
     let locComplete (pos: pos) (filetext: string) =
         let split = filetext.Split('\n')
@@ -247,7 +246,6 @@ type CompletionService
     //// Normal complete
     ///
     ///
-
 
     let valueFieldAll, valueFieldNonGlobal, scopeFieldAll, scopeFieldNonGlobal, variableFieldAll, variableFieldNonGlobal =
         let evs =
@@ -349,7 +347,7 @@ type CompletionService
 
     let createSnippetForClause
         (scoreFunction: string -> int)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (description: string option)
         (key: string)
         =
@@ -375,9 +373,9 @@ type CompletionService
 
         let requiredRules =
             rules
-            |> List.filter (fun (f, o) -> o.min >= 1 && filterToCompletion f)
-            |> List.distinctBy (fun (f, _) -> ruleToDistinctKey f)
-            |> List.mapi (fun i (f, _) -> rulePrint i f)
+            |> Seq.filter (fun (f, o) -> o.min >= 1 && filterToCompletion f)
+            |> Seq.distinctBy (fun (f, _) -> ruleToDistinctKey f)
+            |> Seq.mapi (fun i (f, _) -> rulePrint i f)
             |> String.concat ""
 
         let requiredRules = if requiredRules = "" then "\t${0}\n" else requiredRules
@@ -433,7 +431,7 @@ type CompletionService
 
     and getCompletionFromPath
         (scoreFunction: ScopeContext -> _ list -> CompletionScopeOutput -> CompletionScopeExpectation -> string -> int)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (stack: (string * int * string option * CompletionContext * string option) list)
         scopeContext
         =
@@ -585,7 +583,7 @@ type CompletionService
             let enough = o.max < count
 
             if enough then
-                []
+                [||]
             else
                 let keyvalue (inner: string) =
                     CompletionResponse.Snippet(
@@ -610,114 +608,119 @@ type CompletionService
 
                 match r with
                 | NodeRule(SpecificField(SpecificValue s), innerRules) ->
-                    [ createSnippetForClausei
-                          innerRules
-                          o.description
-                          (StringResource.stringManager.GetStringForID s.normal) ]
+                    [| createSnippetForClausei
+                           innerRules
+                           o.description
+                           (StringResource.stringManager.GetStringForID s.normal) |]
                 | NodeRule(ValueField(ValueType.Enum e), innerRules) ->
                     enums.TryFind(e)
                     |> Option.map (fun (_, es) ->
                         es.StringValues
-                        |> List.ofSeq
-                        |> List.map (fun e -> createSnippetForClausei innerRules o.description e))
-                    |> Option.defaultValue []
-                | NodeRule(ValueField _, _) -> []
-                | NodeRule(AliasField _, _) -> []
-                | NodeRule(FilepathField _, _) -> []
+                        |> Array.ofSeq
+                        |> Array.map (fun e -> createSnippetForClausei innerRules o.description e))
+                    |> Option.defaultValue [||]
+                | NodeRule(ValueField _, _) -> [||]
+                | NodeRule(AliasField _, _) -> [||]
+                | NodeRule(FilepathField _, _) -> [||]
                 | NodeRule(IconField(folder), innerRules) ->
                     checkIconField folder
-                    |> List.map (fun e -> createSnippetForClausei innerRules o.description e)
-                | NodeRule(LocalisationField _, _) -> []
+                    |> Array.map (fun e -> createSnippetForClausei innerRules o.description e)
+                | NodeRule(LocalisationField _, _) -> [||]
                 | NodeRule(ScopeField(x), innerRules) ->
-                    completionForScopeDotChain
+                    (completionForScopeDotChain
                         key
                         context
                         innerRules
                         o.description
-                        (CompletionScopeExpectation.Scopes x)
+                        (CompletionScopeExpectation.Scopes x)) |> List.toArray
                 //TODO: Scopes better
-                | NodeRule(SubtypeField _, _) -> []
+                | NodeRule(SubtypeField _, _) -> [||]
                 | NodeRule(TypeField(TypeType.Simple t), innerRules) ->
                     types.TryFind(t)
                     |> Option.map (fun ts ->
-                        ts |> List.map (fun e -> createSnippetForClausei innerRules o.description e))
-                    |> Option.defaultValue []
+                        ts |> Seq.map (fun e -> createSnippetForClausei innerRules o.description e) |> Seq.toArray)
+                    |> Option.defaultValue [||]
                 | NodeRule(TypeField(TypeType.Complex(p, t, s)), innerRules) ->
                     types.TryFind(t)
                     |> Option.map (fun ts ->
                         ts
-                        |> List.map (fun e -> createSnippetForClausei innerRules o.description (p + e + s)))
-                    |> Option.defaultValue []
+                        |> Seq.map (fun e -> createSnippetForClausei innerRules o.description (p + e + s)) |> Seq.toArray)
+                    |> Option.defaultValue [||]
                 | NodeRule(VariableGetField v, innerRules) ->
                     varMap.TryFind(v)
                     |> Option.map (fun ss ->
                         ss.StringValues
                         |> List.ofSeq
-                        |> List.map (fun e -> createSnippetForClausei innerRules o.description e))
-                    |> Option.defaultValue []
+                        |> List.map (fun e -> createSnippetForClausei innerRules o.description e) |> List.toArray)
+                    |> Option.defaultValue [||]
 
                 | LeafRule(SpecificField(SpecificValue s), _) ->
-                    [ keyvalue (StringResource.stringManager.GetStringForID s.normal) ]
+                    [| keyvalue (StringResource.stringManager.GetStringForID s.normal) |]
                 | LeafRule(ValueField(ValueType.Enum e), _) ->
                     enums.TryFind(e)
-                    |> Option.map (fun (_, es) -> es.StringValues |> List.ofSeq |> List.map (fun e -> keyvalue e))
-                    |> Option.defaultValue []
-                | LeafRule(ValueField _, _) -> []
-                | LeafRule(AliasField _, _) -> []
-                | LeafRule(FilepathField _, _) -> []
-                | LeafRule(IconField(folder), _) -> checkIconField folder |> List.map keyvalue
-                | LeafRule(LocalisationField _, _) -> []
+                    |> Option.map (fun (_, es) -> es.StringValues |> Array.ofSeq |> Array.map (fun e -> keyvalue e))
+                    |> Option.defaultValue [||]
+                | LeafRule(ValueField _, _) -> [||]
+                | LeafRule(AliasField _, _) -> [||]
+                | LeafRule(FilepathField _, _) -> [||]
+                | LeafRule(IconField(folder), _) -> checkIconField folder |> Array.map keyvalue
+                | LeafRule(LocalisationField _, _) -> [||]
                 | LeafRule(ScopeField _, _) ->
                     scopeFieldAll
-                    |> List.map (fun x -> keyvalueWithCustomScopeReq x.requiredScopes x.key)
+                    |> Seq.map (fun x -> keyvalueWithCustomScopeReq x.requiredScopes x.key) |> Seq.toArray
                 //TODO: Scopes
-                | LeafRule(SubtypeField _, _) -> []
+                | LeafRule(SubtypeField _, _) -> [||]
                 | LeafRule(TypeField(TypeType.Simple t), _) ->
                     types.TryFind(t)
-                    |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue e))
-                    |> Option.defaultValue []
+                    |> Option.map (fun ts -> ts |> Seq.map keyvalue |> Seq.toArray)
+                    |> Option.defaultValue [||]
                 | LeafRule(TypeField(TypeType.Complex(p, t, s)), _) ->
                     types.TryFind(t)
-                    |> Option.map (fun ts -> ts |> List.map (fun e -> keyvalue (p + e + s)))
-                    |> Option.defaultValue []
+                    |> Option.map (fun ts -> ts |> Seq.map (fun e -> keyvalue (p + e + s)) |> Seq.toArray)
+                    |> Option.defaultValue [||]
                 | LeafRule(VariableGetField v, _) ->
                     varMap.TryFind(v)
-                    |> Option.map (fun ss -> ss.StringValues |> List.ofSeq |> List.map (fun e -> keyvalue e))
-                    |> Option.defaultValue []
+                    |> Option.map (fun ss -> ss.StringValues |> Array.ofSeq |> Array.map keyvalue)
+                    |> Option.defaultValue [||]
                 | LeafRule(VariableSetField v, _) ->
                     varMap.TryFind(v)
-                    |> Option.map (fun ss -> ss.StringValues |> List.ofSeq |> List.map (fun e -> keyvalue e))
-                    |> Option.defaultValue []
+                    |> Option.map (fun ss -> ss.StringValues |> Array.ofSeq |> Array.map keyvalue)
+                    |> Option.defaultValue [||]
 
                 | LeafValueRule lv ->
                     match lv with
                     | NewField.TypeField(TypeType.Simple t) ->
                         types.TryFind(t)
                         |> Option.defaultValue []
-                        |> List.map CompletionResponse.CreateSimple
+                        |> Seq.map CompletionResponse.CreateSimple
+                        |> Seq.toArray
                     | NewField.TypeField(TypeType.Complex(p, t, s)) ->
                         types.TryFind(t)
                         |> Option.map (fun ns -> List.map (fun n -> p + n + s) ns)
                         |> Option.defaultValue []
-                        |> List.map CompletionResponse.CreateSimple
+                        |> Seq.map CompletionResponse.CreateSimple
+                        |> Seq.toArray
                     | NewField.ValueField(Enum e) ->
                         enums.TryFind(e)
                         |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
                         |> Option.defaultValue []
-                        |> List.map CompletionResponse.CreateSimple
+                        |> Seq.map CompletionResponse.CreateSimple
+                        |> Seq.toArray
                     | NewField.VariableGetField v ->
                         varMap.TryFind(v)
                         |> Option.map (fun s -> s.StringValues |> List.ofSeq)
                         |> Option.defaultValue []
-                        |> List.map CompletionResponse.CreateSimple
+                        |> Seq.map CompletionResponse.CreateSimple
+                        |> Seq.toArray
                     | NewField.VariableSetField v ->
                         varMap.TryFind(v)
                         |> Option.map (fun s -> s.StringValues |> List.ofSeq)
                         |> Option.defaultValue []
-                        |> List.map CompletionResponse.CreateSimple
-                    | _ -> []
-                | SubtypeRule _ -> []
-                | _ -> []
+                        |> Seq.map CompletionResponse.CreateSimple
+                        |> Seq.toArray
+                    | _ -> [||]
+                | SubtypeRule _ -> [||]
+                | _ -> [||]
         //TODO: Add leafvalue
         let fieldToRules (field: NewField) (value: string) (scopeContext: ScopeContext) =
             //            log (sprintf "%A %A" field value)
@@ -725,59 +728,60 @@ type CompletionService
             match field with
             | NewField.ValueField(Enum e) ->
                 enums.TryFind(e)
-                |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
-                |> Option.defaultValue []
-                |> List.map CompletionResponse.CreateSimple
+                |> Option.map (fun (_, s) -> s.StringValues |> Array.ofSeq)
+                |> Option.defaultValue [||]
+                |> Array.map CompletionResponse.CreateSimple
             | NewField.ValueField v ->
                 FieldValidators.getValidValues v
                 |> Option.defaultValue []
-                |> List.map CompletionResponse.CreateSimple
+                |> Seq.map CompletionResponse.CreateSimple
+                |> Seq.toArray
             | NewField.TypeField(TypeType.Simple t) ->
                 types.TryFind(t)
                 |> Option.defaultValue []
-                |> List.map CompletionResponse.CreateSimple
+                |> Seq.map CompletionResponse.CreateSimple
+                |> Seq.toArray
             | NewField.TypeField(TypeType.Complex(p, t, s)) ->
                 types.TryFind(t)
                 |> Option.map (fun ns -> List.map (fun n -> p + n + s) ns)
                 |> Option.defaultValue []
-                |> List.map CompletionResponse.CreateSimple
+                |> Seq.map CompletionResponse.CreateSimple
+                |> Seq.toArray
             | NewField.LocalisationField(s, _) ->
                 match s, value.Contains '[' with
-                | false, true -> (allPossibles |> List.map CompletionResponse.CreateSimple)
+                | false, true -> (allPossibles |> Array.map CompletionResponse.CreateSimple)
                 | true, _ ->
                     localisation
                     |> List.tryFind (fun (lang, _) -> lang = (STL STLLang.Default))
-                    |> Option.map (snd >> Set.toList)
-                    |> Option.defaultValue []
-                    |> List.map CompletionResponse.CreateSimple
+                    |> Option.map (snd >> Set.toArray)
+                    |> Option.defaultValue [||]
+                    |> Array.map CompletionResponse.CreateSimple
                 | false, _ ->
                     localisation
                     |> List.tryFind (fun (lang, _) -> lang <> (STL STLLang.Default))
-                    |> Option.map (snd >> Set.toList)
-                    |> Option.defaultValue []
-                    |> List.map CompletionResponse.CreateSimple
-            | NewField.FilepathField _ -> files |> Set.toList |> List.map CompletionResponse.CreateSimple
+                    |> Option.map (snd >> Set.toArray)
+                    |> Option.defaultValue [||]
+                    |> Array.map CompletionResponse.CreateSimple
+            | NewField.FilepathField _ -> files |> Set.toArray |> Array.map CompletionResponse.CreateSimple
             | NewField.ScopeField x ->
-                completionForRHSScopeChain value scopeContext (CompletionScopeExpectation.Scopes x)
-            //            |NewField.ScopeField _ -> scopeCompletionList |> List.map (fst >> (CompletionResponse.CreateSimple))
+                completionForRHSScopeChain value scopeContext (CompletionScopeExpectation.Scopes x) |> List.toArray
             | NewField.VariableGetField v ->
                 varMap.TryFind v
-                |> Option.map (fun ss -> ss.StringValues |> List.ofSeq)
-                |> Option.defaultValue []
-                |> List.map CompletionResponse.CreateSimple
+                |> Option.map (fun ss -> ss.StringValues |> Array.ofSeq)
+                |> Option.defaultValue [||]
+                |> Array.map CompletionResponse.CreateSimple
             | NewField.VariableSetField v ->
                 varMap.TryFind v
-                |> Option.map (fun ss -> ss.StringValues |> List.ofSeq)
-                |> Option.defaultValue []
-                |> List.map CompletionResponse.CreateSimple
-            | NewField.VariableField _ -> completionForRHSVariableChain value scopeContext
+                |> Option.map (fun ss -> ss.StringValues |> Array.ofSeq)
+                |> Option.defaultValue [||]
+                |> Array.map CompletionResponse.CreateSimple
+            | NewField.VariableField _ -> (completionForRHSVariableChain value scopeContext) |> List.toArray
             | NewField.ValueScopeField _ ->
-                completionForRHSValueChain value scopeContext
-                @ (enums.TryFind("static_values")
+                  (completionForRHSValueChain value scopeContext).Concat(enums.TryFind("static_values")
                    |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
                    |> Option.defaultValue []
-                   |> List.map CompletionResponse.CreateSimple)
-            | _ -> []
+                   |> List.map CompletionResponse.CreateSimple).ToArray()
+            | _ -> [||]
 
         let p =
             { varMap = varMap
@@ -805,35 +809,35 @@ type CompletionService
         let severity = Severity.Error
 
         let rec findRule
-            (rules: NewRule list)
+            (rules: NewRule array)
             (stack: (string * int * string option * CompletionContext) list)
             scopeContext
             =
             let subtypedRules =
                 rules
-                |> List.collect (function
+                |> Array.collect (function
                     | SubtypeRule(_, _, cfs), _ -> cfs
-                    | x -> [ x ])
+                    | x -> [| x |])
 
             let expandedRules =
                 subtypedRules
-                |> List.collect (function
+                |> Array.collect (function
                     | LeafRule(AliasField a, _), o ->
-                        (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        |> List.map (fun (r, oi) -> (r, { oi with min = o.min; max = oi.max }))
+                        (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        |> Array.map (fun (r, oi) -> (r, { oi with min = o.min; max = oi.max }))
                     | NodeRule(AliasField a, _), o ->
-                        (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        |> List.map (fun (r, oi) -> (r, { oi with min = o.min; max = oi.max }))
-                    | x -> [ x ])
+                        (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        |> Array.map (fun (r, oi) -> (r, { oi with min = o.min; max = oi.max }))
+                    | x -> [| x |])
             //eprintfn "fr %A %A" stack (expandedRules |> List.truncate 10)
             match stack with
-            | [] -> expandedRules |> List.collect (convRuleToCompletion "" 0 scopeContext)
+            | [] -> expandedRules |> Array.collect (convRuleToCompletion "" 0 scopeContext)
             | [ (key, count, None, NodeLHS) ] ->
-                expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                expandedRules |> Array.collect (convRuleToCompletion key count scopeContext)
             | [ (key, count, None, NodeRHS) ] ->
                 match
                     expandedRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | NodeRule(l, rs), o when
                             FieldValidators.checkFieldByKey
                                 p
@@ -845,16 +849,16 @@ type CompletionService
                             Some(l, rs, o)
                         | _ -> None)
                 with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                | [||] -> expandedRules |> Array.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     fs
-                    |> List.collect (fun (_, innerRules, _) -> findRule innerRules [] scopeContext)
+                    |> Array.collect (fun (_, innerRules, _) -> findRule innerRules [] scopeContext)
             | [ (key, count, Some _, LeafLHS) ] ->
-                expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                expandedRules |> Array.collect (convRuleToCompletion key count scopeContext)
             | [ (key, count, Some value, LeafRHS) ] ->
                 match
                     expandedRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | LeafRule(l, r), o when
                             FieldValidators.checkFieldByKey
                                 p
@@ -866,16 +870,16 @@ type CompletionService
                             Some(l, r, o)
                         | _ -> None)
                 with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                | [||] -> expandedRules |> Array.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     //log "%s %A" key fs
-                    let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f value scopeContext)
+                    let res = fs |> Array.collect (fun (_, f, _) -> fieldToRules f value scopeContext)
                     //log "res %A" res
                     res
             | (key, count, _, NodeRHS) :: rest ->
                 match
                     expandedRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | NodeRule(l, rs), o when
                             FieldValidators.checkFieldByKey
                                 p
@@ -887,16 +891,16 @@ type CompletionService
                             Some(l, rs, o)
                         | _ -> None)
                 with
-                | [] -> expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                | [||] -> expandedRules |> Array.collect (convRuleToCompletion key count scopeContext)
                 | fs ->
                     fs
-                    |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
+                    |> Array.collect (fun (_, innerRules, _) -> findRule innerRules rest scopeContext)
             | (key, count, _, t) :: rest ->
                 log $"Completion error %A{key} %A{t}"
-                expandedRules |> List.collect (convRuleToCompletion key count scopeContext)
+                expandedRules |> Array.collect (convRuleToCompletion key count scopeContext)
 
         let stack = stack |> List.map (fun (a, b, c, d, e) -> (a, b, c, d))
-        let res = findRule rules stack scopeContext |> List.distinct
+        let res = findRule rules stack scopeContext |> Array.distinct
         //log "res2 %A" res
         res
 
@@ -1006,9 +1010,10 @@ type CompletionService
             =
             let typerules =
                 rootRules.TypeRules
-                |> List.choose (function
+                |> Seq.choose (function
                     | name, typerule when name == t.name -> Some typerule
                     | _ -> None)
+                |> Seq.toArray
 
             match skipRootKeyStack, t.type_per_file, path with
             | _, false, [] -> getCompletionFromPath scoreFunction typerules [] scopeContext
@@ -1030,12 +1035,12 @@ type CompletionService
                         ((t.name, c, None, NodeRHS, None) :: tail)
                         scopeContext
                 else
-                    []
+                    [||]
             | head :: tail, false, (pathhead, _, _, _, _) :: pathtail ->
                 if skiprootkey head pathhead then
                     validateTypeSkipRoot t tail pathtail
                 else
-                    []
+                    [||]
 
         let items =
             match path |> List.tryLast, path.Length with
@@ -1047,7 +1052,8 @@ type CompletionService
             | Some(_, _, _, CompletionContext.NodeLHS, _), 1 -> []
             | _ ->
                 pathFilteredTypes
-                |> List.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+                |> Seq.collect (fun t -> validateTypeSkipRoot t t.skipRootKey path)
+                |> Seq.toList
         //TODO: Expand this to use a snippet not just the name of the type
         let createSnippetForType (typeDef: TypeDefinition) =
             let rootSnippets =
@@ -1062,7 +1068,7 @@ type CompletionService
                        (Some st.typeKeyField.Value)
                    else
                        None))
-            |> List.map (fun s -> createSnippetForClause (fun _ -> 1) [] None s)
+            |> List.map (fun s -> createSnippetForClause (fun _ -> 1) [||] None s)
 
         let rootTypeItems =
             match path with

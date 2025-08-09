@@ -49,7 +49,7 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> =
       defaultContext: ScopeContext
       defaultLang: Lang
       oneToOneScopesNames: string list
-      loadConfigRulesHook: RootRule list -> 'L -> EmbeddedSettings -> RootRule list
+      loadConfigRulesHook: RootRule array -> 'L -> EmbeddedSettings -> RootRule array
       refreshConfigBeforeFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterVarDefHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit

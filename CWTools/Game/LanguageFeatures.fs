@@ -89,7 +89,7 @@ module LanguageFeatures =
         match
             Path.GetExtension filepath, resourceManager.ManualProcessResource resource, completionService, infoService
         with
-        | ".yml", _, Some completion, _ -> completion.LocalisationComplete(pos, filetext)
+        | ".yml", _, Some completion, _ -> completion.LocalisationComplete(pos, filetext) |> List.ofArray
         | _, Some e, Some completion, Some info ->
             log (sprintf "completion %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
 
