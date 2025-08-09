@@ -71,11 +71,12 @@ module CK2GameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         lookup.coreModifiers
-        |> List.map (fun c ->
+        |> Seq.map (fun c ->
             AliasRule(
                 "modifier",
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
             ))
+        |> Seq.toArray
 
     let updateLandedTitles (game: GameObject) =
         let fNode =
@@ -221,10 +222,10 @@ module CK2GameFunctions =
 
             game.Lookup.CK2provinces <- provinces
 
-    let updateScriptedEffects (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
+    let updateScriptedEffects (lookup: Lookup) (rules: RootRule array) (embeddedSettings: EmbeddedSettings) =
         let effects =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | AliasRule("effect", r) -> Some r
                 | _ -> None)
 
@@ -244,12 +245,12 @@ module CK2GameFunctions =
                 ""
             )
 
-        (effects |> List.map ruleToEffect |> List.map (fun e -> e :> Effect))
+        (effects |> Array.map ruleToEffect |> Array.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
+    let updateScriptedTriggers (lookup: Lookup) (rules: RootRule array) (embeddedSettings: EmbeddedSettings) =
         let effects =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | AliasRule("trigger", r) -> Some r
                 | _ -> None)
 
@@ -269,7 +270,7 @@ module CK2GameFunctions =
                 ""
             )
 
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
+        (effects |> Array.map ruleToTrigger |> Array.map (fun e -> e :> Effect))
 
     let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
         typesMap.Add(
@@ -282,9 +283,9 @@ module CK2GameFunctions =
     let loadConfigRulesHook rules (lookup: Lookup) embedded =
         let ts = updateScriptedTriggers lookup rules embedded
         let es = updateScriptedEffects lookup rules embedded
-        let ls = updateEventTargetLinks embedded
-        lookup.allCoreLinks <- ts @ es @ ls
-        rules @ addModifiersWithScopes lookup
+        let ls = updateEventTargetLinks embedded |> List.toArray
+        lookup.allCoreLinks <- Seq.concat [|ts; es ; ls |] |> Seq.toList
+        Array.append rules (addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup: CK2Lookup) _ _ =
         let modifierEnums =

@@ -10,6 +10,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Validation.LocalisationString
 open CWTools.Validation
 open CWTools.Validation.ValidationCore
+open System.Linq
 
 let globalLocalisation (game: GameObject<_, _>) =
     let locParseErrors =
@@ -26,17 +27,13 @@ let globalLocalisation (game: GameObject<_, _>) =
     | Invalid(_, es) -> es
     | _ -> [])
 
-let private updateScriptedTriggers (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
-    let vanillaTriggers =
-        let se = [] |> List.map (fun e -> e :> Effect)
-        let vt = embeddedSettings.triggers |> List.map (fun e -> e :> Effect)
-        se @ vt
-
-    let vanillaTriggerNames = vanillaTriggers |> List.map _.Name |> Set.ofList
+let private updateScriptedTriggers (rules: RootRule array) (embeddedSettings: EmbeddedSettings) =
+    let vanillaTriggers = embeddedSettings.triggers |> Seq.cast<Effect> |> Seq.toArray
+    let vanillaTriggerNames = vanillaTriggers |> Array.map _.Name |> Set.ofArray
 
     let effects =
         rules
-        |> List.choose (function
+        |> Seq.choose (function
             | AliasRule("trigger", r) -> Some r
             | _ -> None)
 
@@ -60,15 +57,14 @@ let private updateScriptedTriggers (lookup: Lookup) (rules: RootRule list) (embe
             DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", ""))
 
     let extraFromRules =
-        (effects |> List.choose ruleToTrigger |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.choose ruleToTrigger |> Seq.cast<Effect> |> Seq.toArray)
 
-    vanillaTriggers @ extraFromRules
+    Array.append vanillaTriggers extraFromRules
 
-let private updateScriptedEffects (lookup: Lookup) (rules: RootRule list) (embeddedSettings: EmbeddedSettings) =
+let private updateScriptedEffects (embeddedSettings: EmbeddedSettings) =
     let vanillaEffects =
-        let se = [] |> List.map (fun e -> e :> Effect)
-        let ve = embeddedSettings.effects |> List.map (fun e -> e :> Effect)
-        se @ ve
+        let ve = embeddedSettings.effects |> Seq.cast<Effect> |> Seq.toArray
+        ve
 
     vanillaEffects
 
@@ -86,15 +82,12 @@ let refreshConfigAfterHook
 
     let addScriptFormulaLinks (lookup: Lookup) =
         match lookup.typeDefInfo |> Map.tryFind "script_value" with
-        | Some vs ->
-            let values = vs |> List.map (fun tdi -> tdi.id)
-
-            values
-            |> List.map (fun v ->
-                Effect(v, scriptFormulaScopes, EffectType.ValueTrigger, Some(TypeRef("script_value", v))))
-        | None -> []
-
-
+        | Some infos ->
+            infos
+            |> Seq.map (fun info ->
+                Effect(info.id, scriptFormulaScopes, EffectType.ValueTrigger, Some(TypeRef("script_value", info.id))))
+            |> Seq.toArray
+        | None -> [||]
 
     let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
         typesMap.Add(
@@ -106,16 +99,16 @@ let refreshConfigAfterHook
     lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
 
     let ts =
-        updateScriptedTriggers lookup lookup.configRules embedded
-        @ addScriptFormulaLinks lookup
+        Array.append (updateScriptedTriggers lookup.configRules embedded) (addScriptFormulaLinks lookup)
 
-    let es = updateScriptedEffects lookup lookup.configRules embedded
+    let es = updateScriptedEffects embedded
 
     let ls =
         updateEventTargetLinks embedded
         @ addDataEventTargetLinks lookup embedded wildcardLinks
+        |> Array.ofList
 
-    lookup.allCoreLinks <- ts @ es @ ls
+    lookup.allCoreLinks <- Array.concat [|ts; es; ls|] |> List.ofArray
 
 let private addModifiersWithScopes (lookup: Lookup) =
     let modifierOptions (modifier: ActualModifier) =
@@ -128,15 +121,16 @@ let private addModifiersWithScopes (lookup: Lookup) =
         RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
     (lookup.coreModifiers
-     |> List.map (fun c ->
+     |> Seq.map (fun c ->
          AliasRule(
              "modifier",
              NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-         )))
-    @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
+         ))
+     ).Concat(RulesHelpers.generateModifierRulesFromTypes(lookup.typeDefs))
+     |> Array.ofSeq
 
-let loadConfigRulesHook rules (lookup: Lookup) embedded =
-    let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
+let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
+    let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule array) =
         let addRequiredScopesE (s: StringTokens) (o: Options) =
             let newScopes =
                 match o.requiredScopes with
@@ -184,35 +178,34 @@ let loadConfigRulesHook rules (lookup: Lookup) embedded =
                 pushScope = innerScope }
 
         rules
-        |> List.collect (function
+        |> Array.collect (function
             | AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) |]
             | AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) |]
             | AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) ]
-            | x -> [ x ])
+                [| AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) |]
+            | x -> [| x |])
 
 
-    let ts = updateScriptedTriggers lookup rules embedded
-    let es = updateScriptedEffects lookup rules embedded
-    let ls = updateEventTargetLinks embedded
-    lookup.allCoreLinks <- ts @ es @ ls
+    let ts = updateScriptedTriggers rules embedded
+    let es = updateScriptedEffects embedded
+    let ls = (updateEventTargetLinks embedded) |> Array.ofList
+    lookup.allCoreLinks <- Array.concat [|ts; es; ls|] |> List.ofArray
     lookup.coreModifiers <- embedded.modifiers
     // eprintfn "crh %A" ts
-    addTriggerDocsScopes lookup (rules @ addModifiersWithScopes lookup)
-
+    addTriggerDocsScopes lookup (Array.append rules (addModifiersWithScopes(lookup)))
 
 let refreshConfigBeforeFirstTypesHook (lookup: Lookup) (resources: IResourceAPI<ScriptedEffectComputedData>) _ =
     let modifierEnums =
         { key = "modifiers"
-          values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+          values = lookup.coreModifiers |> List.map _.tag
           description = "Modifiers"
           valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
 
@@ -220,7 +213,7 @@ let refreshConfigBeforeFirstTypesHook (lookup: Lookup) (resources: IResourceAPI<
         (resources.AllEntities()
          |> PSeq.map (fun struct (e, l) ->
              (l.Force().ScriptedEffectParams
-              |> (Option.defaultWith (fun () -> CWTools.Games.Compute.EU4.getScriptedEffectParamsEntity e))))
+              |> (Option.defaultWith (fun () -> Compute.EU4.getScriptedEffectParamsEntity e))))
          |> List.ofSeq
          |> List.collect id)
 

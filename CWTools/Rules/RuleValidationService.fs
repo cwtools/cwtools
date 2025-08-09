@@ -125,7 +125,7 @@ type RuleValidationService
         let dict =
             new System.Collections.Concurrent.ConcurrentDictionary<_, Dictionary<_, _>>()
 
-        fun (rules: NewRule list) (subtypes: string list) ->
+        fun (rules: NewRule array) (subtypes: string list) ->
             match dict.TryGetValue(rules) with
             | true, v ->
                 match v.TryGetValue(subtypes) with
@@ -159,37 +159,37 @@ type RuleValidationService
             fun rules subtypes ->
                 let subtypedrules =
                     rules
-                    |> List.collect (fun (r, o) ->
+                    |> Array.collect (fun (r, o) ->
                         r
                         |> (function
                         | SubtypeRule(key, shouldMatch, cfs) ->
                             (if (not shouldMatch) <> List.contains key subtypes then
                                  cfs
                              else
-                                 [])
-                        | x -> []))
+                                 [||])
+                        | x -> [||]))
 
                 let expandedbaserules =
                     rules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
 
                 let expandedsubtypedrules =
                     subtypedrules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 let noderules = new ResizeArray<_>()
                 let leafrules = new ResizeArray<_>()
                 let leafvaluerules = new ResizeArray<_>()
                 let valueclauserules = new ResizeArray<_>()
-                let nodeSpecificMap = new System.Collections.Generic.Dictionary<_, _>()
-                let leafSpecificMap = new System.Collections.Generic.Dictionary<_, _>()
+                let nodeSpecificMap = new Dictionary<_, _>()
+                let leafSpecificMap = new Dictionary<_, _>()
 
                 let inner =
                     (fun r ->
@@ -212,10 +212,6 @@ type RuleValidationService
                         | LeafRule(l, r), o as x -> leafrules.Add(x)
                         | LeafValueRule lv, o as x -> leafvaluerules.Add(x)
                         | ValueClauseRule rs, o as x -> valueclauserules.Add(x)
-                        // | (NodeRule (l, rs), o) as x -> noderules.Add(l, rs, o)
-                        // | (LeafRule (l, r), o) as x -> leafrules.Add(l, r, o)
-                        // | (LeafValueRule (lv), o) as x -> leafvaluerules.Add(lv, o)
-                        // | (ValueClauseRule (rs), o) as x -> valueclauserules.Add(rs, o)
                         | _ -> ())
                 // res |> Seq.iter inner
                 // expandedres |> Seq.iter inner
@@ -253,7 +249,7 @@ type RuleValidationService
         (enforceCardinality: bool)
         (nodeSeverity: Severity option)
         (ctx: RuleContext)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (startNode: IClause)
         errors
         =
@@ -624,7 +620,7 @@ type RuleValidationService
         (ctx: RuleContext)
         (options: Options)
         (rule: NewField)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (node: IClause)
         errors
         =
@@ -769,7 +765,7 @@ type RuleValidationService
         (enforceCardinality: bool)
         (ctx: RuleContext)
         (options: Options)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (valueclause: ValueClause)
         errors
         =
@@ -854,7 +850,7 @@ type RuleValidationService
                     | None -> true)
             |> List.map (fun s ->
                 s,
-                if s.rules |> List.isEmpty then
+                if s.rules.Length = 0 then
                     OK
                 else
                     applyClauseField
@@ -886,7 +882,7 @@ type RuleValidationService
 
     let rootId = stringManager.InternIdentifierToken "root"
 
-    let applyNodeRuleRoot (typedef: TypeDefinition) (rules: NewRule list) (options: Options) (node: IClause) =
+    let applyNodeRuleRoot (typedef: TypeDefinition) (rules: NewRule array) (options: Options) (node: IClause) =
         let pushScope, subtypes = testSubtype typedef.subtypes node
 
         let startingScopeContext =
@@ -932,13 +928,9 @@ type RuleValidationService
             let validateType (typedef: TypeDefinition) (n: IClause) =
                 let typerules =
                     rootRules.TypeRules
-                    |> List.choose (function
+                    |> Seq.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
-                //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
-                //let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
-                //match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
-                //match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
                 let filterKey =
                     match n with
                     | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
@@ -949,7 +941,7 @@ type RuleValidationService
                     | :? Node as n -> n.KeyPrefix
                     | _ -> None
 
-                match typerules |> List.tryHead with
+                match typerules |> Seq.tryHead with
                 | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                     (stringManager.GetStringForID x.normal) == typedef.name
                     ->
@@ -962,7 +954,7 @@ type RuleValidationService
             let pathFilteredTypes =
                 typedefs
                 |> List.filter (fun t ->
-                    CSharpHelpers.FieldValidatorsHelper.CheckPathDir(t.pathOptions, directory, fileName))
+                    FieldValidatorsHelper.CheckPathDir(t.pathOptions, directory, fileName))
 
             let rec validateTypeSkipRoot (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) (n: IClause) =
                 let prefixKey =

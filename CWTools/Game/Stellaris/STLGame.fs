@@ -29,6 +29,7 @@ open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open System.IO
 open CWTools.Process.Localisation
+open System.Linq
 
 module STLGameFunctions =
     type GameObject = GameObject<STLComputedData, STLLookup>
@@ -158,7 +159,7 @@ module STLGameFunctions =
     let updateTechnologies (game: GameObject) =
         game.Lookup.technologies <- getTechnologies (EntitySet(game.Resources.AllEntities()))
 
-    let addModifiersWithScopes (lookup: Lookup) =
+    let addModifiersWithScopes (lookup: Lookup) : RootRule array =
         let modifierOptions (modifier: ActualModifier) =
             let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
 
@@ -169,14 +170,13 @@ module STLGameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         (lookup.coreModifiers
-         |> List.map (fun c ->
+         |> Seq.map (fun c ->
              AliasRule(
                  "modifier",
                  NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-             )))
-        @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
+             ))).Concat(RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs).ToArray()
 
-    let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
+    let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule array) =
         let scriptedOptions (scripted: string) (effect: ScriptedEffect) =
             { Options.DefaultOptions with
                 description = Some effect.Comments
@@ -185,10 +185,10 @@ module STLGameFunctions =
 
         let getAllScriptedEffects =
             lookup.onlyScriptedEffects
-            |> List.choose (function
+            |> Seq.choose (function
                 | :? ScriptedEffect as se -> Some se
                 | _ -> None)
-            |> List.map (fun se ->
+            |> Seq.map (fun se ->
                 AliasRule(
                     "effect",
                     NewRule(
@@ -196,20 +196,22 @@ module STLGameFunctions =
                         scriptedOptions "scripted_effect" se
                     )
                 ))
+            |> Seq.toArray
 
         let getAllScriptedTriggers =
             lookup.onlyScriptedTriggers
-            |> List.choose (function
+            |> Seq.choose (function
                 | :? ScriptedEffect as se -> Some se
                 | _ -> None)
-            |> List.map (fun se ->
+            |> Seq.map (fun se ->
                 AliasRule(
                     "trigger",
                     NewRule(
-                        LeafRule(CWTools.Rules.RulesParser.specificFieldFromId se.Name, ValueField(ValueType.Bool)),
+                        LeafRule(RulesParser.specificFieldFromId se.Name, ValueField(ValueType.Bool)),
                         scriptedOptions "scripted_trigger" se
                     )
                 ))
+            |> Seq.toArray
 
         let addRequiredScopesE (s: StringTokens) (o: Options) =
             let newScopes =
@@ -234,33 +236,33 @@ module STLGameFunctions =
             { o with requiredScopes = newScopes }
 
         rules
-        |> List.collect (function
+        |> Array.collect (function
             | AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) |]
             | AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) |]
             | AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) |]
             | AliasRule("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
                 getAllScriptedEffects
             | AliasRule("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
                 getAllScriptedTriggers
-            | x -> [ x ])
+            | x -> [| x |])
 
     let addValueTriggersToTriggers rules (lookup: Lookup) =
         let triggers =
             rules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue n), _), o)) ->
                     Some(StringResource.stringManager.GetStringForID n.normal, o)
                 | _ -> None)
-            |> Map.ofList
+            |> Map.ofSeq
 
         let inline triggerAugment (trigger: Effect) =
             match trigger, triggers |> Map.tryFind (trigger.Name.GetString()) with
@@ -281,11 +283,11 @@ module STLGameFunctions =
         lookup.triggers |> List.collect triggerAugment
     //        lookup.triggers |> List.
 
-    let loadConfigRulesHook rules (lookup: Lookup) embedded =
+    let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
         let triggersWithValueTriggers = addValueTriggersToTriggers rules lookup
         lookup.allCoreLinks <- triggersWithValueTriggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         lookup.coreModifiers <- embedded.modifiers
-        let rulesWithMod = rules @ addModifiersWithScopes (lookup)
+        let rulesWithMod = rules.Concat(addModifiersWithScopes (lookup)).ToArray()
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
 

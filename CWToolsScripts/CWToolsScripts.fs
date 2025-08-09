@@ -6,6 +6,7 @@ open CWTools.Games.Files
 open FSharp.Data
 open FSharp.Data.JsonExtensions
 
+open FSharpPlus.Control
 open Vic3
 
 module CWToolsScripts =
@@ -55,7 +56,7 @@ module CWToolsScripts =
 
         let oldTriggers =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue(x)), _), _)) ->
                     Some(StringResource.stringManager.GetStringForIDs x)
                 | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue(x)), _), _)) ->
@@ -64,7 +65,7 @@ module CWToolsScripts =
 
         let oldEffects =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | AliasRule("effect", (LeafRule(SpecificField(SpecificValue(x)), _), _)) ->
                     Some(StringResource.stringManager.GetStringForIDs x)
                 | AliasRule("effect", (NodeRule(SpecificField(SpecificValue(x)), _), _)) ->
@@ -73,11 +74,11 @@ module CWToolsScripts =
 
         let triggers =
             JominiParser.parseTriggerFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/triggers.log"
-            |> List.filter (fun t -> List.contains t.name oldTriggers |> not)
+            |> List.filter (fun t -> Array.contains t.name oldTriggers |> not)
 
         let effects =
             JominiParser.parseEffectFilesRes @"C:\Users\Thomas\git\cwtools/Scripts/effects.log"
-            |> List.filter (fun t -> List.contains t.name oldEffects |> not)
+            |> List.filter (fun t -> Array.contains t.name oldEffects |> not)
 
 
         let traitParse (x: string) =
@@ -351,8 +352,8 @@ module CWToolsScripts =
             | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue vc), _), _)) -> Some(vc)
             | _ -> None
 
-        let triggerAliases = lookup.configRules |> List.choose getTrigger |> Set.ofList
-        let effectAliases = lookup.configRules |> List.choose getEffect |> Set.ofList
+        let triggerAliases = lookup.configRules |> Array.choose getTrigger |> Set.ofArray
+        let effectAliases = lookup.configRules |> Array.choose getEffect |> Set.ofArray
         let undefinedTriggers = Set.difference triggers triggerAliases
         let undefinedEffects = Set.difference effects effectAliases
 
@@ -504,8 +505,8 @@ module CWToolsScripts =
                 Some(stringManager.GetStringForIDs vc)
             | _ -> None
 
-        let triggerAliases = lookup.configRules |> List.choose getTrigger |> Set.ofList
-        let effectAliases = lookup.configRules |> List.choose getEffect |> Set.ofList
+        let triggerAliases = lookup.configRules |> Seq.choose getTrigger |> Set.ofSeq
+        let effectAliases = lookup.configRules |> Seq.choose getEffect |> Set.ofSeq
         let undefinedTriggers = Set.difference triggersNames triggerAliases
         let undefinedEffects = Set.difference effectsNames effectAliases
 

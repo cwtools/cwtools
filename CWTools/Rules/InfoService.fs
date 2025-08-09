@@ -142,7 +142,7 @@ type InfoService
         let dict =
             new System.Collections.Concurrent.ConcurrentDictionary<_, System.Collections.Generic.Dictionary<_, _>>()
 
-        fun (rules: NewRule list) (subtypes: string list) ->
+        fun (rules: NewRule array) (subtypes: string list) ->
             match dict.TryGetValue(rules) with
             | true, v ->
                 match v.TryGetValue(subtypes) with
@@ -192,25 +192,25 @@ type InfoService
 
                 let subtypedrules =
                     rules
-                    |> List.collect (fun (r, o) ->
+                    |> Array.collect (fun (r, o) ->
                         r
                         |> (function
                         | SubtypeRule(_, _, cfs) -> cfs
-                        | x -> []))
+                        | x -> [||]))
 
                 let expandedbaserules =
                     rules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
 
                 let expandedsubtypedrules =
                     subtypedrules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 let noderules = new ResizeArray<_>()
@@ -470,32 +470,24 @@ type InfoService
 
     let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos: pos) (node: Node) (logicalpath: string) =
         let fChild (ctx, _) (node: IClause) ((field, options): NewRule) =
-            // log "child acc %A %A" ctx field
             let rules =
                 match field with
-                //| Field.LeftTypeField (t, f) -> inner f newCtx n
                 | NodeRule(_, rs) -> rs
-                // | Field.ClauseField rs -> rs
-                // | Field.LeftClauseField (_, ClauseField rs) -> rs
-                // | Field.LeftScopeField rs -> rs
-                | _ -> []
+                | _ -> [||]
 
             let subtypedrules =
                 rules
-                |> List.collect (fun (r, o) ->
+                |> Array.collect (fun (r, o) ->
                     r
                     |> (function
                     | SubtypeRule(_, _, cfs) -> cfs
-                    | x -> [ (r, o) ]))
-            // let subtypedrules =
-            //     rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (_, _, ClauseField cfs) -> cfs | x -> [(s, o, x)]))
-            //     |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
+                    | x -> [| (r, o) |]))
             let expandedrules =
                 subtypedrules
-                |> List.collect (function
-                    | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                    | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                    | x -> [ x ])
+                |> Array.collect (function
+                    | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                    | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                    | x -> [| x |])
 
             let childMatch =
                 node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
@@ -512,7 +504,7 @@ type InfoService
             | Some c, _, _ ->
                 match
                     expandedrules
-                    |> List.tryPick (function
+                    |> Array.tryPick (function
                         | NodeRule(l, rs), o when FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId ->
                             Some(l, rs, o)
                         | _ -> None)
@@ -524,7 +516,7 @@ type InfoService
             | _, Some leaf, _ ->
                 match
                     expandedrules
-                    |> List.tryPick (function
+                    |> Array.tryPick (function
                         | LeafRule(l, r), o when FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId ->
                             Some(l, r, o)
                         | _ -> None)
@@ -571,14 +563,13 @@ type InfoService
                     None
 
         let resultForType (child: Node option) (typedef: TypeDefinition) =
+            let typeRules =
+                    rootRules.TypeRules |> Array.filter (fun (name, _) -> name == typedef.name)
             match child with
-            | Some c ->
-                let typerules =
-                    rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
-
-                match typerules, typedef.type_per_file with
-                | [ (n, (NodeRule(l, rs), o)) ], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
-                | [ (n, (NodeRule(l, rs), o)) ], true ->
+            | Some c ->               
+                match typeRules, typedef.type_per_file with
+                | [| (n, (NodeRule(l, rs), o)) |], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
+                | [| (n, (NodeRule(l, rs), o)) |], true ->
                     Some(
                         singleInfoService
                             fNode
@@ -593,11 +584,8 @@ type InfoService
                     )
                 | _ -> None
             | None ->
-                let typerules =
-                    rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
-
-                match typerules with
-                | [ (n, (NodeRule(l, rs), o)) ] ->
+                match typeRules with
+                | [| (n, (NodeRule(l, rs), o)) |] ->
                     Some(
                         singleInfoService
                             fNode
@@ -739,12 +727,12 @@ type InfoService
             | Some c, Some typedef ->
                 let typerules =
                     rootRules.TypeRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
 
                 let typeruleOptions =
-                    match typerules |> List.tryHead with
+                    match typerules |> Array.tryHead with
                     | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                         (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                         ->
@@ -926,12 +914,12 @@ type InfoService
             | Some c, Some typedef ->
                 let typerules =
                     rootRules.TypeRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
 
                 let typeruleOptions =
-                    match typerules |> List.tryHead with
+                    match typerules |> Array.tryHead with
                     | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                         (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                         ->
@@ -961,7 +949,7 @@ type InfoService
             let rules =
                 match field with
                 | NodeRule(_, rs) -> rs
-                | _ -> []
+                | _ -> [||]
 
             let noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificDict, leafSpecificDict =
                 memoizeRules rules ctx.subtypes
@@ -1035,12 +1023,12 @@ type InfoService
                 let ctx =
                     let typerules =
                         rootRules.TypeRules
-                        |> List.choose (function
+                        |> Seq.choose (function
                             | name, r when name == typedef.name -> Some r
                             | _ -> None)
 
                     let typeruleOptions =
-                        match typerules |> List.tryHead with
+                        match typerules |> Seq.tryHead with
                         | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                             (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                             ->
@@ -1083,11 +1071,11 @@ type InfoService
                     acc
 
         let infoServiceBase (n: Node) acc (t: TypeDefinition) =
-            let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == t.name)
+            let typerules = rootRules.TypeRules |> Array.filter (fun (name, _) -> name == t.name)
 
             match typerules, t.type_per_file with
-            | [ (_, (NodeRule(_, rs), o)) ], false -> n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
-            | [ (_, (NodeRule(_, rs), o)) ], true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
+            | [| (_, (NodeRule(_, rs), o)) |], false -> n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
+            | [| (_, (NodeRule(_, rs), o)) |], true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
             | _ -> acc
 
         pathFilteredTypes |> List.fold (infoServiceBase node) acc
@@ -1584,7 +1572,7 @@ type InfoService
             match finished, field with
             | false, NodeRule(_, rs) when
                 rs
-                |> List.exists (function
+                |> Array.exists (function
                     | LeafRule(AliasField "effect", _), _ -> true
                     | _ -> false)
                 ->
@@ -1607,7 +1595,7 @@ type InfoService
             match finished, field with
             | false, NodeRule(_, rs) when
                 rs
-                |> List.exists (function
+                |> Array.exists (function
                     | LeafRule(AliasField "trigger", _), _ -> true
                     | _ -> false)
                 ->
