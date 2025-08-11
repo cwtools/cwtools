@@ -564,7 +564,8 @@ type STLGame(setupSettings: StellarisSettings) =
              STLGameFunctions.globalLocalisation,
              STLGameFunctions.afterUpdateFile,
              ".yml",
-             rulesManagerSettings)
+             rulesManagerSettings,
+             setupSettings.debugSettings)
             afterInit
 
     let lookup = game.Lookup

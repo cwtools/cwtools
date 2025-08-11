@@ -18,6 +18,7 @@ open System
 open CWTools.Games.Helpers
 open CWTools.Parser
 open CWTools.Process.Localisation
+open Microsoft.FSharp.Collections
 
 module VIC2GameFunctions =
     type GameObject = GameObject<VIC2ComputedData, VIC2Lookup>
@@ -253,7 +254,8 @@ type VIC2Game(setupSettings: VIC2Settings) =
               Hooks.globalLocalisation,
               (fun _ _ -> ()),
               ".yml",
-              rulesManagerSettings))
+              rulesManagerSettings,
+              setupSettings.debugSettings))
             afterInit
 
     let lookup = game.Lookup

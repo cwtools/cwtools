@@ -102,7 +102,7 @@ let perfRunnerWithResult (buildGame: unit -> IGame<_>) runValidation =
       ErrorCount = errorCount }
 
 // Unified Stellaris settings builder with parameterized paths
-let buildStlSettings rootDir configPath useManual useCached cachePath =
+let buildStlSettings rootDir configPath useManual useCached cachePath earlyStopMode =
     let triggers, effects =
         if useManual then
             parseDocsFile "./CWToolsTests/testfiles/validationtests/trigger_docs_2.0.2.txt"
@@ -147,7 +147,10 @@ let buildStlSettings rootDir configPath useManual useCached cachePath =
                   debugRulesOnly = false
                   debugMode = false }
           modFilter = None
-          maxFileSize = None }
+          maxFileSize = None
+          debugSettings =
+            { DebugSettings.Default with
+                EarlyStop = earlyStopMode } }
     else
         { emptyStellarisSettings rootDir with
             embedded = embedded
@@ -157,14 +160,17 @@ let buildStlSettings rootDir configPath useManual useCached cachePath =
                     { validateRules = true
                       ruleFiles = configs
                       debugRulesOnly = false
-                      debugMode = false } }
+                      debugMode = false }
+            debugSettings =
+                { DebugSettings.Default with
+                    EarlyStop = earlyStopMode } }
 
 // Legacy Stellaris cached settings with parameterized paths
 let buildStlCachedSettings rootDir configPath cachePath =
     buildStlSettings rootDir configPath false true cachePath
 
 // EU4 settings builder with parameterized paths
-let buildEu4Settings rootDir configPath useCache cachePath =
+let buildEu4Settings rootDir configPath useCache cachePath earlyStopMode =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList
 
@@ -192,10 +198,13 @@ let buildEu4Settings rootDir configPath useCache cachePath =
               debugRulesOnly = false
               debugMode = false }
       embedded = embedded
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
 
 // CK3 settings builder with parameterized paths
-let buildCk3Settings rootDir configPath useCache cachePath =
+let buildCk3Settings rootDir configPath useCache cachePath earlyStopMode =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList
 
@@ -223,10 +232,13 @@ let buildCk3Settings rootDir configPath useCache cachePath =
               debugRulesOnly = false
               debugMode = false }
       embedded = embedded
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
 
 /// HOI4 settings builder with parameterized paths
-let buildHoi4Settings rootDir configPath useCache cachePath =
+let buildHoi4Settings rootDir configPath useCache cachePath earlyStopMode =
     let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
     let folders = configs |> List.tryPick getFolderList
 
@@ -251,7 +263,10 @@ let buildHoi4Settings rootDir configPath useCache cachePath =
               debugRulesOnly = false
               debugMode = false }
       modFilter = None
-      maxFileSize = None }
+      maxFileSize = None
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
 
 // Unified Stellaris performance test runner
 let perfStellaris
@@ -261,6 +276,7 @@ let perfStellaris
     (modPath: string option)
     (steamRoot: string option)
     (gitRoot: string option)
+    (debugMode: StopPoint)
     runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
@@ -281,7 +297,7 @@ let perfStellaris
             scopeManager.ReInit(defaultScopeInputs, [])
 
             let settings =
-                buildStlSettings defaultRootDir defaultConfigPath false useCache defaultCachePath
+                buildStlSettings defaultRootDir defaultConfigPath false useCache defaultCachePath debugMode
             // Add mod path if provided
             let finalSettings =
                 match modPath with
@@ -303,6 +319,7 @@ let perfEU4
     (modPath: string option)
     (steamRoot: string option)
     (gitRoot: string option)
+    (earlyStopMode: StopPoint)
     runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
@@ -320,7 +337,7 @@ let perfEU4
             scopeManager.ReInit(defaultScopeInputs, [])
 
             let settings =
-                buildEu4Settings defaultRootDir defaultConfigPath useCache defaultCachePath
+                buildEu4Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
             // Add mod path if provided
             let finalSettings =
                 match modPath with
@@ -340,6 +357,7 @@ let perfCK3
     (modPath: string option)
     (steamRoot: string option)
     (gitRoot: string option)
+    (earlyStopMode: StopPoint)
     runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
@@ -357,7 +375,7 @@ let perfCK3
             scopeManager.ReInit(defaultScopeInputs, [])
 
             let settings =
-                buildCk3Settings defaultRootDir defaultConfigPath useCache defaultCachePath
+                buildCk3Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
             // Add mod path if provided
             let finalSettings =
                 match modPath with
@@ -377,6 +395,7 @@ let perfHOI4
     (modPath: string option)
     (steamRoot: string option)
     (gitRoot: string option)
+    (earlyStopMode: StopPoint)
     runTests
     =
     let pathConfig = createPathConfig steamRoot gitRoot
@@ -396,7 +415,7 @@ let perfHOI4
             scopeManager.ReInit(defaultScopeInputs, [])
 
             let settings =
-                buildHoi4Settings defaultRootDir defaultConfigPath useCache defaultCachePath
+                buildHoi4Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
             // Add mod path if provided
             let finalSettings =
                 match modPath with

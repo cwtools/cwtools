@@ -1,6 +1,5 @@
 namespace CWToolsScripts
 
-open System.Text
 open CWTools.Utilities.StringResource
 open CWTools.Games.Files
 open FSharp.Data
@@ -270,7 +269,8 @@ module CWToolsScripts =
           embedded = FromConfig([], [])
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = None }
+          maxFileSize = None
+          debugSettings = DebugSettings.Default }
 
     let emptyHOI4Settings (rootDirectory) =
         { CWTools.Games.GameSetupSettings.rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
@@ -283,7 +283,8 @@ module CWToolsScripts =
           embedded = FromConfig([], [])
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = None }
+          maxFileSize = None
+          debugSettings = DebugSettings.Default }
 
     let rec getAllFolders dirs =
         if Seq.isEmpty dirs then

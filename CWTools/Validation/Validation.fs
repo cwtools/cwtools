@@ -573,6 +573,11 @@ type ValidationResult =
         | :? ValidationResult as vr -> x.Equals vr
         | _ -> false
 
+    override x.GetHashCode() =
+        match x with
+        | OK -> 0
+        | Invalid(id, _) -> id.GetHashCode()
+
 type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) list) =
     member __.GlobMatch(pattern: string) =
         let options = new GlobOptions()

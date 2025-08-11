@@ -8,6 +8,7 @@ open System.IO
 open System.Reflection
 open CWTools.Games.Files
 open CWTools.Games
+open CWTools.Games.VIC3
 open MBrace.FsPickler
 open CWTools.Process
 open CWTools.Utilities.Position
@@ -55,6 +56,7 @@ do registry.RegisterFactory mkConcurrentDictionaryPickler<int, string>
 do registry.RegisterFactory mkConcurrentDictionaryPickler<int, StringMetadata>
 do registry.RegisterFactory mkConcurrentDictionaryPickler<string, StringTokens>
 registry.DeclareSerializable<FParsec.Position>()
+#nowarn "8989"
 let picklerCache = PicklerCache.FromCustomPicklerRegistry registry
 
 let binarySerializer =
@@ -416,6 +418,51 @@ let serializeCK3 folder outputFileName compression =
     compressAndWriteToFile compression pickle filename
     filename
 
+let serializeVIC3 folder outputFileName compression =
+    let fileManager =
+        FileManager(folder, Some "", VIC3Constants.scriptFolders, "victoria 3", Encoding.UTF8, [], 2)
+
+    let files = fileManager.AllFilesByPath()
+    let computefun: unit -> InfoService option = (fun () -> (None))
+
+    let resources =
+        ResourceManager<VIC3ComputedData>(
+            Compute.Jomini.computeJominiData computefun,
+            Compute.Jomini.computeJominiDataUpdate computefun,
+            Encoding.UTF8,
+            Encoding.GetEncoding(1252),
+            false
+        )
+            .Api
+
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) ->
+            e
+            |> function
+                | Some e2 -> Some(r, e2)
+                | _ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
+
+    let files =
+        resources.GetResources()
+        |> List.choose (function
+            | FileResource(_, r) -> Some(r.logicalpath, "")
+            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
+            | _ -> None)
+
+    let data =
+        { resources = entities
+          fileIndexTable = fileIndexTable
+          files = files
+          stringResourceManager = StringResource.stringManager }
+
+    let pickle = binarySerializer.Pickle data
+    let baseFilename = outputFileName |> Option.defaultValue "vic3.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
+    filename
+
 let serializeVIC2 folder outputFileName compression =
     let fileManager =
         FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
@@ -546,7 +593,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = None }
+          maxFileSize = None
+          debugSettings = DebugSettings.Default }
 
     let HOI4options: HOI4Settings =
         { rootDirectories = folders
@@ -565,6 +613,7 @@ let loadGame<'T when 'T :> ComputedData>
           scriptFolders = None
           excludeGlobPatterns = None
           maxFileSize = Some 8
+          debugSettings = DebugSettings.Default
 
         }
 
@@ -584,7 +633,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let CK2options: CK2Settings =
         { rootDirectories = folders
@@ -602,7 +652,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let VIC2options: VIC2Settings =
         { rootDirectories = folders
@@ -620,7 +671,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let Customoptions: CustomSettings =
         { rootDirectories = folders
@@ -638,7 +690,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let IRoptions: IRSettings =
         { rootDirectories = folders
@@ -656,7 +709,8 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let CK3options: CK3Settings =
         { rootDirectories = folders
@@ -674,7 +728,27 @@ let loadGame<'T when 'T :> ComputedData>
           embedded = embedded
           scriptFolders = None
           excludeGlobPatterns = None
-          maxFileSize = Some 8 }
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
+
+    let VIC3options: VIC3Settings =
+        { rootDirectories = folders
+          modFilter = Some modFilter
+          validation =
+            { validateVanilla = scope = FilesScope.All || scope = FilesScope.Vanilla
+              experimental = true
+              langs = langs }
+          rules =
+            Some
+                { ruleFiles = config
+                  validateRules = true
+                  debugRulesOnly = true
+                  debugMode = false }
+          embedded = embedded
+          scriptFolders = None
+          excludeGlobPatterns = None
+          maxFileSize = Some 8
+          debugSettings = DebugSettings.Default }
 
     let game: IGame =
         match game with
@@ -685,7 +759,9 @@ let loadGame<'T when 'T :> ComputedData>
         | Game.VIC2 -> VIC2Game(VIC2options) :> IGame
         | Game.IR -> IRGame(IRoptions) :> IGame
         | Game.CK3 -> CK3Game(CK3options) :> IGame
+        | Game.VIC3 -> VIC3Game(VIC3options) :> IGame
         | Game.Custom -> CustomGame(Customoptions, "") :> IGame
+        | _ -> failwith "Unknown game"
 
     game
 
@@ -721,6 +797,8 @@ let serializeMetadata (dir: string, scope: FilesScope, modFilter: string, config
                     | Game.IR -> "ir"
                     | Game.CK3 -> "ck3"
                     | Game.Custom -> "custom"
+                    | Game.VIC3 -> "vic3"
+                    | _ -> failwith "Unknown game"
 
             sprintf "%s.cwv.bz2" gameName
 

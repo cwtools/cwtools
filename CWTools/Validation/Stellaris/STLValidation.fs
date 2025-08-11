@@ -376,8 +376,6 @@ module STLValidation =
             (fun k ->
                 [ { ActualModifier.tag = "job_" + k + "_add"
                     category = modifierCategoryManager.ParseModifier () "Planets" }
-                  { tag = "job_" + k + "_bonus_workforce_mult"
-                    category = modifierCategoryManager.ParseModifier () "Planets" }
                   { tag = "job_" + k + "_per_pop"
                     category = modifierCategoryManager.ParseModifier () "Planets" }
                   { tag = "job_" + k + "_per_crime"

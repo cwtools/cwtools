@@ -1,9 +1,11 @@
 module Program
 
+open System
 open System.Text
 open System.Threading
 open System.Globalization
 open Argu
+open CWTools.Games
 open CliArguments
 open CWToolsPerformanceCLI.PerfFunctions
 
@@ -29,28 +31,48 @@ let getSteamRoot (results: ParseResults<PerformanceArgs>) = results.TryGetResult
 
 let getGitRoot (results: ParseResults<PerformanceArgs>) = results.TryGetResult Git_Root
 
+let getTestMode (results: ParseResults<PerformanceArgs>) =
+    results.TryGetResult Test_Mode |> Option.defaultValue (StopPoint.Full)
+
 // Run performance test and handle results
 let runPerfTest testName testFunc =
     try
         printfn "Running %s..." testName
         let result = testFunc
+        let memoryAlloc = GC.GetTotalAllocatedBytes true
         printfn "✓ %s completed successfully" testName
-        printfn "  Elapsed: %dms, Errors: %d" result.ElapsedMilliseconds result.ErrorCount
+
+        printfn
+            "  Elapsed: %dms, Errors: %d, Memory Allocated: %d"
+            result.ElapsedMilliseconds
+            result.ErrorCount
+            memoryAlloc
+
         0
     with ex ->
         eprintfn "✗ %s failed: %s" testName ex.Message
         1
 
-// Main program logic
-let runCommand (results: ParseResults<PerformanceArgs>) =
+let getTestFunction (results: ParseResults<PerformanceArgs>) =
     let gamePath = getGamePath results
     let configPath = getConfigPath results
     let cachePath = getCachePath results
     let modPath = getModPath results
     let steamRoot = getSteamRoot results
     let gitRoot = getGitRoot results
+    let stopPoint = getTestMode results
+
+    match results.Contains Stellaris, results.Contains HOI4, results.Contains CK3, results.Contains EU4 with
+    | true, _, _, _ -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, true, _, _ -> perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, true, _ -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, _, true -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | false, false, false, false -> failwith "Please select a game!"
+// Main program logic
+let runCommand (results: ParseResults<PerformanceArgs>) =
     // Default to running validation tests
     let runTests = true
+    let modPath = getModPath results
 
     if results.Contains Stellaris then
         let modInfo =
@@ -58,40 +80,32 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "Stellaris Test %s" modInfo)
-            (perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot runTests)
+        runPerfTest (sprintf "Stellaris Test %s" modInfo) (getTestFunction results)
     elif results.Contains EU4 then
         let modInfo =
             match modPath with
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "EU4 Test %s" modInfo)
-            (perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot runTests)
+        runPerfTest (sprintf "EU4 Test %s" modInfo) (getTestFunction results)
     elif results.Contains HOI4 then
-        let cacheInfo = if cachePath.IsSome then " (cached)" else ""
+        // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 
         let modInfo =
             match modPath with
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "HOI4 Test%s%s" cacheInfo modInfo)
-            (perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot runTests)
+        runPerfTest (sprintf "HOI4 Test%s" modInfo) (getTestFunction results)
     elif results.Contains CK3 then
-        let cacheInfo = if cachePath.IsSome then " (cached)" else ""
+        // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 
         let modInfo =
             match modPath with
             | Some _ -> " + mod"
             | None -> ""
 
-        runPerfTest
-            (sprintf "CK3 Test%s%s" cacheInfo modInfo)
-            (perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot runTests)
+        runPerfTest (sprintf "CK3 Test%s" modInfo) (getTestFunction results)
     else
         eprintfn "No valid command specified. Use --help for usage information."
         1

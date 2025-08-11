@@ -154,7 +154,7 @@ type CompletionService
         | ValueField(Enum e) ->
             enums.TryFind(e)
             |> Option.bind (fun (_, s) ->
-                if s.Count = 0 then
+                if s.IdCount = 0 then
                     None
                 else
                     Some(s.StringValues |> Seq.head))

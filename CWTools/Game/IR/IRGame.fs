@@ -299,7 +299,8 @@ type IRGame(setupSettings: IRSettings) =
               Hooks.globalLocalisation,
               (fun _ _ -> ()),
               ".yml",
-              rulesManagerSettings))
+              rulesManagerSettings,
+              setupSettings.debugSettings))
             afterInit
 
     let lookup = game.Lookup
