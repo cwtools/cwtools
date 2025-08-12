@@ -75,7 +75,9 @@ module HOI4GameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+            |> List.tryFind (fun f ->
+                f.overwrite <> Overwritten
+                && Path.GetFileName(f.filepath.AsSpan()).Equals("definition.csv", StringComparison.OrdinalIgnoreCase))
 
         match provinceFile with
         | None -> ()
