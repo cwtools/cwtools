@@ -84,7 +84,7 @@ module HOI4GameFunctions =
 
             let provinces =
                 lines
-                |> Array.choose (fun l -> l.Split([| ';' |], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
+                |> Array.choose (fun l -> l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
                 |> List.ofArray
 
             game.Lookup.HOI4provinces <- provinces

@@ -1462,10 +1462,13 @@ type InfoService
 
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
         let getVariableFromString (v: string) (s: string) =
+            let first = s.AsSpan().Split('@', 0)
             if v = "variable" then
-                s.Split('@').[0].Split('.') |> Array.last |> _.Split('?').[0]
+                let range = first.Split('.').Last()
+                let struct (start, length) = range.GetOffsetAndLength(first.Length)
+                first.Slice(start, length).Split('?', 0).ToString()
             else
-                s.Split('@').[0]
+                first.ToString()
 
         let fLeaf (res: Collections.Map<string, ResizeArray<string * range>>) (leaf: Leaf) ((field, _): NewRule) =
             match field with
