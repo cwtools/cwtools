@@ -479,7 +479,8 @@ module CommonValidation =
             let findParams (referenceDetails: ReferenceDetails) =
                 //                logInfo (sprintf "vsvp %s" key)
                 let splitString =
-                    referenceDetails.originalValue.GetString().Split '|' |> List.ofArray
+                    referenceDetails.originalValue.GetString().Split '|'
+                let splitStringList = splitString |> List.ofArray
 
                 let rec getParamsFromArray =
                     function
@@ -488,10 +489,10 @@ module CommonValidation =
                 //                logInfo (sprintf "vsvp b %A" splitString)
                 let svparams =
                     getParamsFromArray (
-                        if List.length splitString > 1 then
-                            List.tail splitString
+                        if splitString.Length > 1 then
+                            List.tail splitStringList
                         else
-                            splitString
+                            splitStringList
                     )
                 //                logInfo (sprintf "vsvp c %A" svparams)
                 if List.isEmpty svparams then None else Some svparams
