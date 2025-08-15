@@ -769,7 +769,7 @@ type InfoService
             | _ ->
                 match enums.TryFind "static_values" with
                 | Some(_, ss) ->
-                    if ss.ContainsKey key then
+                    if ss.Contains key then
                         Some(EnumRef("static_values", key))
                     else
                         None
@@ -1162,7 +1162,7 @@ type InfoService
             | _ ->
                 match enums.TryFind "static_values" with
                 | Some(_, ss) ->
-                    if ss.ContainsKey key then
+                    if ss.Contains key then
                         Some(EnumRef("static_values", key))
                     else
                         None
@@ -1669,7 +1669,7 @@ type InfoService
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
                 let value = leaf.ValueText
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1677,7 +1677,7 @@ type InfoService
             | LeafRule(TypeField(TypeType.Simple t), _) ->
                 let value = leaf.Key
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1702,7 +1702,7 @@ type InfoService
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
                 let value = leafvalue.ValueText
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1714,7 +1714,7 @@ type InfoService
             | NodeRule(TypeField(TypeType.Simple t), _) ->
                 let value = node.Key
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else

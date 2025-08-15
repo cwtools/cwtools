@@ -116,5 +116,6 @@
         <PackageReference Include="System.Text.Encoding.CodePages"/>
         <PackageReference Include="FsPickler"/>
         <PackageReference Include="SharpZipLib"/>
+        <PackageReference Include="KTrie" />
     </ItemGroup>
 </Project>

@@ -4,13 +4,14 @@ open System
 open System.Collections.Concurrent
 open System.Collections.Frozen
 open System.Collections.Generic
+open System.Linq
 open System.Runtime.CompilerServices
 open System.Runtime.Serialization
 open System.Threading
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
-open VDS.Common.Tries
+open KTrie
 
 module Utils =
 
@@ -152,37 +153,32 @@ type StringLowerToken = int
 
 [<Struct; IsReadOnly>]
 type StringTokens =
-     val lower: StringLowerToken
-     val normal: StringToken
-     /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
-     val quoted: bool
+    val lower: StringLowerToken
+    val normal: StringToken
+    /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
+    val quoted: bool
 
-     new(lower, normal, quoted) =
-         { lower = lower
-           normal = normal
-           quoted = quoted }
+    new(lower, normal, quoted) =
+        { lower = lower
+          normal = normal
+          quoted = quoted }
 
 [<Struct; IsReadOnly>]
 type StringMetadata =
-     val startsWithAmp: bool
-     val containsDoubleDollar: bool
-     val containsQuestionMark: bool
-     val containsHat: bool
-     val startsWithSquareBracket: bool
-     val containsPipe: bool
+    val startsWithAmp: bool
+    val containsDoubleDollar: bool
+    val containsQuestionMark: bool
+    val containsHat: bool
+    val startsWithSquareBracket: bool
+    val containsPipe: bool
 
-     new(startsWithAmp,
-         containsDoubleDollar,
-         containsQuestionMark,
-         containsHat,
-         startsWithSquareBracket,
-         containsPipe) =
-         { startsWithAmp = startsWithAmp
-           containsDoubleDollar = containsDoubleDollar
-           containsQuestionMark = containsQuestionMark
-           containsHat = containsHat
-           startsWithSquareBracket = startsWithSquareBracket
-           containsPipe = containsPipe }
+    new(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat, startsWithSquareBracket, containsPipe) =
+        { startsWithAmp = startsWithAmp
+          containsDoubleDollar = containsDoubleDollar
+          containsQuestionMark = containsQuestionMark
+          containsHat = containsHat
+          startsWithSquareBracket = startsWithSquareBracket
+          containsPipe = containsPipe }
 
 [<Sealed>]
 type StringResourceManager() =
@@ -202,7 +198,7 @@ type StringResourceManager() =
         // Recreate the lock after deserialization
         lock <- Lock()
 
-    member x.InternIdentifierToken(s: string): StringTokens =
+    member x.InternIdentifierToken(s: string) : StringTokens =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
 
@@ -210,6 +206,7 @@ type StringResourceManager() =
             res
         else
             lock.Enter()
+
             try
                 let retry = strings.TryGetValue(s, &res)
 
@@ -308,21 +305,38 @@ type StringTokens with
 
 module Utils2 =
 
+    type CharacterComparer() =
+        static member Default = CharacterComparer()
+
+        interface IEqualityComparer<char> with
+            member _.Equals(x, y) =
+                if x = y then true
+                else if Char.IsUpper y then Char.ToUpperInvariant x = y
+                else Char.ToLowerInvariant x = y
+
+            member _.GetHashCode(c) = c.GetHashCode()
+
+    [<Sealed>]
     type LowerStringSparseTrie() =
-        inherit
-            AbstractTrie<string, char, string>(
-                (fun s -> s.ToLower(CultureInfo.InvariantCulture)),
-                new SparseCharacterTrieNode<string>(null, Unchecked.defaultof<char>)
-            )
+
+        let trie = Trie(CharacterComparer.Default)
+        // let a = StringTrie()
 
         let idValueList = ResizeArray<StringTokens>()
 
-        override this.CreateRoot(key) =
-            new SparseCharacterTrieNode<string>(null, key)
+        member this.Contains(key: string) = trie.Contains key
 
-        member this.AddWithIDs(key, value) =
-            base.Add(key, value)
-            idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
+        member this.Count = trie.Count
+
+        member this.LongestPrefixMatch(x: string) = trie.LongestPrefixMatch x
+
+        member this.FindFirst(x: string) : string | null =
+            (trie.EnumerateByPrefix x).FirstOrDefault()
+
+        member this.AddWithIDs(key: string) =
+            if key <> "" then
+                trie.Add(key) |> ignore
+                idValueList.Add(StringResource.stringManager.InternIdentifierToken key)
 
         member _.IdValues = idValueList
 
@@ -338,20 +352,17 @@ module Utils2 =
     type IgnoreCaseStringSet(strings: string seq) =
         let mutable set = null
 
-        do
-            set <- strings.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
+        do set <- strings.ToFrozenSet(StringComparer.OrdinalIgnoreCase)
 
         new() = IgnoreCaseStringSet(Seq.empty)
 
-        member this.Contains(x: string) =
-            set.Contains(x)
+        member this.Contains(x: string) = set.Contains(x)
 
     let createStringSet (items: string seq) =
         let newSet = PrefixOptimisedStringSet()
 
         match items with
-        | :? (string array) as array ->
-            array |> Array.iter (fun x -> newSet.AddWithIDs(x, x))
-        | _ -> items |> Seq.iter (fun x -> newSet.AddWithIDs(x, x))
+        | :? (string array) as array -> array |> Array.iter (fun x -> newSet.AddWithIDs(x))
+        | _ -> items |> Seq.iter (fun x -> newSet.AddWithIDs(x))
 
         newSet
