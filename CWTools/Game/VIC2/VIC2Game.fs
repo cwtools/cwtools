@@ -26,14 +26,14 @@ module VIC2GameFunctions =
     let createLocDynamicSettings (lookup: Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
+             |> Option.defaultValue [||]
+             |> Array.map fst)
 
         let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [||] |> Array.map fst)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+          eventTargets = eventtargets |> Array.map (fun s -> s, scopeManager.AnyScope)
           setVariables = definedvars |> IgnoreCaseStringSet }
 
 
@@ -56,11 +56,10 @@ module VIC2GameFunctions =
             let provinces =
                 lines
                 |> Array.choose (fun l ->
-                    if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then
+                    if l.StartsWith('#') then
                         None
                     else
-                        l.Split([| ';' |], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
-                |> List.ofArray
+                        l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
 
             game.Lookup.VIC2provinces <- provinces
 
@@ -69,15 +68,15 @@ module VIC2GameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup: VIC2Lookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+              values = lookup.coreModifiers |> Seq.map _.tag |> Seq.toArray
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+              valuesWithRange = lookup.coreModifiers |> Seq.map (fun m -> m.tag, None) |> Seq.toArray }
 
         let provinceEnums =
             { key = "provinces"
               description = "provinces"
               values = lookup.VIC2provinces
-              valuesWithRange = lookup.VIC2provinces |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.VIC2provinces |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs

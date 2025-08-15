@@ -89,11 +89,12 @@ let refreshConfigAfterHook
             |> Seq.toArray
         | None -> [||]
 
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo array>) =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.toArray
         )
 
     lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
@@ -205,31 +206,31 @@ let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
 let refreshConfigBeforeFirstTypesHook (lookup: Lookup) (resources: IResourceAPI<ScriptedEffectComputedData>) _ =
     let modifierEnums =
         { key = "modifiers"
-          values = lookup.coreModifiers |> List.map _.tag
+          values = lookup.coreModifiers |> List.map _.tag |> List.toArray
           description = "Modifiers"
-          valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+          valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) |> List.toArray }
 
     let scriptedEffectKeys =
         (resources.AllEntities()
          |> PSeq.map (fun struct (e, l) ->
              (l.Force().ScriptedEffectParams
               |> (Option.defaultWith (fun () -> Compute.EU4.getScriptedEffectParamsEntity e))))
-         |> List.ofSeq
-         |> List.collect id)
+         |> Seq.collect id
+         |> Seq.toArray)
 
     let scriptedEffectParmas =
         { key = "scripted_effect_params"
           description = "Scripted effect parameter"
           values = scriptedEffectKeys
-          valuesWithRange = scriptedEffectKeys |> List.map (fun x -> x, None) }
+          valuesWithRange = scriptedEffectKeys |> Array.map (fun x -> x, None) }
 
-    let paramsDValues = scriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+    let paramsDValues = scriptedEffectKeys |> Array.map (fun k -> sprintf "$%s$" k)
 
     let scriptedEffectParmasD =
         { key = "scripted_effect_params_dollar"
           description = "Scripted effect parameter"
           values = paramsDValues
-          valuesWithRange = paramsDValues |> List.map (fun x -> x, None) }
+          valuesWithRange = paramsDValues |> Array.map (fun x -> x, None) }
 
     lookup.enumDefs <-
         lookup.enumDefs

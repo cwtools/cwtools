@@ -92,13 +92,14 @@ module CommonValidation =
             let zipped = types |> List.map (fun td -> td.name, lu.typeDefInfo.[td.name])
 
             let groupFun =
-                List.groupBy (fun (tdi: TypeDefInfo) -> tdi.id)
-                >> List.filter (fun (k, g) -> g.Length > 1)
-                >> List.collect snd
+                Array.groupBy (fun (tdi: TypeDefInfo) -> tdi.id)
+                >> Array.filter (fun (k, g) -> g.Length > 1)
+                >> Array.collect snd
 
             let res =
                 zipped
-                |> List.collect (fun (tn, ts) -> (groupFun ts) |> List.map (fun t -> tn, t))
+                |> Seq.collect (fun (tn, ts) -> (groupFun ts) |> Array.map (fun t -> tn, t))
+                |> Seq.toArray
 
             res
             <&!&> (fun (typename, tdi) ->
@@ -149,7 +150,7 @@ module CommonValidation =
             match rulesValidator, lu.typeDefInfo |> Map.tryFind "scripted_effect" with
             | Some rv, Some ses ->
                 let allScriptedEffects =
-                    ses |> List.map (fun se -> se.id, se.range.FileName, findSE se.range)
+                    ses |> Array.map (fun se -> se.id, se.range.FileName, findSE se.range)
 
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
@@ -173,7 +174,7 @@ module CommonValidation =
                 // eprintfn "ar %A" allRefs
                 let scriptedEffects =
                     allScriptedEffects
-                    |> List.map (fun (name, filename, node) ->
+                    |> Array.map (fun (name, filename, node) ->
                         name,
                         fileManager.ConvertPathToLogicalPath(filename),
                         node,
@@ -329,7 +330,7 @@ module CommonValidation =
             match rulesValidator, lu.typeDefInfo |> Map.tryFind "inline_script" with
             | Some rv, Some ses ->
                 let allInlineScripts =
-                    ses |> List.map (fun se -> se.id, se.range.FileName, findIS se.range)
+                    ses |> Array.map (fun se -> se.id, se.range.FileName, findIS se.range)
 
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
@@ -353,7 +354,7 @@ module CommonValidation =
                 // eprintfn "ar %A" allRefs
                 let inlineScripts =
                     allInlineScripts
-                    |> List.map (fun (name, filename, node) ->
+                    |> Array.map (fun (name, filename, node) ->
                         name,
                         fileManager.ConvertPathToLogicalPath(filename),
                         node,
@@ -514,7 +515,7 @@ module CommonValidation =
                 //                logInfo (sprintf "vsvpa %A" scriptValues)
                 let allScriptValues =
                     scriptValues
-                    |> List.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
+                    |> Array.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
 
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
@@ -538,7 +539,7 @@ module CommonValidation =
                 // eprintfn "ar %A" allRefs
                 let scriptedEffects =
                     allScriptValues
-                    |> List.map (fun (name, filename, node) ->
+                    |> Array.map (fun (name, filename, node) ->
                         name,
                         fileManager.ConvertPathToLogicalPath(filename),
                         node,
@@ -721,18 +722,19 @@ module CommonValidation =
                 | true -> None
                 | false -> Some(invManual (ErrorCodes.UnusedType typename typedef.id) typedef.range typedef.id None)
 
-            let checkType (typename: string, typedefs: TypeDefInfo list) =
+            let checkType (typename: string, typedefs: TypeDefInfo array) =
                 match allReferences |> Map.tryFind typename with
                 | None -> failwith "no refernences?" //inv (ErrorCodes.CustomError "This type should be used" Severity.Error)
                 | Some refs ->
                     typedefs
-                    |> List.choose (
+                    |> Seq.choose (
                         checkTypeDef
                             typename
                             (refs
                              |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                              |> List.map (fun r -> r.name.GetString()))
                     )
+                    |> Seq.toList
 
             match typeInfos |> List.collect checkType with
             | [] -> OK
@@ -764,7 +766,7 @@ module CommonValidation =
                     match ref.referenceType with
                     | ReferenceType.TypeDefFuzzy
                     | ReferenceType.TypeDef ->
-                        match modifierTypes |> List.tryFind (fun t -> t.id = ref.name.GetString()) with
+                        match modifierTypes |> Array.tryFind (fun t -> t.id = ref.name.GetString()) with
                         | Some _ -> OK
                         | None ->
                             Invalid(

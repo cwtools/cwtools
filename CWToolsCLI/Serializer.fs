@@ -545,12 +545,12 @@ let deserializeMetadata path =
     { metadata with
         varDefs =
             metadata.varDefs
-            |> Map.map (fun k v -> v |> List.map (fun (s, _) -> (s, range.Zero)))
+            |> Map.map (fun k v -> v |> Array.map (fun (s, _) -> (s, range.Zero)))
         typeDefs =
             metadata.typeDefs
             |> Map.map (fun k v ->
                 v
-                |> List.map (fun t ->
+                |> Array.map (fun t ->
                     { t with
                         range = range.Zero
                         validate = false })) }

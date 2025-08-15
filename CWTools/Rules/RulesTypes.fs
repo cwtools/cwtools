@@ -211,8 +211,8 @@ type RootRule =
 type EnumDefinition =
     { key: string
       description: string
-      values: string list
-      valuesWithRange: (string * CWTools.Utilities.Position.range option) list }
+      values: string array
+      valuesWithRange: (string * Position.range option) array }
 
 type ComplexEnumDef =
     { name: string

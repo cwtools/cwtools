@@ -82,10 +82,10 @@ type Lookup() =
     member val configRules: RootRule array = [||] with get, set
     member val typeDefs: TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)
-    member val enumDefs: Collections.Map<string, string * (string * range option) list> = Map.empty with get, set
-    member val typeDefInfo: Collections.Map<string, TypeDefInfo list> = Map.empty with get, set
+    member val enumDefs: Map<string, string * (string * range option) array> = Map.empty with get, set
+    member val typeDefInfo: Collections.Map<string, TypeDefInfo array> = Map.empty with get, set
     member val typeDefInfoForValidation: Collections.Map<string, (string * range) list> = Map.empty with get, set
-    member val varDefInfo: Collections.Map<string, (string * range) list> = Map.empty with get, set
+    member val varDefInfo: Collections.Map<string, (string * range) array> = Map.empty with get, set
     member val savedEventTargets: ResizeArray<string * range * Scope> = new ResizeArray<_>() with get, set
 
 type JominiLookup() =
@@ -95,25 +95,25 @@ type JominiLookup() =
 type CK2Lookup() =
     inherit Lookup()
     member val CK2LandedTitles: Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
-    member val CK2provinces: string list = [] with get, set
+    member val CK2provinces: string array = [||] with get, set
 
 type EU4Lookup() =
     inherit Lookup()
-    member val EU4ScriptedEffectKeys: string list = [] with get, set
-    member val EU4TrueLegacyGovernments: string list = [] with get, set
+    member val EU4ScriptedEffectKeys: string array = [||] with get, set
+    member val EU4TrueLegacyGovernments: string array = [||] with get, set
 
 type HOI4Lookup() =
     inherit Lookup()
-    member val HOI4provinces: string list = [] with get, set
+    member val HOI4provinces: string array = [||] with get, set
 
 type STLLookup() =
     inherit Lookup()
 
 type IRLookup() =
     inherit JominiLookup()
-    member val IRprovinces: string list = [] with get, set
-    member val IRcharacters: string list = [] with get, set
+    member val IRprovinces: string array = [||] with get, set
+    member val IRcharacters: string array = [||] with get, set
 
 type VIC2Lookup() =
     inherit Lookup()
-    member val VIC2provinces: string list = [] with get, set
+    member val VIC2provinces: string array = [||] with get, set

@@ -40,11 +40,10 @@ module IRGameFunctions =
             let provinces =
                 lines
                 |> Array.choose (fun l ->
-                    if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then
+                    if l.StartsWith('#') then
                         None
                     else
-                        l.Split([| ';' |], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
-                |> List.ofArray
+                        l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
 
             game.Lookup.IRprovinces <- provinces
 
@@ -66,16 +65,15 @@ module IRGameFunctions =
             let chars =
                 lines
                 |> Array.choose (fun l ->
-                    if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then
+                    if l.StartsWith('#') then
                         None
                     else
-                        l.Split([| ',' |], 3, StringSplitOptions.RemoveEmptyEntries)
+                        l.Split(',', 3, StringSplitOptions.RemoveEmptyEntries)
                         |> (fun a ->
                             if a.Length > 1 then
                                 a |> Array.skip 1 |> Array.tryHead
                             else
                                 None))
-                |> List.ofArray
 
             game.Lookup.IRcharacters <- chars
 
@@ -83,21 +81,21 @@ module IRGameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup: IRLookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+              values = lookup.coreModifiers |> List.map (fun m -> m.tag) |> List.toArray
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) |> List.toArray }
 
         let provinceEnums =
             { key = "provinces"
               description = "provinces"
               values = lookup.IRprovinces
-              valuesWithRange = lookup.IRprovinces |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.IRprovinces |> Array.map (fun x -> x, None) }
 
         let charEnums =
             { key = "character_ids"
               description = "character_ids"
               values = lookup.IRcharacters
-              valuesWithRange = lookup.IRcharacters |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.IRcharacters |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs

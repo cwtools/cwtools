@@ -183,17 +183,10 @@ module ChangeLocScope =
 
     // type LocContext
     let createJominiLocalisationCommandValidator (dataTypes: CWTools.Parser.DataTypeParser.JominiLocDataTypes) =
-        let textInfo = CultureInfo.CurrentCulture.TextInfo
-
         fun
             (source: ScopeContext)
             (eventtargets: Collections.Map<string, Scope list>)
-            (setvariables: string list)
             (command: JominiLocCommand list) ->
-            // let keys = command.Split('.') |> List.ofArray
-            // let keys =
-            //     match
-            // eprintfn "%A" command
             let convScopeToDataType (scope: Scope) = scopeManager.DataTypeForScope(scope)
 
             let command =
