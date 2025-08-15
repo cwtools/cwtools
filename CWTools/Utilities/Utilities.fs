@@ -2,6 +2,7 @@ namespace CWTools.Utilities
 
 open System
 open System.Collections.Concurrent
+open System.Collections.Frozen
 open System.Collections.Generic
 open System.Runtime.CompilerServices
 open System.Runtime.Serialization
@@ -23,19 +24,6 @@ module Utils =
                 String.Compare(a, b, StringComparison.OrdinalIgnoreCase)
 
     type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
-
-    let memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_, _>()
-
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-
-
 
     type LogLevel =
         | Silent
@@ -348,11 +336,10 @@ module Utils2 =
 
     [<Sealed>]
     type IgnoreCaseStringSet(strings: string seq) =
-        let set = HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        let mutable set = null
 
         do
-            for e in strings do
-                set.Add(e) |> ignore
+            set <- strings.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
         new() = IgnoreCaseStringSet(Seq.empty)
 
