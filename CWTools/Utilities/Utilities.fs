@@ -305,6 +305,7 @@ type StringTokens with
 
 module Utils2 =
 
+    [<Sealed>]
     type CharacterComparer() =
         static member Default = CharacterComparer()
 
