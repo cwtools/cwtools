@@ -175,9 +175,9 @@ type CompletionService
 
     let checkIconField (folder: string) =
         files
-        |> Collections.Set.filter (fun icon -> icon.StartsWith(folder, StringComparison.OrdinalIgnoreCase))
-        |> Collections.Set.toArray
-        |> Array.map (fun icon -> icon.Replace(".dds", ""))
+        |> Seq.filter _.StartsWith(folder, StringComparison.OrdinalIgnoreCase)
+        |> Seq.map _.Replace(".dds", "")
+        |> Seq.toArray
     // let value = folder + "/" + key + ".dds"
     // if files.Contains value then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.MissingFile value) leafornode])
 
@@ -381,7 +381,7 @@ type CompletionService
         let requiredRules = if requiredRules = "" then "\t${0}\n" else requiredRules
 
         let score = scoreFunction key
-        CompletionResponse.Snippet(key, $"%s{key} = {{\n%s{requiredRules}}}", description, Some score, Other)
+        CompletionResponse.Snippet(key, $"%s{key} = {{\n%s{requiredRules}}}", description, Some score, CompletionCategory.Other)
 
 
     // | LeafValue
@@ -591,7 +591,7 @@ type CompletionService
                         $"%s{inner} = $0",
                         o.description,
                         Some(scoreFunctioni inner),
-                        Other
+                        CompletionCategory.Other
                     )
 
                 let keyvalueWithCustomScopeReq r (inner: string) =
@@ -603,7 +603,7 @@ type CompletionService
                             (scoreFunction context r CompletionScopeOutput.Nothing CompletionScopeExpectation.Nothing)
                                 inner
                         ),
-                        Other
+                        CompletionCategory.Other
                     )
 
                 match r with

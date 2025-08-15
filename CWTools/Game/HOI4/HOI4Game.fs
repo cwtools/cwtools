@@ -31,15 +31,15 @@ module HOI4GameFunctions =
 
                 yield!
                     lookup.varDefInfo.TryFind "event_target"
-                    |> Option.defaultValue []
+                    |> Option.defaultValue [||]
                     |> Seq.map fst
 
                 yield!
                     lookup.varDefInfo.TryFind "global_event_target"
-                    |> Option.defaultValue []
+                    |> Option.defaultValue [||]
                     |> Seq.map fst
 
-                yield! lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [] |> Seq.map (_.id)
+                yield! lookup.typeDefInfo.TryFind "state" |> Option.defaultValue [||] |> Seq.map _.id
 
                 yield!
                     lookup.enumDefs.TryFind "country_tags"
@@ -49,12 +49,12 @@ module HOI4GameFunctions =
 
         let definedvars =
             seq {
-                yield! (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> Seq.map fst)
-                yield! (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> Seq.map fst)
+                yield! (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [||] |> Seq.map fst)
+                yield! (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [||] |> Seq.map fst)
 
                 yield!
                     (lookup.varDefInfo.TryFind "exiled_ruler"
-                     |> Option.defaultValue []
+                     |> Option.defaultValue [||]
                      |> Seq.map fst)
             }
             |> IgnoreCaseStringSet
@@ -87,7 +87,7 @@ module HOI4GameFunctions =
             let provinces =
                 lines
                 |> Array.choose (fun l -> l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
-                |> List.ofArray
+
 
             game.Lookup.HOI4provinces <- provinces
 
@@ -107,32 +107,27 @@ module HOI4GameFunctions =
 
         game.Lookup.scriptedLoc <- rawLocs
 
-    let updateScriptedEffects (rules: RootRule array) (states: _ list) (countries: _ list) =
+    let ruleToEffect (rule, effectType) =
+        let r, o = rule
+        let name =
+            match r with
+            | LeafRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
+            | NodeRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
+            | _ -> ""
+
+        DocEffect(name, o.requiredScopes, o.pushScope, effectType, o.description |> Option.defaultValue "", "")
+        :> Effect
+
+    let updateScriptedEffects (rules: RootRule array) (states: _ array) (countries: _ array) =
         let effects =
             rules
             |> Array.choose (function
-                | AliasRule("effect", r) -> Some r
+                | AliasRule("effect", r) -> Some(ruleToEffect(r, EffectType.Effect))
                 | _ -> None)
-
-        let ruleToEffect (r, o) =
-            let name =
-                match r with
-                | LeafRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
-                | NodeRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
-                | _ -> ""
-
-            DocEffect(
-                name,
-                o.requiredScopes,
-                o.pushScope,
-                EffectType.Effect,
-                o.description |> Option.defaultValue "",
-                ""
-            )
 
         let stateEffects =
             states
-            |> List.map (fun p ->
+            |> Array.map (fun p ->
                 ScopedEffect(
                     p,
                     scopeManager.AllScopes,
@@ -141,11 +136,11 @@ module HOI4GameFunctions =
                     defaultDesc,
                     "",
                     true
-                ))
+                ) :> Effect)
 
         let countryEffects =
             countries
-            |> List.map (fun p ->
+            |> Array.map (fun p ->
                 ScopedEffect(
                     p,
                     scopeManager.AllScopes,
@@ -154,64 +149,46 @@ module HOI4GameFunctions =
                     defaultDesc,
                     "",
                     true
-                ))
+                ) :> Effect)
 
-        (effects |> Seq.map ruleToEffect |> Seq.cast<Effect> |> Seq.toList)
-        @ (stateEffects |> List.map (fun e -> e :> Effect))
-        @ (countryEffects |> List.map (fun e -> e :> Effect))
+        Array.concat [| effects; stateEffects; countryEffects |]
 
-    let updateScriptedTriggers (rules: RootRule array) states countries =
+    let updateScriptedTriggers (rules: RootRule array) (states: _ array) (countries: _ array) =
         let effects =
             rules
             |> Array.choose (function
-                | AliasRule("trigger", r) -> Some r
+                | AliasRule("trigger", r) -> Some(ruleToEffect(r, EffectType.Trigger))
                 | _ -> None)
 
-        let ruleToTrigger (r, o) =
-            let name =
-                match r with
-                | LeafRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
-                | NodeRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
-                | _ -> ""
-
-            DocEffect(
-                name,
-                o.requiredScopes,
-                o.pushScope,
-                EffectType.Trigger,
-                o.description |> Option.defaultValue "",
-                ""
-            )
-
         let stateEffects =
-            states
-            |> List.map (fun p ->
-                ScopedEffect(
-                    p,
-                    scopeManager.AllScopes,
-                    Some(scopeManager.ParseScope () "State"),
-                    EffectType.Link,
-                    defaultDesc,
-                    "",
-                    true
-                ))
+            (states
+             |> Array.map (fun p ->
+                 ScopedEffect(
+                     p,
+                     scopeManager.AllScopes,
+                     Some(scopeManager.ParseScope () "State"),
+                     EffectType.Link,
+                     defaultDesc,
+                     "",
+                     true
+                 )
+                 :> Effect))
 
         let countryEffects =
-            countries
-            |> List.map (fun p ->
-                ScopedEffect(
-                    p,
-                    scopeManager.AllScopes,
-                    Some(scopeManager.ParseScope () "Country"),
-                    EffectType.Link,
-                    defaultDesc,
-                    "",
-                    true
-                ))
+            (countries
+             |> Array.map (fun p ->
+                 ScopedEffect(
+                     p,
+                     scopeManager.AllScopes,
+                     Some(scopeManager.ParseScope () "Country"),
+                     EffectType.Link,
+                     defaultDesc,
+                     "",
+                     true
+                 )
+                 :> Effect))
 
-        (effects |> Seq.map ruleToTrigger |> Seq.cast<Effect> |> Seq.toList)
-        @ (stateEffects |> List.map (fun e -> e :> Effect))
-        @ (countryEffects |> List.map (fun e -> e :> Effect))
+        Array.concat [| effects; stateEffects; countryEffects |]
 
     let addModifiersWithScopes (lookup: Lookup) =
         let modifierOptions (modifier: ActualModifier) =
@@ -239,7 +216,7 @@ module HOI4GameFunctions =
             { key = "provinces"
               description = "provinces"
               values = lookup.HOI4provinces
-              valuesWithRange = lookup.HOI4provinces |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.HOI4provinces |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs
@@ -250,13 +227,13 @@ module HOI4GameFunctions =
             lookup.typeDefInfo.TryFind "state"
             |> Option.map (fun sl ->
                 sl
-                |> List.map (fun tdi -> StringResource.stringManager.InternIdentifierToken tdi.id))
-            |> Option.defaultValue []
+                |> Array.map (fun tdi -> StringResource.stringManager.InternIdentifierToken tdi.id))
+            |> Option.defaultValue [||]
 
         let countries =
             lookup.enumDefs.TryFind "country_tag"
-            |> Option.map (fun x -> (snd x) |> List.map (fst >> StringResource.stringManager.InternIdentifierToken))
-            |> Option.defaultValue []
+            |> Option.map (fun x -> (snd x) |> Array.map (fst >> StringResource.stringManager.InternIdentifierToken))
+            |> Option.defaultValue [||]
 
         let ts = updateScriptedTriggers lookup.configRules states countries
         let es = updateScriptedEffects lookup.configRules states countries
@@ -265,7 +242,7 @@ module HOI4GameFunctions =
             updateEventTargetLinks embeddedSettings
             @ addDataEventTargetLinks lookup embeddedSettings false
 
-        lookup.allCoreLinks <- ts @ es @ ls
+        lookup.allCoreLinks <- ts.Concat(es).Concat(ls) |> List.ofSeq
 
     let refreshConfigAfterVarDefHook
         (lookup: Lookup)

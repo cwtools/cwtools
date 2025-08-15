@@ -36,21 +36,22 @@ module STLGameFunctions =
 
     let createLocDynamicSettings (lookup: Lookup) =
         let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "global_event_target"
-               |> Option.defaultValue []
-               |> List.map fst)
+            Array.append
+                (lookup.varDefInfo.TryFind "event_target"
+                 |> Option.defaultValue [||]
+                 |> Array.map fst)
+                (lookup.varDefInfo.TryFind "global_event_target"
+                 |> Option.defaultValue [||]
+                 |> Array.map fst)
 
         let definedVariables =
             (lookup.varDefInfo.TryFind "variable"
-             |> Option.defaultValue []
+             |> Option.defaultValue [||]
              |> Seq.map fst
              |> IgnoreCaseStringSet)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+          eventTargets = eventtargets |> Array.map (fun s -> s, scopeManager.AnyScope)
           setVariables = definedVariables }
 
     let updateScriptedTriggers (game: GameObject) =
@@ -174,7 +175,9 @@ module STLGameFunctions =
              AliasRule(
                  "modifier",
                  NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-             ))).Concat(RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs).ToArray()
+             )))
+            .Concat(RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs)
+            .ToArray()
 
     let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule array) =
         let scriptedOptions (scripted: string) (effect: ScriptedEffect) =
@@ -293,11 +296,12 @@ module STLGameFunctions =
 
 
 
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo array>) =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.toArray
         )
 
     let refreshConfigAfterFirstTypesHook

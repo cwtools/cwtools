@@ -119,7 +119,6 @@ let getTypesFromDefinitions
     let resDict = Dictionary<string, _>()
 
     types
-    |> Seq.ofList
     |> PSeq.collect getTypeInfo
     |> Seq.iter (fun (n, k) ->
         let mutable value: (bool * string * Position.range * (string * string * bool) list * string list) list =
@@ -144,12 +143,12 @@ let getTypesFromDefinitions
 
         k,
         vs
-        |> List.map (fun (v, n, r, el, sts) ->
+        |> Seq.map (fun (v, n, r, el, sts) ->
             { TypeDefInfo.validate = v
               id = n
               range = r
               explicitLocalisation = el
-              subtypes = sts }))
+              subtypes = sts }) |> Seq.toArray)
     |> Map.ofSeq
 
 let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) : EnumDefinition list =
@@ -255,9 +254,9 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                     e.Nodes |> Seq.collect (innerStart complexenum.nameTree))
         // log "%A %A" complexenum.name values
         { key = complexenum.name
-          values = values |> Seq.map fst |> List.ofSeq
+          values = values |> Seq.map fst |> Array.ofSeq
           description = complexenum.description
-          valuesWithRange = values |> List.ofSeq }
+          valuesWithRange = values |> Array.ofSeq }
 
     complexenums
     |> List.toSeq
@@ -269,8 +268,8 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                 Map.add
                     e.key
                     { e with
-                        values = e.values @ acc.[e.key].values
-                        valuesWithRange = e.valuesWithRange @ acc.[e.key].valuesWithRange }
+                        values = Array.append e.values acc[e.key].values
+                        valuesWithRange = Array.append e.valuesWithRange acc[e.key].valuesWithRange }
                     acc
             else
                 Map.add e.key e acc)
@@ -300,7 +299,7 @@ let getDefinedVariables (infoService: InfoService) (es: Entity list) =
 
 let expandPredefinedValues
     (types: Map<string, PrefixOptimisedStringSet>)
-    (enums: Map<string, _ * list<string * option<CWTools.Utilities.Position.range>>>)
+    (enums: Map<string, _ * array<string * option<Position.range>>>)
     (values: string list)
     =
     let replaceType (value: string) =
@@ -398,11 +397,11 @@ let generateModifiersFromType (typedef: TypeDefinition) (typeInstance: TypeDefIn
 
     (typedef.modifiers |> List.map inner) @ subtype
 
-let generateModifiersFromTypes (typedefs: TypeDefinition list) (typeDefMap: Collections.Map<string, TypeDefInfo list>) =
+let generateModifiersFromTypes (typedefs: TypeDefinition list) (typeDefMap: Collections.Map<string, TypeDefInfo array>) =
     typedefs
     |> List.collect (fun td ->
         match typeDefMap |> Map.tryFind td.name with
-        | Some typeInstances -> typeInstances |> List.collect (fun ti -> generateModifiersFromType td ti)
+        | Some typeInstances -> typeInstances |> Seq.collect (fun ti -> generateModifiersFromType td ti) |> List.ofSeq
         | None -> [])
 
 let private modifierRuleFromNameAndTypeDef (nameWithSubtypes: string) (m: TypeModifier) =

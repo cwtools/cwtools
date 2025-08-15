@@ -17,9 +17,9 @@ open CWTools.Utilities.StringResource
 
 // Fuzzy = prefix/suffix
 type ReferenceType =
-    | TypeDef
-    | Link
-    | TypeDefFuzzy
+    | TypeDef = 0uy
+    | Link = 1uy
+    | TypeDefFuzzy = 2uy
 
 type ReferenceDetails =
     { name: StringTokens

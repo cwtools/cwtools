@@ -74,11 +74,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string, list<TypeDefInfo>>) ->
+            fun (newMap: Map<string, array<TypeDefInfo>>) ->
                 Map.fold
                     (fun s k v ->
                         match Map.tryFind k s with
-                        | Some v' -> Map.add k (v @ v') s
+                        | Some v' -> Map.add k (Array.append v v') s
                         | None -> Map.add k v s)
                     newMap
                     md.typeDefs
@@ -87,15 +87,15 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string, string * list<string * option<range>>>) ->
+            fun (newMap: Map<string,string * (string * range option) array>) ->
                 let mdAdjusted =
-                    md.enumDefs |> Map.map (fun _ (s, sl) -> s, (sl |> List.map (fun x -> x, None)))
+                    md.enumDefs |> Map.map (fun _ (s, sl) -> s, (sl |> Array.map (fun x -> x, None)))
 
                 let res =
                     Map.fold
                         (fun s k (d, v) ->
                             match Map.tryFind k s with
-                            | Some(d', v') -> Map.add k (d, v @ v') s
+                            | Some(d', v') -> Map.add k (d, Array.append v v') s
                             | None -> Map.add k (d, v) s)
                         newMap
                         mdAdjusted
@@ -107,11 +107,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string, list<string * range>>) ->
+            fun (newMap: Map<string, array<string * range>>) ->
                 Map.fold
                     (fun s k v ->
                         match Map.tryFind k s with
-                        | Some v' -> Map.add k (v @ v') s
+                        | Some v' -> Map.add k (Array.append v v') s
                         | None -> Map.add k v s)
                     newMap
                     md.varDefs
@@ -209,7 +209,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempEnumMap <-
             (lookup.enumDefs
              |> Map.toSeq
-             |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> List.map fst |> createStringSet))))
+             |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> Array.map fst |> createStringSet))))
                 .ToFrozenDictionary()
 
 
@@ -252,7 +252,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             let newTypeMap =
                 lookup.typeDefInfo
                 |> Map.toSeq
-                |> PSeq.map (fun (k, s) -> k, s |> List.map _.id |> createStringSet)
+                |> PSeq.map (fun (k, s) -> k, s |> Seq.map _.id |> createStringSet)
                 |> Map.ofSeq
 
             newTypeMap
@@ -303,14 +303,14 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             lookup.typeDefInfo
             |> Map.map (fun _ v ->
                 v
-                |> List.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None))
+                |> Seq.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None) |> Seq.toList)
 
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
 
         tempTypeMap <-
             lookup.typeDefInfo
             |> Map.toSeq
-            |> PSeq.map (fun (k, s) -> k, s |> List.map _.id |> createStringSet)
+            |> PSeq.map (fun (k, s) -> k, s |> Seq.map _.id |> createStringSet)
             |> Map.ofSeq
 
         let processLoc, validateLoc = settings.locFunctions lookup
@@ -348,7 +348,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             tempValues
             |> Map.map (fun k vs -> (expandPredefinedValues tempTypeMap lookup.enumDefs vs))
             |> Map.toList
-            |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero)))
+            |> List.map (fun (s, sl) -> s, (sl |> Seq.map (fun s2 -> s2, range.Zero) |> Array.ofSeq))
             |> Map.ofList
 
         let results =
@@ -362,9 +362,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     |> List.fold
                         (fun m2 (n, k) ->
                             if Map.containsKey n m2 then
-                                Map.add n ((k |> List.ofSeq) @ m2.[n]) m2
+                                Map.add n (Array.append (k.ToArray()) m2[n]) m2
                             else
-                                Map.add n (k |> List.ofSeq) m2)
+                                Map.add n (k.ToArray()) m2)
                         m)
                 predefValues
 
@@ -388,7 +388,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let varMap: FrozenDictionary<string, PrefixOptimisedStringSet> =
             (lookup.varDefInfo
              |> Map.toSeq
-             |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> List.map fst |> createStringSet)))
+             |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> Seq.map fst |> createStringSet)))
                 .ToFrozenDictionary()
 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()

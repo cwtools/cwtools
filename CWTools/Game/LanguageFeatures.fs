@@ -28,7 +28,7 @@ module LanguageFeatures =
             findChild startNode
 
         lookup.typeDefInfo.TryFind typedef.name
-        |> Option.bind (List.tryFind (fun tdi -> tdi.id = typename))
+        |> Option.bind (Array.tryFind (fun tdi -> tdi.id = typename))
         |> Option.bind (fun typeDefInfoForTypeName ->
             let targetRange = typeDefInfoForTypeName.range
 
@@ -131,11 +131,11 @@ module LanguageFeatures =
             | Some(_, (_, Some(TypeRef(t, tv)), _)) ->
                 lookup.typeDefInfo
                 |> Map.tryFind t
-                |> Option.defaultValue []
-                |> List.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
+                |> Option.defaultValue [||]
+                |> Array.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
             | Some(_, (_, Some(EnumRef(enumName, enumValue)), _)) ->
-                let enumValues = lookup.enumDefs.[enumName] |> snd
-                enumValues |> List.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
+                let enumValues = lookup.enumDefs[enumName] |> snd
+                enumValues |> Array.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
             | Some(_, (_, Some(FileRef f), _)) ->
                 resourceManager.Api.AllEntities()
                 |> Seq.map structFst
@@ -441,7 +441,7 @@ module LanguageFeatures =
     // }
     let getEmbeddedMetadata (lookup: Lookup) (localisation: LocalisationManager<_>) (resources: ResourceManager<_>) =
         { typeDefs = lookup.typeDefInfo
-          enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> List.map fst)
+          enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> Array.map fst)
           varDefs = lookup.varDefInfo
           loc = localisation.LocalisationKeys()
           files = resources.Api.GetFileNames() |> Set.ofArray
@@ -474,12 +474,12 @@ module LanguageFeatures =
         let findLoc key =
             locSet |> Map.tryFind key |> Option.map (fun l -> l.desc)
 
-        let getSourceTypesTD (x: Map<string, TypeDefInfo list>) =
+        let getSourceTypesTD (x: Map<string, TypeDefInfo array>) =
             Map.toList x
             |> List.filter (fun (k, _) -> sourceTypes |> List.contains k)
             |> List.collect (fun (k, vs) ->
                 vs
-                |> List.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
+                |> Array.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes) |> List.ofSeq)
 
         let getSourceTypes (x: Map<string, ReferenceDetails list>) =
             Map.toList x

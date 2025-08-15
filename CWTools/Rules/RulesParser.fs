@@ -1231,8 +1231,8 @@ module private RulesParserImpl =
 
             let values =
                 node.LeafValues
-                |> List.ofSeq
-                |> List.map (fun lv -> lv.Value.ToString().Trim([| '\"' |]), None)
+                |> Array.ofSeq
+                |> Array.map (fun lv -> lv.Value.ToString().Trim('\"'), None)
 
             match enumname with
             | Some en ->
@@ -1243,7 +1243,7 @@ module private RulesParserImpl =
 
                 Some
                     { key = en
-                      values = values |> List.map fst
+                      values = values |> Array.map fst
                       description = description
                       valuesWithRange = values }
             | None -> None

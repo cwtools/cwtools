@@ -914,7 +914,7 @@ let testsv =
                           [ shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value ]
                           [ be ]
                       |> Map.toSeq
-                      |> Seq.map (fun (k, s) -> k, createStringSet (s |> List.map _.id))
+                      |> Seq.map (fun (k, s) -> k, createStringSet (s |> Array.map _.id))
                       |> Map.ofSeq
                   // eprintfn "%A" typeinfo
                   let node =

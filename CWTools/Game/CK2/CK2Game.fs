@@ -31,14 +31,16 @@ module CK2GameFunctions =
     let createLocDynamicSettings (lookup: Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
+             |> Option.defaultValue [||]
+             |> Array.map (fun (s, _) -> s, scopeManager.AnyScope))
 
         let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            (lookup.varDefInfo.TryFind "variable"
+             |> Option.defaultValue [||]
+             |> Array.map fst)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+          eventTargets = eventtargets
           setVariables = definedvars |> IgnoreCaseStringSet }
 
     let updateScriptedLoc (game: GameObject) =
@@ -144,63 +146,75 @@ module CK2GameFunctions =
     let createLandedTitleTypes (lookup: CK2Lookup) (map: Map<_, _>) =
         let ells =
             lookup.CK2LandedTitles.[TitleType.Empire, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landless" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landless" ])
+            |> Seq.toArray
 
         let es =
             lookup.CK2LandedTitles.[TitleType.Empire, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landed" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "empire"; "landed" ])
+            |> Seq.toArray
 
         let klls =
             lookup.CK2LandedTitles.[TitleType.Kingdom, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landless" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landless" ])
+            |> Seq.toArray
 
         let ks =
             lookup.CK2LandedTitles.[TitleType.Kingdom, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landed" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "kingdom"; "landed" ])
+            |> Seq.toArray
 
         let dllns =
             lookup.CK2LandedTitles.[TitleType.Duchy_Normal, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landless" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landless" ])
+            |> Seq.toArray
 
         let dns =
             lookup.CK2LandedTitles.[TitleType.Duchy_Normal, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landed" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_normal"; "landed" ])
+            |> Seq.toArray
 
         let dllhs =
             lookup.CK2LandedTitles.[TitleType.Duchy_Hired, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landless" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landless" ])
+            |> Seq.toArray
 
         let dhs =
             lookup.CK2LandedTitles.[TitleType.Duchy_Hired, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landed" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "duchy"; "duchy_hired"; "landed" ])
+            |> Seq.toArray
 
         let clls =
             lookup.CK2LandedTitles.[TitleType.County, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landless" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landless" ])
+            |> Seq.toArray
 
         let cs =
             lookup.CK2LandedTitles.[TitleType.County, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landed" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "county"; "landed" ])
+            |> Seq.toArray
 
         let blls =
             lookup.CK2LandedTitles.[TitleType.Barony, true]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landless" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landless" ])
+            |> Seq.toArray
 
         let bs =
             lookup.CK2LandedTitles.[TitleType.Barony, false]
-            |> List.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landed" ])
+            |> Seq.map (fun e -> createTypeDefInfo false e range.Zero [] [ "barony"; "landed" ])
+            |> Seq.toArray
 
         map
-        |> Map.add "title.empire" (es @ ells)
-        |> Map.add "title.kingdom" (ks @ klls)
-        |> Map.add "title.duchy" (dllns @ dns @ dllhs @ dhs)
-        |> Map.add "title.duchy_hired" (dllhs @ dhs)
-        |> Map.add "title.duchy_normal" (dllns @ dns)
-        |> Map.add "title.county" (clls @ cs)
-        |> Map.add "title.barony" (blls @ bs)
-        |> Map.add "title.landless" (ells @ klls @ dllns @ dllhs @ clls @ blls)
-        |> Map.add "title.landed" (es @ ks @ dns @ dhs @ cs @ bs)
-        |> Map.add "title" (es @ ells @ ks @ klls @ dns @ dllns @ dhs @ dllhs @ cs @ clls @ bs @ blls)
+        |> Map.add "title.empire" (Array.concat [| es; ells |])
+        |> Map.add "title.kingdom" (Array.concat [| ks; klls |])
+        |> Map.add "title.duchy" (Array.concat [| dllns; dns; dllhs; dhs |])
+        |> Map.add "title.duchy_hired" (Array.concat [| dllhs; dhs |])
+        |> Map.add "title.duchy_normal" (Array.concat [| dllns; dns |])
+        |> Map.add "title.county" (Array.concat [| clls; cs |])
+        |> Map.add "title.barony" (Array.concat [| blls; bs |])
+        |> Map.add "title.landless" (Array.concat [| ells; klls; dllns; dllhs; clls; blls |])
+        |> Map.add "title.landed" (Array.concat [| es; ks; dns; dhs; cs; bs |])
+        |> Map.add "title" (Array.concat [| es; ells; ks; klls; dns; dllns; dhs; dllhs; cs; clls; bs; blls |])
 
     let updateProvinces (game: GameObject) =
         let provinceFile =
@@ -217,8 +231,7 @@ module CK2GameFunctions =
 
             let provinces =
                 lines
-                |> Array.choose (fun l -> l.Split([| ';' |], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
-                |> List.ofArray
+                |> Array.choose (fun l -> l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
 
             game.Lookup.CK2provinces <- provinces
 
@@ -272,11 +285,12 @@ module CK2GameFunctions =
 
         (effects |> Array.map ruleToTrigger |> Array.map (fun e -> e :> Effect))
 
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo array>) =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.toArray
         )
 
 
@@ -284,21 +298,21 @@ module CK2GameFunctions =
         let ts = updateScriptedTriggers lookup rules embedded
         let es = updateScriptedEffects lookup rules embedded
         let ls = updateEventTargetLinks embedded |> List.toArray
-        lookup.allCoreLinks <- Seq.concat [|ts; es ; ls |] |> Seq.toList
+        lookup.allCoreLinks <- Seq.concat [| ts; es; ls |] |> Seq.toList
         Array.append rules (addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup: CK2Lookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+              values = lookup.coreModifiers |> Seq.map _.tag |> Seq.toArray
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+              valuesWithRange = lookup.coreModifiers |> Seq.map (fun m -> m.tag, None) |> Seq.toArray }
 
         let provinceEnums =
             { key = "provinces"
               description = "provinces"
               values = lookup.CK2provinces
-              valuesWithRange = lookup.CK2provinces |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.CK2provinces |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs

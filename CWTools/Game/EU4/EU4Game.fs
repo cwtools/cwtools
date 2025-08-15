@@ -30,30 +30,51 @@ module EU4GameFunctions =
     type GameObject = GameObject<EU4ComputedData, EU4Lookup>
 
     let createLocDynamicSettings (lookup: Lookup) =
-        let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "global_event_target"
-               |> Option.defaultValue []
-               |> List.map fst)
-            @ (lookup.typeDefInfo.TryFind "province_id"
-               |> Option.defaultValue []
-               |> List.map (fun tdi -> tdi.id))
-            @ (lookup.enumDefs.TryFind "country_tags"
-               |> Option.map (fun x -> (snd x) |> List.map fst)
-               |> Option.defaultValue [])
+        let eventTargets = ResizeArray<string>(32)
 
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "exiled_ruler"
-               |> Option.defaultValue []
-               |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+        eventTargets.AddRange(
+            lookup.varDefInfo.TryFind "event_target"
+            |> Option.defaultValue [||]
+            |> Seq.map fst
+        )
+
+        eventTargets.AddRange(
+            lookup.varDefInfo.TryFind "global_event_target"
+            |> Option.defaultValue [||]
+            |> Array.map fst
+        )
+
+        eventTargets.AddRange(
+            lookup.typeDefInfo.TryFind "province_id"
+            |> Option.defaultValue [||]
+            |> Seq.map _.id
+        )
+
+        eventTargets.AddRange(
+            lookup.enumDefs.TryFind "country_tags"
+            |> Option.map (fun x -> (snd x) |> Seq.map fst)
+            |> Option.defaultValue [||]
+        )
+        
+        let definedVars =
+            (lookup.varDefInfo.TryFind "variable"
+             |> Option.defaultValue [||]
+             |> Array.map fst)
+                .Concat(
+                    lookup.varDefInfo.TryFind "exiled_ruler"
+                    |> Option.defaultValue [||]
+                    |> Seq.map fst
+                )
+                .Concat(
+                    lookup.varDefInfo.TryFind "saved_name"
+                    |> Option.defaultValue [||]
+                    |> Seq.map fst
+                )
+
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-          setVariables = definedvars |> IgnoreCaseStringSet }
+          eventTargets = eventTargets.Select(fun s -> s, scopeManager.AnyScope).ToArray()
+          setVariables = definedVars |> IgnoreCaseStringSet }
 
     let globalLocalisation (game: GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
@@ -107,7 +128,7 @@ module EU4GameFunctions =
                     None)
             |> Set.ofList
 
-        let legacyOnly = Set.difference legacies legacyRefs |> Set.toList
+        let legacyOnly = Set.difference legacies legacyRefs |> Set.toArray
         game.Lookup.EU4TrueLegacyGovernments <- legacyOnly
 
     let addModifiersWithScopes (lookup: Lookup) =
@@ -176,11 +197,12 @@ module EU4GameFunctions =
         (effects |> Seq.map ruleToTrigger |> Seq.cast<Effect> |> Seq.toList)
         @ (scopedEffects () |> List.map (fun e -> e :> Effect))
 
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo array>) =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.toArray
         )
 
     let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
@@ -192,40 +214,40 @@ module EU4GameFunctions =
 
     let refreshConfigBeforeFirstTypesHook (lookup: EU4Lookup) (resources: IResourceAPI<EU4ComputedData>) _ =
         lookup.EU4ScriptedEffectKeys <-
-            "scaled_skill"
-            :: (resources.AllEntities()
-                |> PSeq.map (fun struct (e, l) ->
-                    (l.Force().ScriptedEffectParams
-                     |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
-                |> List.ofSeq
-                |> List.collect id)
+            Array.append
+                [| "scaled_skill" |]
+                (resources.AllEntities()
+                 |> PSeq.map (fun struct (e, l) ->
+                     (l.Force().ScriptedEffectParams
+                      |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
+                 |> Seq.collect id
+                 |> Seq.toArray)
 
         let scriptedEffectParmas =
             { key = "scripted_effect_params"
               description = "Scripted effect parameter"
               values = lookup.EU4ScriptedEffectKeys
-              valuesWithRange = lookup.EU4ScriptedEffectKeys |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.EU4ScriptedEffectKeys |> Array.map (fun x -> x, None) }
 
-        let paramsDValues =
-            lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+        let paramsDValues = lookup.EU4ScriptedEffectKeys |> Array.map (fun k -> $"$%s{k}$")
 
         let scriptedEffectParmasD =
             { key = "scripted_effect_params_dollar"
               description = "Scripted effect parameter"
               values = paramsDValues
-              valuesWithRange = paramsDValues |> List.map (fun x -> x, None) }
+              valuesWithRange = paramsDValues |> Array.map (fun x -> x, None) }
 
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+              values = lookup.coreModifiers |> List.map _.tag |> List.toArray
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) |> List.toArray }
 
         let legacyGovEnums =
             { key = "hardcoded_legacy_only_governments"
               values = lookup.EU4TrueLegacyGovernments
               description = "Legacy only government"
-              valuesWithRange = lookup.EU4TrueLegacyGovernments |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.EU4TrueLegacyGovernments |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs
