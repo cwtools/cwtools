@@ -359,8 +359,12 @@ module Utils2 =
         member this.Contains(x: string) =
             set.Contains(x)
 
-    let createStringSet items =
+    let createStringSet (items: string seq) =
         let newSet = PrefixOptimisedStringSet()
 
-        items |> Seq.iter (fun x -> newSet.AddWithIDs(x, x))
+        match items with
+        | :? (string array) as array ->
+            array |> Array.iter (fun x -> newSet.AddWithIDs(x, x))
+        | _ -> items |> Seq.iter (fun x -> newSet.AddWithIDs(x, x))
+
         newSet
