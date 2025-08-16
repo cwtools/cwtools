@@ -4,5 +4,5 @@ FSharp.Collections.ParallelSeq
 DotNet.Glob
 FSharpx.Collections
 Sandwych.QuickGraph.Core
-VDS.Common
+KTrie
 System.Text.Encoding.CodePages

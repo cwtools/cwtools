@@ -50,6 +50,7 @@ NUGET
     FsPickler (5.3.2)
       FSharp.Core (>= 4.3.2) - restriction: || (>= net45) (>= netstandard2.0)
       System.Reflection.Emit.Lightweight (>= 4.3) - restriction: && (< net45) (>= netstandard2.0)
+    KTrie (3.0.1)
     Microsoft.ApplicationInsights (2.23) - restriction: >= net8.0
       System.Diagnostics.DiagnosticSource (>= 5.0) - restriction: || (&& (>= net452) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0)) (>= net46)
     Microsoft.CodeCoverage (17.14.1) - restriction: || (>= net462) (>= net8.0)
@@ -595,7 +596,6 @@ NUGET
       System.Text.Encoding (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Threading (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Xml.ReaderWriter (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
-    VDS.Common (3.0)
     YoloDev.Expecto.TestSdk (0.15.4)
       Expecto (>= 10.2.2 < 11.0) - restriction: >= net8.0
       FSharp.Core (>= 7.0.200) - restriction: >= net8.0

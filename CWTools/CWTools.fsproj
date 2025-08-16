@@ -101,8 +101,5 @@
       <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj" />
       <ProjectReference Include="..\Shared\Shared.fsproj" />
     </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="KTrie" Version="3.0.1" />
-    </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>
 </Project>
