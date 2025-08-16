@@ -2,11 +2,16 @@ namespace CWTools.Utilities
 
 open System
 open System.Collections.Concurrent
+open System.Collections.Frozen
 open System.Collections.Generic
+open System.Linq
+open System.Runtime.CompilerServices
+open System.Runtime.Serialization
+open System.Threading
 open CWTools.Utilities.Position
 open System.Globalization
 open System.IO
-open VDS.Common.Tries
+open KTrie
 
 module Utils =
 
@@ -20,19 +25,6 @@ module Utils =
                 String.Compare(a, b, StringComparison.OrdinalIgnoreCase)
 
     type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
-
-    let memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_, _>()
-
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-
-
 
     type LogLevel =
         | Silent
@@ -159,44 +151,34 @@ module TryParser =
 type StringToken = int
 type StringLowerToken = int
 
+[<Struct; IsReadOnly>]
 type StringTokens =
-    struct
-        val lower: StringLowerToken
-        val normal: StringToken
-        /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
-        val quoted: bool
+    val lower: StringLowerToken
+    val normal: StringToken
+    /// We throw away the quotes when we intern, but we do need to keep that info, but don't want to have multiple tokens with/without quotes
+    val quoted: bool
 
-        new(lower, normal, quoted) =
-            { lower = lower
-              normal = normal
-              quoted = quoted }
-    end
+    new(lower, normal, quoted) =
+        { lower = lower
+          normal = normal
+          quoted = quoted }
 
+[<Struct; IsReadOnly>]
 type StringMetadata =
-    struct
-        val startsWithAmp: bool
-        val containsDoubleDollar: bool
-        val containsQuestionMark: bool
-        val containsHat: bool
-        val startsWithSquareBracket: bool
-        val containsPipe: bool
+    val startsWithAmp: bool
+    val containsDoubleDollar: bool
+    val containsQuestionMark: bool
+    val containsHat: bool
+    val startsWithSquareBracket: bool
+    val containsPipe: bool
 
-        new
-            (
-                startsWithAmp,
-                containsDoubleDollar,
-                containsQuestionMark,
-                containsHat,
-                startsWithSquareBracket,
-                containsPipe
-            ) =
-            { startsWithAmp = startsWithAmp
-              containsDoubleDollar = containsDoubleDollar
-              containsQuestionMark = containsQuestionMark
-              containsHat = containsHat
-              startsWithSquareBracket = startsWithSquareBracket
-              containsPipe = containsPipe }
-    end
+    new(startsWithAmp, containsDoubleDollar, containsQuestionMark, containsHat, startsWithSquareBracket, containsPipe) =
+        { startsWithAmp = startsWithAmp
+          containsDoubleDollar = containsDoubleDollar
+          containsQuestionMark = containsQuestionMark
+          containsHat = containsHat
+          startsWithSquareBracket = startsWithSquareBracket
+          containsPipe = containsPipe }
 
 [<Sealed>]
 type StringResourceManager() =
@@ -207,26 +189,32 @@ type StringResourceManager() =
     let metadata = new ConcurrentDictionary<StringToken, StringMetadata>()
 
     let mutable i = 0
-    // let mutable j = 0
-    let monitor = Object()
 
-    member x.InternIdentifierToken(s) =
-        // j <- j + 1
-        // eprintfn "%A" j
+    [<NonSerialized>]
+    let mutable lock = Lock()
+
+    [<OnDeserialized>]
+    member _.OnDeserialized(_context: StreamingContext) =
+        // Recreate the lock after deserialization
+        lock <- Lock()
+
+    member x.InternIdentifierToken(s: string) : StringTokens =
         let mutable res = Unchecked.defaultof<_>
         let ok = strings.TryGetValue(s, &res)
 
         if ok then
             res
         else
-            lock monitor (fun () ->
+            lock.Enter()
+
+            try
                 let retry = strings.TryGetValue(s, &res)
 
                 if retry then
                     res
                 else
                     let ls = s.ToLower().Trim('"')
-                    let quoted = s.StartsWith "\"" && s.EndsWith "\""
+                    let quoted = s.StartsWith '\"' && s.EndsWith '\"'
                     let lok = strings.TryGetValue(ls, &res)
 
                     if lok then
@@ -295,7 +283,9 @@ type StringResourceManager() =
                         ints.[stringID] <- s
                         strings.[ls] <- resl
                         strings.[s] <- res
-                        res)
+                        res
+            finally
+                lock.Exit()
 
     member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]
     member x.GetLowerStringForIDs(id: StringTokens) = ints.[id.lower]
@@ -315,22 +305,48 @@ type StringTokens with
 
 module Utils2 =
 
+    [<Sealed>]
+    type private CharacterComparer() =
+        static member Default = CharacterComparer()
+
+        interface IEqualityComparer<char> with
+            member _.Equals(x, y) =
+                if x = y then true
+                else if Char.IsUpper y then Char.ToUpperInvariant x = y
+                else Char.ToLowerInvariant x = y
+
+            member _.GetHashCode(c) = c.GetHashCode()
+
+    [<Sealed>]
     type LowerStringSparseTrie() =
-        inherit
-            AbstractTrie<string, char, string>(
-                (fun s -> s.ToLower(CultureInfo.InvariantCulture)),
-                new SparseCharacterTrieNode<string>(null, Unchecked.defaultof<char>)
-            )
+        let trie = Trie(CharacterComparer.Default)
 
         let idValueList = ResizeArray<StringTokens>()
 
-        override this.CreateRoot(key) =
-            new SparseCharacterTrieNode<string>(null, key)
+        member this.Contains(key: string) =
+            if key <> "" then trie.Contains key else false
 
-        member this.AddWithIDs(key, value) =
-            base.Add(key, value)
-            idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
+        member this.Contains(key: ReadOnlySpan<char>) =
+            if not key.IsEmpty then trie.Contains key else false
 
+        member this.LongestPrefixMatch(input: ReadOnlySpan<char>) : string | null =
+            if not input.IsEmpty then
+                trie.LongestPrefixMatch input
+            else
+                null
+
+        member this.FindFirst(input: ReadOnlySpan<char>) : string | null =
+            if not input.IsEmpty then
+                (trie.EnumerateByPrefix input).FirstOrDefault()
+            else
+                null
+
+        member this.AddWithIDs(value: string) =
+            if value <> "" then
+                trie.Add(value) |> ignore
+                idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
+
+        member this.Count = trie.Count
         member _.IdValues = idValueList
 
         member _.StringValues =
@@ -338,23 +354,23 @@ module Utils2 =
 
         member _.IdCount = idValueList.Count
 
-    // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type PrefixOptimisedStringSet = LowerStringSparseTrie
 
-    type LowerCaseStringSet(strings: string seq) =
-        let dictionary = HashSet<string>()
+    [<Sealed>]
+    type IgnoreCaseStringSet(strings: string seq) =
+        let mutable set = null
 
-        do
-            for e in strings do
-                dictionary.Add(e.ToLowerInvariant()) |> ignore
+        do set <- strings.ToFrozenSet(StringComparer.OrdinalIgnoreCase)
 
-        new() = LowerCaseStringSet(Seq.empty)
+        new() = IgnoreCaseStringSet(Seq.empty)
 
-        member this.Contains(x: string) =
-            dictionary.Contains(x.ToLowerInvariant())
+        member this.Contains(x: string) = set.Contains(x)
 
-    let createStringSet items =
+    let createStringSet (items: string seq) =
         let newSet = PrefixOptimisedStringSet()
 
-        items |> Seq.iter (fun x -> newSet.AddWithIDs(x, x))
+        match items with
+        | :? (string array) as array -> array |> Array.iter (fun x -> newSet.AddWithIDs(x))
+        | _ -> items |> Seq.iter (fun x -> newSet.AddWithIDs(x))
+
         newSet

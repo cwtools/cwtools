@@ -57,7 +57,7 @@ type GameSetupSettings<'L> =
 
 
 
-
+[<Sealed>]
 type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (
         settings: GameSettings<'L>,

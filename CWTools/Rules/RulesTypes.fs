@@ -117,7 +117,7 @@ type SubTypeDefinition =
     { name: string
       displayName: string option
       abbreviation: string option
-      rules: NewRule list
+      rules: NewRule array
       typeKeyField: string option
       startsWith: string option
       pushScope: Scope option
@@ -180,11 +180,11 @@ and NewField =
         | _ -> $"Field of %A{x}"
 
 and RuleType =
-    | NodeRule of left: NewField * rules: NewRule list
+    | NodeRule of left: NewField * rules: NewRule array
     | LeafRule of left: NewField * right: NewField
     | LeafValueRule of right: NewField
-    | ValueClauseRule of rules: NewRule list
-    | SubtypeRule of string * bool * NewRule list
+    | ValueClauseRule of rules: NewRule array
+    | SubtypeRule of string * bool * NewRule array
 
     override x.ToString() =
         match x with
@@ -211,8 +211,8 @@ type RootRule =
 type EnumDefinition =
     { key: string
       description: string
-      values: string list
-      valuesWithRange: (string * CWTools.Utilities.Position.range option) list }
+      values: string array
+      valuesWithRange: (string * Position.range option) array }
 
 type ComplexEnumDef =
     { name: string

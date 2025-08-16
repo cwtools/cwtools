@@ -1,5 +1,6 @@
 namespace CWTools.Validation
 
+open System.Runtime.CompilerServices
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open CWTools.Common
@@ -556,10 +557,7 @@ type ErrorCodes =
               Severity = severity
               Message = error }
 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<CustomEquality; NoComparison; Struct>]
+[<CustomEquality; NoComparison; Struct; IsReadOnly>]
 type ValidationResult =
     | OK
     | Invalid of Guid * CWError list
@@ -692,8 +690,6 @@ module ValidationCore =
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
     //     let key = (^a : (member Key : string) l)
     //     sev, pos, key.Length, s
-
-    type Validator<'T when 'T :> Node> = 'T -> ValidationResult
 
     let (<&>) f1 f2 x =
         match f1 x, f2 x with

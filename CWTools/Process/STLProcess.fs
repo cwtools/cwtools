@@ -196,7 +196,7 @@ module STLProcess =
     let simpleProcess = BaseProcess()
 
     let staticModifierCategory (modifiers: System.Linq.ILookup<string, ModifierCategory>) (node: Node) =
-        node.Values
+        node.Leaves
         |> Seq.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
         |> Seq.filter (fun v -> modifiers.Contains v.Key)
         |> Seq.collect (fun v -> modifiers[v.Key])

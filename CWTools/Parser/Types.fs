@@ -1,5 +1,6 @@
 namespace CWTools.Parser
 
+open System.Runtime.CompilerServices
 open CWTools.Process
 open CWTools.Utilities
 open CWTools.Utilities.Position
@@ -8,10 +9,7 @@ open System.Globalization
 
 [<AutoOpen>]
 module Types =
-#if NET5_0_OR_GREATER
-    [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-    [<Struct>]
+    [<Struct; IsReadOnly>]
     type Position =
         | Position of FParsec.Position
 
@@ -48,19 +46,13 @@ module Types =
         | Operator.QuestionEqual -> "?="
         | x -> failwith (sprintf "Unknown enum value %A" x)
 
-#if NET5_0_OR_GREATER
-    [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-    [<Struct>]
+    [<Struct; IsReadOnly>]
     type Key =
         | Key of string
 
         override x.ToString() = let (Key v) = x in sprintf "%s" v
 
-#if NET5_0_OR_GREATER
-    [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-    [<Struct>]
+    [<Struct; IsReadOnly>]
     type KeyValueItem =
         | KeyValueItem of Key * Value * Operator
 
@@ -104,10 +96,7 @@ module Types =
             | _ -> StringResource.stringManager.InternIdentifierToken(x.ToString())
 
     and
-#if NET5_0_OR_GREATER
-        [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-        [<CustomEquality; NoComparison; Struct>] PosKeyValue =
+        [<CustomEquality; NoComparison; Struct; IsReadOnly>] PosKeyValue =
         | PosKeyValue of range * KeyValueItem
 
         override x.Equals(y) =

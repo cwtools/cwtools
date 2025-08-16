@@ -54,7 +54,7 @@ type IClause =
     abstract member Tag: string -> Value option
     abstract member TagText: string -> string
 
-and Leaf =
+and [<Sealed>] Leaf =
     val mutable KeyId: StringTokens
     // val mutable Key : string
     val mutable private _valueId: StringTokens
@@ -105,7 +105,7 @@ and Leaf =
             with get () = this.Trivia
             and set v = this.Trivia <- v
 
-and LeafValue(value: Value, ?pos: range) =
+and [<Sealed>] LeafValue(value: Value, ?pos: range) =
     member val Trivia: Trivia option = None with get, set
     member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToString()) with get, set
     member val private _value = value with get, set
@@ -143,7 +143,7 @@ and Child =
     | LeafValueC of leafvalue: LeafValue
     | ValueClauseC of valueclause: ValueClause
 
-and ValueClause(keys: Value[], pos: range) =
+and [<Sealed>] ValueClause(keys: Value[], pos: range) =
     let mutable _keys =
         keys
         |> Array.map (fun v -> StringResource.stringManager.InternIdentifierToken(v.ToString()))
@@ -360,7 +360,7 @@ and ValueClause(keys: Value[], pos: range) =
         member this.Tag x = this.Tag x
 
 
-and Node(key: string, pos: range) =
+and [<Sealed>] Node(key: string, pos: range) =
     let bothFind (x: string) =
         function
         | NodeC n when n.Key == x -> true
@@ -823,21 +823,3 @@ module ProcessCore =
         match res with
         | None -> (node.Children |> List.collect (recurse newAcc))
         | Some e -> e :: (node.Children |> List.collect (recurse newAcc))
-
-    let rec cata fNode (node: Node) : 'r =
-        let recurse = cata fNode
-        fNode node (node.Children |> Seq.map recurse)
-
-    let rec cataNodeIter fNode (node: Node) =
-        let recurse = cataNodeIter fNode
-        if fNode node then () else node.Nodes |> Seq.iter recurse
-
-    let rec cataIter fChild (child: Child) =
-        let recurse = cataIter fChild
-
-        if fChild child then
-            ()
-        else
-            match child with
-            | NodeC node -> node.AllArray |> Array.iter recurse
-            | _ -> ()

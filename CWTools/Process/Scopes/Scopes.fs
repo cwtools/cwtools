@@ -1,7 +1,8 @@
 namespace CWTools.Process.Scopes
 
 open System
-open System.Collections.Generic
+open System.Collections.Frozen
+open System.Linq
 open CWTools.Common
 open CWTools.Utilities
 open CWTools.Utilities.Utils
@@ -27,11 +28,11 @@ open CWTools.Utilities.Utils2
 
 type EffectDictionary(effects: Effect seq) =
 
-    let dictionary: Dictionary<int, Effect> = Dictionary<int, Effect>()
+    let mutable dictionary: FrozenDictionary<int, Effect> =
+        FrozenDictionary<int, Effect>.Empty
 
     do
-        for e in effects do
-            dictionary[e.Name.lower] <- e
+        dictionary <- effects.DistinctBy(_.Name.lower).ToFrozenDictionary(_.Name.lower)
 
     new() = EffectDictionary(Seq.empty)
 
@@ -46,11 +47,9 @@ type EffectDictionary(effects: Effect seq) =
     member this.Values = dictionary.Values
 
     static member FromList(effects: #Effect seq) : EffectDictionary =
-        EffectDictionary(effects |> Seq.map (fun e -> e :> Effect))
+        EffectDictionary(effects |> Seq.cast<Effect>)
 
 type EffectMap = EffectDictionary
-
-type UsageScopeContext = Scope list
 
 type ScopeContext =
     { Root: Scope
@@ -218,7 +217,7 @@ module Scopes =
                             else
                                 (context, false), NotFound
                         | None, _ ->
-                            if last && vars.ContainsKey nextKey then
+                            if last && vars.Contains nextKey then
                                 (context, false), VarFound
                             else if varOnly then
                                 (context, false), VarNotFound nextKey
@@ -403,7 +402,7 @@ module Scopes =
                             else
                                 (context, (false, false)), NotFound
                         | _, None, _ ->
-                            if last && (vars.ContainsKey nextKey) then
+                            if last && (vars.Contains nextKey) then
                                 (context, (false, false)), VarFound
                             else if varOnly then
                                 (context, (false, false)), VarNotFound nextKey
@@ -513,7 +512,7 @@ module Scopes =
                         | (_, (_, false)), Some r -> r
 
                     if ampersandSplit.Length > 1 then
-                        if vars.ContainsKey key then
+                        if vars.Contains key then
                             VarFound
                         else
                             let keys = ampersandSplit.[1].Split('.')

@@ -2,7 +2,6 @@ namespace CWTools.Common
 
 open System.Collections.Generic
 open System
-open System.Runtime.CompilerServices
 open CWTools.Utilities
 
 type Game =
@@ -367,6 +366,7 @@ module rec NewScope =
           internalID: int option
           scopes: Scope list }
 
+    [<Sealed>]
     type ModifierCategoryManager() =
         let mutable initialized = false
         let mutable dict = Dictionary<string, ModifierCategory>()
@@ -472,8 +472,9 @@ module rec NewScope =
 
     let modifierCategoryManager = ModifierCategoryManager()
 
+    [<Sealed>]
     type ModifierCategory(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = modifierCategoryManager.GetName(x)
 
         override x.Equals(target: obj) =
@@ -496,8 +497,9 @@ module rec NewScope =
 
     type Modifier = ModifierCategory
 
+    [<Sealed>]
     type Scope(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = scopeManager.GetName(x)
 
         override x.Equals(target: obj) =
@@ -525,7 +527,7 @@ module rec NewScope =
     type TypeDefInfo =
         { id: string
           validate: bool
-          range: CWTools.Utilities.Position.range
+          range: Position.range
           explicitLocalisation: (string * string * bool) list
           subtypes: string list }
 
@@ -543,12 +545,11 @@ type StaticModifier =
     { tag: string
       categories: ModifierCategory list }
 
-[<Struct; IsReadOnly>]
 type EffectType =
-    | Effect
-    | Trigger
-    | Link
-    | ValueTrigger
+    | Effect = 0uy
+    | Trigger = 1uy
+    | Link = 2uy
+    | ValueTrigger = 3uy
 
 type ReferenceHint =
     | TypeRef of typeName: string * typeValue: string
@@ -571,7 +572,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     override x.GetHashCode() =
         hash (name, scopes, effectType, refHint)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y ->
@@ -594,6 +595,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     new(name: string, scopes, effectType, refHint) =
         Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
 
+[<Sealed>]
 type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
     member val Comments: string = comments
@@ -610,7 +612,7 @@ type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, s
     override x.GetHashCode() =
         hash (x.Name, x.Scopes, x.Type, x.Comments, x.GlobalEventTargets, x.SavedEventTargets, x.UsedEventTargets)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -636,7 +638,7 @@ type DocEffect(name: StringTokens, scopes, target, effectType, desc, usage, refH
         hash (x.Name, x.Scopes, x.Type, x.Desc, x.Usage, x.Target)
 
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -775,22 +777,18 @@ type ScopedEffect
             None
         )
 
-
 type TitleType =
-    | Empire
-    | Kingdom
-    | Duchy_Hired
-    | Duchy_Normal
-    | County
-    | Barony
+    | Empire = 0uy
+    | Kingdom = 1uy
+    | Duchy_Hired = 2uy
+    | Duchy_Normal = 3uy
+    | County = 4uy
+    | Barony = 5uy
 
 type DataLinkType =
-    | Scope
-    | Value
-    | Both
-
-
-
+    | Scope = 0uy
+    | Value = 1uy
+    | Both = 2uy
 
 type EventTargetDataLink =
     { name: string
@@ -800,7 +798,7 @@ type EventTargetDataLink =
       dataPrefix: string option
       sourceRuleType: string
       dataLinkType: DataLinkType }
-
+ 
 type EventTargetLink =
     | SimpleLink of ScopedEffect
     | DataLink of EventTargetDataLink

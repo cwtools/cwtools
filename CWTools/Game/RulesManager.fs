@@ -1,6 +1,8 @@
 namespace CWTools.Games
 
+open System
 open System.Collections.Generic
+open System.Linq
 open CWTools.Rules
 open CWTools.Common
 open CWTools.Utilities.Position
@@ -48,7 +50,7 @@ type RuleManagerSettings<'T, 'L when 'T :> ComputedData and 'L :> Lookup> =
       defaultContext: ScopeContext
       defaultLang: Lang
       oneToOneScopesNames: string list
-      loadConfigRulesHook: RootRule list -> 'L -> EmbeddedSettings -> RootRule list
+      loadConfigRulesHook: RootRule array -> 'L -> EmbeddedSettings -> RootRule array
       refreshConfigBeforeFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterFirstTypesHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
       refreshConfigAfterVarDefHook: 'L -> IResourceAPI<'T> -> EmbeddedSettings -> unit
@@ -73,11 +75,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string, list<TypeDefInfo>>) ->
+            fun (newMap: Map<string, array<TypeDefInfo>>) ->
                 Map.fold
                     (fun s k v ->
                         match Map.tryFind k s with
-                        | Some v' -> Map.add k (v @ v') s
+                        | Some v' -> Map.add k (Array.append v v') s
                         | None -> Map.add k v s)
                     newMap
                     md.typeDefs
@@ -86,15 +88,16 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string, string * list<string * option<range>>>) ->
+            fun (newMap: Map<string, string * (string * range option) array>) ->
                 let mdAdjusted =
-                    md.enumDefs |> Map.map (fun _ (s, sl) -> s, (sl |> List.map (fun x -> x, None)))
+                    md.enumDefs
+                    |> Map.map (fun _ (s, sl) -> s, (sl |> Array.map (fun x -> x, None)))
 
                 let res =
                     Map.fold
                         (fun s k (d, v) ->
                             match Map.tryFind k s with
-                            | Some(d', v') -> Map.add k (d, v @ v') s
+                            | Some(d', v') -> Map.add k (d, Array.append v v') s
                             | None -> Map.add k (d, v) s)
                         newMap
                         mdAdjusted
@@ -106,11 +109,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string, list<string * range>>) ->
+            fun (newMap: Map<string, array<string * range>>) ->
                 Map.fold
                     (fun s k v ->
                         match Map.tryFind k s with
-                        | Some v' -> Map.add k (v @ v') s
+                        | Some v' -> Map.add k (Array.append v v') s
                         | None -> Map.add k v s)
                     newMap
                     md.varDefs
@@ -138,11 +141,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let addEmbeddedFiles =
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
-        | Some md -> fun (newSet: Set<string>) -> Set.union newSet md.files
+        | Some md ->
+            fun (newSet: HashSet<string>) ->
+                newSet.UnionWith(md.files)
+                newSet
 
-
-    let mutable tempEffects = []
-    let mutable tempTriggers = []
     let mutable simpleEnums = []
     let mutable complexEnums = []
     let mutable tempTypes = []
@@ -159,8 +162,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let loadBaseConfig (rulesSettings: RulesSettings) =
         let rules, types, enums, complexenums, values =
             rulesSettings.ruleFiles
-            |> List.filter (fun (fn, ft) -> Path.GetExtension fn == ".cwt")
-            |> CWTools.Rules.RulesParser.parseConfigs
+            |> List.filter (fun (fn, _) ->
+                Path.GetExtension(fn.AsSpan()).Equals(".cwt", StringComparison.OrdinalIgnoreCase))
+            |> RulesParser.parseConfigs
                 settings.parseScope
                 settings.allScopes
                 settings.anyScope
@@ -185,14 +189,6 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempValues <- values |> Map.ofList //|> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero))) |> Map.ofList
         rulesDataGenerated <- false
     // log (sprintf "Update config rules def: %i" timer.ElapsedMilliseconds); timer.Restart()
-
-    let debugChecks () =
-        if debugMode then
-            // let filesWithoutTypes = getEntitiesWithoutTypes lookup.typeDefs (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            // filesWithoutTypes |> List.iter (fun x -> logDiag $"File without type %s{x}")
-            ()
-        else
-            ()
 
     let refreshConfig () =
         let timer = System.Diagnostics.Stopwatch()
@@ -219,14 +215,13 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         tempEnumMap <-
             (lookup.enumDefs
              |> Map.toSeq
-             |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> List.map fst |> createStringSet))))
+             |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> Array.map fst |> createStringSet))))
                 .ToFrozenDictionary()
-
 
         /// First pass type defs
         let loc = addEmbeddedLoc languages localisation.localisationKeys
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofArray)
+        let files = addEmbeddedFiles(resources.GetFileNames().ToHashSet()).ToFrozenSet()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allEntities = resources.AllEntities() |> List.map (fun struct (e, _) -> e)
@@ -262,7 +257,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             let newTypeMap =
                 lookup.typeDefInfo
                 |> Map.toSeq
-                |> PSeq.map (fun (k, s) -> k, s |> List.map _.id |> createStringSet)
+                |> PSeq.map (fun (k, s) -> k, s |> Seq.map _.id |> createStringSet)
                 |> Map.ofSeq
 
             newTypeMap
@@ -270,7 +265,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         logDiag $"Pre-refresh types time: %0.3f{float timer.ElapsedMilliseconds / 1000.0}"
         timer.Restart()
         let mutable i = 0
-        let mutable beforeCount = tempTypeMap |> Map.values |> Seq.sumBy (_.IdCount)
+        let mutable beforeCount = tempTypeMap.Values |> Seq.sumBy _.Count
 
         let step () =
             //log "%A" current
@@ -279,7 +274,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             tempTypeMap <- refreshTypeInfo ()
             logDiag $"Refresh types time: %0.3f{float timer.ElapsedMilliseconds / 1000.0}"
             timer.Restart()
-            let afterCount = tempTypeMap |> Map.values |> Seq.sumBy (_.IdCount)
+            let afterCount = tempTypeMap.Values |> Seq.sumBy _.Count
             let complete = beforeCount = afterCount || i > 5
             beforeCount <- afterCount
             complete
@@ -313,14 +308,15 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             lookup.typeDefInfo
             |> Map.map (fun _ v ->
                 v
-                |> List.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None))
+                |> Seq.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None)
+                |> Seq.toList)
 
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
 
         tempTypeMap <-
             lookup.typeDefInfo
             |> Map.toSeq
-            |> PSeq.map (fun (k, s) -> k, s |> List.map _.id |> createStringSet)
+            |> PSeq.map (fun (k, s) -> k, s |> Seq.map _.id |> createStringSet)
             |> Map.ofSeq
 
         let processLoc, validateLoc = settings.locFunctions lookup
@@ -358,7 +354,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             tempValues
             |> Map.map (fun k vs -> (expandPredefinedValues tempTypeMap lookup.enumDefs vs))
             |> Map.toList
-            |> List.map (fun (s, sl) -> s, (sl |> List.map (fun s2 -> s2, range.Zero)))
+            |> List.map (fun (s, sl) -> s, (sl |> Seq.map (fun s2 -> s2, range.Zero) |> Array.ofSeq))
             |> Map.ofList
 
         let results =
@@ -372,9 +368,9 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     |> List.fold
                         (fun m2 (n, k) ->
                             if Map.containsKey n m2 then
-                                Map.add n ((k |> List.ofSeq) @ m2.[n]) m2
+                                Map.add n (Array.append (k.ToArray()) m2[n]) m2
                             else
-                                Map.add n (k |> List.ofSeq) m2)
+                                Map.add n (k.ToArray()) m2)
                         m)
                 predefValues
 
@@ -398,7 +394,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let varMap: FrozenDictionary<string, PrefixOptimisedStringSet> =
             (lookup.varDefInfo
              |> Map.toSeq
-             |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> List.map fst |> createStringSet)))
+             |> PSeq.map (fun (k, s) -> KeyValuePair(k, s |> Seq.map fst |> createStringSet)))
                 .ToFrozenDictionary()
 
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
@@ -478,7 +474,6 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             )
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // game.RefreshValidationManager()
-        debugChecks ()
         logInfo $"Refresh all lookups: %0.3f{float endToEndTimer.ElapsedMilliseconds / 1000.0}s"
         ruleValidationService, infoService, completionService
 

@@ -26,13 +26,13 @@ type CheckFieldParams =
       varSet: PrefixOptimisedStringSet
       localisation: (Lang * Collections.Set<string>) list
       defaultLocalisation: Collections.Set<string>
-      files: Collections.Set<string>
+      files: FrozenSet<string>
       changeScope: ChangeScope
       anyScope: Scope
       defaultLang: Lang
-      aliasKeyList: Collections.Map<string, HashSet<StringToken>>
+      aliasKeys: Map<string, HashSet<StringToken>>
       processLocalisation:
-          Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>
+          Lang * Map<string, CWTools.Localisation.Entry> -> Lang * Map<string, LocEntry>
       validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult }
 
 [<RequireQualifiedAccess>]
@@ -50,25 +50,6 @@ module internal FieldValidators =
         | ValueType.Enum es -> Some [ es ]
         | _ -> None
 
-    let checkFileExists (files: Collections.Set<string>) (leaf: Leaf) =
-        let file =
-            leaf.ValueText.Trim('"').Replace("\\", "/").Replace(".lua", ".shader").Replace(".tga", ".dds")
-
-        if files.Contains file then
-            OK
-        else
-            Invalid(Guid.NewGuid(), [ inv (ErrorCodes.MissingFile file) leaf ])
-
-    let checkIconExists (files: Collections.Set<string>) (folder: string) (leaf: Leaf) =
-        let value = folder + "/" + leaf.ValueText + ".dds"
-
-        if files.Contains value then
-            OK
-        else
-            Invalid(Guid.NewGuid(), [ inv (ErrorCodes.MissingFile value) leaf ])
-
-
-
     // type ScopeContext = IScopeContext<Scope>
 
     // type RuleContext  = RuleContext<Scope>
@@ -78,6 +59,7 @@ module internal FieldValidators =
     let getStringMetadata (key: StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let inline trimQuote (s: string) = s.Trim('\"')
+    let inline trimQuoteSpan (s: string) = s.AsSpan().Trim('\"')
     let getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
@@ -120,7 +102,7 @@ module internal FieldValidators =
                 | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
-                        if es.ContainsKey(trimQuote key) then
+                        if es.Contains(trimQuoteSpan key) then
                             errors
                         else
                             inv
@@ -147,7 +129,7 @@ module internal FieldValidators =
                 | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
-                        if es.ContainsKey(trimQuote key) then
+                        if es.Contains(trimQuoteSpan key) then
                             errors
                         else
                             inv
@@ -162,7 +144,7 @@ module internal FieldValidators =
             | ValueType.Enum e ->
                 match enumsMap.TryFind e with
                 | Some(desc, es) ->
-                    if es.ContainsKey(trimQuote key) then
+                    if es.Contains(trimQuoteSpan key) then
                         errors
                     else
                         let defaultValue = "???"
@@ -249,7 +231,7 @@ module internal FieldValidators =
                         |> Seq.cast<Text.RegularExpressions.Capture>
                         |> Seq.map _.Value
 
-                    let res = refs |> Seq.exists (vars.ContainsKey >> not)
+                    let res = refs |> Seq.exists (vars.Contains >> not)
 
                     if res then
                         inv
@@ -277,18 +259,18 @@ module internal FieldValidators =
              | ValueSome i -> i <= max && i >= min
              | ValueNone ->
                  match enumsMap.TryFind "static_values" with
-                 | Some(_, es) -> es.ContainsKey(trimQuote key)
+                 | Some(_, es) -> es.Contains(trimQuoteSpan key)
                  | None -> false
          | ValueType.Float(min, max) ->
              match TryParser.parseDecimal key with
              | ValueSome f -> f <= max && f >= min
              | ValueNone ->
                  match enumsMap.TryFind "static_values" with
-                 | Some(_, es) -> es.ContainsKey(trimQuote key)
+                 | Some(_, es) -> es.Contains(trimQuoteSpan key)
                  | None -> false
          | ValueType.Enum e ->
              match enumsMap.TryFind e with
-             | Some(_, es) -> es.ContainsKey(trimQuote key)
+             | Some(_, es) -> es.Contains(trimQuoteSpan key)
              | None -> false
          // | ValueType.Specific s ->
          //     // if trimQuote key == s then true else false
@@ -316,7 +298,7 @@ module internal FieldValidators =
                      |> Seq.map _.Groups[1]
                      |> Seq.cast<Text.RegularExpressions.Capture>
                      |> Seq.map _.Value
-                     |> Seq.exists (vars.ContainsKey >> not)
+                     |> Seq.exists (vars.Contains >> not)
 
                  res |> not
              | None -> false)
@@ -325,7 +307,7 @@ module internal FieldValidators =
     let checkLocalisationField
         (processLocalisation:
             Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>)
-        (validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
+        (validateLocalisation: LocEntry -> ScopeContext -> ValidationResult)
         scopeContext
         (keys: (Lang * Collections.Set<string>) list)
         (defaultKeys: Collections.Set<string>)
@@ -342,11 +324,11 @@ module internal FieldValidators =
         | true, false ->
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.LocalisationValidation.checkLocNameN leafornode defaultKeys defaultLang ids key errors
+            LocalisationValidation.checkLocNameN leafornode defaultKeys defaultLang ids key errors
         | false, true ->
-            CWTools.Validation.LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
+            LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
         | false, false ->
-            if key.Contains("[") then
+            if key.Contains('[') then
                 let entry =
                     { CWTools.Localisation.Entry.key = "inline"
                       CWTools.Localisation.Entry.value = None
@@ -363,33 +345,11 @@ module internal FieldValidators =
 
                 validateLocalisation proc scopeContext
             else
-                CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
+                LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
         | _ -> errors
 
-    let checkLocalisationFieldNE
-        (processLocalisation:
-            Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>)
-        (validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult)
-        (keys: (Lang * Collections.Set<string>) list)
-        (defaultKeys: Collections.Set<string>)
-        defaultLang
-        (synced: bool)
-        (isInline: bool)
-        (ids: StringTokens)
-        =
-        let key = trimQuote (getOriginalKey ids)
-
-        match synced, isInline with
-        | true, false ->
-            // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
-            //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
-            CWTools.Validation.LocalisationValidation.checkLocNameNE defaultKeys defaultLang ids key
-        | false, true -> CWTools.Validation.LocalisationValidation.checkLocKeysInlineLeafOrNodeNE keys ids key
-        | false, false -> CWTools.Validation.LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids key
-        | _ -> false
-
     let memoize keyFunction memFunction =
-        let dict = new System.Collections.Generic.Dictionary<_, _>()
+        let dict = Dictionary<_, _>()
 
         fun n ->
             match dict.TryGetValue(keyFunction (n)) with
@@ -452,7 +412,7 @@ module internal FieldValidators =
                             | _, _, n when n <= 0 -> None
                             | true, true, n -> Some(value.Substring(p.Length, n))
                     // eprintfn "ct %s %A %A" value newvalue typetype
-                    newvalue |> Option.map values.ContainsKey |> Option.defaultValue false
+                    newvalue |> Option.map values.Contains |> Option.defaultValue false
 
                 if found then
                     errors
@@ -480,8 +440,8 @@ module internal FieldValidators =
 
         let key = getLowerKey ids
 
-        match typesMap.TryFind fieldType with
-        | Some values ->
+        match typesMap.TryFindV fieldType with
+        | ValueSome values ->
             let value = trimQuote key
 
             if firstCharEqualsAmp ids.lower then
@@ -489,20 +449,20 @@ module internal FieldValidators =
             else
                 let value =
                     match typetype with
-                    | TypeType.Simple t -> Some value
+                    | TypeType.Simple _ -> ValueSome value
                     | Complex(p, _, s) ->
                         match
                             value.StartsWith(p, StringComparison.OrdinalIgnoreCase),
                             value.EndsWith(s, StringComparison.OrdinalIgnoreCase),
                             (value.Length - p.Length - s.Length)
                         with
-                        | _, false, _ -> None
-                        | false, _, _ -> None
-                        | _, _, n when n <= 0 -> None
-                        | true, true, n -> Some(value.Substring(p.Length, n))
+                        | _, false, _ -> ValueNone
+                        | false, _, _ -> ValueNone
+                        | _, _, n when n <= 0 -> ValueNone
+                        | true, true, n -> ValueSome(value.Substring(p.Length, n))
 
-                value |> Option.map values.ContainsKey |> Option.defaultValue false
-        | None -> false
+                value |> ValueOption.map values.Contains |> ValueOption.defaultValue false
+        | ValueNone -> false
 
     let checkVariableGetField
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
@@ -516,20 +476,20 @@ module internal FieldValidators =
 
         match varMap.TryFind varName with
         | Some values ->
-            let value = trimQuote key
+            let value = trimQuoteSpan key
 
             if firstCharEqualsAmp ids.lower then
                 errors
-            else if values.ContainsKey value then
+            else if values.Contains value then
                 errors
-            else if value.Contains('@') && values.ContainsKey(value.Split('@')[0]) then
+            else if value.Contains('@') && values.Contains(value.Split('@', 0)) then
                 errors
-            else if (let result = values.FindPredecessor(value) in result <> null) then
+            else if (let result = values.LongestPrefixMatch(value) in result <> null) then
                 errors
             else
                 inv
                     (ErrorCodes.ConfigRulesUnexpectedValue
-                        $"Expected defined value of %s{varName}, got %s{value}"
+                        $"Expected defined value of %s{varName}, got %s{value.ToString()}"
                         (min Severity.Warning severity))
                     leafornode
                 <&&&> errors
@@ -543,7 +503,6 @@ module internal FieldValidators =
 
     let checkVariableGetFieldNE
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
-        severity
         (varName: string)
         (ids: StringTokens)
         =
@@ -551,23 +510,18 @@ module internal FieldValidators =
 
         match varMap.TryFind varName with
         | Some values ->
-            let value = trimQuote key
+            let value = trimQuoteSpan key
 
             if firstCharEqualsAmp ids.lower then
                 true
             else
-                values.ContainsKey value
-                || (value.Contains('@') && values.ContainsKey(value.Split('@')[0]))
-                || (values.FindSuccessor(value) <> null)
+                values.Contains value
+                || (value.Contains('@') && values.Contains(value.Split('@', 0)))
+                || (values.FindFirst(value) <> null)
         | None -> false
-    // var:asd
-    // var:asdasd
-
-    // var -> var.StartsWith (var:asd)
-    // var:asd -> var:asdasd.StartsWith(var:asd)
 
     let checkFilepathField
-        (files: Collections.Set<string>)
+        (files: FrozenSet<string>)
         (ids: StringTokens)
         (prefix: string option)
         (extension: string option)
@@ -597,7 +551,7 @@ module internal FieldValidators =
                 inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
 
     let checkFilepathFieldNE
-        (files: Collections.Set<string>)
+        (files: FrozenSet<string>)
         (ids: StringTokens)
         (prefix: string option)
         (extension: string option)
@@ -615,7 +569,7 @@ module internal FieldValidators =
             || files.Contains(pre + file2)
         | None -> files.Contains file || files.Contains file2
 
-    let checkIconField (files: Collections.Set<string>) (folder: string) (ids: StringTokens) leafornode errors =
+    let checkIconField (files: FrozenSet<string>) (folder: string) (ids: StringTokens) leafornode errors =
         let key = trimQuote (getOriginalKey ids)
         let value = folder + "/" + key + ".dds"
 
@@ -624,7 +578,7 @@ module internal FieldValidators =
         else
             inv (ErrorCodes.MissingFile value) leafornode <&&&> errors
 
-    let checkIconFieldNE (files: Collections.Set<string>) (folder: string) (ids: StringTokens) =
+    let checkIconFieldNE (files: FrozenSet<string>) (folder: string) (ids: StringTokens) =
         let key = trimQuote (getOriginalKey ids)
         let value = folder + "/" + key + ".dds"
         files.Contains value
@@ -702,7 +656,6 @@ module internal FieldValidators =
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
-        anyScope
         (ctx: RuleContext)
         isInt
         is32Bit
@@ -801,7 +754,6 @@ module internal FieldValidators =
         (wildcardLinks: ScopedEffect list)
         varSet
         changeScope
-        anyScope
         (ctx: RuleContext)
         isInt
         min
@@ -841,7 +793,7 @@ module internal FieldValidators =
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
             | Some(_, es) ->
-                if es.ContainsKey(trimQuote key) then
+                if es.Contains(trimQuoteSpan key) then
                     errors
                 else
                     inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
@@ -881,7 +833,7 @@ module internal FieldValidators =
         | _, _, _, ValueFound _ -> true
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
-            | Some(_, es) -> es.ContainsKey(trimQuote key)
+            | Some(_, es) -> es.Contains(trimQuoteSpan key)
             | None -> false
 
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
@@ -973,7 +925,6 @@ module internal FieldValidators =
                     p.wildcardLinks
                     p.varSet
                     p.changeScope
-                    p.anyScope
                     ctx
                     isInt
                     is32Bit
@@ -990,7 +941,6 @@ module internal FieldValidators =
                     p.wildcardLinks
                     p.varSet
                     p.changeScope
-                    p.anyScope
                     ctx
                     isInt
                     min
@@ -1019,7 +969,7 @@ module internal FieldValidators =
                 inv (ErrorCodes.CustomError $"Unexpected rule type {field}" Severity.Error) leafornode
                 <&&&> errors
             | AliasValueKeysField aliasKey ->
-                checkAliasValueKeysField p.aliasKeyList aliasKey keyIDs severity leafornode errors
+                checkAliasValueKeysField p.aliasKeys aliasKey keyIDs severity leafornode errors
             | IgnoreField field -> checkField p severity ctx field keyIDs leafornode errors
             // Should never happen
             | SingleAliasClauseField _ -> errors
@@ -1055,7 +1005,7 @@ module internal FieldValidators =
             | FilepathField(prefix, extension) -> checkFilepathFieldNE p.files keyIDs prefix extension
             | IconField folder -> checkIconFieldNE p.files folder keyIDs
             | VariableSetField _ -> true
-            | VariableGetField v -> checkVariableGetFieldNE p.varMap severity v keyIDs
+            | VariableGetField v -> checkVariableGetFieldNE p.varMap v keyIDs
             | VariableField(isInt, is32Bit, (min, max)) ->
                 checkVariableFieldNE
                     p.linkMap
@@ -1094,7 +1044,7 @@ module internal FieldValidators =
             | TypeMarkerField _
             | IgnoreMarkerField
             | ValueScopeMarkerField _ -> false
-            | AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeyList aliasKey keyIDs
+            | AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeys aliasKey keyIDs
             | IgnoreField field -> checkFieldNE p severity ctx field keyIDs
             // Should never happen
             | SingleAliasClauseField _ -> failwith "todo"
