@@ -797,7 +797,7 @@ type CompletionService
               anyScope = anyScope
               defaultLang = defaultLang
               wildcardLinks = wildCardLinks
-              aliasKeyList = aliasKeyMap
+              aliasKeys = aliasKeyMap
               processLocalisation = processLocalisation
               validateLocalisation = validateLocalisation }
 

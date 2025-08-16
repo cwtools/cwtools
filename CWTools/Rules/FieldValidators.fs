@@ -30,9 +30,9 @@ type CheckFieldParams =
       changeScope: ChangeScope
       anyScope: Scope
       defaultLang: Lang
-      aliasKeyList: Collections.Map<string, HashSet<StringToken>>
+      aliasKeys: Map<string, HashSet<StringToken>>
       processLocalisation:
-          Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>
+          Lang * Map<string, CWTools.Localisation.Entry> -> Lang * Map<string, LocEntry>
       validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult }
 
 [<RequireQualifiedAccess>]
@@ -78,6 +78,7 @@ module internal FieldValidators =
     let getStringMetadata (key: StringToken) = (stringManager.GetMetadataForID key)
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let inline trimQuote (s: string) = s.Trim('\"')
+    let inline trimQuoteSpan (s: string) = s.AsSpan().Trim('\"')
     let getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
     let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
@@ -120,7 +121,7 @@ module internal FieldValidators =
                 | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
-                        if es.Contains(trimQuote key) then
+                        if es.Contains(trimQuoteSpan key) then
                             errors
                         else
                             inv
@@ -147,7 +148,7 @@ module internal FieldValidators =
                 | ValueNone ->
                     match enumsMap.TryFind "static_values" with
                     | Some(_, es) ->
-                        if es.Contains(trimQuote key) then
+                        if es.Contains(trimQuoteSpan key) then
                             errors
                         else
                             inv
@@ -162,7 +163,7 @@ module internal FieldValidators =
             | ValueType.Enum e ->
                 match enumsMap.TryFind e with
                 | Some(desc, es) ->
-                    if es.Contains(trimQuote key) then
+                    if es.Contains(trimQuoteSpan key) then
                         errors
                     else
                         let defaultValue = "???"
@@ -277,18 +278,18 @@ module internal FieldValidators =
              | ValueSome i -> i <= max && i >= min
              | ValueNone ->
                  match enumsMap.TryFind "static_values" with
-                 | Some(_, es) -> es.Contains(trimQuote key)
+                 | Some(_, es) -> es.Contains(trimQuoteSpan key)
                  | None -> false
          | ValueType.Float(min, max) ->
              match TryParser.parseDecimal key with
              | ValueSome f -> f <= max && f >= min
              | ValueNone ->
                  match enumsMap.TryFind "static_values" with
-                 | Some(_, es) -> es.Contains(trimQuote key)
+                 | Some(_, es) -> es.Contains(trimQuoteSpan key)
                  | None -> false
          | ValueType.Enum e ->
              match enumsMap.TryFind e with
-             | Some(_, es) -> es.Contains(trimQuote key)
+             | Some(_, es) -> es.Contains(trimQuoteSpan key)
              | None -> false
          // | ValueType.Specific s ->
          //     // if trimQuote key == s then true else false
@@ -494,20 +495,20 @@ module internal FieldValidators =
 
         match varMap.TryFind varName with
         | Some values ->
-            let value = trimQuote key
+            let value = trimQuoteSpan key
 
             if firstCharEqualsAmp ids.lower then
                 errors
             else if values.Contains value then
                 errors
-            else if value.Contains('@') && values.Contains(value.Split('@')[0]) then
+            else if value.Contains('@') && values.Contains(value.Split('@', 0)) then
                 errors
             else if (let result = values.LongestPrefixMatch(value) in result <> null) then
                 errors
             else
                 inv
                     (ErrorCodes.ConfigRulesUnexpectedValue
-                        $"Expected defined value of %s{varName}, got %s{value}"
+                        $"Expected defined value of %s{varName}, got %s{value.ToString()}"
                         (min Severity.Warning severity))
                     leafornode
                 <&&&> errors
@@ -528,13 +529,13 @@ module internal FieldValidators =
 
         match varMap.TryFind varName with
         | Some values ->
-            let value = trimQuote key
+            let value = trimQuoteSpan key
 
             if firstCharEqualsAmp ids.lower then
                 true
             else
                 values.Contains value
-                || (value.Contains('@') && values.Contains(value.Split('@')[0]))
+                || (value.Contains('@') && values.Contains(value.Split('@', 0)))
                 || (values.FindFirst(value) <> null)
         | None -> false
     // var:asd
@@ -816,7 +817,7 @@ module internal FieldValidators =
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
             | Some(_, es) ->
-                if es.Contains(trimQuote key) then
+                if es.Contains(trimQuoteSpan key) then
                     errors
                 else
                     inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
@@ -856,7 +857,7 @@ module internal FieldValidators =
         | _, _, _, ValueFound _ -> true
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
-            | Some(_, es) -> es.Contains(trimQuote key)
+            | Some(_, es) -> es.Contains(trimQuoteSpan key)
             | None -> false
 
         // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
@@ -992,7 +993,7 @@ module internal FieldValidators =
                 inv (ErrorCodes.CustomError $"Unexpected rule type {field}" Severity.Error) leafornode
                 <&&&> errors
             | AliasValueKeysField aliasKey ->
-                checkAliasValueKeysField p.aliasKeyList aliasKey keyIDs severity leafornode errors
+                checkAliasValueKeysField p.aliasKeys aliasKey keyIDs severity leafornode errors
             | IgnoreField field -> checkField p severity ctx field keyIDs leafornode errors
             // Should never happen
             | SingleAliasClauseField _ -> errors
@@ -1067,7 +1068,7 @@ module internal FieldValidators =
             | TypeMarkerField _
             | IgnoreMarkerField
             | ValueScopeMarkerField _ -> false
-            | AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeyList aliasKey keyIDs
+            | AliasValueKeysField aliasKey -> checkAliasValueKeysFieldNE p.aliasKeys aliasKey keyIDs
             | IgnoreField field -> checkFieldNE p severity ctx field keyIDs
             // Should never happen
             | SingleAliasClauseField _ -> failwith "todo"

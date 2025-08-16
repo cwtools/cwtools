@@ -319,25 +319,24 @@ module Utils2 =
 
     [<Sealed>]
     type LowerStringSparseTrie() =
-
         let trie = Trie(CharacterComparer.Default)
-        // let a = StringTrie()
 
         let idValueList = ResizeArray<StringTokens>()
 
         member this.Contains(key: string) = trie.Contains key
+        member this.Contains(key: ReadOnlySpan<char>) = trie.Contains key
 
         member this.Count = trie.Count
 
-        member this.LongestPrefixMatch(x: string) = trie.LongestPrefixMatch x
+        member this.LongestPrefixMatch(input: ReadOnlySpan<char>) = trie.LongestPrefixMatch input
 
-        member this.FindFirst(x: string) : string | null =
-            (trie.EnumerateByPrefix x).FirstOrDefault()
+        member this.FindFirst(input: ReadOnlySpan<char>) : string | null =
+            (trie.EnumerateByPrefix input).FirstOrDefault()
 
-        member this.AddWithIDs(key: string) =
-            if key <> "" then
-                trie.Add(key) |> ignore
-                idValueList.Add(StringResource.stringManager.InternIdentifierToken key)
+        member this.AddWithIDs(value: string) =
+            if value <> "" then
+                trie.Add(value) |> ignore
+                idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
 
         member _.IdValues = idValueList
 
@@ -346,7 +345,6 @@ module Utils2 =
 
         member _.IdCount = idValueList.Count
 
-    // type StringSet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
     type PrefixOptimisedStringSet = LowerStringSparseTrie
 
     [<Sealed>]

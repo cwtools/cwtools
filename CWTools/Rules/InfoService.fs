@@ -464,7 +464,7 @@ type InfoService
           anyScope = anyScope
           defaultLang = defaultLang
           wildcardLinks = wildCardLinks
-          aliasKeyList = aliasKeyMap
+          aliasKeys = aliasKeyMap
           processLocalisation = processLocalisation
           validateLocalisation = validateLocalisation }
 
@@ -1161,8 +1161,8 @@ type InfoService
             | NewScope(_, _, rh) -> rh
             | _ ->
                 match enums.TryFind "static_values" with
-                | Some(_, ss) ->
-                    if ss.Contains key then
+                | Some(_, trie) ->
+                    if trie.Contains key then
                         Some(EnumRef("static_values", key))
                     else
                         None
