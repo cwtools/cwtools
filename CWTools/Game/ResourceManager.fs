@@ -190,7 +190,7 @@ type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type GetFileNames = unit -> string array
+type FileNames = unit -> string array
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -201,7 +201,7 @@ type IResourceAPI<'T when 'T :> ComputedData> =
     abstract ValidatableEntities: ValidatableEntities<'T>
     abstract ForceRecompute: unit -> unit
     abstract ForceRulesDataGenerate: unit -> unit
-    abstract GetFileNames: GetFileNames
+    abstract GetFileNames: FileNames
 
 type ResourceManager<'T when 'T :> ComputedData>
     (
