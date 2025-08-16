@@ -120,7 +120,7 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
     | Localisation _ ->
         runLocalisationTest results
         0
-    | Full _ ->
+    | Full ->
         // Default to running validation tests
         let runTests = true
         let modPath = getModPath results
