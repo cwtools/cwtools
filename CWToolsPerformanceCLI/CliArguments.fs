@@ -3,6 +3,11 @@ module CliArguments
 open Argu
 open CWTools.Games
 
+type Nothing = Nothing
+    with
+
+        interface IArgParserTemplate with
+            member s.Usage = ""
 // Define the CLI arguments
 [<CliPrefix(CliPrefix.DoubleDash)>]
 type PerformanceArgs =
@@ -18,6 +23,8 @@ type PerformanceArgs =
     | [<AltCommandLine("-steam-root")>] Steam_Root of string
     | [<AltCommandLine("-git-root")>] Git_Root of string
     | [<AltCommandLine("-test-mode")>] Test_Mode of StopPoint
+    | [<CliPrefix(CliPrefix.None)>] Full
+    | [<CliPrefix(CliPrefix.None); CustomCommandLine("localisation")>] Localisation of ParseResults<Nothing>
 
     interface IArgParserTemplate with
         member s.Usage =
@@ -34,3 +41,5 @@ type PerformanceArgs =
             | Steam_Root _ -> "Path to Steam installation root (overrides default)"
             | Git_Root _ -> "Path to Git projects root (overrides default)"
             | Test_Mode _ -> "Test mode, setup game or full"
+            | Full -> "Run full performance test"
+            | Localisation _ -> "Run localisation test"
