@@ -53,7 +53,7 @@ type CompletionService
         enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
         varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
-        files: Collections.Set<string>,
+        files: FrozenSet<string>,
         links: EffectMap,
         valueTriggers: EffectMap,
         globalScriptVariables: string list,
@@ -762,7 +762,7 @@ type CompletionService
                     |> Option.map (snd >> Set.toArray)
                     |> Option.defaultValue [||]
                     |> Array.map CompletionResponse.CreateSimple
-            | NewField.FilepathField _ -> files |> Set.toArray |> Array.map CompletionResponse.CreateSimple
+            | NewField.FilepathField _ -> files.Select(CompletionResponse.CreateSimple).ToArray()
             | NewField.ScopeField x ->
                 completionForRHSScopeChain value scopeContext (CompletionScopeExpectation.Scopes x) |> List.toArray
             | NewField.VariableGetField v ->

@@ -51,7 +51,7 @@ type InfoService
         enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
         varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
         localisation: (Lang * Collections.Set<string>) list,
-        files: Collections.Set<string>,
+        files: FrozenSet<string>,
         links: EffectMap,
         valueTriggers: EffectMap,
         ruleValidationService: RuleValidationService,

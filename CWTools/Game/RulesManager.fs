@@ -2,6 +2,7 @@ namespace CWTools.Games
 
 open System
 open System.Collections.Generic
+open System.Linq
 open CWTools.Rules
 open CWTools.Common
 open CWTools.Utilities.Position
@@ -87,9 +88,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newMap: Map<string,string * (string * range option) array>) ->
+            fun (newMap: Map<string, string * (string * range option) array>) ->
                 let mdAdjusted =
-                    md.enumDefs |> Map.map (fun _ (s, sl) -> s, (sl |> Array.map (fun x -> x, None)))
+                    md.enumDefs
+                    |> Map.map (fun _ (s, sl) -> s, (sl |> Array.map (fun x -> x, None)))
 
                 let res =
                     Map.fold
@@ -139,7 +141,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let addEmbeddedFiles =
         match embeddedSettings.cachedRuleMetadata with
         | None -> id
-        | Some md -> fun (newSet: Set<string>) -> Set.union newSet md.files
+        | Some md ->
+            fun (newSet: HashSet<string>) ->
+                newSet.UnionWith(md.files)
+                newSet
 
     let mutable simpleEnums = []
     let mutable complexEnums = []
@@ -157,7 +162,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     let loadBaseConfig (rulesSettings: RulesSettings) =
         let rules, types, enums, complexenums, values =
             rulesSettings.ruleFiles
-            |> List.filter (fun (fn, _) -> Path.GetExtension(fn.AsSpan()).Equals(".cwt", StringComparison.OrdinalIgnoreCase))
+            |> List.filter (fun (fn, _) ->
+                Path.GetExtension(fn.AsSpan()).Equals(".cwt", StringComparison.OrdinalIgnoreCase))
             |> RulesParser.parseConfigs
                 settings.parseScope
                 settings.allScopes
@@ -212,11 +218,10 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
              |> PSeq.map (fun (k, (d, s)) -> KeyValuePair(k, (d, s |> Array.map fst |> createStringSet))))
                 .ToFrozenDictionary()
 
-
         /// First pass type defs
         let loc = addEmbeddedLoc languages localisation.localisationKeys
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let files = addEmbeddedFiles (resources.GetFileNames() |> Set.ofArray)
+        let files = addEmbeddedFiles(resources.GetFileNames().ToHashSet()).ToFrozenSet()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         let allEntities = resources.AllEntities() |> List.map (fun struct (e, _) -> e)
@@ -303,7 +308,8 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             lookup.typeDefInfo
             |> Map.map (fun _ v ->
                 v
-                |> Seq.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None) |> Seq.toList)
+                |> Seq.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None)
+                |> Seq.toList)
 
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
 

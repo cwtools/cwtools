@@ -26,7 +26,7 @@ type CheckFieldParams =
       varSet: PrefixOptimisedStringSet
       localisation: (Lang * Collections.Set<string>) list
       defaultLocalisation: Collections.Set<string>
-      files: Collections.Set<string>
+      files: FrozenSet<string>
       changeScope: ChangeScope
       anyScope: Scope
       defaultLang: Lang
@@ -49,25 +49,6 @@ module internal FieldValidators =
         | ValueType.Bool -> Some [ "yes"; "no" ]
         | ValueType.Enum es -> Some [ es ]
         | _ -> None
-
-    let checkFileExists (files: Collections.Set<string>) (leaf: Leaf) =
-        let file =
-            leaf.ValueText.Trim('"').Replace("\\", "/").Replace(".lua", ".shader").Replace(".tga", ".dds")
-
-        if files.Contains file then
-            OK
-        else
-            Invalid(Guid.NewGuid(), [ inv (ErrorCodes.MissingFile file) leaf ])
-
-    let checkIconExists (files: Collections.Set<string>) (folder: string) (leaf: Leaf) =
-        let value = folder + "/" + leaf.ValueText + ".dds"
-
-        if files.Contains value then
-            OK
-        else
-            Invalid(Guid.NewGuid(), [ inv (ErrorCodes.MissingFile value) leaf ])
-
-
 
     // type ScopeContext = IScopeContext<Scope>
 
@@ -538,14 +519,9 @@ module internal FieldValidators =
                 || (value.Contains('@') && values.Contains(value.Split('@', 0)))
                 || (values.FindFirst(value) <> null)
         | None -> false
-    // var:asd
-    // var:asdasd
-
-    // var -> var.StartsWith (var:asd)
-    // var:asd -> var:asdasd.StartsWith(var:asd)
 
     let checkFilepathField
-        (files: Collections.Set<string>)
+        (files: FrozenSet<string>)
         (ids: StringTokens)
         (prefix: string option)
         (extension: string option)
@@ -575,7 +551,7 @@ module internal FieldValidators =
                 inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
 
     let checkFilepathFieldNE
-        (files: Collections.Set<string>)
+        (files: FrozenSet<string>)
         (ids: StringTokens)
         (prefix: string option)
         (extension: string option)
@@ -593,7 +569,7 @@ module internal FieldValidators =
             || files.Contains(pre + file2)
         | None -> files.Contains file || files.Contains file2
 
-    let checkIconField (files: Collections.Set<string>) (folder: string) (ids: StringTokens) leafornode errors =
+    let checkIconField (files: FrozenSet<string>) (folder: string) (ids: StringTokens) leafornode errors =
         let key = trimQuote (getOriginalKey ids)
         let value = folder + "/" + key + ".dds"
 
@@ -602,7 +578,7 @@ module internal FieldValidators =
         else
             inv (ErrorCodes.MissingFile value) leafornode <&&&> errors
 
-    let checkIconFieldNE (files: Collections.Set<string>) (folder: string) (ids: StringTokens) =
+    let checkIconFieldNE (files: FrozenSet<string>) (folder: string) (ids: StringTokens) =
         let key = trimQuote (getOriginalKey ids)
         let value = folder + "/" + key + ".dds"
         files.Contains value
