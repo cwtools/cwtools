@@ -306,7 +306,7 @@ type StringTokens with
 module Utils2 =
 
     [<Sealed>]
-    type CharacterComparer() =
+    type private CharacterComparer() =
         static member Default = CharacterComparer()
 
         interface IEqualityComparer<char> with
@@ -323,21 +323,30 @@ module Utils2 =
 
         let idValueList = ResizeArray<StringTokens>()
 
-        member this.Contains(key: string) = trie.Contains key
-        member this.Contains(key: ReadOnlySpan<char>) = trie.Contains key
+        member this.Contains(key: string) =
+            if key <> "" then trie.Contains key else false
 
-        member this.Count = trie.Count
+        member this.Contains(key: ReadOnlySpan<char>) =
+            if not key.IsEmpty then trie.Contains key else false
 
-        member this.LongestPrefixMatch(input: ReadOnlySpan<char>) = trie.LongestPrefixMatch input
+        member this.LongestPrefixMatch(input: ReadOnlySpan<char>) : string | null =
+            if not input.IsEmpty then
+                trie.LongestPrefixMatch input
+            else
+                null
 
         member this.FindFirst(input: ReadOnlySpan<char>) : string | null =
-            (trie.EnumerateByPrefix input).FirstOrDefault()
+            if not input.IsEmpty then
+                (trie.EnumerateByPrefix input).FirstOrDefault()
+            else
+                null
 
         member this.AddWithIDs(value: string) =
             if value <> "" then
                 trie.Add(value) |> ignore
                 idValueList.Add(StringResource.stringManager.InternIdentifierToken value)
 
+        member this.Count = trie.Count
         member _.IdValues = idValueList
 
         member _.StringValues =
