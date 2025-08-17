@@ -11,6 +11,10 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="FSharp.Core"/>
+        <PackageReference Include="ZString"/>
+    </ItemGroup>
+
+    <ItemGroup>
     </ItemGroup>
 
 </Project>

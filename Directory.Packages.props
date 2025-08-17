@@ -31,5 +31,6 @@
 
     <PackageVersion Include="KTrie" Version="3.0.1" />
     <PackageVersion Include="Giraffe.ViewEngine" Version="1.4.0"/>
+    <PackageVersion Include="ZString" Version="2.6.0" />
   </ItemGroup>
 </Project>
