@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Shared\Shared.fsproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ZString" Version="2.6.0" />
+    </ItemGroup>
+
 </Project>

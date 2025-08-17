@@ -31,8 +31,7 @@ type CheckFieldParams =
       anyScope: Scope
       defaultLang: Lang
       aliasKeys: Map<string, HashSet<StringToken>>
-      processLocalisation:
-          Lang * Map<string, CWTools.Localisation.Entry> -> Lang * Map<string, LocEntry>
+      processLocalisation: Lang * Map<string, CWTools.Localisation.Entry> -> Lang * Map<string, LocEntry>
       validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult }
 
 [<RequireQualifiedAccess>]
@@ -325,8 +324,7 @@ module internal FieldValidators =
             // let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
             //let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
             LocalisationValidation.checkLocNameN leafornode defaultKeys defaultLang ids key errors
-        | false, true ->
-            LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
+        | false, true -> LocalisationValidation.checkLocKeysInlineLeafOrNodeN keys ids key leafornode errors
         | false, false ->
             if key.Contains('[') then
                 let entry =
@@ -528,27 +526,13 @@ module internal FieldValidators =
         leafornode
         errors
         =
-        let key = getOriginalKey ids
-        let file = (trimQuote key).Replace('\\', '/').Replace("//", "/")
-        let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
-        let file = if extension.IsSome then file + extension.Value else file
+        let isValid, file =
+            FieldValidatorsHelper.CheckFilePathField(getOriginalKey ids, files, prefix, extension, true)
 
-        match prefix with
-        | Some pre ->
-            if
-                files.Contains file
-                || files.Contains(pre + file)
-                || files.Contains file2
-                || files.Contains(pre + file2)
-            then
-                errors
-            else
-                inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
-        | None ->
-            if files.Contains file || files.Contains file2 then
-                errors
-            else
-                inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
+        if isValid then
+            errors
+        else
+            inv (ErrorCodes.MissingFile file) leafornode <&&&> errors
 
     let checkFilepathFieldNE
         (files: FrozenSet<string>)
@@ -556,18 +540,10 @@ module internal FieldValidators =
         (prefix: string option)
         (extension: string option)
         =
-        let key = getOriginalKey ids
-        let file = (trimQuote key).Replace('\\', '/').Replace("//", "/")
-        let file2 = file.Replace(".lua", ".shader").Replace(".tga", ".dds")
-        let file = if extension.IsSome then file + extension.Value else file
+        let result, _ =
+            FieldValidatorsHelper.CheckFilePathField(getOriginalKey ids, files, prefix, extension, false)
 
-        match prefix with
-        | Some pre ->
-            files.Contains file
-            || files.Contains(pre + file)
-            || files.Contains file2
-            || files.Contains(pre + file2)
-        | None -> files.Contains file || files.Contains file2
+        result
 
     let checkIconField (files: FrozenSet<string>) (folder: string) (ids: StringTokens) leafornode errors =
         let key = trimQuote (getOriginalKey ids)
