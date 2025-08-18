@@ -137,7 +137,7 @@ module Scopes =
         | Some ps -> ps :: context
 
     let createJominiChangeScope oneToOneScopes (varPrefixFun: string -> string * bool) =
-        let amp = [| '@' |]
+        let amp = '@'
 
         (fun
             (varLHS: bool)
@@ -480,7 +480,7 @@ module Scopes =
                 | NotFound
                 | VarNotFound _ ->
 
-                    let ampersandSplit = key.Split([| '@' |], 2)
+                    let ampersandSplit = key.Split('@', 2)
                     let keys = ampersandSplit.[0].Split('.')
                     let keylength = keys.Length - 1
                     let keys = keys |> Array.mapi (fun i k -> k, i = keylength)
