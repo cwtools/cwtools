@@ -482,6 +482,7 @@ type InfoService
                     |> (function
                     | SubtypeRule(_, _, cfs) -> cfs
                     | x -> [| (r, o) |]))
+
             let expandedrules =
                 subtypedrules
                 |> Array.collect (function
@@ -564,9 +565,10 @@ type InfoService
 
         let resultForType (child: Node option) (typedef: TypeDefinition) =
             let typeRules =
-                    rootRules.TypeRules |> Array.filter (fun (name, _) -> name == typedef.name)
+                rootRules.TypeRules |> Array.filter (fun (name, _) -> name == typedef.name)
+
             match child with
-            | Some c ->               
+            | Some c ->
                 match typeRules, typedef.type_per_file with
                 | [| (n, (NodeRule(l, rs), o)) |], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
                 | [| (n, (NodeRule(l, rs), o)) |], true ->
@@ -1071,10 +1073,12 @@ type InfoService
                     acc
 
         let infoServiceBase (n: Node) acc (t: TypeDefinition) =
-            let typerules = rootRules.TypeRules |> Array.filter (fun (name, _) -> name == t.name)
+            let typerules =
+                rootRules.TypeRules |> Array.filter (fun (name, _) -> name == t.name)
 
             match typerules, t.type_per_file with
-            | [| (_, (NodeRule(_, rs), o)) |], false -> n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
+            | [| (_, (NodeRule(_, rs), o)) |], false ->
+                n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
             | [| (_, (NodeRule(_, rs), o)) |], true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
             | _ -> acc
 
@@ -1147,12 +1151,12 @@ type InfoService
 
     let getTypesInEntity () = // (entity : Entity) =
         let changeValueScopeInner (keyId: StringTokens) scope =
-            let metadata = StringResource.stringManager.GetMetadataForID keyId.lower
-            let key = StringResource.stringManager.GetStringForIDs keyId
+            let metadata = stringManager.GetMetadataForID keyId.lower
+            let key = stringManager.GetStringForIDs keyId
 
             let key =
                 match metadata.containsPipe with
-                | true -> key.Split('|').[0]
+                | true -> key.Split('|', 2)[0]
                 | _ -> key
 
             match changeScope false true links valueTriggers wildCardLinks varSet key scope with
@@ -1187,6 +1191,64 @@ type InfoService
               associatedType = assocType }
 
         let res = ConcurrentDictionary<string, ResizeArray<ReferenceDetails>>()
+        let lookup = res.GetAlternateLookup<ReadOnlySpan<char>>()
+
+        let addReferenceDetails (s: string) token position isOutgoing referenceLabel referenceType assocType =
+            let typename = s.AsSpan().Split('.', 0)
+            let result, resizeArray = lookup.TryGetValue(typename)
+
+            if result then
+                resizeArray.Add(createReferenceDetails token position isOutgoing referenceLabel referenceType assocType)
+                res
+            else
+                let newArr = ResizeArray<ReferenceDetails>(4)
+                newArr.Add(createReferenceDetails token position isOutgoing referenceLabel referenceType assocType)
+                res.TryAdd(typename.ToString(), newArr) |> ignore
+
+                res
+
+        let addReferenceDetailsValue
+            (s: string)
+            typeValue
+            token
+            position
+            isOutgoing
+            referenceLabel
+            referenceType
+            assocType
+            =
+            let typename = s.AsSpan().Split('.', 0)
+            let result, resizeArray = lookup.TryGetValue(typename)
+
+            if result then
+                resizeArray.Add(
+                    createReferenceDetailsValue
+                        (stringManager.InternIdentifierToken typeValue)
+                        token
+                        position
+                        isOutgoing
+                        referenceLabel
+                        referenceType
+                        assocType
+                )
+
+                res
+            else
+                let newArr = ResizeArray<ReferenceDetails>(4)
+
+                newArr.Add(
+                    createReferenceDetailsValue
+                        (stringManager.InternIdentifierToken typeValue)
+                        token
+                        position
+                        isOutgoing
+                        referenceLabel
+                        referenceType
+                        assocType
+                )
+
+                res.TryAdd(typename.ToString(), newArr) |> ignore
+                res
 
         let fLeaf _ (leaf: Leaf) ((field, options): NewRule) =
             let isOutgoing, referenceLabel =
@@ -1198,144 +1260,49 @@ type InfoService
 
             match field with
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leaf.ValueId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                ReferenceType.TypeDef
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails leaf.ValueId leaf.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leaf.ValueId
+                    leaf.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDef
+                    assocType
             | LeafRule(_, TypeField(TypeType.Complex(_, t, _))) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leaf.ValueId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                ReferenceType.TypeDefFuzzy
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails
-                            leaf.ValueId
-                            leaf.Position
-                            isOutgoing
-                            referenceLabel
-                            ReferenceType.TypeDefFuzzy
-                            assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leaf.ValueId
+                    leaf.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDefFuzzy
+                    assocType
             | LeafRule(_, ValueScopeField _) ->
-
                 let refHint = changeValueScopeInner leaf.ValueId Scopes.defaultContext
 
                 match refHint with
                 | Some(TypeRef(typeName, typeValue)) ->
-                    let typename = typeName.Split('.').[0]
-
-                    if res.ContainsKey(typename) then
-                        res.[typename]
-                            .Add(
-                                createReferenceDetailsValue
-                                    (stringManager.InternIdentifierToken typeValue)
-                                    leaf.ValueId
-                                    leaf.Position
-                                    isOutgoing
-                                    referenceLabel
-                                    ReferenceType.TypeDef
-                                    assocType
-                            )
-
-                        res
-                    else
-                        let newArr = ResizeArray<ReferenceDetails>()
-
-                        newArr.Add(
-                            createReferenceDetailsValue
-                                (StringResource.stringManager.InternIdentifierToken typeValue)
-                                leaf.ValueId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                ReferenceType.TypeDef
-                                assocType
-                        )
-
-                        res.TryAdd(typename, newArr) |> ignore
-                        res
+                    addReferenceDetailsValue
+                        typeName
+                        typeValue
+                        leaf.ValueId
+                        leaf.Position
+                        isOutgoing
+                        referenceLabel
+                        ReferenceType.TypeDef
+                        assocType
                 | _ -> res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails t leaf.KeyId leaf.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
             | LeafRule(TypeField(TypeType.Complex(_, t, _)), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leaf.KeyId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                ReferenceType.TypeDefFuzzy
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel ReferenceType.TypeDefFuzzy assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leaf.KeyId
+                    leaf.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDefFuzzy
+                    assocType
             | _ -> res
 
         let fLeafValue _ (leafvalue: LeafValue) (field, options) =
@@ -1348,36 +1315,14 @@ type InfoService
 
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leafvalue.ValueId
-                                leafvalue.Position
-                                isOutgoing
-                                referenceLabel
-                                ReferenceType.TypeDef
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails
-                            leafvalue.ValueId
-                            leafvalue.Position
-                            isOutgoing
-                            referenceLabel
-                            ReferenceType.TypeDef
-                            assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leafvalue.ValueId
+                    leafvalue.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDef
+                    assocType
             | _ -> res
 
         let fComment _ _ _ = res
@@ -1392,68 +1337,27 @@ type InfoService
 
             match field with
             | NodeRule(TypeField(TypeType.Simple t), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails t node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
             | NodeRule(TypeField(TypeType.Complex(_, t, _)), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                node.KeyId
-                                node.Position
-                                isOutgoing
-                                referenceLabel
-                                ReferenceType.TypeDefFuzzy
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDefFuzzy assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    node.KeyId
+                    node.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDefFuzzy
+                    assocType
             | NodeRule(JominiGuiField, _) ->
                 let typename = "gui_type"
 
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    typename
+                    node.KeyId
+                    node.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDef
+                    assocType
             | _ -> res
 
         let fValueClause _ _ _ = res
@@ -1463,6 +1367,7 @@ type InfoService
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
         let getVariableFromString (v: string) (s: string) =
             let first = s.AsSpan().Split('@', 0)
+
             if v = "variable" then
                 let range = first.Split('.').Last()
                 let struct (start, length) = range.GetOffsetAndLength(first.Length)

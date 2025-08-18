@@ -335,7 +335,7 @@ module Utils2 =
             else
                 null
 
-        member this.FindFirst(input: ReadOnlySpan<char>) : string | null =
+        member this.FindFirstByPrefix(input: ReadOnlySpan<char>) : string | null =
             if not input.IsEmpty then
                 (trie.EnumerateByPrefix input).FirstOrDefault()
             else
@@ -370,7 +370,7 @@ module Utils2 =
         let newSet = PrefixOptimisedStringSet()
 
         match items with
-        | :? (string array) as array -> array |> Array.iter (fun x -> newSet.AddWithIDs(x))
-        | _ -> items |> Seq.iter (fun x -> newSet.AddWithIDs(x))
+        | :? (string array) as array -> array |> Array.iter newSet.AddWithIDs
+        | _ -> items |> Seq.iter newSet.AddWithIDs
 
         newSet
