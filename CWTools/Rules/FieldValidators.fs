@@ -370,11 +370,6 @@ module internal FieldValidators =
             | TypeType.Simple t -> false, t
             | Complex(_, t, _) -> true, t
 
-        let typeKeyMap v =
-            match typetype with
-            | TypeType.Simple t -> v
-            | Complex(p, _, s) -> p + v + s
-
         let key = getLowerKey ids
 
         match typesMap.TryFind fieldType with
@@ -515,7 +510,7 @@ module internal FieldValidators =
             else
                 values.Contains value
                 || (value.Contains('@') && values.Contains(value.Split('@', 0)))
-                || (values.FindFirst(value) <> null)
+                || (values.FindFirstByPrefix(value) <> null)
         | None -> false
 
     let checkFilepathField
@@ -618,11 +613,10 @@ module internal FieldValidators =
         let scope = ctx.scopes
 
         match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
         | ScopeResult.NewScope({ Scopes = current :: _ }, _, _) -> checkAnyScopesMatch anyScope s current
         | NotFound -> false
-        | ScopeResult.WrongScope(command, prevscope, expected, _) -> true
-        | VarNotFound s -> false
+        | ScopeResult.WrongScope _ -> true
+        | VarNotFound _ -> false
         | ValueFound _ -> false
         | _ -> true
 
