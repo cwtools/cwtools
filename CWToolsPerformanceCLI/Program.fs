@@ -1,11 +1,17 @@
 module Program
 
 open System
+open System.Diagnostics
 open System.Text
 open System.Threading
 open System.Globalization
 open Argu
+open CWTools.Common
 open CWTools.Games
+open CWTools.Localisation.CK3
+open CWTools.Localisation.EU4
+open CWTools.Localisation.HOI4
+open CWTools.Localisation.STL
 open CliArguments
 open CWToolsPerformanceCLI.PerfFunctions
 
@@ -68,47 +74,93 @@ let getTestFunction (results: ParseResults<PerformanceArgs>) =
     | _, _, true, _ -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
     | _, _, _, true -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
     | false, false, false, false -> failwith "Please select a game!"
+
+let runLocalisationTest (results: ParseResults<PerformanceArgs>) =
+
+    let timer = Stopwatch()
+    timer.Start()
+
+
+    let count =
+        match
+            (getGamePath results),
+            results.Contains Stellaris,
+            results.Contains HOI4,
+            results.Contains CK3,
+            results.Contains EU4
+        with
+        | Some gamePath, true, _, _, _ ->
+            STLLocalisationServiceFromFolder(gamePath + "/localisation")
+            |> (fun x -> x.Api(Lang.STL STLLang.English))
+            |> _.Values.Count
+        | Some gamePath, _, true, _, _ ->
+            HOI4LocalisationServiceFromFolder(gamePath + "/localisation")
+            |> (fun x -> x.Api(Lang.HOI4 HOI4Lang.English))
+            |> _.Values.Count
+        | Some gamePath, _, _, true, _ ->
+            CK3LocalisationServiceFromFolder(gamePath + "/localisation")
+            |> (fun x -> x.Api(Lang.CK3 CK3Lang.English))
+            |> _.Values.Count
+        | Some gamePath, _, _, _, true ->
+            EU4LocalisationServiceFromFolder(gamePath + "/localisation")
+            |> (fun x -> x.Api(Lang.EU4 EU4Lang.English))
+            |> _.Values.Count
+        | None, _, _, _, _ -> failwith "Please provide a game path!"
+        | _, false, false, false, false -> failwith "Please select a game!"
+
+    timer.Stop()
+
+    printfn $"Count: %d{count}"
+    printfn $"Time taken: %d{timer.ElapsedMilliseconds}ms"
+// YAMLLocalisationParser.
+
 // Main program logic
 let runCommand (results: ParseResults<PerformanceArgs>) =
-    // Default to running validation tests
-    let runTests = true
-    let modPath = getModPath results
+    match results.GetSubCommand() with
+    | Localisation _ ->
+        runLocalisationTest results
+        0
+    | Full ->
+        // Default to running validation tests
+        let runTests = true
+        let modPath = getModPath results
 
-    if results.Contains Stellaris then
-        let modInfo =
-            match modPath with
-            | Some _ -> " + mod"
-            | None -> ""
+        if results.Contains Stellaris then
+            let modInfo =
+                match modPath with
+                | Some _ -> " + mod"
+                | None -> ""
 
-        runPerfTest (sprintf "Stellaris Test %s" modInfo) (getTestFunction results)
-    elif results.Contains EU4 then
-        let modInfo =
-            match modPath with
-            | Some _ -> " + mod"
-            | None -> ""
+            runPerfTest (sprintf "Stellaris Test %s" modInfo) (getTestFunction results)
+        elif results.Contains EU4 then
+            let modInfo =
+                match modPath with
+                | Some _ -> " + mod"
+                | None -> ""
 
-        runPerfTest (sprintf "EU4 Test %s" modInfo) (getTestFunction results)
-    elif results.Contains HOI4 then
-        // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
+            runPerfTest (sprintf "EU4 Test %s" modInfo) (getTestFunction results)
+        elif results.Contains HOI4 then
+            // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 
-        let modInfo =
-            match modPath with
-            | Some _ -> " + mod"
-            | None -> ""
+            let modInfo =
+                match modPath with
+                | Some _ -> " + mod"
+                | None -> ""
 
-        runPerfTest (sprintf "HOI4 Test%s" modInfo) (getTestFunction results)
-    elif results.Contains CK3 then
-        // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
+            runPerfTest (sprintf "HOI4 Test%s" modInfo) (getTestFunction results)
+        elif results.Contains CK3 then
+            // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 
-        let modInfo =
-            match modPath with
-            | Some _ -> " + mod"
-            | None -> ""
+            let modInfo =
+                match modPath with
+                | Some _ -> " + mod"
+                | None -> ""
 
-        runPerfTest (sprintf "CK3 Test%s" modInfo) (getTestFunction results)
-    else
-        eprintfn "No valid command specified. Use --help for usage information."
-        1
+            runPerfTest (sprintf "CK3 Test%s" modInfo) (getTestFunction results)
+        else
+            eprintfn "No valid command specified. Use --help for usage information."
+            1
+    | _ -> failwith "todo"
 
 [<EntryPoint>]
 let main argv =

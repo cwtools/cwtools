@@ -1,7 +1,6 @@
 namespace CWTools.Localisation
 
 open CWTools.Common
-open CWTools.Parser.SharedParsers
 open CWTools.Utilities.Position
 open System.Collections.Generic
 open System.IO
@@ -27,9 +26,7 @@ module YAMLLocalisationParser =
     let key = many1Satisfy ((=) ':' >> not) .>> skipChar ':' .>> spaces <?> "key"
 
     let private desc =
-        between (skipChar '"') (skipChar '"') (manyStrings (quotedCharSnippet <|> escapedChar))
-        .>>. getPosition
-        <?> "desc"
+        many1Satisfy isLocValueChar .>>. getPosition .>> restOfLine false <?> "desc"
 
     let value = digit .>> spaces <?> "version"
 
