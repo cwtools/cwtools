@@ -1194,7 +1194,7 @@ type InfoService
         let lookup = res.GetAlternateLookup<ReadOnlySpan<char>>()
 
         let addReferenceDetails (s: string) token position isOutgoing referenceLabel referenceType assocType =
-            let typename = s.AsSpan().Split('.', 0)
+            let typename = s.AsSpan().SplitFirst('.')
             let result, resizeArray = lookup.TryGetValue(typename)
 
             if result then
@@ -1217,7 +1217,7 @@ type InfoService
             referenceType
             assocType
             =
-            let typename = s.AsSpan().Split('.', 0)
+            let typename = s.AsSpan().SplitFirst('.')
             let result, resizeArray = lookup.TryGetValue(typename)
 
             if result then
@@ -1366,12 +1366,12 @@ type InfoService
 
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
         let getVariableFromString (v: string) (s: string) =
-            let first = s.AsSpan().Split('@', 0)
+            let first = s.AsSpan().SplitFirst('@')
 
             if v = "variable" then
                 let range = first.Split('.').Last()
                 let struct (start, length) = range.GetOffsetAndLength(first.Length)
-                first.Slice(start, length).Split('?', 0).ToString()
+                first.Slice(start, length).SplitFirst('?').ToString()
             else
                 first.ToString()
 
