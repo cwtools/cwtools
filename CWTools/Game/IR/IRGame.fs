@@ -30,7 +30,7 @@ module IRGameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+            |> List.tryFind (fun f -> f.overwrite <> Overwrite.Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
 
         match provinceFile with
         | None -> ()
@@ -54,7 +54,7 @@ module IRGameFunctions =
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
             |> List.tryFind (fun f ->
-                f.overwrite <> Overwritten
+                f.overwrite <> Overwrite.Overwritten
                 && Path.GetFileName(f.filepath) = "character_setup.csv")
 
         match characterFile with

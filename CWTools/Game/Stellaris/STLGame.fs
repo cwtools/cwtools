@@ -123,7 +123,7 @@ module STLGameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
+            |> List.filter (fun f -> f.overwrite <> Overwrite.Overwritten && f.extension = ".yml" && f.validate)
             |> List.map (fun f -> f.filepath)
 
         let locFileValidation = validateLocalisationFiles locfiles
