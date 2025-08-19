@@ -102,11 +102,10 @@ type FileResult =
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
-[<Struct; IsReadOnly>]
 type Overwrite =
-    | No
-    | Overwrote
-    | Overwritten
+    | No = 1uy
+    | Overwrote = 2uy
+    | Overwritten = 3uy
 
 type EntityResource =
     { scope: string
@@ -360,7 +359,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   logicalpath = logicalpath
                   validate = validate
                   result = Pass({ parseTime = time })
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             parsed
         | Failure(msg, pe, _) ->
@@ -376,7 +375,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                           position = pe.Position
                           parseTime = time }
                     )
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             []
 
@@ -409,7 +408,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   rawEntity = entity
                   validate = v
                   entityType = entityType
-                  overwrite = No }
+                  overwrite = Overwrite.No }
         | _ -> None
 
     let changeEncoding (filestring: string) (source: System.Text.Encoding) (target: System.Text.Encoding) =
@@ -464,7 +463,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   filepath = f.filepath
                   logicalpath = f.logicalpath
                   filetext = f.filetext
-                  overwrite = No
+                  overwrite = Overwrite.No
                   extension = Path.GetExtension(f.filepath)
                   validate = f.validate }
              ),
@@ -506,7 +505,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let processGroup (key, es: (string * EntityResource) list) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
             | es ->
                 let sorted =
                     es
@@ -561,7 +560,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let processGroup (key, es: (string * FileWithContentResource) list) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
             | es ->
                 let sorted =
                     es
@@ -607,7 +606,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             entitiesMap
             |> Map.toSeq
             |> Seq.map snd
-            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
             |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.rawEntity))
@@ -867,13 +866,13 @@ type ResourceManager<'T when 'T :> ComputedData>
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
 
     let validatableEntities () =
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
         |> List.filter (fun struct (e, _) -> e.validate)
 
     let getFileNames () : string array =
