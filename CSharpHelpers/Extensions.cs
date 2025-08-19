@@ -53,6 +53,17 @@ public static class Extensions
         );
     }
 
+    public static ReadOnlySpan<char> SplitFirst(this ReadOnlySpan<char> span, char separator)
+    {
+        var enumerator = span.Split(separator);
+        if (enumerator.MoveNext())
+        {
+            return span[enumerator.Current];
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(span), "enumerator is empty.");
+    }
+
     public static Range Last(this MemoryExtensions.SpanSplitEnumerator<char> enumerator)
     {
         if (!enumerator.MoveNext())

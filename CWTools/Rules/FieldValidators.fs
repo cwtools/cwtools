@@ -475,7 +475,7 @@ module internal FieldValidators =
                 errors
             else if values.Contains value then
                 errors
-            else if value.Contains('@') && values.Contains(value.Split('@', 0)) then
+            else if value.Contains('@') && values.Contains(value.SplitFirst('@')) then
                 errors
             else if (let result = values.LongestPrefixMatch(value) in result <> null) then
                 errors
@@ -509,7 +509,7 @@ module internal FieldValidators =
                 true
             else
                 values.Contains value
-                || (value.Contains('@') && values.Contains(value.Split('@', 0)))
+                || (value.Contains('@') && values.Contains(value.SplitFirst('@')))
                 || (values.FindFirstByPrefix(value) <> null)
         | None -> false
 
