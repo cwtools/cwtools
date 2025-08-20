@@ -100,7 +100,7 @@ module Utils =
     [<Literal>]
     let magicCharString = "\u1E00"
 
-    let quoteCharArray = [| '"' |]
+    let quoteChar = '"'
 
 module TryParser =
     // convenient, functional TryParse wrappers returning option<'a>

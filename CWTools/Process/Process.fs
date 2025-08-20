@@ -65,7 +65,7 @@ and [<Sealed>] Leaf =
 
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteChar
         and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member this.ValueId = this._valueId
@@ -77,7 +77,7 @@ and [<Sealed>] Leaf =
             this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteChar
 
     member this.ToRaw =
         KeyValue(PosKeyValue(this.Position, KeyValueItem(Key(this.Key), this.Value, this.Operator)))
@@ -117,10 +117,10 @@ and [<Sealed>] LeafValue(value: Value, ?pos: range) =
             this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteChar
 
     member this.Key =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteChar
 
     member val Position = defaultArg pos range.Zero
     member this.ToRaw = Value(this.Position, this._value)
@@ -393,7 +393,7 @@ and [<Sealed>] Node(key: string, pos: range) =
     member val KeyId: StringTokens = StringResource.stringManager.InternIdentifierToken(key) with get, set
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteChar
         and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member val Position = pos
