@@ -10,6 +10,7 @@ open CWTools.Utilities
 open CWTools.Utilities.Utils
 open CWTools.Utilities.StringResource
 open CWTools.Process.Localisation
+open Cysharp.Text
 
 type RuleContext =
     { subtypes: string list
@@ -541,18 +542,31 @@ module internal FieldValidators =
         result
 
     let checkIconField (files: FrozenSet<string>) (folder: string) (ids: StringTokens) leafornode errors =
-        let key = trimQuote (getOriginalKey ids)
-        let value = folder + "/" + key + ".dds"
+        let lookup = files.GetAlternateLookup<ReadOnlySpan<char>>()
 
-        if files.Contains value then
-            errors
-        else
-            inv (ErrorCodes.MissingFile value) leafornode <&&&> errors
+        using (ZString.CreateStringBuilder()) (fun sb ->
+            let key = trimQuoteSpan (getOriginalKey ids)
+            sb.Append folder
+            sb.Append '/'
+            sb.Append key
+            sb.Append ".dds"
+
+            if lookup.Contains(sb.AsSpan()) then
+                errors
+            else
+                inv (ErrorCodes.MissingFile(sb.ToString())) leafornode <&&&> errors)
 
     let checkIconFieldNE (files: FrozenSet<string>) (folder: string) (ids: StringTokens) =
-        let key = trimQuote (getOriginalKey ids)
-        let value = folder + "/" + key + ".dds"
-        files.Contains value
+        let lookup = files.GetAlternateLookup<ReadOnlySpan<char>>()
+
+        using (ZString.CreateStringBuilder()) (fun sb ->
+            let key = trimQuoteSpan (getOriginalKey ids)
+            sb.Append folder
+            sb.Append '/'
+            sb.Append key
+            sb.Append ".dds"
+
+            lookup.Contains(sb.AsSpan()))
 
     let private checkAnyScopesMatch anyScope (scopes: Scope list) (currentScope: Scope) =
         (currentScope = anyScope)
