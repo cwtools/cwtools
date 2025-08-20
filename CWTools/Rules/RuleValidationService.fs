@@ -13,7 +13,6 @@ open CWTools.Validation.ValidationCore
 open CWTools.Utilities
 open CWTools.Common
 open System.IO
-open QuickGraph
 open System
 open CWTools.Process.Scopes
 open CWTools.Games

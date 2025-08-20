@@ -70,9 +70,9 @@ NUGET
       Microsoft.Testing.Platform (>= 1.7.3) - restriction: >= netstandard2.0
       Microsoft.TestPlatform.AdapterUtilities (>= 17.13) - restriction: >= netstandard2.0
       Microsoft.TestPlatform.ObjectModel (>= 17.13) - restriction: >= netstandard2.0
-    Microsoft.Testing.Platform (1.8) - restriction: >= netstandard2.0
-    Microsoft.Testing.Platform.MSBuild (1.8)
-      Microsoft.Testing.Platform (>= 1.8) - restriction: >= netstandard2.0
+    Microsoft.Testing.Platform (1.8.2) - restriction: >= netstandard2.0
+    Microsoft.Testing.Platform.MSBuild (1.8.2)
+      Microsoft.Testing.Platform (>= 1.8.2) - restriction: >= netstandard2.0
     Microsoft.TestPlatform.AdapterUtilities (17.14.1) - restriction: || (&& (>= net462) (>= netstandard2.0)) (>= netcoreapp3.1)
     Microsoft.TestPlatform.ObjectModel (17.14.1) - restriction: || (&& (>= net462) (>= netstandard2.0)) (>= netcoreapp3.1)
       System.Reflection.Metadata (>= 8.0) - restriction: || (>= net462) (>= netstandard2.0)
