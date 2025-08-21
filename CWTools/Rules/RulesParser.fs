@@ -952,27 +952,27 @@ module private RulesParserImpl =
             | NodeC subtype when subtype.Key.StartsWith "subtype" ->
                 let typekeyfilter =
                     match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let displayName =
                     match comments |> List.tryFind (fun s -> s.Contains "display_name") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let abbreviation =
                     match comments |> List.tryFind (fun s -> s.Contains "abbreviation") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let pushScope =
                     match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
-                    | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+                    | Some s -> s.Substring(s.IndexOf '=' + 1).Trim() |> parseScope |> Some
                     | None -> None
 
                 let startsWith =
                     match comments |> List.tryFind (fun s -> s.Contains "starts_with") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let onlyIfNot =
@@ -985,7 +985,7 @@ module private RulesParserImpl =
 
                             let values =
                                 match rhs.StartsWith('{') && rhs.EndsWith('}') with
-                                | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
+                                | true -> rhs.Trim('{', '}') |> (fun s -> s.Split(' ')) |> List.ofArray
                                 | false -> [ rhs ]
 
                             values
@@ -1163,7 +1163,7 @@ module private RulesParserImpl =
 
                         let values =
                             match rhs.StartsWith('{') && rhs.EndsWith('}') with
-                            | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
+                            | true -> rhs.Trim('{', '}') |> (fun s -> s.Split(' ')) |> List.ofArray
                             | false -> [ rhs ]
 
                         Some(values, negative)
