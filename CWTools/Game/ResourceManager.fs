@@ -1,7 +1,6 @@
 namespace CWTools.Games
 
-open System.Collections.Generic
-open System.Runtime.CompilerServices
+open System.Collections.Concurrent
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -210,24 +209,16 @@ type ResourceManager<'T when 'T :> ComputedData>
         fallbackencoding,
         enableInlineScripts
     ) =
-    let memoize keyFunction memFunction =
-        let dict = Dictionary<_, _>()
+    static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+    static let globCache = ConcurrentDictionary<string, Glob>()
 
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-
-    let globCheckFilepathI (pattern: string) =
-        let options = new GlobOptions()
-        options.Evaluation.CaseInsensitive <- true
-        let glob = Glob.Parse(pattern, options)
-        (fun (p: string) -> glob.IsMatch(p))
-
-    let globCheckFilepath pattern = (memoize id globCheckFilepathI) pattern
+    let globCheckFilepath (pattern: string) (path: string) =
+        match globCache.TryGetValue(pattern) with
+        | true, glob -> glob.IsMatch(path)
+        | false, _ ->
+            let glob = Glob.Parse(pattern)
+            globCache.TryAdd(pattern, glob) |> ignore
+            glob.IsMatch(path)
 
     let filepathToEntityType =
         function
