@@ -197,8 +197,8 @@ type StringResourceManager() =
         | true, existingLower ->
             let stringID = Interlocked.Increment(&i) - 1
             let newToken = StringTokens(existingLower.lower, stringID, quoted)
-            ints.[stringID] <- key
-            metadata.[stringID] <- metadata.[existingLower.lower]
+            ints[stringID] <- key
+            metadata[stringID] <- metadata[existingLower.lower]
             newToken
         | false, _ ->
             let stringID = Interlocked.Add(&i, 2) - 2
@@ -206,13 +206,13 @@ type StringResourceManager() =
 
             let tokenMetadata =
                 if ls.Length > 0 then
-                    let startsWithAmp = ls.[0] = '@'
+                    let startsWithAmp = ls[0] = '@'
                     let containsQuestionMark = ls.IndexOf('?') >= 0
                     let containsHat = ls.IndexOf('^') >= 0
                     let first = ls.IndexOf('$')
                     let last = ls.LastIndexOf('$')
                     let containsDoubleDollar = first >= 0 && first <> last
-                    let startsWithSquareBracket = ls.[0] = '[' || ls.[0] = ']'
+                    let startsWithSquareBracket = ls[0] = '[' || ls[0] = ']'
                     let containsPipe = ls.IndexOf('|') >= 0
 
                     StringMetadata(
@@ -229,10 +229,10 @@ type StringResourceManager() =
             let normalToken = StringTokens(lowID, stringID, quoted)
             let lowerToken = StringTokens(lowID, lowID, false)
 
-            ints.[lowID] <- ls
-            ints.[stringID] <- key
-            metadata.[lowID] <- tokenMetadata
-            metadata.[stringID] <- tokenMetadata
+            ints[lowID] <- ls
+            ints[stringID] <- key
+            metadata[lowID] <- tokenMetadata
+            metadata[stringID] <- tokenMetadata
 
             strings.TryAdd(ls, lowerToken) |> ignore
 
@@ -249,10 +249,10 @@ type StringResourceManager() =
     [<MethodImpl(MethodImplOptions.NoInlining)>]
     member x.InternIdentifierToken(s: string) : StringTokens = strings.GetOrAdd(s, addData)
 
-    member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]
-    member x.GetLowerStringForIDs(id: StringTokens) = ints.[id.lower]
-    member x.GetStringForID(id: StringToken) = ints.[id]
-    member x.GetMetadataForID(id: StringToken) = metadata.[id]
+    member x.GetStringForIDs(id: StringTokens) = ints[id.normal]
+    member x.GetLowerStringForIDs(id: StringTokens) = ints[id.lower]
+    member x.GetStringForID(id: StringToken) = ints[id]
+    member x.GetMetadataForID(id: StringToken) = metadata[id]
 
 module StringResource =
     let mutable stringManager = StringResourceManager()
