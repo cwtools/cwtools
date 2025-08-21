@@ -185,107 +185,69 @@ type StringResourceManager() =
     // TODO: Replace with arrays?
     let strings = new ConcurrentDictionary<string, StringTokens>()
     let ints = new ConcurrentDictionary<StringToken, string>()
-
     let metadata = new ConcurrentDictionary<StringToken, StringMetadata>()
 
     let mutable i = 0
 
+    let addDataFunc (key: string) =
+        let ls = key.ToLower().Trim('"')
+        let quoted = key.StartsWith '\"' && key.EndsWith '\"'
+
+        match strings.TryGetValue(ls) with
+        | true, existingLower ->
+            let stringID = Interlocked.Increment(&i) - 1
+            let newToken = StringTokens(existingLower.lower, stringID, quoted)
+            ints.[stringID] <- key
+            metadata.[stringID] <- metadata.[existingLower.lower]
+            newToken
+        | false, _ ->
+            let stringID = Interlocked.Add(&i, 2) - 2
+            let lowID = stringID + 1
+
+            let tokenMetadata =
+                if ls.Length > 0 then
+                    let startsWithAmp = ls.[0] = '@'
+                    let containsQuestionMark = ls.IndexOf('?') >= 0
+                    let containsHat = ls.IndexOf('^') >= 0
+                    let first = ls.IndexOf('$')
+                    let last = ls.LastIndexOf('$')
+                    let containsDoubleDollar = first >= 0 && first <> last
+                    let startsWithSquareBracket = ls.[0] = '[' || ls.[0] = ']'
+                    let containsPipe = ls.IndexOf('|') >= 0
+
+                    StringMetadata(
+                        startsWithAmp,
+                        containsDoubleDollar,
+                        containsQuestionMark,
+                        containsHat,
+                        startsWithSquareBracket,
+                        containsPipe
+                    )
+                else
+                    StringMetadata(false, false, false, false, false, false)
+
+            let normalToken = StringTokens(lowID, stringID, quoted)
+            let lowerToken = StringTokens(lowID, lowID, false)
+
+            ints.[lowID] <- ls
+            ints.[stringID] <- key
+            metadata.[lowID] <- tokenMetadata
+            metadata.[stringID] <- tokenMetadata
+
+            strings.TryAdd(ls, lowerToken) |> ignore
+
+            normalToken
+
     [<NonSerialized>]
-    let mutable lock = Lock()
+    let mutable addData: Func<string, StringTokens> =
+        Func<string, StringTokens>(addDataFunc)
 
     [<OnDeserialized>]
     member _.OnDeserialized(_context: StreamingContext) =
-        // Recreate the lock after deserialization
-        lock <- Lock()
+        addData <- Func<string, StringTokens>(addDataFunc)
 
-    member x.InternIdentifierToken(s: string) : StringTokens =
-        let mutable res = Unchecked.defaultof<_>
-        let ok = strings.TryGetValue(s, &res)
-
-        if ok then
-            res
-        else
-            lock.Enter()
-
-            try
-                let retry = strings.TryGetValue(s, &res)
-
-                if retry then
-                    res
-                else
-                    let ls = s.ToLower().Trim('"')
-                    let quoted = s.StartsWith '\"' && s.EndsWith '\"'
-                    let lok = strings.TryGetValue(ls, &res)
-
-                    if lok then
-                        let stringID = i
-                        i <- i + 1
-                        let resn = StringTokens(res.lower, stringID, quoted)
-                        ints.[stringID] <- s
-                        metadata.[stringID] <- metadata.[res.lower]
-                        strings.[s] <- resn
-                        resn
-                    else
-                        let stringID = i
-                        let lowID = i + 1
-                        i <- i + 2
-                        // eprintfn "%A" i
-                        let res = StringTokens(lowID, stringID, quoted)
-                        let resl = StringTokens(lowID, lowID, false)
-
-
-                        let (startsWithAmp,
-                             containsQuestionMark,
-                             containsHat,
-                             containsDoubleDollar,
-                             startsWithSquareBracket,
-                             containsPipe) =
-                            if ls.Length > 0 then
-                                let startsWithAmp = ls.[0] = '@'
-                                let containsQuestionMark = ls.IndexOf('?') >= 0
-                                let containsHat = ls.IndexOf('^') >= 0
-                                let first = ls.IndexOf('$')
-                                let last = ls.LastIndexOf('$')
-                                let containsDoubleDollar = first >= 0 && first <> last
-                                let startsWithSquareBracket = ls.[0] = '[' || ls.[0] = ']'
-                                let containsPipe = ls.IndexOf('|') >= 0
-                                // let quoted =
-                                startsWithAmp,
-                                containsQuestionMark,
-                                containsHat,
-                                containsDoubleDollar,
-                                startsWithSquareBracket,
-                                containsPipe
-                            else
-                                false, false, false, false, false, false
-
-                        metadata.[lowID] <-
-                            StringMetadata(
-                                startsWithAmp,
-                                containsDoubleDollar,
-                                containsQuestionMark,
-                                containsHat,
-                                startsWithSquareBracket,
-                                containsPipe
-                            )
-
-                        metadata.[stringID] <-
-                            StringMetadata(
-                                startsWithAmp,
-                                containsDoubleDollar,
-                                containsQuestionMark,
-                                containsHat,
-                                startsWithSquareBracket,
-                                containsPipe
-                            )
-
-                        ints.[lowID] <- ls
-                        ints.[stringID] <- s
-                        strings.[ls] <- resl
-                        strings.[s] <- res
-                        res
-            finally
-                lock.Exit()
+    [<MethodImpl(MethodImplOptions.NoInlining)>]
+    member x.InternIdentifierToken(s: string) : StringTokens = strings.GetOrAdd(s, addData)
 
     member x.GetStringForIDs(id: StringTokens) = ints.[id.normal]
     member x.GetLowerStringForIDs(id: StringTokens) = ints.[id.lower]
