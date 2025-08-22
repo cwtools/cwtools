@@ -694,7 +694,7 @@ module internal FieldValidators =
         (linkMap: EffectMap)
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
-        varSet
+        (varSet: PrefixOptimisedStringSet)
         changeScope
         anyScope
         (ctx: RuleContext)
