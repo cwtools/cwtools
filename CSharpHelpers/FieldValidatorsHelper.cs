@@ -78,7 +78,7 @@ public static partial class FieldValidatorsHelper
         else
         {
             isValidFileName = fileName.Equals(
-                pathOptions.pathFile.Value,
+                pathOptions.pathFile.Value.AsSpan(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
@@ -92,7 +92,7 @@ public static partial class FieldValidatorsHelper
         {
             var extension = Path.GetExtension(fileName);
             isValidExtension = extension.Equals(
-                pathOptions.pathExtension.Value,
+                pathOptions.pathExtension.Value.AsSpan(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
