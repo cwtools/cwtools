@@ -2,29 +2,22 @@ namespace CWTools.Games
 
 open System
 open System.IO
+open CSharpHelpers
 open CWTools.Parser
 open CWTools.Process
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
+open Shared
 open FSharp.Collections.ParallelSeq
 open FParsec
 open DotNet.Globbing
 
 module Files =
-
-
     type FilesScope =
         | All = 1uy
         | Mods = 2uy
         | Vanilla = 3uy
 
-    type ModInfo = { name: string; path: string }
-
-    type DirectoryType =
-        | Vanilla
-        | MultipleMod of ModInfo list
-        | Mod
-        | Unknown
     //TODO: normalised rootDirectory.Replace("\\","/").TrimStart('.')
     type WorkspaceDirectory = { path: string; name: string }
 
@@ -36,13 +29,6 @@ module Files =
     type WorkspaceDirectoryInput =
         | WD of WorkspaceDirectory
         | ZD of ZippedDirectory
-
-    type ExpandedWorkspaceDirectory =
-        { path: string
-          name: string
-          dirType: DirectoryType
-          normalisedPath: string
-          normalisedPathLength: int }
 
     type FileManager
         (
@@ -68,22 +54,22 @@ module Files =
 
         let allDirsBelowRoot (workspaceDir: WorkspaceDirectory) =
             if Directory.Exists workspaceDir.path then
-                getAllFoldersUnion [ workspaceDir.path ]
-                |> List.ofSeq
-                |> List.map (fun folder -> folder, Path.GetFileName folder)
+                getAllFoldersUnion [| workspaceDir.path |]
+                |> Seq.map (fun folder -> folder, Path.GetFileName folder)
+                |> Array.ofSeq
             else
-                []
+                [||]
 
         let isVanillaDirectory (workspaceDir: WorkspaceDirectory) =
             let dir =
                 allDirsBelowRoot workspaceDir
-                |> List.tryFind (fun (_, folder) ->
-                    folder.ToLower() = gameDirName
-                    || folder.ToLower() = "game"
-                    || folder.ToLower() = gameDirName.Replace(" ", "_"))
+                |> Array.tryFind (fun (_, folder) ->
+                    folder == gameDirName
+                    || folder == "game"
+                    || folder == gameDirName.Replace(' ', '_'))
                 |> Option.map fst
                 |> Option.bind (fun f ->
-                    if Directory.Exists(f + (string Path.DirectorySeparatorChar) + "common") then
+                    if Directory.Exists(Path.Combine(f, "common")) then
                         Some f
                     else
                         None)
@@ -104,9 +90,8 @@ module Files =
 
             let getMultipleModDirectory (workspaceDir: WorkspaceDirectory) : ModInfo list =
                 let getModFiles modDir =
-                    Directory.EnumerateFiles modDir
+                    Directory.EnumerateFiles(modDir, "*.mod")
                     |> List.ofSeq
-                    |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
                     |> List.map CKParser.parseFile
                     |> List.choose (function
                         | Success(p, _, _) -> Some p
@@ -118,7 +103,7 @@ module Files =
 
                 let modFolder =
                     allDirsBelowRoot workspaceDir
-                    |> List.tryFind (fun (_, folder) -> folder.ToLower() = "mod" || folder.ToLower() = "mods")
+                    |> Array.tryFind (fun (_, folder) -> folder == "mod" || folder == "mods")
 
                 match modFolder with
                 | None -> []
@@ -145,8 +130,7 @@ module Files =
             let checkIsGameFolder (workspaceDir: WorkspaceDirectory) =
                 let foundAnyFolders =
                     Directory.EnumerateDirectories workspaceDir.path
-                    |> List.ofSeq
-                    |> List.exists checkFolderLooksLikeGameFolder
+                    |> Seq.exists checkFolderLooksLikeGameFolder
 
                 foundAnyFolders
 
@@ -168,8 +152,7 @@ module Files =
                     { path = rd.path
                       name = rd.name
                       dirType = classifyDirectory rd
-                      normalisedPath = normalisedPath
-                      normalisedPathLength = normalisedPath.Length })
+                      normalisedPath = normalisedPath })
 
             let embeddedDir =
                 embeddedFolder
@@ -177,8 +160,7 @@ module Files =
                     { path = e
                       name = "embedded"
                       dirType = Unknown
-                      normalisedPath = e.Replace("\\", "/").TrimStart('.')
-                      normalisedPathLength = e.Replace("\\", "/").TrimStart('.').Length })
+                      normalisedPath = e.Replace("\\", "/").TrimStart('.') })
 
             match embeddedDir with
             | Some ed -> ed :: expanded
@@ -212,55 +194,6 @@ module Files =
             |> allFoldersInDirectory
             |> List.filter (fun d -> Directory.Exists d.path)
 
-        let convertPathToLogicalPath =
-            fun (path: string) ->
-                let path = path.Replace('\\', '/')
-                // log "conv %A" path
-                let checkDirectories (pathToCheck: string) =
-                    expandedRootDirectories
-                    |> List.tryPick (fun rd ->
-                        let index = pathToCheck.IndexOf(rd.normalisedPath, StringComparison.Ordinal)
-
-                        if index >= 0 then
-                            Some(pathToCheck.Substring(index + rd.normalisedPathLength))
-                        else
-                            None)
-                    |> Option.defaultValue pathToCheck
-
-                let path = checkDirectories path
-                // let path = let index = path.IndexOf(normalisedScopeDirectory) in if index >= 0 then path.Substring(index + normalisedScopeDirectoryLength) else path
-                // log "conv2 %A" path
-                //let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
-                if
-                    path.StartsWith("gfx\\", StringComparison.Ordinal)
-                    || path.StartsWith("gfx/", StringComparison.Ordinal)
-                then
-                    path
-                else
-                    let pathContains (part: string) =
-                        path.Contains("/" + part + "/") || path.Contains("\\" + part + "\\")
-
-                    let pathIndex (part: string) =
-                        let i =
-                            if path.IndexOf("/" + part + "/", StringComparison.Ordinal) < 0 then
-                                path.IndexOf("\\" + part + "\\", StringComparison.Ordinal)
-                            else
-                                path.IndexOf("/" + part + "/", StringComparison.Ordinal)
-
-                        i + 1
-
-                    let matches =
-                        [ for s in scriptFolders do
-                              if pathContains s then
-                                  let i = pathIndex s in yield i, path.Substring(i)
-                              else
-                                  () ]
-
-                    if matches.IsEmpty then
-                        path
-                    else
-                        matches |> List.minBy fst |> snd
-
         let fileToResourceInput
             (normalisedPath: string)
             normalisedPathLength
@@ -268,6 +201,15 @@ module Files =
             (fileLength: int64)
             (fileTextThunk: unit -> string)
             =
+            let rootedPath =
+                filepath
+                    .AsSpan()
+                    .Slice(
+                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
+                        + normalisedPathLength
+                        + 1
+                    )
+
             match Path.GetExtension(filepath) with
             | ".txt"
             | ".gui"
@@ -275,13 +217,6 @@ module Files =
             | ".sfx"
             | ".asset"
             | ".map" ->
-                let rootedpath =
-                    filepath.Substring(
-                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
-                        + normalisedPathLength
-                        + 1
-                    )
-
                 if fileLength > ((int64 maxFileSizeMB) * 1000000L) then
                     None
                 else
@@ -289,7 +224,12 @@ module Files =
                         EntityResourceInput
                             { scope = scope
                               filepath = filepath
-                              logicalpath = (convertPathToLogicalPath rootedpath)
+                              logicalpath =
+                                FileManagerHelper.ConvertPathToLogicalPath(
+                                    rootedPath,
+                                    expandedRootDirectories,
+                                    scriptFolders
+                                )
                               filetext = fileTextThunk ()
                               validate = true }
                     )
@@ -302,33 +242,29 @@ module Files =
             | ".ttf"
             | ".otf"
             | ".wav" ->
-                let rootedpath =
-                    filepath.Substring(
-                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
-                        + normalisedPathLength
-                        + 1
-                    )
-
                 Some(
                     FileResourceInput
                         { scope = scope
                           filepath = filepath
-                          logicalpath = convertPathToLogicalPath rootedpath }
+                          logicalpath =
+                            FileManagerHelper.ConvertPathToLogicalPath(
+                                rootedPath,
+                                expandedRootDirectories,
+                                scriptFolders
+                            ) }
                 )
             | ".yml"
             | ".csv" ->
-                let rootedpath =
-                    filepath.Substring(
-                        filepath.IndexOf(normalisedPath, StringComparison.Ordinal)
-                        + normalisedPathLength
-                        + 1
-                    )
-
                 Some(
                     FileWithContentResourceInput
                         { scope = scope
                           filepath = filepath
-                          logicalpath = convertPathToLogicalPath rootedpath
+                          logicalpath =
+                            FileManagerHelper.ConvertPathToLogicalPath(
+                                rootedPath,
+                                expandedRootDirectories,
+                                scriptFolders
+                            )
                           filetext = fileTextThunk ()
                           validate = true }
                 )
@@ -365,7 +301,7 @@ module Files =
                         |> PSeq.choose (fun (scope, fn) ->
                             (fileToResourceInput
                                 workspaceDir.normalisedPath
-                                workspaceDir.normalisedPathLength
+                                workspaceDir.normalisedPath.Length
                                 (scope, fn)
                                 (fn |> FileInfo).Length
                                 (fun _ -> File.ReadAllText(fn, encoding))))
@@ -404,5 +340,8 @@ module Files =
             |> List.map (fun f -> f.name, f.path)
 
         member __.ShouldUseEmbedded = not doesWorkspaceContainVanillaDirectory
-        member __.ConvertPathToLogicalPath(path: string) = convertPathToLogicalPath path
+
+        member __.ConvertPathToLogicalPath(path: string) =
+            FileManagerHelper.ConvertPathToLogicalPath(path, expandedRootDirectories, scriptFolders)
+
         member __.GetScopeForPath(path: string) = getScopeForPath path
