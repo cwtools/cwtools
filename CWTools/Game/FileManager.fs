@@ -14,9 +14,9 @@ module Files =
 
 
     type FilesScope =
-        | All
-        | Mods
-        | Vanilla
+        | All = 1uy
+        | Mods = 2uy
+        | Vanilla = 3uy
 
     type ModInfo = { name: string; path: string }
 
