@@ -284,7 +284,7 @@ module Files =
                         scope,
                         folder,
                         (if Directory.Exists folder then
-                             getAllFoldersUnion [ folder ] |> Seq.collect Directory.EnumerateFiles
+                             Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories)
                          else
                              Seq.empty)
                         |> List.ofSeq)
