@@ -76,21 +76,6 @@ module Utils =
 
         x
 
-    let getAllFoldersUnion dirs =
-        let rec getAllFolders depth dirs =
-            if Seq.isEmpty dirs || depth > 20 then
-                Seq.empty
-            else
-                seq {
-                    yield! dirs |> Seq.collect Directory.EnumerateDirectories
-                    yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders (depth + 1)
-                }
-
-        seq {
-            yield! dirs
-            yield! getAllFolders 0 dirs
-        }
-
     let structSnd struct (_, x) = x
     let structFst struct (x, _) = x
 

@@ -50,11 +50,10 @@ module Files =
                 | ZD zd -> Some zd
                 | _ -> None)
 
-
-
         let allDirsBelowRoot (workspaceDir: WorkspaceDirectory) =
             if Directory.Exists workspaceDir.path then
-                getAllFoldersUnion [| workspaceDir.path |]
+                [| workspaceDir.path |]
+                |> Seq.append (Directory.EnumerateDirectories(workspaceDir.path, "*", SearchOption.AllDirectories))
                 |> Seq.map (fun folder -> folder, Path.GetFileName folder)
                 |> Array.ofSeq
             else
