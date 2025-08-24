@@ -40,6 +40,7 @@ namespace CWToolsCSTests
             // var values = n.AllChildren.Where(x => x.IsLeafValueC).Select(x => ToMyValue(x.leafvalue)).ToList();
             return new MyNode { };
         }
+
         public static MyNode MapToMyNode() {
             //Parse event file
             var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
@@ -99,8 +100,7 @@ namespace CWToolsCSTests
             var test = processed.Nodes.FirstOrDefault().ToRaw;
             Console.WriteLine(CKPrinter.api.prettyPrintStatement.Invoke(test));
 
-            var folders = CWTools.Utilities.Utils.getAllFoldersUnion(new List<string> {@"C:\Users\Thomas\Git\cwtools-stellaris-config"});
-            var files = folders.SelectMany(folder => Directory.EnumerateFiles(folder))
+            var files = Directory.EnumerateFiles(@"C:\Users\Thomas\Git\cwtools-stellaris-config", "*", SearchOption.AllDirectories)
                                     .Where(f => Path.GetExtension(f) == ".cwt" || Path.GetExtension(f) == ".log")
                                     .Select(f => Tuple.Create(f, File.ReadAllText(f)));
 
