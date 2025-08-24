@@ -57,8 +57,8 @@ module Utils =
     let log m = logInfo m
 
     let duration f s =
-        let timer = new System.Diagnostics.Stopwatch()
-        timer.Start()
+        // let timer = new System.Diagnostics.Stopwatch()
+        // timer.Start()
         let returnValue = f ()
         //log (sprintf "Elapsed Time: %i %s" timer.ElapsedMilliseconds s)
         returnValue
