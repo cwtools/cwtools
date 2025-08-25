@@ -2,6 +2,8 @@ namespace CWTools.Process.Scopes
 
 open System
 open System.Collections.Frozen
+open System.Linq
+open CSharpHelpers
 open CWTools.Common
 open CWTools.Utilities
 open CWTools.Utilities.Utils
@@ -24,7 +26,7 @@ open CWTools.Utilities.Utils2
 //         let tree = EffectMapSparseTrie()
 //         effects |> Seq.iter (fun x -> tree.Add(x.Name, x))
 //         tree
-type varPrefixFunc = delegate of ReadOnlySpan<char> -> string * bool
+type varPrefixFunc = delegate of ReadOnlySpan<char> -> struct (string * bool)
 
 type EffectDictionary(effects: Effect seq) =
 
@@ -161,7 +163,7 @@ module Scopes =
                         None
                     )
                 else
-                    let key, varOnly = varPrefixFun.Invoke(key)
+                    let struct (key, varOnly) = varPrefixFun.Invoke(key)
 
                     let afterAmp, hasAmp =
                         if key.IndexOf('@') >= 0 then
@@ -317,7 +319,11 @@ module Scopes =
                     else
                         res2)
 
-    let createChangeScope oneToOneScopes (varPrefixFun: varPrefixFunc) (hoi4TargetedHardcodedVariables: bool) =
+    let createChangeScope
+        (oneToOneScopes: (string * (ScopeContext * struct (bool * bool) -> ScopeContext * struct (bool * bool))) list)
+        (varPrefixFun: varPrefixFunc)
+        (hoi4TargetedHardcodedVariables: bool)
+        =
         ChangeScope
             (fun
                 (varLHS: bool)
@@ -346,14 +352,19 @@ module Scopes =
                         None
                     )
                 else
-                    let key, varOnly = varPrefixFun.Invoke(key)
+                    let struct (key, varOnly) = varPrefixFun.Invoke(key)
 
-                    let inner (context: ScopeContext, (first: bool, changed: bool)) (nextKey: string) (last: bool) =
+                    let inner
+                        (context: ScopeContext, struct (first: bool, changed: bool))
+                        (nextKey: string)
+                        (last: bool)
+                        =
                         let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
 
                         match onetoone with
                         | Some(_, f) ->
-                            f (context, (first, false)), NewScope(f (context, (false, false)) |> fst, [], None)
+                            f (context, struct (first, false)),
+                            NewScope(f (context, struct (false, false)) |> fst, [], None)
                         | None ->
                             let eventTargetLinkMatch =
                                 eventTargetLinks.TryFind nextKey
@@ -369,7 +380,7 @@ module Scopes =
                                 valueScopeMatch
                             with
                             | true, _, _ ->
-                                (context, (true, true)),
+                                (context, struct (true, true)),
                                 NewScope(
                                     { Root = source.Root
                                       From = source.From
@@ -386,20 +397,20 @@ module Scopes =
 
                                     match context.CurrentScope, possibleScopes, exact with
                                     | x, _, _ when x = source.Root.AnyScope ->
-                                        (context, (false, false)), ValueFound refHint
-                                    | _, [], _ -> (context, (false, false)), NotFound
-                                    | _, _, true -> (context, (false, false)), ValueFound refHint
+                                        (context, struct (false, false)), ValueFound refHint
+                                    | _, [], _ -> (context, struct (false, false)), NotFound
+                                    | _, _, true -> (context, struct (false, false)), ValueFound refHint
                                     | current, ss, false ->
-                                        (context, (false, false)), WrongScope(nextKey, current, ss, refHint)
+                                        (context, struct (false, false)), WrongScope(nextKey, current, ss, refHint)
                                 else
-                                    (context, (false, false)), NotFound
+                                    (context, struct (false, false)), NotFound
                             | _, None, _ ->
                                 if last && (vars.Contains nextKey) then
-                                    (context, (false, false)), VarFound
+                                    (context, struct (false, false)), VarFound
                                 else if varOnly then
-                                    (context, (false, false)), VarNotFound nextKey
+                                    (context, struct (false, false)), VarNotFound nextKey
                                 else
-                                    (context, (false, false)), NotFound
+                                    (context, struct (false, false)), NotFound
                             | _, Some e, _ ->
                                 let possibleScopes = e.Scopes
                                 let currentScope = context.CurrentScope
@@ -409,7 +420,7 @@ module Scopes =
                                 | x, _, _, true when x = source.Root.AnyScope ->
                                     ({ context with
                                         Scopes = applyTargetScope e.Target context.Scopes },
-                                     (false, true)),
+                                     struct (false, true)),
                                     NewScope(
                                         { source with
                                             Scopes = applyTargetScope e.Target context.Scopes },
@@ -417,12 +428,12 @@ module Scopes =
                                         None
                                     )
                                 | x, _, _, false when x = source.Root.AnyScope ->
-                                    (context, (false, false)), NewScope(context, e.IgnoreChildren, None)
-                                | _, [], _, _ -> (context, (false, false)), NotFound
+                                    (context, struct (false, false)), NewScope(context, e.IgnoreChildren, None)
+                                | _, [], _, _ -> (context, struct (false, false)), NotFound
                                 | _, _, true, true ->
                                     ({ context with
                                         Scopes = applyTargetScope e.Target context.Scopes },
-                                     (false, true)),
+                                     struct (false, true)),
                                     NewScope(
                                         { source with
                                             Scopes = applyTargetScope e.Target context.Scopes },
@@ -430,9 +441,9 @@ module Scopes =
                                         None
                                     )
                                 | _, _, true, false ->
-                                    (context, (false, false)), NewScope(context, e.IgnoreChildren, None)
+                                    (context, struct (false, false)), NewScope(context, e.IgnoreChildren, None)
                                 | current, ss, false, _ ->
-                                    (context, (false, false)), WrongScope(nextKey, current, ss, None)
+                                    (context, struct (false, false)), WrongScope(nextKey, current, ss, None)
 
                     let inner2 = fun a b l -> inner a b l |> (fun (c, d) -> c, Some d)
                     // Try just the raw string first
@@ -450,11 +461,11 @@ module Scopes =
                                         | None -> inner2 (c, b) k l
                                         | Some(NewScope(x, i, _)) -> inner2 (x, b) k l
                                         | Some x -> (c, b), Some x)
-                                    ((source, (true, false)), None) // |> snd |> Option.defaultValue (NotFound)
+                                    ((source, struct (true, false)), None)
 
                             match rawRes with
                             | (_, _), None -> NotFound
-                            | (_, (_, true)), Some r ->
+                            | (_, struct (_, true)), Some r ->
                                 r
                                 |> function
                                     | NewScope(x, i, _) ->
@@ -465,7 +476,7 @@ module Scopes =
                                             None
                                         )
                                     | x -> x
-                            | (_, (_, false)), Some r -> r
+                            | (_, struct (_, false)), Some r -> r
                         else
                             NotFound
 
@@ -486,12 +497,12 @@ module Scopes =
                                     | None -> inner2 (c, b) k l
                                     | Some(NewScope(x, i, _)) -> inner2 (x, b) k l
                                     | Some x -> (c, b), Some x)
-                                ((source, (true, false)), None) // |> snd |> Option.defaultValue (NotFound)
+                                ((source, struct (true, false)), None)
 
                         let res2 =
                             match res with
                             | (_, _), None -> NotFound
-                            | (_, (_, true)), Some r ->
+                            | (_, struct (_, true)), Some r ->
                                 r
                                 |> function
                                     | NewScope(x, i, _) ->
@@ -502,7 +513,7 @@ module Scopes =
                                             None
                                         )
                                     | x -> x
-                            | (_, (_, false)), Some r -> r
+                            | (_, struct (_, false)), Some r -> r
 
                         if ampersandSplit.Length > 1 then
                             if vars.Contains key then
@@ -520,7 +531,7 @@ module Scopes =
                                             | None -> inner2 (c, b) k l
                                             | Some(NewScope(x, i, _)) -> inner2 (x, b) k l
                                             | Some x -> (c, b), Some x)
-                                        ((source, (true, false)), None) // |> snd |> Option.defaultValue (NotFound)
+                                        ((source, (true, false)), None)
 
                                 let tres2 =
                                     match tres with

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics;
 using Microsoft.FSharp.Core;
 
 namespace CSharpHelpers;
@@ -45,6 +46,24 @@ public static class Extensions
             }
 
             currentIndex++;
+        }
+
+        throw new ArgumentOutOfRangeException(
+            nameof(index),
+            "Index is out of range of the enumerator."
+        );
+    }
+
+    public static ReadOnlySpan<char> SplitWithCount(this ReadOnlySpan<char> span, char separator, int index, int count)
+    {
+        Debug.Assert(count > 0);
+        Debug.Assert(count > index);
+
+        Span<Range> ranges = count > 64 ? new Range[count] : stackalloc Range[count];
+        int total = span.Split(ranges, separator);
+        if (total > index)
+        {
+            return span[ranges[index]];
         }
 
         throw new ArgumentOutOfRangeException(
