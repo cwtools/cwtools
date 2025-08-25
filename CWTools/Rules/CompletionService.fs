@@ -1115,5 +1115,5 @@ type CompletionService
 
 
 
-    member __.Complete(pos: pos, entity: Entity, scopeContext) = complete pos entity scopeContext
-    member __.LocalisationComplete(pos: pos, filetext: string) = locComplete pos filetext
+    member _.Complete(pos: pos, entity: Entity, scopeContext) = complete pos entity scopeContext
+    member _.LocalisationComplete(pos: pos, filetext: string) = locComplete pos filetext

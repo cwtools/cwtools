@@ -579,7 +579,7 @@ type ValidationResult =
         | Invalid(id, _) -> id.GetHashCode()
 
 type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) list) =
-    member __.GlobMatch(pattern: string) =
+    member _.GlobMatch(pattern: string) =
         let options = new GlobOptions()
         options.Evaluation.CaseInsensitive <- true
         let glob = Glob.Parse(pattern, options)
@@ -590,7 +590,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
     member this.GlobMatchChildren(pattern: string) =
         this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
 
-    member __.AllOfType(entityType: EntityType) =
+    member _.AllOfType(entityType: EntityType) =
         entities
         |> List.choose (fun struct (es, d) ->
             if es.entityType = entityType then
@@ -603,8 +603,8 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
         |> List.map (fun (e, d) -> e.Children)
         |> List.collect id
 
-    member __.All = entities |> List.map (fun struct (es, _) -> es.entity)
-    member __.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
+    member _.All = entities |> List.map (fun struct (es, _) -> es.entity)
+    member _.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
 
     member this.AllEffects =
         entities
@@ -614,7 +614,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
         entities
         |> List.collect (fun struct (_, d) -> d.Force().TriggerBlocks |> Option.defaultValue [])
 
-    member __.AddOrGetCached id generator =
+    member _.AddOrGetCached id generator =
         entities
         |> List.collect (fun struct (e, d) ->
             let data = d.Force()
@@ -627,7 +627,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
                 v)
 
 
-    member __.Raw = entities
+    member _.Raw = entities
 
 type STLEntitySet = EntitySet<STLComputedData>
 type EU4EntitySet = EntitySet<EU4ComputedData>

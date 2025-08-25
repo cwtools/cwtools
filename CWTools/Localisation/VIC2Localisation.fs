@@ -167,14 +167,14 @@ module VIC2Localisation =
 
         member val Results = results with get, set
 
-        member __.Api(lang: Lang) =
+        member _.Api(lang: Lang) =
             { new ILocalisationAPI with
-                member __.Results = results
-                member __.Values = values lang
-                member __.GetKeys = getKeys ()
-                member __.GetDesc x = getDesc lang x
-                member __.GetLang = lang
-                member __.ValueMap = valueMap lang }
+                member _.Results = results
+                member _.Values = values lang
+                member _.GetKeys = getKeys ()
+                member _.GetDesc x = getDesc lang x
+                member _.GetLang = lang
+                member _.ValueMap = valueMap lang }
 
         interface ILocalisationAPICreator with
             member this.Api l = this.Api l

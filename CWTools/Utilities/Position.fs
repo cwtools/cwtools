@@ -304,11 +304,11 @@ let mkFileIndexRange fi b e = range (fi, b, e)
 (* end representation, start derived ops *)
 let orderOn p (pxOrder: IComparer<'U>) =
     { new IComparer<'T> with
-        member __.Compare(x, xx) = pxOrder.Compare(p x, p xx) }
+        member _.Compare(x, xx) = pxOrder.Compare(p x, p xx) }
 
 let porder (compare1: IComparer<'T1>, compare2: IComparer<'T2>) =
     { new IComparer<'T1 * 'T2> with
-        member __.Compare((a1, a2), (aa1, aa2)) =
+        member _.Compare((a1, a2), (aa1, aa2)) =
             let res1 = compare1.Compare(a1, aa1)
             if res1 <> 0 then res1 else compare2.Compare(a2, aa2) }
 

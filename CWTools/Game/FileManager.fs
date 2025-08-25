@@ -330,17 +330,17 @@ module Files =
                 let index = path.IndexOf(rd.normalisedPath, StringComparison.Ordinal)
                 if index >= 0 then Some rd.name else None)
 
-        member __.AllFilesByPath() =
+        member _.AllFilesByPath() =
             (expandedRootDirectories |> List.collect allFilesByPath) @ allFilesInZips
 
-        member __.AllFolders() =
+        member _.AllFolders() =
             expandedRootDirectories
             |> List.collect allFoldersInWorkspaceDir
             |> List.map (fun f -> f.name, f.path)
 
-        member __.ShouldUseEmbedded = not doesWorkspaceContainVanillaDirectory
+        member _.ShouldUseEmbedded = not doesWorkspaceContainVanillaDirectory
 
-        member __.ConvertPathToLogicalPath(path: string) =
+        member _.ConvertPathToLogicalPath(path: string) =
             FileManagerHelper.ConvertPathToLogicalPath(path, expandedRootDirectories, scriptFolders)
 
-        member __.GetScopeForPath(path: string) = getScopeForPath path
+        member _.GetScopeForPath(path: string) = getScopeForPath path

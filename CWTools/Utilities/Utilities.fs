@@ -21,7 +21,7 @@ module Utils =
 
     type InsensitiveStringComparer() =
         interface IComparer<string> with
-            member __.Compare(a, b) =
+            member _.Compare(a, b) =
                 String.Compare(a, b, StringComparison.OrdinalIgnoreCase)
 
     type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>

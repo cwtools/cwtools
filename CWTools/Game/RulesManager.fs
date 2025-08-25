@@ -477,5 +477,5 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         logInfo $"Refresh all lookups: %0.3f{float endToEndTimer.ElapsedMilliseconds / 1000.0}s"
         ruleValidationService, infoService, completionService
 
-    member __.LoadBaseConfig(rulesSettings) = loadBaseConfig rulesSettings
-    member __.RefreshConfig() = refreshConfig ()
+    member _.LoadBaseConfig(rulesSettings) = loadBaseConfig rulesSettings
+    member _.RefreshConfig() = refreshConfig ()
