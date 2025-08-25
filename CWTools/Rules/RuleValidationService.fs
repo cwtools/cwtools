@@ -703,10 +703,10 @@ type RuleValidationService
                  | IgnoreField _ -> OK
                  | ScopeField s ->
                      let scope = newCtx.scopes
-                     let key = node.Key.Trim('"')
+                     let key = node.Key.AsSpan().Trim('"')
 
                      match
-                         changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope,
+                         changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildCardLinks, varSet, key, scope),
                          (stringManager.GetMetadataForID node.KeyId.lower).containsDoubleDollar
                      with
                      | _, true ->
@@ -720,7 +720,7 @@ type RuleValidationService
                      | NewScope(newScopes, _, _), _ ->
                          let newCtx = { newCtx with scopes = newScopes }
                          applyClauseField enforceCardinality options.severity newCtx rules node errors
-                     | NotFound, _ -> inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
+                     | NotFound, _ -> inv (ErrorCodes.ConfigRulesInvalidScopeCommand(key.ToString())) node <&&&> errors
                      | WrongScope(command, prevscope, expected, _), _ ->
                          inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}") node
                          <&&&> errors

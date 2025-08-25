@@ -347,17 +347,6 @@ module internal FieldValidators =
                 LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
         | _ -> errors
 
-    let memoize keyFunction memFunction =
-        let dict = Dictionary<_, _>()
-
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-    // let memoizedComplexTypes (typetype : TypeType) (values : StringSet)
     let checkTypeField
         (typesMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         severity
@@ -380,22 +369,11 @@ module internal FieldValidators =
             if firstCharEqualsAmp ids.lower then
                 errors
             else
-                // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
-                // let values = if isComplex then values.ToList() |> List.map typeKeyMap |> (fun ts -> StringSet.Create(InsensitiveStringComparer(), ts)) else values
                 let found =
                     let newvalue =
                         match typetype with
-                        | TypeType.Simple t -> Some value
+                        | TypeType.Simple _ -> Some value
                         | Complex(p, _, s) ->
-                            // match value.IndexOf(p, StringComparison.OrdinalIgnoreCase), value.LastIndexOf(s, StringComparison.OrdinalIgnoreCase) with
-                            // | -1, -1 ->
-                            //     None
-                            // | fi, -1 ->
-                            //     Some (value.Substring(p.Length))
-                            // | -1, si ->
-                            //     Some (value.Substring(0, si))
-                            // | fi, si ->
-                            //     Some (value.Substring(p.Length, (si - p.Length)))
                             match
                                 value.StartsWith(p, StringComparison.OrdinalIgnoreCase),
                                 value.EndsWith(s, StringComparison.OrdinalIgnoreCase),
@@ -577,7 +555,7 @@ module internal FieldValidators =
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
-        changeScope
+        (changeScope: ChangeScope)
         anyScope
         (ctx: RuleContext)
         s
@@ -589,8 +567,7 @@ module internal FieldValidators =
         let key = key.Trim('"')
         let scope = ctx.scopes
 
-        match changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope with
-        // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = ( ^a : (static member AnyScope : ^a) ()) || current = ( ^a : (static member AnyScope : ^a) ()) then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
+        match changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildcardLinks, varSet, key, scope) with
         | ScopeResult.NewScope({ Scopes = current :: _ }, _, _) ->
             if checkAnyScopesMatch anyScope s current then
                 errors
@@ -615,18 +592,17 @@ module internal FieldValidators =
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
-        changeScope
+        (changeScope: ChangeScope)
         anyScope
         (ctx: RuleContext)
         s
         (ids: StringTokens)
         =
         // log "scope %s %A"key ctx
-        let key = getOriginalKey ids
+        let key = getOriginalKey(ids).AsSpan()
         let key = key.Trim('"')
-        let scope = ctx.scopes
 
-        match changeScope true true linkMap valueTriggerMap wildcardLinks varSet key scope with
+        match changeScope.Invoke(true, true, linkMap, valueTriggerMap, wildcardLinks, varSet, key, ctx.scopes) with
         | ScopeResult.NewScope({ Scopes = current :: _ }, _, _) -> checkAnyScopesMatch anyScope s current
         | NotFound -> false
         | ScopeResult.WrongScope _ -> true
@@ -639,7 +615,7 @@ module internal FieldValidators =
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
-        changeScope
+        (changeScope: ChangeScope)
         (ctx: RuleContext)
         isInt
         is32Bit
@@ -650,7 +626,7 @@ module internal FieldValidators =
         errors
         =
         let scope = ctx.scopes
-        let key = getOriginalKey ids
+        let key = getOriginalKey(ids).AsSpan()
         let metadata = getStringMetadata ids.lower
 
         if metadata.startsWithAmp then
@@ -658,14 +634,14 @@ module internal FieldValidators =
         else
             let key =
                 match metadata.containsQuestionMark, metadata.containsHat with
-                | true, _ -> key.Split('?').[0]
-                | false, true -> key.Split('^').[0]
+                | true, _ -> key.SplitFirst('?')
+                | false, true -> key.SplitFirst('^')
                 | _ -> key
 
             match
-                TryParser.parseDecimal key,
-                TryParser.parseInt key,
-                changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
+                TryParser.parseDecimalSpan key,
+                TryParser.parseIntSpan key,
+                changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildcardLinks, varSet, key, scope)
             with
             | _, ValueSome i, _ when isInt && min <= decimal i && max >= decimal i -> errors
             | ValueSome f, _, _ when (not isInt) && min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3))) ->
@@ -695,7 +671,7 @@ module internal FieldValidators =
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         (varSet: PrefixOptimisedStringSet)
-        changeScope
+        (changeScope: ChangeScope)
         anyScope
         (ctx: RuleContext)
         isInt
@@ -706,29 +682,26 @@ module internal FieldValidators =
         =
         let scope = ctx.scopes
         let metadata = getStringMetadata ids.lower
-        let key = getOriginalKey ids
 
         if metadata.startsWithAmp then
             true
         else
+            let key = getOriginalKey(ids).AsSpan()
             let key =
                 match metadata.containsQuestionMark, metadata.containsHat with
-                | true, _ -> key.Split('?').[0]
-                | false, true -> key.Split('^').[0]
+                | true, _ -> key.SplitFirst('?')
+                | false, true -> key.SplitFirst('^')
                 | _ -> key
 
             match
-                TryParser.parseDecimal key,
-                TryParser.parseInt key,
-                changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
+                TryParser.parseDecimalSpan key,
+                TryParser.parseIntSpan key,
+                changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildcardLinks, varSet, key, scope)
             with
             | _, ValueSome i, _ -> isInt && min <= decimal i && max >= decimal i
             | ValueSome f, _, _ -> min <= f && max >= f && ((not is32Bit) || (f = Math.Round(f, 3)))
             | _, _, VarFound -> true
-            | _, _, VarNotFound s -> false
-            // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = anyScope || current = anyScope then OK else Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode])
-            // |NotFound _ -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode])
-            // |WrongScope (command, prevscope, expected) -> Invalid (Guid.NewGuid(), [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode])
+            | _, _, VarNotFound _ -> false
             | _ -> false
 
     let checkValueScopeField
@@ -737,7 +710,7 @@ module internal FieldValidators =
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
-        changeScope
+        (changeScope: ChangeScope)
         (ctx: RuleContext)
         isInt
         min
@@ -753,14 +726,14 @@ module internal FieldValidators =
 
         let key =
             match metadata.containsPipe with
-            | true -> key.Split('|').[0]
-            | _ -> key
+            | true -> key.AsSpan().SplitFirst('|')
+            | _ -> key.AsSpan()
 
         match
             firstCharEqualsAmp ids.lower,
-            TryParser.parseDecimal key,
-            TryParser.parseInt key,
-            changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
+            TryParser.parseDecimalSpan key,
+            TryParser.parseIntSpan key,
+            changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildcardLinks, varSet, key, scope)
         with
         | true, _, _, _ -> errors
         | _, _, ValueSome i, _ when isInt && min <= decimal i && max >= decimal i -> errors
@@ -777,7 +750,7 @@ module internal FieldValidators =
         | _, _, _, NotFound ->
             match enumsMap.TryFind "static_values" with
             | Some(_, es) ->
-                if es.Contains(trimQuoteSpan key) then
+                if es.Contains(key.Trim('\"')) then
                     errors
                 else
                     inv ErrorCodes.ConfigRulesExpectedVariableValue leafornode <&&&> errors
@@ -792,7 +765,7 @@ module internal FieldValidators =
         (valueTriggerMap: EffectMap)
         (wildcardLinks: ScopedEffect list)
         varSet
-        changeScope
+        (changeScope: ChangeScope)
         anyScope
         (ctx: RuleContext)
         isInt
@@ -807,7 +780,7 @@ module internal FieldValidators =
             firstCharEqualsAmp ids.lower,
             TryParser.parseDecimal key,
             TryParser.parseInt key,
-            changeScope false true linkMap valueTriggerMap wildcardLinks varSet key scope
+            changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildcardLinks, varSet, key, scope)
         with
         | true, _, _, _ -> true
         | _, _, ValueSome i, _ -> isInt && min <= decimal i && max >= decimal i

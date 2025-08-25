@@ -95,8 +95,12 @@ module TryParser =
             | true, v -> ValueSome v
             | false, _ -> ValueNone
 
-    let parseDate: string -> _ = tryParseWith System.DateTime.TryParse
-    let parseInt: string -> _ = tryParseWith System.Int32.TryParse
+    let parseDate: string -> _ = tryParseWith DateTime.TryParse
+    let parseInt: string -> _ = tryParseWith Int32.TryParse
+    let parseIntSpan (s: ReadOnlySpan<char>)  =
+        match Int32.TryParse(s) with
+        | true, v -> ValueSome v
+        | false, _ -> ValueNone
 
     let parseIntWithDecimal: string -> _ =
         tryParseWith (fun s ->
@@ -119,11 +123,16 @@ module TryParser =
 
     let parseDecimal: string -> _ =
         tryParseWith (fun s ->
-            System.Decimal.TryParse(
-                s,
-                (NumberStyles.Float ||| NumberStyles.AllowThousands),
-                CultureInfo.InvariantCulture
-            ))
+            Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture))
+
+    let parseDecimalSpan (s: ReadOnlySpan<char>) =
+        match
+            Decimal.TryParse(s, (NumberStyles.Float ||| NumberStyles.AllowThousands), CultureInfo.InvariantCulture)
+        with
+        | true, v -> ValueSome v
+        | false, _ -> ValueNone
+
+
     // etc.
 
     // active patterns for try-parsing strings
