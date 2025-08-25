@@ -1,6 +1,7 @@
 namespace CWTools.Games
 
 open System.Collections.Concurrent
+open System.Diagnostics
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -90,12 +91,12 @@ type EU5ComputedData = JominiComputedData
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
 
-type PassFileResult = { parseTime: int64 }
+type PassFileResult = { parseTime: float }
 
 type FailFileResult =
     { error: string
       position: FParsec.Position
-      parseTime: int64 }
+      parseTime: float }
 
 type FileResult =
     | Pass of result: PassFileResult
@@ -336,10 +337,9 @@ type ResourceManager<'T when 'T :> ComputedData>
     let mutable entitiesMap: Map<string, struct (Entity * Lazy<'T>)> = Map.empty
 
     let duration f =
-        let timer = System.Diagnostics.Stopwatch()
-        timer.Start()
+        let timestamp = Stopwatch.GetTimestamp()
         let returnValue = f ()
-        (returnValue, timer.ElapsedMilliseconds)
+        (returnValue, Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds)
 
     let matchResult (scope: string, file: string, logicalpath: string, validate: bool, (parseResult, time)) =
         match parseResult with
@@ -370,14 +370,6 @@ type ResourceManager<'T when 'T :> ComputedData>
                   overwrite = Overwrite.No }
             ),
             []
-
-    // let parseFile (file : ResourceInput) =
-    //      match file with
-    //                 |CachedResourceInput (r, s) -> r, s
-    //                 |EntityResourceInput e ->
-    //                     // log "%A %A" e.logicalpath e.filepath
-    //                     e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
-    //                 |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
 
     let shipProcess = STLProcess.shipProcess.ProcessNode
 
