@@ -41,7 +41,6 @@ type RuleValidationService
         validateLocalisation: LocEntry -> ScopeContext -> ValidationResult
     ) =
 
-    let mutable errorList: ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
     let valueTriggerMap = valueTriggers
 
