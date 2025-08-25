@@ -99,7 +99,6 @@ module CommonValidation =
             let res =
                 zipped
                 |> Seq.collect (fun (tn, ts) -> (groupFun ts) |> Array.map (fun t -> tn, t))
-                |> Seq.toArray
 
             res
             <&!&> (fun (typename, tdi) ->
@@ -657,8 +656,8 @@ module CommonValidation =
             | _ -> OK)
 
     type BoolState =
-        | AND
-        | OR
+        | AND = 1uy
+        | OR = 2uy
 
     let validateRedundantANDWithNOR: StructureValidator<_> =
         fun _ es ->
@@ -668,13 +667,13 @@ module CommonValidation =
             let fNode =
                 fun (last: BoolState) (x: Node) ->
                     match last, x.Key with
-                    | AND, k when k == "AND" -> AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
-                    | OR, k when k == "OR" -> OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
-                    | _, k when k == "OR" || k == "NOR" -> OR, None
-                    | _, _ -> AND, None
+                    | BoolState.AND, k when k == "AND" -> BoolState.AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
+                    | BoolState.OR, k when k == "OR" -> BoolState.OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
+                    | _, k when k == "OR" || k == "NOR" -> BoolState.OR, None
+                    | _, _ -> BoolState.AND, None
 
             (effects @ triggers)
-            <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
+            <&!&> (foldNodeWithState fNode BoolState.AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
 
     let validateRedundantANDWithNOT: StructureValidator<_> =
         fun _ es ->
@@ -684,13 +683,13 @@ module CommonValidation =
             let fNode =
                 fun (last: BoolState) (x: Node) ->
                     match last, x.Key with
-                    | AND, k when k == "AND" -> AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
-                    | OR, k when k == "OR" -> OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
-                    | _, k when k == "OR" || k == "NOT" -> OR, None
-                    | _, _ -> AND, None
+                    | BoolState.AND, k when k == "AND" -> BoolState.AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
+                    | BoolState.OR, k when k == "OR" -> BoolState.OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
+                    | _, k when k == "OR" || k == "NOT" -> BoolState.OR, None
+                    | _, _ -> BoolState.AND, None
 
             (effects @ triggers)
-            <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
+            <&!&> (foldNodeWithState fNode BoolState.AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
 
     let validateUnusuedTypes: LookupValidator<_> =
         let merge (a: Map<'a, 'b>) (b: Map<'a, 'b>) (f: 'a -> 'b * 'b -> 'b) =
