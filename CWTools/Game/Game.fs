@@ -345,30 +345,30 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         if debugSettings.EarlyStop >= GameInitLoad then
             initialLoad ()
 
-    member __.RuleValidationService = ruleValidationService
+    member _.RuleValidationService = ruleValidationService
 
-    member __.RuleValidationService
+    member _.RuleValidationService
         with set value = ruleValidationService <- value
     // member val ruleValidationService : RuleValidationService<'S> option = None with get, set
-    member __.InfoService = infoService
+    member _.InfoService = infoService
 
-    member __.InfoService
+    member _.InfoService
         with set value = infoService <- value
     // member val infoService : InfoService<'S> option = None with get, set
     member val completionService: CompletionService option = None with get, set
 
-    member __.Resources: IResourceAPI<'T> = resourceManager.Api
-    member __.ResourceManager = resourceManager
-    member __.Lookup: 'L = lookup
+    member _.Resources: IResourceAPI<'T> = resourceManager.Api
+    member _.ResourceManager = resourceManager
+    member _.Lookup: 'L = lookup
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
-    member __.FileManager = (fun () -> fileManager) ()
-    member __.LocalisationManager: LocalisationManager<'T> = localisationManager
-    member __.ValidationManager = validationManager
-    member __.Settings = settings
-    member __.UpdateFile shallow file text = updateFile shallow file text
+    member _.FileManager = (fun () -> fileManager) ()
+    member _.LocalisationManager: LocalisationManager<'T> = localisationManager
+    member _.ValidationManager = validationManager
+    member _.Settings = settings
+    member _.UpdateFile shallow file text = updateFile shallow file text
 
-    member __.RefreshValidationManager() =
+    member _.RefreshValidationManager() =
         validationManager <-
             ValidationManager(
                 validationSettings,
@@ -389,10 +389,10 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             file
             text
 
-    member __.ReplaceConfigRules rules = rulesManager.LoadBaseConfig rules
-    member __.RefreshCaches() = updateRulesCache ()
-    member __.InitialConfigRules() = initialConfigRules ()
-    member private __.DebugSettings = debugSettings
+    member _.ReplaceConfigRules rules = rulesManager.LoadBaseConfig rules
+    member _.RefreshCaches() = updateRulesCache ()
+    member _.InitialConfigRules() = initialConfigRules ()
+    member private _.DebugSettings = debugSettings
 
     static member CreateGame settings afterInit =
         let game = GameObject(settings)

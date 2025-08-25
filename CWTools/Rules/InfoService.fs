@@ -1649,18 +1649,18 @@ type InfoService
 
         res
 
-    member __.GetInfo(pos: pos, entity: Entity) =
+    member _.GetInfo(pos: pos, entity: Entity) =
         (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)
 
-    member __.GetNode(pos: pos, entity: Entity) =
+    member _.GetNode(pos: pos, entity: Entity) =
         (getNodeAtPos pos entity) |> Option.map (fun (p, n) -> n)
 
-    member __.GetReferencedTypes(entity: Entity) = singleFold (getTypesInEntity ()) entity
-    member __.GetDefinedVariables(entity: Entity) = singleFold getDefVarInEntity entity
-    member __.GetSavedEventTargets(entity: Entity) = getSavedScopesInEntityFolder entity
-    member __.GetTypeLocalisationErrors(entity: Entity) = validateLocalisationFromTypes entity
+    member _.GetReferencedTypes(entity: Entity) = singleFold (getTypesInEntity ()) entity
+    member _.GetDefinedVariables(entity: Entity) = singleFold getDefVarInEntity entity
+    member _.GetSavedEventTargets(entity: Entity) = getSavedScopesInEntityFolder entity
+    member _.GetTypeLocalisationErrors(entity: Entity) = validateLocalisationFromTypes entity
 
-    member __.GetEffectBlocks(entity: Entity) =
+    member _.GetEffectBlocks(entity: Entity) =
         (singleFold getEffectsInEntity entity), (singleFold getTriggersInEntity entity)
 
-    member __.BatchFolds(entity: Entity) = allFolds entity
+    member _.BatchFolds(entity: Entity) = allFolds entity

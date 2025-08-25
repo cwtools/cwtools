@@ -343,11 +343,11 @@ type ValidationManager<'T when 'T :> ComputedData>
               <&!&> (fun (t, l) -> validateSubType t l))
 
 
-    member __.Validate(shallow: bool, entities: struct (Entity * Lazy<'T>) list) = validate shallow entities
-    member __.ValidateLocalisation(entities: struct (Entity * Lazy<'T>) list) = validateLocalisation entities
-    member __.ValidateGlobalLocalisation() = globalTypeDefLoc ()
+    member _.Validate(shallow: bool, entities: struct (Entity * Lazy<'T>) list) = validate shallow entities
+    member _.ValidateLocalisation(entities: struct (Entity * Lazy<'T>) list) = validateLocalisation entities
+    member _.ValidateGlobalLocalisation() = globalTypeDefLoc ()
 
-    member __.CachedRuleErrors(entities: struct (Entity * Lazy<'T>) list) =
+    member _.CachedRuleErrors(entities: struct (Entity * Lazy<'T>) list) =
         let res =
             entities
             |> List.map (fun struct (e, l) -> (struct (e, l)), errorCache.GetErrorsForEntity e)
@@ -364,4 +364,4 @@ type ValidationManager<'T when 'T :> ComputedData>
 
         (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced
 
-    member __.ErrorCache() = errorCache
+    member _.ErrorCache() = errorCache

@@ -56,7 +56,7 @@ type EU4ComputedData
     inherit
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
-    member __.ScriptedEffectParams: string list option = scriptedeffectparams
+    member _.ScriptedEffectParams: string list option = scriptedeffectparams
 
 type HOI4ComputedData = ComputedData
 type CK2ComputedData = ComputedData
@@ -75,7 +75,7 @@ type ScriptedEffectComputedData
     inherit
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
-    member __.ScriptedEffectParams: string list option = scriptedeffectparams
+    member _.ScriptedEffectParams: string list option = scriptedeffectparams
 
 type STLComputedData = ScriptedEffectComputedData
 type JominiComputedData = ScriptedEffectComputedData
@@ -870,9 +870,9 @@ type ResourceManager<'T when 'T :> ComputedData>
             | FileWithContentResource(_, r) -> r.logicalpath)
         |> Seq.toArray
 
-    member __.ManualProcessResource = parseFileThenEntity >> snd
+    member _.ManualProcessResource = parseFileThenEntity >> snd
 
-    member __.ManualProcess (filename: string) (filetext: string) =
+    member _.ManualProcess (filename: string) (filetext: string) =
         let parsed = CKParser.parseString filetext filename
 
         match parsed with
@@ -881,14 +881,14 @@ type ResourceManager<'T when 'T :> ComputedData>
             let filenamenopath = Path.GetFileNameWithoutExtension filename
             Some(shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)
 
-    member __.Api =
+    member _.Api =
         { new IResourceAPI<'T> with
-            member __.UpdateFiles = updateFiles
-            member __.UpdateFile = updateFile
-            member __.GetResources = getResources
-            member __.ValidatableFiles = validatableFiles
-            member __.AllEntities = allEntities
-            member __.ValidatableEntities = validatableEntities
-            member __.ForceRecompute() = forceRecompute ()
-            member __.ForceRulesDataGenerate() = forceRulesData ()
-            member __.GetFileNames = getFileNames }
+            member _.UpdateFiles = updateFiles
+            member _.UpdateFile = updateFile
+            member _.GetResources = getResources
+            member _.ValidatableFiles = validatableFiles
+            member _.AllEntities = allEntities
+            member _.ValidatableEntities = validatableEntities
+            member _.ForceRecompute() = forceRecompute ()
+            member _.ForceRulesDataGenerate() = forceRulesData ()
+            member _.GetFileNames = getFileNames }

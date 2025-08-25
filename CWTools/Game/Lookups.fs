@@ -46,7 +46,7 @@ type Lookup() =
     let resetValueTriggers () =
         _valueTriggersMap <- lazy (_valueTriggers () |> EffectMap.FromList)
 
-    member __.allCoreLinks
+    member _.allCoreLinks
         with get () = _allCoreLinks
         and set value =
             _allCoreLinks <- value
@@ -55,13 +55,13 @@ type Lookup() =
             resetEventTargetLinks ()
             resetValueTriggers ()
 
-    member __.triggers = _triggers ()
+    member _.triggers = _triggers ()
     member this.triggersMap = _triggersMap.Force()
-    member __.effects = _effects ()
+    member _.effects = _effects ()
     member this.effectsMap = _effectsMap.Force()
-    member __.eventTargetLinks = _eventTargetLinks ()
+    member _.eventTargetLinks = _eventTargetLinks ()
     member this.eventTargetLinksMap = _eventTargetLinksMap.Force()
-    member __.valueTriggers = _valueTriggers ()
+    member _.valueTriggers = _valueTriggers ()
     member this.valueTriggerMap = _valueTriggersMap.Force()
     member val onlyScriptedEffects: Effect list = [] with get, set
     member val onlyScriptedTriggers: Effect list = [] with get, set

@@ -135,14 +135,14 @@ module YAMLLocalisationParser =
                 log (sprintf "%s not found" localisationSettings.folder)
                 YAMLLocalisationService([], localisationSettings.keyToLanguage, localisationSettings.gameToLang)
 
-        member __.Api lang =
+        member _.Api lang =
             { new ILocalisationAPI with
-                member __.Results = results
-                member __.Values = values lang
-                member __.GetKeys = getKeys lang
-                member __.GetDesc x = getDesc lang x
-                member __.GetLang = lang
-                member __.ValueMap = valueMap lang }
+                member _.Results = results
+                member _.Values = values lang
+                member _.GetKeys = getKeys lang
+                member _.GetDesc x = getDesc lang x
+                member _.GetLang = lang
+                member _.ValueMap = valueMap lang }
 
         interface ILocalisationAPICreator with
             member this.Api l = this.Api l

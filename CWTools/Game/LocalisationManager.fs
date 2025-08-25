@@ -103,12 +103,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
         updateAllLocalisationSources ()
         updateProcessedLocalisation ()
 
-    member __.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
-    member __.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
+    member _.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
+    member _.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
-    member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
+    member _.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
 
-    member __.LocalisationFileNames() : string list =
+    member _.LocalisationFileNames() : string list =
         localisationAPIMap
         |> Map.toList
         |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f a.GetKeys.Length)

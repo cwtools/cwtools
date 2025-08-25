@@ -79,14 +79,14 @@ module ChangeLocScope =
             let command, res =
                 if staticSettings.questionMarkVariable then
                     if
-                        command.StartsWith("?", StringComparison.OrdinalIgnoreCase)
-                        && command.TrimStart([| '?' |])
+                        command.StartsWith('?')
+                        && command.TrimStart('?')
                            |> CWTools.Utilities.TryParser.parseIntWithDecimal
                            |> (fun s -> s.IsSome)
                     then
                         command, Some(LocContextResult.Found "number")
                     else
-                        command.TrimStart([| '?' |]), None
+                        command.TrimStart('?'), None
                 else
                     command, None
 
