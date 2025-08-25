@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Frozen;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Cysharp.Text;
+using Microsoft.FSharp.Core;
 using Shared;
 
 namespace CSharpHelpers;
@@ -75,7 +78,7 @@ public static partial class FieldValidatorsHelper
         else
         {
             isValidFileName = fileName.Equals(
-                pathOptions.pathFile.Value,
+                pathOptions.pathFile.Value.AsSpan(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
@@ -89,7 +92,7 @@ public static partial class FieldValidatorsHelper
         {
             var extension = Path.GetExtension(fileName);
             isValidExtension = extension.Equals(
-                pathOptions.pathExtension.Value,
+                pathOptions.pathExtension.Value.AsSpan(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
@@ -167,5 +170,47 @@ public static partial class FieldValidatorsHelper
     {
         int length = str.Split(destination, separator);
         return destination[..length];
+    }
+
+    public static bool CheckFilePathField(
+        string key,
+        FrozenSet<string> files,
+        FSharpOption<string>? prefix,
+        FSharpOption<string>? extension,
+        bool needErrorMessage,
+        out string file
+    )
+    {
+        file = string.Empty;
+        var lookup = files.GetAlternateLookup<ReadOnlySpan<char>>();
+        using var sb = ZString.CreateStringBuilder();
+        sb.Append(key.AsSpan().Trim('\"'));
+        sb.Replace('\\', '/');
+        sb.Replace("//", "/");
+
+        using var sb2 = ZString.CreateStringBuilder();
+        sb2.Append(sb.AsSpan());
+        sb2.Replace(".lua", ".shader");
+        sb2.Replace(".tga", ".dds");
+
+        if (extension is not null)
+        {
+            sb.Append(extension.Value);
+        }
+
+        bool isValid = lookup.Contains(sb.AsSpan()) || lookup.Contains(sb2.AsSpan());
+        if (isValid || prefix is null)
+        {
+            return isValid;
+        }
+
+        sb.Insert(0, prefix.Value);
+        sb2.Insert(0, prefix.Value);
+        isValid = lookup.Contains(sb.AsSpan()) || lookup.Contains(sb2.AsSpan());
+        if (!isValid && needErrorMessage)
+        {
+            file = sb.ToString();
+        }
+        return isValid;
     }
 }

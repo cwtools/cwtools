@@ -5,3 +5,17 @@ type PathOptions =
       pathStrict: bool
       pathFile: string option
       pathExtension: string option }
+
+type ModInfo = { name: string; path: string }
+
+type DirectoryType =
+    | Vanilla
+    | MultipleMod of ModInfo list
+    | Mod
+    | Unknown
+
+type ExpandedWorkspaceDirectory =
+    { path: string
+      name: string
+      dirType: DirectoryType
+      normalisedPath: string }

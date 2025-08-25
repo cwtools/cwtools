@@ -5,7 +5,7 @@ open CWTools.Localisation
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 
-
+[<Sealed>]
 type LocalisationManager<'T when 'T :> ComputedData>
     (
         resources: IResourceAPI<'T>,
@@ -25,7 +25,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
         |> List.choose (fun (validate, api) -> if validate then Some api else None)
 
     let parseLocFile (locFile: FileWithContentResource) =
-        if locFile.overwrite <> Overwritten && locFile.extension = localisationExtension then
+        if locFile.overwrite <> Overwrite.Overwritten && locFile.extension = localisationExtension then
             let locService = [ locFile.filepath, locFile.filetext ] |> localisationService
 
             Some(

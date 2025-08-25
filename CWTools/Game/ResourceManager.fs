@@ -1,7 +1,6 @@
 namespace CWTools.Games
 
-open System.Collections.Generic
-open System.Runtime.CompilerServices
+open System.Collections.Concurrent
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -17,9 +16,9 @@ open CWTools.Utilities.StringResource
 
 // Fuzzy = prefix/suffix
 type ReferenceType =
-    | TypeDef
-    | Link
-    | TypeDefFuzzy
+    | TypeDef = 0uy
+    | Link = 1uy
+    | TypeDefFuzzy = 2uy
 
 type ReferenceDetails =
     { name: StringTokens
@@ -102,11 +101,10 @@ type FileResult =
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
-[<Struct; IsReadOnly>]
 type Overwrite =
-    | No
-    | Overwrote
-    | Overwritten
+    | No = 1uy
+    | Overwrote = 2uy
+    | Overwritten = 3uy
 
 type EntityResource =
     { scope: string
@@ -189,7 +187,7 @@ type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type GetFileNames = unit -> string array
+type FileNames = unit -> string array
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -200,7 +198,7 @@ type IResourceAPI<'T when 'T :> ComputedData> =
     abstract ValidatableEntities: ValidatableEntities<'T>
     abstract ForceRecompute: unit -> unit
     abstract ForceRulesDataGenerate: unit -> unit
-    abstract GetFileNames: GetFileNames
+    abstract GetFileNames: FileNames
 
 type ResourceManager<'T when 'T :> ComputedData>
     (
@@ -210,24 +208,16 @@ type ResourceManager<'T when 'T :> ComputedData>
         fallbackencoding,
         enableInlineScripts
     ) =
-    let memoize keyFunction memFunction =
-        let dict = Dictionary<_, _>()
+    static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+    static let globCache = ConcurrentDictionary<string, Glob>()
 
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-
-    let globCheckFilepathI (pattern: string) =
-        let options = new GlobOptions()
-        options.Evaluation.CaseInsensitive <- true
-        let glob = Glob.Parse(pattern, options)
-        (fun (p: string) -> glob.IsMatch(p))
-
-    let globCheckFilepath pattern = (memoize id globCheckFilepathI) pattern
+    let globCheckFilepath (pattern: string) (path: string) =
+        match globCache.TryGetValue(pattern) with
+        | true, glob -> glob.IsMatch(path)
+        | false, _ ->
+            let glob = Glob.Parse(pattern)
+            globCache.TryAdd(pattern, glob) |> ignore
+            glob.IsMatch(path)
 
     let filepathToEntityType =
         function
@@ -360,7 +350,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   logicalpath = logicalpath
                   validate = validate
                   result = Pass({ parseTime = time })
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             parsed
         | Failure(msg, pe, _) ->
@@ -376,7 +366,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                           position = pe.Position
                           parseTime = time }
                     )
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             []
 
@@ -409,7 +399,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   rawEntity = entity
                   validate = v
                   entityType = entityType
-                  overwrite = No }
+                  overwrite = Overwrite.No }
         | _ -> None
 
     let changeEncoding (filestring: string) (source: System.Text.Encoding) (target: System.Text.Encoding) =
@@ -464,7 +454,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   filepath = f.filepath
                   logicalpath = f.logicalpath
                   filetext = f.filetext
-                  overwrite = No
+                  overwrite = Overwrite.No
                   extension = Path.GetExtension(f.filepath)
                   validate = f.validate }
              ),
@@ -506,7 +496,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let processGroup (key, es: (string * EntityResource) list) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
             | es ->
                 let sorted =
                     es
@@ -561,7 +551,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let processGroup (key, es: (string * FileWithContentResource) list) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
             | es ->
                 let sorted =
                     es
@@ -607,7 +597,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             entitiesMap
             |> Map.toSeq
             |> Seq.map snd
-            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
             |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.rawEntity))
@@ -867,13 +857,13 @@ type ResourceManager<'T when 'T :> ComputedData>
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
 
     let validatableEntities () =
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
         |> List.filter (fun struct (e, _) -> e.validate)
 
     let getFileNames () : string array =
