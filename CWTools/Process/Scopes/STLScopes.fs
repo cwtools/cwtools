@@ -34,16 +34,7 @@ module STL =
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
 
-    let changeScope
-        : bool
-              -> bool
-              -> EffectMap
-              -> EffectMap
-              -> ScopedEffect list
-              -> PrefixOptimisedStringSet
-              -> string
-              -> ScopeContext
-              -> ScopeResult =
+    let changeScope: ChangeScope =
         Scopes.createChangeScope oneToOneScopes (Scopes.simpleVarPrefixFun "var:") true
 
     let sourceScope (effects: Map<StringLowerToken, Scope list>) (key: string) =

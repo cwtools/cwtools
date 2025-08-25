@@ -55,7 +55,7 @@ type InfoService
         links: EffectMap,
         valueTriggers: EffectMap,
         ruleValidationService: RuleValidationService,
-        changeScope,
+        changeScope: ChangeScope,
         defaultContext,
         anyScope,
         defaultLang,
@@ -407,7 +407,7 @@ type InfoService
                     let key = node.Key.Trim('"')
 
                     let newCtx =
-                        match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+                        match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
                         | NewScope({ Scopes = current :: _ }, _, _) ->
                             // log "cs %A %A %A" s node.Key current
                             { newCtx with
@@ -756,15 +756,15 @@ type InfoService
         foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx pos entity.entity entity.logicalpath
 
     let getInfoAtPos (pos: pos) (entity: Entity) =
-        let changeScopeInner key scope =
-            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+        let changeScopeInner (key: string) scope =
+            match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ -> None
 
-        let changeValueScopeInner key scope =
-            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+        let changeValueScopeInner (key: string) scope =
+            match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
@@ -866,7 +866,7 @@ type InfoService
                 let key = node.Key.Trim('"')
 
                 let newCtx, rh =
-                    match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+                    match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
                     | NewScope({ Scopes = current :: _ }, _, rh) ->
                         // log "cs %A %A %A" s node.Key current
                         { newCtx with
@@ -1159,7 +1159,7 @@ type InfoService
                 | true -> key.Split('|', 2)[0]
                 | _ -> key
 
-            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+            match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh

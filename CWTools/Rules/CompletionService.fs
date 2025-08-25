@@ -18,6 +18,7 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.StringResource
 open System.Collections.Frozen
 open System.Linq
+open Cysharp.Text
 
 type CompletionContext =
     | NodeLHS
@@ -201,11 +202,9 @@ type CompletionService
     let functions = dataTypes.functions.Keys |> Seq.toArray
 
     let dataTypeFunctions =
-        dataTypes.dataTypes.Values
-        |> Seq.collect _.Keys
-        |> Seq.toArray
+        dataTypes.dataTypes.Values |> Seq.collect _.Keys |> Seq.toArray
 
-    let allPossibles = Array.concat [| promotes; functions; dataTypeFunctions|]
+    let allPossibles = Array.concat [| promotes; functions; dataTypeFunctions |]
 
     let locCompleteInner (textBeforeCursor: string) =
         if textBeforeCursor.LastIndexOf '[' > textBeforeCursor.LastIndexOf ']' then
@@ -381,7 +380,14 @@ type CompletionService
         let requiredRules = if requiredRules = "" then "\t${0}\n" else requiredRules
 
         let score = scoreFunction key
-        CompletionResponse.Snippet(key, $"%s{key} = {{\n%s{requiredRules}}}", description, Some score, CompletionCategory.Other)
+
+        CompletionResponse.Snippet(
+            key,
+            $"%s{key} = {{\n%s{requiredRules}}}",
+            description,
+            Some score,
+            CompletionCategory.Other
+        )
 
 
     // | LeafValue
@@ -451,7 +457,16 @@ type CompletionService
                         substringBefore
                         |> String.concat "."
                         |> (fun next ->
-                            changeScope false true linkMap valueTriggerMap wildCardLinks varSet next startingContext)
+                            changeScope.Invoke(
+                                false,
+                                true,
+                                linkMap,
+                                valueTriggerMap,
+                                wildCardLinks,
+                                varSet,
+                                next,
+                                startingContext
+                            ))
                         |> Some
 
                 //                        let res =
@@ -632,26 +647,31 @@ type CompletionService
                         context
                         innerRules
                         o.description
-                        (CompletionScopeExpectation.Scopes x)) |> List.toArray
+                        (CompletionScopeExpectation.Scopes x))
+                    |> List.toArray
                 //TODO: Scopes better
                 | NodeRule(SubtypeField _, _) -> [||]
                 | NodeRule(TypeField(TypeType.Simple t), innerRules) ->
                     types.TryFind(t)
                     |> Option.map (fun ts ->
-                        ts |> Seq.map (fun e -> createSnippetForClausei innerRules o.description e) |> Seq.toArray)
+                        ts
+                        |> Seq.map (fun e -> createSnippetForClausei innerRules o.description e)
+                        |> Seq.toArray)
                     |> Option.defaultValue [||]
                 | NodeRule(TypeField(TypeType.Complex(p, t, s)), innerRules) ->
                     types.TryFind(t)
                     |> Option.map (fun ts ->
                         ts
-                        |> Seq.map (fun e -> createSnippetForClausei innerRules o.description (p + e + s)) |> Seq.toArray)
+                        |> Seq.map (fun e -> createSnippetForClausei innerRules o.description (p + e + s))
+                        |> Seq.toArray)
                     |> Option.defaultValue [||]
                 | NodeRule(VariableGetField v, innerRules) ->
                     varMap.TryFind(v)
                     |> Option.map (fun ss ->
                         ss.StringValues
                         |> List.ofSeq
-                        |> List.map (fun e -> createSnippetForClausei innerRules o.description e) |> List.toArray)
+                        |> List.map (fun e -> createSnippetForClausei innerRules o.description e)
+                        |> List.toArray)
                     |> Option.defaultValue [||]
 
                 | LeafRule(SpecificField(SpecificValue s), _) ->
@@ -667,7 +687,8 @@ type CompletionService
                 | LeafRule(LocalisationField _, _) -> [||]
                 | LeafRule(ScopeField _, _) ->
                     scopeFieldAll
-                    |> Seq.map (fun x -> keyvalueWithCustomScopeReq x.requiredScopes x.key) |> Seq.toArray
+                    |> Seq.map (fun x -> keyvalueWithCustomScopeReq x.requiredScopes x.key)
+                    |> Seq.toArray
                 //TODO: Scopes
                 | LeafRule(SubtypeField _, _) -> [||]
                 | LeafRule(TypeField(TypeType.Simple t), _) ->
@@ -764,7 +785,8 @@ type CompletionService
                     |> Array.map CompletionResponse.CreateSimple
             | NewField.FilepathField _ -> files.Select(CompletionResponse.CreateSimple).ToArray()
             | NewField.ScopeField x ->
-                completionForRHSScopeChain value scopeContext (CompletionScopeExpectation.Scopes x) |> List.toArray
+                completionForRHSScopeChain value scopeContext (CompletionScopeExpectation.Scopes x)
+                |> List.toArray
             | NewField.VariableGetField v ->
                 varMap.TryFind v
                 |> Option.map (fun ss -> ss.StringValues |> Array.ofSeq)
@@ -777,10 +799,14 @@ type CompletionService
                 |> Array.map CompletionResponse.CreateSimple
             | NewField.VariableField _ -> (completionForRHSVariableChain value scopeContext) |> List.toArray
             | NewField.ValueScopeField _ ->
-                  (completionForRHSValueChain value scopeContext).Concat(enums.TryFind("static_values")
-                   |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
-                   |> Option.defaultValue []
-                   |> List.map CompletionResponse.CreateSimple).ToArray()
+                (completionForRHSValueChain value scopeContext)
+                    .Concat(
+                        enums.TryFind("static_values")
+                        |> Option.map (fun (_, s) -> s.StringValues |> List.ofSeq)
+                        |> Option.defaultValue []
+                        |> List.map CompletionResponse.CreateSimple
+                    )
+                    .ToArray()
             | _ -> [||]
 
         let p =

@@ -2,7 +2,6 @@ namespace CWTools.Process.Scopes
 
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Utilities.Utils2
 
 module CK2 =
 
@@ -142,14 +141,5 @@ module CK2 =
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
 
-    let changeScope
-        : bool
-              -> bool
-              -> EffectMap
-              -> EffectMap
-              -> ScopedEffect list
-              -> PrefixOptimisedStringSet
-              -> string
-              -> ScopeContext
-              -> ScopeResult =
+    let changeScope: ChangeScope =
         Scopes.createChangeScope oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:") false
