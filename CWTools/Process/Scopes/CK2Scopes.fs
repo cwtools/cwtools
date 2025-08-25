@@ -119,10 +119,12 @@ module CK2 =
             fun (s, change) ->
                 { s with
                     Scopes = (s.GetFrom i) :: s.Scopes },
-                (false, true)
+                struct (false, true)
 
-        let prev = fun (s, change) -> { s with Scopes = s.PopScope }, (false, true)
-        let root = fun (s, change) -> { s with Scopes = s.Root :: s.Scopes }, (false, true)
+        let prev = fun (s, change) -> { s with Scopes = s.PopScope }, struct (false, true)
+
+        let root =
+            fun (s, change) -> { s with Scopes = s.Root :: s.Scopes }, struct (false, true)
 
         [ "THIS", id
           "ROOT", root
