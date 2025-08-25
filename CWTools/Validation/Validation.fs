@@ -579,10 +579,10 @@ type ValidationResult =
         | Invalid(id, _) -> id.GetHashCode()
 
 type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) list) =
+    static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+
     member _.GlobMatch(pattern: string) =
-        let options = new GlobOptions()
-        options.Evaluation.CaseInsensitive <- true
-        let glob = Glob.Parse(pattern, options)
+        let glob = Glob.Parse(pattern)
 
         entities
         |> List.choose (fun struct (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
