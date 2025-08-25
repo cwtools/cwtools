@@ -158,11 +158,11 @@ module Scopes =
                 else
                     let key, varOnly = varPrefixFun.Invoke(key)
 
-                    let beforeAmp, afterAmp, hasAmp =
+                    let afterAmp, hasAmp =
                         if key.IndexOf('@') >= 0 then
-                            let x = key.Split('@', 2) in x.[0], x.[1], true
+                            let x = key.Split('@', 2) in x[1], true
                         else
-                            key, "", false
+                            "", false
 
                     let keys = key.Split('.')
                     let keylength = keys.Length - 1
