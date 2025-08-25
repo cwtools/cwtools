@@ -859,8 +859,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
-        |> List.filter (fun struct (e, _) -> e.validate)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten && e.validate)
 
     let getFileNames () : string array =
         fileMap.Values
