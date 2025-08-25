@@ -68,7 +68,7 @@ module internal FieldValidators =
         (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
         (keys: (Lang * Collections.Set<string>) list)
         (severity: Severity)
-        (vt: CWTools.Rules.ValueType)
+        (vt: ValueType)
         (ids: StringTokens)
         leafornode
         errors
@@ -79,8 +79,6 @@ module internal FieldValidators =
             errors
         else
             match vt with
-            // | ValueType.Scalar ->
-            //     errors
             | ValueType.Bool ->
                 if key == "yes" || key == "no" then
                     errors
@@ -272,9 +270,6 @@ module internal FieldValidators =
              match enumsMap.TryFind e with
              | Some(_, es) -> es.Contains(trimQuoteSpan key)
              | None -> false
-         // | ValueType.Specific s ->
-         //     // if trimQuote key == s then true else false
-         //     id = s.lower
          | ValueType.Percent -> key.EndsWith('%')
          | ValueType.Date -> FieldValidatorsHelper.IsValidDate(key)
          | ValueType.DateTime -> FieldValidatorsHelper.IsValidDateTime(key)
@@ -672,7 +667,6 @@ module internal FieldValidators =
         (wildcardLinks: ScopedEffect list)
         (varSet: PrefixOptimisedStringSet)
         (changeScope: ChangeScope)
-        anyScope
         (ctx: RuleContext)
         isInt
         is32Bit
@@ -766,7 +760,6 @@ module internal FieldValidators =
         (wildcardLinks: ScopedEffect list)
         varSet
         (changeScope: ChangeScope)
-        anyScope
         (ctx: RuleContext)
         isInt
         min
@@ -970,7 +963,6 @@ module internal FieldValidators =
                     p.wildcardLinks
                     p.varSet
                     p.changeScope
-                    p.anyScope
                     ctx
                     isInt
                     is32Bit
@@ -985,7 +977,6 @@ module internal FieldValidators =
                     p.wildcardLinks
                     p.varSet
                     p.changeScope
-                    p.anyScope
                     ctx
                     isInt
                     min
