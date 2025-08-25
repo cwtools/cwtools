@@ -18,7 +18,6 @@ open CWTools.Utilities.Position
 open CWTools.Utilities.StringResource
 open System.Collections.Frozen
 open System.Linq
-open Cysharp.Text
 
 type CompletionContext =
     | NodeLHS
@@ -444,8 +443,8 @@ type CompletionService
         // log (sprintf "%A" stack)
 
         let completionDotChainInner (key: string) (startingContext: ScopeContext) =
-            if key.Contains(".") then
-                let splitKey = key.Split([| '.' |])
+            if key.Contains('.') then
+                let splitKey = key.Split('.')
 
                 let changeScopeRes =
                     let substringBefore =
