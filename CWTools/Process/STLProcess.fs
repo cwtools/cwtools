@@ -1,6 +1,7 @@
 namespace CWTools.Process
 
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System
@@ -46,8 +47,7 @@ module STLProcess =
             node.Values
             //|> List.filter (fun v -> v.Key.StartsWith("@"))
             |> List.map (function
-                | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) ->
-                    scopeManager.AllScopes |> Set.ofList
+                | x when x.Key.StartsWith('@') -> scopeManager.AllScopes |> Set.ofList
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
@@ -77,7 +77,8 @@ module STLProcess =
     let findAllUsedEventTargets (event: Node) =
         let fNode =
             (fun (x: Node) children ->
-                let targetFromString (k: string) = k.Substring(13).Split('.').[0]
+                let targetFromString (k: string) =
+                    k.AsSpan().Slice(13).SplitFirst('.').ToString()
 
                 let inner (leaf: Leaf) =
                     if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then
@@ -113,11 +114,12 @@ module STLProcess =
         let fNode =
             (fun (x: Node) children ->
                 let inner (leaf: Leaf) =
+                    let value = leaf.Value.ToRawString()
                     if
                         leaf.Key == "exists"
-                        && leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
+                        && value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
                     then
-                        Some(leaf.Value.ToRawString().Substring(13).Split('.').[0])
+                        Some(value.Substring(13).Split('.').[0])
                     else
                         None
 

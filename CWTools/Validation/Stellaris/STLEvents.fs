@@ -143,8 +143,12 @@ module STLEventValidation =
         let fNode =
             (fun (x: Node) children ->
                 let inner (leaf: Leaf) =
-                    if leaf.Key == "exists" && leaf.Value.ToRawString().StartsWith("event_target:") then
-                        Some(leaf.Value.ToRawString().Substring(13).Split('.').[0])
+                    let value = leaf.Value.ToRawString()
+                    if
+                        leaf.Key == "exists"
+                        && value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
+                    then
+                        Some(value.Substring(13).Split('.').[0])
                     else
                         None
 
