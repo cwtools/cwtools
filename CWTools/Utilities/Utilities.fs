@@ -240,7 +240,6 @@ type StringResourceManager() =
     member _.OnDeserialized(_context: StreamingContext) =
         addData <- Func<string, StringTokens>(addDataFunc)
 
-    [<MethodImpl(MethodImplOptions.NoInlining)>]
     member x.InternIdentifierToken(s: string) : StringTokens = strings.GetOrAdd(s, addData)
 
     member x.GetStringForIDs(id: StringTokens) = ints[id.normal]
