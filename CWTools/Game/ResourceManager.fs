@@ -202,6 +202,7 @@ type IResourceAPI<'T when 'T :> ComputedData> =
     abstract ForceRulesDataGenerate: unit -> unit
     abstract GetFileNames: FileNames
 
+[<Sealed>]
 type ResourceManager<'T when 'T :> ComputedData>
     (
         computedDataFunction: Entity -> 'T,
