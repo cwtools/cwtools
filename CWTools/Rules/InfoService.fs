@@ -528,7 +528,7 @@ type InfoService
             | None, None, None -> None
 
         let childMatch =
-            node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+            node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
         // eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
         // let rec skipRootKeySkipper
         let skiprootkey (skipRootKey: SkipRootKey) (n: Node) =
@@ -557,8 +557,8 @@ type InfoService
                     None
             | head :: tail ->
                 if skiprootkey head n then
-                    node.Children
-                    |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+                    node.Nodes
+                    |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
                     |> Option.bind (foldAtPosSkipRoot rs o t tail acc)
                 else
                     None
@@ -717,8 +717,8 @@ type InfoService
         // | _ -> newCtx, (Some options, None, Some (NodeC node))
 
         let childMatch =
-            entity.entity.Children
-            |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+            entity.entity.Nodes
+            |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
         // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
         let ctx =
             match

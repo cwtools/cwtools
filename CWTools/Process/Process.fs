@@ -543,7 +543,7 @@ and [<Sealed>] Node(key: string, pos: range) =
             | s -> s.ToString())
 
     member this.SetTag x v =
-        this.All <- this.AllChildren |> List.ofSeq |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
+        this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
 
     member this.Child x =
         this.Nodes

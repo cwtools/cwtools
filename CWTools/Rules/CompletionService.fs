@@ -139,7 +139,7 @@ type CompletionService
         let fNode =
             (fun (x: Node) acc ->
                 let withValues =
-                    x.Values |> List.fold (fun a leaf -> leaf.Key :: leaf.ValueText :: a) acc
+                    x.Leaves |> Seq.fold (fun a leaf -> leaf.Key :: leaf.ValueText :: a) acc
 
                 let withBoth =
                     x.LeafValues

@@ -21,7 +21,7 @@ module LanguageFeatures =
                 if node.Position.Equals pos then
                     Some node
                 else
-                    match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                    match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
                     | Some c -> findChild c
                     | None -> None
 

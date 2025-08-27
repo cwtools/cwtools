@@ -20,10 +20,10 @@ module STLValidation =
     let getDefinedVariables (node: Node) =
         let fNode =
             (fun (x: Node) acc ->
-                x.Values
-                |> List.fold
+                x.Leaves
+                |> Seq.fold
                     (fun a n ->
-                        if n.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then
+                        if n.Key.StartsWith('@') then
                             n.Key :: a
                         else
                             a)
