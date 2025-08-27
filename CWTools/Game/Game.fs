@@ -21,7 +21,7 @@ type GameSettings<'L> =
       validation: ValidationSettings
       rules: RulesSettings option
       scriptFolders: string array option
-      excludeGlobPatterns: string list option
+      excludeGlobPatterns: string array option
       modFilter: string option
       initialLookup: 'L
       maxFileSize: int option
@@ -50,12 +50,10 @@ type GameSetupSettings<'L> =
       validation: ValidationSettings
       rules: RulesSettings option
       scriptFolders: string array option
-      excludeGlobPatterns: string list option
+      excludeGlobPatterns: string array option
       modFilter: string option
       maxFileSize: int option
       debugSettings: DebugSettings }
-
-
 
 [<Sealed>]
 type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
@@ -79,7 +77,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         debugSettings: DebugSettings
     ) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
-    let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
+    let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue [||]
 
     let embeddedDir =
         settings.embedded.cachedResourceData

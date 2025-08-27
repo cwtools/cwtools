@@ -144,7 +144,7 @@ let serialize gameDirName scriptFolders cacheDirectory = ()
 
 let serializeSTL folder outputFileName compression =
     let fileManager =
-        FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
+        FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -193,7 +193,7 @@ let serializeEU4 folder outputFileName compression =
     let folders = (WD folder) :: (addDLCs folder)
 
     let fileManager =
-        FileManager(folders, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
+        FileManager(folders, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -240,7 +240,7 @@ let serializeHOI4 folder outputFileName compression =
     let folders = (WD folder) :: (addDLCs folder)
 
     let fileManager =
-        FileManager(folders, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
+        FileManager(folders, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -285,7 +285,7 @@ let serializeHOI4 folder outputFileName compression =
 
 let serializeCK2 folder outputFileName compression =
     let fileManager =
-        FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [], 2)
+        FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -330,7 +330,7 @@ let serializeCK2 folder outputFileName compression =
 
 let serializeIR folder outputFileName compression =
     let fileManager =
-        FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [], 2)
+        FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -375,7 +375,7 @@ let serializeIR folder outputFileName compression =
 
 let serializeCK3 folder outputFileName compression =
     let fileManager =
-        FileManager(folder, Some "", CK3Constants.scriptFolders, "crusader kings iii", Encoding.UTF8, [], 2)
+        FileManager(folder, Some "", CK3Constants.scriptFolders, "crusader kings iii", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -420,7 +420,7 @@ let serializeCK3 folder outputFileName compression =
 
 let serializeVIC3 folder outputFileName compression =
     let fileManager =
-        FileManager(folder, Some "", VIC3Constants.scriptFolders, "victoria 3", Encoding.UTF8, [], 2)
+        FileManager(folder, Some "", VIC3Constants.scriptFolders, "victoria 3", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -465,7 +465,7 @@ let serializeVIC3 folder outputFileName compression =
 
 let serializeVIC2 folder outputFileName compression =
     let fileManager =
-        FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
+        FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))

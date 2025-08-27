@@ -943,7 +943,7 @@ let embeddedTests =
                 scriptFolders,
                 "stellaris",
                 Encoding.UTF8,
-                [],
+                [||],
                 2000000
             )
 
