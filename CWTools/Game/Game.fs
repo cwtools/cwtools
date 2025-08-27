@@ -395,7 +395,6 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     member private _.DebugSettings = debugSettings
 
     static member CreateGame settings afterInit =
-        log $"Settings: {settings}"
         let game = GameObject(settings)
 
         if game.DebugSettings.EarlyStop >= GameAfterInit then
