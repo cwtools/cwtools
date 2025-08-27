@@ -23,8 +23,6 @@ module STLProcess =
         let anyBlockKeys =
             [ "OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect" ]
 
-        let triggerBlockKeys = [ "limit" ] //@ targetKeys
-
         let nodeScopes =
             node.Children
             |> List.map (function
@@ -35,7 +33,7 @@ module STLProcess =
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
-                | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
+                | x when x.Key == "limit" ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
                 | x -> Scopes.STL.sourceScope scopedEffects x.Key |> Set.ofList
             // match STLScopes.sourceScope x.Key with
@@ -81,15 +79,17 @@ module STLProcess =
                     k.AsSpan().Slice(13).SplitFirst('.').ToString()
 
                 let inner (leaf: Leaf) =
-                    if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then
-                        Some(leaf.Value.ToRawString() |> targetFromString)
+                    let value = leaf.Value.ToRawString()
+                    if value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then
+                        Some(value |> targetFromString)
                     else
                         None
 
+                let leaves = (x.Leaves |> Seq.choose inner |> List.ofSeq)
                 match x.Key with
                 | k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
-                    targetFromString k :: ((x.Values |> List.choose inner) @ children)
-                | _ -> ((x.Values |> List.choose inner) @ children)
+                    targetFromString k :: (leaves @ children)
+                | _ -> (leaves @ children)
 
             )
 

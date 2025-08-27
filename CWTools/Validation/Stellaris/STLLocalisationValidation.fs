@@ -53,9 +53,9 @@ module STLLocalisationValidation =
         let fNode =
             (fun (x: Node) children ->
                 let results =
-                    x.Values
-                    |> List.filter (fun l -> tags |> List.contains l.Key)
-                    |> List.fold (fun s t -> s <&&> (checkLocKeys keys t)) OK
+                    x.Leaves
+                    |> Seq.filter (fun l -> tags |> List.contains l.Key)
+                    |> Seq.fold (fun s t -> s <&&> (checkLocKeys keys t)) OK
 
                 results <&&> children)
 

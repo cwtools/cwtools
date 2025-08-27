@@ -19,7 +19,7 @@ module CommonValidation =
                 (fun (x: Node) children ->
                     if
                         (x.LeafValues |> Seq.isEmpty |> not
-                         && (x.Leaves |> Seq.isEmpty |> not || x.Children |> Seq.isEmpty |> not))
+                         && (x.Leaves |> Seq.isEmpty |> not || x.Nodes |> Seq.isEmpty |> not))
                         |> not
                     then
                         children
@@ -73,8 +73,8 @@ module CommonValidation =
                 (fun (x: Node) children ->
                     if
                         (x.KeyId = keyIdIF || x.KeyId = keyIdelIF)
-                        && (x.Values |> List.isEmpty)
-                        && (x.Children |> List.exists (fun c -> c.KeyId <> keyID) |> not)
+                        && (x.Leaves |> Seq.isEmpty)
+                        && (x.Nodes |> Seq.exists (fun c -> c.KeyId <> keyID) |> not)
                     then
                         inv ErrorCodes.EmptyIf x <&&&> children
                     else
@@ -225,7 +225,7 @@ module CommonValidation =
                                 )
                         | _ -> ()))
 
-                    node.Children |> List.iter (foldOverNode stringReplacer)
+                    node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
                 let validateSESpecific
                     (
@@ -367,8 +367,8 @@ module CommonValidation =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
 
-                    node.Values
-                    |> List.iter (fun (l: Leaf) ->
+                    node.Leaves
+                    |> Seq.iter (fun (l: Leaf) ->
                         l.Key <- stringReplacer l.Key
 
                         l.Value
@@ -405,7 +405,7 @@ module CommonValidation =
                                 )
                         | _ -> ()))
 
-                    node.Children |> List.iter (foldOverNode stringReplacer)
+                    node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
                 let validateISSpecific
                     (
@@ -553,8 +553,8 @@ module CommonValidation =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
 
-                    node.Values
-                    |> List.iter (fun (l: Leaf) ->
+                    node.Leaves
+                    |> Seq.iter (fun (l: Leaf) ->
                         l.Key <- stringReplacer l.Key
 
                         l.Value
@@ -591,7 +591,7 @@ module CommonValidation =
                                 )
                         | _ -> ()))
 
-                    node.Children |> List.iter (foldOverNode stringReplacer)
+                    node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
                 let validateSESpecific
                     (

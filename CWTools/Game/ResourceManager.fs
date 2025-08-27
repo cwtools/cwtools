@@ -633,9 +633,9 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                     match child with
                     | NodeC n ->
-                        let stringReplace (isParams: (string * string) list) (key: string) =
+                        let stringReplace (isParams: (string * string) seq) (key: string) =
                             isParams
-                            |> List.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
+                            |> Seq.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
 
                         let rec foldOverNode stringReplacer (node: Node) =
                             node.Key <- stringReplacer node.Key
@@ -644,8 +644,8 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 let res = stringReplacer (token.GetString())
                                 StringResource.stringManager.InternIdentifierToken res
 
-                            node.Values
-                            |> List.iter (fun (l: Leaf) ->
+                            node.Leaves
+                            |> Seq.iter (fun (l: Leaf) ->
                                 l.Key <- stringReplacer l.Key
 
                                 l.Value
@@ -662,12 +662,12 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 | Value.QString s -> l.Value <- QString(stringTokenReplace s)
                                 | _ -> ()))
 
-                            node.Children |> List.iter (foldOverNode stringReplacer)
+                            node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
 
                         if
                             nodeScriptRefs
-                            |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
+                            |> List.exists (fun s -> s.Position.Equals(n.Position) && s.KeyId.lower = n.KeyId.lower)
                         then
                             let scriptName = (n.TagText "script")
 
@@ -675,7 +675,6 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 n.Leaves
                                 |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText)
                                 |> Seq.where (fun (k, v) -> k.Length > 0 && v.Length > 0)
-                                |> List.ofSeq
 
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             | Some scriptNode ->
