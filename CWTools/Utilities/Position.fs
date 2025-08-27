@@ -265,10 +265,14 @@ type range(code: int64, fidx: int16) =
 
     override r.Equals(obj) =
         match obj with
-        | :? range as r2 -> code = r2.Code
+        | :? range as r2 -> r.Equals(r2)
         | _ -> false
 
     override r.GetHashCode() = hash code
+    member r.Equals(other: range) = other.Code = code
+
+    interface IEquatable<range> with
+        member this.Equals(other) = other.Code = code
 
 let memoize (keyFunction: 'a -> 'b) (memFunction: 'a -> 'c) =
     let dict = new System.Collections.Concurrent.ConcurrentDictionary<'b, 'c>()

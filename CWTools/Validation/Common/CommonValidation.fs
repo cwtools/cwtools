@@ -116,11 +116,11 @@ module CommonValidation =
             let entityMap =
                 res |> List.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofList
 
-            let findParams (pos: CWTools.Utilities.Position.range) (key: string) =
+            let findParams (pos: range) =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals(pos) then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -136,7 +136,7 @@ module CommonValidation =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals pos then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -167,7 +167,7 @@ module CommonValidation =
                     |> List.map (fun ref ->
                         {| effectName = ref.name.GetString()
                            callSite = ref.position
-                           seParams = findParams ref.position (ref.name.GetString()) |})
+                           seParams = findParams ref.position |})
                     |> List.groupBy (fun ref -> ref.effectName)
                     |> Map.ofList
                 // eprintfn "ar %A" allRefs
@@ -187,8 +187,8 @@ module CommonValidation =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
 
-                    node.Values
-                    |> List.iter (fun (l: Leaf) ->
+                    node.Leaves
+                    |> Seq.iter (fun (l: Leaf) ->
                         l.Key <- stringReplacer l.Key
 
                         l.Value
@@ -300,7 +300,7 @@ module CommonValidation =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals pos then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -316,7 +316,7 @@ module CommonValidation =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals(pos) then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -500,7 +500,7 @@ module CommonValidation =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals pos then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with

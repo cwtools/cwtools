@@ -704,7 +704,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                         if
                             leafScriptRefs
                             |> List.exists (fun s ->
-                                s.Position = l.Position
+                                s.Position.Equals(l.Position)
                                 && s.KeyId = l.KeyId
                                 && s.ValueId.lower = l.ValueId.lower)
                         then
