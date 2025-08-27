@@ -1075,7 +1075,7 @@ module private RulesParserImpl =
 
         match node.Key with
         | x when x.StartsWith("type") ->
-            node.All |> List.iter checkTypeChildren
+            node.AllArray |> Array.iter checkTypeChildren
             let typename = getSettingFromString node.Key "type"
 
             let namefield =

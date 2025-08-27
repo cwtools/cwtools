@@ -168,28 +168,28 @@ module STLLocalisationValidation =
                 let flags =
                     node.Child "feature_flags"
                     |> Option.map (fun c ->
-                        c.All
-                        |> List.choose (function
+                        c.AllArray
+                        |> Array.choose (function
                             | LeafValueC lv -> Some lv.Value
                             | _ -> None))
-                    |> Option.defaultValue []
+                    |> Option.defaultValue [||]
 
-                let flags2 = flags |> List.map (fun f -> "feature_" + f.ToString())
+                let flags2 = flags |> Array.map (fun f -> "feature_" + f.ToString())
 
                 let flagres =
                     flags2
-                    |> List.fold
+                    |> Array.fold
                         (fun s c ->
                             s
                             <&&> (keys
                                   |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
                         OK
 
-                let flagdesc = flags2 |> List.map (fun f -> f + "_desc")
+                let flagdesc = flags2 |> Array.map (fun f -> f + "_desc")
 
                 let flagdescres =
                     flagdesc
-                    |> List.fold
+                    |> Array.fold
                         (fun s c ->
                             s
                             <&&> (keys
@@ -219,16 +219,16 @@ module STLLocalisationValidation =
                     let vals =
                         node.Child "policy_flags"
                         |> Option.map (fun c ->
-                            c.All
-                            |> List.choose (function
+                            c.AllArray
+                            |> Array.choose (function
                                 | LeafValueC lv -> Some lv.Value
                                 | _ -> None))
-                        |> Option.defaultValue []
+                        |> Option.defaultValue [||]
 
-                    let vals2 = vals |> List.map (fun v -> v.ToString() + "_name")
+                    let vals2 = vals |> Array.map (fun v -> v.ToString() + "_name")
 
                     vals2
-                    |> List.fold
+                    |> Array.fold
                         (fun s c ->
                             s
                             <&&> (keys

@@ -195,8 +195,8 @@ module STLValidation =
                     let cat =
                         node.Child "category"
                         |> Option.bind (fun c ->
-                            c.All
-                            |> List.tryPick (function
+                            c.AllArray
+                            |> Array.tryPick (function
                                 | LeafValueC lv -> Some(lv.Value.ToString())
                                 | _ -> None))
 

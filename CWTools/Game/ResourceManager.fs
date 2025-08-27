@@ -682,7 +682,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
 
-                                newScriptNode.All
+                                newScriptNode.AllArray
                                 |> Seq.map (fun x ->
                                     addTrivia n.Position x
                                     x)
@@ -714,7 +714,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                             | Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
 
-                                newScriptNode.All
+                                newScriptNode.AllArray
                                 |> Seq.map (fun x ->
                                     addTrivia l.Position x
                                     x)

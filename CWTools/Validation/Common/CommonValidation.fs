@@ -33,7 +33,7 @@ module CommonValidation =
         fun _ es ->
             let fNode =
                 (fun (x: Node) children ->
-                    if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1 then
+                    if x.Key == "NOT" && (x.AllArray.Length - (x.Comments |> Seq.length)) > 1 then
                         Invalid(
                             System.Guid.NewGuid(),
                             [ inv (ErrorCodes.CustomError "Reminder: NOT does not mean NOT AND" Severity.Information) x ]
@@ -48,7 +48,7 @@ module CommonValidation =
         fun _ es ->
             let fNode =
                 (fun (x: Node) children ->
-                    if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1 then
+                    if x.Key == "NOT" && (x.AllArray.Length - (x.Comments |> Seq.length)) > 1 then
                         inv ErrorCodes.IncorrectNotUsage x <&&&> children
                     else
                         children)
