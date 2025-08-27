@@ -138,7 +138,7 @@ let serializeGame<'T when 'T :> ComputedData> (config: GameSerializationConfig<'
             [ WD folder ]
 
     let fileManager =
-        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [], 2)
+        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))

@@ -37,7 +37,7 @@ module Files =
             scriptFolders: string array,
             gameDirName: string,
             encoding: System.Text.Encoding,
-            ignoreGlobList: string list,
+            ignoreGlobList: string array,
             maxFileSizeMB: int
         ) =
         let rootDirectories, zippedDirectories =
@@ -270,9 +270,10 @@ module Files =
             | _ -> None
         //File.ReadAllText(filepath, encoding
         let allFilesByPath (workspaceDir: ExpandedWorkspaceDirectory) =
-            let excludeGlobTest =
-                let globs = ignoreGlobList |> List.map Glob.Parse
-                (fun (path: string) -> globs |> List.exists (fun g -> g.IsMatch(path)))
+            let globs = ignoreGlobList |> Array.map Glob.Parse
+
+            let excludeGlobTest (path: string) =
+                globs |> Array.exists _.IsMatch(path)
 
             let getAllFiles (modInfo: ModInfo) =
                 //log "%A" path
