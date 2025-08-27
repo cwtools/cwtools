@@ -369,7 +369,7 @@ module rec NewScope =
     [<Sealed>]
     type ModifierCategoryManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, ModifierCategory>()
+        let mutable dict = Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
 
         let mutable reverseDict = Dictionary<ModifierCategory, ModifierCategoryInput>()
 
@@ -397,7 +397,7 @@ module rec NewScope =
                 ()
 
             (fun (x: string) ->
-                let found, value = dict.TryGetValue(x.ToLower())
+                let found, value = dict.TryGetValue(x)
 
                 if found then
                     value
@@ -408,7 +408,7 @@ module rec NewScope =
         let init (modifiers: ModifierCategoryInput list) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
-            dict <- Dictionary<string, ModifierCategory>()
+            dict <- Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
             reverseDict <- Dictionary<ModifierCategory, ModifierCategoryInput>()
             dict.Add("any", anyModifier)
             dict.Add("invalid_modifier", invalidModifier)
@@ -420,7 +420,7 @@ module rec NewScope =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
                 let modifier = ModifierCategory(newID)
-                dict.Add(newModifier.name.ToLower(), modifier)
+                dict.Add(newModifier.name, modifier)
                 reverseDict.Add(modifier, newModifier)
 
                 newModifier.scopes
