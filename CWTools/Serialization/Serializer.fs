@@ -119,7 +119,7 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
         []
 
 type GameSerializationConfig<'T when 'T :> ComputedData> =
-    { scriptFolders: string list
+    { scriptFolders: string array
       gameName: string
       defaultFilename: string
       computeData: (unit -> InfoService option) -> FileManager -> ResourceManager<'T>

@@ -201,7 +201,7 @@ type EU5Game(setupSettings: EU5Settings) =
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }
 
-    let scriptFolders = [ "common"; "events" ]
+    let scriptFolders = [| "common"; "events" |]
 
     let game =
         GameObject<JominiComputedData, JominiLookup>.CreateGame

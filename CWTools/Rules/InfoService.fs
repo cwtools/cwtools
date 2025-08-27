@@ -902,8 +902,8 @@ type InfoService
             | _ -> newCtx, (Some options, None, Some(NodeC node))
 
         let childMatch =
-            entity.entity.Children
-            |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+            entity.entity.Nodes
+            |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
         // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
         let ctx =
 

@@ -27,8 +27,7 @@ let getFolderList (filename: string, filetext: string) =
     if Path.GetFileName filename = "folders.cwt" then
         Some(
             filetext.Split([| "\r\n"; "\r"; "\n" |], System.StringSplitOptions.None)
-            |> List.ofArray
-            |> List.filter ((<>) "")
+            |> Array.filter ((<>) "")
         )
     else
         None
