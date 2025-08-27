@@ -202,7 +202,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }
 
-    let scriptFolders = []
+    let scriptFolders = [||]
 
     let game =
         GameObject<JominiComputedData, JominiLookup>.CreateGame

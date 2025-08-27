@@ -201,7 +201,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }
 
-    let scriptFolders = [ "common"; "events" ]
+    let scriptFolders = [| "common"; "events" |]
 
     let game =
         GameObject<JominiComputedData, JominiLookup>.CreateGame

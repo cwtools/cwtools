@@ -20,7 +20,7 @@ type GameSettings<'L> =
       embedded: EmbeddedSettings
       validation: ValidationSettings
       rules: RulesSettings option
-      scriptFolders: string list option
+      scriptFolders: string array option
       excludeGlobPatterns: string list option
       modFilter: string option
       initialLookup: 'L
@@ -49,7 +49,7 @@ type GameSetupSettings<'L> =
       embedded: EmbeddedSetupSettings
       validation: ValidationSettings
       rules: RulesSettings option
-      scriptFolders: string list option
+      scriptFolders: string array option
       excludeGlobPatterns: string list option
       modFilter: string option
       maxFileSize: int option
@@ -395,6 +395,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     member private _.DebugSettings = debugSettings
 
     static member CreateGame settings afterInit =
+        log $"Settings: {settings}"
         let game = GameObject(settings)
 
         if game.DebugSettings.EarlyStop >= GameAfterInit then

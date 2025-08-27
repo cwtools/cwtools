@@ -208,7 +208,7 @@ type CK3Game(setupSettings: CK3Settings) =
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }
 
-    let scriptFolders = []
+    let scriptFolders = [||]
 
     let game =
         GameObject<JominiComputedData, JominiLookup>.CreateGame

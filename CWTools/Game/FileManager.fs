@@ -34,7 +34,7 @@ module Files =
         (
             inputDirectories: WorkspaceDirectoryInput list,
             embeddedFolder: string option,
-            scriptFolders: string list,
+            scriptFolders: string array,
             gameDirName: string,
             encoding: System.Text.Encoding,
             ignoreGlobList: string list,
@@ -277,20 +277,19 @@ module Files =
             let getAllFiles (modInfo: ModInfo) =
                 //log "%A" path
                 scriptFolders
-                |> List.map (
+                |> Array.map (
                     (fun folder -> modInfo.name, Path.GetFullPath(Path.Combine(modInfo.path, folder)))
                     >> (fun (scope, folder) ->
                         scope,
                         folder,
                         (if Directory.Exists folder then
-                             Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories)
+                             Directory.GetFiles(folder, "*", SearchOption.AllDirectories)
                          else
-                             Seq.empty)
-                        |> List.ofSeq)
+                             [||]))
                 )
-                |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
-                |> List.distinct
-                |> List.filter (fun (_, f) -> f |> excludeGlobTest |> not)
+                |> Array.collect (fun (scope, _, files) -> files |> Array.map (fun f -> scope, f))
+                |> Array.distinct
+                |> Array.filter (fun (_, f) -> f |> excludeGlobTest |> not)
 
             let allFiles =
                 duration
