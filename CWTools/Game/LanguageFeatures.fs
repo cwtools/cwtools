@@ -18,7 +18,7 @@ module LanguageFeatures =
         =
         let findNode (pos: range) (startNode: Node) =
             let rec findChild (node: Node) =
-                if node.Position = pos then
+                if node.Position.Equals pos then
                     Some node
                 else
                     match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
