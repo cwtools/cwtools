@@ -11,7 +11,7 @@ open CWTools.Rules
 
 
 type ValidationSettings =
-    { langs: Lang list
+    { langs: Lang array
       validateVanilla: bool
       experimental: bool }
 
@@ -131,7 +131,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         | Some md ->
             fun (newList: (Lang * Set<string>) list) ->
                 let newMap = newList |> Map.ofList
-                let oldList = md.loc |> List.filter (fun (l, _) -> List.contains l langs)
+                let oldList = md.loc |> List.filter (fun (l, _) -> Array.contains l langs)
                 let embeddedMap = oldList |> Map.ofList
 
                 let res =

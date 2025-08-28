@@ -10,7 +10,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
     (
         resources: IResourceAPI<'T>,
         localisationService: _ -> ILocalisationAPICreator,
-        langs: Lang list,
+        langs: Lang array,
         lookup: Lookup,
         processLocalisation,
         localisationExtension: string
@@ -30,7 +30,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             Some(
                 langs
-                |> List.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang)))
+                |> Array.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang)))
             )
         else
             None
@@ -62,11 +62,11 @@ type LocalisationManager<'T when 'T :> ComputedData>
                 |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
-        let loc = parseLocFile locFile |> Option.defaultValue []
+        let loc = parseLocFile locFile |> Option.defaultValue [||]
 
         let newMap =
             loc
-            |> List.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
+            |> Array.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
 
         localisationAPIMap <- newMap
 
