@@ -66,8 +66,7 @@ module STLValidation =
                 os.GlobMatch("**/common/scripted_variables/*.txt")
                 @ es.GlobMatch("**/common/scripted_variables/*.txt")
                 |> List.map getDefinedVariables
-                |> Seq.collect id
-                |> List.ofSeq
+                |> List.collect id
 
             es.All
             <&!!&>
