@@ -2,7 +2,7 @@ source https://api.nuget.org/v3/index.json
 storage: none
 
 nuget Expecto 11.0.0-alpha8
-nuget FParsec 1.1.1
+nuget FParsec 2.0.0-beta2
 nuget FSharp.Data 3.1.1 #
 nuget FSharp.Collections.ParallelSeq #
 nuget FSharpPlus #
@@ -19,7 +19,7 @@ nuget Chiron
 nuget NuGet.CommandLine
 nuget SharpZipLib
 nuget CWTools 0.4.0-alpha
-nuget VDS.Common
+nuget KTrie
 github giraffe-fsharp/Giraffe:612aa186c68101f532196817f67ebaa083c16146 src/Giraffe/GiraffeViewEngine.fs
 nuget Microsoft.NET.Test.Sdk
 nuget NUnit

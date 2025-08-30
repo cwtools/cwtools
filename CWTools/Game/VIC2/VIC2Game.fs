@@ -26,15 +26,15 @@ module VIC2GameFunctions =
     let createLocDynamicSettings (lookup: Lookup) =
         let eventtargets =
             (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
+             |> Option.defaultValue [||]
+             |> Array.map fst)
 
         let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
+            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [||] |> Array.map fst)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-          setVariables = definedvars |> LowerCaseStringSet }
+          eventTargets = eventtargets |> Array.map (fun s -> s, scopeManager.AnyScope)
+          setVariables = definedvars |> IgnoreCaseStringSet }
 
 
     let updateModifiers (game: GameObject) =
@@ -46,7 +46,7 @@ module VIC2GameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.tryFind (fun f -> f.overwrite <> Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+            |> List.tryFind (fun f -> f.overwrite <> Overwrite.Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
 
         match provinceFile with
         | None -> ()
@@ -56,11 +56,10 @@ module VIC2GameFunctions =
             let provinces =
                 lines
                 |> Array.choose (fun l ->
-                    if l.StartsWith("#", StringComparison.OrdinalIgnoreCase) then
+                    if l.StartsWith('#') then
                         None
                     else
-                        l.Split([| ';' |], 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
-                |> List.ofArray
+                        l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
 
             game.Lookup.VIC2provinces <- provinces
 
@@ -69,15 +68,15 @@ module VIC2GameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup: VIC2Lookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+              values = lookup.coreModifiers |> Seq.map _.tag |> Seq.toArray
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+              valuesWithRange = lookup.coreModifiers |> Seq.map (fun m -> m.tag, None) |> Seq.toArray }
 
         let provinceEnums =
             { key = "provinces"
               description = "provinces"
               values = lookup.VIC2provinces
-              valuesWithRange = lookup.VIC2provinces |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.VIC2provinces |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs
@@ -278,36 +277,36 @@ type VIC2Game(setupSettings: VIC2Settings) =
                 | _ -> None)
 
     interface IGame<VIC2ComputedData> with
-        member __.ParserErrors() = parseErrors ()
+        member _.ParserErrors() = parseErrors ()
 
-        member __.ValidationErrors() =
+        member _.ValidationErrors() =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
-        member __.LocalisationErrors(force: bool, forceGlobal: bool) =
+        member _.LocalisationErrors(force: bool, forceGlobal: bool) =
             getLocalisationErrors game Hooks.globalLocalisation (force, forceGlobal)
 
-        member __.Folders() = fileManager.AllFolders()
-        member __.AllFiles() = resources.GetResources()
+        member _.Folders() = fileManager.AllFolders()
+        member _.AllFiles() = resources.GetResources()
 
-        member __.AllLoadedLocalisation() =
+        member _.AllLoadedLocalisation() =
             game.LocalisationManager.LocalisationFileNames()
 
-        member __.ScriptedTriggers() = lookup.triggers
-        member __.ScriptedEffects() = lookup.effects
-        member __.StaticModifiers() = [] //lookup.staticModifiers
-        member __.UpdateFile shallow file text = game.UpdateFile shallow file text
-        member __.AllEntities() = resources.AllEntities()
+        member _.ScriptedTriggers() = lookup.triggers
+        member _.ScriptedEffects() = lookup.effects
+        member _.StaticModifiers() = [] //lookup.staticModifiers
+        member _.UpdateFile shallow file text = game.UpdateFile shallow file text
+        member _.AllEntities() = resources.AllEntities()
 
-        member __.References() =
+        member _.References() =
             References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
-        member __.Complete pos file text =
+        member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
 
-        member __.ScopesAtPos pos file text =
+        member _.ScopesAtPos pos file text =
             scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
 
-        member __.GoToType pos file text =
+        member _.GoToType pos file text =
             getInfoAtPos
                 fileManager
                 game.ResourceManager
@@ -319,32 +318,32 @@ type VIC2Game(setupSettings: VIC2Settings) =
                 file
                 text
 
-        member __.FindAllRefs pos file text =
+        member _.FindAllRefs pos file text =
             findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
 
-        member __.InfoAtPos pos file text = game.InfoAtPos pos file text
+        member _.InfoAtPos pos file text = game.InfoAtPos pos file text
 
-        member __.ReplaceConfigRules rules =
+        member _.ReplaceConfigRules rules =
             game.ReplaceConfigRules
                 { ruleFiles = rules
                   validateRules = true
                   debugRulesOnly = false
                   debugMode = false } //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
 
-        member __.RefreshCaches() = game.RefreshCaches()
+        member _.RefreshCaches() = game.RefreshCaches()
 
-        member __.RefreshLocalisationCaches() =
+        member _.RefreshLocalisationCaches() =
             game.LocalisationManager.UpdateProcessedLocalisation()
 
-        member __.ForceRecompute() = resources.ForceRecompute()
-        member __.Types() = game.Lookup.typeDefInfo
-        member __.TypeDefs() = game.Lookup.typeDefs
-        member __.GetPossibleCodeEdits file text = []
-        member __.GetCodeEdits file text = None //getFastTrigger fileManager game.ResourceManager file text
+        member _.ForceRecompute() = resources.ForceRecompute()
+        member _.Types() = game.Lookup.typeDefInfo
+        member _.TypeDefs() = game.Lookup.typeDefs
+        member _.GetPossibleCodeEdits file text = []
+        member _.GetCodeEdits file text = None //getFastTrigger fileManager game.ResourceManager file text
 
-        member __.GetEventGraphData: GraphDataRequest =
+        member _.GetEventGraphData: GraphDataRequest =
             (fun files gameType depth ->
                 graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
 
-        member __.GetEmbeddedMetadata() =
+        member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

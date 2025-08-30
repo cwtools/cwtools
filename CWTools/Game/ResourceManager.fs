@@ -1,7 +1,7 @@
 namespace CWTools.Games
 
-open System.Collections.Generic
-open System.Runtime.CompilerServices
+open System.Collections.Concurrent
+open System.Diagnostics
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -17,9 +17,9 @@ open CWTools.Utilities.StringResource
 
 // Fuzzy = prefix/suffix
 type ReferenceType =
-    | TypeDef
-    | Link
-    | TypeDefFuzzy
+    | TypeDef = 0uy
+    | Link = 1uy
+    | TypeDefFuzzy = 2uy
 
 type ReferenceDetails =
     { name: StringTokens
@@ -56,7 +56,7 @@ type EU4ComputedData
     inherit
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
-    member __.ScriptedEffectParams: string list option = scriptedeffectparams
+    member _.ScriptedEffectParams: string list option = scriptedeffectparams
 
 type HOI4ComputedData = ComputedData
 type CK2ComputedData = ComputedData
@@ -75,7 +75,7 @@ type ScriptedEffectComputedData
     inherit
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
-    member __.ScriptedEffectParams: string list option = scriptedeffectparams
+    member _.ScriptedEffectParams: string list option = scriptedeffectparams
 
 type STLComputedData = ScriptedEffectComputedData
 type JominiComputedData = ScriptedEffectComputedData
@@ -90,23 +90,22 @@ type VIC3ComputedData = JominiComputedData
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
 
-type PassFileResult = { parseTime: int64 }
+type PassFileResult = { parseTime: float }
 
 type FailFileResult =
     { error: string
       position: FParsec.Position
-      parseTime: int64 }
+      parseTime: float }
 
 type FileResult =
     | Pass of result: PassFileResult
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
-[<Struct; IsReadOnly>]
 type Overwrite =
-    | No
-    | Overwrote
-    | Overwritten
+    | No = 1uy
+    | Overwrote = 2uy
+    | Overwritten = 3uy
 
 type EntityResource =
     { scope: string
@@ -189,7 +188,7 @@ type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type GetFileNames = unit -> string array
+type FileNames = unit -> string array
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -200,8 +199,9 @@ type IResourceAPI<'T when 'T :> ComputedData> =
     abstract ValidatableEntities: ValidatableEntities<'T>
     abstract ForceRecompute: unit -> unit
     abstract ForceRulesDataGenerate: unit -> unit
-    abstract GetFileNames: GetFileNames
+    abstract GetFileNames: FileNames
 
+[<Sealed>]
 type ResourceManager<'T when 'T :> ComputedData>
     (
         computedDataFunction: Entity -> 'T,
@@ -210,24 +210,16 @@ type ResourceManager<'T when 'T :> ComputedData>
         fallbackencoding,
         enableInlineScripts
     ) =
-    let memoize keyFunction memFunction =
-        let dict = Dictionary<_, _>()
+    static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+    static let globCache = ConcurrentDictionary<string, Glob>()
 
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-
-    let globCheckFilepathI (pattern: string) =
-        let options = new GlobOptions()
-        options.Evaluation.CaseInsensitive <- true
-        let glob = Glob.Parse(pattern, options)
-        (fun (p: string) -> glob.IsMatch(p))
-
-    let globCheckFilepath pattern = (memoize id globCheckFilepathI) pattern
+    let globCheckFilepath (pattern: string) (path: string) =
+        match globCache.TryGetValue(pattern) with
+        | true, glob -> glob.IsMatch(path)
+        | false, _ ->
+            let glob = Glob.Parse(pattern)
+            globCache.TryAdd(pattern, glob) |> ignore
+            glob.IsMatch(path)
 
     let filepathToEntityType =
         function
@@ -345,10 +337,9 @@ type ResourceManager<'T when 'T :> ComputedData>
     let mutable entitiesMap: Map<string, struct (Entity * Lazy<'T>)> = Map.empty
 
     let duration f =
-        let timer = System.Diagnostics.Stopwatch()
-        timer.Start()
+        let timestamp = Stopwatch.GetTimestamp()
         let returnValue = f ()
-        (returnValue, timer.ElapsedMilliseconds)
+        (returnValue, Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds)
 
     let matchResult (scope: string, file: string, logicalpath: string, validate: bool, (parseResult, time)) =
         match parseResult with
@@ -360,7 +351,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   logicalpath = logicalpath
                   validate = validate
                   result = Pass({ parseTime = time })
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             parsed
         | Failure(msg, pe, _) ->
@@ -376,17 +367,9 @@ type ResourceManager<'T when 'T :> ComputedData>
                           position = pe.Position
                           parseTime = time }
                     )
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             []
-
-    // let parseFile (file : ResourceInput) =
-    //      match file with
-    //                 |CachedResourceInput (r, s) -> r, s
-    //                 |EntityResourceInput e ->
-    //                     // log "%A %A" e.logicalpath e.filepath
-    //                     e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
-    //                 |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
 
     let shipProcess = STLProcess.shipProcess.ProcessNode
 
@@ -409,7 +392,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   rawEntity = entity
                   validate = v
                   entityType = entityType
-                  overwrite = No }
+                  overwrite = Overwrite.No }
         | _ -> None
 
     let changeEncoding (filestring: string) (source: System.Text.Encoding) (target: System.Text.Encoding) =
@@ -464,7 +447,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   filepath = f.filepath
                   logicalpath = f.logicalpath
                   filetext = f.filetext
-                  overwrite = No
+                  overwrite = Overwrite.No
                   extension = Path.GetExtension(f.filepath)
                   validate = f.validate }
              ),
@@ -506,7 +489,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let processGroup (key, es: (string * EntityResource) list) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
             | es ->
                 let sorted =
                     es
@@ -561,7 +544,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let processGroup (key, es: (string * FileWithContentResource) list) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
             | es ->
                 let sorted =
                     es
@@ -607,7 +590,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             entitiesMap
             |> Map.toSeq
             |> Seq.map snd
-            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
             |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.rawEntity))
@@ -649,9 +632,9 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                     match child with
                     | NodeC n ->
-                        let stringReplace (isParams: (string * string) list) (key: string) =
+                        let stringReplace (isParams: (string * string) seq) (key: string) =
                             isParams
-                            |> List.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
+                            |> Seq.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
 
                         let rec foldOverNode stringReplacer (node: Node) =
                             node.Key <- stringReplacer node.Key
@@ -660,8 +643,8 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 let res = stringReplacer (token.GetString())
                                 StringResource.stringManager.InternIdentifierToken res
 
-                            node.Values
-                            |> List.iter (fun (l: Leaf) ->
+                            node.Leaves
+                            |> Seq.iter (fun (l: Leaf) ->
                                 l.Key <- stringReplacer l.Key
 
                                 l.Value
@@ -678,24 +661,24 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 | Value.QString s -> l.Value <- QString(stringTokenReplace s)
                                 | _ -> ()))
 
-                            node.Children |> List.iter (foldOverNode stringReplacer)
+                            node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
 
                         if
                             nodeScriptRefs
-                            |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
+                            |> List.exists (fun s -> s.Position.Equals(n.Position) && s.KeyId.lower = n.KeyId.lower)
                         then
                             let scriptName = (n.TagText "script")
 
                             let values =
-                                n.Leaves |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText) |> List.ofSeq
+                                n.Leaves |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText)
 
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             | Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
 
-                                newScriptNode.All
+                                newScriptNode.AllArray
                                 |> Seq.map (fun x ->
                                     addTrivia n.Position x
                                     x)
@@ -717,7 +700,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                         if
                             leafScriptRefs
                             |> List.exists (fun s ->
-                                s.Position = l.Position
+                                s.Position.Equals(l.Position)
                                 && s.KeyId = l.KeyId
                                 && s.ValueId.lower = l.ValueId.lower)
                         then
@@ -727,7 +710,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                             | Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
 
-                                newScriptNode.All
+                                newScriptNode.AllArray
                                 |> Seq.map (fun x ->
                                     addTrivia l.Position x
                                     x)
@@ -867,14 +850,13 @@ type ResourceManager<'T when 'T :> ComputedData>
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
 
     let validatableEntities () =
         entitiesMap
         |> Map.toList
         |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
-        |> List.filter (fun struct (e, _) -> e.validate)
+        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten && e.validate)
 
     let getFileNames () : string array =
         fileMap.Values
@@ -884,9 +866,9 @@ type ResourceManager<'T when 'T :> ComputedData>
             | FileWithContentResource(_, r) -> r.logicalpath)
         |> Seq.toArray
 
-    member __.ManualProcessResource = parseFileThenEntity >> snd
+    member _.ManualProcessResource = parseFileThenEntity >> snd
 
-    member __.ManualProcess (filename: string) (filetext: string) =
+    member _.ManualProcess (filename: string) (filetext: string) =
         let parsed = CKParser.parseString filetext filename
 
         match parsed with
@@ -895,14 +877,14 @@ type ResourceManager<'T when 'T :> ComputedData>
             let filenamenopath = Path.GetFileNameWithoutExtension filename
             Some(shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)
 
-    member __.Api =
+    member _.Api =
         { new IResourceAPI<'T> with
-            member __.UpdateFiles = updateFiles
-            member __.UpdateFile = updateFile
-            member __.GetResources = getResources
-            member __.ValidatableFiles = validatableFiles
-            member __.AllEntities = allEntities
-            member __.ValidatableEntities = validatableEntities
-            member __.ForceRecompute() = forceRecompute ()
-            member __.ForceRulesDataGenerate() = forceRulesData ()
-            member __.GetFileNames = getFileNames }
+            member _.UpdateFiles = updateFiles
+            member _.UpdateFile = updateFile
+            member _.GetResources = getResources
+            member _.ValidatableFiles = validatableFiles
+            member _.AllEntities = allEntities
+            member _.ValidatableEntities = validatableEntities
+            member _.ForceRecompute() = forceRecompute ()
+            member _.ForceRulesDataGenerate() = forceRulesData ()
+            member _.GetFileNames = getFileNames }

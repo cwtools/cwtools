@@ -16,8 +16,9 @@ module STLLookup =
             | (_, c), NodeC n when n.Key = t -> (true, c)
             | (_, _), _ -> (false, [])
 
-        root.Children
-        |> List.map (fun e -> e, root.All |> List.fold (findComment e.Key) (false, []) |> snd)
+        root.Nodes
+        |> Seq.map (fun e -> e, root.AllArray |> Array.fold (findComment e.Key) (false, []) |> snd)
+        |> Seq.toList
 
     let updateScriptedTriggers (resources: IResourceAPI<STLComputedData>) (vanillaTriggers: Effect list) =
         let rawTriggers =

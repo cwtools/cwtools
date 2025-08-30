@@ -47,4 +47,4 @@ module IRConstants =
               NewScope.ModifierCategoryInput.internalID = intID
               NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
-    let scriptFolders = [ "common"; "events"; "localization"; "map_data" ]
+    let scriptFolders = [| "common"; "events"; "localization"; "map_data" |]

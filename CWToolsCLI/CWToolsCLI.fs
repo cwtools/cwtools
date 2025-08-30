@@ -138,7 +138,7 @@ module CWToolsCLI =
         | OutputFile of filename: string
         | [<EqualsAssignment>] OutputHashes of filename: string option
         | [<EqualsAssignment>] IgnoreHashesFile of filename: string option
-        | Languages of LanguageArg list
+        | Languages of LanguageArg array
 
         interface IArgParserTemplate with
             member s.Usage =
@@ -358,19 +358,19 @@ module CWToolsCLI =
 
         let langs =
             results.TryGetResult <@ Languages @>
-            |> Option.map (List.choose (parseLanguageArg game))
+            |> Option.map (Array.choose (parseLanguageArg game))
 
         let langs =
             match langs, game with
             | Some l, _ -> Some l
-            | None, Game.STL -> Some [ STL STLLang.English ]
-            | None, Game.EU4 -> Some [ EU4 EU4Lang.English ]
-            | None, Game.HOI4 -> Some [ HOI4 HOI4Lang.English ]
-            | None, Game.CK2 -> Some [ CK2 CK2Lang.English ]
-            | None, Game.VIC2 -> Some [ VIC2 VIC2Lang.English ]
-            | None, Game.IR -> Some [ IR IRLang.English ]
-            | None, Game.CK3 -> Some [ CK3 CK3Lang.English ]
-            | None, Game.Custom -> Some [ Custom CustomLang.English ]
+            | None, Game.STL -> Some [| STL STLLang.English |]
+            | None, Game.EU4 -> Some [| EU4 EU4Lang.English |]
+            | None, Game.HOI4 -> Some [| HOI4 HOI4Lang.English |]
+            | None, Game.CK2 -> Some [| CK2 CK2Lang.English |]
+            | None, Game.VIC2 -> Some [| VIC2 VIC2Lang.English |]
+            | None, Game.IR -> Some [| IR IRLang.English |]
+            | None, Game.CK3 -> Some [| CK3 CK3Lang.English |]
+            | None, Game.Custom -> Some [| Custom CustomLang.English |]
             | _ -> None
 
         let embedded =

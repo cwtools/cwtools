@@ -116,11 +116,12 @@ let runLocalisationTest (results: ParseResults<PerformanceArgs>) =
 
 // Main program logic
 let runCommand (results: ParseResults<PerformanceArgs>) =
-    match results.GetSubCommand() with
-    | Localisation _ ->
+    match results.TryGetSubCommand() with
+    | Some(Localisation _) ->
         runLocalisationTest results
         0
-    | Full ->
+    | Some Full
+    | _ ->
         // Default to running validation tests
         let runTests = true
         let modPath = getModPath results
@@ -160,7 +161,6 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
         else
             eprintfn "No valid command specified. Use --help for usage information."
             1
-    | _ -> failwith "todo"
 
 [<EntryPoint>]
 let main argv =
@@ -173,6 +173,8 @@ let main argv =
             ArgumentParser.Create<PerformanceArgs>(programName = "CWToolsPerformanceCLI")
 
         let results = parser.Parse(argv)
+
+        printfn $"Running with arguments: %A{argv}"
 
         // Run the specified command
         runCommand results
