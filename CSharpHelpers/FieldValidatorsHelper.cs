@@ -15,20 +15,21 @@ public static partial class FieldValidatorsHelper
 
     public static bool CheckPathDir(PathOptions pathOptions, string fullPath)
     {
-        // to prevent stack overflow, chosen a relatively conservative array size.
-        const int maxStackSize = 256;
-
         var span = fullPath.AsSpan();
         var dirSpan = Path.GetDirectoryName(span);
-        Span<char> directory =
-            dirSpan.Length > maxStackSize
-                ? new char[dirSpan.Length]
-                : stackalloc char[dirSpan.Length];
+        if (dirSpan.Contains('\\'))
+        {
+            // to prevent stack overflow, chosen a relatively conservative array size.
+            const int maxStackSize = 256;
+            Span<char> directory =
+                dirSpan.Length > maxStackSize
+                    ? new char[dirSpan.Length]
+                    : stackalloc char[dirSpan.Length];
+            dirSpan.Replace(directory, '\\', '/');
+            return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
+        }
 
-        // TODO: use Vector check?
-        dirSpan.Replace(directory, '\\', '/');
-
-        return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
+        return CheckPathDir(pathOptions, dirSpan, Path.GetFileName(span));
     }
 
     public static bool CheckPathDir(
@@ -211,6 +212,7 @@ public static partial class FieldValidatorsHelper
         {
             file = sb.ToString();
         }
+
         return isValid;
     }
 }
