@@ -17,10 +17,12 @@ module YAMLLocalisationParser =
         || (c >= '\u00A0' && c <= '\u024F')
         || (c >= '\u0401' && c <= '\u045F')
         || (c >= '\u0490' && c <= '\u0491')
+        || (c >= '\u1E00' && c <= '\u1EFF')
         || (c >= '\u2013' && c <= '\u2044')
+        || (c >= '\u2460' && c <= '\u24FF')
         || (c >= '\u4E00' && c <= '\u9FFF')
-        || (c >= '\uFE30' && c <= '\uFE4F')
         || (c >= '\u3000' && c <= '\u30FF')
+        || (c >= '\uFE30' && c <= '\uFE4F')
         || (c >= '\uFF00' && c <= '\uFFEF')
 
     let key = many1Satisfy ((=) ':' >> not) .>> skipChar ':' .>> spaces <?> "key"
