@@ -12,6 +12,7 @@ open CWTools.Localisation.CK3
 open CWTools.Localisation.EU4
 open CWTools.Localisation.HOI4
 open CWTools.Localisation.STL
+open CWTools.Localisation.EU5
 open CliArguments
 open CWToolsPerformanceCLI.PerfFunctions
 
@@ -68,12 +69,19 @@ let getTestFunction (results: ParseResults<PerformanceArgs>) =
     let gitRoot = getGitRoot results
     let stopPoint = getTestMode results
 
-    match results.Contains Stellaris, results.Contains HOI4, results.Contains CK3, results.Contains EU4 with
-    | true, _, _, _ -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
-    | _, true, _, _ -> perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
-    | _, _, true, _ -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
-    | _, _, _, true -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
-    | false, false, false, false -> failwith "Please select a game!"
+    match
+        results.Contains Stellaris,
+        results.Contains HOI4,
+        results.Contains CK3,
+        results.Contains EU4,
+        results.Contains EU5
+    with
+    | true, _, _, _, _ -> perfStellaris gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, true, _, _, _ -> perfHOI4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, true, _, _ -> perfCK3 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, _, true, _ -> perfEU4 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | _, _, _, _, true -> perfEU5 gamePath configPath cachePath modPath steamRoot gitRoot stopPoint true
+    | false, false, false, false, false -> failwith "Please select a game!"
 
 let runLocalisationTest (results: ParseResults<PerformanceArgs>) =
 
@@ -87,26 +95,31 @@ let runLocalisationTest (results: ParseResults<PerformanceArgs>) =
             results.Contains Stellaris,
             results.Contains HOI4,
             results.Contains CK3,
-            results.Contains EU4
+            results.Contains EU4,
+            results.Contains EU5
         with
-        | Some gamePath, true, _, _, _ ->
+        | Some gamePath, true, _, _, _, _ ->
             STLLocalisationServiceFromFolder(gamePath + "/localisation")
             |> (fun x -> x.Api(Lang.STL STLLang.English))
             |> _.Values.Count
-        | Some gamePath, _, true, _, _ ->
+        | Some gamePath, _, true, _, _, _ ->
             HOI4LocalisationServiceFromFolder(gamePath + "/localisation")
             |> (fun x -> x.Api(Lang.HOI4 HOI4Lang.English))
             |> _.Values.Count
-        | Some gamePath, _, _, true, _ ->
+        | Some gamePath, _, _, true, _, _ ->
             CK3LocalisationServiceFromFolder(gamePath + "/localisation")
             |> (fun x -> x.Api(Lang.CK3 CK3Lang.English))
             |> _.Values.Count
-        | Some gamePath, _, _, _, true ->
+        | Some gamePath, _, _, _, true, _ ->
             EU4LocalisationServiceFromFolder(gamePath + "/localisation")
             |> (fun x -> x.Api(Lang.EU4 EU4Lang.English))
             |> _.Values.Count
-        | None, _, _, _, _ -> failwith "Please provide a game path!"
-        | _, false, false, false, false -> failwith "Please select a game!"
+        | Some gamePath, _, _, _, _, true ->
+            EU5LocalisationServiceFromFolder(gamePath + "/localisation")
+            |> (fun x -> x.Api(Lang.EU5 EU5Lang.English))
+            |> _.Values.Count
+        | None, _, _, _, _, _ -> failwith "Please provide a game path!"
+        | _, false, false, false, false, false -> failwith "Please select a game!"
 
     timer.Stop()
 
@@ -139,6 +152,13 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
                 | None -> ""
 
             runPerfTest (sprintf "EU4 Test %s" modInfo) (getTestFunction results)
+        elif results.Contains EU5 then
+            let modInfo =
+                match modPath with
+                | Some _ -> " + mod"
+                | None -> ""
+
+            runPerfTest (sprintf "EU5 Test %s" modInfo) (getTestFunction results)
         elif results.Contains HOI4 then
             // let cacheInfo = if cachePath.IsSome then " (cached)" else ""
 

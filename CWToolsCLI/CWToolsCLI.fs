@@ -74,6 +74,17 @@ module CWToolsCLI =
         | Game.EU4, German -> Some(EU4 EU4Lang.German)
         | Game.EU4, Spanish -> Some(EU4 EU4Lang.Spanish)
         | Game.EU4, _ -> None
+        | Game.EU5, English -> Some(EU5 EU5Lang.English)
+        | Game.EU5, French -> Some(EU5 EU5Lang.French)
+        | Game.EU5, German -> Some(EU5 EU5Lang.German)
+        | Game.EU5, Spanish -> Some(EU5 EU5Lang.Spanish)
+        | Game.EU5, SimpChinese -> Some(EU5 EU5Lang.Chinese)
+        | Game.EU5, Russian -> Some(EU5 EU5Lang.Russian)
+        | Game.EU5, Korean -> Some(EU5 EU5Lang.Korean)
+        | Game.EU5, Japanese -> Some(EU5 EU5Lang.Japanese)
+        | Game.EU5, BrazPor -> Some(EU5 EU5Lang.Braz_Por)
+        | Game.EU5, Polish -> Some(EU5 EU5Lang.Polish)
+        | Game.EU5, _ -> None
         | Game.VIC2, English -> Some(VIC2 VIC2Lang.English)
         | Game.VIC2, French -> Some(VIC2 VIC2Lang.French)
         | Game.VIC2, German -> Some(VIC2 VIC2Lang.German)
