@@ -9,7 +9,7 @@
         <Compile Include="AssemblyInfo.fs"/>
         <Compile Include="Utilities/Position.fs"/>
         <Compile Include="Utilities/Utilities.fs"/>
-        <Compile Include="Process\Comment.fs" />
+        <Compile Include="Process\Comment.fs"/>
         <Compile Include="Common/Constants.fs"/>
         <Compile Include="Common/STLConstants.fs"/>
         <Compile Include="Common/EU4Constants.fs"/>
@@ -17,6 +17,7 @@
         <Compile Include="Common/CK2Constants.fs"/>
         <Compile Include="Common/CK3Constants.fs"/>
         <Compile Include="Common\VIC3Constants.fs"/>
+        <Compile Include="Common\EU5Constants.fs"/>
         <Compile Include="Common/IRConstants.fs"/>
         <Compile Include="Common/VIC2Constants.fs"/>
         <Compile Include="Parser/Types.fs"/>
@@ -104,8 +105,8 @@
         <Compile Include="CSharp/Extensions.fs"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj" />
-      <ProjectReference Include="..\Shared\Shared.fsproj" />
+        <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj"/>
+        <ProjectReference Include="..\Shared\Shared.fsproj"/>
     </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>
 </Project>
