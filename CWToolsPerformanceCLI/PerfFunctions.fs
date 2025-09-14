@@ -2,6 +2,7 @@ module CWToolsPerformanceCLI.PerfFunctions
 
 open CWTools.Games.CK3
 open CWTools.Games.EU4
+open CWTools.Games.EU5
 open CWTools.Games.HOI4
 open CWToolsPerformanceCLI.PerfCommon
 open CWTools.Parser.DocsParser
@@ -452,3 +453,76 @@ let test (filePath: string) =
 
         { ElapsedMilliseconds = timer.ElapsedMilliseconds
           ErrorCount = 1 }
+
+
+// EU5 settings builder with parameterized paths (mirrors EU4 for now)
+let buildEu5Settings rootDir configPath useCache cachePath earlyStopMode =
+    let configs = CWToolsCLI.getConfigFiles (None, Some configPath)
+    let folders = configs |> List.tryPick getFolderList
+
+    let embedded =
+        if useCache then
+            let cached, cachedFiles = Serializer.deserialize cachePath in FromConfig(cachedFiles, cached)
+        else
+            FromConfig([], [])
+
+    { rootDirectories =
+        [ WD
+              { name = "Europa Universalis V"
+                path = rootDir } ]
+      modFilter = None
+      scriptFolders = folders
+      excludeGlobPatterns = None
+      validation =
+        { validateVanilla = not useCache
+          experimental = false
+          langs = [ EU5 EU5Lang.English ] }
+      rules =
+        Some
+            { ruleFiles = configs
+              validateRules = true
+              debugRulesOnly = false
+              debugMode = false }
+      embedded = embedded
+      maxFileSize = None
+      debugSettings =
+        { DebugSettings.Default with
+            EarlyStop = earlyStopMode } }
+
+// Unified EU5 performance test runner (uses EU4 defaults for convenience)
+let perfEU5
+    rootDir
+    configPath
+    (cachePath: string option)
+    (modPath: string option)
+    (steamRoot: string option)
+    (gitRoot: string option)
+    (earlyStopMode: StopPoint)
+    runTests
+    =
+    let pathConfig = createPathConfig steamRoot gitRoot
+
+    let _, (defaultEu4Root, defaultEu4Config, defaultEu4Cache), _, _ =
+        getDefaultGamePaths pathConfig
+
+    let useCache = cachePath.IsSome
+    let defaultRootDir = defaultArg rootDir defaultEu4Root
+    let defaultConfigPath = defaultArg configPath defaultEu4Config
+    let defaultCachePath = defaultArg cachePath defaultEu4Cache
+
+    perfRunnerWithResult
+        (fun () ->
+            scopeManager.ReInit(defaultScopeInputs, [])
+
+            let settings =
+                buildEu5Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
+            // Add mod path if provided
+            let finalSettings =
+                match modPath with
+                | Some mp ->
+                    { settings with
+                        rootDirectories = settings.rootDirectories @ [ WD { path = mp; name = "mod" } ] }
+                | None -> settings
+
+            EU5Game(finalSettings) :> IGame<_>)
+        runTests

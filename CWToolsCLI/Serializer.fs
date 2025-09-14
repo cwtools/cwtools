@@ -755,6 +755,7 @@ let loadGame<'T when 'T :> ComputedData>
         | Game.HOI4 -> HOI4Game(HOI4options) :> IGame
         | Game.STL -> STLGame(STLoptions) :> IGame
         | Game.EU4 -> EU4Game(EU4options) :> IGame
+        | Game.EU5 -> EU4Game(EU4options) :> IGame
         | Game.CK2 -> CK2Game(CK2options) :> IGame
         | Game.VIC2 -> VIC2Game(VIC2options) :> IGame
         | Game.IR -> IRGame(IRoptions) :> IGame
@@ -792,6 +793,7 @@ let serializeMetadata (dir: string, scope: FilesScope, modFilter: string, config
                     | Game.CK2 -> "ck2"
                     | Game.HOI4 -> "hoi4"
                     | Game.EU4 -> "eu4"
+                    | Game.EU5 -> "eu5"
                     | Game.STL -> "stl"
                     | Game.VIC2 -> "vic2"
                     | Game.IR -> "ir"

@@ -320,3 +320,31 @@ module VIC3 =
               gameName = "VIC3"
               keyToLanguage = keyToLanguage
               gameToLang = VIC3 }
+
+module EU5 =
+    open YAMLLocalisationParser
+
+    let private keyToLanguage =
+        function
+        | "l_english" -> Some EU5Lang.English
+        | "l_french" -> Some EU5Lang.French
+        | "l_german" -> Some EU5Lang.German
+        | "l_spanish" -> Some EU5Lang.Spanish
+        | "l_simp_chinese" -> Some EU5Lang.Chinese
+        | "l_russian" -> Some EU5Lang.Russian
+        | "l_korean" -> Some EU5Lang.Korean
+        | "l_japanese" -> Some EU5Lang.Japanese
+        | "l_braz_por" -> Some EU5Lang.Braz_Por
+        | "l_polish" -> Some EU5Lang.Polish
+        | "l_turkish" -> Some EU5Lang.Turkish
+        | _ -> None
+
+    let EU5LocalisationService (files: (string * string) list) =
+        YAMLLocalisationService(files, keyToLanguage, EU5)
+
+    let EU5LocalisationServiceFromFolder (folder: string) =
+        YAMLLocalisationService
+            { folder = folder
+              gameName = "EU5"
+              keyToLanguage = keyToLanguage
+              gameToLang = EU5 }
