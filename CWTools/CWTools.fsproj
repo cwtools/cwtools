@@ -46,6 +46,7 @@
         <Compile Include="Process/Scopes/CK2Scopes.fs"/>
         <Compile Include="Process/Scopes/CK3Scopes.fs"/>
         <Compile Include="Process\Scopes\VIC3Scopes.fs"/>
+        <Compile Include="Process\Scopes\EU5Scopes.fs"/>
         <Compile Include="Process/Scopes/IRScopes.fs"/>
         <Compile Include="Process/Scopes/VIC2Scopes.fs"/>
         <Compile Include="Rules/RulesParserConstants.fs"/>
@@ -96,10 +97,11 @@
         <Compile Include="Game/VIC2/VIC2Game.fs"/>
         <Compile Include="Game/CK3/CK3Game.fs"/>
         <Compile Include="Game/Custom/CustomGame.fs"/>
+        <Compile Include="Game\VIC3\VIC3Game.fs"/>
+        <Compile Include="Game\EU5\EU5Game.fs"/>
         <Compile Include="CSharp/Parsers.fs"/>
         <Compile Include="CSharp/Helpers.fs"/>
         <Compile Include="CSharp/Extensions.fs"/>
-        <Compile Include="Game\VIC3\VIC3Game.fs"/>
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj" />
