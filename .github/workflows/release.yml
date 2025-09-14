@@ -30,7 +30,7 @@ jobs:
     - name: Test and Pack
       run: /bin/sh ./build.sh PackTools
     - name: upload artifact package
-      uses: actions/upload-artifact@4
+      uses: actions/upload-artifact@v4
       with:
         name: cwtools-nugets
         path: pkg/
