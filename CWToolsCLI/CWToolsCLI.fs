@@ -2,6 +2,7 @@ namespace CWToolsCLI
 
 open System.Text
 open CWTools.Common
+open CWTools
 open System.IO
 open CWTools.Parser
 open FParsec
