@@ -484,6 +484,51 @@ let serializeVIC2 folder outputFileName compression =
     compressAndWriteToFile compression pickle filename
     filename
 
+let serializeEU5 folder outputFileName compression =
+    let fileManager =
+        FileManager(folder, Some "", EU5Constants.scriptFolders, "Europa Universalis V", Encoding.UTF8, [], 2)
+
+    let files = fileManager.AllFilesByPath()
+    let computefun: unit -> InfoService option = (fun () -> None)
+
+    let resources =
+        ResourceManager<EU5ComputedData>(
+            Compute.Jomini.computeJominiData computefun,
+            Compute.Jomini.computeJominiDataUpdate computefun,
+            Encoding.UTF8,
+            Encoding.GetEncoding(1252),
+            false
+        )
+            .Api
+
+    let entities =
+        resources.UpdateFiles(files)
+        |> List.choose (fun (r, e) ->
+            e
+            |> function
+                | Some e2 -> Some(r, e2)
+                | _ -> None)
+        |> List.map (fun (r, (struct (e, _))) -> r, e)
+
+    let files =
+        resources.GetResources()
+        |> List.choose (function
+            | FileResource(_, r) -> Some(r.logicalpath, "")
+            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
+            | _ -> None)
+
+    let data =
+        { resources = entities
+          fileIndexTable = fileIndexTable
+          files = files
+          stringResourceManager = StringResource.stringManager }
+
+    let pickle = binarySerializer.Pickle data
+    let baseFilename = outputFileName |> Option.defaultValue "eu5.cwb"
+    let filename = baseFilename + (getExtension compression)
+    compressAndWriteToFile compression pickle filename
+    filename
+
 let deserialize path =
     match File.Exists path, Path.GetExtension path with
     | true, ".bz2" ->
