@@ -6,3 +6,5 @@ FSharpx.Collections
 Sandwych.QuickGraph.Core
 VDS.Common
 System.Text.Encoding.CodePages
+FsPickler
+SharpZipLib

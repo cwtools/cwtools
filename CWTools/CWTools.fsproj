@@ -103,6 +103,8 @@
         <Compile Include="CSharp/Parsers.fs"/>
         <Compile Include="CSharp/Helpers.fs"/>
         <Compile Include="CSharp/Extensions.fs"/>
+        <Compile Include="Serialization/CompressionOptions.fs"/>
+        <Compile Include="Serialization/Serializer.fs"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj"/>

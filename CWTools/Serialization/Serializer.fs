@@ -1,4 +1,4 @@
-module CWToolsCLI.Serializer
+﻿module CWTools.Serializer
 
 open System.Collections.Concurrent
 open System.Collections.Generic
@@ -25,8 +25,7 @@ open CWTools.Games.VIC2
 open CWTools.Games.Custom
 open CWTools.Games.IR
 open System.IO.Compression
-open CWToolsCLI.CompressionOptions
-
+open CWTools.CompressionOptions
 
 let mkPickler (resolver: IPicklerResolver) =
     let arrayPickler = resolver.Resolve<Leaf array>()
@@ -64,29 +63,6 @@ let binarySerializer =
 
 let assemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
 
-
-// let compressAndWrite (input : byte array) (file : string) =
-//     use stream = new MemoryStream(input);
-//     let encoder = SevenZip.Compression.LZMA.Encoder()
-//     use fileStream = File.Create(file)
-//     encoder.WriteCoderProperties(fileStream)
-//     for i = 0 to 7 do
-//         fileStream.WriteByte((input.Length >>> (8 * i)) |> byte)
-
-//     // fileStream.Write(BitConverter.GetBytes(input.Length), 0, 8)
-//     encoder.Code(stream, fileStream, stream.Length, -1L, NullProgress())
-//     fileStream.Flush()
-//     fileStream.Close()
-//     use encoder = ManagedLzma.SevenZip.Writer.ArchiveWriter.Create(fileStream, false)
-//     let settings = ManagedLzma.SevenZip.Writer.Lzma2EncoderSettings(ManagedLzma.LZMA2.EncoderSettings())
-//     Encode
-//     encoder.BeginEncoding()
-//     let writer = new ArchiveWriter(stream);
-//     write
-//     // use encoder = new ManagedLzma.LZMA.AsyncEncoder(ManagedLzma.LZMA.EncoderSettings())
-//     // // ManagedLzma.
-//     // encoder.EncodeAsync(stream, fileStream)
-
 let compressAndWrite (input: byte array) (file: string) =
     use stream = new MemoryStream(input)
     use fileStream = File.Create(file)
@@ -99,21 +75,18 @@ let decompress (path: string) =
     ICSharpCode.SharpZipLib.BZip2.BZip2.Decompress(inStream, outStream, false)
     outStream.ToArray()
 
-let addDLCs (workspaceDirectory: WorkspaceDirectory) =
+let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
     let dir = workspaceDirectory.path
-    // eprintfn "ad %A" dir
-    // eprintfn "ad2 %A" (Path.Combine [|dir; "dlc"|])
-    if Directory.Exists(dir) && Directory.Exists(Path.Combine [| dir; "dlc" |]) then
-        let dlcs = Directory.EnumerateDirectories(Path.Combine [| dir; "dlc" |])
-        // eprintfn "ad3 %A" dlcs
+
+    if Directory.Exists(dir) && Directory.Exists(Path.Combine [| dir; dlcDir |]) then
+        let dlcs = Directory.EnumerateDirectories(Path.Combine [| dir; dlcDir |])
+
         let createZippedDirectory (dlcDir: string) =
-            // eprintfn "d1 %A" (Directory.EnumerateFiles dlcDir)
             match
                 Directory.EnumerateFiles dlcDir
                 |> Seq.tryFind (fun f -> (Path.GetExtension f) = ".zip")
             with
             | Some zip ->
-                // eprintfn "d2 %A" zip
                 use file = File.OpenRead(zip)
 
                 try
@@ -145,24 +118,32 @@ let addDLCs (workspaceDirectory: WorkspaceDirectory) =
     else
         []
 
+type GameSerializationConfig<'T when 'T :> ComputedData> =
+    { scriptFolders: string list
+      gameName: string
+      defaultFilename: string
+      computeData: (unit -> InfoService option) -> FileManager -> ResourceManager<'T>
+      supportsDLC: bool
+      primaryEncoding: Encoding
+      secondaryEncoding: Encoding
+      encodingFlag: bool }
+
 let serialize gameDirName scriptFolders cacheDirectory = ()
 
-let serializeSTL folder outputFileName compression =
+let serializeGame<'T when 'T :> ComputedData> (config: GameSerializationConfig<'T>) folder outputFileName compression =
+    let folders =
+        if config.supportsDLC then
+            (WD folder) :: (addDLCs "dlc" folder) @ (addDLCs "integrated_dlc" folder)
+        else
+            [ WD folder ]
+
     let fileManager =
-        FileManager(folder, Some "", STLConstants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
+        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
 
-    let resources =
-        ResourceManager<STLComputedData>(
-            STL.computeSTLData computefun,
-            STL.computeSTLDataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            true
-        )
-            .Api
+    let resources = (config.computeData computefun fileManager).Api
 
     let entities =
         resources.UpdateFiles(files)
@@ -187,349 +168,210 @@ let serializeSTL folder outputFileName compression =
           stringResourceManager = StringResource.stringManager }
 
     let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "stl.cwb"
+    let baseFilename = outputFileName |> Option.defaultValue config.defaultFilename
     let filename = baseFilename + (getExtension compression)
     compressAndWriteToFile compression pickle filename
     filename
-//File.Create()
-//File.WriteAllBytes(Path.Combine(cacheDirectory, "stl.cwb"), pickle)
+
+let serializeSTL folder outputFileName compression =
+    let config =
+        { scriptFolders = STLConstants.scriptFolders
+          gameName = "stellaris"
+          defaultFilename = "stl.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<STLComputedData>(
+                    STL.computeSTLData computefun,
+                    STL.computeSTLDataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    true
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = true }
+
+    serializeGame config folder outputFileName compression
 
 let serializeEU4 folder outputFileName compression =
-    let folders = (WD folder) :: (addDLCs folder)
+    let config =
+        { scriptFolders = EU4Constants.scriptFolders
+          gameName = "europa universalis iv"
+          defaultFilename = "eu4.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<EU4ComputedData>(
+                    EU4.computeEU4Data computefun,
+                    EU4.computeEU4DataUpdate computefun,
+                    Encoding.GetEncoding(1252),
+                    Encoding.UTF8,
+                    false
+                )
+          supportsDLC = true
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let fileManager =
-        FileManager(folders, Some "", EU4Constants.scriptFolders, "stellaris", Encoding.UTF8, [], 2)
-
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
-
-    let resources =
-        ResourceManager<EU4ComputedData>(
-            EU4.computeEU4Data computefun,
-            EU4.computeEU4DataUpdate computefun,
-            Encoding.GetEncoding(1252),
-            Encoding.UTF8,
-            false
-        )
-            .Api
-
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "eu4.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let serializeHOI4 folder outputFileName compression =
-    let folders = (WD folder) :: (addDLCs folder)
+    let config =
+        { scriptFolders = HOI4Constants.scriptFolders
+          gameName = "hearts of iron iv"
+          defaultFilename = "hoi4.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<HOI4ComputedData>(
+                    computeHOI4Data computefun,
+                    computeHOI4DataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = true
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let fileManager =
-        FileManager(folders, Some "", HOI4Constants.scriptFolders, "hearts of iron iv", Encoding.UTF8, [], 2)
-
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
-
-    let resources =
-        ResourceManager<HOI4ComputedData>(
-            computeHOI4Data computefun,
-            computeHOI4DataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            false
-        )
-            .Api
-
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "hoi4.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let serializeCK2 folder outputFileName compression =
-    let fileManager =
-        FileManager(folder, Some "", CK2Constants.scriptFolders, "crusader kings ii", Encoding.UTF8, [], 2)
+    let config =
+        { scriptFolders = CK2Constants.scriptFolders
+          gameName = "crusader kings ii"
+          defaultFilename = "ck2.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<CK2ComputedData>(
+                    computeCK2Data computefun,
+                    computeCK2DataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
-
-    let resources =
-        ResourceManager<CK2ComputedData>(
-            computeCK2Data computefun,
-            computeCK2DataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            false
-        )
-            .Api
-
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "ck2.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let serializeIR folder outputFileName compression =
-    let fileManager =
-        FileManager(folder, Some "", IRConstants.scriptFolders, "imperator", Encoding.UTF8, [], 2)
+    let config =
+        { scriptFolders = IRConstants.scriptFolders
+          gameName = "imperator"
+          defaultFilename = "ir.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<IRComputedData>(
+                    Compute.Jomini.computeJominiData computefun,
+                    Compute.Jomini.computeJominiDataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
-
-    let resources =
-        ResourceManager<IRComputedData>(
-            Compute.Jomini.computeJominiData computefun,
-            Compute.Jomini.computeJominiDataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            false
-        )
-            .Api
-
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "ir.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let serializeCK3 folder outputFileName compression =
-    let fileManager =
-        FileManager(folder, Some "", CK3Constants.scriptFolders, "crusader kings iii", Encoding.UTF8, [], 2)
+    let config =
+        { scriptFolders = CK3Constants.scriptFolders
+          gameName = "crusader kings iii"
+          defaultFilename = "ck3.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<CK3ComputedData>(
+                    Compute.Jomini.computeJominiData computefun,
+                    Compute.Jomini.computeJominiDataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
-
-    let resources =
-        ResourceManager<CK3ComputedData>(
-            Compute.Jomini.computeJominiData computefun,
-            Compute.Jomini.computeJominiDataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            false
-        )
-            .Api
-
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "ck3.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let serializeVIC3 folder outputFileName compression =
-    let fileManager =
-        FileManager(folder, Some "", VIC3Constants.scriptFolders, "victoria 3", Encoding.UTF8, [], 2)
+    let config =
+        { scriptFolders = VIC3Constants.scriptFolders
+          gameName = "victoria 3"
+          defaultFilename = "vic3.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<VIC3ComputedData>(
+                    Compute.Jomini.computeJominiData computefun,
+                    Compute.Jomini.computeJominiDataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
-
-    let resources =
-        ResourceManager<VIC3ComputedData>(
-            Compute.Jomini.computeJominiData computefun,
-            Compute.Jomini.computeJominiDataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            false
-        )
-            .Api
-
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "vic3.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let serializeVIC2 folder outputFileName compression =
-    let fileManager =
-        FileManager(folder, Some "", VIC2Constants.scriptFolders, "victoria 2", Encoding.UTF8, [], 2)
+    let config =
+        { scriptFolders = VIC2Constants.scriptFolders
+          gameName = "victoria 2"
+          defaultFilename = "vic2.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<VIC2ComputedData>(
+                    computeVIC2Data computefun,
+                    computeVIC2DataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let files = fileManager.AllFilesByPath()
-    let computefun: unit -> InfoService option = (fun () -> (None))
+    serializeGame config folder outputFileName compression
 
-    let resources =
-        ResourceManager<VIC2ComputedData>(
-            computeVIC2Data computefun,
-            computeVIC2DataUpdate computefun,
-            Encoding.UTF8,
-            Encoding.GetEncoding(1252),
-            false
-        )
-            .Api
+let serializeEU5 folder outputFileName compression =
+    let config =
+        { scriptFolders = EU5Constants.scriptFolders
+          gameName = "Europa Universalis V"
+          defaultFilename = "eu5.cwb"
+          computeData =
+            fun computefun _ ->
+                ResourceManager<EU5ComputedData>(
+                    Compute.Jomini.computeJominiData computefun,
+                    Compute.Jomini.computeJominiDataUpdate computefun,
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(1252),
+                    false
+                )
+          supportsDLC = false
+          primaryEncoding = Encoding.UTF8
+          secondaryEncoding = Encoding.GetEncoding(1252)
+          encodingFlag = false }
 
-    let entities =
-        resources.UpdateFiles(files)
-        |> List.choose (fun (r, e) ->
-            e
-            |> function
-                | Some e2 -> Some(r, e2)
-                | _ -> None)
-        |> List.map (fun (r, (struct (e, _))) -> r, e)
-
-    let files =
-        resources.GetResources()
-        |> List.choose (function
-            | FileResource(_, r) -> Some(r.logicalpath, "")
-            | FileWithContentResource(_, r) -> Some(r.logicalpath, r.filetext)
-            | _ -> None)
-
-    let data =
-        { resources = entities
-          fileIndexTable = fileIndexTable
-          files = files
-          stringResourceManager = StringResource.stringManager }
-
-    let pickle = binarySerializer.Pickle data
-    let baseFilename = outputFileName |> Option.defaultValue "vic2.cwb"
-    let filename = baseFilename + (getExtension compression)
-    compressAndWriteToFile compression pickle filename
-    filename
+    serializeGame config folder outputFileName compression
 
 let deserialize path =
-    // registry.DeclareSerializable<System.LazyHelper>()
-    // registry.DeclareSerializable<Lazy>()
     match File.Exists path, Path.GetExtension path with
     | true, ".bz2" ->
         let cacheFile = decompress path
-        // let cacheFile = File.ReadAllBytes(path)
-        // let cacheFile = Assembly.GetEntryAssembly().GetManifestResourceStream("Main.files.pickled.cwb")
-        //                 |> (fun f -> use ms = new MemoryStream() in f.CopyTo(ms); ms.ToArray())
         let cached = binarySerializer.UnPickle<CachedResourceData> cacheFile
         fileIndexTable <- cached.fileIndexTable
         StringResource.stringManager <- cached.stringResourceManager
         cached.resources, cached.files
     | true, _ ->
         let cacheFile = File.ReadAllBytes(path)
-        // let cacheFile = Assembly.GetEntryAssembly().GetManifestResourceStream("Main.files.pickled.cwb")
-        //                 |> (fun f -> use ms = new MemoryStream() in f.CopyTo(ms); ms.ToArray())
         let cached = binarySerializer.UnPickle<CachedResourceData> cacheFile
         fileIndexTable <- cached.fileIndexTable
         StringResource.stringManager <- cached.stringResourceManager
@@ -560,10 +402,8 @@ let deserializeMetadata path =
                         range = range.Zero
                         validate = false })) }
 
-
 let loadGame<'T when 'T :> ComputedData>
     (dir: string, scope: FilesScope, modFilter: string, config, game: Game, embedded: EmbeddedSetupSettings, langSetting) =
-    // let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
     let langs =
         match langSetting, game with
         | Some ls, _ -> ls
@@ -580,8 +420,9 @@ let loadGame<'T when 'T :> ComputedData>
     eprintfn "%A" langs
 
     let folders =
-        WD { path = dir; name = "game" } :: addDLCs { path = dir; name = "game" }
-    // let langs = [Lang.HOI4 HOI4Lang.English; Lang.HOI4 HOI4Lang.German; Lang.HOI4 HOI4Lang.French; Lang.HOI4 HOI4Lang.Spanish;]
+        WD { path = dir; name = "game" } :: addDLCs "dlc" { path = dir; name = "game" }
+        @ addDLCs "integrated_dlc" { path = dir; name = "game" }
+
     let STLoptions: StellarisSettings =
         { rootDirectories = folders
           modFilter = Some modFilter
@@ -811,10 +652,3 @@ let serializeMetadata (dir: string, scope: FilesScope, modFilter: string, config
 
     compressAndWrite pickle (filename)
     eprintfn "Metadata cache file created at %s, relative to CWD" filename
-
-
-// let deserializeEU4 path =
-//     let cacheFile = File.ReadAllBytes(path)
-//     let cached = binarySerializer.UnPickle<CachedResourceData> cacheFile
-//     fileIndexTable <- cached.fileIndexTable
-//     cached.resources

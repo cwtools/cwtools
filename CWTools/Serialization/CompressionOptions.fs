@@ -1,4 +1,4 @@
-module CWToolsCLI.CompressionOptions
+﻿module CWTools.CompressionOptions
 
 open System.IO
 open ICSharpCode.SharpZipLib.BZip2

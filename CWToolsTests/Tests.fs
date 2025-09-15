@@ -12,7 +12,7 @@ open CWTools.Parser.DocsParser
 open CWTools.Utilities
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
-open CWToolsCLI
+open CWTools
 open Expecto
 open Expecto.Logging
 open Expecto.Logging.Message

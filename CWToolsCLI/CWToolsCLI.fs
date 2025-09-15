@@ -2,6 +2,7 @@ namespace CWToolsCLI
 
 open System.Text
 open CWTools.Common
+open CWTools
 open System.IO
 open CWTools.Parser
 open FParsec
@@ -497,39 +498,21 @@ module CWToolsCLI =
             let filename =
                 match game with
                 | Game.STL ->
-                    Serializer.serializeSTL
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeSTL ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.HOI4 ->
                     Serializer.serializeHOI4 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.IR ->
-                    Serializer.serializeIR
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeIR ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.CK2 ->
-                    Serializer.serializeCK2
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeCK2 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.EU4 ->
                     Serializer.serializeEU4 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.VIC2 ->
-                    Serializer.serializeVIC2
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeVIC2 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.CK3 ->
-                    Serializer.serializeCK3
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeCK3 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.VIC3 ->
-                    Serializer.serializeVIC3
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeVIC3 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
                 | _ -> ArgumentOutOfRangeException() |> raise
 

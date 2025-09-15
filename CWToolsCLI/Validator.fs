@@ -3,6 +3,7 @@ namespace CWToolsCLI
 open Chiron.Builder
 open Chiron
 open CWTools.Utilities.Position
+open CWTools
 open System.Security.Cryptography
 open System.Text
 
