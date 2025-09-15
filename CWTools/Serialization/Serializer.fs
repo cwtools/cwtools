@@ -75,11 +75,11 @@ let decompress (path: string) =
     ICSharpCode.SharpZipLib.BZip2.BZip2.Decompress(inStream, outStream, false)
     outStream.ToArray()
 
-let addDLCs (workspaceDirectory: WorkspaceDirectory) =
+let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
     let dir = workspaceDirectory.path
 
-    if Directory.Exists(dir) && Directory.Exists(Path.Combine [| dir; "dlc" |]) then
-        let dlcs = Directory.EnumerateDirectories(Path.Combine [| dir; "dlc" |])
+    if Directory.Exists(dir) && Directory.Exists(Path.Combine [| dir; dlcDir |]) then
+        let dlcs = Directory.EnumerateDirectories(Path.Combine [| dir; dlcDir |])
 
         let createZippedDirectory (dlcDir: string) =
             match
@@ -133,7 +133,7 @@ let serialize gameDirName scriptFolders cacheDirectory = ()
 let serializeGame<'T when 'T :> ComputedData> (config: GameSerializationConfig<'T>) folder outputFileName compression =
     let folders =
         if config.supportsDLC then
-            (WD folder) :: (addDLCs folder)
+            (WD folder) :: (addDLCs "dlc" folder) @ (addDLCs "integrated_dlc" folder)
         else
             [ WD folder ]
 
@@ -420,7 +420,8 @@ let loadGame<'T when 'T :> ComputedData>
     eprintfn "%A" langs
 
     let folders =
-        WD { path = dir; name = "game" } :: addDLCs { path = dir; name = "game" }
+        WD { path = dir; name = "game" } :: addDLCs "dlc" { path = dir; name = "game" }
+        @ addDLCs "integrated_dlc" { path = dir; name = "game" }
 
     let STLoptions: StellarisSettings =
         { rootDirectories = folders
