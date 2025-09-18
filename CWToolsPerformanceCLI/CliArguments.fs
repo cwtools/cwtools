@@ -13,6 +13,7 @@ type Nothing = Nothing
 type PerformanceArgs =
     | [<AltCommandLine("-stellaris")>] Stellaris
     | [<AltCommandLine("-eu4")>] EU4
+    | [<AltCommandLine("-eu5")>] EU5
     | [<AltCommandLine("-hoi4")>] HOI4
     | [<AltCommandLine("-ck3")>] CK3
     | [<AltCommandLine("-parse-test")>] Parse_Test
@@ -31,6 +32,7 @@ type PerformanceArgs =
             match s with
             | Stellaris -> "Run Stellaris performance test"
             | EU4 -> "Run EU4 performance test"
+            | EU5 -> "Run EU5 performance test"
             | HOI4 -> "Run HOI4 performance test"
             | CK3 -> "Run CK3 performance test"
             | Parse_Test -> "Run parsing test"

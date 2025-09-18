@@ -6,3 +6,5 @@ FSharpx.Collections
 Sandwych.QuickGraph.Core
 KTrie
 System.Text.Encoding.CodePages
+FsPickler
+SharpZipLib

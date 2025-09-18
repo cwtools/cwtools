@@ -83,6 +83,7 @@ type JominiComputedData = ScriptedEffectComputedData
 type IRComputedData = JominiComputedData
 type CK3ComputedData = JominiComputedData
 type VIC3ComputedData = JominiComputedData
+type EU5ComputedData = JominiComputedData
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 // type CK2ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks) =
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)

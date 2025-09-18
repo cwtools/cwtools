@@ -2,6 +2,7 @@ namespace CWToolsCLI
 
 open System.Text
 open CWTools.Common
+open CWTools
 open System.IO
 open CWTools.Parser
 open FParsec
@@ -74,6 +75,16 @@ module CWToolsCLI =
         | Game.EU4, German -> Some(EU4 EU4Lang.German)
         | Game.EU4, Spanish -> Some(EU4 EU4Lang.Spanish)
         | Game.EU4, _ -> None
+        | Game.EU5, English -> Some(EU5 EU5Lang.English)
+        | Game.EU5, French -> Some(EU5 EU5Lang.French)
+        | Game.EU5, German -> Some(EU5 EU5Lang.German)
+        | Game.EU5, Spanish -> Some(EU5 EU5Lang.Spanish)
+        | Game.EU5, SimpChinese -> Some(EU5 EU5Lang.Chinese)
+        | Game.EU5, Russian -> Some(EU5 EU5Lang.Russian)
+        | Game.EU5, Korean -> Some(EU5 EU5Lang.Korean)
+        | Game.EU5, Japanese -> Some(EU5 EU5Lang.Japanese)
+        | Game.EU5, BrazPor -> Some(EU5 EU5Lang.Braz_Por)
+        | Game.EU5, Polish -> Some(EU5 EU5Lang.Polish)
         | Game.VIC2, English -> Some(VIC2 VIC2Lang.English)
         | Game.VIC2, French -> Some(VIC2 VIC2Lang.French)
         | Game.VIC2, German -> Some(VIC2 VIC2Lang.German)
@@ -487,39 +498,21 @@ module CWToolsCLI =
             let filename =
                 match game with
                 | Game.STL ->
-                    Serializer.serializeSTL
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeSTL ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.HOI4 ->
                     Serializer.serializeHOI4 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.IR ->
-                    Serializer.serializeIR
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeIR ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.CK2 ->
-                    Serializer.serializeCK2
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeCK2 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.EU4 ->
                     Serializer.serializeEU4 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.VIC2 ->
-                    Serializer.serializeVIC2
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeVIC2 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.CK3 ->
-                    Serializer.serializeCK3
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeCK3 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.VIC3 ->
-                    Serializer.serializeVIC3
-                        ([ WD { path = directory; name = "undefined" } ])
-                        outputCacheFileName
-                        compression
+                    Serializer.serializeVIC3 ({ path = directory; name = "undefined" }) outputCacheFileName compression
                 | Game.Custom -> failwith "This CLI doesn't support serializing for custom games yet"
                 | _ -> ArgumentOutOfRangeException() |> raise
 

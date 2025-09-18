@@ -13,6 +13,7 @@ type Game =
     | IR = 5
     | CK3 = 6
     | VIC3 = 7
+    | EU5 = 8
     | Custom = 99
 
 type CK2Lang =
@@ -54,6 +55,19 @@ type EU4Lang =
     | German = 2
     | Spanish = 3
     | Default = 4
+
+type EU5Lang =
+    | English = 0
+    | French = 1
+    | German = 2
+    | Spanish = 3
+    | Chinese = 4
+    | Russian = 5
+    | Korean = 6
+    | Braz_Por = 7
+    | Japanese = 8
+    | Polish = 9
+    | Turkish = 10
 
 type IRLang =
     | English = 0
@@ -107,6 +121,7 @@ type Lang =
     | STL of STLLang
     | HOI4 of HOI4Lang
     | EU4 of EU4Lang
+    | EU5 of EU5Lang
     | IR of IRLang
     | VIC2 of VIC2Lang
     | CK3 of CK3Lang
@@ -120,6 +135,7 @@ type Lang =
             | STL s -> s.ToString()
             | HOI4 s -> s.ToString()
             | EU4 s -> s.ToString()
+            | EU5 s -> s.ToString()
             | IR s -> s.ToString()
             | VIC2 s -> s.ToString()
             | CK3 s -> s.ToString()
@@ -162,6 +178,20 @@ module LangHelpers =
            EU4 EU4Lang.French
            EU4 EU4Lang.German
            EU4 EU4Lang.Spanish |]
+
+    let allEU5Langs =
+        [ EU5 EU5Lang.English
+          EU5 EU5Lang.Chinese
+          EU5 EU5Lang.French
+          EU5 EU5Lang.German
+          EU5 EU5Lang.Japanese
+          EU5 EU5Lang.Korean
+          EU5 EU5Lang.Polish
+          EU5 EU5Lang.Russian
+          EU5 EU5Lang.Spanish
+          EU5 EU5Lang.Turkish
+          EU5 EU5Lang.Braz_Por ]
+
 
     let allIRLangs =
         [| IR IRLang.English
