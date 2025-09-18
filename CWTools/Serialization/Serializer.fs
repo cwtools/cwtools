@@ -78,13 +78,14 @@ let decompress (path: string) =
 let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
     let dir = workspaceDirectory.path
 
-    if Directory.Exists(dir) && Directory.Exists(Path.Combine [| dir; dlcDir |]) then
-        let dlcs = Directory.EnumerateDirectories(Path.Combine [| dir; dlcDir |])
+    if Directory.Exists(dir) && Directory.Exists(Path.Combine(dir, dlcDir)) then
+        let dlcs = Directory.EnumerateDirectories(Path.Combine(dir, dlcDir))
 
         let createZippedDirectory (dlcDir: string) =
             match
                 Directory.EnumerateFiles dlcDir
-                |> Seq.tryFind (fun f -> (Path.GetExtension f) = ".zip")
+                |> Seq.tryFind (fun f ->
+                    Path.GetExtension(f.AsSpan()).Equals(".zip", StringComparison.OrdinalIgnoreCase))
             with
             | Some zip ->
                 use file = File.OpenRead(zip)
@@ -95,14 +96,14 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
                     let files =
                         zipFile.Entries
                         |> Seq.map (fun e ->
-                            Path.Combine([| "uri:"; zip; e.FullName.Replace("\\", "/") |]),
+                            Path.Combine("uri:", zip, e.FullName.Replace('\\', '/')),
                             let sr = new StreamReader(e.Open()) in sr.ReadToEnd())
                         |> List.ofSeq
 
                     Some(
                         ZD
                             { ZippedDirectory.name = Path.GetFileName zip
-                              path = zip.Replace("\\", "/")
+                              path = zip.Replace('\\', '/')
                               files = files }
                     )
                 with _ ->
