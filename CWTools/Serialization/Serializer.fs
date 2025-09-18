@@ -392,10 +392,10 @@ let deserializeMetadata path =
     { metadata with
         varDefs =
             metadata.varDefs
-            |> Map.map (fun k v -> v |> Array.map (fun (s, _) -> (s, range.Zero)))
+            |> Map.map (fun _ v -> v |> Array.map (fun (s, _) -> (s, range.Zero)))
         typeDefs =
             metadata.typeDefs
-            |> Map.map (fun k v ->
+            |> Map.map (fun _ v ->
                 v
                 |> Array.map (fun t ->
                     { t with

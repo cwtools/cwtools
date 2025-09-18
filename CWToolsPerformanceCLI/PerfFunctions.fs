@@ -477,7 +477,7 @@ let buildEu5Settings rootDir configPath useCache cachePath earlyStopMode =
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ EU5 EU5Lang.English ] }
+          langs = [| EU5 EU5Lang.English |] }
       rules =
         Some
             { ruleFiles = configs
