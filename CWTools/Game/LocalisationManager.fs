@@ -95,7 +95,6 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     member val localisationErrors: CWError list option = None with get, set
     member val globalLocalisationErrors: CWError list option = None with get, set
-    member val rulesLocalisationErrors: CWError list option = None with get, set
     member val localisationKeys: (Lang * Set<string>) list = [] with get, set
     member val taggedLocalisationKeys: (Lang * LocKeySet) list = [] with get, set
 
