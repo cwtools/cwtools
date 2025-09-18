@@ -520,29 +520,29 @@ module internal FieldValidators =
     let checkIconField (files: FrozenSet<string>) (folder: string) (ids: StringTokens) leafornode errors =
         let lookup = files.GetAlternateLookup<ReadOnlySpan<char>>()
 
-        using (ZString.CreateStringBuilder()) (fun sb ->
-            let key = trimQuoteSpan (getOriginalKey ids)
-            sb.Append folder
-            sb.Append '/'
-            sb.Append key
-            sb.Append ".dds"
+        use sb = ZString.CreateStringBuilder()
+        let key = trimQuoteSpan (getOriginalKey ids)
+        sb.Append folder
+        sb.Append '/'
+        sb.Append key
+        sb.Append ".dds"
 
-            if lookup.Contains(sb.AsSpan()) then
-                errors
-            else
-                inv (ErrorCodes.MissingFile(sb.ToString())) leafornode <&&&> errors)
+        if lookup.Contains(sb.AsSpan()) then
+            errors
+        else
+            inv (ErrorCodes.MissingFile(sb.ToString())) leafornode <&&&> errors
 
     let checkIconFieldNE (files: FrozenSet<string>) (folder: string) (ids: StringTokens) =
         let lookup = files.GetAlternateLookup<ReadOnlySpan<char>>()
 
-        using (ZString.CreateStringBuilder()) (fun sb ->
-            let key = trimQuoteSpan (getOriginalKey ids)
-            sb.Append folder
-            sb.Append '/'
-            sb.Append key
-            sb.Append ".dds"
+        use sb = ZString.CreateStringBuilder()
+        let key = trimQuoteSpan (getOriginalKey ids)
+        sb.Append folder
+        sb.Append '/'
+        sb.Append key
+        sb.Append ".dds"
 
-            lookup.Contains(sb.AsSpan()))
+        lookup.Contains(sb.AsSpan())
 
     let private checkAnyScopesMatch anyScope (scopes: Scope list) (currentScope: Scope) =
         (currentScope = anyScope)
