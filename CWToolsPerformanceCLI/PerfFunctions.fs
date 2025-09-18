@@ -1,5 +1,6 @@
 module CWToolsPerformanceCLI.PerfFunctions
 
+open CWTools
 open CWTools.Games.CK3
 open CWTools.Games.EU4
 open CWTools.Games.EU5
@@ -476,7 +477,7 @@ let buildEu5Settings rootDir configPath useCache cachePath earlyStopMode =
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ EU5 EU5Lang.English ] }
+          langs = [| EU5 EU5Lang.English |] }
       rules =
         Some
             { ruleFiles = configs

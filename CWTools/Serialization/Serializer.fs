@@ -119,7 +119,7 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
         []
 
 type GameSerializationConfig<'T when 'T :> ComputedData> =
-    { scriptFolders: string list
+    { scriptFolders: string array
       gameName: string
       defaultFilename: string
       computeData: (unit -> InfoService option) -> FileManager -> ResourceManager<'T>
@@ -138,7 +138,7 @@ let serializeGame<'T when 'T :> ComputedData> (config: GameSerializationConfig<'
             [ WD folder ]
 
     let fileManager =
-        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [], 2)
+        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -392,12 +392,12 @@ let deserializeMetadata path =
     { metadata with
         varDefs =
             metadata.varDefs
-            |> Map.map (fun k v -> v |> List.map (fun (s, _) -> (s, range.Zero)))
+            |> Map.map (fun _ v -> v |> Array.map (fun (s, _) -> (s, range.Zero)))
         typeDefs =
             metadata.typeDefs
-            |> Map.map (fun k v ->
+            |> Map.map (fun _ v ->
                 v
-                |> List.map (fun t ->
+                |> Array.map (fun t ->
                     { t with
                         range = range.Zero
                         validate = false })) }
