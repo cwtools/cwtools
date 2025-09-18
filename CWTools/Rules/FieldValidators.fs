@@ -44,6 +44,9 @@ module internal FieldValidators =
     open CWTools.Validation.ValidationCore
     open CWTools.Rules
 
+    [<Literal>]
+    let CK2DnaLength = 11
+
     let getValidValues =
         function
         | ValueType.Bool -> Some [ "yes"; "no" ]
@@ -188,7 +191,7 @@ module internal FieldValidators =
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.CK2DNA ->
-                if key.Length = 11 && key |> Seq.forall Char.IsLetter then
+                if key.Length = CK2DnaLength && key |> Seq.forall Char.IsLetterOrDigit then
                     errors
                 else
                     inv
@@ -273,7 +276,7 @@ module internal FieldValidators =
          | ValueType.Percent -> key.EndsWith('%')
          | ValueType.Date -> FieldValidatorsHelper.IsValidDate(key)
          | ValueType.DateTime -> FieldValidatorsHelper.IsValidDateTime(key)
-         | ValueType.CK2DNA -> key.Length = 11 && key |> Seq.forall Char.IsLetter
+         | ValueType.CK2DNA -> key.Length = CK2DnaLength && key |> Seq.forall Char.IsLetterOrDigit
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
              let parts = key.Split('.')
@@ -681,6 +684,7 @@ module internal FieldValidators =
             true
         else
             let key = getOriginalKey(ids).AsSpan()
+
             let key =
                 match metadata.containsQuestionMark, metadata.containsHat with
                 | true, _ -> key.SplitFirst('?')
