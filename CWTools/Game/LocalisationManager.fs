@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System
 open CWTools.Common
 open CWTools.Localisation
 open CWTools.Utilities.Utils
@@ -59,7 +60,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
                 k,
                 g
                 |> Seq.collect _.GetKeys
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
         let loc = parseLocFile locFile |> Option.defaultValue [||]
@@ -82,7 +83,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
                 k,
                 g
                 |> Seq.collect (fun ls -> ls.GetKeys)
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
 
     let updateProcessedLocalisation () =
         let validatableEntries =

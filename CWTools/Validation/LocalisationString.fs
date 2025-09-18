@@ -189,7 +189,7 @@ module LocalisationString =
                 keys
                 |> List.filter (fun (l, _) -> l = lang)
                 |> List.map snd
-                |> List.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
+                |> List.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase))
 
             m
             |> Map.map (fun _ e -> e.refs <&!&> checkRef hardcodedLocalisation lang keys e)
