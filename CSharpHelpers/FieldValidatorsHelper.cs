@@ -178,7 +178,7 @@ public static partial class FieldValidatorsHelper
         FrozenSet<string> files,
         FSharpOption<string>? prefix,
         FSharpOption<string>? extension,
-        bool needErrorMessage,
+        bool generateErrorMessage,
         out string file
     )
     {
@@ -200,16 +200,22 @@ public static partial class FieldValidatorsHelper
         }
 
         bool isValid = lookup.Contains(sb.AsSpan()) || lookup.Contains(sb2.AsSpan());
-        if (isValid || prefix is null)
+        if (prefix is null)
         {
+            if (!isValid && generateErrorMessage)
+            {
+                file = sb.ToString();
+            }
             return isValid;
         }
 
         sb.Insert(0, prefix.Value);
         sb2.Insert(0, prefix.Value);
         isValid = lookup.Contains(sb.AsSpan()) || lookup.Contains(sb2.AsSpan());
-        if (!isValid && needErrorMessage)
+        if (!isValid && generateErrorMessage)
         {
+            // Remove prefix, because we don't want to show the prefix in the error message.
+            sb.Remove(0, prefix.Value.Length);
             file = sb.ToString();
         }
 
