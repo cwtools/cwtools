@@ -982,7 +982,7 @@ type RuleValidationService
 
             pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
 
-        let res = (root.Clauses |> List.ofSeq <&!&> inner normalTypeDefs)
+        let res = (root.Clauses <&!&> inner normalTypeDefs)
         let rootres = (inner rootTypeDefs root)
         res <&&> rootres
 
