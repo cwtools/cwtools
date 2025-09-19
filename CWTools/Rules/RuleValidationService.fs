@@ -976,7 +976,7 @@ type RuleValidationService
                         OK
                 | head :: tail ->
                     if skiprootkey head n then
-                        n.ClauseList <&!&> validateTypeSkipRoot t tail
+                        n.Clauses <&!&> validateTypeSkipRoot t tail
                     else
                         OK
 

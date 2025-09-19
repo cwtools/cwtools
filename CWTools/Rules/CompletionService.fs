@@ -398,10 +398,7 @@ type CompletionService
         //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
         let countChildren (n2: IClause) (key: string) =
             n2.Nodes
-            |> Seq.choose (function
-                | c when c.Key == key -> Some c
-                | _ -> None)
-            |> Seq.length
+            |> Seq.sumBy (fun c -> if c.Key == key then 1 else 0)
 
         match node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos) with
         | Some c ->
@@ -421,7 +418,7 @@ type CompletionService
                 | true -> (l.Key, countChildren node l.Key, Some l.Key, LeafLHS, None) :: stack
                 | false -> (l.Key, countChildren node l.Key, Some l.ValueText, LeafRHS, None) :: stack
             | None ->
-                match node.ClauseList |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
+                match node.Clauses |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos) with
                 | Some vc ->
                     match
                         (vc.Position.StartLine = pos.Line)
