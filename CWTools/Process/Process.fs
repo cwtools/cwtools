@@ -803,7 +803,7 @@ module ProcessCore =
     let foldNode7 fNode (node: Node) =
         let rec loop acc (node: Node) =
             let resNode = fNode node acc
-            node.Children |> List.fold loop resNode
+            node.Nodes |> Seq.fold loop resNode
 
         loop [] node
 
