@@ -49,8 +49,8 @@ module internal FieldValidators =
 
     let getValidValues =
         function
-        | ValueType.Bool -> Some [ "yes"; "no" ]
-        | ValueType.Enum es -> Some [ es ]
+        | ValueType.Bool -> Some [| "yes"; "no" |]
+        | ValueType.Enum es -> Some [| es |]
         | _ -> None
 
     // type ScopeContext = IScopeContext<Scope>
