@@ -184,15 +184,15 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     let mutable errorCache = Map.empty
 
-    let updateFile (shallow: bool) filepath (filetext: string option) =
-        log (sprintf "%s" filepath)
-        let timer = new System.Diagnostics.Stopwatch()
+    let updateFile (shallow: bool) filepath (fileText: string option) =
+        log $"updateFile %s{filepath}"
+        let timer = System.Diagnostics.Stopwatch()
         timer.Start()
 
         let res =
             match filepath with
             | x when x.EndsWith localisationExtension ->
-                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                let file = fileText |> Option.defaultWith (fun () -> File.ReadAllText filepath)
 
                 let resourceInput =
                     LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
@@ -202,15 +202,12 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 match resource with
                 | FileWithContentResource(_, r) -> this.LocalisationManager.UpdateLocalisationFile r
                 | _ -> logWarning (sprintf "Localisation file failed to parse %s" filepath)
-                // let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities()))
                 let ges = globalLocalisation (this)
-                // this.LocalisationManager.localisationErrors <- Some les
                 this.LocalisationManager.globalLocalisationErrors <- Some ges
                 []
-            // les @ ges
             | _ ->
                 let file =
-                    filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
+                    fileText |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
 
                 let resource = LanguageFeatures.makeEntityResourceInput fileManager filepath file
                 let newEntities = [ this.Resources.UpdateFile resource ] |> List.choose snd
@@ -227,12 +224,10 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     errorCache <- errorCache.Add(filepath, deepres)
                     shallowres @ deepres
-        //validateAll shallow newEntities @ localisationCheck newEntities
-        log (sprintf "Update Time: %i" timer.ElapsedMilliseconds)
+        log $"Update file Time: %i{timer.ElapsedMilliseconds}"
         res
 
     let initialLoad () =
-        log (sprintf "Parsing %i files" (fileManager.AllFilesByPath().Length))
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
@@ -240,6 +235,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
         //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
         let files = fileManager.AllFilesByPath()
+        log $"Parsing %i{files.Length} files"
 
         let filteredfiles =
             if settings.validation.validateVanilla then
