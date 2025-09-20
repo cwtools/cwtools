@@ -719,7 +719,9 @@ type RuleValidationService
                      | NewScope(newScopes, _, _), _ ->
                          let newCtx = { newCtx with scopes = newScopes }
                          applyClauseField enforceCardinality options.severity newCtx rules node errors
-                     | NotFound, _ -> inv (ErrorCodes.ConfigRulesInvalidScopeCommand(key.ToString())) node <&&&> errors
+                     | NotFound, _ ->
+                         inv (ErrorCodes.ConfigRulesInvalidScopeCommand(key.ToString())) node
+                         <&&&> errors
                      | WrongScope(command, prevscope, expected, _), _ ->
                          inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}") node
                          <&&&> errors
@@ -927,9 +929,6 @@ type RuleValidationService
             | AnyKey -> true
             | MultipleKeys(keys, shouldMatch) -> (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let directory = Path.GetDirectoryName(path).Replace('\\', '/')
-        let fileName = Path.GetFileName(path)
-
         let inner (typedefs: TypeDefinition list) (node: IClause) =
             let validateType (typedef: TypeDefinition) (n: IClause) =
                 let typerules =
@@ -937,6 +936,7 @@ type RuleValidationService
                     |> Seq.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
+
                 let filterKey =
                     match n with
                     | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
@@ -959,8 +959,7 @@ type RuleValidationService
 
             let pathFilteredTypes =
                 typedefs
-                |> List.filter (fun t ->
-                    FieldValidatorsHelper.CheckPathDir(t.pathOptions, directory, fileName))
+                |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, path))
 
             let rec validateTypeSkipRoot (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) (n: IClause) =
                 let prefixKey =

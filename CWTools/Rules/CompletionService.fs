@@ -397,8 +397,7 @@ type CompletionService
         =
         //log "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
         let countChildren (n2: IClause) (key: string) =
-            n2.Nodes
-            |> Seq.sumBy (fun c -> if c.Key == key then 1 else 0)
+            n2.Nodes |> Seq.sumBy (fun c -> if c.Key == key then 1 else 0)
 
         match node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos) with
         | Some c ->
@@ -1004,8 +1003,6 @@ type CompletionService
         let path = getRulePath pos [] entity.entity |> List.rev
         //        log (sprintf "%A" path)
 
-        let dir = Path.GetDirectoryName(entity.logicalpath).Replace('\\', '/')
-        let fileName = Path.GetFileName(entity.logicalpath)
         // log "%A" typedefs
         // log "%A" pos
         // log "%A" entity.logicalpath
@@ -1018,7 +1015,7 @@ type CompletionService
 
         let pathFilteredTypes =
             typedefs
-            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, dir, fileName))
+            |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, entity.logicalpath))
 
         let allUsedKeys =
             getAllKeysInFile entity.entity @ globalScriptVariables |> Set.ofList
