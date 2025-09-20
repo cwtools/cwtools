@@ -191,7 +191,7 @@ module internal FieldValidators =
                     inv (ErrorCodes.ConfigRulesUnexpectedValue $"Expecting a date, got %s{key}" severity) leafornode
                     <&&&> errors
             | ValueType.CK2DNA ->
-                if key.Length = CK2DnaLength && key |> Seq.forall Char.IsLetterOrDigit then
+                if key.Length = CK2DnaLength && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0') then
                     errors
                 else
                     inv
@@ -276,7 +276,7 @@ module internal FieldValidators =
          | ValueType.Percent -> key.EndsWith('%')
          | ValueType.Date -> FieldValidatorsHelper.IsValidDate(key)
          | ValueType.DateTime -> FieldValidatorsHelper.IsValidDateTime(key)
-         | ValueType.CK2DNA -> key.Length = CK2DnaLength && key |> Seq.forall Char.IsLetterOrDigit
+         | ValueType.CK2DNA -> key.Length = CK2DnaLength && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.CK2DNAProperty -> key.Length <= 39 && key |> Seq.forall (fun c -> Char.IsLetter c || c = '0')
          | ValueType.IRFamilyName ->
              let parts = key.Split('.')
