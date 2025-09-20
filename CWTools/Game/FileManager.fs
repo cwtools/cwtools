@@ -146,7 +146,7 @@ module Files =
             let expanded =
                 rootDirectories
                 |> List.map (fun rd ->
-                    let normalisedPath = rd.path.Replace("\\", "/").TrimStart('.')
+                    let normalisedPath = rd.path.Replace('\\', '/').TrimStart('.')
 
                     { path = rd.path
                       name = rd.name
@@ -323,7 +323,7 @@ module Files =
             rootDirectories |> List.exists isVanillaDirectory
 
         let getScopeForPath (path: string) =
-            let path = path.Replace("\\", "/")
+            let path = path.Replace('\\', '/')
 
             expandedRootDirectories
             |> List.tryPick (fun rd ->
