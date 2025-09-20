@@ -161,7 +161,7 @@ type CompletionService
             |> Option.defaultValue "x"
         | ValueField v ->
             FieldValidators.getValidValues v
-            |> Option.bind List.tryHead
+            |> Option.bind Array.tryHead
             |> Option.defaultValue "x"
         | TypeField(TypeType.Simple t) -> types.TryFind(t) |> Option.bind List.tryHead |> Option.defaultValue "x"
         | TypeField(TypeType.Complex(p, t, s)) ->
@@ -749,7 +749,7 @@ type CompletionService
                 |> Array.map CompletionResponse.CreateSimple
             | NewField.ValueField v ->
                 FieldValidators.getValidValues v
-                |> Option.defaultValue []
+                |> Option.defaultValue [||]
                 |> Seq.map CompletionResponse.CreateSimple
                 |> Seq.toArray
             | NewField.TypeField(TypeType.Simple t) ->
