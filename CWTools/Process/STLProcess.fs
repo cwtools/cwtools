@@ -1,6 +1,7 @@
 namespace CWTools.Process
 
 open System.Collections.Generic
+open CSharpHelpers
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System
@@ -22,8 +23,6 @@ module STLProcess =
         let anyBlockKeys =
             [ "OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect" ]
 
-        let triggerBlockKeys = [ "limit" ] //@ targetKeys
-
         let nodeScopes =
             node.Children
             |> List.map (function
@@ -34,7 +33,7 @@ module STLProcess =
                 //     allScopes
                 | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
-                | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
+                | x when x.Key == "limit" ->
                     scriptedTriggerScope strict vanillaTriggersAndEffects newTriggersAndEffects scopedEffects root x
                 | x -> Scopes.STL.sourceScope scopedEffects x.Key |> Set.ofList
             // match STLScopes.sourceScope x.Key with
@@ -46,8 +45,7 @@ module STLProcess =
             node.Values
             //|> List.filter (fun v -> v.Key.StartsWith("@"))
             |> List.map (function
-                | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) ->
-                    scopeManager.AllScopes |> Set.ofList
+                | x when x.Key.StartsWith('@') -> scopeManager.AllScopes |> Set.ofList
                 | x when x.Key = root -> scopeManager.AllScopes |> Set.ofList
                 | x ->
                     match vanillaTriggersAndEffects.TryGetValue x.KeyId.normal with
@@ -77,18 +75,21 @@ module STLProcess =
     let findAllUsedEventTargets (event: Node) =
         let fNode =
             (fun (x: Node) children ->
-                let targetFromString (k: string) = k.Substring(13).Split('.').[0]
+                let targetFromString (k: string) =
+                    k.AsSpan().Slice(13).SplitFirst('.').ToString()
 
                 let inner (leaf: Leaf) =
-                    if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then
-                        Some(leaf.Value.ToRawString() |> targetFromString)
+                    let value = leaf.Value.ToRawString()
+                    if value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then
+                        Some(value |> targetFromString)
                     else
                         None
 
+                let leaves = (x.Leaves |> Seq.choose inner |> List.ofSeq)
                 match x.Key with
                 | k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
-                    targetFromString k :: ((x.Values |> List.choose inner) @ children)
-                | _ -> ((x.Values |> List.choose inner) @ children)
+                    targetFromString k :: (leaves @ children)
+                | _ -> (leaves @ children)
 
             )
 
@@ -113,11 +114,12 @@ module STLProcess =
         let fNode =
             (fun (x: Node) children ->
                 let inner (leaf: Leaf) =
+                    let value = leaf.Value.ToRawString()
                     if
                         leaf.Key == "exists"
-                        && leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
+                        && value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
                     then
-                        Some(leaf.Value.ToRawString().Substring(13).Split('.').[0])
+                        Some(value.Substring(13).Split('.').[0])
                     else
                         None
 
@@ -196,7 +198,7 @@ module STLProcess =
     let simpleProcess = BaseProcess()
 
     let staticModifierCategory (modifiers: System.Linq.ILookup<string, ModifierCategory>) (node: Node) =
-        node.Values
+        node.Leaves
         |> Seq.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
         |> Seq.filter (fun v -> modifiers.Contains v.Key)
         |> Seq.collect (fun v -> modifiers[v.Key])

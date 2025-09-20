@@ -189,7 +189,7 @@ module LocalisationString =
                 keys
                 |> List.filter (fun (l, _) -> l = lang)
                 |> List.map snd
-                |> List.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
+                |> List.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase))
 
             m
             |> Map.map (fun _ e -> e.refs <&!&> checkRef hardcodedLocalisation lang keys e)
@@ -269,7 +269,6 @@ module LocalisationString =
     let processJominiLocalisationBase
         localisationCommandValidator
         (eventtargets: Collections.Map<string, Scope list>)
-        (setvariables: string list)
         (api: Lang * Map<string, Entry>)
         : Lang * Map<string, LocEntry> =
         let extractResult =
@@ -301,7 +300,7 @@ module LocalisationString =
               jominiCommands = commands
               scopes =
                 commands
-                |> List.map (fun s -> localisationCommandValidator eventtargets setvariables s)
+                |> List.map (fun s -> localisationCommandValidator eventtargets s)
               errorRanges = m.errorRange }
 
         api
@@ -341,7 +340,6 @@ module LocalisationString =
     let validateJominiLocalisationCommandsBase
         localisationCommandValidator
         (eventtargets: Collections.Map<string, Scope list>)
-        (setvariables: string list)
         (locentry: LocEntry)
         (startContext: ScopeContext)
         =
@@ -354,7 +352,7 @@ module LocalisationString =
         let keycommands = locentry.jominiCommands
 
         let validateCommand (c: JominiLocCommand list) =
-            match localisationCommandValidator startContext eventtargets setvariables c with
+            match localisationCommandValidator startContext eventtargets c with
             | LocNotFound s ->
                 Invalid(
                     Guid.NewGuid(),

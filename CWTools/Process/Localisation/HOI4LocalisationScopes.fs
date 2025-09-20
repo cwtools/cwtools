@@ -29,7 +29,7 @@ module HOI4 =
               "owner",
               [ scopeManager.ParseScope () "UnitLeader"; scopeManager.ParseScope () "State" ],
               scopeManager.ParseScope () "Country",
-              Link,
+              EffectType.Link,
               defaultDesc,
               "",
               true

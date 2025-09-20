@@ -1,16 +1,17 @@
 namespace CWTools.Games
 
+open System
 open CWTools.Common
 open CWTools.Localisation
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 
-
+[<Sealed>]
 type LocalisationManager<'T when 'T :> ComputedData>
     (
         resources: IResourceAPI<'T>,
         localisationService: _ -> ILocalisationAPICreator,
-        langs: Lang list,
+        langs: Lang array,
         lookup: Lookup,
         processLocalisation,
         localisationExtension: string
@@ -25,12 +26,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
         |> List.choose (fun (validate, api) -> if validate then Some api else None)
 
     let parseLocFile (locFile: FileWithContentResource) =
-        if locFile.overwrite <> Overwritten && locFile.extension = localisationExtension then
+        if locFile.overwrite <> Overwrite.Overwritten && locFile.extension = localisationExtension then
             let locService = [ locFile.filepath, locFile.filetext ] |> localisationService
 
             Some(
                 langs
-                |> List.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang)))
+                |> Array.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang)))
             )
         else
             None
@@ -59,14 +60,14 @@ type LocalisationManager<'T when 'T :> ComputedData>
                 k,
                 g
                 |> Seq.collect _.GetKeys
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
-        let loc = parseLocFile locFile |> Option.defaultValue []
+        let loc = parseLocFile locFile |> Option.defaultValue [||]
 
         let newMap =
             loc
-            |> List.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
+            |> Array.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
 
         localisationAPIMap <- newMap
 
@@ -82,7 +83,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
                 k,
                 g
                 |> Seq.collect (fun ls -> ls.GetKeys)
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
 
     let updateProcessedLocalisation () =
         let validatableEntries =
@@ -95,7 +96,6 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     member val localisationErrors: CWError list option = None with get, set
     member val globalLocalisationErrors: CWError list option = None with get, set
-    member val rulesLocalisationErrors: CWError list option = None with get, set
     member val localisationKeys: (Lang * Set<string>) list = [] with get, set
     member val taggedLocalisationKeys: (Lang * LocKeySet) list = [] with get, set
 
@@ -103,12 +103,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
         updateAllLocalisationSources ()
         updateProcessedLocalisation ()
 
-    member __.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
-    member __.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
+    member _.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
+    member _.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
-    member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
+    member _.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
 
-    member __.LocalisationFileNames() : string list =
+    member _.LocalisationFileNames() : string list =
         localisationAPIMap
         |> Map.toList
         |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f a.GetKeys.Length)

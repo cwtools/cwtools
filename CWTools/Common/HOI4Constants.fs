@@ -32,14 +32,14 @@ module HOI4Constants =
               NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
     let scriptFolders =
-        [ "common"
-          "country_metadata"
-          "events"
-          "gfx"
-          "interface"
-          "localisation"
-          "history"
-          "map"
-          "music"
-          "portraits"
-          "sound" ]
+        [| "common"
+           "country_metadata"
+           "events"
+           "gfx"
+           "interface"
+           "localisation"
+           "history"
+           "map"
+           "music"
+           "portraits"
+           "sound" |]

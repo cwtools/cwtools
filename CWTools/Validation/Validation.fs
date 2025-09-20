@@ -1,5 +1,6 @@
 namespace CWTools.Validation
 
+open System.Runtime.CompilerServices
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open CWTools.Common
@@ -556,10 +557,7 @@ type ErrorCodes =
               Severity = severity
               Message = error }
 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<CustomEquality; NoComparison; Struct>]
+[<CustomEquality; NoComparison; Struct; IsReadOnly>]
 type ValidationResult =
     | OK
     | Invalid of Guid * CWError list
@@ -581,10 +579,10 @@ type ValidationResult =
         | Invalid(id, _) -> id.GetHashCode()
 
 type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) list) =
-    member __.GlobMatch(pattern: string) =
-        let options = new GlobOptions()
-        options.Evaluation.CaseInsensitive <- true
-        let glob = Glob.Parse(pattern, options)
+    static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+
+    member _.GlobMatch(pattern: string) =
+        let glob = Glob.Parse(pattern)
 
         entities
         |> List.choose (fun struct (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
@@ -592,7 +590,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
     member this.GlobMatchChildren(pattern: string) =
         this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
 
-    member __.AllOfType(entityType: EntityType) =
+    member _.AllOfType(entityType: EntityType) =
         entities
         |> List.choose (fun struct (es, d) ->
             if es.entityType = entityType then
@@ -605,8 +603,8 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
         |> List.map (fun (e, d) -> e.Children)
         |> List.collect id
 
-    member __.All = entities |> List.map (fun struct (es, _) -> es.entity)
-    member __.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
+    member _.All = entities |> List.map (fun struct (es, _) -> es.entity)
+    member _.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
 
     member this.AllEffects =
         entities
@@ -616,7 +614,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
         entities
         |> List.collect (fun struct (_, d) -> d.Force().TriggerBlocks |> Option.defaultValue [])
 
-    member __.AddOrGetCached id generator =
+    member _.AddOrGetCached id generator =
         entities
         |> List.collect (fun struct (e, d) ->
             let data = d.Force()
@@ -629,7 +627,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
                 v)
 
 
-    member __.Raw = entities
+    member _.Raw = entities
 
 type STLEntitySet = EntitySet<STLComputedData>
 type EU4EntitySet = EntitySet<EU4ComputedData>
@@ -692,8 +690,6 @@ module ValidationCore =
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
     //     let key = (^a : (member Key : string) l)
     //     sev, pos, key.Length, s
-
-    type Validator<'T when 'T :> Node> = 'T -> ValidationResult
 
     let (<&>) f1 f2 x =
         match f1 x, f2 x with

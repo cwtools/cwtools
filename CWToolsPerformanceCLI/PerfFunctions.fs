@@ -1,5 +1,6 @@
 module CWToolsPerformanceCLI.PerfFunctions
 
+open CWTools
 open CWTools.Games.CK3
 open CWTools.Games.EU4
 open CWTools.Games.EU5
@@ -139,7 +140,7 @@ let buildStlSettings rootDir configPath useManual useCached cachePath earlyStopM
           embedded = embedded
           validation =
             { validateVanilla = true
-              langs = [ Lang.STL STLLang.English ]
+              langs = [| Lang.STL STLLang.English |]
               experimental = false }
           rules =
             Some
@@ -191,7 +192,7 @@ let buildEu4Settings rootDir configPath useCache cachePath earlyStopMode =
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ EU4 EU4Lang.English ] }
+          langs = [| EU4 EU4Lang.English |] }
       rules =
         Some
             { ruleFiles = configs
@@ -225,7 +226,7 @@ let buildCk3Settings rootDir configPath useCache cachePath earlyStopMode =
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ CK3 CK3Lang.English ] }
+          langs = [| CK3 CK3Lang.English |] }
       rules =
         Some
             { ruleFiles = configs
@@ -255,7 +256,7 @@ let buildHoi4Settings rootDir configPath useCache cachePath earlyStopMode =
       embedded = embedded
       validation =
         { validateVanilla = not useCache
-          langs = [ Lang.HOI4 HOI4Lang.English ]
+          langs = [| Lang.HOI4 HOI4Lang.English |]
           experimental = false }
       rules =
         Some
@@ -476,7 +477,7 @@ let buildEu5Settings rootDir configPath useCache cachePath earlyStopMode =
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ EU5 EU5Lang.English ] }
+          langs = [| EU5 EU5Lang.English |] }
       rules =
         Some
             { ruleFiles = configs

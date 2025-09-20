@@ -2,7 +2,6 @@ namespace CWTools.Common
 
 open System.Collections.Generic
 open System
-open System.Runtime.CompilerServices
 open CWTools.Utilities
 
 type Game =
@@ -145,40 +144,40 @@ type Lang =
 
 module LangHelpers =
     let allCK2Langs =
-        [ CK2 CK2Lang.English
-          CK2 CK2Lang.French
-          CK2 CK2Lang.German
-          CK2 CK2Lang.Spanish
-          CK2 CK2Lang.Russian ]
+        [| CK2 CK2Lang.English
+           CK2 CK2Lang.French
+           CK2 CK2Lang.German
+           CK2 CK2Lang.Spanish
+           CK2 CK2Lang.Russian |]
 
     let allSTLLangs =
-        [ STL STLLang.English
-          STL STLLang.French
-          STL STLLang.German
-          STL STLLang.Spanish
-          STL STLLang.Russian
-          STL STLLang.Polish
-          STL STLLang.Braz_Por
-          STL STLLang.Chinese
-          STL STLLang.Japanese
-          STL STLLang.Korean ]
+        [| STL STLLang.English
+           STL STLLang.French
+           STL STLLang.German
+           STL STLLang.Spanish
+           STL STLLang.Russian
+           STL STLLang.Polish
+           STL STLLang.Braz_Por
+           STL STLLang.Chinese
+           STL STLLang.Japanese
+           STL STLLang.Korean |]
 
     let allHOI4Langs =
-        [ HOI4 HOI4Lang.English
-          HOI4 HOI4Lang.French
-          HOI4 HOI4Lang.German
-          HOI4 HOI4Lang.Spanish
-          HOI4 HOI4Lang.Russian
-          HOI4 HOI4Lang.Polish
-          HOI4 HOI4Lang.Braz_Por
-          HOI4 HOI4Lang.Chinese
-          HOI4 HOI4Lang.Japanese ]
+        [| HOI4 HOI4Lang.English
+           HOI4 HOI4Lang.French
+           HOI4 HOI4Lang.German
+           HOI4 HOI4Lang.Spanish
+           HOI4 HOI4Lang.Russian
+           HOI4 HOI4Lang.Polish
+           HOI4 HOI4Lang.Braz_Por
+           HOI4 HOI4Lang.Chinese
+           HOI4 HOI4Lang.Japanese |]
 
     let allEU4Langs =
-        [ EU4 EU4Lang.English
-          EU4 EU4Lang.French
-          EU4 EU4Lang.German
-          EU4 EU4Lang.Spanish ]
+        [| EU4 EU4Lang.English
+           EU4 EU4Lang.French
+           EU4 EU4Lang.German
+           EU4 EU4Lang.Spanish |]
 
     let allEU5Langs =
         [ EU5 EU5Lang.English
@@ -195,50 +194,50 @@ module LangHelpers =
 
 
     let allIRLangs =
-        [ IR IRLang.English
-          IR IRLang.French
-          IR IRLang.German
-          IR IRLang.Spanish
-          IR IRLang.Russian
-          IR IRLang.Chinese ]
+        [| IR IRLang.English
+           IR IRLang.French
+           IR IRLang.German
+           IR IRLang.Spanish
+           IR IRLang.Russian
+           IR IRLang.Chinese |]
 
     let allVIC2Langs =
-        [ VIC2 VIC2Lang.English
-          VIC2 VIC2Lang.French
-          VIC2 VIC2Lang.German
-          VIC2 VIC2Lang.Spanish ]
+        [| VIC2 VIC2Lang.English
+           VIC2 VIC2Lang.French
+           VIC2 VIC2Lang.German
+           VIC2 VIC2Lang.Spanish |]
 
     let allCK3Langs =
-        [ CK3 CK3Lang.English
-          CK3 CK3Lang.French
-          CK3 CK3Lang.German
-          CK3 CK3Lang.Spanish
-          CK3 CK3Lang.Chinese
-          CK3 CK3Lang.Russian
-          CK3 CK3Lang.Korean ]
+        [| CK3 CK3Lang.English
+           CK3 CK3Lang.French
+           CK3 CK3Lang.German
+           CK3 CK3Lang.Spanish
+           CK3 CK3Lang.Chinese
+           CK3 CK3Lang.Russian
+           CK3 CK3Lang.Korean |]
 
     let allVIC3Langs =
-        [ VIC3 VIC3Lang.English
-          VIC3 VIC3Lang.Chinese
-          VIC3 VIC3Lang.French
-          VIC3 VIC3Lang.German
-          VIC3 VIC3Lang.Japanese
-          VIC3 VIC3Lang.Korean
-          VIC3 VIC3Lang.Polish
-          VIC3 VIC3Lang.Russian
-          VIC3 VIC3Lang.Spanish
-          VIC3 VIC3Lang.Turkish
-          VIC3 VIC3Lang.Braz_Por ]
+        [| VIC3 VIC3Lang.English
+           VIC3 VIC3Lang.Chinese
+           VIC3 VIC3Lang.French
+           VIC3 VIC3Lang.German
+           VIC3 VIC3Lang.Japanese
+           VIC3 VIC3Lang.Korean
+           VIC3 VIC3Lang.Polish
+           VIC3 VIC3Lang.Russian
+           VIC3 VIC3Lang.Spanish
+           VIC3 VIC3Lang.Turkish
+           VIC3 VIC3Lang.Braz_Por |]
 
     let allCustomLangs =
-        [ Custom CustomLang.English
-          Custom CustomLang.French
-          Custom CustomLang.German
-          Custom CustomLang.Spanish
-          Custom CustomLang.Russian
-          Custom CustomLang.Polish
-          Custom CustomLang.Braz_Por
-          Custom CustomLang.Chinese ]
+        [| Custom CustomLang.English
+           Custom CustomLang.French
+           Custom CustomLang.German
+           Custom CustomLang.Spanish
+           Custom CustomLang.Russian
+           Custom CustomLang.Polish
+           Custom CustomLang.Braz_Por
+           Custom CustomLang.Chinese |]
 
 type RawEffect =
     { name: string
@@ -397,9 +396,10 @@ module rec NewScope =
           internalID: int option
           scopes: Scope list }
 
+    [<Sealed>]
     type ModifierCategoryManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, ModifierCategory>()
+        let mutable dict = Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
 
         let mutable reverseDict = Dictionary<ModifierCategory, ModifierCategoryInput>()
 
@@ -427,7 +427,7 @@ module rec NewScope =
                 ()
 
             (fun (x: string) ->
-                let found, value = dict.TryGetValue(x.ToLower())
+                let found, value = dict.TryGetValue(x)
 
                 if found then
                     value
@@ -438,7 +438,7 @@ module rec NewScope =
         let init (modifiers: ModifierCategoryInput list) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
-            dict <- Dictionary<string, ModifierCategory>()
+            dict <- Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
             reverseDict <- Dictionary<ModifierCategory, ModifierCategoryInput>()
             dict.Add("any", anyModifier)
             dict.Add("invalid_modifier", invalidModifier)
@@ -450,7 +450,7 @@ module rec NewScope =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
                 let modifier = ModifierCategory(newID)
-                dict.Add(newModifier.name.ToLower(), modifier)
+                dict.Add(newModifier.name, modifier)
                 reverseDict.Add(modifier, newModifier)
 
                 newModifier.scopes
@@ -502,8 +502,9 @@ module rec NewScope =
 
     let modifierCategoryManager = ModifierCategoryManager()
 
+    [<Sealed>]
     type ModifierCategory(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = modifierCategoryManager.GetName(x)
 
         override x.Equals(target: obj) =
@@ -526,8 +527,9 @@ module rec NewScope =
 
     type Modifier = ModifierCategory
 
+    [<Sealed>]
     type Scope(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = scopeManager.GetName(x)
 
         override x.Equals(target: obj) =
@@ -555,7 +557,7 @@ module rec NewScope =
     type TypeDefInfo =
         { id: string
           validate: bool
-          range: CWTools.Utilities.Position.range
+          range: Position.range
           explicitLocalisation: (string * string * bool) list
           subtypes: string list }
 
@@ -573,12 +575,11 @@ type StaticModifier =
     { tag: string
       categories: ModifierCategory list }
 
-[<Struct; IsReadOnly>]
 type EffectType =
-    | Effect
-    | Trigger
-    | Link
-    | ValueTrigger
+    | Effect = 0uy
+    | Trigger = 1uy
+    | Link = 2uy
+    | ValueTrigger = 3uy
 
 type ReferenceHint =
     | TypeRef of typeName: string * typeValue: string
@@ -601,7 +602,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     override x.GetHashCode() =
         hash (name, scopes, effectType, refHint)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y ->
@@ -624,6 +625,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     new(name: string, scopes, effectType, refHint) =
         Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
 
+[<Sealed>]
 type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
     member val Comments: string = comments
@@ -640,7 +642,7 @@ type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, s
     override x.GetHashCode() =
         hash (x.Name, x.Scopes, x.Type, x.Comments, x.GlobalEventTargets, x.SavedEventTargets, x.UsedEventTargets)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -666,7 +668,7 @@ type DocEffect(name: StringTokens, scopes, target, effectType, desc, usage, refH
         hash (x.Name, x.Scopes, x.Type, x.Desc, x.Usage, x.Target)
 
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -805,22 +807,18 @@ type ScopedEffect
             None
         )
 
-
 type TitleType =
-    | Empire
-    | Kingdom
-    | Duchy_Hired
-    | Duchy_Normal
-    | County
-    | Barony
+    | Empire = 0uy
+    | Kingdom = 1uy
+    | Duchy_Hired = 2uy
+    | Duchy_Normal = 3uy
+    | County = 4uy
+    | Barony = 5uy
 
 type DataLinkType =
-    | Scope
-    | Value
-    | Both
-
-
-
+    | Scope = 0uy
+    | Value = 1uy
+    | Both = 2uy
 
 type EventTargetDataLink =
     { name: string
@@ -830,7 +828,7 @@ type EventTargetDataLink =
       dataPrefix: string option
       sourceRuleType: string
       dataLinkType: DataLinkType }
-
+ 
 type EventTargetLink =
     | SimpleLink of ScopedEffect
     | DataLink of EventTargetDataLink

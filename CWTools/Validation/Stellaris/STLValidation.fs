@@ -20,16 +20,16 @@ module STLValidation =
     let getDefinedVariables (node: Node) =
         let fNode =
             (fun (x: Node) acc ->
-                x.Values
-                |> List.fold
+                x.Leaves
+                |> Seq.fold
                     (fun a n ->
-                        if n.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then
+                        if n.Key.StartsWith('@') then
                             n.Key :: a
                         else
                             a)
                     acc)
 
-        node |> (foldNode7 fNode) |> List.ofSeq
+        node |> (foldNode7 fNode)
 
     let checkUsedVariables (node: Node) (variables: string list) =
         let fNode =
@@ -66,8 +66,7 @@ module STLValidation =
                 os.GlobMatch("**/common/scripted_variables/*.txt")
                 @ es.GlobMatch("**/common/scripted_variables/*.txt")
                 |> List.map getDefinedVariables
-                |> Seq.collect id
-                |> List.ofSeq
+                |> List.collect id
 
             es.All
             <&!!&>
@@ -195,8 +194,8 @@ module STLValidation =
                     let cat =
                         node.Child "category"
                         |> Option.bind (fun c ->
-                            c.All
-                            |> List.tryPick (function
+                            c.AllArray
+                            |> Array.tryPick (function
                                 | LeafValueC lv -> Some(lv.Value.ToString())
                                 | _ -> None))
 

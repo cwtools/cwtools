@@ -48,4 +48,4 @@ module CK3Constants =
               NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
     let scriptFolders =
-        [ "common"; "events"; "gfx"; "gui"; "localization"; "history"; "map_data" ]
+        [| "common"; "events"; "gfx"; "gui"; "localization"; "history"; "map_data" |]

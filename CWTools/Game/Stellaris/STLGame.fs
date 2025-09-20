@@ -29,27 +29,29 @@ open CWTools.Validation.LocalisationString
 open CWTools.Games.Helpers
 open System.IO
 open CWTools.Process.Localisation
+open System.Linq
 
 module STLGameFunctions =
     type GameObject = GameObject<STLComputedData, STLLookup>
 
     let createLocDynamicSettings (lookup: Lookup) =
         let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "global_event_target"
-               |> Option.defaultValue []
-               |> List.map fst)
+            Array.append
+                (lookup.varDefInfo.TryFind "event_target"
+                 |> Option.defaultValue [||]
+                 |> Array.map fst)
+                (lookup.varDefInfo.TryFind "global_event_target"
+                 |> Option.defaultValue [||]
+                 |> Array.map fst)
 
         let definedVariables =
             (lookup.varDefInfo.TryFind "variable"
-             |> Option.defaultValue []
+             |> Option.defaultValue [||]
              |> Seq.map fst
-             |> LowerCaseStringSet)
+             |> IgnoreCaseStringSet)
 
         { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
+          eventTargets = eventtargets |> Array.map (fun s -> s, scopeManager.AnyScope)
           setVariables = definedVariables }
 
     let updateScriptedTriggers (game: GameObject) =
@@ -121,7 +123,7 @@ module STLGameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.filter (fun f -> f.overwrite <> Overwritten && f.extension = ".yml" && f.validate)
+            |> List.filter (fun f -> f.overwrite <> Overwrite.Overwritten && f.extension = ".yml" && f.validate)
             |> List.map (fun f -> f.filepath)
 
         let locFileValidation = validateLocalisationFiles locfiles
@@ -158,7 +160,7 @@ module STLGameFunctions =
     let updateTechnologies (game: GameObject) =
         game.Lookup.technologies <- getTechnologies (EntitySet(game.Resources.AllEntities()))
 
-    let addModifiersWithScopes (lookup: Lookup) =
+    let addModifiersWithScopes (lookup: Lookup) : RootRule array =
         let modifierOptions (modifier: ActualModifier) =
             let requiredScopes = modifierCategoryManager.SupportedScopes modifier.category
 
@@ -169,14 +171,15 @@ module STLGameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         (lookup.coreModifiers
-         |> List.map (fun c ->
+         |> Seq.map (fun c ->
              AliasRule(
                  "modifier",
                  NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
              )))
-        @ RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs
+            .Concat(RulesHelpers.generateModifierRulesFromTypes lookup.typeDefs)
+            .ToArray()
 
-    let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule list) =
+    let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule array) =
         let scriptedOptions (scripted: string) (effect: ScriptedEffect) =
             { Options.DefaultOptions with
                 description = Some effect.Comments
@@ -185,10 +188,10 @@ module STLGameFunctions =
 
         let getAllScriptedEffects =
             lookup.onlyScriptedEffects
-            |> List.choose (function
+            |> Seq.choose (function
                 | :? ScriptedEffect as se -> Some se
                 | _ -> None)
-            |> List.map (fun se ->
+            |> Seq.map (fun se ->
                 AliasRule(
                     "effect",
                     NewRule(
@@ -196,20 +199,22 @@ module STLGameFunctions =
                         scriptedOptions "scripted_effect" se
                     )
                 ))
+            |> Seq.toArray
 
         let getAllScriptedTriggers =
             lookup.onlyScriptedTriggers
-            |> List.choose (function
+            |> Seq.choose (function
                 | :? ScriptedEffect as se -> Some se
                 | _ -> None)
-            |> List.map (fun se ->
+            |> Seq.map (fun se ->
                 AliasRule(
                     "trigger",
                     NewRule(
-                        LeafRule(CWTools.Rules.RulesParser.specificFieldFromId se.Name, ValueField(ValueType.Bool)),
+                        LeafRule(RulesParser.specificFieldFromId se.Name, ValueField(ValueType.Bool)),
                         scriptedOptions "scripted_trigger" se
                     )
                 ))
+            |> Seq.toArray
 
         let addRequiredScopesE (s: StringTokens) (o: Options) =
             let newScopes =
@@ -234,33 +239,33 @@ module STLGameFunctions =
             { o with requiredScopes = newScopes }
 
         rules
-        |> List.collect (function
+        |> Array.collect (function
             | AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (LeafRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) |]
             | AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), o)) ->
-                [ AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (NodeRule(SpecificField(SpecificValue s), r), addRequiredScopesT s o)) |]
             | AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) ]
+                [| AliasRule("effect", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesE s o)) |]
             | AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), o)) ->
-                [ AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) ]
+                [| AliasRule("trigger", (LeafValueRule(SpecificField(SpecificValue s)), addRequiredScopesT s o)) |]
             | AliasRule("effect", (LeafRule(TypeField(TypeType.Simple "scripted_effect"), o), _)) ->
                 getAllScriptedEffects
             | AliasRule("trigger", (LeafRule(TypeField(TypeType.Simple "scripted_trigger"), o), _)) ->
                 getAllScriptedTriggers
-            | x -> [ x ])
+            | x -> [| x |])
 
     let addValueTriggersToTriggers rules (lookup: Lookup) =
         let triggers =
             rules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue n), _), o)) ->
                     Some(StringResource.stringManager.GetStringForID n.normal, o)
                 | _ -> None)
-            |> Map.ofList
+            |> Map.ofSeq
 
         let inline triggerAugment (trigger: Effect) =
             match trigger, triggers |> Map.tryFind (trigger.Name.GetString()) with
@@ -281,21 +286,22 @@ module STLGameFunctions =
         lookup.triggers |> List.collect triggerAugment
     //        lookup.triggers |> List.
 
-    let loadConfigRulesHook rules (lookup: Lookup) embedded =
+    let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
         let triggersWithValueTriggers = addValueTriggersToTriggers rules lookup
         lookup.allCoreLinks <- triggersWithValueTriggers @ lookup.effects @ updateEventTargetLinks embedded //@ addDataEventTargetLinks lookup embedded
         lookup.coreModifiers <- embedded.modifiers
-        let rulesWithMod = rules @ addModifiersWithScopes (lookup)
+        let rulesWithMod = rules.Concat(addModifiersWithScopes (lookup)).ToArray()
         let rulesWithEmbeddedScopes = addTriggerDocsScopes lookup rulesWithMod
         rulesWithEmbeddedScopes
 
 
 
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo array>) =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Seq.toArray
         )
 
     let refreshConfigAfterFirstTypesHook
@@ -591,39 +597,39 @@ type STLGame(setupSettings: StellarisSettings) =
         let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/"))
         tech
 
-    member __.Lookup = lookup
+    member _.Lookup = lookup
 
     interface IGame<STLComputedData> with
-        member __.ParserErrors() = parseErrors ()
+        member _.ParserErrors() = parseErrors ()
 
-        member __.ValidationErrors() =
+        member _.ValidationErrors() =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
-        member __.LocalisationErrors(force: bool, forceGlobal: bool) =
+        member _.LocalisationErrors(force: bool, forceGlobal: bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-        member __.Folders() = fileManager.AllFolders()
-        member __.AllFiles() = resources.GetResources()
+        member _.Folders() = fileManager.AllFolders()
+        member _.AllFiles() = resources.GetResources()
 
-        member __.AllLoadedLocalisation() =
+        member _.AllLoadedLocalisation() =
             game.LocalisationManager.LocalisationFileNames()
 
-        member __.ScriptedTriggers() = lookup.triggers
-        member __.ScriptedEffects() = lookup.effects
-        member __.StaticModifiers() = lookup.staticModifiers
-        member __.UpdateFile shallow file text = game.UpdateFile shallow file text
-        member __.AllEntities() = resources.AllEntities()
+        member _.ScriptedTriggers() = lookup.triggers
+        member _.ScriptedEffects() = lookup.effects
+        member _.StaticModifiers() = lookup.staticModifiers
+        member _.UpdateFile shallow file text = game.UpdateFile shallow file text
+        member _.AllEntities() = resources.AllEntities()
 
-        member __.References() =
+        member _.References() =
             References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
 
-        member __.Complete pos file text =
+        member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
 
-        member __.ScopesAtPos pos file text =
+        member _.ScopesAtPos pos file text =
             scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
 
-        member __.GoToType pos file text =
+        member _.GoToType pos file text =
             getInfoAtPos
                 fileManager
                 game.ResourceManager
@@ -635,36 +641,36 @@ type STLGame(setupSettings: StellarisSettings) =
                 file
                 text
 
-        member __.FindAllRefs pos file text =
+        member _.FindAllRefs pos file text =
             findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
 
-        member __.InfoAtPos pos file text = game.InfoAtPos pos file text
+        member _.InfoAtPos pos file text = game.InfoAtPos pos file text
 
-        member __.ReplaceConfigRules rules =
+        member _.ReplaceConfigRules rules =
             game.ReplaceConfigRules
                 { ruleFiles = rules
                   validateRules = true
                   debugRulesOnly = false
                   debugMode = false } //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
 
-        member __.RefreshCaches() = game.RefreshCaches()
+        member _.RefreshCaches() = game.RefreshCaches()
 
-        member __.RefreshLocalisationCaches() =
+        member _.RefreshLocalisationCaches() =
             game.LocalisationManager.UpdateProcessedLocalisation()
 
-        member __.ForceRecompute() = resources.ForceRecompute()
-        member __.Types() = game.Lookup.typeDefInfo
-        member __.TypeDefs() = game.Lookup.typeDefs
+        member _.ForceRecompute() = resources.ForceRecompute()
+        member _.Types() = game.Lookup.typeDefInfo
+        member _.TypeDefs() = game.Lookup.typeDefs
 
-        member __.GetPossibleCodeEdits file text =
+        member _.GetPossibleCodeEdits file text =
             getPreTriggerPossible fileManager game.ResourceManager file text
 
-        member __.GetCodeEdits file text =
+        member _.GetCodeEdits file text =
             getFastTrigger fileManager game.ResourceManager file text
 
-        member __.GetEventGraphData: GraphDataRequest =
+        member _.GetEventGraphData: GraphDataRequest =
             (fun files gameType depth ->
                 graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
 
-        member __.GetEmbeddedMetadata() =
+        member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

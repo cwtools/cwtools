@@ -76,7 +76,6 @@ module STLEventValidation =
                 | "enable_special_project" -> [ x.TagText "name" ]
                 | _ -> children)
 
-        let fCombine = (@)
         let directCalls = event.Children |> List.collect (foldNode7 fNode) // |> List.fold (@) []
         let referencedProjects = event.Children |> List.collect (foldNode7 fpNode)
         //log "%s projs %A" (event.ID) referencedProjects
@@ -113,7 +112,7 @@ module STLEventValidation =
                     else
                         children
 
-                let innerValues = x.Values |> List.fold inner children
+                let innerValues = x.Leaves |> Seq.fold inner children
 
                 match x.Key with
                 | k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
@@ -143,8 +142,12 @@ module STLEventValidation =
         let fNode =
             (fun (x: Node) children ->
                 let inner (leaf: Leaf) =
-                    if leaf.Key == "exists" && leaf.Value.ToRawString().StartsWith("event_target:") then
-                        Some(leaf.Value.ToRawString().Substring(13).Split('.').[0])
+                    let value = leaf.Value.ToRawString()
+                    if
+                        leaf.Key == "exists"
+                        && value.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)
+                    then
+                        Some(value.Substring(13).Split('.').[0])
                     else
                         None
 

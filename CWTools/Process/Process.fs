@@ -54,7 +54,7 @@ type IClause =
     abstract member Tag: string -> Value option
     abstract member TagText: string -> string
 
-and Leaf =
+and [<Sealed>] Leaf =
     val mutable KeyId: StringTokens
     // val mutable Key : string
     val mutable private _valueId: StringTokens
@@ -65,7 +65,7 @@ and Leaf =
 
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteChar
         and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member this.ValueId = this._valueId
@@ -77,7 +77,7 @@ and Leaf =
             this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteChar
 
     member this.ToRaw =
         KeyValue(PosKeyValue(this.Position, KeyValueItem(Key(this.Key), this.Value, this.Operator)))
@@ -105,7 +105,7 @@ and Leaf =
             with get () = this.Trivia
             and set v = this.Trivia <- v
 
-and LeafValue(value: Value, ?pos: range) =
+and [<Sealed>] LeafValue(value: Value, ?pos: range) =
     member val Trivia: Trivia option = None with get, set
     member val ValueId = StringResource.stringManager.InternIdentifierToken(value.ToString()) with get, set
     member val private _value = value with get, set
@@ -117,10 +117,10 @@ and LeafValue(value: Value, ?pos: range) =
             this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteChar
 
     member this.Key =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteChar
 
     member val Position = defaultArg pos range.Zero
     member this.ToRaw = Value(this.Position, this._value)
@@ -143,7 +143,7 @@ and Child =
     | LeafValueC of leafvalue: LeafValue
     | ValueClauseC of valueclause: ValueClause
 
-and ValueClause(keys: Value[], pos: range) =
+and [<Sealed>] ValueClause(keys: Value[], pos: range) =
     let mutable _keys =
         keys
         |> Array.map (fun v -> StringResource.stringManager.InternIdentifierToken(v.ToString()))
@@ -360,7 +360,7 @@ and ValueClause(keys: Value[], pos: range) =
         member this.Tag x = this.Tag x
 
 
-and Node(key: string, pos: range) =
+and [<Sealed>] Node(key: string, pos: range) =
     let bothFind (x: string) =
         function
         | NodeC n when n.Key == x -> true
@@ -393,7 +393,7 @@ and Node(key: string, pos: range) =
     member val KeyId: StringTokens = StringResource.stringManager.InternIdentifierToken(key) with get, set
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
+        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteChar
         and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
 
     member val Position = pos
@@ -543,7 +543,7 @@ and Node(key: string, pos: range) =
             | s -> s.ToString())
 
     member this.SetTag x v =
-        this.All <- this.AllChildren |> List.ofSeq |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
+        this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
 
     member this.Child x =
         this.Nodes
@@ -803,7 +803,7 @@ module ProcessCore =
     let foldNode7 fNode (node: Node) =
         let rec loop acc (node: Node) =
             let resNode = fNode node acc
-            node.Children |> List.fold loop resNode
+            node.Nodes |> Seq.fold loop resNode
 
         loop [] node
 
@@ -823,21 +823,3 @@ module ProcessCore =
         match res with
         | None -> (node.Children |> List.collect (recurse newAcc))
         | Some e -> e :: (node.Children |> List.collect (recurse newAcc))
-
-    let rec cata fNode (node: Node) : 'r =
-        let recurse = cata fNode
-        fNode node (node.Children |> Seq.map recurse)
-
-    let rec cataNodeIter fNode (node: Node) =
-        let recurse = cataNodeIter fNode
-        if fNode node then () else node.Nodes |> Seq.iter recurse
-
-    let rec cataIter fChild (child: Child) =
-        let recurse = cataIter fChild
-
-        if fChild child then
-            ()
-        else
-            match child with
-            | NodeC node -> node.AllArray |> Array.iter recurse
-            | _ -> ()

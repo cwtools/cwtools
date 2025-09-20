@@ -154,17 +154,17 @@ module STLConstants =
         | Decisions = 91
 
     let scriptFolders =
-        [ "common"
-          "common/deposits"
-          "events"
-          "map/galaxy"
-          "map/setup_scenarios"
-          "prescripted_countries"
-          "interface"
-          "gfx"
-          "music"
-          "sound"
-          "fonts"
-          "flags"
-          "localisation"
-          "localisation_synced" ]
+        [| "common"
+           "common/deposits"
+           "events"
+           "map/galaxy"
+           "map/setup_scenarios"
+           "prescripted_countries"
+           "interface"
+           "gfx"
+           "music"
+           "sound"
+           "fonts"
+           "flags"
+           "localisation"
+           "localisation_synced" |]
