@@ -29,7 +29,7 @@ module STLValidation =
                             a)
                     acc)
 
-        node |> (foldNode7 fNode) |> List.ofSeq
+        node |> (foldNode7 fNode)
 
     let checkUsedVariables (node: Node) (variables: string list) =
         let fNode =
