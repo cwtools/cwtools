@@ -1,5 +1,6 @@
 namespace CWTools.Localisation
 
+open System.Linq
 open CWTools.Common
 open CWTools.Utilities.Position
 open System.Collections.Generic
@@ -9,7 +10,9 @@ open CWTools.Utilities.Utils
 module YAMLLocalisationParser =
     open FParsec
 
-    type LocFile = { key: string; entries: Entry list }
+    type LocFile =
+        { key: string
+          entries: IReadOnlyCollection<Entry> }
 
     let inline isLocValueChar (c: char) =
         isAsciiLetter c
@@ -52,11 +55,33 @@ module YAMLLocalisationParser =
 
     let comment = skipChar '#' >>. skipRestOfLine true .>> spaces <?> "comment"
 
+    let private manyOption p =
+        Inline.Many(
+            firstElementParser = p,
+            elementParser = p,
+            stateFromFirstElement =
+                (fun (value: ValueOption<'a>) ->
+                    let list = new LinkedList<'a>()
+
+                    if value.IsSome then
+                        list.AddLast(value.Value) |> ignore
+
+                    list),
+            foldState =
+                (fun (list: LinkedList<'a>) newValue ->
+                    if newValue.IsSome then
+                        list.AddLast(newValue.Value) |> ignore
+
+                    list),
+            resultFromState = id,
+            resultForEmptySequence = (fun () -> LinkedList<_>())
+        )
+
     let file =
         spaces
         >>. skipMany (attempt comment)
-        >>. pipe2 key (many ((attempt comment >>% None) <|> (entry |>> Some)) .>> eof) (fun k es ->
-            { key = k; entries = List.choose id es })
+        >>. pipe2 key (manyOption ((attempt comment >>% ValueNone) <|> (entry |>> ValueSome)) .>> eof) (fun k es ->
+            { key = k; entries = es })
         <?> "file"
 
     let parseLocFile filepath =
@@ -68,47 +93,42 @@ module YAMLLocalisationParser =
         let mutable results: Results =
             upcast new Dictionary<string, bool * int * string * Position option>()
 
-        let mutable records: struct (Entry * Lang) array = [||]
-        let mutable recordsL: struct (Entry * Lang) list = []
+        let resizeArray = ResizeArray<struct (Entry * Lang)>(8)
 
-        let addFile f t =
-            //log "%s" f
-            match parseLocText t f with
+        let addFile (fileName: string) (text: string) : bool * int * string * Position option =
+            match parseLocText text fileName with
             | Success({ key = key; entries = entries }, _, _) ->
                 match keyToLanguage key with
                 | Some l ->
-                    let es = entries |> List.map (fun e -> struct (e, gameLang l))
-                    recordsL <- es @ recordsL
-                    (true, es.Length, "", None)
-                | None -> (true, entries.Length, "", None)
+                    resizeArray.EnsureCapacity(resizeArray.Count + entries.Count) |> ignore
+                    resizeArray.AddRange(entries.Select(fun e -> struct (e, gameLang l)))
+                    (true, entries.Count, "", None)
+                | None -> (true, entries.Count, "", None)
             | Failure(msg, p, _) -> (false, 0, msg, Some p.Position)
 
         let addFiles (x: (string * string) list) =
             List.map (fun (f, t) -> (f, addFile f t)) x
 
-        let recordsLang (lang: Lang) =
-            records
-            |> Array.choose (function
+        let getRecordsByLanguage (lang: Lang) =
+            resizeArray
+            |> Seq.choose (function
                 | struct (r, l) when l = lang -> Some r
                 | _ -> None)
 
         let valueMap lang =
-            recordsLang lang |> Array.map (fun r -> (r.key, r)) |> Map.ofArray
+            getRecordsByLanguage lang |> Seq.map (fun r -> (r.key, r)) |> Map.ofSeq
 
         let values l =
-            recordsLang l |> Array.map (fun r -> (r.key, r.desc)) |> dict
+            getRecordsByLanguage l |> Seq.map (fun r -> (r.key, r.desc)) |> dict
 
         let getDesc l x =
-            recordsLang l
-            |> Array.tryPick (fun r -> if r.key = x then Some r.desc else None)
+            getRecordsByLanguage l
+            |> Seq.tryPick (fun r -> if r.key = x then Some r.desc else None)
             |> Option.defaultValue x
 
-        let getKeys l = recordsLang l |> Array.map _.key
+        let getKeys l = getRecordsByLanguage l |> Seq.map _.key
 
-        do
-            results <- addFiles files |> dict
-            records <- recordsL |> Array.ofList
-            recordsL <- []
+        do results <- addFiles files |> dict
 
         new(localisationSettings: LocalisationSettings<'L>) =
             log (sprintf "Loading %s localisation in %s" localisationSettings.gameName localisationSettings.folder)
@@ -139,7 +159,7 @@ module YAMLLocalisationParser =
             { new ILocalisationAPI with
                 member _.Results = results
                 member _.Values = values lang
-                member _.GetKeys = getKeys lang
+                member _.GetKeys = getKeys lang |> Array.ofSeq
                 member _.GetDesc x = getDesc lang x
                 member _.GetLang = lang
                 member _.ValueMap = valueMap lang }
