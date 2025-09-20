@@ -202,6 +202,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 match resource with
                 | FileWithContentResource(_, r) -> this.LocalisationManager.UpdateLocalisationFile r
                 | _ -> logWarning (sprintf "Localisation file failed to parse %s" filepath)
+
                 let ges = globalLocalisation (this)
                 this.LocalisationManager.globalLocalisationErrors <- Some ges
                 []
@@ -224,16 +225,13 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     errorCache <- errorCache.Add(filepath, deepres)
                     shallowres @ deepres
+
         log $"Update file Time: %i{timer.ElapsedMilliseconds}"
         res
 
     let initialLoad () =
-        let timer = new System.Diagnostics.Stopwatch()
+        let timer = System.Diagnostics.Stopwatch()
         timer.Start()
-        // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
-        //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
-        // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
-        //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
         let files = fileManager.AllFilesByPath()
         log $"Parsing %i{files.Length} files"
 
@@ -253,29 +251,25 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     | _ -> None)
 
         resourceManager.Api.UpdateFiles(filteredfiles) |> ignore
-        log (sprintf "Parsed files in %A" timer.ElapsedMilliseconds)
+        log $"Parsed files in %A{timer.ElapsedMilliseconds}"
         timer.Restart()
 
         let embeddedFiles =
             settings.embedded.embeddedFiles
-            |> List.map (fun (f, ft) -> f.Replace("\\", "/"), ft)
-            |> List.choose (fun (f, ft) ->
-                if ft = "" then
-                    Some(
-                        FileResourceInput
-                            { scope = "embedded"
-                              filepath = f
-                              logicalpath = (fileManager.ConvertPathToLogicalPath f) }
-                    )
+            |> List.map (fun (filePath: string, fileText) ->
+                let newFilePath = filePath.Replace('\\', '/')
+                if fileText = "" then
+                    FileResourceInput
+                        { scope = "embedded"
+                          filepath = newFilePath
+                          logicalpath = (fileManager.ConvertPathToLogicalPath newFilePath) }
                 else
-                    Some(
-                        FileWithContentResourceInput
-                            { scope = "embedded"
-                              filepath = f
-                              logicalpath = (fileManager.ConvertPathToLogicalPath f)
-                              filetext = ft
-                              validate = false }
-                    ))
+                    FileWithContentResourceInput
+                        { scope = "embedded"
+                          filepath = newFilePath
+                          logicalpath = (fileManager.ConvertPathToLogicalPath newFilePath)
+                          filetext = fileText
+                          validate = false })
 
         let disableValidate (r, e) : Resource * Entity =
             match r with
