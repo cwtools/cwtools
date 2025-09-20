@@ -63,8 +63,8 @@ module internal FieldValidators =
     // let firstCharEqualsAmp (s : string) = s.Length > 0 && (s.[0] = '@')// || s.[0] = '$')
     let inline trimQuote (s: string) = s.Trim('\"')
     let inline trimQuoteSpan (s: string) = s.AsSpan().Trim('\"')
-    let getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
-    let getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
+    let inline getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
+    let inline getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
     let checkValidValue
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
