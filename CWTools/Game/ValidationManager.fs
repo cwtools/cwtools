@@ -351,11 +351,7 @@ type ValidationManager<'T when 'T :> ComputedData>
         let res =
             entities
             |> List.map (fun struct (e, l) -> (struct (e, l)), errorCache.GetErrorsForEntity e)
-        // TODO: This is too performance slow
-        // res |> List.filter (fun (e, errors) -> errors.IsNone)
-        //             |> List.map fst
-        //             |> (validate true)
-        //             |> ignore
+
         let forced =
             res
             |> List.filter (fun (e, errors) -> errors.IsNone)
