@@ -12,5 +12,8 @@ module RulesParserConstants =
     [<Literal>]
     let CardinalityDefaultMaximum = 10000
 
+    [<Literal>]
     let floatFieldDefaultMinimum = -1E+12M
+
+    [<Literal>]
     let floatFieldDefaultMaximum = 1E+12M
