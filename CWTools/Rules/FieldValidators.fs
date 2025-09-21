@@ -217,10 +217,10 @@ module internal FieldValidators =
                         leafornode
                     <&&&> errors
                 else
-                    (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[0] leafornode errors)
-                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[1] leafornode)
-                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[2] leafornode)
-                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys ids parts.[3] leafornode)
+                    (LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[0] leafornode errors)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[1] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[2] leafornode)
+                    |> (LocalisationValidation.checkLocKeysLeafOrNodeN keys parts.[3] leafornode)
             | ValueType.STLNameFormat var ->
                 match varMap.TryFind var with
                 | Some vars ->
@@ -342,7 +342,7 @@ module internal FieldValidators =
 
                 validateLocalisation proc scopeContext
             else
-                LocalisationValidation.checkLocKeysLeafOrNodeN keys ids key leafornode errors
+                LocalisationValidation.checkLocKeysLeafOrNodeN keys key leafornode errors
         | _ -> errors
 
     let checkTypeField
