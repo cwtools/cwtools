@@ -916,12 +916,12 @@ type InfoService
             | Some c, Some typedef ->
                 let typerules =
                     rootRules.TypeRules
-                    |> Array.choose (function
+                    |> Seq.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
 
                 let typeruleOptions =
-                    match typerules |> Array.tryHead with
+                    match typerules |> Seq.tryHead with
                     | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                         (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                         ->
