@@ -57,7 +57,6 @@
         <Compile Include="Rules/RulesLoader.fs"/>
         <Compile Include="Game/ResourceManager.fs"/>
         <Compile Include="Game/FileManager.fs"/>
-        <Compile Include="Game/CachedFileManager.fs"/>
         <Compile Include="Game/Lookups.fs"/>
         <Compile Include="Game/References.fs"/>
         <Compile Include="Game/GameTypes.fs"/>
@@ -104,6 +103,11 @@
     <ItemGroup>
         <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj"/>
         <ProjectReference Include="..\Shared\Shared.fsproj"/>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Update="FSharp.Core">
+        <Version>9.0.303</Version>
+      </PackageReference>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="FParsec"/>
