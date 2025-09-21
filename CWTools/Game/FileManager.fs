@@ -30,6 +30,7 @@ module Files =
         | WD of WorkspaceDirectory
         | ZD of ZippedDirectory
 
+    [<Sealed>]
     type FileManager
         (
             inputDirectories: WorkspaceDirectoryInput list,
@@ -75,7 +76,6 @@ module Files =
 
             dir.IsSome
 
-
         let classifyDirectory (workspaceDir: WorkspaceDirectory) =
             let checkFolderLooksLikeGameFolder =
                 (fun (f: string) ->
@@ -118,8 +118,7 @@ module Files =
                         |> List.ofSeq
                         |> List.filter (fun folder ->
                             Directory.EnumerateDirectories folder
-                            |> List.ofSeq
-                            |> List.exists checkFolderLooksLikeGameFolder)
+                            |> Seq.exists checkFolderLooksLikeGameFolder)
                         |> List.map (fun folder ->
                             { ModInfo.name = Path.GetFileName folder
                               path = folder })
@@ -133,14 +132,20 @@ module Files =
 
                 foundAnyFolders
 
-            match
-                isVanillaDirectory workspaceDir, getMultipleModDirectory workspaceDir, checkIsGameFolder workspaceDir
-            with
-            | true, _, _ -> DirectoryType.Vanilla
-            | _, _, true -> DirectoryType.Mod
-            | false, [], false -> DirectoryType.Unknown
-            | _, ms, _ -> DirectoryType.MultipleMod ms
+            let result: DirectoryType =
+                if isVanillaDirectory workspaceDir then
+                    DirectoryType.Vanilla
+                elif checkIsGameFolder workspaceDir then
+                    DirectoryType.Mod
+                else
+                    let list = getMultipleModDirectory workspaceDir
 
+                    if not (List.isEmpty list) then
+                        DirectoryType.MultipleMod list
+                    else
+                        DirectoryType.Unknown
+
+            result
 
         let expandedRootDirectories =
             let expanded =
@@ -159,7 +164,7 @@ module Files =
                     { path = e
                       name = "embedded"
                       dirType = Unknown
-                      normalisedPath = e.Replace("\\", "/").TrimStart('.') })
+                      normalisedPath = e.Replace('\\', '/').TrimStart('.') })
 
             match embeddedDir with
             | Some ed -> ed :: expanded
@@ -272,8 +277,7 @@ module Files =
         let allFilesByPath (workspaceDir: ExpandedWorkspaceDirectory) =
             let globs = ignoreGlobList |> Array.map Glob.Parse
 
-            let excludeGlobTest (path: string) =
-                globs |> Array.exists _.IsMatch(path)
+            let excludeGlobTest (path: string) = globs |> Array.exists _.IsMatch(path)
 
             let getAllFiles (modInfo: ModInfo) =
                 //log "%A" path
@@ -311,7 +315,7 @@ module Files =
 
         let allFilesInZips =
             let zippedDirToResourceInputs (zd: ZippedDirectory) =
-                let normalisedPath = zd.path.Replace("\\", "/").TrimStart('.')
+                let normalisedPath = zd.path.Replace('\\', '/').TrimStart('.')
 
                 zd.files
                 |> List.choose (fun (fn, ft) ->
