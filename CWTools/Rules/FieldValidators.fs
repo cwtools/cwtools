@@ -282,10 +282,10 @@ module internal FieldValidators =
              let parts = key.Split('.')
 
              (parts.Length = 4)
-             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[0]
-             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[1]
-             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[2]
-             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys ids parts[3]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts[0]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts[1]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts[2]
+             && LocalisationValidation.checkLocKeysLeafOrNodeNE keys parts[3]
          | ValueType.STLNameFormat var ->
              match varMap.TryFind var with
              | Some vars ->
