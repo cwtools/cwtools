@@ -230,8 +230,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
-
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
     let parseErrors () =
         resources.GetResources()
@@ -266,7 +265,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
         member _.AllEntities() = resources.AllEntities()
 
         member _.References() =
-            References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+            References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
         member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text

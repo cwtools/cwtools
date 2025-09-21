@@ -50,7 +50,11 @@ module HOI4GameFunctions =
         let definedvars =
             seq {
                 yield! (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [||] |> Seq.map fst)
-                yield! (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [||] |> Seq.map fst)
+
+                yield!
+                    (lookup.varDefInfo.TryFind "saved_name"
+                     |> Option.defaultValue [||]
+                     |> Seq.map fst)
 
                 yield!
                     (lookup.varDefInfo.TryFind "exiled_ruler"
@@ -109,6 +113,7 @@ module HOI4GameFunctions =
 
     let ruleToEffect (rule, effectType) =
         let r, o = rule
+
         let name =
             match r with
             | LeafRule(SpecificField(SpecificValue n), _) -> StringResource.stringManager.GetStringForID n.normal
@@ -122,7 +127,7 @@ module HOI4GameFunctions =
         let effects =
             rules
             |> Array.choose (function
-                | AliasRule("effect", r) -> Some(ruleToEffect(r, EffectType.Effect))
+                | AliasRule("effect", r) -> Some(ruleToEffect (r, EffectType.Effect))
                 | _ -> None)
 
         let stateEffects =
@@ -136,7 +141,8 @@ module HOI4GameFunctions =
                     defaultDesc,
                     "",
                     true
-                ) :> Effect)
+                )
+                :> Effect)
 
         let countryEffects =
             countries
@@ -149,7 +155,8 @@ module HOI4GameFunctions =
                     defaultDesc,
                     "",
                     true
-                ) :> Effect)
+                )
+                :> Effect)
 
         Array.concat [| effects; stateEffects; countryEffects |]
 
@@ -157,7 +164,7 @@ module HOI4GameFunctions =
         let effects =
             rules
             |> Array.choose (function
-                | AliasRule("trigger", r) -> Some(ruleToEffect(r, EffectType.Trigger))
+                | AliasRule("trigger", r) -> Some(ruleToEffect (r, EffectType.Trigger))
                 | _ -> None)
 
         let stateEffects =
@@ -447,7 +454,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
     let getEmbeddedFiles () =
         settings.embedded.embeddedFiles
@@ -488,11 +495,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
         member _.AllEntities() = resources.AllEntities()
 
         member _.References() =
-            References<HOI4ComputedData>(
-                resources,
-                lookup,
-                (game.LocalisationManager.LocalisationAPIs() |> List.map snd)
-            )
+            References<HOI4ComputedData>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
         member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text

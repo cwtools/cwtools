@@ -30,7 +30,9 @@ module IRGameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.tryFind (fun f -> f.overwrite <> Overwrite.Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+            |> List.tryFind (fun f ->
+                f.overwrite <> Overwrite.Overwritten
+                && Path.GetFileName(f.filepath) = "definition.csv")
 
         match provinceFile with
         | None -> ()
@@ -306,8 +308,7 @@ type IRGame(setupSettings: IRSettings) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
-
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
     let parseErrors () =
         resources.GetResources()
@@ -342,7 +343,7 @@ type IRGame(setupSettings: IRSettings) =
         member _.AllEntities() = resources.AllEntities()
 
         member _.References() =
-            References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+            References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
         member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text

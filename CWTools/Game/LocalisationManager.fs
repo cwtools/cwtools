@@ -16,22 +16,23 @@ type LocalisationManager<'T when 'T :> ComputedData>
         processLocalisation,
         localisationExtension: string
     ) as this =
-    let mutable localisationAPIMap: Map<string * Lang, bool * ILocalisationAPI> =
+    let mutable localisationAPIMap: Map<string * Lang, struct (bool * ILocalisationAPI)> =
         Map.empty
 
-    let allLocalisation () = this.LocalisationAPIs() |> List.map snd
-
     let validatableLocalisation () =
-        this.LocalisationAPIs()
-        |> List.choose (fun (validate, api) -> if validate then Some api else None)
+        this.GetLocalisationAPIs()
+        |> List.choose (fun struct (validate, api) -> if validate then Some api else None)
 
     let parseLocFile (locFile: FileWithContentResource) =
-        if locFile.overwrite <> Overwrite.Overwritten && locFile.extension = localisationExtension then
+        if
+            locFile.overwrite <> Overwrite.Overwritten
+            && locFile.extension = localisationExtension
+        then
             let locService = [ locFile.filepath, locFile.filetext ] |> localisationService
 
             Some(
                 langs
-                |> Array.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang)))
+                |> Array.map (fun lang -> (locFile.filepath, lang), struct (locFile.validate, locService.Api(lang)))
             )
         else
             None
@@ -48,7 +49,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             allLocs |> Map.ofSeq
 
-        let groupedLocalisation = allLocalisation () |> List.groupBy _.GetLang
+        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> List.groupBy _.GetLang
 
         this.localisationKeys <-
             groupedLocalisation
@@ -71,7 +72,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         localisationAPIMap <- newMap
 
-        let groupedLocalisation = allLocalisation () |> List.groupBy _.GetLang
+        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> List.groupBy _.GetLang
 
         this.localisationKeys <-
             groupedLocalisation
@@ -106,7 +107,10 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member _.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
     member _.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
-    member _.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
+    member _.GetLocalisationAPIs() : (struct (bool * ILocalisationAPI)) list = localisationAPIMap.Values |> Seq.toList
+
+    member this.GetCleanLocalisationAPIs() : ILocalisationAPI list =
+        this.GetLocalisationAPIs() |> List.map structSnd
 
     member _.LocalisationFileNames() : string list =
         localisationAPIMap
@@ -116,6 +120,6 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member this.LocalisationKeys() = this.localisationKeys
 
     member this.LocalisationEntries() =
-        allLocalisation ()
+        this.GetCleanLocalisationAPIs()
         |> List.groupBy (fun l -> l.GetLang)
         |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList))
