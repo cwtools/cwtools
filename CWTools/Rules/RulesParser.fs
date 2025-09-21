@@ -49,7 +49,7 @@ module private RulesParserImpl =
         let findComments (t: range) s (a: Child) =
             match struct (s, a) with
             | struct (struct (b, c), _) when b -> struct (b, c)
-            | struct ((_, c), CommentC comment) when comment.Comment.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
+            | struct ((_, c), CommentC comment) when comment.Comment.StartsWith('#') ->
                 struct (false, comment.Comment :: c)
             | struct ((_, c), CommentC _) -> struct (false, c)
             | struct ((_, c), NodeC n) when n.Position.Code = t.Code -> struct (true, c)
@@ -74,8 +74,7 @@ module private RulesParserImpl =
                 NodeC e,
                 clause.AllArray
                 |> Array.fold (findComments e.Position) (false, [])
-                |> structSnd
-                |> (fun l -> l))
+                |> structSnd)
             |> List.ofSeq
 
         let three =
@@ -914,7 +913,7 @@ module private RulesParserImpl =
 
                 let description =
                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
-                    | Some d -> Some(d.Trim('#'))
+                    | Some d -> Some(d.TrimStart('#'))
                     | None -> None
 
                 match value.IndexOf '$' with
