@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8BD0CABC-6A8F-4DDC-9B9B-20E1F6A0F353}"
 	ProjectSection(SolutionItems) = preProject
 		paket.dependencies = paket.dependencies
+		CWTools\paket.references = CWTools\paket.references
 	EndProjectSection
 EndProject
 Global
