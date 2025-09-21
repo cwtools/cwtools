@@ -14,8 +14,8 @@ open System.Linq
 
 let globalLocalisation (game: GameObject<_, _>) =
     let locParseErrors =
-        game.LocalisationManager.LocalisationAPIs()
-        <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
+        game.LocalisationManager.GetLocalisationAPIs()
+        <&!&> (fun struct (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
 
     let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
 

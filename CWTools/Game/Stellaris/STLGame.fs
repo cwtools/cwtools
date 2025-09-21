@@ -129,8 +129,8 @@ module STLGameFunctions =
         let locFileValidation = validateLocalisationFiles locfiles
 
         let locParseErrors =
-            game.LocalisationManager.LocalisationAPIs()
-            <&!&> (fun (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
+            game.LocalisationManager.GetLocalisationAPIs()
+            <&!&> (fun struct (b, api) -> if b then validateLocalisationSyntax api.Results else OK)
 
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
 
@@ -577,7 +577,7 @@ type STLGame(setupSettings: StellarisSettings) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
     let useRules = settings.rules.IsSome
 
@@ -621,7 +621,7 @@ type STLGame(setupSettings: StellarisSettings) =
         member _.AllEntities() = resources.AllEntities()
 
         member _.References() =
-            References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+            References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
         member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text

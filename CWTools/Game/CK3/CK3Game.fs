@@ -5,6 +5,7 @@ open CWTools.Localisation
 open CWTools.Games
 open CWTools.Common
 open System.IO
+open CWTools.Utilities.Utils
 open CWTools.Validation.Common.CommonValidation
 open CWTools.Process.Scopes
 open System.Text
@@ -236,7 +237,7 @@ type CK3Game(setupSettings: CK3Settings) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
 
     let parseErrors () =
@@ -272,7 +273,7 @@ type CK3Game(setupSettings: CK3Settings) =
         member _.AllEntities() = resources.AllEntities()
 
         member _.References() =
-            References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+            References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
         member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
