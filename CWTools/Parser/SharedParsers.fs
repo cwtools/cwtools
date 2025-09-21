@@ -69,9 +69,6 @@ module internal SharedParsers =
 
     // Sets of chars
     // =======
-    let whitespaceTextChars = " \t\r\n"
-    let norseChars = [| 'ö'; 'ð'; 'æ'; 'ó'; 'ä'; 'Þ'; 'Å'; 'Ö' |]
-
     let idCharArray =
         [| '_'
            ':'
