@@ -202,7 +202,7 @@ module STL =
 
         let referencedtypes =
             referencedtypes
-            |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
+            |> Option.map (fun r -> r |> Map.map (fun _ v -> (v |> List.ofSeq)))
 
         STLComputedData(
             referencedtypes,
