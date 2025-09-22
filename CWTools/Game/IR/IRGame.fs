@@ -71,11 +71,7 @@ module IRGameFunctions =
                         None
                     else
                         l.Split(',', 3, StringSplitOptions.RemoveEmptyEntries)
-                        |> (fun a ->
-                            if a.Length > 1 then
-                                a |> Array.skip 1 |> Array.tryHead
-                            else
-                                None))
+                        |> (fun array -> if array.Length > 1 then Some array[1] else None))
 
             game.Lookup.IRcharacters <- chars
 
