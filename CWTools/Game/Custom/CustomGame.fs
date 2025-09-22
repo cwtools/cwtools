@@ -21,26 +21,13 @@ module CustomGameFunctions =
     let afterInit (game: GameObject) = updateModifiers (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        let scopeDefinitions =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-            |> (fun f -> UtilityParser.initializeScopes f (Some []))
+        initializeScopesAndModifierCategories configs (fun _ -> []) (fun _ -> [])
 
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some []))
-
-        let irMods =
+        let modifiers =
             configs
             |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
             |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
             |> Option.defaultValue []
-
-        let irLocCommands =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-            |> Option.defaultValue ([], [], [])
 
         let jominiLocDataTypes =
             configs
@@ -101,7 +88,7 @@ module CustomGameFunctions =
 
         { triggers = irTriggers
           effects = irEffects
-          modifiers = irMods
+          modifiers = modifiers
           embeddedFiles = embeddedFiles
           cachedResourceData = cachedResourceData
           localisationCommands = Jomini jominiLocDataTypes

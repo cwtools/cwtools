@@ -26,12 +26,12 @@ module VIC2Constants =
           "Governorship", [ "governorship" ]
           "Region", [ "region" ] ]
 
-    let defaultScopeInputs =
+    let defaultScopeInputs() =
         defaultScopes
         |> List.map (fun (n, s) ->
-            { NewScope.ScopeInput.name = n
-              NewScope.ScopeInput.aliases = s
-              NewScope.ScopeInput.isSubscopeOf = []
+            { ScopeInput.name = n
+              ScopeInput.aliases = s
+              ScopeInput.isSubscopeOf = []
               dataTypeName = None })
 
     let defaultModifiers =

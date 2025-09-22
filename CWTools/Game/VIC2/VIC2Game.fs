@@ -92,15 +92,7 @@ module VIC2GameFunctions =
         updateModifiers (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        let scopeDefinitions =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs))
-
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some(defaultModifiersInputs ())))
-
+        initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
         let vic2Mods =
             configs

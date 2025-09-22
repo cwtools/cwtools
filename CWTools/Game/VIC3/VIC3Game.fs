@@ -18,26 +18,13 @@ module VIC3GameFunctions =
     let afterInit (game: GameObject) = ()
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        let scopeDefinitions =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-            |> (fun f -> UtilityParser.initializeScopes f (Some []))
+        initializeScopesAndModifierCategories configs (fun _ -> []) (fun _ -> [])
 
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some []))
-
-        let irMods =
+        let modifiers =
             configs
             |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
             |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
             |> Option.defaultValue []
-
-        let irLocCommands =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-            |> Option.defaultValue ([], [], [])
 
         let jominiLocDataTypes =
             configs
@@ -65,7 +52,7 @@ module VIC3GameFunctions =
                     ft)
             |> Option.defaultValue (CWTools.Process.Scopes.IR.scopedEffects |> List.map SimpleLink)
 
-        let irEffects =
+        let effects =
             configs
             |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "effects.log")
             |> Option.bind (fun (fn, ft) ->
@@ -77,7 +64,7 @@ module VIC3GameFunctions =
                 eprintfn "effects.log was not found in VIC3 config"
                 [])
 
-        let irTriggers =
+        let triggers =
             configs
             |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "triggers.log")
             |> Option.bind (fun (fn, ft) ->
@@ -95,10 +82,9 @@ module VIC3GameFunctions =
             |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
             |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
 
-
-        { triggers = irTriggers
-          effects = irEffects
-          modifiers = irMods
+        { triggers = triggers
+          effects = effects
+          modifiers = modifiers
           embeddedFiles = embeddedFiles
           cachedResourceData = cachedResourceData
           localisationCommands = Jomini jominiLocDataTypes

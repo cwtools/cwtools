@@ -18,26 +18,13 @@ module EU5GameFunctions =
     let afterInit (game: GameObject) = ()
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        let scopeDefinitions =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-            |> (fun f -> UtilityParser.initializeScopes f (Some []))
-
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some []))
+        initializeScopesAndModifierCategories configs (fun _ -> []) (fun _ -> [])
 
         let irMods =
             configs
             |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
             |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
             |> Option.defaultValue []
-
-        let irLocCommands =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-            |> Option.defaultValue ([], [], [])
 
         let jominiLocDataTypes =
             configs
