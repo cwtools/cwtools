@@ -12,7 +12,7 @@ module RulesLoader =
     let private loadFromConfigFilesInner defaultScopeInputs defaultModifiersInputs (configs: (string * string) list) =
         configs
         |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-        |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs))
+        |> (fun f -> UtilityParser.initializeScopes f (Some(defaultScopeInputs())))
 
         configs
         |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")

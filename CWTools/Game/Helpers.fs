@@ -1,7 +1,10 @@
 namespace CWTools.Games
 
+open System
 open System.Collections.Generic
+open System.IO
 open CWTools.Common
+open CWTools.Parser
 open CWTools.Rules
 open CWTools.Utilities
 open CWTools.Utilities.Utils
@@ -211,10 +214,7 @@ module Helpers =
                 | None -> ()
             }
 
-        links
-        |> Seq.collect convertLinkToEffects
-        |> Seq.map (fun e -> e :> Effect)
-        |> List.ofSeq
+        links |> Seq.collect convertLinkToEffects |> Seq.map (fun e -> e :> Effect) |> List.ofSeq
 
     let getLocalisationErrors (game: GameObject<_, _>) globalLocalisation =
         fun (force: bool, forceGlobal: bool) ->
@@ -339,3 +339,14 @@ module Helpers =
 
             processLocalisation commands variableCommands (createLocDynamicSettings (lookup)),
             validateLocalisationCommand commands variableCommands (createLocDynamicSettings (lookup))
+
+    let initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs =
+        configs
+        |> List.tryFind (fun (fileName: string, _) ->
+            Path.GetFileName(fileName.AsSpan()).Equals("scopes.cwt", StringComparison.OrdinalIgnoreCase))
+        |> (fun f -> UtilityParser.initializeScopes f (Some(defaultScopeInputs ())))
+
+        configs
+        |> List.tryFind (fun (fileName, _) ->
+            Path.GetFileName(fileName.AsSpan()).Equals("modifier_categories.cwt", StringComparison.OrdinalIgnoreCase))
+        |> (fun f -> UtilityParser.initializeModifierCategories f (Some(defaultModifiersInputs ())))

@@ -16,12 +16,12 @@ module EU4Constants =
           "Culture", [ "culture" ], []
           "Advisor", [ "advisor" ], [] ]
 
-    let defaultScopeInputs =
+    let defaultScopeInputs () =
         defaultScopes
         |> List.map (fun (n, s, ss) ->
-            { NewScope.ScopeInput.name = n
-              NewScope.ScopeInput.aliases = s
-              NewScope.ScopeInput.isSubscopeOf = ss
+            { ScopeInput.name = n
+              ScopeInput.aliases = s
+              ScopeInput.isSubscopeOf = ss
               dataTypeName = None })
 
     let defaultModifiers =
