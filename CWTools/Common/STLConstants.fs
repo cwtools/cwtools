@@ -25,12 +25,12 @@ module STLConstants =
           "Deposit", [ "deposit" ]
           "Archaeological Site", [ "archaeologicalsite"; "archaeological_site" ] ]
 
-    let defaultScopeInputs =
+    let defaultScopeInputs () =
         defaultScopes
         |> List.map (fun (n, s) ->
-            { NewScope.ScopeInput.name = n
-              NewScope.ScopeInput.aliases = s
-              NewScope.ScopeInput.isSubscopeOf = []
+            { ScopeInput.name = n
+              ScopeInput.aliases = s
+              ScopeInput.isSubscopeOf = []
               dataTypeName = None })
 
     type RawStaticModifier = { num: int; tag: string; name: string }

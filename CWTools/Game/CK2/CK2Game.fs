@@ -346,13 +346,7 @@ module CK2GameFunctions =
         updateProvinces (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-        |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs))
-
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some(defaultModifiersInputs ())))
+        initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
         let ck2Mods =
             configs

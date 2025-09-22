@@ -17,7 +17,7 @@ module CK2Constants =
           "Bloodline", [ "bloodline" ], []
           "Wonder", [ "wonder" ], [] ]
 
-    let defaultScopeInputs =
+    let defaultScopeInputs() =
         defaultScopes
         |> List.map (fun (n, s, ss) ->
             { NewScope.ScopeInput.name = n

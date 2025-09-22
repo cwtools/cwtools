@@ -982,7 +982,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  UtilityParser.initializeScopes None (Some defaultScopeInputs)
+                  UtilityParser.initializeScopes None (Some(defaultScopeInputs()))
                   let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
@@ -1061,7 +1061,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  UtilityParser.initializeScopes None (Some defaultScopeInputs)
+                  UtilityParser.initializeScopes None (Some(defaultScopeInputs()))
                   let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
@@ -1146,7 +1146,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  UtilityParser.initializeScopes None (Some defaultScopeInputs)
+                  UtilityParser.initializeScopes None (Some(defaultScopeInputs()))
                   let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =

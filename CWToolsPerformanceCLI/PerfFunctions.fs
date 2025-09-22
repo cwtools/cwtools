@@ -296,7 +296,7 @@ let perfStellaris
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs(), [])
 
             let settings =
                 buildStlSettings defaultRootDir defaultConfigPath false useCache defaultCachePath debugMode
@@ -336,7 +336,7 @@ let perfEU4
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs(), [])
 
             let settings =
                 buildEu4Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -374,7 +374,7 @@ let perfCK3
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs(), [])
 
             let settings =
                 buildCk3Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -414,7 +414,7 @@ let perfHOI4
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs(), [])
 
             let settings =
                 buildHoi4Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -513,7 +513,7 @@ let perfEU5
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs(), [])
 
             let settings =
                 buildEu5Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode

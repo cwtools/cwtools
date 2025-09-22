@@ -201,7 +201,7 @@ let fileOfFileIndex n = fileIndexTable.IndexToFile(n)
 
 let mkPos l c = pos (l, c)
 
-/// an 10 bytes struct
+/// an 16 bytes struct
 [<Struct; CustomEquality; NoComparison; IsReadOnly>]
 #if DEBUG
 [<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {FileName} IsSynthetic={IsSynthetic} -> {DebugCode}")>]
