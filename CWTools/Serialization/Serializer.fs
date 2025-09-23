@@ -410,9 +410,11 @@ let loadGame<'T when 'T :> ComputedData>
         | Some ls, _ -> ls
         | _, Game.STL -> LangHelpers.allSTLLangs
         | _, Game.EU4 -> LangHelpers.allEU4Langs
+        | _, Game.EU5 -> LangHelpers.allEU5Langs
         | _, Game.HOI4 -> LangHelpers.allHOI4Langs
         | _, Game.IR -> LangHelpers.allIRLangs
         | _, Game.VIC2 -> LangHelpers.allVIC2Langs
+        | _, Game.VIC3 -> LangHelpers.allVIC3Langs
         | _, Game.CK2 -> LangHelpers.allCK2Langs
         | _, Game.CK3 -> LangHelpers.allCK3Langs
         | _, Game.Custom -> LangHelpers.allCustomLangs
