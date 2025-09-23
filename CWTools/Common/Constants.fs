@@ -145,100 +145,40 @@ type Lang =
 
 module LangHelpers =
     let allCK2Langs =
-        [| CK2 CK2Lang.English
-           CK2 CK2Lang.French
-           CK2 CK2Lang.German
-           CK2 CK2Lang.Spanish
-           CK2 CK2Lang.Russian |]
+        Enum.GetValues<CK2Lang>()
+        |> Array.filter (fun lang -> lang <> CK2Lang.Default)
+        |> Array.map CK2
 
     let allSTLLangs =
-        [| STL STLLang.English
-           STL STLLang.French
-           STL STLLang.German
-           STL STLLang.Spanish
-           STL STLLang.Russian
-           STL STLLang.Polish
-           STL STLLang.Braz_Por
-           STL STLLang.Chinese
-           STL STLLang.Japanese
-           STL STLLang.Korean |]
+        Enum.GetValues<STLLang>()
+        |> Array.filter (fun lang -> lang <> STLLang.Default)
+        |> Array.map STL
 
     let allHOI4Langs =
-        [| HOI4 HOI4Lang.English
-           HOI4 HOI4Lang.French
-           HOI4 HOI4Lang.German
-           HOI4 HOI4Lang.Spanish
-           HOI4 HOI4Lang.Russian
-           HOI4 HOI4Lang.Polish
-           HOI4 HOI4Lang.Braz_Por
-           HOI4 HOI4Lang.Chinese
-           HOI4 HOI4Lang.Japanese |]
+        Enum.GetValues<HOI4Lang>()
+        |> Array.filter (fun lang -> lang <> HOI4Lang.Default)
+        |> Array.map HOI4
 
     let allEU4Langs =
-        [| EU4 EU4Lang.English
-           EU4 EU4Lang.French
-           EU4 EU4Lang.German
-           EU4 EU4Lang.Spanish |]
+        Enum.GetValues<EU4Lang>()
+        |> Array.filter (fun lang -> lang <> EU4Lang.Default)
+        |> Array.map EU4
 
-    let allEU5Langs =
-        [ EU5 EU5Lang.English
-          EU5 EU5Lang.Chinese
-          EU5 EU5Lang.French
-          EU5 EU5Lang.German
-          EU5 EU5Lang.Japanese
-          EU5 EU5Lang.Korean
-          EU5 EU5Lang.Polish
-          EU5 EU5Lang.Russian
-          EU5 EU5Lang.Spanish
-          EU5 EU5Lang.Turkish
-          EU5 EU5Lang.Braz_Por ]
+    let allEU5Langs = Enum.GetValues<EU5Lang>() |> Array.map EU5
 
 
-    let allIRLangs =
-        [| IR IRLang.English
-           IR IRLang.French
-           IR IRLang.German
-           IR IRLang.Spanish
-           IR IRLang.Russian
-           IR IRLang.Chinese |]
+    let allIRLangs = Enum.GetValues<IRLang>() |> Array.map IR
 
-    let allVIC2Langs =
-        [| VIC2 VIC2Lang.English
-           VIC2 VIC2Lang.French
-           VIC2 VIC2Lang.German
-           VIC2 VIC2Lang.Spanish |]
+    let allVIC2Langs = Enum.GetValues<VIC2Lang>() |> Array.map VIC2
 
-    let allCK3Langs =
-        [| CK3 CK3Lang.English
-           CK3 CK3Lang.French
-           CK3 CK3Lang.German
-           CK3 CK3Lang.Spanish
-           CK3 CK3Lang.Chinese
-           CK3 CK3Lang.Russian
-           CK3 CK3Lang.Korean |]
+    let allCK3Langs = Enum.GetValues<CK3Lang>() |> Array.map CK3
 
-    let allVIC3Langs =
-        [| VIC3 VIC3Lang.English
-           VIC3 VIC3Lang.Chinese
-           VIC3 VIC3Lang.French
-           VIC3 VIC3Lang.German
-           VIC3 VIC3Lang.Japanese
-           VIC3 VIC3Lang.Korean
-           VIC3 VIC3Lang.Polish
-           VIC3 VIC3Lang.Russian
-           VIC3 VIC3Lang.Spanish
-           VIC3 VIC3Lang.Turkish
-           VIC3 VIC3Lang.Braz_Por |]
+    let allVIC3Langs = Enum.GetValues<VIC3Lang>() |> Array.map VIC3
 
     let allCustomLangs =
-        [| Custom CustomLang.English
-           Custom CustomLang.French
-           Custom CustomLang.German
-           Custom CustomLang.Spanish
-           Custom CustomLang.Russian
-           Custom CustomLang.Polish
-           Custom CustomLang.Braz_Por
-           Custom CustomLang.Chinese |]
+        Enum.GetValues<CustomLang>()
+        |> Array.filter (fun lang -> lang <> CustomLang.Default)
+        |> Array.map Custom
 
 type RawEffect =
     { name: string
