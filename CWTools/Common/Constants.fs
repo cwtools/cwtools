@@ -265,9 +265,10 @@ module rec NewScope =
 
     type ScopeWrapper = byte
 
+    [<Sealed>]
     type ScopeManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, Scope>()
+        let mutable dict = Dictionary<string, Scope>(StringComparer.OrdinalIgnoreCase)
         let mutable reverseDict = Dictionary<Scope, ScopeInput>()
         let mutable groupDict = Map<string, Scope list>(Seq.empty)
         let mutable complexEquality = false
@@ -296,7 +297,7 @@ module rec NewScope =
                 ()
 
             (fun (x: string) ->
-                let found, value = dict.TryGetValue(x.ToLower())
+                let found, value = dict.TryGetValue(x)
 
                 if found then
                     value
@@ -307,7 +308,7 @@ module rec NewScope =
         let init (scopes: ScopeInput array, scopeGroups: (string * string list) array) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
-            dict <- Dictionary<string, Scope>()
+            dict <- Dictionary<string, Scope>(StringComparer.OrdinalIgnoreCase)
             reverseDict <- Dictionary<Scope, ScopeInput>()
             dict.Add("any", anyScope)
             dict.Add("all", anyScope)
@@ -321,7 +322,7 @@ module rec NewScope =
             let addScope (newScope: ScopeInput) =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
-                newScope.aliases |> List.iter (fun s -> dict.Add(s, Scope(newID)))
+                newScope.aliases |> List.iter (fun s -> dict[s] <- Scope(newID))
                 reverseDict.Add(Scope(newID), newScope)
 
                 match newScope.dataTypeName with
@@ -399,7 +400,9 @@ module rec NewScope =
     [<Sealed>]
     type ModifierCategoryManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
+
+        let mutable dict =
+            Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
 
         let mutable reverseDict = Dictionary<ModifierCategory, ModifierCategoryInput>()
 
@@ -828,7 +831,7 @@ type EventTargetDataLink =
       dataPrefix: string option
       sourceRuleType: string
       dataLinkType: DataLinkType }
- 
+
 type EventTargetLink =
     | SimpleLink of ScopedEffect
     | DataLink of EventTargetDataLink
