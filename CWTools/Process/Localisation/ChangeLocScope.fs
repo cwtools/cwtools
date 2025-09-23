@@ -109,7 +109,7 @@ module ChangeLocScope =
                         let exact = validScopes |> List.exists currentScope.IsOfScope
 
                         match context.CurrentScope, validScopes, exact with
-                        | x, _, _ when x = context.Root.AnyScope ->
+                        | x, _, _ when x.Equals context.Root.AnyScope ->
                             (LocContextResult.NewScope
                                 { source with
                                     Scopes = applyTargetScope e.Target context.Scopes })

@@ -220,7 +220,7 @@ module Scopes =
                                 let refHint = e.RefHint
 
                                 match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                                | x, _, _, true when x = source.Root.AnyScope ->
+                                | x, _, _, true when x.Equals source.Root.AnyScope ->
                                     ({ context with
                                         Scopes = applyTargetScope e.Target context.Scopes },
                                      true),
@@ -230,7 +230,7 @@ module Scopes =
                                         e.IgnoreChildren,
                                         refHint
                                     )
-                                | x, _, _, false when x = source.Root.AnyScope ->
+                                | x, _, _, false when x.Equals source.Root.AnyScope ->
                                     (context, false), NewScope(context, e.IgnoreChildren, refHint)
                                 | _, [], _, _ -> (context, false), NotFound
                                 | _, _, true, true ->
@@ -390,7 +390,7 @@ module Scopes =
                                     let refHint = e.RefHint
 
                                     match context.CurrentScope, possibleScopes, exact with
-                                    | x, _, _ when x = source.Root.AnyScope ->
+                                    | x, _, _ when x.Equals source.Root.AnyScope ->
                                         (context, struct (false, false)), ValueFound refHint
                                     | _, [], _ -> (context, struct (false, false)), NotFound
                                     | _, _, true -> (context, struct (false, false)), ValueFound refHint
@@ -411,7 +411,7 @@ module Scopes =
                                 let exact = possibleScopes |> List.exists currentScope.IsOfScope
 
                                 match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                                | x, _, _, true when x = source.Root.AnyScope ->
+                                | x, _, _, true when x.Equals source.Root.AnyScope ->
                                     ({ context with
                                         Scopes = applyTargetScope e.Target context.Scopes },
                                      struct (false, true)),
@@ -421,7 +421,7 @@ module Scopes =
                                         e.IgnoreChildren,
                                         None
                                     )
-                                | x, _, _, false when x = source.Root.AnyScope ->
+                                | x, _, _, false when x.Equals source.Root.AnyScope ->
                                     (context, struct (false, false)), NewScope(context, e.IgnoreChildren, None)
                                 | _, [], _, _ -> (context, struct (false, false)), NotFound
                                 | _, _, true, true ->
