@@ -338,27 +338,6 @@ let rangeN filename line =
     mkRange filename (mkPos line 0) (mkPos line 0)
 
 let pos0 = mkPos 1 0
-let range0 = rangeN "unknown" 1
-let rangeStartup = rangeN "startup" 1
-let rangeCmdArgs = rangeN "commandLineArgs" 0
-
-let trimRangeToLine (r: range) =
-    let startL, startC = r.StartLine, r.StartColumn
-    let endL, _endC = r.EndLine, r.EndColumn
-
-    if endL <= startL then
-        r
-    else
-        let endL, endC =
-            startL + 1, 0 (* Trim to the start of the next line (we do not know the end of the current line) *)
-
-        range (r.FileIndex, startL, startC, endL, endC)
-
-(* For Diagnostics *)
-let stringOfPos (pos: pos) = sprintf "(%d,%d)" pos.Line pos.Column
-
-let stringOfRange (r: range) =
-    sprintf "%s%s-%s" r.FileName (stringOfPos r.Start) (stringOfPos r.End)
 
 #if CHECK_LINE0_TYPES // turn on to check that we correctly transform zero-based line counts to one-based line counts
 // Visual Studio uses line counts starting at 0, F# uses them starting at 1
@@ -369,12 +348,3 @@ type Line0 = int<ZeroBasedLineAnnotation>
 #else
 type Line0 = int
 #endif
-type Pos01 = Line0 * int
-type Range01 = Pos01 * Pos01
-
-module Line =
-    // Visual Studio uses line counts starting at 0, F# uses them starting at 1
-    let fromZ (line: Line0) = int line + 1
-
-    let toZ (line: int) : Line0 =
-        LanguagePrimitives.Int32WithMeasure(line - 1)
