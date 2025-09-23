@@ -113,19 +113,19 @@ module UtilityParser =
         match parsed with
         | Failure(e, _, _) ->
             log (sprintf "scopedefinitions file %s failed with %s" filename e)
-            ([], [])
+            ([||], [||])
         | Success(s, _, _) ->
             let root = simpleProcess.ProcessNode () "root" (mkZeroFile filename) s
 
             let scopes =
                 root.Child "scopes"
-                |> Option.map (fun c -> c.Children |> List.map parseScopeDef)
-                |> Option.defaultValue []
+                |> Option.map (fun c -> c.Nodes |> Seq.map parseScopeDef |> Seq.toArray)
+                |> Option.defaultValue [||]
 
             let scope_groups =
                 root.Child "scope_groups"
-                |> Option.map (fun c -> c.Children |> List.map parseScopeGroupDef)
-                |> Option.defaultValue []
+                |> Option.map (fun c -> c.Nodes |> Seq.map parseScopeGroupDef |> Seq.toArray)
+                |> Option.defaultValue [||]
 
             scopes, scope_groups
 
@@ -133,11 +133,11 @@ module UtilityParser =
         let scopes, scope_groups =
             match configFile with
             | Some(filename, fileString) -> loadScopeDefinitions filename fileString
-            | None -> [], []
+            | None -> [||], [||]
 
         let fallbackScopes =
             match scopes, fallbackScopes with
-            | [], Some fallbackScopes -> fallbackScopes
+            | [||], Some fallbackScopes -> fallbackScopes
             | _ -> scopes
 
         scopeManager.ReInit(fallbackScopes, scope_groups)
@@ -159,29 +159,29 @@ module UtilityParser =
           NewScope.ModifierCategoryInput.scopes = scopes }
 
 
-    let private loadModCatDefinitions filename fileString =
+    let private loadModCatDefinitions (filename: string) (fileString: string) =
         let parsed = CKParser.parseString fileString filename
 
         match parsed with
         | Failure(e, _, _) ->
-            log (sprintf "modifiercategorydefinitions file %s failed with %s" filename e)
-            []
+            log $"modifiercategorydefinitions file %s{filename} failed with %s{e}"
+            [||]
         | Success(s, _, _) ->
             let root = simpleProcess.ProcessNode () "root" (mkZeroFile filename) s
 
             root.Child "modifier_categories"
-            |> Option.map (fun c -> c.Children |> List.map parseModCatDef)
-            |> Option.defaultValue []
+            |> Option.map (fun c -> c.Nodes |> Seq.map parseModCatDef |> Array.ofSeq)
+            |> Option.defaultValue [||]
 
     let initializeModifierCategories configFile fallbackModifierCategories =
         let modcats =
             match configFile with
             | Some(filename, fileString) -> loadModCatDefinitions filename fileString
-            | None -> []
+            | None -> [||]
 
         let fallbackModifierCategories =
             match modcats, fallbackModifierCategories with
-            | [], Some fallbackModifierCategories -> fallbackModifierCategories
+            | [||], Some fallbackModifierCategories -> fallbackModifierCategories
             | _ -> modcats
 
         modifierCategoryManager.ReInit(fallbackModifierCategories)

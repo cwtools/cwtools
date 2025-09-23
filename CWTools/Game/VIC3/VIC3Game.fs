@@ -18,7 +18,7 @@ module VIC3GameFunctions =
     let afterInit (game: GameObject) = ()
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        initializeScopesAndModifierCategories configs (fun _ -> []) (fun _ -> [])
+        initializeScopesAndModifierCategories configs (fun _ -> [||]) (fun _ -> [||])
 
         let modifiers =
             configs

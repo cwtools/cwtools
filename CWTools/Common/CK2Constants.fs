@@ -3,39 +3,39 @@ namespace CWTools.Common
 module CK2Constants =
 
     let defaultScopes =
-        [ "Character", [ "character" ], []
-          "Title", [ "title" ], []
-          "Province", [ "province" ], []
-          "Offmap", [ "offmap" ], []
-          "War", [ "war" ], []
-          "Siege", [ "siege" ], []
-          "Unit", [ "unit" ], []
-          "Religion", [ "religion" ], []
-          "Culture", [ "culture" ], []
-          "Society", [ "society" ], []
-          "Artifact", [ "artifact" ], []
-          "Bloodline", [ "bloodline" ], []
-          "Wonder", [ "wonder" ], [] ]
+        [| "Character", [ "character" ], []
+           "Title", [ "title" ], []
+           "Province", [ "province" ], []
+           "Offmap", [ "offmap" ], []
+           "War", [ "war" ], []
+           "Siege", [ "siege" ], []
+           "Unit", [ "unit" ], []
+           "Religion", [ "religion" ], []
+           "Culture", [ "culture" ], []
+           "Society", [ "society" ], []
+           "Artifact", [ "artifact" ], []
+           "Bloodline", [ "bloodline" ], []
+           "Wonder", [ "wonder" ], [] |]
 
     let defaultScopeInputs() =
         defaultScopes
-        |> List.map (fun (n, s, ss) ->
-            { NewScope.ScopeInput.name = n
-              NewScope.ScopeInput.aliases = s
-              NewScope.ScopeInput.isSubscopeOf = ss
+        |> Array.map (fun (n, s, ss) ->
+            { ScopeInput.name = n
+              ScopeInput.aliases = s
+              ScopeInput.isSubscopeOf = ss
               dataTypeName = None })
 
     let defaultModifiers =
-        [ "Character", None, [ "character" ]
-          "Province", None, [ "province" ]
-          "Unit", None, [ "unit"; "province" ] ]
+        [| "Character", None, [ "character" ]
+           "Province", None, [ "province" ]
+           "Unit", None, [ "unit"; "province" ] |]
 
     let defaultModifiersInputs () =
         defaultModifiers
-        |> List.map (fun (n, intID, ss) ->
-            { NewScope.ModifierCategoryInput.name = n
-              NewScope.ModifierCategoryInput.internalID = intID
-              NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
+        |> Array.map (fun (n, intID, ss) ->
+            { ModifierCategoryInput.name = n
+              ModifierCategoryInput.internalID = intID
+              ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
     let scriptFolders =
         [| "common"

@@ -286,7 +286,6 @@ module EU4GameFunctions =
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
-
         let triggers, effects = ([], [])
 
         let modifiers =

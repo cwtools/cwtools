@@ -304,7 +304,7 @@ module rec NewScope =
                     log (sprintf "Unexpected scope %O" x)
                     anyScope)
 
-        let init (scopes: ScopeInput list, scopeGroups: (string * string list) list) =
+        let init (scopes: ScopeInput array, scopeGroups: (string * string list) array) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
             dict <- Dictionary<string, Scope>()
@@ -328,7 +328,7 @@ module rec NewScope =
                 | Some dtn -> dataTypeMap <- dataTypeMap |> Map.add (Scope(newID)) dtn
                 | None -> ()
 
-            scopes |> List.iter addScope
+            scopes |> Array.iter addScope
 
             let addScopeSubset (newScope: ScopeInput) =
                 newScope.isSubscopeOf
@@ -336,7 +336,7 @@ module rec NewScope =
                     matchesSet <-
                         (Set.add (parseScope () (newScope.aliases |> List.head), parseScope () ss) matchesSet))
 
-            scopes |> List.iter addScopeSubset
+            scopes |> Array.iter addScopeSubset
 
             if Set.isEmpty matchesSet then
                 ()
@@ -345,8 +345,8 @@ module rec NewScope =
 
             groupDict <-
                 scopeGroups
-                |> List.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
-                |> Map.ofList
+                |> Array.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
+                |> Map.ofArray
 
         member this.GetName(scope: Scope) =
             let found, value = reverseDict.TryGetValue scope
@@ -368,7 +368,7 @@ module rec NewScope =
             | "all" -> this.AllScopes
             | x -> [ this.ParseScope () x ]
 
-        member this.ReInit(scopes: ScopeInput list, scopeGroups: (string * string list) list) =
+        member this.ReInit(scopes: ScopeInput array, scopeGroups: (string * string list) array) =
             init (scopes, scopeGroups)
 
         member this.MatchesScope (source: Scope) (target: Scope) =
@@ -435,7 +435,7 @@ module rec NewScope =
                     log (sprintf "Unexpected modifier category %O" x)
                     anyModifier)
 
-        let init (modifiers: ModifierCategoryInput list) =
+        let init (modifiers: ModifierCategoryInput array) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
             dict <- Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
@@ -460,7 +460,7 @@ module rec NewScope =
                 | Some id -> idMap <- idMap |> (Map.add id modifier)
                 | None -> ()
 
-            modifiers |> List.iter addModifier
+            modifiers |> Array.iter addModifier
 
         member this.GetName(modifier: ModifierCategory) =
             let found, value = reverseDict.TryGetValue modifier
@@ -475,7 +475,7 @@ module rec NewScope =
         member this.AnyModifier = anyModifier
         member this.InvalidModifiere = invalidModifier
         member this.ParseModifier = parseModifierCategory
-        member this.ReInit(modifiers: ModifierCategoryInput list) = init modifiers
+        member this.ReInit(modifiers: ModifierCategoryInput array) = init modifiers
 
         member this.SupportsScope (source: ModifierCategory) (target: Scope) =
             match Set.contains (source, target) matchesSet, source, target with
