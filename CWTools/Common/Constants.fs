@@ -2,6 +2,7 @@ namespace CWTools.Common
 
 open System.Collections.Generic
 open System
+open System.Runtime.CompilerServices
 open CWTools.Utilities
 
 type Game =
@@ -272,7 +273,7 @@ module rec NewScope =
         let mutable reverseDict = Dictionary<Scope, ScopeInput>()
         let mutable groupDict = Map<string, Scope list>(Seq.empty)
         let mutable complexEquality = false
-        let mutable matchesSet = Set<Scope * Scope>(Seq.empty)
+        let mutable matchesSet = Set<struct (Scope * Scope)>(Seq.empty)
         let mutable dataTypeMap = Map<Scope, string>(Seq.empty)
         let anyScope = Scope(0uy)
 
@@ -355,7 +356,7 @@ module rec NewScope =
             if found then
                 value.name
             else
-                log (sprintf "Unexpected scope %O" scope.tag)
+                log (sprintf "Unexpected scope %O" scope.Tag)
                 ""
 
         member this.AllScopes = reverseDict.Keys |> List.ofSeq
@@ -376,14 +377,14 @@ module rec NewScope =
             if not complexEquality then
                 match source, target with
                 | x, _
-                | _, x when x = anyScope -> true
-                | x, y -> x = y
+                | _, x when x.Equals anyScope -> true
+                | x, y -> x.Equals y
             else
-                match Set.contains (source, target) matchesSet, source, target with
+                match Set.contains struct (source, target) matchesSet, source, target with
                 | true, _, _ -> true
                 | _, x, _
-                | _, _, x when x = anyScope -> true
-                | _, x, y -> x = y
+                | _, _, x when x.Equals anyScope -> true
+                | _, x, y -> x.Equals y
 
         member this.DataTypeForScope(scope: Scope) =
             Map.tryFind scope dataTypeMap |> Option.defaultValue (scope.ToString())
@@ -530,30 +531,38 @@ module rec NewScope =
 
     type Modifier = ModifierCategory
 
-    [<Sealed>]
+    [<Struct; CustomComparison; CustomEquality; IsReadOnly>]
     type Scope(tag: byte) =
-        member _.tag = tag
+        member _.Tag = tag
         override x.ToString() = scopeManager.GetName(x)
 
         override x.Equals(target: obj) =
             match target with
-            | :? Scope as t -> tag = t.tag
+            | :? Scope as t -> x.Equals t
             | _ -> false
 
+        member x.Equals(target: Scope) = tag = target.Tag
+
         override x.GetHashCode() = tag.GetHashCode()
+
+        interface IComparable<Scope> with
+            member this.CompareTo scope = scope.Tag.CompareTo tag
 
         interface IComparable with
             member this.CompareTo target =
                 match target with
-                | :? Scope as t -> tag.CompareTo t.tag
+                | :? Scope as t -> tag.CompareTo t.Tag
                 | _ -> 0
+
+        interface IEquatable<Scope> with
+            member this.Equals(target: Scope) = this.Equals target
 
         member this.AnyScope = scopeManager.AnyScope
 
         member this.IsOfScope target =
             match this, target with
             | _, x
-            | x, _ when x = scopeManager.AnyScope -> true
+            | x, _ when x.Equals scopeManager.AnyScope -> true
             | this, target -> scopeManager.MatchesScope this target
 
 
