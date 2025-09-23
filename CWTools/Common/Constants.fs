@@ -264,8 +264,6 @@ module rec NewScope =
           isSubscopeOf: string list
           dataTypeName: string option }
 
-    type ScopeWrapper = byte
-
     [<Sealed>]
     type ScopeManager() =
         let mutable initialized = false
