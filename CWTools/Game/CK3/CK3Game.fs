@@ -22,7 +22,7 @@ module CK3GameFunctions =
     let afterInit (game: GameObject) = updateModifiers (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        initializeScopesAndModifierCategories configs (fun _ -> []) (fun _ -> [])
+        initializeScopesAndModifierCategories configs (fun _ -> [||]) (fun _ -> [||])
 
         let irMods =
             configs

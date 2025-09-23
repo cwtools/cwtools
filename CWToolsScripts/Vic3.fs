@@ -31,7 +31,7 @@ let generateVic3 () =
     let effectPath = root + @"config/effects.cwt"
 
     let listEffectPath = root + @"config/list_effects.cwt"
-    UtilityParser.initializeScopes (Some(scopePath, System.IO.File.ReadAllText scopePath)) (Some [])
+    UtilityParser.initializeScopes (Some(scopePath, System.IO.File.ReadAllText scopePath)) (Some [||])
 
     let rulesFiles =
         [ triggerPath; listTriggerPath; effectPath; listEffectPath ]

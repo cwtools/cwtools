@@ -4,35 +4,35 @@ namespace CWTools.Common
 
 module EU4Constants =
     let defaultScopes =
-        [ "Country", [ "country" ], []
-          "Province", [ "province" ], []
-          "Trade Node", [ "trade_node"; "tradenode" ], [ "province" ]
-          "Unit", [ "unit" ], []
-          "Monarch", [ "monarch" ], []
-          "Heir", [ "heir" ], []
-          "Consort", [ "consort" ], []
-          "Rebel Faction", [ "rebel_faction" ], []
-          "Religion", [ "religion" ], []
-          "Culture", [ "culture" ], []
-          "Advisor", [ "advisor" ], [] ]
+        [| "Country", [ "country" ], []
+           "Province", [ "province" ], []
+           "Trade Node", [ "trade_node"; "tradenode" ], [ "province" ]
+           "Unit", [ "unit" ], []
+           "Monarch", [ "monarch" ], []
+           "Heir", [ "heir" ], []
+           "Consort", [ "consort" ], []
+           "Rebel Faction", [ "rebel_faction" ], []
+           "Religion", [ "religion" ], []
+           "Culture", [ "culture" ], []
+           "Advisor", [ "advisor" ], [] |]
 
     let defaultScopeInputs () =
         defaultScopes
-        |> List.map (fun (n, s, ss) ->
+        |> Array.map (fun (n, s, ss) ->
             { ScopeInput.name = n
               ScopeInput.aliases = s
               ScopeInput.isSubscopeOf = ss
               dataTypeName = None })
 
     let defaultModifiers =
-        [ "Country", None, [ "country" ]; "Province", None, [ "province" ] ]
+        [| "Country", None, [ "country" ]; "Province", None, [ "province" ] |]
 
     let defaultModifiersInputs () =
         defaultModifiers
-        |> List.map (fun (n, intID, ss) ->
-            { NewScope.ModifierCategoryInput.name = n
-              NewScope.ModifierCategoryInput.internalID = intID
-              NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
+        |> Array.map (fun (n, intID, ss) ->
+            { ModifierCategoryInput.name = n
+              ModifierCategoryInput.internalID = intID
+              ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
     let scriptFolders =
         [| "common/advisortypes"
