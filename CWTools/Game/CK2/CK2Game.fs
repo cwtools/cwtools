@@ -118,7 +118,8 @@ module CK2GameFunctions =
             | TitleType.Kingdom, false -> (ells, es, klls, value :: ks, dnlls, dns, dhlls, dhs, clls, cs, blls, bs)
             | TitleType.Duchy_Normal, true -> (ells, es, klls, ks, value :: dnlls, dns, dhlls, dhs, clls, cs, blls, bs)
             | TitleType.Duchy_Normal, false -> (ells, es, klls, ks, dnlls, value :: dns, dhlls, dhs, clls, cs, blls, bs)
-            | TitleType.Duchy_Hired, true -> (ells, es, klls, ks, dnlls, dns, value :: value :: dhlls, dhs, clls, cs, blls, bs)
+            | TitleType.Duchy_Hired, true ->
+                (ells, es, klls, ks, dnlls, dns, value :: value :: dhlls, dhs, clls, cs, blls, bs)
             | TitleType.Duchy_Hired, false -> (ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, cs, blls, bs)
             | TitleType.County, true -> (ells, es, klls, ks, dnlls, dns, dhlls, dhs, value :: clls, cs, blls, bs)
             | TitleType.County, false -> (ells, es, klls, ks, dnlls, dns, dhlls, dhs, clls, value :: cs, blls, bs)
@@ -222,7 +223,9 @@ module CK2GameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.tryFind (fun f -> f.overwrite <> Overwrite.Overwritten && Path.GetFileName(f.filepath) = "definition.csv")
+            |> List.tryFind (fun f ->
+                f.overwrite <> Overwrite.Overwritten
+                && Path.GetFileName(f.filepath) = "definition.csv")
 
         match provinceFile with
         | None -> ()
@@ -348,11 +351,7 @@ module CK2GameFunctions =
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
-        let ck2Mods =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let ck2Mods = getActualModifiers configs
 
         let ck2LocCommands =
             configs
@@ -372,11 +371,7 @@ module CK2GameFunctions =
                     ft)
             |> Option.defaultValue (CWTools.Process.Scopes.CK2.scopedEffects () |> List.map SimpleLink)
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
+        let featureSettings = getFeatureSettings configs
 
         let triggers, effects = ([], [])
 
