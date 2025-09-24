@@ -199,9 +199,9 @@ module internal SharedParsers =
         <?> "quoted string"
 
     // "yes" and "no" are case-sensitive.
-    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot isValueChar >>% YesBool
+    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot isValueChar >>% Bool(true)
 
-    let valueBNo = skipString "no" .>> nextCharSatisfiesNot isValueChar >>% NoBool
+    let valueBNo = skipString "no" .>> nextCharSatisfiesNot isValueChar >>% Bool(false)
 
     let valueInt = pint64 .>> nextCharSatisfiesNot isValueChar |>> int |>> Int
     let valueFloat = pfloat .>> nextCharSatisfiesNot isValueChar |>> decimal |>> Float

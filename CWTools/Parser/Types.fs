@@ -131,9 +131,6 @@ module Types =
             | KeyValue kv -> kv.GetHashCode()
             | Value(r, v) -> v.GetHashCode()
 
-    let YesBool = Bool true
-    let NoBool = Bool false
-    
     [<StructuralEquality; NoComparison>]
     type ParsedFile = ParsedFile of Statement list
 
