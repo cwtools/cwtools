@@ -83,9 +83,9 @@ type Lookup() =
     member val typeDefs: TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)
     member val enumDefs: Map<string, string * (string * range option) array> = Map.empty with get, set
-    member val typeDefInfo: Collections.Map<string, TypeDefInfo array> = Map.empty with get, set
-    member val typeDefInfoForValidation: Collections.Map<string, (string * range) list> = Map.empty with get, set
-    member val varDefInfo: Collections.Map<string, (string * range) array> = Map.empty with get, set
+    member val typeDefInfo: Map<string, TypeDefInfo array> = Map.empty with get, set
+    member val typeDefInfoForValidation: Map<string, struct (string * range) array> = Map.empty with get, set
+    member val varDefInfo: Map<string, (string * range) array> = Map.empty with get, set
     member val savedEventTargets: ResizeArray<string * range * Scope> = new ResizeArray<_>() with get, set
 
 type JominiLookup() =
