@@ -13,38 +13,38 @@ type Lookup() =
 
     let mutable _allCoreLinks: Effect list = []
 
-    let _triggers () =
+    let getTriggers () =
         _allCoreLinks
         |> List.filter (fun l -> l.Type = EffectType.Trigger || l.Type = EffectType.ValueTrigger)
 
     let mutable _triggersMap: Lazy<EffectMap> = lazy (EffectMap())
 
     let resetTriggers () =
-        _triggersMap <- lazy (_triggers () |> EffectMap.FromList)
+        _triggersMap <- lazy (getTriggers () |> EffectMap.FromList)
 
-    let _effects () =
+    let getEffects () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Effect)
 
     let mutable _effectsMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetEffects () =
-        _effectsMap <- lazy (_effects () |> (fun l -> EffectMap.FromList(l)))
+        _effectsMap <- lazy (getEffects () |> (fun l -> EffectMap.FromList(l)))
 
-    let _eventTargetLinks () =
+    let getEventTargetLinks () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Link)
 
     let mutable _eventTargetLinksMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetEventTargetLinks () =
-        _eventTargetLinksMap <- lazy (_eventTargetLinks () |> EffectMap.FromList)
+        _eventTargetLinksMap <- lazy (getEventTargetLinks () |> EffectMap.FromList)
 
-    let _valueTriggers () =
+    let getValueTriggers () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.ValueTrigger)
 
     let mutable _valueTriggersMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetValueTriggers () =
-        _valueTriggersMap <- lazy (_valueTriggers () |> EffectMap.FromList)
+        _valueTriggersMap <- lazy (getValueTriggers () |> EffectMap.FromList)
 
     member _.allCoreLinks
         with get () = _allCoreLinks
@@ -55,13 +55,13 @@ type Lookup() =
             resetEventTargetLinks ()
             resetValueTriggers ()
 
-    member _.triggers = _triggers ()
+    member _.triggers = getTriggers ()
     member this.triggersMap = _triggersMap.Force()
-    member _.effects = _effects ()
+    member _.effects = getEffects ()
     member this.effectsMap = _effectsMap.Force()
-    member _.eventTargetLinks = _eventTargetLinks ()
+    member _.eventTargetLinks = getEventTargetLinks ()
     member this.eventTargetLinksMap = _eventTargetLinksMap.Force()
-    member _.valueTriggers = _valueTriggers ()
+    member _.valueTriggers = getValueTriggers ()
     member this.valueTriggerMap = _valueTriggersMap.Force()
     member val onlyScriptedEffects: Effect list = [] with get, set
     member val onlyScriptedTriggers: Effect list = [] with get, set
