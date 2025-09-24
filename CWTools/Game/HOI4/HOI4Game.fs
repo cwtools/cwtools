@@ -276,18 +276,13 @@ module HOI4GameFunctions =
 
         initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
-        let hoi4Mods =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let hoi4Mods = getActualModifiers configs
 
         let hoi4LocCommands =
             configs
             |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
             |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
             |> Option.defaultValue ([], [], [])
-
 
         let triggers, effects = ([], [])
 
@@ -303,11 +298,7 @@ module HOI4GameFunctions =
                     ft)
             |> Option.defaultValue []
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
+        let featureSettings = getFeatureSettings configs
 
         { triggers = triggers
           effects = effects

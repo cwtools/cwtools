@@ -20,11 +20,7 @@ module VIC3GameFunctions =
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         initializeScopesAndModifierCategories configs (fun _ -> [||]) (fun _ -> [||])
 
-        let modifiers =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let modifiers = getActualModifiers configs
 
         let jominiLocDataTypes =
             configs
@@ -76,11 +72,7 @@ module VIC3GameFunctions =
                 eprintfn "triggers.log was not found in VIC3 config"
                 [])
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
+        let featureSettings = getFeatureSettings configs
 
         { triggers = triggers
           effects = effects

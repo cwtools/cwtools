@@ -20,11 +20,7 @@ module EU5GameFunctions =
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         initializeScopesAndModifierCategories configs (fun _ -> [||]) (fun _ -> [||])
 
-        let irMods =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let irMods = getActualModifiers configs
 
         let jominiLocDataTypes =
             configs
@@ -76,12 +72,7 @@ module EU5GameFunctions =
                 eprintfn "triggers.log was not found in EU5 config"
                 [])
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
-
+        let featureSettings = getFeatureSettings configs
 
         { triggers = irTriggers
           effects = irEffects

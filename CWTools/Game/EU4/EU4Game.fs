@@ -287,12 +287,7 @@ module EU4GameFunctions =
         initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
         let triggers, effects = ([], [])
-
-        let modifiers =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let modifiers = getActualModifiers configs
 
         let eu4LocCommands =
             configs
@@ -312,11 +307,7 @@ module EU4GameFunctions =
                     ft)
             |> Option.defaultValue (CWTools.Process.Scopes.EU4.scopedEffects () |> List.map SimpleLink)
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
+        let featureSettings = getFeatureSettings configs
 
         { triggers = triggers
           effects = effects

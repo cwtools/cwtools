@@ -94,11 +94,7 @@ module VIC2GameFunctions =
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
         initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
-        let vic2Mods =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let vic2Mods = getActualModifiers configs
 
         let vic2LocCommands =
             configs
@@ -118,11 +114,7 @@ module VIC2GameFunctions =
                     ft)
             |> Option.defaultValue []
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
+        let featureSettings = getFeatureSettings configs
 
         { triggers = []
           effects = []

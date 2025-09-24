@@ -345,3 +345,15 @@ module Helpers =
         |> List.tryFind (fun (fileName, _) ->
             Path.GetFileName(fileName.AsSpan()).Equals("modifier_categories.cwt", StringComparison.OrdinalIgnoreCase))
         |> (fun f -> UtilityParser.initializeModifierCategories f (Some(defaultModifiersInputs ())))
+
+    let getActualModifiers configs =
+        configs
+        |> List.tryFind (fun (fileName: string, _) -> Path.GetFileName fileName = "modifiers.cwt")
+        |> Option.map (fun (fileName, fileText) -> UtilityParser.loadModifiers fileName fileText)
+        |> Option.defaultValue []
+
+    let getFeatureSettings configs =
+        configs
+        |> List.tryFind (fun (fileName: string, _) -> Path.GetFileName fileName = "settings.cwt")
+        |> Option.bind (fun (fileName, fileText) -> UtilityParser.loadSettingsFile fileName fileText)
+        |> Option.defaultValue UtilityParser.FeatureSettings.Default
