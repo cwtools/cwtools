@@ -69,7 +69,6 @@ type Lookup() =
     member val rootFolders: WorkspaceDirectoryInput list = [] with get, set
     member val staticModifiers: StaticModifier list = [] with get, set
     member val coreModifiers: ActualModifier list = [] with get, set
-    member val definedScriptVariables: string list = [] with get, set
     member val embeddedScriptedLoc: string list = [] with get, set
     member val _realScriptedLoc: string list = [] with get, set
     member this.scriptedLoc = this.embeddedScriptedLoc @ this._realScriptedLoc
