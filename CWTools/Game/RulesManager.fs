@@ -308,8 +308,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             lookup.typeDefInfo
             |> Map.map (fun _ v ->
                 v
-                |> Seq.choose (fun tdi -> if tdi.validate then Some(tdi.id, tdi.range) else None)
-                |> Seq.toList)
+                |> Array.choose (fun tdi ->
+                    if tdi.validate then
+                        Some(struct (tdi.id, tdi.range))
+                    else
+                        None))
 
         settings.refreshConfigAfterFirstTypesHook lookup resources embeddedSettings
 

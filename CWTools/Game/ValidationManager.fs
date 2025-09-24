@@ -289,7 +289,7 @@ type ValidationManager<'T when 'T :> ComputedData>
     let globalTypeDefLoc () =
         let valLocCommand = validateLocalisationCommand services.lookup
 
-        let validateLoc (values: (string * range) list) (locdef: TypeLocalisation) =
+        let validateLoc (values: struct (string * range) array) (locdef: TypeLocalisation) =
             let res1 (value: string) =
                 let validate (locentry: LocEntry) =
                     valLocCommand locentry (createScopeContextFromReplace locdef.replaceScopes)
@@ -307,22 +307,22 @@ type ValidationManager<'T when 'T :> ComputedData>
             // let validateLocEntry (locentry : LocEntry<_>) =
             // locentry.
             // services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
-            values |> List.filter (fun (s, _) -> s.Contains('.') |> not)
-            <&!&> (fun (key, range) ->
+            values |> Seq.filter (fun struct (s, _) -> s.Contains('.') |> not)
+            <&!&> (fun struct (key, range) ->
                 let fakeLeaf = LeafValue(Value.Bool true, range)
                 let lockey = locdef.prefix + key + locdef.suffix
 
                 if locdef.explicitField.IsNone then res1 lockey else OK
                 <&&> checkLocKeysLeafOrNode (services.localisationKeys ()) lockey fakeLeaf)
 
-        let validateType (typename: string) (values: (string * range) list) =
+        let validateType (typename: string) (values: struct (string * range) array) =
             match services.lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
             | None -> OK
             | Some td ->
                 td.localisation |> List.filter (fun locdef -> locdef.required)
                 <&!&> validateLoc values
 
-        let validateSubType (typename: string) (values: (string * range) list) =
+        let validateSubType (typename: string) (values: struct (string * range) array) =
             let splittype = typename.Split('.', 2)
 
             if splittype.Length > 1 then
