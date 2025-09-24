@@ -309,7 +309,7 @@ type ValidationManager<'T when 'T :> ComputedData>
             // services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
             values |> Seq.filter (fun struct (s, _) -> s.Contains('.') |> not)
             <&!&> (fun struct (key, range) ->
-                let fakeLeaf = LeafValue(Value.Bool true, range)
+                let fakeLeaf = LeafValue(YesBool, range)
                 let lockey = locdef.prefix + key + locdef.suffix
 
                 if locdef.explicitField.IsNone then res1 lockey else OK
