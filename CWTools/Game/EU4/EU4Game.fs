@@ -136,7 +136,7 @@ module EU4GameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         lookup.coreModifiers
-        |> List.map (fun c ->
+        |> Array.map (fun c ->
             AliasRule(
                 "modifier",
                 NewRule(
@@ -201,8 +201,7 @@ module EU4GameFunctions =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-            |> Seq.toArray
+            |> Array.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
         )
 
     let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
@@ -239,9 +238,9 @@ module EU4GameFunctions =
 
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map _.tag |> List.toArray
+              values = lookup.coreModifiers |> Array.map _.tag
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) |> List.toArray }
+              valuesWithRange = lookup.coreModifiers |> Array.map (fun m -> m.tag, None) }
 
         let legacyGovEnums =
             { key = "hardcoded_legacy_only_governments"

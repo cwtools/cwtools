@@ -72,9 +72,9 @@ module VIC2GameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup: VIC2Lookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> Seq.map _.tag |> Seq.toArray
+              values = lookup.coreModifiers |> Array.map _.tag
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> Seq.map (fun m -> m.tag, None) |> Seq.toArray }
+              valuesWithRange = lookup.coreModifiers |> Array.map (fun m -> m.tag, None) }
 
         let provinceEnums =
             { key = "provinces"

@@ -208,7 +208,7 @@ module HOI4GameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         lookup.coreModifiers
-        |> List.map (fun c ->
+        |> Array.map (fun c ->
             AliasRule(
                 "modifier",
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
@@ -216,7 +216,7 @@ module HOI4GameFunctions =
 
     let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
         lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
-        rules.Concat(addModifiersWithScopes lookup).ToArray()
+        Array.append rules (addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup: HOI4Lookup) _ _ =
         let provinceEnums =

@@ -1,5 +1,6 @@
 namespace CWTools.Games.Stellaris
 
+open System.Diagnostics
 open CWTools.Game
 open CWTools.Parser
 open CWTools.Process
@@ -151,8 +152,13 @@ module STLGameFunctions =
         let typeGeneratedModifiers =
             RulesHelpers.generateModifiersFromTypes lookup.typeDefs lookup.typeDefInfo
 
-        let current = embeddedSettings.modifiers @ typeGeneratedModifiers
-        lookup.coreModifiers <- addGeneratedModifiers current (EntitySet(resources.AllEntities()))
+        // When everything is changed to arrays later, this code needs to be updated accordingly.
+        Debug.Assert(lookup.typeDefs.GetType() = typeof<list<TypeDefinition>>)
+        let current = (embeddedSettings.modifiers |> List.ofArray) @ typeGeneratedModifiers
+
+        lookup.coreModifiers <-
+            addGeneratedModifiers current (EntitySet(resources.AllEntities()))
+            |> List.toArray
 
     // let updateModifiers(game : GameObject) =
     // game.Lookup.coreModifiers <- addGeneratedModifiers game.Settings.embedded.modifiers (EntitySet (game.Resources.AllEntities()))
@@ -300,8 +306,7 @@ module STLGameFunctions =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-            |> Seq.toArray
+            |> Array.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
         )
 
     let refreshConfigAfterFirstTypesHook
@@ -379,11 +384,7 @@ module STLGameFunctions =
                     Utils.logError "setup.log was not found in stellaris config"
                     [])
 
-        let stlRulesMods =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let stlRulesMods = getActualModifiers configs
 
         let stlLocCommands =
             configs
@@ -407,7 +408,7 @@ module STLGameFunctions =
 
         { triggers = triggers
           effects = effects
-          modifiers = stlSetupModifiers @ stlRulesMods
+          modifiers = stlSetupModifiers.Concat(stlRulesMods).ToArray()
           embeddedFiles = embeddedFiles
           cachedResourceData = cachedResourceData
           localisationCommands = Legacy stlLocCommands

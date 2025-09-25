@@ -93,8 +93,7 @@ let refreshConfigAfterHook
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-            |> Seq.toArray
+            |> Array.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
         )
 
     lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
@@ -109,7 +108,7 @@ let refreshConfigAfterHook
         @ addDataEventTargetLinks lookup embedded wildcardLinks
         |> Array.ofList
 
-    lookup.allCoreLinks <- Array.concat [|ts; es; ls|] |> List.ofArray
+    lookup.allCoreLinks <- Array.concat [| ts; es; ls |] |> List.ofArray
 
 let private addModifiersWithScopes (lookup: Lookup) =
     let modifierOptions (modifier: ActualModifier) =
@@ -126,9 +125,9 @@ let private addModifiersWithScopes (lookup: Lookup) =
          AliasRule(
              "modifier",
              NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
-         ))
-     ).Concat(RulesHelpers.generateModifierRulesFromTypes(lookup.typeDefs))
-     |> Array.ofSeq
+         )))
+        .Concat(RulesHelpers.generateModifierRulesFromTypes (lookup.typeDefs))
+    |> Array.ofSeq
 
 let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
     let addTriggerDocsScopes (lookup: Lookup) (rules: RootRule array) =
@@ -198,17 +197,17 @@ let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
     let ts = updateScriptedTriggers rules embedded
     let es = updateScriptedEffects embedded
     let ls = (updateEventTargetLinks embedded) |> Array.ofList
-    lookup.allCoreLinks <- Array.concat [|ts; es; ls|] |> List.ofArray
+    lookup.allCoreLinks <- Array.concat [| ts; es; ls |] |> List.ofArray
     lookup.coreModifiers <- embedded.modifiers
     // eprintfn "crh %A" ts
-    addTriggerDocsScopes lookup (Array.append rules (addModifiersWithScopes(lookup)))
+    addTriggerDocsScopes lookup (Array.append rules (addModifiersWithScopes (lookup)))
 
 let refreshConfigBeforeFirstTypesHook (lookup: Lookup) (resources: IResourceAPI<ScriptedEffectComputedData>) _ =
     let modifierEnums =
         { key = "modifiers"
-          values = lookup.coreModifiers |> List.map _.tag |> List.toArray
+          values = lookup.coreModifiers |> Array.map _.tag
           description = "Modifiers"
-          valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) |> List.toArray }
+          valuesWithRange = lookup.coreModifiers |> Array.map (fun m -> m.tag, None) }
 
     let scriptedEffectKeys =
         (resources.AllEntities()

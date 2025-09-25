@@ -73,12 +73,11 @@ module CK2GameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         lookup.coreModifiers
-        |> Seq.map (fun c ->
+        |> Array.map (fun c ->
             AliasRule(
                 "modifier",
                 NewRule(LeafRule(processField c.tag, ValueField(ValueType.Float(-1E+12M, 1E+12M))), modifierOptions c)
             ))
-        |> Seq.toArray
 
     let updateLandedTitles (game: GameObject) =
         let fNode =
@@ -292,10 +291,8 @@ module CK2GameFunctions =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> Seq.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
-            |> Seq.toArray
+            |> Array.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
         )
-
 
     let loadConfigRulesHook rules (lookup: Lookup) embedded =
         let ts = updateScriptedTriggers lookup rules embedded
@@ -307,9 +304,9 @@ module CK2GameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup: CK2Lookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> Seq.map _.tag |> Seq.toArray
+              values = lookup.coreModifiers |> Array.map _.tag
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> Seq.map (fun m -> m.tag, None) |> Seq.toArray }
+              valuesWithRange = lookup.coreModifiers |> Array.map (fun m -> m.tag, None) }
 
         let provinceEnums =
             { key = "provinces"
