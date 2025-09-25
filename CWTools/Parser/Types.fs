@@ -46,11 +46,7 @@ module Types =
         | Operator.QuestionEqual -> "?="
         | x -> failwith (sprintf "Unknown enum value %A" x)
 
-    [<Struct; IsReadOnly>]
-    type Key =
-        | Key of string
-
-        override x.ToString() = let (Key v) = x in sprintf "%s" v
+    type Key = string
 
     [<Struct; IsReadOnly>]
     type KeyValueItem =
@@ -66,7 +62,7 @@ module Types =
         | Int of int
         | Bool of bool
         | Clause of Statement list
-        
+
         static member CreateString(s: string) =
             String(StringResource.stringManager.InternIdentifierToken(s))
 
@@ -95,8 +91,7 @@ module Types =
             | QString stringTokens -> stringTokens
             | _ -> StringResource.stringManager.InternIdentifierToken(x.ToString())
 
-    and
-        [<CustomEquality; NoComparison; Struct; IsReadOnly>] PosKeyValue =
+    and [<CustomEquality; NoComparison; Struct; IsReadOnly>] PosKeyValue =
         | PosKeyValue of range * KeyValueItem
 
         override x.Equals(y) =
