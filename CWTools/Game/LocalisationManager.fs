@@ -93,8 +93,8 @@ type LocalisationManager<'T when 'T :> ComputedData>
             |> List.map (fun (k, g) ->
                 k,
                 g
-                |> List.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> (x.key, x)) |> Seq.toList)
-                |> Map.ofList)
+                |> Seq.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> (x.key, x)))
+                |> Map.ofSeq)
 
         let processLoc = processLocalisation lookup
         lookup.proccessedLoc <- validatableEntries |> List.map processLoc
@@ -129,4 +129,5 @@ type LocalisationManager<'T when 'T :> ComputedData>
         |> List.map (fun (k, g) ->
             k,
             g
-            |> List.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> struct (x.key, x)) |> Seq.toList))
+            |> Seq.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> struct (x.key, x)))
+            |> Seq.toList)
