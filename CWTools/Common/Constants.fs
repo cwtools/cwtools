@@ -467,8 +467,6 @@ module rec NewScope =
 
         member this.Name = modifierCategoryManager.GetName this
 
-    type Modifier = ModifierCategory
-
     [<Struct; CustomComparison; CustomEquality; IsReadOnly>]
     type Scope(tag: byte) =
         member _.Tag = tag
