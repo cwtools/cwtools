@@ -124,7 +124,7 @@ module LanguageFeatures =
                     |> List.tryFind (fun (l, _) -> l = lang)
                 with
                 | Some(_, entries) ->
-                    match entries |> List.tryFind (fun (k, _) -> k = tv) with
+                    match entries |> List.tryFind (fun struct (k, _) -> k = tv) with
                     | Some(_, entry) -> Some entry.position
                     | _ -> None
                 | None -> None
@@ -479,7 +479,8 @@ module LanguageFeatures =
             |> List.filter (fun (k, _) -> sourceTypes |> List.contains k)
             |> List.collect (fun (k, vs) ->
                 vs
-                |> Array.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes) |> List.ofSeq)
+                |> Array.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes)
+                |> List.ofSeq)
 
         let getSourceTypes (x: Map<string, ReferenceDetails list>) =
             Map.toList x
