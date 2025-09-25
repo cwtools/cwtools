@@ -23,7 +23,8 @@ type References<'T when 'T :> ComputedData>
 
     let localisation () =
         localisation
-        |> List.collect (fun l -> l.GetEntries |> Seq.map (fun x -> (x.key, x)) |> Seq.toList)
+        |> Seq.collect (fun l -> l.GetEntries |> Seq.map (fun x -> (x.key, x)))
+        |> Seq.toList
 
     member _.ModifierNames = modifiers ()
     member _.TriggerNames = triggers ()
