@@ -50,7 +50,7 @@ type CachedRuleMetadata =
       varDefs: Map<string, array<string * range>>
       loc: (Lang * Set<string>) list
       files: Set<string>
-      scriptedLoc: string list }
+      scriptedLoc: string array }
 
 type CompletionCategory =
     | Link = 1uy

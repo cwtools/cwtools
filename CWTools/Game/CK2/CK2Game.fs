@@ -39,7 +39,7 @@ module CK2GameFunctions =
              |> Option.defaultValue [||]
              |> Array.map fst)
 
-        { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
+        { scriptedLocCommands = lookup.scriptedLoc |> Array.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets
           setVariables = definedvars |> IgnoreCaseStringSet }
 
@@ -49,13 +49,14 @@ module CK2GameFunctions =
             |> List.choose (function
                 | struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some f.entity
                 | _ -> None)
-            |> List.collect (fun n -> n.Children)
-            |> List.map (fun l -> l.TagText "name")
+            |> Seq.collect _.Nodes
+            |> Seq.map (fun l -> l.TagText "name")
+            |> Array.ofSeq
 
         game.Lookup.embeddedScriptedLoc <-
             game.Settings.embedded.cachedRuleMetadata
-            |> Option.map (fun crm -> crm.scriptedLoc)
-            |> Option.defaultValue []
+            |> Option.map _.scriptedLoc
+            |> Option.defaultValue [||]
 
         game.Lookup.scriptedLoc <- rawLocs
 

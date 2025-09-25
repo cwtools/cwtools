@@ -101,13 +101,14 @@ module HOI4GameFunctions =
             |> List.choose (function
                 | struct (f, _) when f.filepath.Contains("scripted_localisation") -> Some f.entity
                 | _ -> None)
-            |> List.collect (fun n -> n.Children)
-            |> List.map (fun l -> l.TagText "name")
+            |> Seq.collect _.Nodes
+            |> Seq.map (fun l -> l.TagText "name")
+            |> Seq.toArray
 
         game.Lookup.embeddedScriptedLoc <-
             game.Settings.embedded.cachedRuleMetadata
-            |> Option.map (fun crm -> crm.scriptedLoc)
-            |> Option.defaultValue []
+            |> Option.map _.scriptedLoc
+            |> Option.defaultValue [||]
 
         game.Lookup.scriptedLoc <- rawLocs
 
