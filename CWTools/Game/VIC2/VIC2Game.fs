@@ -34,7 +34,7 @@ module VIC2GameFunctions =
              |> Option.defaultValue [||]
              |> Array.map fst)
 
-        { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
+        { scriptedLocCommands = lookup.scriptedLoc |> Array.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventtargets |> Array.map (fun s -> s, scopeManager.AnyScope)
           setVariables = definedvars |> IgnoreCaseStringSet }
 

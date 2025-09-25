@@ -72,7 +72,7 @@ module EU4GameFunctions =
                 )
 
 
-        { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
+        { scriptedLocCommands = lookup.scriptedLoc |> Array.map (fun s -> s, [ scopeManager.AnyScope ])
           eventTargets = eventTargets.Select(fun s -> s, scopeManager.AnyScope).ToArray()
           setVariables = definedVars |> IgnoreCaseStringSet }
 
@@ -92,13 +92,14 @@ module EU4GameFunctions =
             |> List.choose (function
                 | struct (f, _) when f.filepath.Contains("customizable_localization") -> Some f.entity
                 | _ -> None)
-            |> List.collect (fun n -> n.Children)
-            |> List.map (fun l -> l.TagText "name")
+            |> Seq.collect (fun n -> n.Nodes)
+            |> Seq.map (fun l -> l.TagText "name")
+            |> Seq.toArray
 
         game.Lookup.embeddedScriptedLoc <-
             game.Settings.embedded.cachedRuleMetadata
-            |> Option.map (fun crm -> crm.scriptedLoc)
-            |> Option.defaultValue []
+            |> Option.map _.scriptedLoc
+            |> Option.defaultValue [||]
 
         game.Lookup.scriptedLoc <- rawLocs
 
