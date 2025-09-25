@@ -855,8 +855,8 @@ let specialtests =
             :> IGame<STLComputedData>
         // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
         let exp =
-            [ { tag = "test"
-                categories = [ modifierCategoryManager.ParseModifier () "pop" ] } ]
+            [| { tag = "test"
+                 categories = [ modifierCategoryManager.ParseModifier () "pop" ] } |]
 
         Expect.equal (stl.StaticModifiers()) exp ""
 // [<Tests>]

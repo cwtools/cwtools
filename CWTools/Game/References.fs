@@ -13,7 +13,7 @@ type References<'T when 'T :> ComputedData>
         resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
 
     let modifiers () =
-        lookup.staticModifiers |> List.map (fun m -> m.tag)
+        lookup.staticModifiers |> Array.map _.tag
 
     let triggers () =
         lookup.triggers |> List.map (fun t -> t.Name)

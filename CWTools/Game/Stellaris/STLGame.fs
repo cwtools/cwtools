@@ -83,14 +83,14 @@ module STLGameFunctions =
             |> List.choose (function
                 | struct (f, _) when f.filepath.Contains("static_modifiers") -> Some f.entity
                 | _ -> None)
-            |> List.collect (fun n -> n.Children)
+            |> Seq.collect _.Nodes
+            |> Seq.toArray
 
         let modifiers2 =
-            System.Linq.Enumerable.ToLookup(game.Settings.embedded.modifiers, (fun x -> x.tag), (fun x -> x.category))
+            Enumerable.ToLookup(game.Settings.embedded.modifiers, (fun x -> x.tag), (fun x -> x.category))
 
         let newModifiers =
-            rawModifiers
-            |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers2 e)
+            rawModifiers |> Array.map (STLProcess.getStaticModifierCategory modifiers2)
 
         game.Lookup.staticModifiers <- newModifiers
 
