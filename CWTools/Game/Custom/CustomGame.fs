@@ -238,7 +238,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
 
         member _.ScriptedTriggers() = lookup.triggers
         member _.ScriptedEffects() = lookup.effects
-        member _.StaticModifiers() = [] //lookup.staticModifiers
+        member _.StaticModifiers() = [||] //lookup.staticModifiers
         member _.UpdateFile shallow file text = game.UpdateFile shallow file text
         member _.AllEntities() = resources.AllEntities()
 

@@ -237,7 +237,7 @@ type VIC3Game(setupSettings: VIC3Settings) =
 
         member _.ScriptedTriggers() = lookup.triggers
         member _.ScriptedEffects() = lookup.effects
-        member _.StaticModifiers() = [] //lookup.staticModifiers
+        member _.StaticModifiers() = [||] //lookup.staticModifiers
         member _.UpdateFile shallow file text = game.UpdateFile shallow file text
         member _.AllEntities() = resources.AllEntities()
 

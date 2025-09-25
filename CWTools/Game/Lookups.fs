@@ -67,7 +67,7 @@ type Lookup() =
     member val onlyScriptedTriggers: Effect list = [] with get, set
 
     member val rootFolders: WorkspaceDirectoryInput list = [] with get, set
-    member val staticModifiers: StaticModifier list = [] with get, set
+    member val staticModifiers: StaticModifier array = [||] with get, set
     member val coreModifiers: ActualModifier array = [||] with get, set
     member val embeddedScriptedLoc: string list = [] with get, set
     member val _realScriptedLoc: string list = [] with get, set

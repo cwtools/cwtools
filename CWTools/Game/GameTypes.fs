@@ -92,7 +92,7 @@ type IGame =
     abstract GetEventGraphData: GraphDataRequest
     abstract ScriptedTriggers: unit -> Effect list
     abstract ScriptedEffects: unit -> Effect list
-    abstract StaticModifiers: unit -> StaticModifier list
+    abstract StaticModifiers: unit -> StaticModifier array
     abstract ScopesAtPos: pos -> string -> string -> ScopeContext option
     abstract GetEmbeddedMetadata: unit -> CachedRuleMetadata
 
