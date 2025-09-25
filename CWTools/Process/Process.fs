@@ -63,7 +63,6 @@ and [<Sealed>] Leaf =
     val mutable Operator: Operator
     val mutable Trivia: Trivia option
 
-
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteChar
         and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
@@ -611,21 +610,6 @@ module ProcessCore =
           entityType: EntityType }
 
     let processNodeSimple _ = processNode id
-
-    type NodeTypeMap =
-        string * range * LookupContext
-            -> (LookupContext -> (Statement -> Child) -> string -> range -> Statement list -> Node) *
-            string *
-            (LookupContext -> LookupContext)
-
-    let updateContext f n key context =
-        match n with
-        | "" -> f { context with previous = key }
-        | _ ->
-            f
-                { context with
-                    parents = n :: context.parents
-                    previous = key }
 
     type BaseProcess() =
         let rec nodeWindowFun context (backtwo: Statement option, backone: Statement option, acc) (next: Statement) =
