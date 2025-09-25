@@ -64,17 +64,11 @@ module CK2Localisation =
         let makeRangeForRow i fn = mkRange fn (mkPos i 0) (mkPos i 0)
 
         let addFile (filename, filetext: string) =
-            // let retry file msg =
-            //     let rows = LocalisationEntryFallback.ParseRows file |> List.ofSeq
-            //     let rows = rows |> List.mapi (fun i r -> makeRangeForRow i filename, r)
-            //     csvFallback <- rows @ csvFallback
-            //     (false, rows.Length, msg, None)
             let fileRows =
                 filetext.Split([| System.Environment.NewLine |], System.StringSplitOptions.RemoveEmptyEntries)
-                |> Array.filter (fun l -> l.StartsWith("#CODE") || not (l.StartsWith("#")))
+                |> Array.filter (fun l -> l.StartsWith("#CODE") || not (l.StartsWith('#')))
                 |> List.ofArray
-            //|> String.concat "\n"
-            // try
+
             let rows =
                 fileRows
                 |> List.map (parseRow filename)
@@ -85,20 +79,6 @@ module CK2Localisation =
             let rows = rows |> List.mapi (fun i r -> makeRangeForRow i filename, r)
             csv <- rows @ csv
             (true, rows.Length, "", None)
-        // with
-        // | Failure msg ->
-        //     try
-        //         retry file msg
-        //     with
-        //     | Failure msg2 ->
-        //         eprintfn "%A %A" msg msg2
-        //         (false, 0, msg2, None)
-        // | exn ->
-        //     try
-        //         retry file exn.Message
-        //     with
-        //     | Failure msg ->
-        //         (false, 0, msg, None)
 
         let mutable results: Results =
             upcast new Dictionary<string, bool * int * string * FParsec.Position option>()
@@ -114,22 +94,11 @@ module CK2Localisation =
             | CK2 CK2Lang.Spanish -> x.Spanish
             | _ -> x.English
 
-        // let getForLangFallback language (x : LocalisationEntryFallback.Row) =
-        //     match language with
-        //     |CK2 CK2Lang.English -> x.ENGLISH
-        //     |CK2 CK2Lang.French -> x.FRENCH
-        //     |CK2 CK2Lang.German -> x.GERMAN
-        //     |CK2 CK2Lang.Spanish -> x.SPANISH
-        //     |_ -> x.ENGLISH
-
         let getKeys () =
             csv |> Seq.map (snd >> (fun f -> f.Code)) |> Seq.toArray
 
         let valueMap lang =
             let one = csv |> Seq.map (fun (p, r) -> (p, r.Code, getForLang lang r))
-
-            let range =
-                mkRange (files |> List.tryHead |> Option.map fst |> Option.defaultValue "") (mkPos 0 0) (mkPos 0 0)
 
             one
             |> Seq.map (fun (p, k, v) ->
@@ -153,13 +122,7 @@ module CK2Localisation =
             | _ -> x
 
         do results <- addFiles files |> dict
-        // do
-        //     match Directory.Exists(localisationFolder) with
-        //     | true ->
-        //                 let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
-        //                 results <- addFiles files |> dict
-        //     | false -> ()
-        //new (settings : CK2Settings) = CKLocalisationService(settings.CK2Directory.localisationDirectory, settings.ck2Language)
+
         new(localisationSettings: LocalisationSettings<CK2Lang>) =
             log (sprintf "Loading CK2 localisation in %s" localisationSettings.folder)
 
@@ -180,8 +143,6 @@ module CK2Localisation =
             | false ->
                 log (sprintf "%s not found" localisationSettings.folder)
                 CK2LocalisationService([])
-
-
 
         member val Results = results with get, set
 
