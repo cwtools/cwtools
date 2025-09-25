@@ -89,8 +89,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
     let updateProcessedLocalisation () =
         let validatableEntries =
             validatableLocalisation ()
-            |> List.groupBy (fun l -> l.GetLang)
-            |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            |> List.groupBy _.GetLang
+            |> List.map (fun (k, g) ->
+                k,
+                g
+                |> List.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> (x.key, x)) |> Seq.toList)
+                |> Map.ofList)
 
         let processLoc = processLocalisation lookup
         lookup.proccessedLoc <- validatableEntries |> List.map processLoc
@@ -119,7 +123,10 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     member this.LocalisationKeys() = this.localisationKeys
 
-    member this.LocalisationEntries() =
+    member this.LocalisationEntries() : (Lang * struct (string * Entry) list) list =
         this.GetCleanLocalisationAPIs()
-        |> List.groupBy (fun l -> l.GetLang)
-        |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList))
+        |> List.groupBy _.GetLang
+        |> List.map (fun (k, g) ->
+            k,
+            g
+            |> List.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> struct (x.key, x)) |> Seq.toList))

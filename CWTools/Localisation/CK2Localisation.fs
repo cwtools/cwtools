@@ -94,21 +94,22 @@ module CK2Localisation =
             | CK2 CK2Lang.Spanish -> x.Spanish
             | _ -> x.English
 
-        let getKeys () =
-            csv |> Seq.map (snd >> (fun f -> f.Code)) |> Seq.toArray
-
-        let valueMap lang =
+        let getEntries lang =
             let one = csv |> Seq.map (fun (p, r) -> (p, r.Code, getForLang lang r))
 
             one
             |> Seq.map (fun (p, k, v) ->
-                k,
                 { key = k
                   value = None
                   desc = v
                   position = p
                   errorRange = None })
-            |> Map.ofSeq
+
+        let getKeys () =
+            csv |> Seq.map (snd >> _.Code) |> Seq.toArray
+
+        let valueMap lang =
+            getEntries lang |> Seq.map (fun x -> x.key, x) |> Map.ofSeq
 
         let values lang =
             let one = csv |> Seq.map (snd >> (fun f -> (f.Code, getForLang lang f)))
@@ -153,7 +154,8 @@ module CK2Localisation =
                 member _.GetKeys = getKeys ()
                 member _.GetDesc x = getDesc lang x
                 member _.GetLang = lang
-                member _.ValueMap = valueMap lang }
+                member _.ValueMap = valueMap lang
+                member _.GetEntries = getEntries lang }
 
         interface ILocalisationAPICreator with
             member this.Api l = this.Api l

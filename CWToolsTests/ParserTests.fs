@@ -21,7 +21,7 @@ let tests =
           testCase "localisation folder"
           <| fun () ->
               let folder = "testfiles/localisationtests/localisation/"
-              let parsed = STLLocalisationServiceFromFolder(folder).Api(STL STLLang.English)
+              let _ = STLLocalisationServiceFromFolder(folder).Api(STL STLLang.English)
               // eprintfn "%A" parsed.Results
               ()
           testCase "localisation simple"

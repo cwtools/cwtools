@@ -126,6 +126,8 @@ module YAMLLocalisationParser =
             |> Seq.tryPick (fun r -> if r.key = x then Some r.desc else None)
             |> Option.defaultValue x
 
+        let getEntries lang = getRecordsByLanguage lang
+
         let getKeys l = getRecordsByLanguage l |> Seq.map _.key
 
         do results <- addFiles files |> dict
@@ -162,7 +164,8 @@ module YAMLLocalisationParser =
                 member _.GetKeys = getKeys lang |> Array.ofSeq
                 member _.GetDesc x = getDesc lang x
                 member _.GetLang = lang
-                member _.ValueMap = valueMap lang }
+                member _.ValueMap = valueMap lang
+                member _.GetEntries = getEntries lang }
 
         interface ILocalisationAPICreator with
             member this.Api l = this.Api l
