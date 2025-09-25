@@ -350,7 +350,7 @@ module Helpers =
         configs
         |> List.tryFind (fun (fileName: string, _) -> Path.GetFileName fileName = "modifiers.cwt")
         |> Option.map (fun (fileName, fileText) -> UtilityParser.loadModifiers fileName fileText)
-        |> Option.defaultValue []
+        |> Option.defaultValue [||]
 
     let getFeatureSettings configs =
         configs

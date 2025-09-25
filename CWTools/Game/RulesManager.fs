@@ -31,7 +31,7 @@ type EmbeddedSettings =
     { triggers: DocEffect list
       effects: DocEffect list
       embeddedFiles: (string * string) list
-      modifiers: ActualModifier list
+      modifiers: ActualModifier array
       cachedResourceData: (Resource * Entity) list
       localisationCommands: LocalisationEmbeddedSettings
       eventTargetLinks: EventTargetLink list

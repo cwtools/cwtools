@@ -46,7 +46,7 @@ Thread.CurrentThread.CurrentUICulture <- CultureInfo("ru-RU")
 let emptyEmbeddedSettings =
     { triggers = []
       effects = []
-      modifiers = []
+      modifiers = [||]
       embeddedFiles = []
       cachedResourceData = []
       localisationCommands = Legacy([], [], [])
@@ -850,7 +850,7 @@ let specialtests =
                     embedded =
                         ManualSettings
                             { emptyEmbeddedSettings with
-                                modifiers = modifiers } }
+                                modifiers = modifiers |> List.toArray } }
             )
             :> IGame<STLComputedData>
         // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
@@ -1090,7 +1090,7 @@ let overwriteTests =
                         { emptyEmbeddedSettings with
                             triggers = triggers
                             effects = effects
-                            modifiers = modifiers
+                            modifiers = modifiers |> List.toArray
                             embeddedFiles = embeddedFiles }
                 rules =
                     Some

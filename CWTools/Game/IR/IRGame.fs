@@ -79,9 +79,9 @@ module IRGameFunctions =
     let refreshConfigBeforeFirstTypesHook (lookup: IRLookup) _ _ =
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag) |> List.toArray
+              values = lookup.coreModifiers |> Array.map _.tag
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) |> List.toArray }
+              valuesWithRange = lookup.coreModifiers |> Array.map (fun m -> m.tag, None) }
 
         let provinceEnums =
             { key = "provinces"
