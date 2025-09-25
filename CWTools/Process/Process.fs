@@ -91,7 +91,7 @@ and [<Sealed>] Leaf =
           Trivia = None }
 
     new(keyvalueitem: KeyValueItem, ?pos: range) =
-        let (KeyValueItem(Key(key), value, op)) = keyvalueitem
+        let (KeyValueItem(key, value, op)) = keyvalueitem
         Leaf(key, value, pos |> Option.defaultValue range.Zero, op)
 
     static member Create key value = LeafC(Leaf(key, value))
@@ -632,19 +632,19 @@ module ProcessCore =
             //eprintfn "%A %A %A" backtwo backone next
             match backtwo, backone, next with
             | Some(Value(_, Clause _)), _, _
-            | Some(Value _), Some(KeyValue(PosKeyValue(_, KeyValueItem(Key _, Clause _, _)))), Value(_, Clause _)
+            | Some(Value _), Some(KeyValue(PosKeyValue(_, KeyValueItem(_, Clause _, _)))), Value(_, Clause _)
             | _, Some(Value(_, Clause _)), _ -> backone, Some next, (processNodeInner context next) :: acc
             | Some(Value(_, v2)), Some(Value(_, v1)), Value(pos, Clause sl) ->
                 None, None, (lookupVC pos context sl [| v2; v1 |]) :: (acc |> List.skip 2)
-            | Some(Value(_, v2)), Some(KeyValue(PosKeyValue(_, KeyValueItem(Key(k), v1, _)))), Value(pos, Clause sl) ->
-                let node: Node = lookupNode k pos context sl
+            | Some(Value(_, v2)), Some(KeyValue(PosKeyValue(_, KeyValueItem(key, v1, _)))), Value(pos, Clause sl) ->
+                let node: Node = lookupNode key pos context sl
                 node.KeyPrefix <- Some(v2.ToRawString())
                 node.ValuePrefix <- Some(v1.ToRawString())
                 None, None, (NodeC node) :: (acc |> List.skip 2)
-            | _, Some(Value(pos, v2)), KeyValue(PosKeyValue(pos2, KeyValueItem(Key(k), Clause sl, _))) when
+            | _, Some(Value(pos, v2)), KeyValue(PosKeyValue(pos2, KeyValueItem(key, Clause sl, _))) when
                 pos.StartLine = pos2.StartLine
                 ->
-                let node = lookupNode k pos2 context sl
+                let node = lookupNode key pos2 context sl
                 node.KeyPrefix <- Some(v2.ToRawString())
                 None, None, (NodeC node) :: (acc |> List.skip 1)
             | _ -> backone, Some next, (processNodeInner context next) :: acc
@@ -676,7 +676,7 @@ module ProcessCore =
         and processNodeInner (c: LookupContext) statement =
             //log "%A" node.Key
             match statement with
-            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k), Clause(sl), _))) -> NodeC(lookupNode k pos c sl)
+            | KeyValue(PosKeyValue(pos, KeyValueItem(key, Clause(sl), _))) -> NodeC(lookupNode key pos c sl)
             | KeyValue(PosKeyValue(pos, kv)) -> LeafC(Leaf(kv, pos))
             | CommentStatement(comment) -> CommentC(comment)
             | Value(pos, Value.Clause sl) -> lookupVC pos c sl [||]

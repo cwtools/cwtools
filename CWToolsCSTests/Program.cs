@@ -81,7 +81,7 @@ namespace CWToolsCSTests
             var myEvent = processed.Nodes.FirstOrDefault(x => x.TagText("id") == "test.1");
 
             //Add is_triggered_only = true
-            var leaf = new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true), Operator.Equals), FSharpOption<range>.None);
+            var leaf = new Leaf(KeyValueItem.NewKeyValueItem("is_triggered_only", Value.NewBool(true), Operator.Equals), FSharpOption<range>.None);
             myEvent.SetTag(leaf.Key, Child.NewLeafC(leaf));
             // or
             // var newChildren = myEvent.AllChildren;
