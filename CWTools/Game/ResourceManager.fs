@@ -1,6 +1,7 @@
 namespace CWTools.Games
 
 open System.Collections.Concurrent
+open System.Collections.Generic
 open System.Diagnostics
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
@@ -334,7 +335,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         | x when globCheckFilepath "**/gfx/*.asset" x -> EntityType.GfxAsset
         | _ -> EntityType.Other
 
-    let mutable fileMap: Map<string, Resource> = Map.empty
+    let fileMap = Dictionary<string, Resource>()
     let mutable entitiesMap: Map<string, struct (Entity * Lazy<'T>)> = Map.empty
 
     let duration f =
@@ -458,11 +459,10 @@ type ResourceManager<'T when 'T :> ComputedData>
 
     let saveResults (resource, entity) =
         seq {
-            fileMap <-
-                match resource with
-                | EntityResource(f, _) -> fileMap.Add(f, resource)
-                | FileResource(f, _) -> fileMap.Add(f, resource)
-                | FileWithContentResource(f, _) -> fileMap.Add(f, resource)
+            match resource with
+            | EntityResource(f, _) -> fileMap[f] <- resource
+            | FileResource(f, _) -> fileMap[f] <- resource
+            | FileWithContentResource(f, _) -> fileMap[f] <- resource
 
             match entity with
             | Some e ->
@@ -480,10 +480,10 @@ type ResourceManager<'T when 'T :> ComputedData>
         }
 
     let updateOverwrite () =
-        let filelist = fileMap.Values |> Seq.toList
+        let fileList = fileMap.Values |> Seq.toList
 
         let entities =
-            filelist
+            fileList
             |> List.choose (function
                 | EntityResource(s, e) -> Some((s, e))
                 | _ -> None)
@@ -522,7 +522,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             |> List.groupBy (fun (s, e) -> e.logicalpath)
             |> List.collect processGroup
 
-        fileMap <- res |> List.fold (fun fm (s, e) -> fm.Add(s, EntityResource(s, e))) fileMap
+        res |> List.iter (fun (s, e) -> fileMap[s] <- EntityResource(s, e))
 
         let entityMap em (s, e: EntityResource) =
             match Map.tryFind s em with
@@ -538,7 +538,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         entitiesMap <- res |> List.fold entityMap entitiesMap
 
         let filesWithContent =
-            filelist
+            fileList
             |> List.choose (function
                 | FileWithContentResource(s, e) -> Some((s, e))
                 | _ -> None)
@@ -577,9 +577,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             |> List.groupBy (fun (s, e) -> e.logicalpath)
             |> List.collect processGroup
 
-        fileMap <-
-            res
-            |> List.fold (fun fm (s, e) -> fm.Add(s, FileWithContentResource(s, e))) fileMap
+        res |> List.iter (fun (s, e) -> fileMap[s] <- FileWithContentResource(s, e))
 
     // log "print all"
     // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
@@ -841,9 +839,8 @@ type ResourceManager<'T when 'T :> ComputedData>
     let getResources () = fileMap.Values |> List.ofSeq
 
     let validatableFiles () =
-        fileMap
-        |> Map.toList
-        |> List.map snd
+        fileMap.Values
+        |> List.ofSeq
         |> List.choose (function
             | EntityResource(_, e) -> Some e
             | _ -> None)
