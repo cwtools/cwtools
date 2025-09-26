@@ -3,6 +3,8 @@ namespace CWTools.Games
 open System.Collections.Concurrent
 open System.Collections.Generic
 open System.Diagnostics
+open System.Linq
+open System.Threading
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -335,8 +337,9 @@ type ResourceManager<'T when 'T :> ComputedData>
         | x when globCheckFilepath "**/gfx/*.asset" x -> EntityType.GfxAsset
         | _ -> EntityType.Other
 
-    let fileMap = Dictionary<string, Resource>()
-    let mutable entitiesMap: Map<string, struct (Entity * Lazy<'T>)> = Map.empty
+    let fileMap = Dictionary<string, Resource>(52361)
+
+    let entitiesMap = Dictionary<string, struct (Entity * Lazy<'T>)>(5306)
 
     let duration f =
         let timestamp = Stopwatch.GetTimestamp()
@@ -467,14 +470,11 @@ type ResourceManager<'T when 'T :> ComputedData>
             match entity with
             | Some e ->
                 let lazyi =
-                    new System.Lazy<_>(
-                        (fun () -> computedDataFunction e),
-                        System.Threading.LazyThreadSafetyMode.PublicationOnly
-                    )
+                    new System.Lazy<_>((fun () -> computedDataFunction e), LazyThreadSafetyMode.PublicationOnly)
 
                 let item = struct (e, lazyi)
                 // log "e %A %A %A" e.filepath e.logicalpath e.overwrite
-                entitiesMap <- entitiesMap.Add(e.filepath, item)
+                entitiesMap[e.filepath] <- item
                 yield resource, Some item
             | None -> yield resource, None
         }
@@ -519,23 +519,23 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         let res =
             entities
-            |> List.groupBy (fun (s, e) -> e.logicalpath)
+            |> List.groupBy (fun (_, e) -> e.logicalpath)
             |> List.collect processGroup
 
         res |> List.iter (fun (s, e) -> fileMap[s] <- EntityResource(s, e))
 
-        let entityMap em (s, e: EntityResource) =
-            match Map.tryFind s em with
-            | None -> em
-            | Some struct (olde, oldl) ->
-                em.Add(
-                    s,
-                    ({ olde with
-                        Entity.overwrite = e.overwrite },
-                     oldl)
-                )
+        let entityMap (s, e: EntityResource) =
+            let found, result = entitiesMap.TryGetValue(s)
 
-        entitiesMap <- res |> List.fold entityMap entitiesMap
+            if found then
+                let struct (olde, oldl) = result
+
+                entitiesMap[s] <-
+                    struct ({ olde with
+                                Entity.overwrite = e.overwrite },
+                            oldl)
+
+        res |> List.iter entityMap
 
         let filesWithContent =
             fileList
@@ -586,14 +586,11 @@ type ResourceManager<'T when 'T :> ComputedData>
         let inlinePathLength = inlinePath.Length
 
         let inlineScriptsMap =
-            entitiesMap
-            |> Map.toSeq
-            |> Seq.map snd
+            entitiesMap.Values
             |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
             |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.rawEntity))
-            // |> Seq.map (fun (x, e) -> log x; (x, e))
             |> Map.ofSeq
 
         let keyId = StringResource.stringManager.InternIdentifierToken "inline_script"
@@ -760,7 +757,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                         )
 
                     let item = struct (newE, lazyi)
-                    entitiesMap <- entitiesMap.Add(newE.filepath, item)
+                    entitiesMap[newE.filepath] <- item
                     resource, Some item
                 | None -> resource, Some struct (oldE, oldLazy)
             | resource, None -> resource, None)
@@ -778,29 +775,25 @@ type ResourceManager<'T when 'T :> ComputedData>
     //             oldE
     // )
     let forceRulesData () =
-        entitiesMap
-        |> Map.toSeq
-        |> PSeq.iter (fun (_, (struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
+        entitiesMap.Values
+        |> PSeq.iter (fun (struct (e, l)) -> computedDataUpdateFunction e (l.Force()))
 
     let forceEagerData () =
-        entitiesMap
-        |> Map.toArray
+        // TODO:ArrayPool?
+        entitiesMap.Values.ToArray()
         |> (fun array ->
             Array.randomShuffleInPlace array
             array)
-        |> PSeq.iter (fun (_, (struct (e, l))) -> (l.Force() |> ignore))
+        |> PSeq.iter (fun (struct (e, l)) -> (l.Force() |> ignore))
 
     let forceRecompute () =
-        entitiesMap <-
-            entitiesMap
-            |> Map.map (fun _ (struct (e, _)) ->
-                let lazyi =
-                    new System.Lazy<_>(
-                        (fun () -> computedDataFunction e),
-                        System.Threading.LazyThreadSafetyMode.PublicationOnly
-                    ) in
+        for pair in entitiesMap do
+            let struct (entity, _) = pair.Value
 
-                struct (e, lazyi))
+            let lazyi =
+                System.Lazy<_>((fun () -> computedDataFunction entity), LazyThreadSafetyMode.PublicationOnly)
+
+            entitiesMap[pair.Key] <- struct (entity, lazyi)
 
         let task = new Task(fun () -> forceEagerData ())
         task.Start()
@@ -844,16 +837,14 @@ type ResourceManager<'T when 'T :> ComputedData>
         |> List.filter (fun f -> f.validate)
 
     let allEntities () =
-        entitiesMap
-        |> Map.toList
-        |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
+        entitiesMap.Values
+        |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
+        |> Seq.toList
 
     let validatableEntities () =
-        entitiesMap
-        |> Map.toList
-        |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten && e.validate)
+        entitiesMap.Values
+        |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten && e.validate)
+        |> Seq.toList
 
     let getFileNames () : string array =
         fileMap.Values
