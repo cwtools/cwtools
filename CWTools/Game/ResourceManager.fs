@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System
 open System.Collections.Concurrent
 open System.Collections.Generic
 open System.Diagnostics
@@ -480,49 +481,48 @@ type ResourceManager<'T when 'T :> ComputedData>
         }
 
     let updateOverwrite () =
-        let fileList = fileMap.Values |> Seq.toList
+        let fileList = fileMap.Values.ToArray()
 
         let entities =
             fileList
-            |> List.choose (function
+            |> Array.choose (function
                 | EntityResource(s, e) -> Some((s, e))
                 | _ -> None)
 
-        let processGroup (key, es: (string * EntityResource) list) =
+        let processGroup (key, es: (string * EntityResource) array) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
+            | [| s, e |] -> [| s, { e with overwrite = Overwrite.No } |]
             | es ->
                 let sorted =
                     es
-                    |> List.sortByDescending (fun (s, e) ->
+                    |> Array.sortByDescending (fun (s, e) ->
                         if e.scope = "embedded" then ""
                         else if e.scope = "" then "ZZZZZZZZ"
                         else e.scope)
 
-                let first =
-                    sorted
-                    |> List.head
-                    |> (fun (s, h) ->
-                        s,
-                        { h with
-                            overwrite = Overwrite.Overwrote })
-                // log "overwrote: %s" (first |> fst)
-                let rest =
-                    sorted
-                    |> List.skip 1
-                    |> List.map (fun (s, r) ->
-                        s,
-                        { r with
-                            overwrite = Overwrite.Overwritten })
-                // rest |> List.iter (fun (s, _) -> log "overwritten: %s" s)
-                first :: rest
+                let firstStr, entity = sorted[0]
+
+                sorted[0] <-
+                    (firstStr,
+                     { entity with
+                         overwrite = Overwrite.Overwrote })
+
+                for i in 1 .. sorted.Length - 1 do
+                    let s, entity = sorted[i]
+
+                    sorted[i] <-
+                        (s,
+                         { entity with
+                             overwrite = Overwrite.Overwritten })
+
+                sorted
 
         let res =
             entities
-            |> List.groupBy (fun (_, e) -> e.logicalpath)
-            |> List.collect processGroup
+            |> Array.groupBy (fun (_, e) -> e.logicalpath)
+            |> Array.collect processGroup
 
-        res |> List.iter (fun (s, e) -> fileMap[s] <- EntityResource(s, e))
+        res |> Array.iter (fun (s, e) -> fileMap[s] <- EntityResource(s, e))
 
         let entityMap (s, e: EntityResource) =
             let found, result = entitiesMap.TryGetValue(s)
@@ -535,49 +535,48 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 Entity.overwrite = e.overwrite },
                             oldl)
 
-        res |> List.iter entityMap
+        res |> Array.iter entityMap
 
         let filesWithContent =
             fileList
-            |> List.choose (function
+            |> Array.choose (function
                 | FileWithContentResource(s, e) -> Some((s, e))
                 | _ -> None)
 
-        let processGroup (key, es: (string * FileWithContentResource) list) =
+        let processGroup (key, es: (string * FileWithContentResource) array) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = Overwrite.No } ]
+            | [| s, e |] -> [| s, { e with overwrite = Overwrite.No } |]
             | es ->
                 let sorted =
                     es
-                    |> List.sortByDescending (fun (s, e) ->
+                    |> Array.sortByDescending (fun (s, e) ->
                         if e.scope = "embedded" then ""
                         else if e.scope = "" then "ZZZZZZZZ"
                         else e.scope)
 
-                let first =
-                    sorted
-                    |> List.head
-                    |> (fun (s, h) ->
-                        s,
-                        { h with
-                            overwrite = Overwrite.Overwrote })
-                // log "overwrote: %s" (first |> fst)
-                let rest =
-                    sorted
-                    |> List.skip 1
-                    |> List.map (fun (s, r) ->
-                        s,
-                        { r with
-                            overwrite = Overwrite.Overwritten })
-                // rest |> List.iter (fun (s, _) -> log "overwritten: %s" s)
-                first :: rest
+                let firstStr, entity = sorted[0]
+
+                sorted[0] <-
+                    (firstStr,
+                     { entity with
+                         overwrite = Overwrite.Overwrote })
+
+                for i in 1 .. sorted.Length - 1 do
+                    let s, entity = sorted[i]
+
+                    sorted[i] <-
+                        (s,
+                         { entity with
+                             overwrite = Overwrite.Overwritten })
+
+                sorted
 
         let res =
             filesWithContent
-            |> List.groupBy (fun (s, e) -> e.logicalpath)
-            |> List.collect processGroup
+            |> Array.groupBy (fun (s, e) -> e.logicalpath)
+            |> Array.collect processGroup
 
-        res |> List.iter (fun (s, e) -> fileMap[s] <- FileWithContentResource(s, e))
+        res |> Array.iter (fun (s, e) -> fileMap[s] <- FileWithContentResource(s, e))
 
     // log "print all"
     // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
@@ -731,7 +730,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             if List.isEmpty allScriptRefs then
                 None
             else
-                let newNode = CWTools.Process.STLProcess.cloneNode e.entity
+                let newNode = STLProcess.cloneNode e.entity
                 replaceCataFun newNode
                 Some newNode
 
@@ -754,40 +753,24 @@ type ResourceManager<'T when 'T :> ComputedData>
                     let newE = { oldE with entity = newNode }
 
                     let lazyi =
-                        new System.Lazy<_>(
-                            (fun () -> computedDataFunction newE),
-                            System.Threading.LazyThreadSafetyMode.PublicationOnly
-                        )
+                        System.Lazy<_>((fun () -> computedDataFunction newE), LazyThreadSafetyMode.PublicationOnly)
 
                     let item = struct (newE, lazyi)
                     entitiesMap[newE.filepath] <- item
                     resource, Some item
                 | None -> resource, Some struct (oldE, oldLazy)
             | resource, None -> resource, None)
-    // entities |> Seq.map (fun e -> e, updateEntity e)
-    //     |> Seq.map (function |e, Some newNode -> (e, {e with entity = newNode }, true) |e, None -> (e, e, false))
-    //     |> Seq.map (fun (oldE, newE, updated) ->
-    //         if updated
-    //         then
-    //             let lazyi = new System.Lazy<_>((fun () -> computedDataFunction newE),System.Threading.LazyThreadSafetyMode.PublicationOnly)
-    //             let item = struct(newE, lazyi)
-    //             rawEntitiesMap <- rawEntitiesMap.Add(oldE.filepath, oldE)
-    //             entitiesMap <- entitiesMap.Add(newE.filepath, item)
-    //             item
-    //         else
-    //             oldE
-    // )
+
     let forceRulesData () =
         entitiesMap.Values
         |> PSeq.iter (fun (struct (e, l)) -> computedDataUpdateFunction e (l.Force()))
 
     let forceEagerData () =
-        // TODO:ArrayPool?
         entitiesMap.Values.ToArray()
         |> (fun array ->
             Array.randomShuffleInPlace array
             array)
-        |> PSeq.iter (fun (struct (e, l)) -> (l.Force() |> ignore))
+        |> PSeq.iter (fun (struct (_, l)) -> (l.Force() |> ignore))
 
     let forceRecompute () =
         for pair in entitiesMap do
@@ -798,8 +781,8 @@ type ResourceManager<'T when 'T :> ComputedData>
 
             entitiesMap[pair.Key] <- struct (entity, lazyi)
 
-        let task = new Task(fun () -> forceEagerData ())
-        task.Start()
+        let _ = Task.Run(fun () -> forceEagerData ())
+        ()
 
     let updateFiles files =
         let news =
@@ -815,8 +798,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         if enableInlineScripts then
             res <- updateInlineScripts news |> Seq.toList
 
-        let task = new Task(fun () -> forceEagerData ())
-        task.Start()
+        let _ = Task.Run(fun () -> forceEagerData ())
         res
 
     let updateFile file =
