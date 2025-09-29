@@ -27,7 +27,7 @@ open LogCaptureTest
 
 
 let emptyStellarisSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false

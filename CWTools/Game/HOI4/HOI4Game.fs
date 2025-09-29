@@ -364,7 +364,7 @@ type HOI4Game(setupSettings: HOI4Settings) =
 
     do
         if scopeManager.Initialized |> not then
-            eprintfn "%A has no scopes" (settings.rootDirectories |> List.head)
+            eprintfn "%A has no scopes" (settings.rootDirectories |> Array.head)
         else
             ()
 

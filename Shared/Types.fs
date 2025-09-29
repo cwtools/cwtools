@@ -10,7 +10,7 @@ type ModInfo = { name: string; path: string }
 
 type DirectoryType =
     | Vanilla
-    | MultipleMod of ModInfo list
+    | MultipleMod of ModInfo array
     | Mod
     | Unknown
 
