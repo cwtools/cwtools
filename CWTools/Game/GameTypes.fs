@@ -73,7 +73,7 @@ type IGame =
     abstract ParserErrors: unit -> (string * string * FParsec.Position) list
     abstract ValidationErrors: unit -> CWError list
     abstract LocalisationErrors: bool * bool -> CWError list
-    abstract Folders: unit -> (string * string) list
+    abstract Folders: unit -> (string * string) array
     abstract AllFiles: unit -> Resource list
     abstract AllLoadedLocalisation: unit -> string list
     abstract UpdateFile: bool -> string -> string option -> CWError list

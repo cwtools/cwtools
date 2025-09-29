@@ -492,7 +492,7 @@ type STLGame(setupSettings: StellarisSettings) =
 
     do
         if scopeManager.Initialized |> not then
-            Utils.logError (sprintf "%A has no scopes" (settings.rootDirectories |> List.head))
+            Utils.logError (sprintf "%A has no scopes" (settings.rootDirectories |> Array.head))
         else
             ()
 

@@ -1,5 +1,7 @@
 namespace CWTools.Games
 
+open System.Linq
+
 open CWTools.Common
 // open CWTools.Process.STLScopes
 open Files
@@ -16,7 +18,7 @@ type ValidationSettings =
       experimental: bool }
 
 type GameSettings<'L> =
-    { rootDirectories: WorkspaceDirectoryInput list
+    { rootDirectories: WorkspaceDirectoryInput array
       embedded: EmbeddedSettings
       validation: ValidationSettings
       rules: RulesSettings option
@@ -45,7 +47,7 @@ type DebugSettings =
     static member Default = { EarlyStop = Full }
 
 type GameSetupSettings<'L> =
-    { rootDirectories: WorkspaceDirectoryInput list
+    { rootDirectories: WorkspaceDirectoryInput array
       embedded: EmbeddedSetupSettings
       validation: ValidationSettings
       rules: RulesSettings option
@@ -240,7 +242,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 files
             else
                 files
-                |> List.choose (function
+                |> Array.choose (function
                     | FileResourceInput f -> Some(FileResourceInput f)
                     | FileWithContentResourceInput f -> Some(FileWithContentResourceInput f)
                     | EntityResourceInput f ->
@@ -287,7 +289,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             settings.embedded.cachedResourceData
             |> List.map (fun (r, e) -> CachedResourceInput(disableValidate (r, e)))
 
-        let embedded = embeddedFiles @ cached
+        let embedded = embeddedFiles.Concat(cached).ToArray()
 
         if fileManager.ShouldUseEmbedded then
             resourceManager.Api.UpdateFiles(embedded) |> ignore

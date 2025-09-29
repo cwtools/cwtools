@@ -45,7 +45,7 @@ let emptyEmbeddedSettings =
       featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
 
 let emptyStellarisSettings rootDirectory =
-    { StellarisSettings.rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { StellarisSettings.rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false

@@ -96,9 +96,9 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
                     let files =
                         zipFile.Entries
                         |> Seq.map (fun e ->
-                            Path.Combine("uri:", zip, e.FullName.Replace('\\', '/')),
-                            let sr = new StreamReader(e.Open()) in sr.ReadToEnd())
-                        |> List.ofSeq
+                            struct (Path.Combine("uri:", zip, e.FullName.Replace('\\', '/')),
+                                    let sr = new StreamReader(e.Open()) in sr.ReadToEnd()))
+                        |> Array.ofSeq
 
                     Some(
                         ZD
@@ -115,9 +115,9 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
                           path = dlcDir }
                 )
 
-        dlcs |> Seq.choose createZippedDirectory |> List.ofSeq
+        dlcs |> Seq.choose createZippedDirectory |> Array.ofSeq
     else
-        []
+        [||]
 
 type GameSerializationConfig<'T when 'T :> ComputedData> =
     { scriptFolders: string array
@@ -134,9 +134,12 @@ let serialize gameDirName scriptFolders cacheDirectory = ()
 let serializeGame<'T when 'T :> ComputedData> (config: GameSerializationConfig<'T>) folder outputFileName compression =
     let folders =
         if config.supportsDLC then
-            (WD folder) :: (addDLCs "dlc" folder) @ (addDLCs "integrated_dlc" folder)
+            Array.concat
+                [| [| (WD folder) |]
+                   (addDLCs "dlc" folder)
+                   (addDLCs "integrated_dlc" folder) |]
         else
-            [ WD folder ]
+            [| WD folder |]
 
     let fileManager =
         FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [||], 2)
@@ -423,8 +426,10 @@ let loadGame<'T when 'T :> ComputedData>
     eprintfn "%A" langs
 
     let folders =
-        WD { path = dir; name = "game" } :: addDLCs "dlc" { path = dir; name = "game" }
-        @ addDLCs "integrated_dlc" { path = dir; name = "game" }
+        Array.concat
+            [| [| WD { path = dir; name = "game" } |]
+               addDLCs "dlc" { path = dir; name = "game" }
+               addDLCs "integrated_dlc" { path = dir; name = "game" } |]
 
     let STLoptions: StellarisSettings =
         { rootDirectories = folders

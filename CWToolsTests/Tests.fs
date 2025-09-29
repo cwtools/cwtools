@@ -55,7 +55,7 @@ let emptyEmbeddedSettings =
       featureSettings = UtilityParser.FeatureSettings.Default }
 
 let emptyStellarisSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
@@ -69,7 +69,7 @@ let emptyStellarisSettings rootDirectory =
       debugSettings = DebugSettings.Default }
 
 let emptyImperatorSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
@@ -83,7 +83,7 @@ let emptyImperatorSettings rootDirectory =
       debugSettings = DebugSettings.Default }
 
 let emptyVictoriaSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
@@ -936,9 +936,9 @@ let embeddedTests =
         //Test serialization
         let fileManager =
             FileManager(
-                [ WD
-                      { name = "test"
-                        path = "./testfiles/embeddedtest/test" } ],
+                [| WD
+                       { name = "test"
+                         path = "./testfiles/embeddedtest/test" } |],
                 Some "",
                 scriptFolders,
                 "stellaris",

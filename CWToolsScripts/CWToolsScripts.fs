@@ -259,7 +259,7 @@ module CWToolsScripts =
         0 // return an integer exit code
 
     let emptyStellarisSettings (rootDirectory) =
-        { CWTools.Games.GameSetupSettings.rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+        { CWTools.Games.GameSetupSettings.rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
           modFilter = None
           validation =
             { validateVanilla = false
@@ -273,7 +273,7 @@ module CWToolsScripts =
           debugSettings = DebugSettings.Default }
 
     let emptyHOI4Settings (rootDirectory) =
-        { CWTools.Games.GameSetupSettings.rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+        { CWTools.Games.GameSetupSettings.rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
           modFilter = None
           validation =
             { validateVanilla = false

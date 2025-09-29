@@ -139,7 +139,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
 
     do
         if scopeManager.Initialized |> not then
-            eprintfn "%A has no scopes" (settings.rootDirectories |> List.head)
+            eprintfn "%A has no scopes" (settings.rootDirectories |> Array.head)
         else
             ()
 

@@ -188,7 +188,7 @@ type ResourceInput =
 
 
 type UpdateFile<'T> = ResourceInput -> Resource * struct (Entity * Lazy<'T>) option
-type UpdateFiles<'T> = ResourceInput list -> (Resource * struct (Entity * Lazy<'T>) option) list
+type UpdateFiles<'T> = ResourceInput array -> (Resource * struct (Entity * Lazy<'T>) option) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
@@ -781,10 +781,9 @@ type ResourceManager<'T when 'T :> ComputedData>
         let _ = Task.Run(fun () -> forceEagerData ())
         ()
 
-    let updateFiles files =
+    let updateFiles (files: ResourceInput array) =
         let news =
             files
-            |> PSeq.ofList
             |> PSeq.map parseFileThenEntity
             |> Seq.collect saveResults
             |> Seq.toList
@@ -799,7 +798,7 @@ type ResourceManager<'T when 'T :> ComputedData>
         res
 
     let updateFile file =
-        let res = updateFiles [ file ]
+        let res = updateFiles [| file |]
 
         if res.Length > 1 then
             log (sprintf "File %A returned multiple resources" file)

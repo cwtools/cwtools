@@ -2,6 +2,7 @@ namespace CWTools.Games
 
 open System
 open System.IO
+open System.Linq
 open CSharpHelpers
 open CWTools.Parser
 open CWTools.Process
@@ -24,7 +25,7 @@ module Files =
     type ZippedDirectory =
         { path: string
           name: string
-          files: (string * string) list }
+          files: struct (string * string) array }
 
     type WorkspaceDirectoryInput =
         | WD of WorkspaceDirectory
@@ -33,7 +34,7 @@ module Files =
     [<Sealed>]
     type FileManager
         (
-            inputDirectories: WorkspaceDirectoryInput list,
+            inputDirectories: WorkspaceDirectoryInput array,
             embeddedFolder: string option,
             scriptFolders: string array,
             gameDirName: string,
@@ -43,11 +44,11 @@ module Files =
         ) =
         let rootDirectories, zippedDirectories =
             inputDirectories
-            |> List.choose (function
+            |> Array.choose (function
                 | WD wd -> Some wd
                 | _ -> None),
             inputDirectories
-            |> List.choose (function
+            |> Array.choose (function
                 | ZD zd -> Some zd
                 | _ -> None)
 
@@ -87,15 +88,14 @@ module Files =
                     || f = "gfx"
                     || f = "localisation")
 
-            let getMultipleModDirectory (workspaceDir: WorkspaceDirectory) : ModInfo list =
+            let getMultipleModDirectory (workspaceDir: WorkspaceDirectory) : ModInfo array =
                 let getModFiles modDir =
                     Directory.EnumerateFiles(modDir, "*.mod")
-                    |> List.ofSeq
-                    |> List.map CKParser.parseFile
-                    |> List.choose (function
+                    |> Seq.map CKParser.parseFile
+                    |> Seq.choose (function
                         | Success(p, _, _) -> Some p
                         | _ -> None)
-                    |> List.map (
+                    |> Seq.map (
                         (ProcessCore.processNodeBasic "mod" range.Zero)
                         >> (fun s -> s.TagText "name", "../" + (s.TagText "path"))
                     )
@@ -105,25 +105,24 @@ module Files =
                     |> Array.tryFind (fun (_, folder) -> folder == "mod" || folder == "mods")
 
                 match modFolder with
-                | None -> []
+                | None -> [||]
                 | Some(mf, _) ->
                     let modFoldersFromDot =
                         getModFiles mf
-                        |> List.map (fun (n, p) ->
+                        |> Seq.map (fun (n, p) ->
                             { ModInfo.name = n
                               path = Path.Combine(workspaceDir.path, p) })
 
                     let modFoldersFromRoot =
                         Directory.EnumerateDirectories mf
-                        |> List.ofSeq
-                        |> List.filter (fun folder ->
+                        |> Seq.filter (fun folder ->
                             Directory.EnumerateDirectories folder
                             |> Seq.exists checkFolderLooksLikeGameFolder)
-                        |> List.map (fun folder ->
+                        |> Seq.map (fun folder ->
                             { ModInfo.name = Path.GetFileName folder
                               path = folder })
 
-                    (modFoldersFromDot @ modFoldersFromRoot) |> List.distinct
+                    modFoldersFromDot.Concat(modFoldersFromRoot).Distinct().ToArray()
 
             let checkIsGameFolder (workspaceDir: WorkspaceDirectory) =
                 let foundAnyFolders =
@@ -138,10 +137,10 @@ module Files =
                 elif checkIsGameFolder workspaceDir then
                     DirectoryType.Mod
                 else
-                    let list = getMultipleModDirectory workspaceDir
+                    let array = getMultipleModDirectory workspaceDir
 
-                    if not (List.isEmpty list) then
-                        DirectoryType.MultipleMod list
+                    if not (Array.isEmpty array) then
+                        DirectoryType.MultipleMod array
                     else
                         DirectoryType.Unknown
 
@@ -150,7 +149,7 @@ module Files =
         let expandedRootDirectories =
             let expanded =
                 rootDirectories
-                |> List.map (fun rd ->
+                |> Array.map (fun rd ->
                     let normalisedPath = rd.path.Replace('\\', '/').TrimStart('.')
 
                     { path = rd.path
@@ -167,36 +166,35 @@ module Files =
                       normalisedPath = e.Replace('\\', '/').TrimStart('.') })
 
             match embeddedDir with
-            | Some ed -> ed :: expanded
+            | Some ed -> Array.append [| ed |] expanded
             | None -> expanded
 
         do
             logInfo "Workspace roots:"
 
             rootDirectories
-            |> List.iter (fun rd -> logInfo (sprintf "root %s, exists: %b" rd.path (Directory.Exists rd.path)))
+            |> Array.iter (fun rd -> logInfo (sprintf "root %s, exists: %b" rd.path (Directory.Exists rd.path)))
 
             logInfo (sprintf "embedded folder %A" embeddedFolder)
 
             expandedRootDirectories
-            |> List.iter (fun rd -> log (sprintf "normalised %s" rd.normalisedPath))
-
+            |> Array.iter (fun rd -> log (sprintf "normalised %s" rd.normalisedPath))
 
         let allFoldersInWorkspaceDir (workspaceDir: ExpandedWorkspaceDirectory) =
             let allFoldersInDirectory (workspaceDir: ExpandedWorkspaceDirectory) =
                 match workspaceDir.dirType with
                 | Mod ->
-                    [ { ModInfo.name = workspaceDir.name
-                        path = workspaceDir.path } ]
+                    [| { ModInfo.name = workspaceDir.name
+                         path = workspaceDir.path } |]
                 | Vanilla ->
-                    [ { ModInfo.name = "vanilla"
-                        path = workspaceDir.path } ]
+                    [| { ModInfo.name = "vanilla"
+                         path = workspaceDir.path } |]
                 | MultipleMod mods -> mods
-                | Unknown -> []
+                | Unknown -> [||]
 
             workspaceDir
             |> allFoldersInDirectory
-            |> List.filter (fun d -> Directory.Exists d.path)
+            |> Array.filter (fun d -> Directory.Exists d.path)
 
         let fileToResourceInput
             (normalisedPath: string)
@@ -308,7 +306,7 @@ module Files =
                                 (scope, fn)
                                 (fn |> FileInfo).Length
                                 (fun _ -> File.ReadAllText(fn, encoding))))
-                        |> List.ofSeq)
+                        |> Array.ofSeq)
                     "Load files"
 
             allFiles
@@ -318,29 +316,30 @@ module Files =
                 let normalisedPath = zd.path.Replace('\\', '/').TrimStart('.')
 
                 zd.files
-                |> List.choose (fun (fn, ft) ->
+                |> Array.choose (fun struct (fn, ft) ->
                     fileToResourceInput normalisedPath normalisedPath.Length (zd.name, fn) 0L (fun _ -> ft))
 
-            zippedDirectories |> List.collect zippedDirToResourceInputs
+            zippedDirectories |> Array.collect zippedDirToResourceInputs
 
         let doesWorkspaceContainVanillaDirectory =
-            rootDirectories |> List.exists isVanillaDirectory
+            rootDirectories |> Array.exists isVanillaDirectory
 
         let getScopeForPath (path: string) =
             let path = path.Replace('\\', '/')
 
             expandedRootDirectories
-            |> List.tryPick (fun rd ->
+            |> Array.tryPick (fun rd ->
                 let index = path.IndexOf(rd.normalisedPath, StringComparison.Ordinal)
                 if index >= 0 then Some rd.name else None)
 
         member _.AllFilesByPath() =
-            (expandedRootDirectories |> List.collect allFilesByPath) @ allFilesInZips
+            // TODO: ResizeArray
+            Array.append (expandedRootDirectories |> Array.collect allFilesByPath) allFilesInZips
 
         member _.AllFolders() =
             expandedRootDirectories
-            |> List.collect allFoldersInWorkspaceDir
-            |> List.map (fun f -> f.name, f.path)
+            |> Array.collect allFoldersInWorkspaceDir
+            |> Array.map (fun f -> f.name, f.path)
 
         member _.ShouldUseEmbedded = not doesWorkspaceContainVanillaDirectory
 
