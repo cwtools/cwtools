@@ -1,5 +1,6 @@
 namespace CWTools.Games.HOI4
 
+open CSharpHelpers
 open CWTools.Common.HOI4Constants
 open CWTools.Game
 open CWTools.Localisation
@@ -86,14 +87,10 @@ module HOI4GameFunctions =
         match provinceFile with
         | None -> ()
         | Some pf ->
-            let lines = pf.filetext.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
-
-            let provinces =
-                lines
-                |> Array.choose (fun l -> l.Split(';', 2, StringSplitOptions.RemoveEmptyEntries) |> Array.tryHead)
-
-
-            game.Lookup.HOI4provinces <- provinces
+            let resizeArray = ResizeArray<string>(pf.filetext.AsSpan().Count('\n'))
+            for line: ReadOnlySpan<char> in pf.filetext.AsSpan().EnumerateLines() do
+                   resizeArray.Add(line.SplitFirst(';').ToString())
+            game.Lookup.HOI4provinces <- resizeArray.ToArray()
 
     let updateScriptedLoc (game: GameObject) =
         let rawLocs =
