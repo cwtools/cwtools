@@ -569,8 +569,6 @@ type STLGame(setupSettings: StellarisSettings) =
     let references =
         References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
-    let useRules = settings.rules.IsSome
-
     let parseErrors () =
         resources.GetResources()
         |> List.choose (function
