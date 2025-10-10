@@ -78,13 +78,14 @@ let decompress (path: string) =
 let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
     let dir = workspaceDirectory.path
 
-    if Directory.Exists(dir) && Directory.Exists(Path.Combine [| dir; dlcDir |]) then
-        let dlcs = Directory.EnumerateDirectories(Path.Combine [| dir; dlcDir |])
+    if Directory.Exists(dir) && Directory.Exists(Path.Combine(dir, dlcDir)) then
+        let dlcs = Directory.EnumerateDirectories(Path.Combine(dir, dlcDir))
 
         let createZippedDirectory (dlcDir: string) =
             match
                 Directory.EnumerateFiles dlcDir
-                |> Seq.tryFind (fun f -> (Path.GetExtension f) = ".zip")
+                |> Seq.tryFind (fun f ->
+                    Path.GetExtension(f.AsSpan()).Equals(".zip", StringComparison.OrdinalIgnoreCase))
             with
             | Some zip ->
                 use file = File.OpenRead(zip)
@@ -95,14 +96,14 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
                     let files =
                         zipFile.Entries
                         |> Seq.map (fun e ->
-                            Path.Combine([| "uri:"; zip; e.FullName.Replace("\\", "/") |]),
-                            let sr = new StreamReader(e.Open()) in sr.ReadToEnd())
-                        |> List.ofSeq
+                            struct (Path.Combine("uri:", zip, e.FullName.Replace('\\', '/')),
+                                    let sr = new StreamReader(e.Open()) in sr.ReadToEnd()))
+                        |> Array.ofSeq
 
                     Some(
                         ZD
                             { ZippedDirectory.name = Path.GetFileName zip
-                              path = zip.Replace("\\", "/")
+                              path = zip.Replace('\\', '/')
                               files = files }
                     )
                 with _ ->
@@ -114,12 +115,12 @@ let addDLCs dlcDir (workspaceDirectory: WorkspaceDirectory) =
                           path = dlcDir }
                 )
 
-        dlcs |> Seq.choose createZippedDirectory |> List.ofSeq
+        dlcs |> Seq.choose createZippedDirectory |> Array.ofSeq
     else
-        []
+        [||]
 
 type GameSerializationConfig<'T when 'T :> ComputedData> =
-    { scriptFolders: string list
+    { scriptFolders: string array
       gameName: string
       defaultFilename: string
       computeData: (unit -> InfoService option) -> FileManager -> ResourceManager<'T>
@@ -133,12 +134,15 @@ let serialize gameDirName scriptFolders cacheDirectory = ()
 let serializeGame<'T when 'T :> ComputedData> (config: GameSerializationConfig<'T>) folder outputFileName compression =
     let folders =
         if config.supportsDLC then
-            (WD folder) :: (addDLCs "dlc" folder) @ (addDLCs "integrated_dlc" folder)
+            Array.concat
+                [| [| (WD folder) |]
+                   (addDLCs "dlc" folder)
+                   (addDLCs "integrated_dlc" folder) |]
         else
-            [ WD folder ]
+            [| WD folder |]
 
     let fileManager =
-        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [], 2)
+        FileManager(folders, Some "", config.scriptFolders, config.gameName, config.primaryEncoding, [||], 2)
 
     let files = fileManager.AllFilesByPath()
     let computefun: unit -> InfoService option = (fun () -> (None))
@@ -392,12 +396,12 @@ let deserializeMetadata path =
     { metadata with
         varDefs =
             metadata.varDefs
-            |> Map.map (fun k v -> v |> List.map (fun (s, _) -> (s, range.Zero)))
+            |> Map.map (fun _ v -> v |> Array.map (fun (s, _) -> (s, range.Zero)))
         typeDefs =
             metadata.typeDefs
-            |> Map.map (fun k v ->
+            |> Map.map (fun _ v ->
                 v
-                |> List.map (fun t ->
+                |> Array.map (fun t ->
                     { t with
                         range = range.Zero
                         validate = false })) }
@@ -409,9 +413,11 @@ let loadGame<'T when 'T :> ComputedData>
         | Some ls, _ -> ls
         | _, Game.STL -> LangHelpers.allSTLLangs
         | _, Game.EU4 -> LangHelpers.allEU4Langs
+        | _, Game.EU5 -> LangHelpers.allEU5Langs
         | _, Game.HOI4 -> LangHelpers.allHOI4Langs
         | _, Game.IR -> LangHelpers.allIRLangs
         | _, Game.VIC2 -> LangHelpers.allVIC2Langs
+        | _, Game.VIC3 -> LangHelpers.allVIC3Langs
         | _, Game.CK2 -> LangHelpers.allCK2Langs
         | _, Game.CK3 -> LangHelpers.allCK3Langs
         | _, Game.Custom -> LangHelpers.allCustomLangs
@@ -420,8 +426,10 @@ let loadGame<'T when 'T :> ComputedData>
     eprintfn "%A" langs
 
     let folders =
-        WD { path = dir; name = "game" } :: addDLCs "dlc" { path = dir; name = "game" }
-        @ addDLCs "integrated_dlc" { path = dir; name = "game" }
+        Array.concat
+            [| [| WD { path = dir; name = "game" } |]
+               addDLCs "dlc" { path = dir; name = "game" }
+               addDLCs "integrated_dlc" { path = dir; name = "game" } |]
 
     let STLoptions: StellarisSettings =
         { rootDirectories = folders

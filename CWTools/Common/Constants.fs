@@ -145,100 +145,40 @@ type Lang =
 
 module LangHelpers =
     let allCK2Langs =
-        [ CK2 CK2Lang.English
-          CK2 CK2Lang.French
-          CK2 CK2Lang.German
-          CK2 CK2Lang.Spanish
-          CK2 CK2Lang.Russian ]
+        Enum.GetValues<CK2Lang>()
+        |> Array.filter (fun lang -> lang <> CK2Lang.Default)
+        |> Array.map CK2
 
     let allSTLLangs =
-        [ STL STLLang.English
-          STL STLLang.French
-          STL STLLang.German
-          STL STLLang.Spanish
-          STL STLLang.Russian
-          STL STLLang.Polish
-          STL STLLang.Braz_Por
-          STL STLLang.Chinese
-          STL STLLang.Japanese
-          STL STLLang.Korean ]
+        Enum.GetValues<STLLang>()
+        |> Array.filter (fun lang -> lang <> STLLang.Default)
+        |> Array.map STL
 
     let allHOI4Langs =
-        [ HOI4 HOI4Lang.English
-          HOI4 HOI4Lang.French
-          HOI4 HOI4Lang.German
-          HOI4 HOI4Lang.Spanish
-          HOI4 HOI4Lang.Russian
-          HOI4 HOI4Lang.Polish
-          HOI4 HOI4Lang.Braz_Por
-          HOI4 HOI4Lang.Chinese
-          HOI4 HOI4Lang.Japanese ]
+        Enum.GetValues<HOI4Lang>()
+        |> Array.filter (fun lang -> lang <> HOI4Lang.Default)
+        |> Array.map HOI4
 
     let allEU4Langs =
-        [ EU4 EU4Lang.English
-          EU4 EU4Lang.French
-          EU4 EU4Lang.German
-          EU4 EU4Lang.Spanish ]
+        Enum.GetValues<EU4Lang>()
+        |> Array.filter (fun lang -> lang <> EU4Lang.Default)
+        |> Array.map EU4
 
-    let allEU5Langs =
-        [ EU5 EU5Lang.English
-          EU5 EU5Lang.Chinese
-          EU5 EU5Lang.French
-          EU5 EU5Lang.German
-          EU5 EU5Lang.Japanese
-          EU5 EU5Lang.Korean
-          EU5 EU5Lang.Polish
-          EU5 EU5Lang.Russian
-          EU5 EU5Lang.Spanish
-          EU5 EU5Lang.Turkish
-          EU5 EU5Lang.Braz_Por ]
+    let allEU5Langs = Enum.GetValues<EU5Lang>() |> Array.map EU5
 
 
-    let allIRLangs =
-        [ IR IRLang.English
-          IR IRLang.French
-          IR IRLang.German
-          IR IRLang.Spanish
-          IR IRLang.Russian
-          IR IRLang.Chinese ]
+    let allIRLangs = Enum.GetValues<IRLang>() |> Array.map IR
 
-    let allVIC2Langs =
-        [ VIC2 VIC2Lang.English
-          VIC2 VIC2Lang.French
-          VIC2 VIC2Lang.German
-          VIC2 VIC2Lang.Spanish ]
+    let allVIC2Langs = Enum.GetValues<VIC2Lang>() |> Array.map VIC2
 
-    let allCK3Langs =
-        [ CK3 CK3Lang.English
-          CK3 CK3Lang.French
-          CK3 CK3Lang.German
-          CK3 CK3Lang.Spanish
-          CK3 CK3Lang.Chinese
-          CK3 CK3Lang.Russian
-          CK3 CK3Lang.Korean ]
+    let allCK3Langs = Enum.GetValues<CK3Lang>() |> Array.map CK3
 
-    let allVIC3Langs =
-        [ VIC3 VIC3Lang.English
-          VIC3 VIC3Lang.Chinese
-          VIC3 VIC3Lang.French
-          VIC3 VIC3Lang.German
-          VIC3 VIC3Lang.Japanese
-          VIC3 VIC3Lang.Korean
-          VIC3 VIC3Lang.Polish
-          VIC3 VIC3Lang.Russian
-          VIC3 VIC3Lang.Spanish
-          VIC3 VIC3Lang.Turkish
-          VIC3 VIC3Lang.Braz_Por ]
+    let allVIC3Langs = Enum.GetValues<VIC3Lang>() |> Array.map VIC3
 
     let allCustomLangs =
-        [ Custom CustomLang.English
-          Custom CustomLang.French
-          Custom CustomLang.German
-          Custom CustomLang.Spanish
-          Custom CustomLang.Russian
-          Custom CustomLang.Polish
-          Custom CustomLang.Braz_Por
-          Custom CustomLang.Chinese ]
+        Enum.GetValues<CustomLang>()
+        |> Array.filter (fun lang -> lang <> CustomLang.Default)
+        |> Array.map Custom
 
 type RawEffect =
     { name: string
@@ -264,15 +204,14 @@ module rec NewScope =
           isSubscopeOf: string list
           dataTypeName: string option }
 
-    type ScopeWrapper = byte
-
+    [<Sealed>]
     type ScopeManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, Scope>()
+        let mutable dict = Dictionary<string, Scope>(StringComparer.OrdinalIgnoreCase)
         let mutable reverseDict = Dictionary<Scope, ScopeInput>()
         let mutable groupDict = Map<string, Scope list>(Seq.empty)
         let mutable complexEquality = false
-        let mutable matchesSet = Set<Scope * Scope>(Seq.empty)
+        let mutable matchesSet = Set<struct (Scope * Scope)>(Seq.empty)
         let mutable dataTypeMap = Map<Scope, string>(Seq.empty)
         let anyScope = Scope(0uy)
 
@@ -297,7 +236,7 @@ module rec NewScope =
                 ()
 
             (fun (x: string) ->
-                let found, value = dict.TryGetValue(x.ToLower())
+                let found, value = dict.TryGetValue(x)
 
                 if found then
                     value
@@ -305,10 +244,10 @@ module rec NewScope =
                     log (sprintf "Unexpected scope %O" x)
                     anyScope)
 
-        let init (scopes: ScopeInput list, scopeGroups: (string * string list) list) =
+        let init (scopes: ScopeInput array, scopeGroups: (string * string list) array) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
-            dict <- Dictionary<string, Scope>()
+            dict <- Dictionary<string, Scope>(StringComparer.OrdinalIgnoreCase)
             reverseDict <- Dictionary<Scope, ScopeInput>()
             dict.Add("any", anyScope)
             dict.Add("all", anyScope)
@@ -322,14 +261,14 @@ module rec NewScope =
             let addScope (newScope: ScopeInput) =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
-                newScope.aliases |> List.iter (fun s -> dict.Add(s, Scope(newID)))
+                newScope.aliases |> List.iter (fun s -> dict[s] <- Scope(newID))
                 reverseDict.Add(Scope(newID), newScope)
 
                 match newScope.dataTypeName with
                 | Some dtn -> dataTypeMap <- dataTypeMap |> Map.add (Scope(newID)) dtn
                 | None -> ()
 
-            scopes |> List.iter addScope
+            scopes |> Array.iter addScope
 
             let addScopeSubset (newScope: ScopeInput) =
                 newScope.isSubscopeOf
@@ -337,7 +276,7 @@ module rec NewScope =
                     matchesSet <-
                         (Set.add (parseScope () (newScope.aliases |> List.head), parseScope () ss) matchesSet))
 
-            scopes |> List.iter addScopeSubset
+            scopes |> Array.iter addScopeSubset
 
             if Set.isEmpty matchesSet then
                 ()
@@ -346,8 +285,8 @@ module rec NewScope =
 
             groupDict <-
                 scopeGroups
-                |> List.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
-                |> Map.ofList
+                |> Array.map (fun (name, scopes) -> name, (scopes |> List.map (fun s -> parseScope () s)))
+                |> Map.ofArray
 
         member this.GetName(scope: Scope) =
             let found, value = reverseDict.TryGetValue scope
@@ -355,7 +294,7 @@ module rec NewScope =
             if found then
                 value.name
             else
-                log (sprintf "Unexpected scope %O" scope.tag)
+                log (sprintf "Unexpected scope %O" scope.Tag)
                 ""
 
         member this.AllScopes = reverseDict.Keys |> List.ofSeq
@@ -369,21 +308,21 @@ module rec NewScope =
             | "all" -> this.AllScopes
             | x -> [ this.ParseScope () x ]
 
-        member this.ReInit(scopes: ScopeInput list, scopeGroups: (string * string list) list) =
+        member this.ReInit(scopes: ScopeInput array, scopeGroups: (string * string list) array) =
             init (scopes, scopeGroups)
 
         member this.MatchesScope (source: Scope) (target: Scope) =
             if not complexEquality then
                 match source, target with
                 | x, _
-                | _, x when x = anyScope -> true
-                | x, y -> x = y
+                | _, x when x.Equals anyScope -> true
+                | x, y -> x.Equals y
             else
-                match Set.contains (source, target) matchesSet, source, target with
+                match Set.contains struct (source, target) matchesSet, source, target with
                 | true, _, _ -> true
                 | _, x, _
-                | _, _, x when x = anyScope -> true
-                | _, x, y -> x = y
+                | _, _, x when x.Equals anyScope -> true
+                | _, x, y -> x.Equals y
 
         member this.DataTypeForScope(scope: Scope) =
             Map.tryFind scope dataTypeMap |> Option.defaultValue (scope.ToString())
@@ -397,9 +336,12 @@ module rec NewScope =
           internalID: int option
           scopes: Scope list }
 
+    [<Sealed>]
     type ModifierCategoryManager() =
         let mutable initialized = false
-        let mutable dict = Dictionary<string, ModifierCategory>()
+
+        let mutable dict =
+            Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
 
         let mutable reverseDict = Dictionary<ModifierCategory, ModifierCategoryInput>()
 
@@ -427,7 +369,7 @@ module rec NewScope =
                 ()
 
             (fun (x: string) ->
-                let found, value = dict.TryGetValue(x.ToLower())
+                let found, value = dict.TryGetValue(x)
 
                 if found then
                     value
@@ -435,10 +377,10 @@ module rec NewScope =
                     log (sprintf "Unexpected modifier category %O" x)
                     anyModifier)
 
-        let init (modifiers: ModifierCategoryInput list) =
+        let init (modifiers: ModifierCategoryInput array) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
-            dict <- Dictionary<string, ModifierCategory>()
+            dict <- Dictionary<string, ModifierCategory>(StringComparer.OrdinalIgnoreCase)
             reverseDict <- Dictionary<ModifierCategory, ModifierCategoryInput>()
             dict.Add("any", anyModifier)
             dict.Add("invalid_modifier", invalidModifier)
@@ -450,7 +392,7 @@ module rec NewScope =
                 let newID = nextByte
                 nextByte <- nextByte + 1uy
                 let modifier = ModifierCategory(newID)
-                dict.Add(newModifier.name.ToLower(), modifier)
+                dict.Add(newModifier.name, modifier)
                 reverseDict.Add(modifier, newModifier)
 
                 newModifier.scopes
@@ -460,7 +402,7 @@ module rec NewScope =
                 | Some id -> idMap <- idMap |> (Map.add id modifier)
                 | None -> ()
 
-            modifiers |> List.iter addModifier
+            modifiers |> Array.iter addModifier
 
         member this.GetName(modifier: ModifierCategory) =
             let found, value = reverseDict.TryGetValue modifier
@@ -475,7 +417,7 @@ module rec NewScope =
         member this.AnyModifier = anyModifier
         member this.InvalidModifiere = invalidModifier
         member this.ParseModifier = parseModifierCategory
-        member this.ReInit(modifiers: ModifierCategoryInput list) = init modifiers
+        member this.ReInit(modifiers: ModifierCategoryInput array) = init modifiers
 
         member this.SupportsScope (source: ModifierCategory) (target: Scope) =
             match Set.contains (source, target) matchesSet, source, target with
@@ -502,8 +444,9 @@ module rec NewScope =
 
     let modifierCategoryManager = ModifierCategoryManager()
 
+    [<Sealed>]
     type ModifierCategory(tag: byte) =
-        member val tag = tag
+        member _.tag = tag
         override x.ToString() = modifierCategoryManager.GetName(x)
 
         override x.Equals(target: obj) =
@@ -524,38 +467,45 @@ module rec NewScope =
 
         member this.Name = modifierCategoryManager.GetName this
 
-    type Modifier = ModifierCategory
-
+    [<Struct; CustomComparison; CustomEquality; IsReadOnly>]
     type Scope(tag: byte) =
-        member val tag = tag
+        member _.Tag = tag
         override x.ToString() = scopeManager.GetName(x)
 
         override x.Equals(target: obj) =
             match target with
-            | :? Scope as t -> tag = t.tag
+            | :? Scope as t -> x.Equals t
             | _ -> false
 
+        member x.Equals(target: Scope) = tag = target.Tag
+
         override x.GetHashCode() = tag.GetHashCode()
+
+        interface IComparable<Scope> with
+            member this.CompareTo scope = scope.Tag.CompareTo tag
 
         interface IComparable with
             member this.CompareTo target =
                 match target with
-                | :? Scope as t -> tag.CompareTo t.tag
+                | :? Scope as t -> tag.CompareTo t.Tag
                 | _ -> 0
+
+        interface IEquatable<Scope> with
+            member this.Equals(target: Scope) = this.Equals target
 
         member this.AnyScope = scopeManager.AnyScope
 
         member this.IsOfScope target =
             match this, target with
             | _, x
-            | x, _ when x = scopeManager.AnyScope -> true
+            | x, _ when x.Equals scopeManager.AnyScope -> true
             | this, target -> scopeManager.MatchesScope this target
 
 
     type TypeDefInfo =
         { id: string
           validate: bool
-          range: CWTools.Utilities.Position.range
+          range: Position.range
           explicitLocalisation: (string * string * bool) list
           subtypes: string list }
 
@@ -573,12 +523,11 @@ type StaticModifier =
     { tag: string
       categories: ModifierCategory list }
 
-[<Struct; IsReadOnly>]
 type EffectType =
-    | Effect
-    | Trigger
-    | Link
-    | ValueTrigger
+    | Effect = 0uy
+    | Trigger = 1uy
+    | Link = 2uy
+    | ValueTrigger = 3uy
 
 type ReferenceHint =
     | TypeRef of typeName: string * typeValue: string
@@ -601,7 +550,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     override x.GetHashCode() =
         hash (name, scopes, effectType, refHint)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y ->
@@ -624,6 +573,7 @@ type Effect internal (name, scopes, effectType, refHint) =
     new(name: string, scopes, effectType, refHint) =
         Effect(StringResource.stringManager.InternIdentifierToken name, scopes, effectType, refHint)
 
+[<Sealed>]
 type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, settargets, usedtargets) =
     inherit Effect(name, scopes, effectType)
     member val Comments: string = comments
@@ -640,7 +590,7 @@ type ScriptedEffect(name: StringTokens, scopes, effectType, comments, globals, s
     override x.GetHashCode() =
         hash (x.Name, x.Scopes, x.Type, x.Comments, x.GlobalEventTargets, x.SavedEventTargets, x.UsedEventTargets)
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -666,7 +616,7 @@ type DocEffect(name: StringTokens, scopes, target, effectType, desc, usage, refH
         hash (x.Name, x.Scopes, x.Type, x.Desc, x.Usage, x.Target)
 
 
-    interface System.IComparable with
+    interface IComparable with
         member x.CompareTo yobj =
             match yobj with
             | :? Effect as y -> x.Name.normal.CompareTo(y.Name.normal)
@@ -805,22 +755,18 @@ type ScopedEffect
             None
         )
 
-
 type TitleType =
-    | Empire
-    | Kingdom
-    | Duchy_Hired
-    | Duchy_Normal
-    | County
-    | Barony
+    | Empire = 0uy
+    | Kingdom = 1uy
+    | Duchy_Hired = 2uy
+    | Duchy_Normal = 3uy
+    | County = 4uy
+    | Barony = 5uy
 
 type DataLinkType =
-    | Scope
-    | Value
-    | Both
-
-
-
+    | Scope = 0uy
+    | Value = 1uy
+    | Both = 2uy
 
 type EventTargetDataLink =
     { name: string

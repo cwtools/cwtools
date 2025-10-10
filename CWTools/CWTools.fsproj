@@ -3,7 +3,7 @@
         <OutputType>Library</OutputType>
         <Tailcalls>true</Tailcalls>
         <PaketCommand>dotnet paket</PaketCommand>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="AssemblyInfo.fs"/>
@@ -58,7 +58,6 @@
         <Compile Include="Rules/RulesLoader.fs"/>
         <Compile Include="Game/ResourceManager.fs"/>
         <Compile Include="Game/FileManager.fs"/>
-        <Compile Include="Game/CachedFileManager.fs"/>
         <Compile Include="Game/Lookups.fs"/>
         <Compile Include="Game/References.fs"/>
         <Compile Include="Game/GameTypes.fs"/>
@@ -82,11 +81,7 @@
         <Compile Include="Game/LanguageFeatures.fs"/>
         <Compile Include="Game/ValidationManager.fs"/>
         <Compile Include="Validation/Common/CommonValidation.fs"/>
-        <Compile Include="Validation/EU4/EU4LocalisationString.fs"/>
-        <Compile Include="Validation/EU4/EU4LocalisationValidation.fs"/>
         <Compile Include="Validation/EU4/EU4Validation.fs"/>
-        <Compile Include="Validation/VIC2/VIC2Validation.fs"/>
-        <Compile Include="Validation/HOI4/HOI4Validation.fs"/>
         <Compile Include="Game/Game.fs"/>
         <Compile Include="Game/Helpers.fs"/>
         <Compile Include="Game/Hooks.fs"/>
@@ -109,6 +104,11 @@
     <ItemGroup>
         <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj"/>
         <ProjectReference Include="..\Shared\Shared.fsproj"/>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Update="FSharp.Core">
+        <Version>9.0.303</Version>
+      </PackageReference>
     </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>
 </Project>

@@ -29,7 +29,7 @@ module CKPrinter =
             acc
             + (if leadingNewline then "\n" else "")
             + (tabs depth)
-            + key.ToString()
+            + key
             + " "
             + operatorToString op
             + " "

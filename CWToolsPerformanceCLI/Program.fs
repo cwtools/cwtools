@@ -2,10 +2,12 @@ module Program
 
 open System
 open System.Diagnostics
+open System.IO
 open System.Text
 open System.Threading
 open System.Globalization
 open Argu
+open ByteSizeLib
 open CWTools.Common
 open CWTools.Games
 open CWTools.Localisation.CK3
@@ -44,16 +46,16 @@ let getTestMode (results: ParseResults<PerformanceArgs>) =
 // Run performance test and handle results
 let runPerfTest testName testFunc =
     try
-        printfn "Running %s..." testName
+        printfn $"Running %s{testName}..."
         let result = testFunc
         let memoryAlloc = GC.GetTotalAllocatedBytes true
-        printfn "✓ %s completed successfully" testName
+        printfn $"✓ %s{testName} completed successfully"
 
         printfn
-            "  Elapsed: %dms, Errors: %d, Memory Allocated: %d"
+            "  Elapsed: %dms, Errors: %d, Memory Allocated: %s"
             result.ElapsedMilliseconds
             result.ErrorCount
-            memoryAlloc
+            (ByteSize.FromBits(memoryAlloc).ToString("MiB", CultureInfo.InvariantCulture))
 
         0
     with ex ->
@@ -99,23 +101,23 @@ let runLocalisationTest (results: ParseResults<PerformanceArgs>) =
             results.Contains EU5
         with
         | Some gamePath, true, _, _, _, _ ->
-            STLLocalisationServiceFromFolder(gamePath + "/localisation")
+            STLLocalisationServiceFromFolder(Path.Combine(gamePath, "localisation"))
             |> (fun x -> x.Api(Lang.STL STLLang.English))
             |> _.Values.Count
         | Some gamePath, _, true, _, _, _ ->
-            HOI4LocalisationServiceFromFolder(gamePath + "/localisation")
+            HOI4LocalisationServiceFromFolder(Path.Combine(gamePath, "localisation"))
             |> (fun x -> x.Api(Lang.HOI4 HOI4Lang.English))
             |> _.Values.Count
         | Some gamePath, _, _, true, _, _ ->
-            CK3LocalisationServiceFromFolder(gamePath + "/localisation")
+            CK3LocalisationServiceFromFolder(Path.Combine(gamePath, "localisation"))
             |> (fun x -> x.Api(Lang.CK3 CK3Lang.English))
             |> _.Values.Count
         | Some gamePath, _, _, _, true, _ ->
-            EU4LocalisationServiceFromFolder(gamePath + "/localisation")
+            EU4LocalisationServiceFromFolder(Path.Combine(gamePath, "localisation"))
             |> (fun x -> x.Api(Lang.EU4 EU4Lang.English))
             |> _.Values.Count
         | Some gamePath, _, _, _, _, true ->
-            EU5LocalisationServiceFromFolder(gamePath + "/localisation")
+            EU5LocalisationServiceFromFolder(Path.Combine(gamePath, "localisation"))
             |> (fun x -> x.Api(Lang.EU5 EU5Lang.English))
             |> _.Values.Count
         | None, _, _, _, _, _ -> failwith "Please provide a game path!"
@@ -129,11 +131,12 @@ let runLocalisationTest (results: ParseResults<PerformanceArgs>) =
 
 // Main program logic
 let runCommand (results: ParseResults<PerformanceArgs>) =
-    match results.GetSubCommand() with
-    | Localisation _ ->
+    match results.TryGetSubCommand() with
+    | Some(Localisation _) ->
         runLocalisationTest results
         0
-    | Full ->
+    | Some Full
+    | _ ->
         // Default to running validation tests
         let runTests = true
         let modPath = getModPath results
@@ -180,7 +183,6 @@ let runCommand (results: ParseResults<PerformanceArgs>) =
         else
             eprintfn "No valid command specified. Use --help for usage information."
             1
-    | _ -> failwith "todo"
 
 [<EntryPoint>]
 let main argv =
@@ -193,6 +195,8 @@ let main argv =
             ArgumentParser.Create<PerformanceArgs>(programName = "CWToolsPerformanceCLI")
 
         let results = parser.Parse(argv)
+
+        printfn $"Running with arguments: %A{argv}"
 
         // Run the specified command
         runCommand results

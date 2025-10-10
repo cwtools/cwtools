@@ -24,35 +24,57 @@ open CWTools.Games.Compute.EU4
 open CWTools.Parser
 open System.IO
 open CWTools.Process.Localisation
+open System.Linq
 
 module EU4GameFunctions =
     type GameObject = GameObject<EU4ComputedData, EU4Lookup>
 
     let createLocDynamicSettings (lookup: Lookup) =
-        let eventtargets =
-            (lookup.varDefInfo.TryFind "event_target"
-             |> Option.defaultValue []
-             |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "global_event_target"
-               |> Option.defaultValue []
-               |> List.map fst)
-            @ (lookup.typeDefInfo.TryFind "province_id"
-               |> Option.defaultValue []
-               |> List.map (fun tdi -> tdi.id))
-            @ (lookup.enumDefs.TryFind "country_tags"
-               |> Option.map (fun x -> (snd x) |> List.map fst)
-               |> Option.defaultValue [])
+        let eventTargets = ResizeArray<string>(32)
 
-        let definedvars =
-            (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "exiled_ruler"
-               |> Option.defaultValue []
-               |> List.map fst)
-            @ (lookup.varDefInfo.TryFind "saved_name" |> Option.defaultValue [] |> List.map fst)
+        eventTargets.AddRange(
+            lookup.varDefInfo.TryFind "event_target"
+            |> Option.defaultValue [||]
+            |> Seq.map fst
+        )
 
-        { scriptedLocCommands = lookup.scriptedLoc |> List.map (fun s -> s, [ scopeManager.AnyScope ])
-          eventTargets = eventtargets |> List.map (fun s -> s, scopeManager.AnyScope)
-          setVariables = definedvars |> LowerCaseStringSet }
+        eventTargets.AddRange(
+            lookup.varDefInfo.TryFind "global_event_target"
+            |> Option.defaultValue [||]
+            |> Array.map fst
+        )
+
+        eventTargets.AddRange(
+            lookup.typeDefInfo.TryFind "province_id"
+            |> Option.defaultValue [||]
+            |> Seq.map _.id
+        )
+
+        eventTargets.AddRange(
+            lookup.enumDefs.TryFind "country_tags"
+            |> Option.map (fun x -> (snd x) |> Seq.map fst)
+            |> Option.defaultValue [||]
+        )
+
+        let definedVars =
+            (lookup.varDefInfo.TryFind "variable"
+             |> Option.defaultValue [||]
+             |> Array.map fst)
+                .Concat(
+                    lookup.varDefInfo.TryFind "exiled_ruler"
+                    |> Option.defaultValue [||]
+                    |> Seq.map fst
+                )
+                .Concat(
+                    lookup.varDefInfo.TryFind "saved_name"
+                    |> Option.defaultValue [||]
+                    |> Seq.map fst
+                )
+
+
+        { scriptedLocCommands = lookup.scriptedLoc |> Array.map (fun s -> s, [ scopeManager.AnyScope ])
+          eventTargets = eventTargets.Select(fun s -> s, scopeManager.AnyScope).ToArray()
+          setVariables = definedVars |> IgnoreCaseStringSet }
 
     let globalLocalisation (game: GameObject) =
         let globalTypeLoc = game.ValidationManager.ValidateGlobalLocalisation()
@@ -67,16 +89,17 @@ module EU4GameFunctions =
     let updateScriptedLoc (game: GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("customizable_localization") -> Some f.entity
                 | _ -> None)
-            |> List.collect (fun n -> n.Children)
-            |> List.map (fun l -> l.TagText "name")
+            |> Seq.collect (fun n -> n.Nodes)
+            |> Seq.map (fun l -> l.TagText "name")
+            |> Seq.toArray
 
         game.Lookup.embeddedScriptedLoc <-
             game.Settings.embedded.cachedRuleMetadata
-            |> Option.map (fun crm -> crm.scriptedLoc)
-            |> Option.defaultValue []
+            |> Option.map _.scriptedLoc
+            |> Option.defaultValue [||]
 
         game.Lookup.scriptedLoc <- rawLocs
 
@@ -106,7 +129,7 @@ module EU4GameFunctions =
                     None)
             |> Set.ofList
 
-        let legacyOnly = Set.difference legacies legacyRefs |> Set.toList
+        let legacyOnly = Set.difference legacies legacyRefs |> Set.toArray
         game.Lookup.EU4TrueLegacyGovernments <- legacyOnly
 
     let addModifiersWithScopes (lookup: Lookup) =
@@ -114,7 +137,7 @@ module EU4GameFunctions =
             RulesParser.processTagAsField (scopeManager.ParseScope()) scopeManager.AnyScope scopeManager.ScopeGroups
 
         lookup.coreModifiers
-        |> List.map (fun c ->
+        |> Array.map (fun c ->
             AliasRule(
                 "modifier",
                 NewRule(
@@ -123,10 +146,10 @@ module EU4GameFunctions =
                 )
             ))
 
-    let updateScriptedEffects (rules: RootRule list) =
+    let updateScriptedEffects (rules: RootRule seq) =
         let effects =
             rules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule("effect", r) -> Some r
                 | _ -> None)
 
@@ -146,13 +169,13 @@ module EU4GameFunctions =
                 ""
             )
 
-        (effects |> List.map ruleToEffect |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.map ruleToEffect |> Seq.cast<Effect> |> Seq.toList)
         @ (scopedEffects () |> List.map (fun e -> e :> Effect))
 
-    let updateScriptedTriggers (rules: RootRule list) =
+    let updateScriptedTriggers (rules: RootRule seq) =
         let effects =
             rules
-            |> List.choose (function
+            |> Seq.choose (function
                 | AliasRule("trigger", r) -> Some r
                 | _ -> None)
 
@@ -172,59 +195,59 @@ module EU4GameFunctions =
                 ""
             )
 
-        (effects |> List.map ruleToTrigger |> List.map (fun e -> e :> Effect))
+        (effects |> Seq.map ruleToTrigger |> Seq.cast<Effect> |> Seq.toList)
         @ (scopedEffects () |> List.map (fun e -> e :> Effect))
 
-    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo list>) =
+    let addModifiersAsTypes (lookup: Lookup) (typesMap: Map<string, TypeDefInfo array>) =
         typesMap.Add(
             "modifier",
             lookup.coreModifiers
-            |> List.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
+            |> Array.map (fun m -> createTypeDefInfo false m.tag range.Zero [] [])
         )
 
-    let loadConfigRulesHook rules (lookup: Lookup) embedded =
+    let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
         let ts = updateScriptedTriggers rules
         let es = updateScriptedEffects rules
         let ls = updateEventTargetLinks embedded
         lookup.allCoreLinks <- ts @ es @ ls
-        rules @ addModifiersWithScopes lookup
+        rules.Concat(addModifiersWithScopes lookup).ToArray()
 
     let refreshConfigBeforeFirstTypesHook (lookup: EU4Lookup) (resources: IResourceAPI<EU4ComputedData>) _ =
         lookup.EU4ScriptedEffectKeys <-
-            "scaled_skill"
-            :: (resources.AllEntities()
-                |> PSeq.map (fun struct (e, l) ->
-                    (l.Force().ScriptedEffectParams
-                     |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
-                |> List.ofSeq
-                |> List.collect id)
+            Array.append
+                [| "scaled_skill" |]
+                (resources.AllEntities()
+                 |> PSeq.map (fun struct (e, l) ->
+                     (l.Force().ScriptedEffectParams
+                      |> (Option.defaultWith (fun () -> getScriptedEffectParamsEntity e))))
+                 |> Seq.collect id
+                 |> Seq.toArray)
 
         let scriptedEffectParmas =
             { key = "scripted_effect_params"
               description = "Scripted effect parameter"
               values = lookup.EU4ScriptedEffectKeys
-              valuesWithRange = lookup.EU4ScriptedEffectKeys |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.EU4ScriptedEffectKeys |> Array.map (fun x -> x, None) }
 
-        let paramsDValues =
-            lookup.EU4ScriptedEffectKeys |> List.map (fun k -> sprintf "$%s$" k)
+        let paramsDValues = lookup.EU4ScriptedEffectKeys |> Array.map (fun k -> $"$%s{k}$")
 
         let scriptedEffectParmasD =
             { key = "scripted_effect_params_dollar"
               description = "Scripted effect parameter"
               values = paramsDValues
-              valuesWithRange = paramsDValues |> List.map (fun x -> x, None) }
+              valuesWithRange = paramsDValues |> Array.map (fun x -> x, None) }
 
         let modifierEnums =
             { key = "modifiers"
-              values = lookup.coreModifiers |> List.map (fun m -> m.tag)
+              values = lookup.coreModifiers |> Array.map _.tag
               description = "Modifiers"
-              valuesWithRange = lookup.coreModifiers |> List.map (fun m -> m.tag, None) }
+              valuesWithRange = lookup.coreModifiers |> Array.map (fun m -> m.tag, None) }
 
         let legacyGovEnums =
             { key = "hardcoded_legacy_only_governments"
               values = lookup.EU4TrueLegacyGovernments
               description = "Legacy only government"
-              valuesWithRange = lookup.EU4TrueLegacyGovernments |> List.map (fun x -> x, None) }
+              valuesWithRange = lookup.EU4TrueLegacyGovernments |> Array.map (fun x -> x, None) }
 
         lookup.enumDefs <-
             lookup.enumDefs
@@ -261,23 +284,10 @@ module EU4GameFunctions =
         updateLegacyGovernments (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        let scopeDefinitions =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-            |> (fun f -> UtilityParser.initializeScopes f (Some defaultScopeInputs))
-
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some(defaultModifiersInputs ())))
-
+        initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs
 
         let triggers, effects = ([], [])
-
-        let modifiers =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
+        let modifiers = getActualModifiers configs
 
         let eu4LocCommands =
             configs
@@ -297,11 +307,7 @@ module EU4GameFunctions =
                     ft)
             |> Option.defaultValue (CWTools.Process.Scopes.EU4.scopedEffects () |> List.map SimpleLink)
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
+        let featureSettings = getFeatureSettings configs
 
         { triggers = triggers
           effects = effects
@@ -363,7 +369,7 @@ type EU4Game(setupSettings: EU4Settings) =
 
     do
         if scopeManager.Initialized |> not then
-            eprintfn "%A has no scopes" (settings.rootDirectories |> List.head)
+            eprintfn "%A has no scopes" (settings.rootDirectories |> Array.head)
         else
             ()
 
@@ -439,7 +445,7 @@ type EU4Game(setupSettings: EU4Settings) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
     let parseErrors () =
         resources.GetResources()
@@ -453,36 +459,36 @@ type EU4Game(setupSettings: EU4Settings) =
                 | _ -> None)
 
     interface IGame<EU4ComputedData> with
-        member __.ParserErrors() = parseErrors ()
+        member _.ParserErrors() = parseErrors ()
 
-        member __.ValidationErrors() =
+        member _.ValidationErrors() =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
-        member __.LocalisationErrors(force: bool, forceGlobal: bool) =
+        member _.LocalisationErrors(force: bool, forceGlobal: bool) =
             getLocalisationErrors game globalLocalisation (force, forceGlobal)
 
-        member __.Folders() = fileManager.AllFolders()
-        member __.AllFiles() = resources.GetResources()
+        member _.Folders() = fileManager.AllFolders()
+        member _.AllFiles() = resources.GetResources()
 
-        member __.AllLoadedLocalisation() =
+        member _.AllLoadedLocalisation() =
             game.LocalisationManager.LocalisationFileNames()
 
-        member __.ScriptedTriggers() = lookup.triggers
-        member __.ScriptedEffects() = lookup.effects
-        member __.StaticModifiers() = [] //lookup.staticModifiers
-        member __.UpdateFile shallow file text = game.UpdateFile shallow file text
-        member __.AllEntities() = resources.AllEntities()
+        member _.ScriptedTriggers() = lookup.triggers
+        member _.ScriptedEffects() = lookup.effects
+        member _.StaticModifiers() = [||] //lookup.staticModifiers
+        member _.UpdateFile shallow file text = game.UpdateFile shallow file text
+        member _.AllEntities() = resources.AllEntities()
 
-        member __.References() =
-            References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member _.References() =
+            References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
-        member __.Complete pos file text =
+        member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
 
-        member __.ScopesAtPos pos file text =
+        member _.ScopesAtPos pos file text =
             scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
 
-        member __.GoToType pos file text =
+        member _.GoToType pos file text =
             getInfoAtPos
                 fileManager
                 game.ResourceManager
@@ -494,32 +500,32 @@ type EU4Game(setupSettings: EU4Settings) =
                 file
                 text
 
-        member __.FindAllRefs pos file text =
+        member _.FindAllRefs pos file text =
             findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
 
-        member __.InfoAtPos pos file text = game.InfoAtPos pos file text
+        member _.InfoAtPos pos file text = game.InfoAtPos pos file text
 
-        member __.ReplaceConfigRules rules =
+        member _.ReplaceConfigRules rules =
             game.ReplaceConfigRules
                 { ruleFiles = rules
                   validateRules = true
                   debugRulesOnly = false
                   debugMode = false } //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
 
-        member __.RefreshCaches() = game.RefreshCaches()
+        member _.RefreshCaches() = game.RefreshCaches()
 
-        member __.RefreshLocalisationCaches() =
+        member _.RefreshLocalisationCaches() =
             game.LocalisationManager.UpdateProcessedLocalisation()
 
-        member __.ForceRecompute() = resources.ForceRecompute()
-        member __.Types() = game.Lookup.typeDefInfo
-        member __.TypeDefs() = game.Lookup.typeDefs
-        member __.GetPossibleCodeEdits file text = []
-        member __.GetCodeEdits file text = None
+        member _.ForceRecompute() = resources.ForceRecompute()
+        member _.Types() = game.Lookup.typeDefInfo
+        member _.TypeDefs() = game.Lookup.typeDefs
+        member _.GetPossibleCodeEdits file text = []
+        member _.GetCodeEdits file text = None
 
-        member __.GetEventGraphData: GraphDataRequest =
+        member _.GetEventGraphData: GraphDataRequest =
             (fun files gameType depth ->
                 graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
 
-        member __.GetEmbeddedMetadata() =
+        member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

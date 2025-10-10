@@ -24,6 +24,7 @@ type ILocalisationAPI =
     abstract GetKeys: string array
     abstract GetDesc: string -> string
     abstract GetLang: Lang
+    abstract GetEntries: Entry seq
 
 type ILocalisationAPICreator =
     abstract Api: Lang -> ILocalisationAPI

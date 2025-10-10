@@ -1,5 +1,6 @@
 module CWToolsPerformanceCLI.PerfFunctions
 
+open CWTools
 open CWTools.Games.CK3
 open CWTools.Games.EU4
 open CWTools.Games.EU5
@@ -133,13 +134,13 @@ let buildStlSettings rootDir configPath useManual useCached cachePath earlyStopM
     let folders = configs |> List.tryPick getFolderList
 
     if useCached then
-        { rootDirectories = [ WorkspaceDirectoryInput.WD { path = rootDir; name = "test" } ]
+        { rootDirectories = [| WorkspaceDirectoryInput.WD { path = rootDir; name = "test" } |]
           scriptFolders = folders
           excludeGlobPatterns = None
           embedded = embedded
           validation =
             { validateVanilla = true
-              langs = [ Lang.STL STLLang.English ]
+              langs = [| Lang.STL STLLang.English |]
               experimental = false }
           rules =
             Some
@@ -182,16 +183,16 @@ let buildEu4Settings rootDir configPath useCache cachePath earlyStopMode =
             FromConfig([], [])
 
     { rootDirectories =
-        [ WD
-              { name = "Europa Universalis IV"
-                path = rootDir } ]
+        [| WD
+               { name = "Europa Universalis IV"
+                 path = rootDir } |]
       modFilter = None
       scriptFolders = folders
       excludeGlobPatterns = None
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ EU4 EU4Lang.English ] }
+          langs = [| EU4 EU4Lang.English |] }
       rules =
         Some
             { ruleFiles = configs
@@ -216,16 +217,16 @@ let buildCk3Settings rootDir configPath useCache cachePath earlyStopMode =
             FromConfig([], [])
 
     { rootDirectories =
-        [ WD
-              { name = "Crusader Kings III"
-                path = rootDir } ]
+        [| WD
+               { name = "Crusader Kings III"
+                 path = rootDir } |]
       modFilter = None
       scriptFolders = folders
       excludeGlobPatterns = None
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ CK3 CK3Lang.English ] }
+          langs = [| CK3 CK3Lang.English |] }
       rules =
         Some
             { ruleFiles = configs
@@ -249,13 +250,13 @@ let buildHoi4Settings rootDir configPath useCache cachePath earlyStopMode =
         else
             FromConfig([], [])
 
-    { rootDirectories = [ WD { path = rootDir; name = "test" } ]
+    { rootDirectories = [| WD { path = rootDir; name = "test" } |]
       scriptFolders = folders
       excludeGlobPatterns = None
       embedded = embedded
       validation =
         { validateVanilla = not useCache
-          langs = [ Lang.HOI4 HOI4Lang.English ]
+          langs = [| Lang.HOI4 HOI4Lang.English |]
           experimental = false }
       rules =
         Some
@@ -295,7 +296,7 @@ let perfStellaris
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs (), [||])
 
             let settings =
                 buildStlSettings defaultRootDir defaultConfigPath false useCache defaultCachePath debugMode
@@ -305,8 +306,9 @@ let perfStellaris
                 | Some mp ->
                     { settings with
                         rootDirectories =
-                            settings.rootDirectories
-                            @ [ WorkspaceDirectoryInput.WD { path = mp; name = "mod" } ] }
+                            Array.append
+                                settings.rootDirectories
+                                [| WorkspaceDirectoryInput.WD { path = mp; name = "mod" } |] }
                 | None -> settings
 
             STLGame(finalSettings) :> IGame<_>)
@@ -335,7 +337,7 @@ let perfEU4
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs (), [||])
 
             let settings =
                 buildEu4Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -344,7 +346,7 @@ let perfEU4
                 match modPath with
                 | Some mp ->
                     { settings with
-                        rootDirectories = settings.rootDirectories @ [ WD { path = mp; name = "mod" } ] }
+                        rootDirectories = Array.append settings.rootDirectories [| WD { path = mp; name = "mod" } |] }
                 | None -> settings
 
             EU4Game(finalSettings) :> IGame<_>)
@@ -373,7 +375,7 @@ let perfCK3
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs (), [||])
 
             let settings =
                 buildCk3Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -382,7 +384,7 @@ let perfCK3
                 match modPath with
                 | Some mp ->
                     { settings with
-                        rootDirectories = settings.rootDirectories @ [ WD { path = mp; name = "mod" } ] }
+                        rootDirectories = Array.append settings.rootDirectories [| WD { path = mp; name = "mod" } |] }
                 | None -> settings
 
             CK3Game(finalSettings) :> IGame<_>)
@@ -413,7 +415,7 @@ let perfHOI4
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs (), [||])
 
             let settings =
                 buildHoi4Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -422,7 +424,7 @@ let perfHOI4
                 match modPath with
                 | Some mp ->
                     { settings with
-                        rootDirectories = settings.rootDirectories @ [ WD { path = mp; name = "mod" } ] }
+                        rootDirectories = Array.append settings.rootDirectories [| WD { path = mp; name = "mod" } |] }
                 | None -> settings
 
             HOI4Game(finalSettings) :> IGame<_>)
@@ -467,16 +469,16 @@ let buildEu5Settings rootDir configPath useCache cachePath earlyStopMode =
             FromConfig([], [])
 
     { rootDirectories =
-        [ WD
-              { name = "Europa Universalis V"
-                path = rootDir } ]
+        [| WD
+               { name = "Europa Universalis V"
+                 path = rootDir } |]
       modFilter = None
       scriptFolders = folders
       excludeGlobPatterns = None
       validation =
         { validateVanilla = not useCache
           experimental = false
-          langs = [ EU5 EU5Lang.English ] }
+          langs = [| EU5 EU5Lang.English |] }
       rules =
         Some
             { ruleFiles = configs
@@ -512,7 +514,7 @@ let perfEU5
 
     perfRunnerWithResult
         (fun () ->
-            scopeManager.ReInit(defaultScopeInputs, [])
+            scopeManager.ReInit(defaultScopeInputs (), [||])
 
             let settings =
                 buildEu5Settings defaultRootDir defaultConfigPath useCache defaultCachePath earlyStopMode
@@ -521,7 +523,7 @@ let perfEU5
                 match modPath with
                 | Some mp ->
                     { settings with
-                        rootDirectories = settings.rootDirectories @ [ WD { path = mp; name = "mod" } ] }
+                        rootDirectories = Array.append settings.rootDirectories [| WD { path = mp; name = "mod" } |] }
                 | None -> settings
 
             EU5Game(finalSettings) :> IGame<_>)

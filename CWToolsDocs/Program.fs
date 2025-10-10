@@ -48,11 +48,11 @@ let main argv =
 
     rulesFiles
     |> List.tryFind (fun (fileName, _) -> Path.GetFileName fileName = "scopes.cwt")
-    |> (fun f -> UtilityParser.initializeScopes f (Some []))
+    |> (fun f -> UtilityParser.initializeScopes f (Some [||]))
 
     rulesFiles
     |> List.tryFind (fun (fileName, _) -> Path.GetFileName fileName = "modifier_categories.cwt")
-    |> (fun f -> UtilityParser.initializeModifierCategories f (Some []))
+    |> (fun f -> UtilityParser.initializeModifierCategories f (Some [||]))
 
     let rules, types, enums, _, _ =
         rulesFiles

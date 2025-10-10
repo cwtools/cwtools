@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Frozen;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Cysharp.Text;
+using Microsoft.FSharp.Core;
 using Shared;
 
 namespace CSharpHelpers;
@@ -12,20 +15,21 @@ public static partial class FieldValidatorsHelper
 
     public static bool CheckPathDir(PathOptions pathOptions, string fullPath)
     {
-        // to prevent stack overflow, chosen a relatively conservative array size.
-        const int maxStackSize = 256;
-
         var span = fullPath.AsSpan();
         var dirSpan = Path.GetDirectoryName(span);
-        Span<char> directory =
-            dirSpan.Length > maxStackSize
-                ? new char[dirSpan.Length]
-                : stackalloc char[dirSpan.Length];
+        if (dirSpan.Contains('\\'))
+        {
+            // to prevent stack overflow, chosen a relatively conservative array size.
+            const int maxStackSize = 256;
+            Span<char> directory =
+                dirSpan.Length > maxStackSize
+                    ? new char[dirSpan.Length]
+                    : stackalloc char[dirSpan.Length];
+            dirSpan.Replace(directory, '\\', '/');
+            return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
+        }
 
-        // TODO: use Vector check?
-        dirSpan.Replace(directory, '\\', '/');
-
-        return CheckPathDir(pathOptions, directory, Path.GetFileName(span));
+        return CheckPathDir(pathOptions, dirSpan, Path.GetFileName(span));
     }
 
     public static bool CheckPathDir(
@@ -75,7 +79,7 @@ public static partial class FieldValidatorsHelper
         else
         {
             isValidFileName = fileName.Equals(
-                pathOptions.pathFile.Value,
+                pathOptions.pathFile.Value.AsSpan(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
@@ -89,7 +93,7 @@ public static partial class FieldValidatorsHelper
         {
             var extension = Path.GetExtension(fileName);
             isValidExtension = extension.Equals(
-                pathOptions.pathExtension.Value,
+                pathOptions.pathExtension.Value.AsSpan(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
@@ -167,5 +171,54 @@ public static partial class FieldValidatorsHelper
     {
         int length = str.Split(destination, separator);
         return destination[..length];
+    }
+
+    public static bool CheckFilePathField(
+        string key,
+        FrozenSet<string> files,
+        FSharpOption<string>? prefix,
+        FSharpOption<string>? extension,
+        bool generateErrorMessage,
+        out string file
+    )
+    {
+        file = string.Empty;
+        var lookup = files.GetAlternateLookup<ReadOnlySpan<char>>();
+        using var sb = ZString.CreateStringBuilder();
+        sb.Append(key.AsSpan().Trim('\"'));
+        sb.Replace('\\', '/');
+        sb.Replace("//", "/");
+
+        using var sb2 = ZString.CreateStringBuilder();
+        sb2.Append(sb.AsSpan());
+        sb2.Replace(".lua", ".shader");
+        sb2.Replace(".tga", ".dds");
+
+        if (extension is not null)
+        {
+            sb.Append(extension.Value);
+        }
+
+        bool isValid = lookup.Contains(sb.AsSpan()) || lookup.Contains(sb2.AsSpan());
+        if (prefix is null)
+        {
+            if (!isValid && generateErrorMessage)
+            {
+                file = sb.ToString();
+            }
+            return isValid;
+        }
+
+        sb.Insert(0, prefix.Value);
+        sb2.Insert(0, prefix.Value);
+        isValid = lookup.Contains(sb.AsSpan()) || lookup.Contains(sb2.AsSpan());
+        if (!isValid && generateErrorMessage)
+        {
+            // Remove prefix, because we don't want to show the prefix in the error message.
+            sb.Remove(0, prefix.Value.Length);
+            file = sb.ToString();
+        }
+
+        return isValid;
     }
 }

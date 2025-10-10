@@ -43,9 +43,9 @@ type Helpers =
               entityType = CWTools.Common.STLConstants.EntityType.Other
               overwrite = Overwrite.No }
 
-        let typeInfoMap = getTypesFromDefinitions None types [ entity ]
+        let typeInfoMap = getTypesFromDefinitions None types [| entity |]
 
         typeInfoMap
-        |> Map.filter (fun _ v -> not (List.isEmpty v))
+        |> Map.filter (fun _ v -> not (Array.isEmpty v))
         |> Map.map (fun _ v -> v :> IReadOnlyCollection<_>)
         :> IReadOnlyDictionary<_, _>

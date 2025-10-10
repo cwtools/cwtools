@@ -31,7 +31,7 @@ let generateVic3 () =
     let effectPath = root + @"config/effects.cwt"
 
     let listEffectPath = root + @"config/list_effects.cwt"
-    UtilityParser.initializeScopes (Some(scopePath, System.IO.File.ReadAllText scopePath)) (Some [])
+    UtilityParser.initializeScopes (Some(scopePath, System.IO.File.ReadAllText scopePath)) (Some [||])
 
     let rulesFiles =
         [ triggerPath; listTriggerPath; effectPath; listEffectPath ]
@@ -218,7 +218,7 @@ let generateVic3 () =
     // |> String.concat("")
     let oldTriggers =
         rules
-        |> List.choose (function
+        |> Array.choose (function
             | AliasRule("trigger", (LeafRule(SpecificField(SpecificValue(x)), _), _)) ->
                 Some(StringResource.stringManager.GetStringForIDs x)
             | AliasRule("trigger", (NodeRule(SpecificField(SpecificValue(x)), _), _)) ->
@@ -227,7 +227,7 @@ let generateVic3 () =
 
     let oldEffects =
         rules
-        |> List.choose (function
+        |> Array.choose (function
             | AliasRule("effect", (LeafRule(SpecificField(SpecificValue(x)), _), _)) ->
                 Some(StringResource.stringManager.GetStringForIDs x)
             | AliasRule("effect", (NodeRule(SpecificField(SpecificValue(x)), _), _)) ->
@@ -236,37 +236,37 @@ let generateVic3 () =
 
     let atout =
         anytriggers
-        |> List.filter (fun e -> oldTriggers |> List.contains e.name |> not)
+        |> List.filter (fun e -> oldTriggers |> Array.contains e.name |> not)
         |> List.collect tout
         |> String.concat ("")
 
     let otout =
         othertriggers
-        |> List.filter (fun e -> oldTriggers |> List.contains e.name |> not)
+        |> List.filter (fun e -> oldTriggers |> Array.contains e.name |> not)
         |> List.collect tout
         |> String.concat ("")
 
     oldTriggers
-    |> List.filter (fun e -> anytriggers |> List.exists (fun t -> t.name = e) |> not)
-    |> List.filter (fun e -> othertriggers |> List.exists (fun t -> t.name = e) |> not)
-    |> List.iter (fun e -> eprintfn "removed: %s" e)
+    |> Seq.filter (fun e -> anytriggers |> List.exists (fun t -> t.name = e) |> not)
+    |> Seq.filter (fun e -> othertriggers |> List.exists (fun t -> t.name = e) |> not)
+    |> Seq.iter (fun e -> eprintfn "removed: %s" e)
 
     let ieout =
         itereffects
-        |> List.filter (fun e -> oldEffects |> List.contains e.name |> not)
+        |> List.filter (fun e -> oldEffects |> Array.contains e.name |> not)
         |> List.map efun
         |> String.concat ("")
 
     let oeout =
         othereffects
-        |> List.filter (fun e -> oldEffects |> List.contains e.name |> not)
+        |> List.filter (fun e -> oldEffects |> Array.contains e.name |> not)
         |> List.map efun
         |> String.concat ("")
 
     oldEffects
-    |> List.filter (fun e -> itereffects |> List.exists (fun t -> t.name = e) |> not)
-    |> List.filter (fun e -> othereffects |> List.exists (fun t -> t.name = e) |> not)
-    |> List.iter (fun e -> eprintfn "removed: %s" e)
+    |> Seq.filter (fun e -> itereffects |> List.exists (fun t -> t.name = e) |> not)
+    |> Seq.filter (fun e -> othereffects |> List.exists (fun t -> t.name = e) |> not)
+    |> Seq.iter (fun e -> eprintfn "removed: %s" e)
 
     File.AppendAllText(triggerPath, otout)
     File.AppendAllText(listTriggerPath, atout)

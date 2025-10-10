@@ -13,40 +13,40 @@ type Lookup() =
 
     let mutable _allCoreLinks: Effect list = []
 
-    let _triggers () =
+    let getTriggers () =
         _allCoreLinks
         |> List.filter (fun l -> l.Type = EffectType.Trigger || l.Type = EffectType.ValueTrigger)
 
     let mutable _triggersMap: Lazy<EffectMap> = lazy (EffectMap())
 
     let resetTriggers () =
-        _triggersMap <- lazy (_triggers () |> EffectMap.FromList)
+        _triggersMap <- lazy (getTriggers () |> EffectMap.FromList)
 
-    let _effects () =
+    let getEffects () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Effect)
 
     let mutable _effectsMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetEffects () =
-        _effectsMap <- lazy (_effects () |> (fun l -> EffectMap.FromList(l)))
+        _effectsMap <- lazy (getEffects () |> (fun l -> EffectMap.FromList(l)))
 
-    let _eventTargetLinks () =
+    let getEventTargetLinks () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.Link)
 
     let mutable _eventTargetLinksMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetEventTargetLinks () =
-        _eventTargetLinksMap <- lazy (_eventTargetLinks () |> EffectMap.FromList)
+        _eventTargetLinksMap <- lazy (getEventTargetLinks () |> EffectMap.FromList)
 
-    let _valueTriggers () =
+    let getValueTriggers () =
         _allCoreLinks |> List.filter (fun l -> l.Type = EffectType.ValueTrigger)
 
     let mutable _valueTriggersMap: Lazy<EffectMap> = lazy EffectMap()
 
     let resetValueTriggers () =
-        _valueTriggersMap <- lazy (_valueTriggers () |> EffectMap.FromList)
+        _valueTriggersMap <- lazy (getValueTriggers () |> EffectMap.FromList)
 
-    member __.allCoreLinks
+    member _.allCoreLinks
         with get () = _allCoreLinks
         and set value =
             _allCoreLinks <- value
@@ -55,37 +55,36 @@ type Lookup() =
             resetEventTargetLinks ()
             resetValueTriggers ()
 
-    member __.triggers = _triggers ()
+    member _.triggers = getTriggers ()
     member this.triggersMap = _triggersMap.Force()
-    member __.effects = _effects ()
+    member _.effects = getEffects ()
     member this.effectsMap = _effectsMap.Force()
-    member __.eventTargetLinks = _eventTargetLinks ()
+    member _.eventTargetLinks = getEventTargetLinks ()
     member this.eventTargetLinksMap = _eventTargetLinksMap.Force()
-    member __.valueTriggers = _valueTriggers ()
+    member _.valueTriggers = getValueTriggers ()
     member this.valueTriggerMap = _valueTriggersMap.Force()
     member val onlyScriptedEffects: Effect list = [] with get, set
     member val onlyScriptedTriggers: Effect list = [] with get, set
 
-    member val rootFolders: WorkspaceDirectoryInput list = [] with get, set
-    member val staticModifiers: StaticModifier list = [] with get, set
-    member val coreModifiers: ActualModifier list = [] with get, set
-    member val definedScriptVariables: string list = [] with get, set
-    member val embeddedScriptedLoc: string list = [] with get, set
-    member val _realScriptedLoc: string list = [] with get, set
-    member this.scriptedLoc = this.embeddedScriptedLoc @ this._realScriptedLoc
+    member val rootFolders: WorkspaceDirectoryInput array = [||] with get, set
+    member val staticModifiers: StaticModifier array = [||] with get, set
+    member val coreModifiers: ActualModifier array = [||] with get, set
+    member val embeddedScriptedLoc: string array = [||] with get, set
+    member val _realScriptedLoc: string array = [||] with get, set
+    member this.scriptedLoc = Array.append this.embeddedScriptedLoc this._realScriptedLoc
 
     member this.scriptedLoc
         with set value = this._realScriptedLoc <- value
 
     member val proccessedLoc: (Lang * Collections.Map<string, LocEntry>) list = [] with get, set
     member val technologies: (string * string list) list = [] with get, set
-    member val configRules: RootRule list = [] with get, set
+    member val configRules: RootRule array = [||] with get, set
     member val typeDefs: TypeDefinition list = [] with get, set
     /// Map<enum key, (description * values list)
-    member val enumDefs: Collections.Map<string, string * (string * range option) list> = Map.empty with get, set
-    member val typeDefInfo: Collections.Map<string, TypeDefInfo list> = Map.empty with get, set
-    member val typeDefInfoForValidation: Collections.Map<string, (string * range) list> = Map.empty with get, set
-    member val varDefInfo: Collections.Map<string, (string * range) list> = Map.empty with get, set
+    member val enumDefs: Map<string, string * (string * range option) array> = Map.empty with get, set
+    member val typeDefInfo: Map<string, TypeDefInfo array> = Map.empty with get, set
+    member val typeDefInfoForValidation: Map<string, struct (string * range) array> = Map.empty with get, set
+    member val varDefInfo: Map<string, (string * range) array> = Map.empty with get, set
     member val savedEventTargets: ResizeArray<string * range * Scope> = new ResizeArray<_>() with get, set
 
 type JominiLookup() =
@@ -95,25 +94,25 @@ type JominiLookup() =
 type CK2Lookup() =
     inherit Lookup()
     member val CK2LandedTitles: Collections.Map<TitleType * bool, string list> = Map.empty with get, set // Title * landless
-    member val CK2provinces: string list = [] with get, set
+    member val CK2provinces: string array = [||] with get, set
 
 type EU4Lookup() =
     inherit Lookup()
-    member val EU4ScriptedEffectKeys: string list = [] with get, set
-    member val EU4TrueLegacyGovernments: string list = [] with get, set
+    member val EU4ScriptedEffectKeys: string array = [||] with get, set
+    member val EU4TrueLegacyGovernments: string array = [||] with get, set
 
 type HOI4Lookup() =
     inherit Lookup()
-    member val HOI4provinces: string list = [] with get, set
+    member val HOI4provinces: string array = [||] with get, set
 
 type STLLookup() =
     inherit Lookup()
 
 type IRLookup() =
     inherit JominiLookup()
-    member val IRprovinces: string list = [] with get, set
-    member val IRcharacters: string list = [] with get, set
+    member val IRprovinces: string array = [||] with get, set
+    member val IRcharacters: string array = [||] with get, set
 
 type VIC2Lookup() =
     inherit Lookup()
-    member val VIC2provinces: string list = [] with get, set
+    member val VIC2provinces: string array = [||] with get, set

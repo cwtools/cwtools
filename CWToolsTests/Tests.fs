@@ -46,7 +46,7 @@ Thread.CurrentThread.CurrentUICulture <- CultureInfo("ru-RU")
 let emptyEmbeddedSettings =
     { triggers = []
       effects = []
-      modifiers = []
+      modifiers = [||]
       embeddedFiles = []
       cachedResourceData = []
       localisationCommands = Legacy([], [], [])
@@ -55,12 +55,12 @@ let emptyEmbeddedSettings =
       featureSettings = UtilityParser.FeatureSettings.Default }
 
 let emptyStellarisSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
           experimental = true
-          langs = [ STL STLLang.English ] }
+          langs = [| STL STLLang.English |] }
       rules = None
       embedded = FromConfig([], [])
       scriptFolders = None
@@ -69,12 +69,12 @@ let emptyStellarisSettings rootDirectory =
       debugSettings = DebugSettings.Default }
 
 let emptyImperatorSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
           experimental = true
-          langs = [ IR IRLang.English ] }
+          langs = [| IR IRLang.English |] }
       rules = None
       embedded = FromConfig([], [])
       scriptFolders = None
@@ -83,12 +83,12 @@ let emptyImperatorSettings rootDirectory =
       debugSettings = DebugSettings.Default }
 
 let emptyVictoriaSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
           experimental = true
-          langs = [ VIC3 VIC3Lang.English ] }
+          langs = [| VIC3 VIC3Lang.English |] }
       rules = None
       embedded = FromConfig([], [])
       scriptFolders = None
@@ -309,7 +309,7 @@ let tests =
               let stl = STLGame(settings) :> IGame<STLComputedData>
               let parseErrors = stl.ParserErrors()
               let errors = stl.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
-              let entities = stl.AllEntities()
+              let entities = stl.AllEntities() |> Seq.toList
 
               let testLocKeys =
                   entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
@@ -377,7 +377,7 @@ let tests =
                       embedded = FromConfig([ locfiles ], [])
                       validation =
                           { settings.validation with
-                              langs = [ STL STLLang.English; STL STLLang.German ] }
+                              langs = [| STL STLLang.English; STL STLLang.German |] }
                       rules =
                           Some
                               { ruleFiles = configtext
@@ -400,7 +400,7 @@ let tests =
 
               let testLocKeys =
                   stl.AllEntities()
-                  |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
+                  |> Seq.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
 
               let inner (file, (req: range list, noreq: range list, _: range list)) =
                   let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
@@ -408,7 +408,7 @@ let tests =
                   Expect.isEmpty missing $"Missing required despite having key %s{file}"
                   Expect.isEmpty extra $"Incorrect required %s{file}"
 
-              testLocKeys |> List.iter (fun (f, t) -> inner (f, t))
+              testLocKeys |> Seq.iter (fun (f, t) -> inner (f, t))
               // yield! testLocKeys |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
               // eprintfn "%A" (stl.LocalisationErrors(true))
               let globalLocError =
@@ -538,6 +538,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     stl.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -545,6 +546,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     stl.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (stl :> IGame), errors, testVals, completionTests, stl.ParserErrors()
@@ -585,6 +587,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     ir.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -592,6 +595,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     ir.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (ir :> IGame), errors, testVals, completionTests, ir.ParserErrors()
@@ -632,6 +636,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     vic3.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -639,6 +644,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     vic3.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (vic3 :> IGame), errors, testVals, completionTests, vic3.ParserErrors()
@@ -681,6 +687,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     hoi4.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -688,6 +695,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     hoi4.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (hoi4 :> IGame), errors, testVals, completionTests, hoi4.ParserErrors()
@@ -850,13 +858,13 @@ let specialtests =
                     embedded =
                         ManualSettings
                             { emptyEmbeddedSettings with
-                                modifiers = modifiers } }
+                                modifiers = modifiers |> List.toArray } }
             )
             :> IGame<STLComputedData>
         // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
         let exp =
-            [ { tag = "test"
-                categories = [ modifierCategoryManager.ParseModifier () "pop" ] } ]
+            [| { tag = "test"
+                 categories = [ modifierCategoryManager.ParseModifier () "pop" ] } |]
 
         Expect.equal (stl.StaticModifiers()) exp ""
 // [<Tests>]
@@ -936,14 +944,14 @@ let embeddedTests =
         //Test serialization
         let fileManager =
             FileManager(
-                [ WD
-                      { name = "test"
-                        path = "./testfiles/embeddedtest/test" } ],
+                [| WD
+                       { name = "test"
+                         path = "./testfiles/embeddedtest/test" } |],
                 Some "",
                 scriptFolders,
                 "stellaris",
                 Encoding.UTF8,
-                [],
+                [||],
                 2000000
             )
 
@@ -1019,10 +1027,12 @@ let embeddedTests =
 
         let etestVals =
             stlE.AllEntities()
+            |> Seq.toList
             |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
         let netestVals =
             stlNE.AllEntities()
+            |> Seq.toList
             |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
         let einner (file, _: range list) =
@@ -1090,7 +1100,7 @@ let overwriteTests =
                         { emptyEmbeddedSettings with
                             triggers = triggers
                             effects = effects
-                            modifiers = modifiers
+                            modifiers = modifiers |> List.toArray
                             embeddedFiles = embeddedFiles }
                 rules =
                     Some
@@ -1104,7 +1114,7 @@ let overwriteTests =
 
         let testVals =
             stl.AllEntities()
-            |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+            |> Seq.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
         let inner (file, nodekeys: range list) =
             let expected = nodekeys //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
@@ -1119,7 +1129,7 @@ let overwriteTests =
 
             Expect.isEmpty missing $"Following lines are expected to have an error %A{missing}"
 
-        testVals |> List.iter inner
+        testVals |> Seq.iter inner
 // ]
 
 

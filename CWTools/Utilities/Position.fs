@@ -7,6 +7,9 @@ module CWTools.Utilities.Position
 open System
 open System.IO
 open System.Collections.Generic
+open System.Runtime.CompilerServices
+open System.Runtime.Serialization
+open System.Threading
 open Microsoft.FSharp.Core.Printf
 
 let rec pown32 n =
@@ -31,10 +34,7 @@ let _ = assert (posBitCount <= 32)
 let posColumnMask = mask32 0 columnBitCount
 let lineColumnMask = mask32 columnBitCount lineBitCount
 
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-[<Struct; CustomEquality; NoComparison>]
+[<Struct; CustomEquality; NoComparison; IsReadOnly>]
 [<System.Diagnostics.DebuggerDisplay("{Line},{Column}")>]
 type pos(code: int32) =
     new(l, c) =
@@ -147,6 +147,14 @@ type FileIndexTable() =
     let indexToFileTable = new ResizeArray<_>(11)
     let fileToIndexTable = new Dictionary<string, int>(11)
 
+    [<NonSerialized>]
+    let mutable lock = Lock()
+
+    [<OnDeserialized>]
+    member _.OnDeserialized(_context: StreamingContext) =
+        // Recreate the lock after deserialization
+        lock <- Lock()
+
     member t.FileToIndex f =
         let mutable res = 0
         let ok = fileToIndexTable.TryGetValue(f, &res)
@@ -154,7 +162,9 @@ type FileIndexTable() =
         if ok then
             res
         else
-            lock fileToIndexTable (fun () ->
+            lock.Enter()
+
+            try
                 let mutable res = 0 in
                 let ok = fileToIndexTable.TryGetValue(f, &res) in
 
@@ -164,7 +174,9 @@ type FileIndexTable() =
                     let n = indexToFileTable.Count in
                     indexToFileTable.Add(f)
                     fileToIndexTable.[f] <- n
-                    n)
+                    n
+            finally
+                lock.Exit()
 
     member t.IndexToFile n =
         (if n < 0 then
@@ -189,10 +201,8 @@ let fileOfFileIndex n = fileIndexTable.IndexToFile(n)
 
 let mkPos l c = pos (l, c)
 
-[<Struct; CustomEquality; NoComparison>]
-#if NET5_0_OR_GREATER
-[<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
+/// an 16 bytes struct
+[<Struct; CustomEquality; NoComparison; IsReadOnly>]
 #if DEBUG
 [<System.Diagnostics.DebuggerDisplay("({StartLine},{StartColumn}-{EndLine},{EndColumn}) {FileName} IsSynthetic={IsSynthetic} -> {DebugCode}")>]
 #else
@@ -256,10 +266,14 @@ type range(code: int64, fidx: int16) =
 
     override r.Equals(obj) =
         match obj with
-        | :? range as r2 -> code = r2.Code
+        | :? range as r2 -> r.Equals(r2)
         | _ -> false
 
     override r.GetHashCode() = hash code
+    member r.Equals(other: range) = other.Code = code
+
+    interface IEquatable<range> with
+        member this.Equals(other) = other.Code = code
 
 let memoize (keyFunction: 'a -> 'b) (memFunction: 'a -> 'c) =
     let dict = new System.Collections.Concurrent.ConcurrentDictionary<'b, 'c>()
@@ -274,7 +288,7 @@ let memoize (keyFunction: 'a -> 'b) (memFunction: 'a -> 'c) =
 
 
 let mkRangePath (f: string) =
-    if System.IO.Path.IsPathRooted f then
+    if Path.IsPathRooted f then
         try
             Path.GetFullPath f
         with _ ->
@@ -295,35 +309,16 @@ let mkFileIndexRange fi b e = range (fi, b, e)
 (* end representation, start derived ops *)
 let orderOn p (pxOrder: IComparer<'U>) =
     { new IComparer<'T> with
-        member __.Compare(x, xx) = pxOrder.Compare(p x, p xx) }
+        member _.Compare(x, xx) = pxOrder.Compare(p x, p xx) }
 
 let porder (compare1: IComparer<'T1>, compare2: IComparer<'T2>) =
     { new IComparer<'T1 * 'T2> with
-        member __.Compare((a1, a2), (aa1, aa2)) =
+        member _.Compare((a1, a2), (aa1, aa2)) =
             let res1 = compare1.Compare(a1, aa1)
             if res1 <> 0 then res1 else compare2.Compare(a2, aa2) }
 
 module Int32 =
     let order = LanguagePrimitives.FastGenericComparer<int>
-
-module String =
-    let order = LanguagePrimitives.FastGenericComparer<string>
-
-let posOrder =
-    orderOn (fun (p: pos) -> p.Line, p.Column) (porder (Int32.order, Int32.order))
-(* rangeOrder: not a total order, but enough to sort on ranges *)
-let rangeOrder =
-    orderOn (fun (r: range) -> r.FileName, r.Start) (porder (String.order, posOrder))
-
-let outputPos (os: TextWriter) (m: pos) = fprintf os "(%d,%d)" m.Line m.Column
-
-let outputRange (os: TextWriter) (m: range) =
-    fprintf os "%s%a-%a" m.FileName outputPos m.Start outputPos m.End
-
-let boutputPos os (m: pos) = bprintf os "(%d,%d)" m.Line m.Column
-
-let boutputRange os (m: range) =
-    bprintf os "%s%a-%a" m.FileName boutputPos m.Start boutputPos m.End
 
 let posGt (p1: pos) (p2: pos) =
     (p1.Line > p2.Line || (p1.Line = p2.Line && p1.Column > p2.Column))
@@ -334,63 +329,15 @@ let posEq (p1: pos) (p2: pos) =
 let posGeq p1 p2 = posEq p1 p2 || posGt p1 p2
 let posLt p1 p2 = posGt p2 p1
 
-// This is deliberately written in an allocation-free way, i.e. m1.Start, m1.End etc. are not called
-let unionRanges (m1: range) (m2: range) =
-    if m1.FileIndex <> m2.FileIndex then
-        m2
-    else
-        let b =
-            if
-                (m1.StartLine > m2.StartLine
-                 || (m1.StartLine = m2.StartLine && m1.StartColumn > m2.StartColumn))
-            then
-                m2
-            else
-                m1
-
-        let e =
-            if
-                (m1.EndLine > m2.EndLine
-                 || (m1.EndLine = m2.EndLine && m1.EndColumn > m2.EndColumn))
-            then
-                m1
-            else
-                m2
-
-        range (m1.FileIndex, b.StartLine, b.StartColumn, e.EndLine, e.EndColumn)
-
 let rangeContainsRange (m1: range) (m2: range) =
     m1.FileIndex = m2.FileIndex && posGeq m2.Start m1.Start && posGeq m1.End m2.End
 
 let rangeContainsPos (m1: range) p = posGeq p m1.Start && posGeq m1.End p
 
-let rangeBeforePos (m1: range) p = posGeq p m1.End
-
 let rangeN filename line =
     mkRange filename (mkPos line 0) (mkPos line 0)
 
 let pos0 = mkPos 1 0
-let range0 = rangeN "unknown" 1
-let rangeStartup = rangeN "startup" 1
-let rangeCmdArgs = rangeN "commandLineArgs" 0
-
-let trimRangeToLine (r: range) =
-    let startL, startC = r.StartLine, r.StartColumn
-    let endL, _endC = r.EndLine, r.EndColumn
-
-    if endL <= startL then
-        r
-    else
-        let endL, endC =
-            startL + 1, 0 (* Trim to the start of the next line (we do not know the end of the current line) *)
-
-        range (r.FileIndex, startL, startC, endL, endC)
-
-(* For Diagnostics *)
-let stringOfPos (pos: pos) = sprintf "(%d,%d)" pos.Line pos.Column
-
-let stringOfRange (r: range) =
-    sprintf "%s%s-%s" r.FileName (stringOfPos r.Start) (stringOfPos r.End)
 
 #if CHECK_LINE0_TYPES // turn on to check that we correctly transform zero-based line counts to one-based line counts
 // Visual Studio uses line counts starting at 0, F# uses them starting at 1
@@ -401,21 +348,3 @@ type Line0 = int<ZeroBasedLineAnnotation>
 #else
 type Line0 = int
 #endif
-type Pos01 = Line0 * int
-type Range01 = Pos01 * Pos01
-
-module Line =
-    // Visual Studio uses line counts starting at 0, F# uses them starting at 1
-    let fromZ (line: Line0) = int line + 1
-
-    let toZ (line: int) : Line0 =
-        LanguagePrimitives.Int32WithMeasure(line - 1)
-
-module Pos =
-    let fromZ (line: Line0) idx = mkPos (Line.fromZ line) idx
-    let toZ (p: pos) = (Line.toZ p.Line, p.Column)
-
-
-module Range =
-    let toZ (m: range) = Pos.toZ m.Start, Pos.toZ m.End
-    let toFileZ (m: range) = m.FileName, toZ m

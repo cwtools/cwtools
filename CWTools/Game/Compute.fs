@@ -75,8 +75,8 @@ module EU4 =
             (fun (x: Node) acc ->
                 let nodeRes = getDollarText x.Key acc
 
-                x.Values
-                |> List.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes)
+                x.Leaves
+                |> Seq.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes)
 
         node |> (foldNode7 fNode) |> List.ofSeq
 
@@ -169,7 +169,7 @@ module STL =
                     else
                         ls
 
-                t.Values |> List.fold inner children
+                t.Leaves |> Seq.fold inner children
 
         (nodes |> List.collect (foldNode7 fNode))
 
@@ -202,7 +202,7 @@ module STL =
 
         let referencedtypes =
             referencedtypes
-            |> Option.map (fun r -> r |> Map.map (fun k v -> (v.ToArray() |> List.ofSeq)))
+            |> Option.map (fun r -> r |> Map.map (fun _ v -> (v |> List.ofSeq)))
 
         STLComputedData(
             referencedtypes,
@@ -257,8 +257,8 @@ module Jomini =
             (fun (x: Node) acc ->
                 let nodeRes = getDollarText x.Key acc
 
-                x.Values
-                |> List.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes)
+                x.Leaves
+                |> Seq.fold (fun a n -> getDollarText n.Key (getDollarText (n.Value.ToRawString()) a)) nodeRes)
 
         node |> (foldNode7 fNode) |> List.ofSeq
 
