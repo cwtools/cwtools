@@ -17,7 +17,9 @@
         <ProjectReference Include="..\CWTools\CWTools.fsproj"/>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
     </ItemGroup>
+
     <ItemGroup>
+        <PackageReference Include="ByteSize"/>
         <PackageReference Include="Argu"/>
         <PackageReference Include="Expecto"/>
     </ItemGroup>
