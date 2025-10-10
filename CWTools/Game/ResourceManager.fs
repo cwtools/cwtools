@@ -205,6 +205,7 @@ type IResourceAPI<'T when 'T :> ComputedData> =
     abstract ForceRecompute: unit -> unit
     abstract ForceRulesDataGenerate: unit -> unit
     abstract GetFileNames: FileNames
+    abstract GetEntityByFilePath: string -> struct (Entity * Lazy<'T>) option
 
 [<Sealed>]
 type ResourceManager<'T when 'T :> ComputedData>
@@ -340,6 +341,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
     let fileMap = Dictionary<string, Resource>(52361)
 
+    /// Key: filePath
     let entitiesMap = Dictionary<string, struct (Entity * Lazy<'T>)>(5306)
 
     let duration f =
@@ -524,13 +526,13 @@ type ResourceManager<'T when 'T :> ComputedData>
 
         res |> Array.iter (fun (s, e) -> fileMap[s] <- EntityResource(s, e))
 
-        let entityMap (s, e: EntityResource) =
-            let found, result = entitiesMap.TryGetValue(s)
+        let entityMap (filePath, e: EntityResource) =
+            let found, result = entitiesMap.TryGetValue(filePath)
 
             if found then
                 let struct (olde, oldl) = result
 
-                entitiesMap[s] <-
+                entitiesMap[filePath] <-
                     struct ({ olde with
                                 Entity.overwrite = e.overwrite },
                             oldl)
@@ -747,13 +749,13 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                 match updatedE with
                 | Some newNode ->
-                    let newE = { oldE with entity = newNode }
+                    let newEntity = { oldE with entity = newNode }
 
                     let lazyi =
-                        System.Lazy<_>((fun () -> computedDataFunction newE), LazyThreadSafetyMode.PublicationOnly)
+                        System.Lazy<_>((fun () -> computedDataFunction newEntity), LazyThreadSafetyMode.PublicationOnly)
 
-                    let item = struct (newE, lazyi)
-                    entitiesMap[newE.filepath] <- item
+                    let item = struct (newEntity, lazyi)
+                    entitiesMap[newEntity.filepath] <- item
                     resource, Some item
                 | None -> resource, Some struct (oldE, oldLazy)
             | resource, None -> resource, None)
@@ -783,10 +785,7 @@ type ResourceManager<'T when 'T :> ComputedData>
 
     let updateFiles (files: ResourceInput array) =
         let news =
-            files
-            |> PSeq.map parseFileThenEntity
-            |> Seq.collect saveResults
-            |> Seq.toList
+            files |> PSeq.map parseFileThenEntity |> Seq.collect saveResults |> Seq.toList
 
         updateOverwrite ()
         let mutable res = news
@@ -835,6 +834,11 @@ type ResourceManager<'T when 'T :> ComputedData>
             | FileWithContentResource(_, r) -> r.logicalpath)
         |> Seq.toArray
 
+    let getEntityByFilePath path =
+        match entitiesMap.TryGetValue(path) with
+        | true, r -> Some r
+        | _ -> None
+
     member _.ManualProcessResource = parseFileThenEntity >> snd
 
     member _.ManualProcess (filename: string) (filetext: string) =
@@ -856,4 +860,5 @@ type ResourceManager<'T when 'T :> ComputedData>
             member _.ValidatableEntities = validatableEntities
             member _.ForceRecompute() = forceRecompute ()
             member _.ForceRulesDataGenerate() = forceRulesData ()
-            member _.GetFileNames = getFileNames }
+            member _.GetFileNames = getFileNames
+            member _.GetEntityByFilePath path = getEntityByFilePath path }

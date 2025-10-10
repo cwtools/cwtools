@@ -30,8 +30,7 @@ module LanguageFeatures =
         lookup.typeDefInfo.TryFind typedef.name
         |> Option.bind (Array.tryFind (fun tdi -> tdi.id = typename))
         |> Option.bind (fun typeDefInfoForTypeName ->
-            resourceManager.Api.AllEntities()
-            |> List.tryFind (fun struct (e, _) -> e.filepath = typeDefInfoForTypeName.range.FileName)
+            resourceManager.Api.GetEntityByFilePath typeDefInfoForTypeName.range.FileName
             |> Option.bind (fun struct (e, _) -> findNode typeDefInfoForTypeName.range e.entity))
 
     let makeEntityResourceInput (fileManager: FileManager) filepath filetext =
