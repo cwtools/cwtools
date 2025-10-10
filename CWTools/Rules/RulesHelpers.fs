@@ -152,6 +152,7 @@ let getTypesFromDefinitions
     |> Map.ofSeq
 
 let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity seq) : EnumDefinition list =
+    let entities = es |> Seq.toArray
     let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"
     let enumNameKeyId = StringResource.stringManager.InternIdentifierToken "enum_name"
     let nameKeyId = StringResource.stringManager.InternIdentifierToken "name"
@@ -241,7 +242,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity seq
     //enumtree.Children |> List.collect (fun e -> node.Children |> List.collect (inner e ))
     let getEnumInfo (complexenum: ComplexEnumDef) =
         let values =
-            es
+            entities
             |> Seq.choose (fun e ->
                 if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
                     Some e.entity
@@ -252,17 +253,17 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity seq
                     innerStart complexenum.nameTree e
                 else
                     e.Nodes |> Seq.collect (innerStart complexenum.nameTree))
+            |> Seq.toArray
         // log "%A %A" complexenum.name values
         { key = complexenum.name
-          values = values |> Seq.map fst |> Array.ofSeq
+          values = values |> Array.map fst
           description = complexenum.description
-          valuesWithRange = values |> Array.ofSeq }
+          valuesWithRange = values }
 
     complexenums
     |> List.toSeq
     |> PSeq.map getEnumInfo
-    |> List.ofSeq
-    |> List.fold
+    |> Seq.fold
         (fun acc e ->
             if Map.containsKey e.key acc then
                 Map.add
