@@ -114,7 +114,7 @@ module CommonValidation =
             let res = res.AllEntities()
 
             let entityMap =
-                res |> List.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofList
+                res |> Seq.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofSeq
 
             let findParams (pos: range) =
                 match entityMap |> Map.tryFind pos.FileName with
@@ -294,7 +294,7 @@ module CommonValidation =
             let res = res.AllEntities()
 
             let entityMap =
-                res |> List.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofList
+                res |> Seq.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofSeq
 
             let findParams (referenceDetails: ReferenceDetails) =
                 //                logInfo (sprintf "vsvp %s" key)

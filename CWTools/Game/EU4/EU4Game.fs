@@ -89,7 +89,7 @@ module EU4GameFunctions =
     let updateScriptedLoc (game: GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("customizable_localization") -> Some f.entity
                 | _ -> None)
             |> Seq.collect (fun n -> n.Nodes)

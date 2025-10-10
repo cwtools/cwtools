@@ -80,7 +80,7 @@ module STLGameFunctions =
     let updateStaticodifiers (game: GameObject) =
         let rawModifiers =
             game.Resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("static_modifiers") -> Some f.entity
                 | _ -> None)
             |> Seq.collect _.Nodes
@@ -97,7 +97,7 @@ module STLGameFunctions =
     let updateScriptedLoc (game: GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("scripted_loc") -> Some f.entity
                 | _ -> None)
             |> Seq.collect (fun n -> n.Nodes)

@@ -199,7 +199,7 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
         /// Enums
         let complexEnumDefs =
-            getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct (e, _) -> e))
+            getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> Seq.map structFst)
 
         let allEnums = simpleEnums @ complexEnumDefs
 
@@ -224,7 +224,6 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         let files = addEmbeddedFiles(resources.GetFileNames().ToHashSet()).ToFrozenSet()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
         // log "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-        let allEntities = resources.AllEntities() |> List.map (fun struct (e, _) -> e)
 
         let refreshTypeInfo () =
             let processLoc, validateLoc = settings.locFunctions lookup
@@ -248,11 +247,11 @@ type RulesManager<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     validateLoc
                 )
 
+            let allEntities = resources.AllEntities() |> Seq.map structFst
             let typeDefInfo =
                 getTypesFromDefinitions (Some tempRuleValidationService) tempTypes allEntities
 
-            let newTypeDefInfo = typeDefInfo
-            lookup.typeDefInfo <- addEmbeddedTypeDefData newTypeDefInfo // |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
+            lookup.typeDefInfo <- addEmbeddedTypeDefData typeDefInfo // |> Map.map (fun _ v -> v |> List.map (fun (_, t, r) -> (t, r)))
 
             let newTypeMap =
                 lookup.typeDefInfo

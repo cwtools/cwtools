@@ -309,7 +309,7 @@ let tests =
               let stl = STLGame(settings) :> IGame<STLComputedData>
               let parseErrors = stl.ParserErrors()
               let errors = stl.LocalisationErrors(true, true) |> List.map (fun e -> e.range)
-              let entities = stl.AllEntities()
+              let entities = stl.AllEntities() |> Seq.toList
 
               let testLocKeys =
                   entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
@@ -400,7 +400,7 @@ let tests =
 
               let testLocKeys =
                   stl.AllEntities()
-                  |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
+                  |> Seq.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
 
               let inner (file, (req: range list, noreq: range list, _: range list)) =
                   let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
@@ -408,7 +408,7 @@ let tests =
                   Expect.isEmpty missing $"Missing required despite having key %s{file}"
                   Expect.isEmpty extra $"Incorrect required %s{file}"
 
-              testLocKeys |> List.iter (fun (f, t) -> inner (f, t))
+              testLocKeys |> Seq.iter (fun (f, t) -> inner (f, t))
               // yield! testLocKeys |> List.map (fun (f, t) -> testWithCapturedLogs (f.ToString()) <| fun () -> inner (f, t))
               // eprintfn "%A" (stl.LocalisationErrors(true))
               let globalLocError =
@@ -538,6 +538,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     stl.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -545,6 +546,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     stl.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (stl :> IGame), errors, testVals, completionTests, stl.ParserErrors()
@@ -585,6 +587,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     ir.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -592,6 +595,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     ir.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (ir :> IGame), errors, testVals, completionTests, ir.ParserErrors()
@@ -632,6 +636,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     vic3.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -639,6 +644,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     vic3.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (vic3 :> IGame), errors, testVals, completionTests, vic3.ParserErrors()
@@ -681,6 +687,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let testVals =
                     hoi4.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) ->
                         e.filepath,
                         getNodeComments e.entity
@@ -688,6 +695,7 @@ let testFolder folder testsname config configValidate configfile configOnly conf
 
                 let completionTests =
                     hoi4.AllEntities()
+                    |> Seq.toList
                     |> List.map (fun struct (e, _) -> e.filepath, getCompletionTests e.entity)
 
                 (hoi4 :> IGame), errors, testVals, completionTests, hoi4.ParserErrors()
@@ -1019,10 +1027,12 @@ let embeddedTests =
 
         let etestVals =
             stlE.AllEntities()
+            |> Seq.toList
             |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
         let netestVals =
             stlNE.AllEntities()
+            |> Seq.toList
             |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
         let einner (file, _: range list) =
@@ -1104,7 +1114,7 @@ let overwriteTests =
 
         let testVals =
             stl.AllEntities()
-            |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+            |> Seq.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
 
         let inner (file, nodekeys: range list) =
             let expected = nodekeys //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
@@ -1119,7 +1129,7 @@ let overwriteTests =
 
             Expect.isEmpty missing $"Following lines are expected to have an error %A{missing}"
 
-        testVals |> List.iter inner
+        testVals |> Seq.iter inner
 // ]
 
 

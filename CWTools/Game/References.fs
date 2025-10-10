@@ -9,8 +9,6 @@ open CWTools.Common
 
 type References<'T when 'T :> ComputedData>
     (resourceManager: IResourceAPI<'T>, lookup: Lookup, localisation: ILocalisationAPI list) =
-    let entities () =
-        resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
 
     let modifiers () =
         lookup.staticModifiers |> Array.map _.tag

@@ -191,9 +191,9 @@ type UpdateFile<'T> = ResourceInput -> Resource * struct (Entity * Lazy<'T>) opt
 type UpdateFiles<'T> = ResourceInput array -> (Resource * struct (Entity * Lazy<'T>) option) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
-type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
+type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) seq
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type FileNames = unit -> string array
+type FileNames = unit -> string seq
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -822,20 +822,18 @@ type ResourceManager<'T when 'T :> ComputedData>
     let allEntities () =
         entitiesMap.Values
         |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
-        |> Seq.toList
 
     let validatableEntities () =
         entitiesMap.Values
         |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten && e.validate)
         |> Seq.toList
 
-    let getFileNames () : string array =
+    let getFileNames () : string seq =
         fileMap.Values
         |> Seq.map (function
             | EntityResource(_, r) -> r.logicalpath
             | FileResource(_, r) -> r.logicalpath
             | FileWithContentResource(_, r) -> r.logicalpath)
-        |> Seq.toArray
 
     let getEntityByFilePath path =
         match entitiesMap.TryGetValue(path) with

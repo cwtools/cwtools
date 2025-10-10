@@ -578,20 +578,23 @@ type ValidationResult =
         | OK -> 0
         | Invalid(id, _) -> id.GetHashCode()
 
-type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) list) =
+[<Sealed>]
+type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) seq) =
     static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+
+    let _entities = entities |> List.ofSeq
 
     member _.GlobMatch(pattern: string) =
         let glob = Glob.Parse(pattern)
 
-        entities
+        _entities
         |> List.choose (fun struct (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
 
     member this.GlobMatchChildren(pattern: string) =
         this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
 
     member _.AllOfType(entityType: EntityType) =
-        entities
+        _entities
         |> List.choose (fun struct (es, d) ->
             if es.entityType = entityType then
                 Some(es.entity, d)
@@ -603,19 +606,19 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
         |> List.map (fun (e, d) -> e.Children)
         |> List.collect id
 
-    member _.All = entities |> List.map (fun struct (es, _) -> es.entity)
-    member _.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
+    member _.All = _entities |> List.map (fun struct (es, _) -> es.entity)
+    member _.AllWithData = _entities |> List.map (fun struct (es, d) -> es.entity, d)
 
     member this.AllEffects =
-        entities
+        _entities
         |> List.collect (fun struct (_, d) -> d.Force().EffectBlocks |> Option.defaultValue [])
 
     member this.AllTriggers =
-        entities
+        _entities
         |> List.collect (fun struct (_, d) -> d.Force().TriggerBlocks |> Option.defaultValue [])
 
     member _.AddOrGetCached id generator =
-        entities
+        _entities
         |> List.collect (fun struct (e, d) ->
             let data = d.Force()
 
@@ -627,7 +630,7 @@ type EntitySet<'T when 'T :> ComputedData>(entities: struct (Entity * Lazy<'T>) 
                 v)
 
 
-    member _.Raw = entities
+    member _.Raw = _entities
 
 type STLEntitySet = EntitySet<STLComputedData>
 type EU4EntitySet = EntitySet<EU4ComputedData>

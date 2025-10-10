@@ -15,7 +15,7 @@ open CWTools.Common
 let getTypesFromDefinitions
     (ruleapplicator: RuleValidationService option)
     (types: TypeDefinition list)
-    (entities: Entity list)
+    (entities: Entity seq)
     =
     let getExplicitLocalisationKeys (entity: IClause) (typeDef: TypeDefinition) =
         typeDef.localisation
@@ -25,12 +25,12 @@ let getTypesFromDefinitions
 
     let getTypeInfo (def: TypeDefinition) =
         entities
-        |> List.choose (fun e ->
+        |> Seq.choose (fun e ->
             if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(def.pathOptions, e.logicalpath) then
                 Some(e.entity, Path.GetFileNameWithoutExtension e.logicalpath, e.validate)
             else
                 None)
-        |> List.collect (fun (e, fileNameWithoutExtension, v) ->
+        |> Seq.collect (fun (e, fileNameWithoutExtension, v) ->
             let inner (n: IClause) =
                 let rawSubtypes, subtypes =
                     match ruleapplicator with
@@ -151,7 +151,7 @@ let getTypesFromDefinitions
               subtypes = sts }) |> Seq.toArray)
     |> Map.ofSeq
 
-let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) : EnumDefinition list =
+let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity seq) : EnumDefinition list =
     let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"
     let enumNameKeyId = StringResource.stringManager.InternIdentifierToken "enum_name"
     let nameKeyId = StringResource.stringManager.InternIdentifierToken "name"
