@@ -46,7 +46,7 @@ module CK2GameFunctions =
     let updateScriptedLoc (game: GameObject) =
         let rawLocs =
             game.Resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("customizable_localisation") -> Some f.entity
                 | _ -> None)
             |> Seq.collect _.Nodes

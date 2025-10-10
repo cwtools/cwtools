@@ -98,5 +98,5 @@ type IGame =
 
 type IGame<'T when 'T :> ComputedData> =
     inherit IGame
-    abstract AllEntities: unit -> struct (Entity * Lazy<'T>) list
+    abstract AllEntities: unit -> struct (Entity * Lazy<'T>) seq
     abstract References: unit -> References<'T>

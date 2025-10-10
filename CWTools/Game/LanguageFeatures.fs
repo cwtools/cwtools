@@ -441,7 +441,7 @@ module LanguageFeatures =
           enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> Array.map fst)
           varDefs = lookup.varDefInfo
           loc = localisation.LocalisationKeys()
-          files = resources.Api.GetFileNames() |> Set.ofArray
+          files = resources.Api.GetFileNames() |> Set.ofSeq
           scriptedLoc = lookup.scriptedLoc }
 
 
@@ -464,7 +464,8 @@ module LanguageFeatures =
 
         let entitiesInSelectedFiles =
             resourceManager.Api.AllEntities()
-            |> List.filter (fun struct (e, _) -> files |> List.contains e.filepath)
+            |> Seq.filter (fun struct (e, _) -> files |> List.contains e.filepath)
+            |> Seq.toList
 
         let locSet = referenceManager.Localisation |> Map.ofList
 
@@ -607,8 +608,8 @@ module LanguageFeatures =
 
                 let newIncomingRefs =
                     resourceManager.Api.AllEntities()
-                    |> List.filter (fun struct (e, _) -> allOtherFiles |> List.contains e.filepath)
-                    |> List.collect (fun struct (_, data) ->
+                    |> Seq.filter (fun struct (e, _) -> allOtherFiles |> List.contains e.filepath)
+                    |> Seq.collect (fun struct (_, data) ->
                         data.Force().Referencedtypes
                         |> Option.map (
                             getSourceTypes
@@ -616,7 +617,8 @@ module LanguageFeatures =
                                 (v.GetString(), r, isOutgoing, refLabel))
                         )
                         |> Option.defaultValue [])
-                    |> List.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)
+                    |> Seq.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)
+                    |> Seq.toList
 
                 newIncomingRefs
 

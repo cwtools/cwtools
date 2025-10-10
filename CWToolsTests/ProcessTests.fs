@@ -912,7 +912,7 @@ let testsv =
                       RulesHelpers.getTypesFromDefinitions
                           (Some ruleapplicator)
                           [ shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value ]
-                          [ be ]
+                          [| be |]
                       |> Map.toSeq
                       |> Seq.map (fun (k, s) -> k, createStringSet (s |> Array.map _.id))
                       |> Map.ofSeq
