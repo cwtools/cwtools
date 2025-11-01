@@ -118,10 +118,10 @@ module LanguageFeatures =
             | Some(_, (_, Some(LocRef(tv)), _)) ->
                 match
                     localisationManager.LocalisationEntries()
-                    |> List.tryFind (fun (l, _) -> l = lang)
+                    |> Seq.tryFind (fun (l, _) -> l = lang)
                 with
                 | Some(_, entries) ->
-                    match entries |> List.tryFind (fun struct (k, _) -> k = tv) with
+                    match entries |> Array.tryFind (fun struct (k, _) -> k = tv) with
                     | Some(_, entry) -> Some entry.position
                     | _ -> None
                 | None -> None

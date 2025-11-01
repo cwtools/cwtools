@@ -258,7 +258,7 @@ module Helpers =
     let hardcodedLocalisation = []
 
     let validateProcessedLocalisation
-        : ((Lang * LocKeySet) list -> (Lang * Map<string, LocEntry>) list -> ValidationResult) =
+        : ((Lang * LocKeySet) array -> (Lang * Map<string, LocEntry>) list -> ValidationResult) =
         validateProcessedLocalisationBase hardcodedLocalisation
 
     let createJominiLocalisationFunctions

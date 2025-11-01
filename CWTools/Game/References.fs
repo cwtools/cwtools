@@ -8,7 +8,7 @@ open CWTools.Common
 
 
 type References<'T when 'T :> ComputedData>
-    (resourceManager: IResourceAPI<'T>, lookup: Lookup, localisation: ILocalisationAPI list) =
+    (resourceManager: IResourceAPI<'T>, lookup: Lookup, localisation: ILocalisationAPI seq) =
 
     let modifiers () =
         lookup.staticModifiers |> Array.map _.tag
