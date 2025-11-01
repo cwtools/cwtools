@@ -1,5 +1,6 @@
 namespace CWTools.Games.Stellaris
 
+open System
 open System.Diagnostics
 open CWTools.Game
 open CWTools.Parser
@@ -125,8 +126,11 @@ module STLGameFunctions =
             |> List.choose (function
                 | FileWithContentResource(_, e) -> Some e
                 | _ -> None)
-            |> List.filter (fun f -> f.overwrite <> Overwrite.Overwritten && f.extension = ".yml" && f.validate)
-            |> List.map (fun f -> f.filepath)
+            |> List.filter (fun f ->
+                f.overwrite <> Overwrite.Overwritten
+                && Path.GetExtension(f.filepath.AsSpan()).Equals(".yml", StringComparison.OrdinalIgnoreCase)
+                && f.validate)
+            |> List.map _.filepath
 
         let locFileValidation = validateLocalisationFiles locfiles
 

@@ -1,6 +1,7 @@
 namespace CWTools.Games
 
 open System
+open System.IO
 open CWTools.Common
 open CWTools.Localisation
 open CWTools.Utilities.Utils
@@ -26,7 +27,9 @@ type LocalisationManager<'T when 'T :> ComputedData>
     let parseLocFile (locFile: FileWithContentResource) =
         if
             locFile.overwrite <> Overwrite.Overwritten
-            && locFile.extension = localisationExtension
+            && Path
+                .GetExtension(locFile.filepath.AsSpan())
+                .Equals(localisationExtension, StringComparison.OrdinalIgnoreCase)
         then
             let locService = [ locFile.filepath, locFile.filetext ] |> localisationService
 

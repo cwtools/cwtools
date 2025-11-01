@@ -129,7 +129,6 @@ type FileWithContentResource =
     { scope: string
       filetext: string
       filepath: string
-      extension: string
       logicalpath: string
       overwrite: Overwrite
       validate: bool }
@@ -456,7 +455,6 @@ type ResourceManager<'T when 'T :> ComputedData>
                   logicalpath = f.logicalpath
                   filetext = f.filetext
                   overwrite = Overwrite.No
-                  extension = Path.GetExtension(f.filepath)
                   validate = f.validate }
              ),
              [])
