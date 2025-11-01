@@ -52,7 +52,7 @@ type CompletionService
         types: FrozenDictionary<string, PrefixOptimisedStringSet>,
         enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
         varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
-        localisation: (Lang * Collections.Set<string>) list,
+        localisation: (Lang * Collections.Set<string>) array,
         files: FrozenSet<string>,
         links: EffectMap,
         valueTriggers: EffectMap,
@@ -80,13 +80,13 @@ type CompletionService
 
     let defaultKeys =
         localisation
-        |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None)
-        |> List.tryHead
+        |> Array.choose (fun (l, ks) -> if l = defaultLang then Some ks else None)
+        |> Array.tryHead
         |> Option.defaultValue Set.empty
 
     let localisationKeys =
         localisation
-        |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some(l, ks))
+        |> Array.choose (fun (l, ks) -> if l = defaultLang then None else Some(l, ks))
 
     let ruleToCompletionListHelper =
         function
@@ -768,13 +768,13 @@ type CompletionService
                 | false, true -> (allPossibles |> Array.map CompletionResponse.CreateSimple)
                 | true, _ ->
                     localisation
-                    |> List.tryFind (fun (lang, _) -> lang = (STL STLLang.Default))
+                    |> Array.tryFind (fun (lang, _) -> lang = (STL STLLang.Default))
                     |> Option.map (snd >> Set.toArray)
                     |> Option.defaultValue [||]
                     |> Array.map CompletionResponse.CreateSimple
                 | false, _ ->
                     localisation
-                    |> List.tryFind (fun (lang, _) -> lang <> (STL STLLang.Default))
+                    |> Array.tryFind (fun (lang, _) -> lang <> (STL STLLang.Default))
                     |> Option.map (snd >> Set.toArray)
                     |> Option.defaultValue [||]
                     |> Array.map CompletionResponse.CreateSimple

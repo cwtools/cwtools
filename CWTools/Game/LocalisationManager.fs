@@ -53,7 +53,8 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         this.localisationKeys <-
             groupedLocalisation
-            |> List.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
+            |> Seq.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
+            |> Array.ofSeq
 
         this.taggedLocalisationKeys <-
             groupedLocalisation
@@ -76,7 +77,8 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         this.localisationKeys <-
             groupedLocalisation
-            |> List.map (fun (k, g) -> k, g |> Seq.collect (fun ls -> ls.GetKeys) |> Set.ofSeq)
+            |> Seq.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
+            |> Array.ofSeq
 
         this.taggedLocalisationKeys <-
             groupedLocalisation
@@ -101,7 +103,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     member val localisationErrors: CWError list option = None with get, set
     member val globalLocalisationErrors: CWError list option = None with get, set
-    member val localisationKeys: (Lang * Set<string>) list = [] with get, set
+    member val localisationKeys: (Lang * Set<string>) array = [||] with get, set
     member val taggedLocalisationKeys: (Lang * LocKeySet) list = [] with get, set
 
     member this.UpdateAllLocalisation() =

@@ -36,14 +36,14 @@ let inline checkLocNameN (leaf: ^a) (keys: Set<string>) (lang: Lang) (ids: Strin
     | _, _, true -> errors
     | _, _, false -> invData (ErrorCodes.MissingLocalisation key lang) leaf (Some key) <&&&> errors
 
-let inline checkLocKeysLeafOrNodeN (keys: (Lang * Set<string>) list) (key: string) (leafornode: ^a) errors =
+let inline checkLocKeysLeafOrNodeN (keys: (Lang * Set<string>) array) (key: string) (leafornode: ^a) errors =
     keys
-    |> List.fold (fun state (l, keys) -> checkLocKeyN leafornode keys l state key) errors
+    |> Array.fold (fun state (l, keys) -> checkLocKeyN leafornode keys l state key) errors
 
-let inline checkLocKeysLeafOrNodeNE (keys: (Lang * Set<string>) list) (key: string) =
+let inline checkLocKeysLeafOrNodeNE (keys: (Lang * Set<string>) array) (key: string) =
     keys
-    |> List.fold (fun state (l, keys) -> state && checkLocKeyNE keys key) true
+    |> Array.fold (fun state (l, keys) -> state && checkLocKeyNE keys key) true
 
-let inline checkLocKeysInlineLeafOrNodeN (keys: (Lang * Set<string>) list) ids (key: string) (leafornode: ^a) errors =
+let inline checkLocKeysInlineLeafOrNodeN (keys: (Lang * Set<string>) array) ids (key: string) (leafornode: ^a) errors =
     keys
-    |> List.fold (fun state (l, keys) -> checkLocKeyInlineN leafornode keys l state ids key) errors
+    |> Array.fold (fun state (l, keys) -> checkLocKeyInlineN leafornode keys l state ids key) errors

@@ -131,10 +131,10 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match settings.embedded.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newList: (Lang * Set<string>) list) ->
-                let newMap = newList |> Map.ofList
-                let oldList = md.loc |> List.filter (fun (l, _) -> Array.contains l langs)
-                let embeddedMap = oldList |> Map.ofList
+            fun (newList: (Lang * Set<string>) array) ->
+                let newMap = newList |> Map.ofArray
+                let oldList = md.loc |> Array.filter (fun (l, _) -> Array.contains l langs)
+                let embeddedMap = oldList |> Map.ofArray
 
                 let res =
                     Map.fold
@@ -145,7 +145,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                         newMap
                         embeddedMap
 
-                res |> Map.toList
+                res |> Map.toArray
 
     let validationServices () =
         { resources = resourceManager.Api

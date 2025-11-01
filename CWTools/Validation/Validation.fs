@@ -644,7 +644,7 @@ type STLFileValidator = FileValidator<STLComputedData>
 type LookupValidator<'T when 'T :> ComputedData> = Lookup -> StructureValidator<'T>
 
 type LocalisationValidator<'T when 'T :> ComputedData> =
-    EntitySet<'T> -> (Lang * Set<string>) list -> EntitySet<'T> -> ValidationResult
+    EntitySet<'T> -> (Lang * Set<string>) array -> EntitySet<'T> -> ValidationResult
 
 module ValidationCore =
 

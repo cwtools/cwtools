@@ -35,7 +35,7 @@ type ValidationManagerServices<'T when 'T :> ComputedData> =
       lookup: Lookup
       ruleValidationService: RuleValidationService option
       infoService: InfoService option
-      localisationKeys: unit -> (Lang * Set<string>) list
+      localisationKeys: unit -> (Lang * Set<string>) array
       fileManager: Files.FileManager }
 
 open System.Collections.Generic
