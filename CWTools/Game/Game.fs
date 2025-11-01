@@ -176,14 +176,6 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             settings.validation.langs,
             debugMode
         )
-    // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
-    // let mutable localisationErrors : CWError list option = None
-    // let mutable localisationKeys = []
-    // let mutable taggedLocalisationKeys = []
-    let getEmbeddedFiles () =
-        settings.embedded.embeddedFiles
-        |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
-
     let mutable errorCache = Map.empty
 
     let updateFile (shallow: bool) filepath (fileText: string option) =
