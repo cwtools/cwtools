@@ -298,7 +298,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         this.RefreshValidationManager()
 
     let initialConfigRules () =
-        log (sprintf "Initial config rules update")
+        log "Initial config rules update"
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         localisationManager.UpdateAllLocalisation()
