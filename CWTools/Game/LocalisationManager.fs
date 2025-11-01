@@ -52,7 +52,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             allLocs |> Map.ofSeq
 
-        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> List.groupBy _.GetLang
+        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
 
         this.localisationKeys <-
             groupedLocalisation
@@ -61,11 +61,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         this.taggedLocalisationKeys <-
             groupedLocalisation
-            |> List.map (fun (k, g) ->
+            |> Seq.map (fun (k, g) ->
                 k,
                 g
                 |> Seq.collect _.GetKeys
                 |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
+            |> Seq.toArray
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
         let loc = parseLocFile locFile |> Option.defaultValue [||]
@@ -76,7 +77,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         localisationAPIMap <- newMap
 
-        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> List.groupBy _.GetLang
+        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang
 
         this.localisationKeys <-
             groupedLocalisation
@@ -85,11 +86,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         this.taggedLocalisationKeys <-
             groupedLocalisation
-            |> List.map (fun (k, g) ->
+            |> Seq.map (fun (k, g) ->
                 k,
                 g
-                |> Seq.collect (fun ls -> ls.GetKeys)
+                |> Seq.collect _.GetKeys
                 |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
+            |> Seq.toArray
 
     let updateProcessedLocalisation () =
         let validatableEntries =
@@ -107,7 +109,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
     member val localisationErrors: CWError list option = None with get, set
     member val globalLocalisationErrors: CWError list option = None with get, set
     member val localisationKeys: (Lang * Set<string>) array = [||] with get, set
-    member val taggedLocalisationKeys: (Lang * LocKeySet) list = [] with get, set
+    member val taggedLocalisationKeys: (Lang * LocKeySet) array = [||] with get, set
 
     member this.UpdateAllLocalisation() =
         updateAllLocalisationSources ()
@@ -118,8 +120,8 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     member _.GetLocalisationAPIs() : (struct (bool * ILocalisationAPI)) list = localisationAPIMap.Values |> Seq.toList
 
-    member this.GetCleanLocalisationAPIs() : ILocalisationAPI list =
-        this.GetLocalisationAPIs() |> List.map structSnd
+    member this.GetCleanLocalisationAPIs() : ILocalisationAPI seq =
+        localisationAPIMap.Values |> Seq.map structSnd
 
     member _.LocalisationFileNames() : string list =
         localisationAPIMap
@@ -128,11 +130,11 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     member this.LocalisationKeys() = this.localisationKeys
 
-    member this.LocalisationEntries() : (Lang * struct (string * Entry) list) list =
+    member this.LocalisationEntries() : (Lang * struct (string * Entry) array) seq =
         this.GetCleanLocalisationAPIs()
-        |> List.groupBy _.GetLang
-        |> List.map (fun (k, g) ->
+        |> Seq.groupBy _.GetLang
+        |> Seq.map (fun (k, g) ->
             k,
             g
             |> Seq.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> struct (x.key, x)))
-            |> Seq.toList)
+            |> Seq.toArray)

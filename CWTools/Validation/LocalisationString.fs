@@ -118,7 +118,7 @@ module LocalisationString =
     /// Checks quotes, localisation command chains, localisation references
     let validateProcessedLocalisationBase
         hardcodedLocalisation
-        (keys: (Lang * LocKeySet) list)
+        (keys: (Lang * LocKeySet) array)
         (api: (Lang * Map<string, LocEntry>) list)
         =
         let validateInvalidChars _ (e: LocEntry) =
@@ -187,9 +187,9 @@ module LocalisationString =
         let validateLocMap (lang, m: Map<string, LocEntry>) =
             let keys =
                 keys
-                |> List.filter (fun (l, _) -> l = lang)
-                |> List.map snd
-                |> List.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase))
+                |> Array.filter (fun (l, _) -> l = lang)
+                |> Array.map snd
+                |> Array.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase))
 
             m
             |> Map.map (fun _ e -> e.refs <&!&> checkRef hardcodedLocalisation lang keys e)
