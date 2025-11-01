@@ -278,26 +278,6 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity seq
     |> Map.toList
     |> List.map snd
 
-let getDefinedVariables (infoService: InfoService) (es: Entity list) =
-    // let results = es |> List.toSeq |> PSeq.fold (fun c e -> infoService.GetDefinedVariables(c,e)) (Collections.Map.empty)//|> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Collections.Map.empty
-    let results =
-        es
-        |> List.toSeq
-        |> PSeq.map (fun e -> infoService.GetDefinedVariables(e))
-        |> Seq.fold
-            (fun m map ->
-                Map.toList map
-                |> List.fold
-                    (fun m2 (n, k) ->
-                        if Map.containsKey n m2 then
-                            Map.add n ((k |> List.ofSeq) @ m2.[n]) m2
-                        else
-                            Map.add n (k |> List.ofSeq) m2)
-                    m)
-            Collections.Map.empty
-
-    results
-
 let expandPredefinedValues
     (types: Map<string, PrefixOptimisedStringSet>)
     (enums: Map<string, _ * array<string * option<Position.range>>>)
