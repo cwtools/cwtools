@@ -48,7 +48,7 @@ type CachedRuleMetadata =
     { typeDefs: Map<string, array<TypeDefInfo>>
       enumDefs: Map<string, string * array<string>>
       varDefs: Map<string, array<string * range>>
-      loc: (Lang * Set<string>) list
+      loc: (Lang * Set<string>) array
       files: Set<string>
       scriptedLoc: string array }
 

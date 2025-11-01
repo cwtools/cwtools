@@ -25,7 +25,7 @@ type CheckFieldParams =
       wildcardLinks: ScopedEffect list
       valueTriggerMap: EffectMap
       varSet: PrefixOptimisedStringSet
-      localisation: (Lang * Collections.Set<string>) list
+      localisation: (Lang * Collections.Set<string>) array
       defaultLocalisation: Collections.Set<string>
       files: FrozenSet<string>
       changeScope: ChangeScope
@@ -69,7 +69,7 @@ module internal FieldValidators =
     let checkValidValue
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
-        (keys: (Lang * Collections.Set<string>) list)
+        (keys: (Lang * Collections.Set<string>) array)
         (severity: Severity)
         (vt: ValueType)
         (ids: StringTokens)
@@ -247,7 +247,7 @@ module internal FieldValidators =
     let checkValidValueNE
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
-        (keys: (Lang * Collections.Set<string>) list)
+        (keys: (Lang * Collections.Set<string>) array)
         (vt: ValueType)
         (ids: StringTokens)
         =
@@ -307,7 +307,7 @@ module internal FieldValidators =
             Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>)
         (validateLocalisation: LocEntry -> ScopeContext -> ValidationResult)
         scopeContext
-        (keys: (Lang * Collections.Set<string>) list)
+        (keys: (Lang * Collections.Set<string>) array)
         (defaultKeys: Collections.Set<string>)
         defaultLang
         (synced: bool)
