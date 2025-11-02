@@ -19,7 +19,7 @@ module Utils =
     let inline (==) (x: string) (y: string) =
         x.Equals(y, StringComparison.OrdinalIgnoreCase)
 
-    type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, StringComparer>
+    type LocKeySet = HashSet<string>
 
     type LogLevel =
         | Silent

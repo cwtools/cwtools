@@ -40,6 +40,17 @@ type LocalisationManager<'T when 'T :> ComputedData>
         else
             None
 
+    let getTaggedLocalisationKeys (groupedLocalisation: (Lang * ILocalisationAPI seq) array) =
+        groupedLocalisation
+            |> Seq.map (fun (k, g) ->
+                k,
+                let set = LocKeySet(StringComparer.OrdinalIgnoreCase)
+                g
+                |> Seq.collect _.GetKeys
+                |> Seq.iter (fun key -> set.Add key |> ignore)
+                set)
+            |> Seq.toArray
+
     let updateAllLocalisationSources () =
         localisationAPIMap <-
             let allLocs =
@@ -59,14 +70,7 @@ type LocalisationManager<'T when 'T :> ComputedData>
             |> Seq.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
             |> Array.ofSeq
 
-        this.taggedLocalisationKeys <-
-            groupedLocalisation
-            |> Seq.map (fun (k, g) ->
-                k,
-                g
-                |> Seq.collect _.GetKeys
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
-            |> Seq.toArray
+        this.taggedLocalisationKeys <- getTaggedLocalisationKeys(groupedLocalisation)
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
         let loc = parseLocFile locFile |> Option.defaultValue [||]
@@ -77,21 +81,14 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         localisationAPIMap <- newMap
 
-        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang
+        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
 
         this.localisationKeys <-
             groupedLocalisation
             |> Seq.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
             |> Array.ofSeq
 
-        this.taggedLocalisationKeys <-
-            groupedLocalisation
-            |> Seq.map (fun (k, g) ->
-                k,
-                g
-                |> Seq.collect _.GetKeys
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(StringComparer.OrdinalIgnoreCase)))
-            |> Seq.toArray
+        this.taggedLocalisationKeys <- getTaggedLocalisationKeys(groupedLocalisation)
 
     let updateProcessedLocalisation () =
         let validatableEntries =
