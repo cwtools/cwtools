@@ -4,8 +4,6 @@ open CWTools.Common
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities
 
-type S = Severity
-
 let inline checkLocKeyN (leaf: ^a) (keys: Set<string>) (lang: Lang) errors key =
     match key = "" || key.Contains(' ') || (key.StartsWith('[') && key.EndsWith(']')), Set.contains key keys with
     | true, _ -> errors
