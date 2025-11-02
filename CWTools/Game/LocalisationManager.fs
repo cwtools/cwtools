@@ -42,14 +42,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
     let getTaggedLocalisationKeys (groupedLocalisation: (Lang * ILocalisationAPI seq) array) =
         groupedLocalisation
-            |> Seq.map (fun (k, g) ->
-                k,
-                let set = LocKeySet(StringComparer.OrdinalIgnoreCase)
-                g
-                |> Seq.collect _.GetKeys
-                |> Seq.iter (fun key -> set.Add key |> ignore)
-                set)
-            |> Seq.toArray
+        |> Seq.map (fun (k, g) ->
+            k,
+            let set = LocKeySet(StringComparer.OrdinalIgnoreCase)
+            g |> Seq.collect _.GetKeys |> Seq.iter (fun key -> set.Add key |> ignore)
+            set)
+        |> Seq.toArray
 
     let updateAllLocalisationSources () =
         localisationAPIMap <-
@@ -63,12 +61,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             allLocs |> Map.ofSeq
 
-        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
+        let groupedLocalisation =
+            this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
 
         this.localisationKeys <-
             groupedLocalisation
-            |> Seq.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
-            |> Array.ofSeq
+            |> Array.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
 
         this.taggedLocalisationKeys <- getTaggedLocalisationKeys(groupedLocalisation)
 
@@ -81,12 +79,12 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
         localisationAPIMap <- newMap
 
-        let groupedLocalisation = this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
+        let groupedLocalisation =
+            this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
 
         this.localisationKeys <-
             groupedLocalisation
-            |> Seq.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
-            |> Array.ofSeq
+            |> Array.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
 
         this.taggedLocalisationKeys <- getTaggedLocalisationKeys(groupedLocalisation)
 
