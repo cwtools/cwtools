@@ -21,26 +21,9 @@ module CustomGameFunctions =
     let afterInit (game: GameObject) = updateModifiers (game)
 
     let createEmbeddedSettings embeddedFiles cachedResourceData (configs: (string * string) list) cachedRuleMetadata =
-        let scopeDefinitions =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "scopes.cwt")
-            |> (fun f -> UtilityParser.initializeScopes f (Some []))
+        initializeScopesAndModifierCategories configs (fun _ -> [||]) (fun _ -> [||])
 
-        configs
-        |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifier_categories.cwt")
-        |> (fun f -> UtilityParser.initializeModifierCategories f (Some []))
-
-        let irMods =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "modifiers.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadModifiers fn ft)
-            |> Option.defaultValue []
-
-        let irLocCommands =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "localisation.cwt")
-            |> Option.map (fun (fn, ft) -> UtilityParser.loadLocCommands fn ft)
-            |> Option.defaultValue ([], [], [])
+        let modifiers = getActualModifiers configs
 
         let jominiLocDataTypes =
             configs
@@ -92,16 +75,11 @@ module CustomGameFunctions =
                 eprintfn "triggers.log was not found in custom config"
                 [])
 
-        let featureSettings =
-            configs
-            |> List.tryFind (fun (fn, _) -> Path.GetFileName fn = "settings.cwt")
-            |> Option.bind (fun (fn, ft) -> UtilityParser.loadSettingsFile fn ft)
-            |> Option.defaultValue CWTools.Parser.UtilityParser.FeatureSettings.Default
-
+        let featureSettings = getFeatureSettings configs
 
         { triggers = irTriggers
           effects = irEffects
-          modifiers = irMods
+          modifiers = modifiers
           embeddedFiles = embeddedFiles
           cachedResourceData = cachedResourceData
           localisationCommands = Jomini jominiLocDataTypes
@@ -161,7 +139,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
 
     do
         if scopeManager.Initialized |> not then
-            eprintfn "%A has no scopes" (settings.rootDirectories |> List.head)
+            eprintfn "%A has no scopes" (settings.rootDirectories |> Array.head)
         else
             ()
 
@@ -202,7 +180,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
           refreshConfigAfterVarDefHook = Hooks.refreshConfigAfterVarDefHook true
           locFunctions = processLocalisationFunction }
 
-    let scriptFolders = []
+    let scriptFolders = [||]
 
     let game =
         GameObject<JominiComputedData, JominiLookup>.CreateGame
@@ -230,8 +208,7 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
     let fileManager = game.FileManager
 
     let references =
-        References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
-
+        References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
     let parseErrors () =
         resources.GetResources()
@@ -245,36 +222,36 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
                 | _ -> None)
 
     interface IGame<JominiComputedData> with
-        member __.ParserErrors() = parseErrors ()
+        member _.ParserErrors() = parseErrors ()
 
-        member __.ValidationErrors() =
+        member _.ValidationErrors() =
             let s, d = game.ValidationManager.Validate(false, resources.ValidatableEntities()) in s @ d
 
-        member __.LocalisationErrors(force: bool, forceGlobal: bool) =
+        member _.LocalisationErrors(force: bool, forceGlobal: bool) =
             getLocalisationErrors game Hooks.globalLocalisation (force, forceGlobal)
 
-        member __.Folders() = fileManager.AllFolders()
-        member __.AllFiles() = resources.GetResources()
+        member _.Folders() = fileManager.AllFolders()
+        member _.AllFiles() = resources.GetResources()
 
-        member __.AllLoadedLocalisation() =
+        member _.AllLoadedLocalisation() =
             game.LocalisationManager.LocalisationFileNames()
 
-        member __.ScriptedTriggers() = lookup.triggers
-        member __.ScriptedEffects() = lookup.effects
-        member __.StaticModifiers() = [] //lookup.staticModifiers
-        member __.UpdateFile shallow file text = game.UpdateFile shallow file text
-        member __.AllEntities() = resources.AllEntities()
+        member _.ScriptedTriggers() = lookup.triggers
+        member _.ScriptedEffects() = lookup.effects
+        member _.StaticModifiers() = [||] //lookup.staticModifiers
+        member _.UpdateFile shallow file text = game.UpdateFile shallow file text
+        member _.AllEntities() = resources.AllEntities()
 
-        member __.References() =
-            References<_>(resources, lookup, (game.LocalisationManager.LocalisationAPIs() |> List.map snd))
+        member _.References() =
+            References<_>(resources, lookup, game.LocalisationManager.GetCleanLocalisationAPIs())
 
-        member __.Complete pos file text =
+        member _.Complete pos file text =
             completion fileManager game.completionService game.InfoService game.ResourceManager pos file text
 
-        member __.ScopesAtPos pos file text =
+        member _.ScopesAtPos pos file text =
             scopesAtPos fileManager game.ResourceManager game.InfoService scopeManager.AnyScope pos file text
 
-        member __.GoToType pos file text =
+        member _.GoToType pos file text =
             getInfoAtPos
                 fileManager
                 game.ResourceManager
@@ -286,32 +263,32 @@ type CustomGame(setupSettings: CustomSettings, gameFolderName: string) =
                 file
                 text
 
-        member __.FindAllRefs pos file text =
+        member _.FindAllRefs pos file text =
             findAllRefsFromPos fileManager game.ResourceManager game.InfoService pos file text
 
-        member __.InfoAtPos pos file text = game.InfoAtPos pos file text
+        member _.InfoAtPos pos file text = game.InfoAtPos pos file text
 
-        member __.ReplaceConfigRules rules =
+        member _.ReplaceConfigRules rules =
             game.ReplaceConfigRules
                 { ruleFiles = rules
                   validateRules = true
                   debugRulesOnly = false
                   debugMode = false } //refreshRuleCaches game (Some { ruleFiles = rules; validateRules = true; debugRulesOnly = false; debugMode = false})
 
-        member __.RefreshCaches() = game.RefreshCaches()
+        member _.RefreshCaches() = game.RefreshCaches()
 
-        member __.RefreshLocalisationCaches() =
+        member _.RefreshLocalisationCaches() =
             game.LocalisationManager.UpdateProcessedLocalisation()
 
-        member __.ForceRecompute() = resources.ForceRecompute()
-        member __.Types() = game.Lookup.typeDefInfo
-        member __.TypeDefs() = game.Lookup.typeDefs
-        member __.GetPossibleCodeEdits file text = []
-        member __.GetCodeEdits file text = None
+        member _.ForceRecompute() = resources.ForceRecompute()
+        member _.Types() = game.Lookup.typeDefInfo
+        member _.TypeDefs() = game.Lookup.typeDefs
+        member _.GetPossibleCodeEdits file text = []
+        member _.GetCodeEdits file text = None
 
-        member __.GetEventGraphData: GraphDataRequest =
+        member _.GetEventGraphData: GraphDataRequest =
             (fun files gameType depth ->
                 graphEventDataForFiles references game.ResourceManager lookup files gameType depth)
 
-        member __.GetEmbeddedMetadata() =
+        member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager

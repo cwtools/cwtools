@@ -1,18 +1,19 @@
 ﻿module CWTools.Rules.RulesWrapper
 
-type RulesWrapper(rules: RootRule list) =
+[<Sealed>]
+type RulesWrapper(rules: RootRule array) =
     let aliases =
         rules
-        |> List.choose (function
+        |> Seq.choose (function
             | AliasRule(a, rs) -> Some(a, rs)
             | _ -> None)
-        |> List.groupBy fst
-        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
-        |> Collections.Map.ofList
+        |> Seq.groupBy fst
+        |> Seq.map (fun (k, vs) -> k, vs |> Seq.map snd |> Array.ofSeq)
+        |> Map.ofSeq
 
     let typeRules =
         rules
-        |> List.choose (function
+        |> Array.choose (function
             | TypeRule(k, rs) -> Some(k, rs)
             | _ -> None)
 

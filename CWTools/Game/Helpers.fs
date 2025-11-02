@@ -1,7 +1,10 @@
 namespace CWTools.Games
 
+open System
 open System.Collections.Generic
+open System.IO
 open CWTools.Common
+open CWTools.Parser
 open CWTools.Rules
 open CWTools.Utilities
 open CWTools.Utilities.Utils
@@ -53,59 +56,57 @@ module Helpers =
                 |> Option.defaultValue Seq.empty
             | _ -> Seq.empty
 
-        //TODO crazy inefficient! Done for every link
-        let aliasKeyMap =
-            let resDict = Dictionary<string, string list>()
-
-            lookup.configRules
-            |> Seq.choose (function
-                | AliasRule(a, rs) -> Some(a, rs)
-                | _ -> None)
-            |> Seq.groupBy fst
-            |> Seq.iter (fun (k, vs) ->
-                resDict[k] <- vs |> Seq.map snd |> Seq.collect ruleToCompletionListHelper |> List.ofSeq)
-
-            resDict
-        // |> Map.ofSeq
-
         let convertSourceRuleType (lookup: Lookup) (link: EventTargetDataLink) =
             match link.sourceRuleType.Trim() with
-            | x when x.StartsWith "<" && x.EndsWith ">" ->
+            | x when x.StartsWith '<' && x.EndsWith '>' ->
                 let sourceType = x.Trim([| '<'; '>' |])
 
                 match lookup.typeDefInfo |> Map.tryFind sourceType with
-                | Some x -> x |> List.map (fun tdi -> tdi.id, Some(TypeRef(sourceType, tdi.id)))
+                | Some x -> x |> Array.map (fun tdi -> tdi.id, Some(TypeRef(sourceType, tdi.id)))
                 | None ->
                     log (sprintf "Link %s refers to undefined type %s" link.name sourceType)
-                    []
+                    [||]
             | x when x.StartsWith "enum[" ->
-                let enum = CWTools.Rules.RulesParser.getSettingFromString x "enum"
+                let enum = RulesParser.getSettingFromString x "enum"
 
                 match enum |> Option.bind (fun x -> Map.tryFind x lookup.enumDefs) with
-                | Some(_, vs) -> (vs |> List.map (fun (x, _) -> x, None))
+                | Some(_, vs) -> (vs |> Array.map (fun (x, _) -> x, None))
                 | None ->
                     log (sprintf "Link %s refers to undefined enum %A" link.name enum)
-                    []
+                    [||]
             | x when x.StartsWith "value[" ->
-                let valuename = CWTools.Rules.RulesParser.getSettingFromString x "value"
+                let valuename = RulesParser.getSettingFromString x "value"
 
                 match valuename |> Option.bind (fun x -> Map.tryFind x lookup.varDefInfo) with
-                | Some vs -> vs |> List.map (fun x -> fst x, None)
+                | Some vs -> vs |> Array.map (fun x -> fst x, None)
                 | None ->
                     log (sprintf "Link %s refers to undefined value %A" link.name valuename)
-                    []
+                    [||]
             | x when x.StartsWith "alias_keys_field[" ->
-                let aliasname = CWTools.Rules.RulesParser.getSettingFromString x "alias_keys_field"
+                let aliasKeyMap =
+                    let resDict = Dictionary<string, string array>()
+
+                    lookup.configRules
+                    |> Seq.choose (function
+                        | AliasRule(a, rs) -> Some(a, rs)
+                        | _ -> None)
+                    |> Seq.groupBy fst
+                    |> Seq.iter (fun (k, vs) ->
+                        resDict[k] <- vs |> Seq.map snd |> Seq.collect ruleToCompletionListHelper |> Array.ofSeq)
+
+                    resDict
+
+                let aliasname = RulesParser.getSettingFromString x "alias_keys_field"
 
                 match aliasname |> Option.map (fun x -> aliasKeyMap.TryGetValue x) with
-                | Some(true, vs) -> vs |> List.map (fun x -> x, None)
+                | Some(true, vs) -> vs |> Array.map (fun x -> x, None)
                 | Some(false, _)
                 | None ->
                     log (sprintf "Link %s refers to undefined alias %A" link.name aliasname)
-                    []
+                    [||]
             | x ->
                 log (sprintf "Link %s refers to invalid source %s" link.name x)
-                []
+                [||]
 
         let getWildCard (link: EventTargetDataLink) =
             match link.sourceRuleType.Trim(), link.dataPrefix with
@@ -211,10 +212,7 @@ module Helpers =
                 | None -> ()
             }
 
-        links
-        |> Seq.collect convertLinkToEffects
-        |> Seq.map (fun e -> e :> Effect)
-        |> List.ofSeq
+        links |> Seq.collect convertLinkToEffects |> Seq.cast<Effect> |> List.ofSeq
 
     let getLocalisationErrors (game: GameObject<_, _>) globalLocalisation =
         fun (force: bool, forceGlobal: bool) ->
@@ -260,7 +258,7 @@ module Helpers =
     let hardcodedLocalisation = []
 
     let validateProcessedLocalisation
-        : ((Lang * LocKeySet) list -> (Lang * Map<string, LocEntry>) list -> ValidationResult) =
+        : ((Lang * LocKeySet) array -> (Lang * Map<string, LocEntry>) list -> ValidationResult) =
         validateProcessedLocalisationBase hardcodedLocalisation
 
     let createJominiLocalisationFunctions
@@ -290,14 +288,14 @@ module Helpers =
 
             let definedEventTargets =
                 (lookup.varDefInfo.TryFind "event_target"
-                 |> Option.defaultValue []
-                 |> List.map fst)
+                 |> Option.defaultValue [||]
+                 |> Array.map fst)
 
             let eventtargets =
                 lookup.savedEventTargets
                 |> Seq.map (fun (a, _, c) -> (a, c))
+                |> Seq.distinct
                 |> List.ofSeq
-                |> List.distinct
                 |> List.fold
                     (fun map (k, s) ->
                         if Map.containsKey k map then
@@ -308,12 +306,9 @@ module Helpers =
 
             let eventtargets =
                 definedEventTargets
-                |> List.fold (fun oldMap et -> oldMap |> Map.add et [ scopeManager.AnyScope ]) eventtargets
+                |> Array.fold (fun oldMap et -> oldMap |> Map.add et [ scopeManager.AnyScope ]) eventtargets
 
-            let definedvars =
-                (lookup.varDefInfo.TryFind "variable" |> Option.defaultValue [] |> List.map fst)
-
-            processLocalisation eventtargets definedvars, validateLocalisationCommand eventtargets definedvars
+            processLocalisation eventtargets, validateLocalisationCommand eventtargets
 
 
     let createLocalisationFunctions
@@ -339,3 +334,26 @@ module Helpers =
 
             processLocalisation commands variableCommands (createLocDynamicSettings (lookup)),
             validateLocalisationCommand commands variableCommands (createLocDynamicSettings (lookup))
+
+    let initializeScopesAndModifierCategories configs defaultScopeInputs defaultModifiersInputs =
+        configs
+        |> List.tryFind (fun (fileName: string, _) ->
+            Path.GetFileName(fileName.AsSpan()).Equals("scopes.cwt", StringComparison.OrdinalIgnoreCase))
+        |> (fun f -> UtilityParser.initializeScopes f (Some(defaultScopeInputs ())))
+
+        configs
+        |> List.tryFind (fun (fileName, _) ->
+            Path.GetFileName(fileName.AsSpan()).Equals("modifier_categories.cwt", StringComparison.OrdinalIgnoreCase))
+        |> (fun f -> UtilityParser.initializeModifierCategories f (Some(defaultModifiersInputs ())))
+
+    let getActualModifiers configs =
+        configs
+        |> List.tryFind (fun (fileName: string, _) -> Path.GetFileName fileName = "modifiers.cwt")
+        |> Option.map (fun (fileName, fileText) -> UtilityParser.loadModifiers fileName fileText)
+        |> Option.defaultValue [||]
+
+    let getFeatureSettings configs =
+        configs
+        |> List.tryFind (fun (fileName: string, _) -> Path.GetFileName fileName = "settings.cwt")
+        |> Option.bind (fun (fileName, fileText) -> UtilityParser.loadSettingsFile fileName fileText)
+        |> Option.defaultValue UtilityParser.FeatureSettings.Default

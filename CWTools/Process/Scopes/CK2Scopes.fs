@@ -2,7 +2,6 @@ namespace CWTools.Process.Scopes
 
 open CWTools.Common
 open CWTools.Process.Scopes
-open CWTools.Utilities.Utils2
 
 module CK2 =
 
@@ -120,10 +119,12 @@ module CK2 =
             fun (s, change) ->
                 { s with
                     Scopes = (s.GetFrom i) :: s.Scopes },
-                (false, true)
+                struct (false, true)
 
-        let prev = fun (s, change) -> { s with Scopes = s.PopScope }, (false, true)
-        let root = fun (s, change) -> { s with Scopes = s.Root :: s.Scopes }, (false, true)
+        let prev = fun (s, change) -> { s with Scopes = s.PopScope }, struct (false, true)
+
+        let root =
+            fun (s, change) -> { s with Scopes = s.Root :: s.Scopes }, struct (false, true)
 
         [ "THIS", id
           "ROOT", root
@@ -142,14 +143,5 @@ module CK2 =
 
     let oneToOneScopesNames = List.map fst oneToOneScopes
 
-    let changeScope
-        : bool
-              -> bool
-              -> EffectMap
-              -> EffectMap
-              -> ScopedEffect list
-              -> PrefixOptimisedStringSet
-              -> string
-              -> ScopeContext
-              -> ScopeResult =
+    let changeScope: ChangeScope =
         Scopes.createChangeScope oneToOneScopes (Scopes.complexVarPrefixFun "variable:from:" "variable:") false

@@ -35,11 +35,11 @@ module STLLocalisationValidation =
         | _, _, true -> OK
         | _, _, false -> Invalid(Guid.NewGuid(), [ invData (ErrorCodes.MissingLocalisation key lang) leaf (Some key) ])
 
-    let inline checkLocKeysLeafOrNode (keys: (Lang * Set<string>) list) (key: string) (leafornode: ^a) =
+    let inline checkLocKeysLeafOrNode (keys: (Lang * Set<string>) array) (key: string) (leafornode: ^a) =
         keys
-        |> List.fold (fun state (l, keys) -> state <&&> checkLocKey leafornode keys l key) OK
+        |> Array.fold (fun state (l, keys) -> state <&&> checkLocKey leafornode keys l key) OK
 
-    let checkLocKeys (keys: (Lang * Set<string>) list) (leaf: Leaf) =
+    let checkLocKeys (keys: (Lang * Set<string>) array) (leaf: Leaf) =
         let key =
             leaf.Value
             |> (function
@@ -47,15 +47,15 @@ module STLLocalisationValidation =
             | s -> s.ToString())
 
         keys
-        |> List.fold (fun state (l, keys) -> state <&&> checkLocKey leaf keys l key) OK
+        |> Array.fold (fun state (l, keys) -> state <&&> checkLocKey leaf keys l key) OK
 
-    let getLocKeys (keys: (Lang * Set<string>) list) (tags: string list) (node: Node) =
+    let getLocKeys (keys: (Lang * Set<string>) array) (tags: string list) (node: Node) =
         let fNode =
             (fun (x: Node) children ->
                 let results =
-                    x.Values
-                    |> List.filter (fun l -> tags |> List.contains l.Key)
-                    |> List.fold (fun s t -> s <&&> (checkLocKeys keys t)) OK
+                    x.Leaves
+                    |> Seq.filter (fun l -> tags |> List.contains l.Key)
+                    |> Seq.fold (fun s t -> s <&&> (checkLocKeys keys t)) OK
 
                 results <&&> children)
 
@@ -93,17 +93,17 @@ module STLLocalisationValidation =
         keys
         |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l key node) OK
 
-    let checkKeyAndDesc (keys: (Lang * Set<string>) list) (node: Node) =
+    let checkKeyAndDesc (keys: (Lang * Set<string>) array) (node: Node) =
         let key = node.Key
         let desc = key + "_desc"
 
         let keyres =
             keys
-            |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l key node) OK
+            |> Array.fold (fun state (l, keys) -> state <&&> checkLocNode keys l key node) OK
 
         let descres =
             keys
-            |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l desc node) OK
+            |> Array.fold (fun state (l, keys) -> state <&&> checkLocNode keys l desc node) OK
 
         keyres <&&> descres
 
@@ -133,7 +133,7 @@ module STLLocalisationValidation =
         let inner =
             (fun (leaf: Leaf) ->
                 (keys
-                 |> List.fold
+                 |> Array.fold
                      (fun state (l, keys) ->
                          state <&&> checkLocKey leaf keys l (prefix + leaf.Value.ToRawString() + suffix))
                      OK))
@@ -168,32 +168,32 @@ module STLLocalisationValidation =
                 let flags =
                     node.Child "feature_flags"
                     |> Option.map (fun c ->
-                        c.All
-                        |> List.choose (function
+                        c.AllArray
+                        |> Array.choose (function
                             | LeafValueC lv -> Some lv.Value
                             | _ -> None))
-                    |> Option.defaultValue []
+                    |> Option.defaultValue [||]
 
-                let flags2 = flags |> List.map (fun f -> "feature_" + f.ToString())
+                let flags2 = flags |> Array.map (fun f -> "feature_" + f.ToString())
 
                 let flagres =
                     flags2
-                    |> List.fold
+                    |> Array.fold
                         (fun s c ->
                             s
                             <&&> (keys
-                                  |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
+                                  |> Array.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
                         OK
 
-                let flagdesc = flags2 |> List.map (fun f -> f + "_desc")
+                let flagdesc = flags2 |> Array.map (fun f -> f + "_desc")
 
                 let flagdescres =
                     flagdesc
-                    |> List.fold
+                    |> Array.fold
                         (fun s c ->
                             s
                             <&&> (keys
-                                  |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
+                                  |> Array.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
                         OK
 
                 let gateway = node.TagText "gateway"
@@ -203,7 +203,7 @@ module STLLocalisationValidation =
                     | "" -> OK
                     | x ->
                         keys
-                        |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l ("gateway_" + x) node) OK
+                        |> Array.fold (fun state (l, keys) -> state <&&> checkLocNode keys l ("gateway_" + x) node) OK
 
                 keyres <&&> innerKeys <&&> gatewayres <&&> flagres <&&> flagdescres)
             |> List.fold (<&&>) OK
@@ -219,20 +219,20 @@ module STLLocalisationValidation =
                     let vals =
                         node.Child "policy_flags"
                         |> Option.map (fun c ->
-                            c.All
-                            |> List.choose (function
+                            c.AllArray
+                            |> Array.choose (function
                                 | LeafValueC lv -> Some lv.Value
                                 | _ -> None))
-                        |> Option.defaultValue []
+                        |> Option.defaultValue [||]
 
-                    let vals2 = vals |> List.map (fun v -> v.ToString() + "_name")
+                    let vals2 = vals |> Array.map (fun v -> v.ToString() + "_name")
 
                     vals2
-                    |> List.fold
+                    |> Array.fold
                         (fun s c ->
                             s
                             <&&> (keys
-                                  |> List.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
+                                  |> Array.fold (fun state (l, keys) -> state <&&> checkLocNode keys l c node) OK))
                         OK
                     <&&> (checkLocNodeTagAdvs keys "" [ ""; "_desc" ] "name" node)
 

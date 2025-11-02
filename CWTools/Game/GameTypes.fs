@@ -45,35 +45,35 @@ type CWError =
       relatedErrors: CWRelatedError list option }
 
 type CachedRuleMetadata =
-    { typeDefs: Map<string, list<TypeDefInfo>>
-      enumDefs: Map<string, string * list<string>>
-      varDefs: Map<string, list<string * range>>
-      loc: (Lang * Set<string>) list
+    { typeDefs: Map<string, array<TypeDefInfo>>
+      enumDefs: Map<string, string * array<string>>
+      varDefs: Map<string, array<string * range>>
+      loc: (Lang * Set<string>) array
       files: Set<string>
-      scriptedLoc: string list }
+      scriptedLoc: string array }
 
 type CompletionCategory =
-    | Link
-    | Global
-    | Variable
-    | Value
-    | Other
+    | Link = 1uy
+    | Global = 2uy
+    | Variable = 3uy
+    | Value = 4uy
+    | Other = 5uy
 
 type CompletionResponse =
     | Simple of label: string * score: int option * CompletionCategory
     | Detailed of label: string * desc: string option * score: int option * CompletionCategory
     | Snippet of label: string * snippet: string * desc: string option * score: int option * CompletionCategory
 
-    static member CreateSimple(label: string) = Simple(label, None, Other)
+    static member CreateSimple(label: string) = Simple(label, None, CompletionCategory.Other)
 
     static member CreateSnippet(label, snippet, desc) =
-        Snippet(label, snippet, desc, None, Other)
+        Snippet(label, snippet, desc, None, CompletionCategory.Other)
 
 type IGame =
     abstract ParserErrors: unit -> (string * string * FParsec.Position) list
     abstract ValidationErrors: unit -> CWError list
     abstract LocalisationErrors: bool * bool -> CWError list
-    abstract Folders: unit -> (string * string) list
+    abstract Folders: unit -> (string * string) array
     abstract AllFiles: unit -> Resource list
     abstract AllLoadedLocalisation: unit -> string list
     abstract UpdateFile: bool -> string -> string option -> CWError list
@@ -84,7 +84,7 @@ type IGame =
     abstract RefreshCaches: unit -> unit
     abstract RefreshLocalisationCaches: unit -> unit
     abstract ForceRecompute: unit -> unit
-    abstract Types: unit -> Map<string, TypeDefInfo list>
+    abstract Types: unit -> Map<string, TypeDefInfo array>
     abstract TypeDefs: unit -> CWTools.Rules.TypeDefinition list
     abstract InfoAtPos: pos -> string -> string -> SymbolInformation option
     abstract GetPossibleCodeEdits: string -> string -> range list
@@ -92,11 +92,11 @@ type IGame =
     abstract GetEventGraphData: GraphDataRequest
     abstract ScriptedTriggers: unit -> Effect list
     abstract ScriptedEffects: unit -> Effect list
-    abstract StaticModifiers: unit -> StaticModifier list
+    abstract StaticModifiers: unit -> StaticModifier array
     abstract ScopesAtPos: pos -> string -> string -> ScopeContext option
     abstract GetEmbeddedMetadata: unit -> CachedRuleMetadata
 
 type IGame<'T when 'T :> ComputedData> =
     inherit IGame
-    abstract AllEntities: unit -> struct (Entity * Lazy<'T>) list
+    abstract AllEntities: unit -> struct (Entity * Lazy<'T>) seq
     abstract References: unit -> References<'T>

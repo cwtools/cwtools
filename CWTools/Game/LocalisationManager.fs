@@ -1,39 +1,53 @@
 namespace CWTools.Games
 
+open System
+open System.IO
 open CWTools.Common
 open CWTools.Localisation
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 
-
+[<Sealed>]
 type LocalisationManager<'T when 'T :> ComputedData>
     (
         resources: IResourceAPI<'T>,
         localisationService: _ -> ILocalisationAPICreator,
-        langs: Lang list,
+        langs: Lang array,
         lookup: Lookup,
         processLocalisation,
         localisationExtension: string
     ) as this =
-    let mutable localisationAPIMap: Map<string * Lang, bool * ILocalisationAPI> =
+    let mutable localisationAPIMap: Map<string * Lang, struct (bool * ILocalisationAPI)> =
         Map.empty
 
-    let allLocalisation () = this.LocalisationAPIs() |> List.map snd
-
     let validatableLocalisation () =
-        this.LocalisationAPIs()
-        |> List.choose (fun (validate, api) -> if validate then Some api else None)
+        this.GetLocalisationAPIs()
+        |> List.choose (fun struct (validate, api) -> if validate then Some api else None)
 
     let parseLocFile (locFile: FileWithContentResource) =
-        if locFile.overwrite <> Overwritten && locFile.extension = localisationExtension then
+        if
+            locFile.overwrite <> Overwrite.Overwritten
+            && Path
+                .GetExtension(locFile.filepath.AsSpan())
+                .Equals(localisationExtension, StringComparison.OrdinalIgnoreCase)
+        then
             let locService = [ locFile.filepath, locFile.filetext ] |> localisationService
 
             Some(
                 langs
-                |> List.map (fun lang -> (locFile.filepath, lang), (locFile.validate, locService.Api(lang)))
+                |> Array.map (fun lang -> (locFile.filepath, lang), struct (locFile.validate, locService.Api(lang)))
             )
         else
             None
+
+    let getTaggedLocalisationKeys (groupedLocalisation: (Lang * ILocalisationAPI seq) array) =
+        groupedLocalisation
+        |> Seq.map (fun (k, g) ->
+            k,
+            let set = LocKeySet(StringComparer.OrdinalIgnoreCase)
+            g |> Seq.collect _.GetKeys |> Seq.iter (fun key -> set.Add key |> ignore)
+            set)
+        |> Seq.toArray
 
     let updateAllLocalisationSources () =
         localisationAPIMap <-
@@ -47,75 +61,75 @@ type LocalisationManager<'T when 'T :> ComputedData>
 
             allLocs |> Map.ofSeq
 
-        let groupedLocalisation = allLocalisation () |> List.groupBy _.GetLang
+        let groupedLocalisation =
+            this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
 
         this.localisationKeys <-
             groupedLocalisation
-            |> List.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
+            |> Array.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
 
-        this.taggedLocalisationKeys <-
-            groupedLocalisation
-            |> List.map (fun (k, g) ->
-                k,
-                g
-                |> Seq.collect _.GetKeys
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+        this.taggedLocalisationKeys <- getTaggedLocalisationKeys(groupedLocalisation)
 
     let updateLocalisationSource (locFile: FileWithContentResource) =
-        let loc = parseLocFile locFile |> Option.defaultValue []
+        let loc = parseLocFile locFile |> Option.defaultValue [||]
 
         let newMap =
             loc
-            |> List.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
+            |> Array.fold (fun map (key, value) -> Map.add key value map) localisationAPIMap
 
         localisationAPIMap <- newMap
 
-        let groupedLocalisation = allLocalisation () |> List.groupBy _.GetLang
+        let groupedLocalisation =
+            this.GetCleanLocalisationAPIs() |> Seq.groupBy _.GetLang |> Seq.toArray
 
         this.localisationKeys <-
             groupedLocalisation
-            |> List.map (fun (k, g) -> k, g |> Seq.collect (fun ls -> ls.GetKeys) |> Set.ofSeq)
+            |> Array.map (fun (k, g) -> k, g |> Seq.collect _.GetKeys |> Set.ofSeq)
 
-        this.taggedLocalisationKeys <-
-            groupedLocalisation
-            |> List.map (fun (k, g) ->
-                k,
-                g
-                |> Seq.collect (fun ls -> ls.GetKeys)
-                |> Seq.fold (fun (s: LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())))
+        this.taggedLocalisationKeys <- getTaggedLocalisationKeys(groupedLocalisation)
 
     let updateProcessedLocalisation () =
         let validatableEntries =
             validatableLocalisation ()
-            |> List.groupBy (fun l -> l.GetLang)
-            |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            |> List.groupBy _.GetLang
+            |> List.map (fun (k, g) ->
+                k,
+                g
+                |> Seq.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> (x.key, x)))
+                |> Map.ofSeq)
 
         let processLoc = processLocalisation lookup
         lookup.proccessedLoc <- validatableEntries |> List.map processLoc
 
     member val localisationErrors: CWError list option = None with get, set
     member val globalLocalisationErrors: CWError list option = None with get, set
-    member val rulesLocalisationErrors: CWError list option = None with get, set
-    member val localisationKeys: (Lang * Set<string>) list = [] with get, set
-    member val taggedLocalisationKeys: (Lang * LocKeySet) list = [] with get, set
+    member val localisationKeys: (Lang * Set<string>) array = [||] with get, set
+    member val taggedLocalisationKeys: (Lang * LocKeySet) array = [||] with get, set
 
     member this.UpdateAllLocalisation() =
         updateAllLocalisationSources ()
         updateProcessedLocalisation ()
 
-    member __.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
-    member __.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
+    member _.UpdateProcessedLocalisation() = updateProcessedLocalisation ()
+    member _.UpdateLocalisationFile(locFile: FileWithContentResource) = updateLocalisationSource locFile
 
-    member __.LocalisationAPIs() : (bool * ILocalisationAPI) list = localisationAPIMap.Values |> Seq.toList
+    member _.GetLocalisationAPIs() : (struct (bool * ILocalisationAPI)) list = localisationAPIMap.Values |> Seq.toList
 
-    member __.LocalisationFileNames() : string list =
+    member this.GetCleanLocalisationAPIs() : ILocalisationAPI seq =
+        localisationAPIMap.Values |> Seq.map structSnd
+
+    member _.LocalisationFileNames() : string list =
         localisationAPIMap
         |> Map.toList
         |> List.map (fun ((f, l), (_, a)) -> sprintf "%A, %s, %i" l f a.GetKeys.Length)
 
     member this.LocalisationKeys() = this.localisationKeys
 
-    member this.LocalisationEntries() =
-        allLocalisation ()
-        |> List.groupBy (fun l -> l.GetLang)
-        |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList))
+    member this.LocalisationEntries() : (Lang * struct (string * Entry) array) seq =
+        this.GetCleanLocalisationAPIs()
+        |> Seq.groupBy _.GetLang
+        |> Seq.map (fun (k, g) ->
+            k,
+            g
+            |> Seq.collect (fun ls -> ls.GetEntries |> Seq.map (fun x -> struct (x.key, x)))
+            |> Seq.toArray)

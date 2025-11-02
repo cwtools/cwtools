@@ -17,5 +17,9 @@
         <ProjectReference Include="..\CWTools\CWTools.fsproj"/>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ByteSize" Version="2.1.2" />
+    </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets"/>
 </Project>

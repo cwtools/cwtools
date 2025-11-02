@@ -19,7 +19,7 @@ module CommonValidation =
                 (fun (x: Node) children ->
                     if
                         (x.LeafValues |> Seq.isEmpty |> not
-                         && (x.Leaves |> Seq.isEmpty |> not || x.Children |> Seq.isEmpty |> not))
+                         && (x.Leaves |> Seq.isEmpty |> not || x.Nodes |> Seq.isEmpty |> not))
                         |> not
                     then
                         children
@@ -33,7 +33,7 @@ module CommonValidation =
         fun _ es ->
             let fNode =
                 (fun (x: Node) children ->
-                    if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1 then
+                    if x.Key == "NOT" && (x.AllArray.Length - (x.Comments |> Seq.length)) > 1 then
                         Invalid(
                             System.Guid.NewGuid(),
                             [ inv (ErrorCodes.CustomError "Reminder: NOT does not mean NOT AND" Severity.Information) x ]
@@ -48,7 +48,7 @@ module CommonValidation =
         fun _ es ->
             let fNode =
                 (fun (x: Node) children ->
-                    if x.Key == "NOT" && (x.All.Length - (x.Comments |> Seq.length)) > 1 then
+                    if x.Key == "NOT" && (x.AllArray.Length - (x.Comments |> Seq.length)) > 1 then
                         inv ErrorCodes.IncorrectNotUsage x <&&&> children
                     else
                         children)
@@ -73,8 +73,8 @@ module CommonValidation =
                 (fun (x: Node) children ->
                     if
                         (x.KeyId = keyIdIF || x.KeyId = keyIdelIF)
-                        && (x.Values |> List.isEmpty)
-                        && (x.Children |> List.exists (fun c -> c.KeyId <> keyID) |> not)
+                        && (x.Leaves |> Seq.isEmpty)
+                        && (x.Nodes |> Seq.exists (fun c -> c.KeyId <> keyID) |> not)
                     then
                         inv ErrorCodes.EmptyIf x <&&&> children
                     else
@@ -92,13 +92,13 @@ module CommonValidation =
             let zipped = types |> List.map (fun td -> td.name, lu.typeDefInfo.[td.name])
 
             let groupFun =
-                List.groupBy (fun (tdi: TypeDefInfo) -> tdi.id)
-                >> List.filter (fun (k, g) -> g.Length > 1)
-                >> List.collect snd
+                Array.groupBy (fun (tdi: TypeDefInfo) -> tdi.id)
+                >> Array.filter (fun (k, g) -> g.Length > 1)
+                >> Array.collect snd
 
             let res =
                 zipped
-                |> List.collect (fun (tn, ts) -> (groupFun ts) |> List.map (fun t -> tn, t))
+                |> Seq.collect (fun (tn, ts) -> (groupFun ts) |> Array.map (fun t -> tn, t))
 
             res
             <&!&> (fun (typename, tdi) ->
@@ -114,13 +114,13 @@ module CommonValidation =
             let res = res.AllEntities()
 
             let entityMap =
-                res |> List.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofList
+                res |> Seq.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofSeq
 
-            let findParams (pos: CWTools.Utilities.Position.range) (key: string) =
+            let findParams (pos: range) =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals(pos) then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -136,7 +136,7 @@ module CommonValidation =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals pos then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -149,7 +149,7 @@ module CommonValidation =
             match rulesValidator, lu.typeDefInfo |> Map.tryFind "scripted_effect" with
             | Some rv, Some ses ->
                 let allScriptedEffects =
-                    ses |> List.map (fun se -> se.id, se.range.FileName, findSE se.range)
+                    ses |> Array.map (fun se -> se.id, se.range.FileName, findSE se.range)
 
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
@@ -167,13 +167,13 @@ module CommonValidation =
                     |> List.map (fun ref ->
                         {| effectName = ref.name.GetString()
                            callSite = ref.position
-                           seParams = findParams ref.position (ref.name.GetString()) |})
+                           seParams = findParams ref.position |})
                     |> List.groupBy (fun ref -> ref.effectName)
                     |> Map.ofList
                 // eprintfn "ar %A" allRefs
                 let scriptedEffects =
                     allScriptedEffects
-                    |> List.map (fun (name, filename, node) ->
+                    |> Array.map (fun (name, filename, node) ->
                         name,
                         fileManager.ConvertPathToLogicalPath(filename),
                         node,
@@ -187,8 +187,8 @@ module CommonValidation =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
 
-                    node.Values
-                    |> List.iter (fun (l: Leaf) ->
+                    node.Leaves
+                    |> Seq.iter (fun (l: Leaf) ->
                         l.Key <- stringReplacer l.Key
 
                         l.Value
@@ -225,7 +225,7 @@ module CommonValidation =
                                 )
                         | _ -> ()))
 
-                    node.Children |> List.iter (foldOverNode stringReplacer)
+                    node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
                 let validateSESpecific
                     (
@@ -289,196 +289,18 @@ module CommonValidation =
                 <&!&> (fun (name, lp, node, refs) -> validateSE name lp node refs)
             | _ -> OK)
 
-    let valInlineScriptParams<'T when 'T :> ComputedData> : CWTools.Games.LookupFileValidator<'T> =
-        (fun fileManager rulesValidator lu res es ->
-            let res = res.AllEntities()
-
-            let entityMap =
-                res |> List.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofList
-
-            let findParams (pos: CWTools.Utilities.Position.range) (key: string) =
-                match entityMap |> Map.tryFind pos.FileName with
-                | Some struct (e, _) ->
-                    let rec findChild (node: Node) =
-                        if node.Position = pos then
-                            Some node
-                        else
-                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
-                            | Some c -> findChild c
-                            | None -> None
-
-                    findChild e.entity
-                | None -> None
-                //|> Option.map (fun s -> eprintfn "vsep %A %A" s.Key key; s)
-                |> Option.map (fun s -> s.Values |> List.map (fun l -> "$" + l.Key + "$", l.ValueText))
-
-            let findIS (pos: range) =
-                match entityMap |> Map.tryFind pos.FileName with
-                | Some struct (e, _) ->
-                    let rec findChild (node: Node) =
-                        if node.Position = pos then
-                            Some node
-                        else
-                            match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
-                            | Some c -> findChild c
-                            | None -> None
-
-                    findChild e.entity
-                | None -> None
-
-            match rulesValidator, lu.typeDefInfo |> Map.tryFind "inline_script" with
-            | Some rv, Some ses ->
-                let allInlineScripts =
-                    ses |> List.map (fun se -> se.id, se.range.FileName, findIS se.range)
-
-                let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
-                    //eprintfn "grfrt %A" referencedtypes
-                    referencedtypes
-                    |> (fun refMap -> Map.tryFind "inline_script" refMap)
-                    |> Option.defaultValue []
-
-                let allRefs =
-                    es.AllWithData
-                    |> List.collect (fun (n, d) ->
-                        d.Force().Referencedtypes
-                        |> Option.map getRefsFromRefTypes
-                        |> Option.defaultValue [])
-                    |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
-                    |> List.map (fun ref ->
-                        {| scriptName = ref.name.GetString()
-                           callSite = ref.position
-                           isParams = findParams ref.position (ref.name.GetString()) |})
-                    |> List.groupBy (fun ref -> ref.scriptName)
-                    |> Map.ofList
-                // eprintfn "ar %A" allRefs
-                let inlineScripts =
-                    allInlineScripts
-                    |> List.map (fun (name, filename, node) ->
-                        name,
-                        fileManager.ConvertPathToLogicalPath(filename),
-                        node,
-                        allRefs |> Map.tryFind name |> Option.defaultValue [])
-
-                let stringReplace (isParams: (string * string) list) (key: string) =
-                    isParams
-                    |> List.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
-
-                let rec foldOverNode stringReplacer (node: Node) =
-                    // eprintfn "fov %A" node.Key
-                    node.Key <- stringReplacer node.Key
-
-                    node.Values
-                    |> List.iter (fun (l: Leaf) ->
-                        l.Key <- stringReplacer l.Key
-
-                        l.Value
-                        |> (function
-                        | Value.String s ->
-                            l.Value <-
-                                String(
-                                    stringReplacer (s.GetString())
-                                    |> StringResource.stringManager.InternIdentifierToken
-                                )
-                        | Value.QString s ->
-                            l.Value <-
-                                QString(
-                                    stringReplacer (s.GetString())
-                                    |> StringResource.stringManager.InternIdentifierToken
-                                )
-                        | _ -> ()))
-
-                    node.LeafValues
-                    |> Seq.iter (fun (l: LeafValue) ->
-                        l.Value
-                        |> (function
-                        | Value.String s ->
-                            l.Value <-
-                                String(
-                                    stringReplacer (s.GetString())
-                                    |> StringResource.stringManager.InternIdentifierToken
-                                )
-                        | Value.QString s ->
-                            l.Value <-
-                                QString(
-                                    stringReplacer (s.GetString())
-                                    |> StringResource.stringManager.InternIdentifierToken
-                                )
-                        | _ -> ()))
-
-                    node.Children |> List.iter (foldOverNode stringReplacer)
-
-                let validateISSpecific
-                    (
-                        name: string,
-                        logicalpath: string,
-                        node: Node,
-                        callSite: range,
-                        isParams: (string * string) list option
-                    ) =
-                    let newNode = CWTools.Process.STLProcess.cloneNode node
-                    let rootNode = Node("root")
-                    rootNode.AllArray <- [| NodeC newNode |]
-
-                    match isParams with
-                    | Some seps -> foldOverNode (stringReplace seps) newNode
-                    | None -> ()
-                    // eprintfn "vis %A %A" (CKPrinter.api.prettyPrintStatements [newNode.ToRaw]) (isParams)
-                    let res = rv.ManualRuleValidate(logicalpath, rootNode)
-                    // eprintfn "%A %A" logicalpath res
-                    let message =
-                        { location = callSite
-                          message = sprintf "This use of inline script %s results in an error" name }
-
-                    res
-                    |> (function
-                    | OK -> OK
-                    | Invalid(_, inv) ->
-                        Invalid(
-                            System.Guid.NewGuid(),
-                            inv
-                            |> List.map (fun e ->
-                                { e with
-                                    relatedErrors = Some [ message ] })
-                        ))
-
-                let memoizeValidation =
-                    let keyFun = (fun (_, _, node: Node, _, isParams) -> (node.Position, isParams))
-                    let memFun = validateISSpecific
-                    memoize keyFun memFun
-
-                let validateIS
-                    (name: string)
-                    (logicalpath: string)
-                    (node: Node option)
-                    (refs:
-                        {| callSite: range
-                           scriptName: string
-                           isParams: (string * string) list option |} list)
-                    =
-                    // eprintfn "vse %A %A %A" name node refs
-                    let res =
-                        match node with
-                        | Some node ->
-                            refs
-                            <&!&> (fun ref -> memoizeValidation (name, logicalpath, node, ref.callSite, ref.isParams))
-                        | None -> OK
-
-                    res
-
-                inlineScripts <&!&> (fun (name, lp, node, refs) -> validateIS name lp node refs)
-            | _ -> OK)
-
     let valScriptValueParams<'T when 'T :> ComputedData> : CWTools.Games.LookupFileValidator<'T> =
         (fun fileManager rulesValidator lu res es ->
             let res = res.AllEntities()
 
             let entityMap =
-                res |> List.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofList
+                res |> Seq.map (fun struct (e, d) -> e.filepath, struct (e, d)) |> Map.ofSeq
 
             let findParams (referenceDetails: ReferenceDetails) =
                 //                logInfo (sprintf "vsvp %s" key)
                 let splitString =
-                    referenceDetails.originalValue.GetString().Split '|' |> List.ofArray
+                    referenceDetails.originalValue.GetString().Split '|'
+                let splitStringList = splitString |> List.ofArray
 
                 let rec getParamsFromArray =
                     function
@@ -487,10 +309,10 @@ module CommonValidation =
                 //                logInfo (sprintf "vsvp b %A" splitString)
                 let svparams =
                     getParamsFromArray (
-                        if List.length splitString > 1 then
-                            List.tail splitString
+                        if splitString.Length > 1 then
+                            List.tail splitStringList
                         else
-                            splitString
+                            splitStringList
                     )
                 //                logInfo (sprintf "vsvp c %A" svparams)
                 if List.isEmpty svparams then None else Some svparams
@@ -499,7 +321,7 @@ module CommonValidation =
                 match entityMap |> Map.tryFind pos.FileName with
                 | Some struct (e, _) ->
                     let rec findChild (node: Node) =
-                        if node.Position = pos then
+                        if node.Position.Equals pos then
                             Some node
                         else
                             match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
@@ -514,7 +336,7 @@ module CommonValidation =
                 //                logInfo (sprintf "vsvpa %A" scriptValues)
                 let allScriptValues =
                     scriptValues
-                    |> List.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
+                    |> Array.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
 
                 let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
                     //eprintfn "grfrt %A" referencedtypes
@@ -538,7 +360,7 @@ module CommonValidation =
                 // eprintfn "ar %A" allRefs
                 let scriptedEffects =
                     allScriptValues
-                    |> List.map (fun (name, filename, node) ->
+                    |> Array.map (fun (name, filename, node) ->
                         name,
                         fileManager.ConvertPathToLogicalPath(filename),
                         node,
@@ -552,8 +374,8 @@ module CommonValidation =
                     // eprintfn "fov %A" node.Key
                     node.Key <- stringReplacer node.Key
 
-                    node.Values
-                    |> List.iter (fun (l: Leaf) ->
+                    node.Leaves
+                    |> Seq.iter (fun (l: Leaf) ->
                         l.Key <- stringReplacer l.Key
 
                         l.Value
@@ -590,7 +412,7 @@ module CommonValidation =
                                 )
                         | _ -> ()))
 
-                    node.Children |> List.iter (foldOverNode stringReplacer)
+                    node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
                 let validateSESpecific
                     (
@@ -655,8 +477,8 @@ module CommonValidation =
             | _ -> OK)
 
     type BoolState =
-        | AND
-        | OR
+        | AND = 1uy
+        | OR = 2uy
 
     let validateRedundantANDWithNOR: StructureValidator<_> =
         fun _ es ->
@@ -666,13 +488,13 @@ module CommonValidation =
             let fNode =
                 fun (last: BoolState) (x: Node) ->
                     match last, x.Key with
-                    | AND, k when k == "AND" -> AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
-                    | OR, k when k == "OR" -> OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
-                    | _, k when k == "OR" || k == "NOR" -> OR, None
-                    | _, _ -> AND, None
+                    | BoolState.AND, k when k == "AND" -> BoolState.AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
+                    | BoolState.OR, k when k == "OR" -> BoolState.OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
+                    | _, k when k == "OR" || k == "NOR" -> BoolState.OR, None
+                    | _, _ -> BoolState.AND, None
 
             (effects @ triggers)
-            <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
+            <&!&> (foldNodeWithState fNode BoolState.AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
 
     let validateRedundantANDWithNOT: StructureValidator<_> =
         fun _ es ->
@@ -682,13 +504,13 @@ module CommonValidation =
             let fNode =
                 fun (last: BoolState) (x: Node) ->
                     match last, x.Key with
-                    | AND, k when k == "AND" -> AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
-                    | OR, k when k == "OR" -> OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
-                    | _, k when k == "OR" || k == "NOT" -> OR, None
-                    | _, _ -> AND, None
+                    | BoolState.AND, k when k == "AND" -> BoolState.AND, Some(inv (ErrorCodes.UnnecessaryBoolean "AND") x)
+                    | BoolState.OR, k when k == "OR" -> BoolState.OR, Some(inv (ErrorCodes.UnnecessaryBoolean "OR") x)
+                    | _, k when k == "OR" || k == "NOT" -> BoolState.OR, None
+                    | _, _ -> BoolState.AND, None
 
             (effects @ triggers)
-            <&!&> (foldNodeWithState fNode AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
+            <&!&> (foldNodeWithState fNode BoolState.AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
 
     let validateUnusuedTypes: LookupValidator<_> =
         let merge (a: Map<'a, 'b>) (b: Map<'a, 'b>) (f: 'a -> 'b * 'b -> 'b) =
@@ -721,18 +543,19 @@ module CommonValidation =
                 | true -> None
                 | false -> Some(invManual (ErrorCodes.UnusedType typename typedef.id) typedef.range typedef.id None)
 
-            let checkType (typename: string, typedefs: TypeDefInfo list) =
+            let checkType (typename: string, typedefs: TypeDefInfo array) =
                 match allReferences |> Map.tryFind typename with
                 | None -> failwith "no refernences?" //inv (ErrorCodes.CustomError "This type should be used" Severity.Error)
                 | Some refs ->
                     typedefs
-                    |> List.choose (
+                    |> Seq.choose (
                         checkTypeDef
                             typename
                             (refs
                              |> List.filter (fun ref -> ref.referenceType = ReferenceType.TypeDef)
                              |> List.map (fun r -> r.name.GetString()))
                     )
+                    |> Seq.toList
 
             match typeInfos |> List.collect checkType with
             | [] -> OK
@@ -764,7 +587,7 @@ module CommonValidation =
                     match ref.referenceType with
                     | ReferenceType.TypeDefFuzzy
                     | ReferenceType.TypeDef ->
-                        match modifierTypes |> List.tryFind (fun t -> t.id = ref.name.GetString()) with
+                        match modifierTypes |> Array.tryFind (fun t -> t.id = ref.name.GetString()) with
                         | Some _ -> OK
                         | None ->
                             Invalid(

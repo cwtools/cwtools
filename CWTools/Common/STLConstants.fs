@@ -4,60 +4,60 @@ open NewScope
 
 module STLConstants =
     let defaultScopes =
-        [ "Country", [ "country" ]
-          "Leader", [ "leader" ]
-          "System", [ "galacticobject"; "system"; "galactic_object" ]
-          "Planet", [ "planet" ]
-          "Ship", [ "ship" ]
-          "Fleet", [ "fleet" ]
-          "Pop", [ "pop" ]
-          "Ambient Object", [ "ambientobject"; "ambient_object" ]
-          "Army", [ "army" ]
-          "Species", [ "species" ]
-          "Pop Faction", [ "popfaction"; "pop_faction" ]
-          "Sector", [ "sector" ]
-          "Federation", [ "alliance"; "federation"; "Alliance" ]
-          "War", [ "war" ]
-          "Megastructure", [ "megastructure" ]
-          "Design", [ "design" ]
-          "Starbase", [ "starbase" ]
-          "Star", [ "star" ]
-          "Deposit", [ "deposit" ]
-          "Archaeological Site", [ "archaeologicalsite"; "archaeological_site" ] ]
+        [| "Country", [ "country" ]
+           "Leader", [ "leader" ]
+           "System", [ "galacticobject"; "system"; "galactic_object" ]
+           "Planet", [ "planet" ]
+           "Ship", [ "ship" ]
+           "Fleet", [ "fleet" ]
+           "Pop", [ "pop" ]
+           "Ambient Object", [ "ambientobject"; "ambient_object" ]
+           "Army", [ "army" ]
+           "Species", [ "species" ]
+           "Pop Faction", [ "popfaction"; "pop_faction" ]
+           "Sector", [ "sector" ]
+           "Federation", [ "alliance"; "federation"; "Alliance" ]
+           "War", [ "war" ]
+           "Megastructure", [ "megastructure" ]
+           "Design", [ "design" ]
+           "Starbase", [ "starbase" ]
+           "Star", [ "star" ]
+           "Deposit", [ "deposit" ]
+           "Archaeological Site", [ "archaeologicalsite"; "archaeological_site" ] |]
 
-    let defaultScopeInputs =
+    let defaultScopeInputs () =
         defaultScopes
-        |> List.map (fun (n, s) ->
-            { NewScope.ScopeInput.name = n
-              NewScope.ScopeInput.aliases = s
-              NewScope.ScopeInput.isSubscopeOf = []
+        |> Array.map (fun (n, s) ->
+            { ScopeInput.name = n
+              ScopeInput.aliases = s
+              ScopeInput.isSubscopeOf = []
               dataTypeName = None })
 
     type RawStaticModifier = { num: int; tag: string; name: string }
     type RawModifier = { tag: string; category: int }
 
     let defaultModifiers =
-        [ "Pop", Some 2, [ "pop"; "planet"; "galacticobject"; "country" ]
-          "Science", Some 64, [ "ship"; "country" ]
-          "Country", Some 256, [ "country" ]
-          "Army", Some 512, [ "army"; "planet"; "country" ]
-          "Leader", Some 1024, [ "leader"; "country" ]
-          "Planet", Some 2048, [ "planet"; "galacticobject"; "country" ]
-          "PopFaction", Some 8192, [ "popfaction"; "country" ]
-          "ShipSize", Some 16496, [ "ship"; "starbase"; "country" ]
-          "Ship", Some 16508, [ "ship"; "starbase"; "fleet"; "country" ]
-          "Megastructure", Some 65536, [ "megastructure"; "country" ]
-          "PlanetClass", Some 131072, [ "planet"; "pop"; "country" ]
-          "Starbase", Some 262144, [ "starbase"; "country" ]
-          "Resource", Some 524288, [ "country"; "galacticobject"; "planet"; "pop"; "starbase"; "leader"; "ship" ]
-          "Federation", Some 4194304, [ "federation" ] ]
+        [| "Pop", Some 2, [ "pop"; "planet"; "galacticobject"; "country" ]
+           "Science", Some 64, [ "ship"; "country" ]
+           "Country", Some 256, [ "country" ]
+           "Army", Some 512, [ "army"; "planet"; "country" ]
+           "Leader", Some 1024, [ "leader"; "country" ]
+           "Planet", Some 2048, [ "planet"; "galacticobject"; "country" ]
+           "PopFaction", Some 8192, [ "popfaction"; "country" ]
+           "ShipSize", Some 16496, [ "ship"; "starbase"; "country" ]
+           "Ship", Some 16508, [ "ship"; "starbase"; "fleet"; "country" ]
+           "Megastructure", Some 65536, [ "megastructure"; "country" ]
+           "PlanetClass", Some 131072, [ "planet"; "pop"; "country" ]
+           "Starbase", Some 262144, [ "starbase"; "country" ]
+           "Resource", Some 524288, [ "country"; "galacticobject"; "planet"; "pop"; "starbase"; "leader"; "ship" ]
+           "Federation", Some 4194304, [ "federation" ] |]
 
     let defaultModifiersInputs () =
         defaultModifiers
-        |> List.map (fun (n, intID, ss) ->
-            { NewScope.ModifierCategoryInput.name = n
-              NewScope.ModifierCategoryInput.internalID = intID
-              NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
+        |> Array.map (fun (n, intID, ss) ->
+            { ModifierCategoryInput.name = n
+              ModifierCategoryInput.internalID = intID
+              ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
     type EntityType =
         | Agenda = 1
@@ -154,17 +154,17 @@ module STLConstants =
         | Decisions = 91
 
     let scriptFolders =
-        [ "common"
-          "common/deposits"
-          "events"
-          "map/galaxy"
-          "map/setup_scenarios"
-          "prescripted_countries"
-          "interface"
-          "gfx"
-          "music"
-          "sound"
-          "fonts"
-          "flags"
-          "localisation"
-          "localisation_synced" ]
+        [| "common"
+           "common/deposits"
+           "events"
+           "map/galaxy"
+           "map/setup_scenarios"
+           "prescripted_countries"
+           "interface"
+           "gfx"
+           "music"
+           "sound"
+           "fonts"
+           "flags"
+           "localisation"
+           "localisation_synced" |]

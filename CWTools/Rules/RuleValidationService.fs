@@ -13,7 +13,6 @@ open CWTools.Validation.ValidationCore
 open CWTools.Utilities
 open CWTools.Common
 open System.IO
-open QuickGraph
 open System
 open CWTools.Process.Scopes
 open CWTools.Games
@@ -29,8 +28,8 @@ type RuleValidationService
         types: FrozenDictionary<string, PrefixOptimisedStringSet>,
         enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
         varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
-        localisation: (Lang * Collections.Set<string>) list,
-        files: Collections.Set<string>,
+        localisation: (Lang * Collections.Set<string>) array,
+        files: FrozenSet<string>,
         links: EffectMap,
         valueTriggers: EffectMap,
         anyScope,
@@ -42,7 +41,6 @@ type RuleValidationService
         validateLocalisation: LocEntry -> ScopeContext -> ValidationResult
     ) =
 
-    let mutable errorList: ResizeArray<CWError> = new ResizeArray<CWError>()
     let linkMap = links
     let valueTriggerMap = valueTriggers
 
@@ -61,13 +59,13 @@ type RuleValidationService
 
     let defaultKeys =
         localisation
-        |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None)
-        |> List.tryHead
+        |> Array.choose (fun (l, ks) -> if l = defaultLang then Some ks else None)
+        |> Array.tryHead
         |> Option.defaultValue Set.empty
 
     let localisationKeys =
         localisation
-        |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some(l, ks))
+        |> Array.choose (fun (l, ks) -> if l = defaultLang then None else Some(l, ks))
 
     let ruleToCompletionListHelper =
         function
@@ -123,9 +121,9 @@ type RuleValidationService
 
     let memoizeRulesInner memFunction =
         let dict =
-            new System.Collections.Concurrent.ConcurrentDictionary<_, System.Collections.Generic.Dictionary<_, _>>()
+            new System.Collections.Concurrent.ConcurrentDictionary<_, Dictionary<_, _>>()
 
-        fun (rules: NewRule list) (subtypes: string list) ->
+        fun (rules: NewRule array) (subtypes: string list) ->
             match dict.TryGetValue(rules) with
             | true, v ->
                 match v.TryGetValue(subtypes) with
@@ -159,37 +157,37 @@ type RuleValidationService
             fun rules subtypes ->
                 let subtypedrules =
                     rules
-                    |> List.collect (fun (r, o) ->
+                    |> Array.collect (fun (r, o) ->
                         r
                         |> (function
                         | SubtypeRule(key, shouldMatch, cfs) ->
                             (if (not shouldMatch) <> List.contains key subtypes then
                                  cfs
                              else
-                                 [])
-                        | x -> []))
+                                 [||])
+                        | x -> [||]))
 
                 let expandedbaserules =
                     rules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
 
                 let expandedsubtypedrules =
                     subtypedrules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 let noderules = new ResizeArray<_>()
                 let leafrules = new ResizeArray<_>()
                 let leafvaluerules = new ResizeArray<_>()
                 let valueclauserules = new ResizeArray<_>()
-                let nodeSpecificMap = new System.Collections.Generic.Dictionary<_, _>()
-                let leafSpecificMap = new System.Collections.Generic.Dictionary<_, _>()
+                let nodeSpecificMap = new Dictionary<_, _>()
+                let leafSpecificMap = new Dictionary<_, _>()
 
                 let inner =
                     (fun r ->
@@ -212,10 +210,6 @@ type RuleValidationService
                         | LeafRule(l, r), o as x -> leafrules.Add(x)
                         | LeafValueRule lv, o as x -> leafvaluerules.Add(x)
                         | ValueClauseRule rs, o as x -> valueclauserules.Add(x)
-                        // | (NodeRule (l, rs), o) as x -> noderules.Add(l, rs, o)
-                        // | (LeafRule (l, r), o) as x -> leafrules.Add(l, r, o)
-                        // | (LeafValueRule (lv), o) as x -> leafvaluerules.Add(lv, o)
-                        // | (ValueClauseRule (rs), o) as x -> valueclauserules.Add(rs, o)
                         | _ -> ())
                 // res |> Seq.iter inner
                 // expandedres |> Seq.iter inner
@@ -242,7 +236,7 @@ type RuleValidationService
           anyScope = anyScope
           defaultLang = defaultLang
           wildcardLinks = wildCardLinks
-          aliasKeyList = aliasKeyMap
+          aliasKeys = aliasKeyMap
           processLocalisation = processLocalisation
           validateLocalisation = validateLocalisation }
 
@@ -253,7 +247,7 @@ type RuleValidationService
         (enforceCardinality: bool)
         (nodeSeverity: Severity option)
         (ctx: RuleContext)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (startNode: IClause)
         errors
         =
@@ -632,7 +626,7 @@ type RuleValidationService
         (ctx: RuleContext)
         (options: Options)
         (rule: NewField)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (node: IClause)
         errors
         =
@@ -708,10 +702,10 @@ type RuleValidationService
                  | IgnoreField _ -> OK
                  | ScopeField s ->
                      let scope = newCtx.scopes
-                     let key = node.Key.Trim('"')
+                     let key = node.Key.AsSpan().Trim('"')
 
                      match
-                         changeScope false true linkMap valueTriggerMap wildCardLinks varSet key scope,
+                         changeScope.Invoke(false, true, linkMap, valueTriggerMap, wildCardLinks, varSet, key, scope),
                          (stringManager.GetMetadataForID node.KeyId.lower).containsDoubleDollar
                      with
                      | _, true ->
@@ -725,7 +719,9 @@ type RuleValidationService
                      | NewScope(newScopes, _, _), _ ->
                          let newCtx = { newCtx with scopes = newScopes }
                          applyClauseField enforceCardinality options.severity newCtx rules node errors
-                     | NotFound, _ -> inv (ErrorCodes.ConfigRulesInvalidScopeCommand key) node <&&&> errors
+                     | NotFound, _ ->
+                         inv (ErrorCodes.ConfigRulesInvalidScopeCommand(key.ToString())) node
+                         <&&&> errors
                      | WrongScope(command, prevscope, expected, _), _ ->
                          inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) $"%A{expected}") node
                          <&&&> errors
@@ -777,7 +773,7 @@ type RuleValidationService
         (enforceCardinality: bool)
         (ctx: RuleContext)
         (options: Options)
-        (rules: NewRule list)
+        (rules: NewRule array)
         (valueclause: ValueClause)
         errors
         =
@@ -862,7 +858,7 @@ type RuleValidationService
                     | None -> true)
             |> List.map (fun s ->
                 s,
-                if s.rules |> List.isEmpty then
+                if s.rules.Length = 0 then
                     OK
                 else
                     applyClauseField
@@ -894,7 +890,7 @@ type RuleValidationService
 
     let rootId = stringManager.InternIdentifierToken "root"
 
-    let applyNodeRuleRoot (typedef: TypeDefinition) (rules: NewRule list) (options: Options) (node: IClause) =
+    let applyNodeRuleRoot (typedef: TypeDefinition) (rules: NewRule array) (options: Options) (node: IClause) =
         let pushScope, subtypes = testSubtype typedef.subtypes node
 
         let startingScopeContext =
@@ -933,20 +929,14 @@ type RuleValidationService
             | AnyKey -> true
             | MultipleKeys(keys, shouldMatch) -> (keys |> List.exists ((==) n.Key)) <> (not shouldMatch)
 
-        let directory = Path.GetDirectoryName(path).Replace('\\', '/')
-        let fileName = Path.GetFileName(path)
-
         let inner (typedefs: TypeDefinition list) (node: IClause) =
             let validateType (typedef: TypeDefinition) (n: IClause) =
                 let typerules =
                     rootRules.TypeRules
-                    |> List.choose (function
+                    |> Seq.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
-                //let expandedRules = typerules |> List.collect (function | (LeafRule (AliasField a, _),_) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
-                //let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
-                //match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
-                //match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
+
                 let filterKey =
                     match n with
                     | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
@@ -957,7 +947,7 @@ type RuleValidationService
                     | :? Node as n -> n.KeyPrefix
                     | _ -> None
 
-                match typerules |> List.tryHead with
+                match typerules |> Seq.tryHead with
                 | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                     (stringManager.GetStringForID x.normal) == typedef.name
                     ->
@@ -969,8 +959,7 @@ type RuleValidationService
 
             let pathFilteredTypes =
                 typedefs
-                |> List.filter (fun t ->
-                    CSharpHelpers.FieldValidatorsHelper.CheckPathDir(t.pathOptions, directory, fileName))
+                |> List.filter (fun t -> FieldValidatorsHelper.CheckPathDir(t.pathOptions, path))
 
             let rec validateTypeSkipRoot (t: TypeDefinition) (skipRootKeyStack: SkipRootKey list) (n: IClause) =
                 let prefixKey =
@@ -986,13 +975,13 @@ type RuleValidationService
                         OK
                 | head :: tail ->
                     if skiprootkey head n then
-                        n.ClauseList <&!&> validateTypeSkipRoot t tail
+                        n.Clauses <&!&> validateTypeSkipRoot t tail
                     else
                         OK
 
             pathFilteredTypes <&!&> (fun t -> validateTypeSkipRoot t t.skipRootKey node)
 
-        let res = (root.Clauses |> List.ofSeq <&!&> inner normalTypeDefs)
+        let res = (root.Clauses <&!&> inner normalTypeDefs)
         let rootres = (inner rootTypeDefs root)
         res <&&> rootres
 

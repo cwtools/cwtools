@@ -30,11 +30,6 @@ module VIC2Localisation =
          >
 
     type VIC2LocalisationService(files: (string * string) list) =
-        // let localisationFolder : string = localisationSettings.folder
-        // let language : VIC2Lang =
-        //     match localisationSettings.language with
-        //     | VIC2 l -> l
-        //     | _ -> failwith "Wrong language for localisation"
         let mutable csv: (range * LocalisationEntry.Row) list = [] //upcast LocalisationEntry. "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x"
         let mutable csvFallback: (range * LocalisationEntryFallback.Row) list = [] // upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x"
 
@@ -94,25 +89,23 @@ module VIC2Localisation =
         let getKeys () =
             csvFallback |> Seq.map (snd >> (fun f -> f.``#CODE``)) |> Seq.toArray
 
-        let valueMap lang =
+        let getEntries lang =
             let one = csv |> Seq.map (fun (p, r) -> (p, r.``#CODE``, getForLang lang r))
 
             let two =
                 csvFallback
                 |> Seq.map (fun (p, r) -> (p, r.``#CODE``, getForLangFallback lang r))
 
-            let range =
-                mkRange (files |> List.tryHead |> Option.map fst |> Option.defaultValue "") (mkPos 0 0) (mkPos 0 0)
-
-            Seq.concat [ one; two ]
+            Seq.concat [| one; two |]
             |> Seq.map (fun (p, k, v) ->
-                k,
                 { key = k
                   value = None
                   desc = v
                   position = p
                   errorRange = None })
-            |> Map.ofSeq
+
+        let valueMap lang =
+            getEntries lang |> Seq.map (fun x -> x.key, x) |> Map.ofSeq
 
         let values lang =
             let one = csv |> Seq.map (snd >> (fun f -> (f.``#CODE``, getForLang lang f)))
@@ -135,13 +128,7 @@ module VIC2Localisation =
             | _ -> x
 
         do results <- addFiles files |> dict
-        // do
-        //     match Directory.Exists(localisationFolder) with
-        //     | true ->
-        //                 let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
-        //                 results <- addFiles files |> dict
-        //     | false -> ()
-        //new (settings : VIC2Settings) = CKLocalisationService(settings.VIC2Directory.localisationDirectory, settings.ck2Language)
+
         new(localisationSettings: LocalisationSettings<VIC2Lang>) =
             log (sprintf "Loading VIC2 localisation in %s" localisationSettings.folder)
 
@@ -163,18 +150,17 @@ module VIC2Localisation =
                 log (sprintf "%s not found" localisationSettings.folder)
                 VIC2LocalisationService([])
 
-
-
         member val Results = results with get, set
 
-        member __.Api(lang: Lang) =
+        member _.Api(lang: Lang) =
             { new ILocalisationAPI with
-                member __.Results = results
-                member __.Values = values lang
-                member __.GetKeys = getKeys ()
-                member __.GetDesc x = getDesc lang x
-                member __.GetLang = lang
-                member __.ValueMap = valueMap lang }
+                member _.Results = results
+                member _.Values = values lang
+                member _.GetKeys = getKeys ()
+                member _.GetDesc x = getDesc lang x
+                member _.GetLang = lang
+                member _.ValueMap = valueMap lang
+                member _.GetEntries = getEntries lang }
 
         interface ILocalisationAPICreator with
             member this.Api l = this.Api l

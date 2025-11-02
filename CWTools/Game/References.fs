@@ -8,12 +8,10 @@ open CWTools.Common
 
 
 type References<'T when 'T :> ComputedData>
-    (resourceManager: IResourceAPI<'T>, lookup: Lookup, localisation: ILocalisationAPI list) =
-    let entities () =
-        resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
+    (resourceManager: IResourceAPI<'T>, lookup: Lookup, localisation: ILocalisationAPI seq) =
 
     let modifiers () =
-        lookup.staticModifiers |> List.map (fun m -> m.tag)
+        lookup.staticModifiers |> Array.map _.tag
 
     let triggers () =
         lookup.triggers |> List.map (fun t -> t.Name)
@@ -22,14 +20,16 @@ type References<'T when 'T :> ComputedData>
         lookup.effects |> List.map (fun e -> e.Name)
 
     let localisation () =
-        localisation |> List.collect (fun l -> l.ValueMap |> Map.toList)
+        localisation
+        |> Seq.collect (fun l -> l.GetEntries |> Seq.map (fun x -> (x.key, x)))
+        |> Seq.toList
 
-    member __.ModifierNames = modifiers ()
-    member __.TriggerNames = triggers ()
-    member __.EffectNames = effects ()
-    member __.ScopeNames = oneToOneScopes |> List.map (fun (n, _) -> n)
-    member __.Technologies = lookup.technologies
-    member __.Localisation = localisation ()
-    member __.TypeMapInfo = lookup.typeDefInfo
-    member __.ConfigRules = lookup.configRules
-    member __.SavedScopes = lookup.savedEventTargets
+    member _.ModifierNames = modifiers ()
+    member _.TriggerNames = triggers ()
+    member _.EffectNames = effects ()
+    member _.ScopeNames = oneToOneScopes |> List.map (fun (n, _) -> n)
+    member _.Technologies = lookup.technologies
+    member _.Localisation = localisation ()
+    member _.TypeMapInfo = lookup.typeDefInfo
+    member _.ConfigRules = lookup.configRules
+    member _.SavedScopes = lookup.savedEventTargets
