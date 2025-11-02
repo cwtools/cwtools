@@ -2,6 +2,7 @@ namespace CWTools.Rules
 
 open System.Collections.Frozen
 open System.Collections.Generic
+open System.Linq
 open CSharpHelpers
 open CWTools.Common
 open CWTools.Process.Scopes
@@ -334,11 +335,9 @@ module internal FieldValidators =
                       CWTools.Localisation.Entry.errorRange = None }
 
                 let proc =
-                    processLocalisation (defaultLang, Collections.Map.ofList [ "inline", entry ])
+                    processLocalisation (defaultLang, Map.ofArray [| "inline", entry |])
                     |> snd
-                    |> Map.toList
-                    |> List.head
-                    |> snd
+                    |> _.Values.First()
 
                 validateLocalisation proc scopeContext
             else
