@@ -62,11 +62,12 @@ def main [
             git clone /mnt/repo /tmp/build --quiet &&
             cd /tmp/build &&
             git checkout ($full_hash) --quiet &&
-            dotnet restore CWTools/CWTools.CLI/CWTools.CLI.fsproj &&
-            dotnet publish CWTools/CWTools.CLI/CWTools.CLI.fsproj -c Release -o /out/temp_($full_hash) --no-restore &&
+            dotnet tool restore &&
+            dotnet restore CWToolsCLI/CWToolsCLI.fsproj &&
+            dotnet publish CWToolsCLI/CWToolsCLI.fsproj -c Release -o /out/temp_($full_hash) --no-restore &&
 
             # Validate the build succeeded
-            if [ -f '/out/temp_($full_hash)/CWTools.CLI.dll' ]; then
+            if [ -f '/out/temp_($full_hash)/CWToolsCLI.dll' ]; then
                 # Atomic move to final cache location
                 mv /out/temp_($full_hash) /out/($full_hash) &&
 
@@ -104,7 +105,7 @@ def main [
         }
 
         # Validate key file exists (marker will be created by container)
-        let dll_path = ($cache_dir | path join "CWTools.CLI.dll")
+        let dll_path = ($cache_dir | path join "CWToolsCLI.dll")
         if not ($dll_path | path exists) {
             print $"(ansi red)Error: Cache directory exists but ($dll_path) is missing(ansi reset)"
             # Clean up invalid cache - no marker yet, but it's safe since we just created it
@@ -140,19 +141,14 @@ def main [
     let result_path = ($out_dir_base | path join $"($full_hash)_($r_hash)_($g_hash)")
     mkdir $result_path
 
-    # Docker User ID fix
-    let uid = (do -i { ^id -u } | str trim)
-    let gid = (do -i { ^id -g } | str trim)
-
     let result = do -i {
         (^docker run --rm
-            --user $"($uid):($gid)"
             -v $"($cache_dir):/app:ro"
             -v $"($rules_path | path expand):/rules:ro"
             -v $"($game_path | path expand):/game:ro"
             -v $"($result_path):/output"
             $RUNNER_IMAGE
-            dotnet /app/CWTools.CLI.dll /rules /game /output/output.json)
+            dotnet /app/CWToolsCLI.dll validate --rulespath /rules --directory /game --outputfile /output/output.json --reporttype json --game stl --scope vanilla  all)
 
     } | complete
     $result.stdout | save -f ($result_path | path join "stdout.log")
