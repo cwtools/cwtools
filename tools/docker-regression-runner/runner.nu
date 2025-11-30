@@ -10,9 +10,9 @@ def main [
     let start = (date now)
 
     # --- CONFIGURATION ---
-    # We need an SDK image that includes Git. The standard dotnet SDK usually does.
     let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:10.0"
     let RUNNER_IMAGE = "mcr.microsoft.com/dotnet/runtime:9.0"
+    let MARKER_FILE = ".valid-cache"
 
     let root = ($env.PWD | path expand)
     let repo_path = ($local_repo | path expand)
@@ -23,60 +23,96 @@ def main [
         exit 1
     }
 
-    # Resolve Hash (On Host) to know where to cache it
-    # We do this locally because it's instant
-    cd $repo_path
-    let full_hash = (do -i { ^git rev-parse $commit } | str trim)
+    # Resolve Hash (NO CD - use git flags instead)
+    let git_dir = ($repo_path | path join ".git")
+    let full_hash = (do -i {
+        ^git --git-dir $git_dir --work-tree $repo_path rev-parse $commit
+    } | str trim)
     if ($full_hash | is-empty) { print "Invalid commit"; exit 1 }
-    cd $root
 
     # Paths
-    let cache_dir = ($root | path join "build-cache" $full_hash)
-    let temp_cache_dir = ($root | path join "build-cache" $"temp_($full_hash)")
+    let cache_parent = ($root | path join "build-cache")
+    let cache_dir = ($cache_parent | path join $full_hash)
+    let marker_path = ($cache_dir | path join $MARKER_FILE)
     let out_dir_base = ($root | path join "regression-results")
 
-    # --- 1. BUILD (READ-ONLY MOUNT STRATEGY) ---
-    if $force_rebuild or not ($cache_dir | path exists) {
-        print $"🔨 Building ($full_hash | str substring 0..7) in isolated container..."
-        mkdir $cache_dir
+    # --- 1. BUILD (MARKER FILE ONLY FOR SAFE DELETION) ---
+    let should_build = ($force_rebuild or not ($cache_dir | path exists))
 
-        # THE MAGIC:
-        # 1. Mount local repo to /mnt/repo (Read-Only)
-        # 2. 'git clone' from /mnt/repo to /tmp/build (Inside container)
-        #    - This is fast and ignores your local uncommitted changes/garbage
-        # 3. Checkout the specific hash
-        # 4. Build
+    if $should_build {
+        print $"🔨 Building ($full_hash | str substring 0..7) in isolated container..."
+
+        # NUSHELL: Only rm if marker file exists (proves it's safe to delete)
+        if ($cache_dir | path exists) and ($marker_path | path exists) {
+            print "   Cleaning existing valid cache (marker file found)..."
+            rm -rf $cache_dir
+        } else if ($cache_dir | path exists) {
+            print $"(ansi yellow)   Found existing directory without marker file - will rebuild over it(ansi reset)"
+        }
+
+        # Ensure parent cache directory exists
+        mkdir $cache_parent
+
+        # Container script - creates marker file on success
         let build_cmd = $"
+            # Create temp build directory
+            mkdir -p /out/temp_($full_hash) &&
+
+            # Clone, build, and validate
             git clone /mnt/repo /tmp/build --quiet &&
             cd /tmp/build &&
             git checkout ($full_hash) --quiet &&
             dotnet restore CWTools/CWTools.CLI/CWTools.CLI.fsproj &&
-            dotnet publish CWTools/CWTools.CLI/CWTools.CLI.fsproj -c Release -o /out --no-restore
+            dotnet publish CWTools/CWTools.CLI/CWTools.CLI.fsproj -c Release -o /out/temp_($full_hash) --no-restore &&
+
+            # Validate the build succeeded
+            if [ -f '/out/temp_($full_hash)/CWTools.CLI.dll' ]; then
+                # Atomic move to final cache location
+                mv /out/temp_($full_hash) /out/($full_hash) &&
+
+                # Create marker file to prove this is safe to delete in future
+                echo '($full_hash)' > /out/($full_hash)/($MARKER_FILE) &&
+
+                echo 'BUILD_SUCCESS' &&
+                exit 0
+            else
+                echo 'BUILD_FAILED: DLL missing after publish' &&
+                exit 1
+            fi
         " | str replace --all "\r" ""
 
         # Run Builder (capture output for debugging)
-        let build_output = (do -i { (^docker run --rm
-            -v $"($repo_path):/mnt/repo:ro"
-            -v $"($cache_dir):/out"
-            $BUILDER_IMAGE
-            /bin/bash -c $build_cmd) } | complete)
+        let build_output = (do -i {
+            (^docker run --rm
+                -v $"($repo_path):/mnt/repo:ro"
+                -v $"($cache_parent):/out"
+                $BUILDER_IMAGE
+                /bin/bash -c $build_cmd)
+        } | complete)
 
         if $build_output.exit_code != 0 {
-            print $"(ansi red)Build failed! Output:(ansi reset)"
+            print $"(ansi red)Build failed! Container output:(ansi reset)"
             print $build_output.stdout
             print $build_output.stderr
             exit $build_output.exit_code
         }
 
-        # Validate cache (ensure DLL exists)
+        # Final validation: container succeeded, check cache exists
+        if not ($cache_dir | path exists) {
+            print $"(ansi red)Error: Container reported success but cache directory ($cache_dir) was not created(ansi reset)"
+            exit 1
+        }
+
+        # Validate key file exists (marker will be created by container)
         let dll_path = ($cache_dir | path join "CWTools.CLI.dll")
         if not ($dll_path | path exists) {
-            print $"(ansi red)Error: Build succeeded but ($dll_path) missing. Cache invalid.(ansi reset)"
+            print $"(ansi red)Error: Cache directory exists but ($dll_path) is missing(ansi reset)"
+            # Clean up invalid cache - no marker yet, but it's safe since we just created it
             rm -rf $cache_dir
             exit 1
         }
 
-        print $"   Build Cached: ($cache_dir)"
+        print $"   Build Cached: ($cache_dir) ✓"
     } else {
         print $"⚡ Using cached build: ($cache_dir)"
     }
@@ -84,31 +120,44 @@ def main [
     # --- 2. RUN ---
     print "🚀 Running Validation..."
 
-    # Hash inputs for unique output folder
-    let r_hash = (ls ($rules_path | path join "**/*") | sort-by name | each {|f| $"($f.name)($f.modified)"} | str join | hash md5)
-    let g_hash = (ls ($game_path | path join "**/*") | sort-by name | each {|f| $"($f.name)($f.modified)"} | str join | hash md5)
+    # Hash inputs (handle empty dirs gracefully)
+    def safe_hash [p: path] {
+        try {
+            let files = (ls ($p | path join "**/*") | sort-by name)
+            if ($files | is-empty) {
+                return ("" | hash md5)  # Hash of empty string for empty dirs
+            }
+            $files | each {|f| $"($f.name)($f.modified)"} | str join | hash md5
+        } catch {
+            print $"(ansi yellow)Warning: Could not hash ($p) - using empty hash(ansi reset)"
+            return ("" | hash md5)
+        }
+    }
+
+    let r_hash = (safe_hash ($rules_path | path expand))
+    let g_hash = (safe_hash ($game_path | path expand))
 
     let result_path = ($out_dir_base | path join $"($full_hash)_($r_hash)_($g_hash)")
     mkdir $result_path
 
-    # Docker User ID fix (so you own the output files)
+    # Docker User ID fix
     let uid = (do -i { ^id -u } | str trim)
     let gid = (do -i { ^id -g } | str trim)
 
     let result = do -i {
         (^docker run --rm
             --user $"($uid):($gid)"
-            -v $"($cache_dir):/app:ro"          # Mounted Build
+            -v $"($cache_dir):/app:ro"
             -v $"($rules_path | path expand):/rules:ro"
             -v $"($game_path | path expand):/game:ro"
             -v $"($result_path):/output"
             $RUNNER_IMAGE
             dotnet /app/CWTools.CLI.dll /rules /game /output/output.json)
 
-
     } | complete
     $result.stdout | save -f ($result_path | path join "stdout.log")
     $result.stderr | save -f ($result_path | path join "stderr.log")
+
     # --- 3. METADATA ---
     {
         commit: $full_hash
@@ -116,6 +165,7 @@ def main [
         exit_code: $env.LAST_EXIT_CODE
         rules_hash: $r_hash
         game_hash: $g_hash
+        build_cache: $cache_dir
     } | to json | save -f ($result_path | path join "metadata.json")
 
     print $"(ansi green)Done: ($result_path)(ansi reset)"
