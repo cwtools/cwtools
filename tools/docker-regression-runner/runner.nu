@@ -10,8 +10,7 @@ def main [
     let start = (date now)
 
     # --- CONFIGURATION ---
-    let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:10.0"
-    let RUNNER_IMAGE = "mcr.microsoft.com/dotnet/runtime:9.0"
+    let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:9.0"
     let MARKER_FILE = ".valid-cache"
 
     let root = ($env.PWD | path expand)
@@ -141,18 +140,42 @@ def main [
     let result_path = ($out_dir_base | path join $"($full_hash)_($r_hash)_($g_hash)")
     mkdir $result_path
 
-    let result = do -i {
-        (^docker run --rm
-            -v $"($cache_dir):/app:ro"
-            -v $"($rules_path | path expand):/rules:ro"
-            -v $"($game_path | path expand):/game:ro"
-            -v $"($result_path):/output"
-            $RUNNER_IMAGE
-            dotnet /app/CWToolsCLI.dll validate --rulespath /rules --directory /game --outputfile /output/output.json --reporttype json --game stl --scope vanilla  all)
+    # Native execution - no Docker I/O
+    print "   Running natively (no Docker I/O)..."
 
+    # Determine .NET executable name
+    let dotnet_exe = if ($env.OS | str contains "windows") { "dotnet.exe" } else { "dotnet" }
+
+    # Change to cache directory temporarily
+    let old_pwd = ($env.PWD)
+    cd $cache_dir
+
+    # Run natively with absolute paths
+    let cli_args = [
+        "CWToolsCLI.dll"
+        "validate"
+        $"--rulespath" $"($rules_path | path expand)"
+        $"--directory" $"($game_path | path expand)"
+        $"--outputfile" $"($result_path | path join "output.json")"
+        $"--reporttype" "json"
+        $"--game" "stl"
+        $"--scope" "vanilla"
+        "all"
+    ]
+
+    let run_result = do {
+        ^dotnet ...$cli_args
     } | complete
-    $result.stdout | save -f ($result_path | path join "stdout.log")
-    $result.stderr | save -f ($result_path | path join "stderr.log")
+
+    $run_result.stdout | save -f ($result_path | path join "native_stdout.txt")
+    $run_result.stderr | save -f ($result_path | path join "native_stderr.txt")
+
+    cd $old_pwd  # Restore original directory
+
+    if $run_result.exit_code != 0 {
+        print $"(ansi red)Native run failed with exit code ($run_result.exit_code)(ansi reset)"
+        exit $run_result.exit_code
+    }
 
     # --- 3. METADATA ---
     {
