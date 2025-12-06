@@ -1,9 +1,0 @@
-Expecto
-FParsec
-System.Text.Encoding.CodePages
-FsPickler
-FSharpx.Collections
-Argu
-Microsoft.NET.Test.Sdk
-YoloDev.Expecto.TestSdk
-Microsoft.Testing.Platform.MSBuild
