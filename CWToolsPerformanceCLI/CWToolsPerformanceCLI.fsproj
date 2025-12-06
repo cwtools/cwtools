@@ -17,5 +17,8 @@
         <ProjectReference Include="..\CWTools\CWTools.fsproj"/>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
     </ItemGroup>
-    <Import Project="..\.paket\Paket.Restore.targets"/>
+    <ItemGroup>
+        <PackageReference Include="Argu" Version="6.2.5"/>
+        <PackageReference Include="Expecto" Version="11.0.0-alpha8"/>
+    </ItemGroup>
 </Project>
