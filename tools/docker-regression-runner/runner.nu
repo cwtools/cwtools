@@ -6,10 +6,11 @@ def main [
     rules_path: path    # Path to rules
     game_path: path     # Path to game
     --force-rebuild     # Force fresh build
+    --force-rerun       # Force rerun even if results exist
 ] {
     let start = (date now)
-    let rules_path = $rules_path | str replace --all '\' '/' | str replace "D:" ""
-    let game_path = $game_path | str replace --all '\' '/' | str replace "D:" ""
+    let rules_path = $rules_path | str replace --all '\\' '/' | str replace "D:" ""
+    let game_path = $game_path | str replace --all '\\' '/' | str replace "D:" ""
 
     # --- CONFIGURATION ---
     let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:9.0"
@@ -36,6 +37,37 @@ def main [
     let cache_dir = ($cache_parent | path join $full_hash)
     let marker_path = ($cache_dir | path join $MARKER_FILE)
     let out_dir_base = ($root | path join "regression-results")
+
+    # Hash inputs early (needed for result path check)
+    def safe_hash [p: path] {
+        try {
+            print ($"($p)**/*" )
+            let files = (glob $"($p)**/*" | sort | each {|f| ls $f | first } )
+            if ($files | is-empty) {
+                return ("" | hash md5)
+            }
+            $files | each {|f| $"($f.name)($f.modified)"} | str join "" | hash md5
+        } catch { |err|
+            print $"(ansi yellow)Warning: Could not hash ($p), ($err.msg) - using empty hash(ansi reset)"
+            return ("" | hash md5)
+        }
+    }
+
+    let r_hash = "0"
+    let g_hash = "0"
+    let result_path = ($out_dir_base | path join $"($full_hash)_($r_hash)_($g_hash)")
+
+    # --- CHECK IF RESULTS ALREADY EXIST ---
+    let results_exist = (
+        ($result_path | path join "output.json" | path exists) and
+        ($result_path | path join "metadata.json" | path exists)
+    )
+
+    if $results_exist and (not $force_rerun) {
+        print $"⚡ Results already exist: ($result_path)"
+        print $"   Use --force-rerun to regenerate"
+        exit 0
+    }
 
     # --- 1. BUILD (MARKER FILE ONLY FOR SAFE DELETION) ---
     let should_build = ($force_rebuild or not ($cache_dir | path exists))
@@ -123,25 +155,6 @@ def main [
     # --- 2. RUN ---
     print "🚀 Running Validation..."
 
-    # Hash inputs (handle empty dirs gracefully)
-    def safe_hash [p: path] {
-        try {
-            print ($"($p)**/*" )
-            let files = (glob $"($p)**/*" | sort | each {|f| ls $f | first } )
-            if ($files | is-empty) {
-                return ("" | hash md5)  # Hash of empty string for empty dirs
-            }
-            $files | each {|f| $"($f.name)($f.modified)"} | str join "" | hash md5
-        } catch { |err|
-            print $"(ansi yellow)Warning: Could not hash ($p), ($err.msg) - using empty hash(ansi reset)"
-            return ("" | hash md5)
-        }
-    }
-
-    let r_hash = (safe_hash ($rules_path ))
-    let g_hash = (safe_hash ($game_path ))
-
-    let result_path = ($out_dir_base | path join $"($full_hash)_($r_hash)_($g_hash)")
     mkdir $result_path
 
     # Native execution - no Docker I/O
