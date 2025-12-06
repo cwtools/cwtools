@@ -8,6 +8,8 @@ def main [
     --force-rebuild     # Force fresh build
 ] {
     let start = (date now)
+    let rules_path = $rules_path | str replace --all '\' '/' | str replace "D:" ""
+    let game_path = $game_path | str replace --all '\' '/' | str replace "D:" ""
 
     # --- CONFIGURATION ---
     let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:9.0"
@@ -124,19 +126,20 @@ def main [
     # Hash inputs (handle empty dirs gracefully)
     def safe_hash [p: path] {
         try {
-            let files = (ls ($p | path join "**/*") | sort-by name)
+            print ($"($p)**/*" )
+            let files = (glob $"($p)**/*" | sort | each {|f| ls $f | first } )
             if ($files | is-empty) {
                 return ("" | hash md5)  # Hash of empty string for empty dirs
             }
-            $files | each {|f| $"($f.name)($f.modified)"} | str join | hash md5
-        } catch {
-            print $"(ansi yellow)Warning: Could not hash ($p) - using empty hash(ansi reset)"
+            $files | each {|f| $"($f.name)($f.modified)"} | str join "" | hash md5
+        } catch { |err|
+            print $"(ansi yellow)Warning: Could not hash ($p), ($err.msg) - using empty hash(ansi reset)"
             return ("" | hash md5)
         }
     }
 
-    let r_hash = (safe_hash ($rules_path | path expand))
-    let g_hash = (safe_hash ($game_path | path expand))
+    let r_hash = (safe_hash ($rules_path ))
+    let g_hash = (safe_hash ($game_path ))
 
     let result_path = ($out_dir_base | path join $"($full_hash)_($r_hash)_($g_hash)")
     mkdir $result_path
@@ -173,7 +176,7 @@ def main [
 
     cd $old_pwd  # Restore original directory
 
-    if $run_result.exit_code != 0 {
+    if $run_result.exit_code != 0 and $run_result.exit_code != 1 {
         print $"(ansi red)Native run failed with exit code ($run_result.exit_code)(ansi reset)"
         exit $run_result.exit_code
     }
