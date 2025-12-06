@@ -21,7 +21,7 @@ def main [
     
     # We invoke the runner. Note: runner.nu writes to regression-results/ based on hash
     # We force-rerun to ensure we aren't picking up a stale result from a different run attempt
-    nu $runner_path $local_repo $current_commit $rules_path $game_path --force-rerun
+    nu $runner_path $local_repo $current_commit $rules_path $game_path
 
     # 2. Locate the output file
     # runner.nu logic: $root | path join "regression-results" | path join $"($full_hash)_0_0"

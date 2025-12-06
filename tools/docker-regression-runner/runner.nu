@@ -65,6 +65,8 @@ def main [
 
     if $results_exist and (not $force_rerun) {
         print $"⚡ Results already exist: ($result_path)"
+        let errorCount = (open ($result_path | path join "output.json") | get "errorCount")
+        print $"   ($errorCount) errors found"
         print $"   Use --force-rerun to regenerate"
         exit 0
     }
@@ -203,6 +205,8 @@ def main [
         game_hash: $g_hash
         build_cache: $cache_dir
     } | to json | save -f ($result_path | path join "metadata.json")
+    
+    let errorCount = (open ($result_path | path join "output.json") | get "errorCount")
 
     print $"(ansi green)Done: ($result_path)(ansi reset)"
 }
