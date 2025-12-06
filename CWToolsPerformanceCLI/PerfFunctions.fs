@@ -1,5 +1,6 @@
 module CWToolsPerformanceCLI.PerfFunctions
 
+open CWTools
 open CWTools.Games.CK3
 open CWTools.Games.EU4
 open CWTools.Games.EU5
