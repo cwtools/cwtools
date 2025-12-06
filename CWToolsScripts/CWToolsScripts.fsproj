@@ -17,10 +17,10 @@
     <EmbeddedResource Include="../CWTools/files/**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Argu" Version="6.2.5"/>
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7"/>
-    <PackageReference Include="FSharpPlus" Version="1.7"/>
-    <PackageReference Include="FsPickler" Version="5.3.2"/>
-    <PackageReference Include="FSharp.Data" Version="3.1.1"/>
+    <PackageReference Include="Argu"/>
+    <PackageReference Include="System.Text.Encoding.CodePages"/>
+    <PackageReference Include="FSharpPlus"/>
+    <PackageReference Include="FsPickler"/>
+    <PackageReference Include="FSharp.Data"/>
   </ItemGroup>
 </Project>

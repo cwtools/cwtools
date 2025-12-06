@@ -34,14 +34,14 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Expecto" Version="11.0.0-alpha8"/>
-        <PackageReference Include="FParsec" Version="1.1.1"/>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7"/>
-        <PackageReference Include="FsPickler" Version="5.3.2"/>
-        <PackageReference Include="FSharpx.Collections" Version="2.0"/>
-        <PackageReference Include="Argu" Version="6.2.5"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
-        <PackageReference Include="YoloDev.Expecto.TestSdk" Version="0.15.4"/>
-        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.8"/>
+        <PackageReference Include="Expecto"/>
+        <PackageReference Include="FParsec"/>
+        <PackageReference Include="System.Text.Encoding.CodePages"/>
+        <PackageReference Include="FsPickler"/>
+        <PackageReference Include="FSharpx.Collections"/>
+        <PackageReference Include="Argu"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="YoloDev.Expecto.TestSdk"/>
+        <PackageReference Include="Microsoft.Testing.Platform.MSBuild"/>
     </ItemGroup>
 </Project>

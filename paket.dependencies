@@ -1,32 +1,9 @@
 source https://api.nuget.org/v3/index.json
 storage: none
 
-nuget Expecto 11.0.0-alpha8
-nuget FParsec 1.1.1
-nuget FSharp.Data 3.1.1 #
-nuget FSharp.Collections.ParallelSeq #
-nuget FSharpPlus #
-nuget DotNet.Glob #
-nuget FSharpx.Collections 2.0 #
-nuget FSharp.Compiler.Service
-nuget Sandwych.QuickGraph.Core #
-nuget FsPickler #
-nuget FSharp.Core #
-nuget System.Text.Encoding.CodePages #
-nuget Argu
-nuget Pastel
-nuget Chiron
-nuget NuGet.CommandLine
-nuget SharpZipLib
-nuget CWTools 0.4.0-alpha
-nuget VDS.Common
+# Central NuGet package management is used in the SDK projects.
+# Keep only the GitHub include used by CWToolsDocs below.
 github giraffe-fsharp/Giraffe:612aa186c68101f532196817f67ebaa083c16146 src/Giraffe/GiraffeViewEngine.fs
-nuget Microsoft.NET.Test.Sdk
-nuget NUnit
-nuget NUnit.Analyzers
-nuget NUnit3TestAdapter
-nuget YoloDev.Expecto.TestSdk
-nuget Microsoft.Testing.Platform.MSBuild
 
 group build
     source https://api.nuget.org/v3/index.json

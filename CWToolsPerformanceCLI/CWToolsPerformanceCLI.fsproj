@@ -18,7 +18,7 @@
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Argu" Version="6.2.5"/>
-        <PackageReference Include="Expecto" Version="11.0.0-alpha8"/>
+        <PackageReference Include="Argu"/>
+        <PackageReference Include="Expecto"/>
     </ItemGroup>
 </Project>
