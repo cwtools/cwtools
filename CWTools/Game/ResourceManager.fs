@@ -689,7 +689,10 @@ type ResourceManager<'T when 'T :> ComputedData>
                             let scriptName = (n.TagText "script")
 
                             let values =
-                                n.Leaves |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText) |> List.ofSeq
+                                n.Leaves
+                                |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText)
+                                |> Seq.where (fun (k, v) -> k.Length > 0 && v.Length > 0)
+                                |> List.ofSeq
 
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             | Some scriptNode ->
