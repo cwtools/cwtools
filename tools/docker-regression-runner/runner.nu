@@ -13,7 +13,7 @@ def main [
     let game_path = $game_path | str replace --all '\\' '/' | str replace "D:" ""
 
     # --- CONFIGURATION ---
-    let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:9.0"
+    let BUILDER_IMAGE = "mcr.microsoft.com/dotnet/sdk:10.0-alpine"
     let MARKER_FILE = ".valid-cache"
 
     let root = ($env.PWD | path expand)
@@ -94,9 +94,9 @@ def main [
             mkdir -p /out/temp_($full_hash) &&
 
             # Clone, build, and validate
-            git clone /mnt/repo /tmp/build --quiet &&
+            git clone file:///mnt/repo /tmp/build --revision ($full_hash) --depth 1 &&
             cd /tmp/build &&
-            git checkout ($full_hash) --quiet &&
+            git checkout ($full_hash) &&
             dotnet tool restore &&
             dotnet restore CWToolsCLI/CWToolsCLI.fsproj &&
             dotnet publish CWToolsCLI/CWToolsCLI.fsproj -c Release -o /out/temp_($full_hash) --no-restore &&
@@ -124,7 +124,7 @@ def main [
                 -v $"($repo_path):/mnt/repo:ro"
                 -v $"($cache_parent):/out"
                 $BUILDER_IMAGE
-                /bin/bash -c $build_cmd)
+                /bin/sh -c $build_cmd)
         } | complete)
 
         if $build_output.exit_code != 0 {
