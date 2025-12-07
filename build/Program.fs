@@ -97,8 +97,7 @@ let assertOk (result: ProcessResult) =
     if result.ExitCode <> 0 then
         failwith $"Error while running restore %A{result.Errors}"
 
-let restoreCheck () =
-    DotNet.exec id "paket" "restore --fail-on-checks --force" |> assertOk
+let restoreCheck () = DotNet.exec id "restore" "" |> assertOk
 
 let buildAll () =
     libraryProjects |> Seq.iter (DotNet.build id)
