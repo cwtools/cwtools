@@ -18,22 +18,19 @@ module LanguageFeatures =
         =
         let findNode (pos: range) (startNode: Node) =
             let rec findChild (node: Node) =
-                if node.Position = pos then
+                if node.Position.Equals pos then
                     Some node
                 else
-                    match node.Children |> List.tryFind (fun n -> rangeContainsRange n.Position pos) with
+                    match node.Nodes |> Seq.tryFind (fun n -> rangeContainsRange n.Position pos) with
                     | Some c -> findChild c
                     | None -> None
 
             findChild startNode
 
         lookup.typeDefInfo.TryFind typedef.name
-        |> Option.bind (List.tryFind (fun tdi -> tdi.id = typename))
+        |> Option.bind (Array.tryFind (fun tdi -> tdi.id = typename))
         |> Option.bind (fun typeDefInfoForTypeName ->
-            let targetRange = typeDefInfoForTypeName.range
-
-            resourceManager.Api.AllEntities()
-            |> List.tryFind (fun struct (e, _) -> e.filepath = typeDefInfoForTypeName.range.FileName)
+            resourceManager.Api.GetEntityByFilePath typeDefInfoForTypeName.range.FileName
             |> Option.bind (fun struct (e, _) -> findNode typeDefInfoForTypeName.range e.entity))
 
     let makeEntityResourceInput (fileManager: FileManager) filepath filetext =
@@ -89,7 +86,7 @@ module LanguageFeatures =
         match
             Path.GetExtension filepath, resourceManager.ManualProcessResource resource, completionService, infoService
         with
-        | ".yml", _, Some completion, _ -> completion.LocalisationComplete(pos, filetext)
+        | ".yml", _, Some completion, _ -> completion.LocalisationComplete(pos, filetext) |> List.ofArray
         | _, Some e, Some completion, Some info ->
             log (sprintf "completion %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
 
@@ -121,21 +118,21 @@ module LanguageFeatures =
             | Some(_, (_, Some(LocRef(tv)), _)) ->
                 match
                     localisationManager.LocalisationEntries()
-                    |> List.tryFind (fun (l, _) -> l = lang)
+                    |> Seq.tryFind (fun (l, _) -> l = lang)
                 with
                 | Some(_, entries) ->
-                    match entries |> List.tryFind (fun (k, _) -> k = tv) with
+                    match entries |> Array.tryFind (fun struct (k, _) -> k = tv) with
                     | Some(_, entry) -> Some entry.position
                     | _ -> None
                 | None -> None
             | Some(_, (_, Some(TypeRef(t, tv)), _)) ->
                 lookup.typeDefInfo
                 |> Map.tryFind t
-                |> Option.defaultValue []
-                |> List.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
+                |> Option.defaultValue [||]
+                |> Array.tryPick (fun tdi -> if tdi.id = tv then Some tdi.range else None)
             | Some(_, (_, Some(EnumRef(enumName, enumValue)), _)) ->
-                let enumValues = lookup.enumDefs.[enumName] |> snd
-                enumValues |> List.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
+                let enumValues = lookup.enumDefs[enumName] |> snd
+                enumValues |> Array.tryPick (fun (ev, r) -> if ev == enumValue then r else None)
             | Some(_, (_, Some(FileRef f), _)) ->
                 resourceManager.Api.AllEntities()
                 |> Seq.map structFst
@@ -441,10 +438,10 @@ module LanguageFeatures =
     // }
     let getEmbeddedMetadata (lookup: Lookup) (localisation: LocalisationManager<_>) (resources: ResourceManager<_>) =
         { typeDefs = lookup.typeDefInfo
-          enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> List.map fst)
+          enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> Array.map fst)
           varDefs = lookup.varDefInfo
           loc = localisation.LocalisationKeys()
-          files = resources.Api.GetFileNames() |> Set.ofArray
+          files = resources.Api.GetFileNames() |> Set.ofSeq
           scriptedLoc = lookup.scriptedLoc }
 
 
@@ -467,19 +464,21 @@ module LanguageFeatures =
 
         let entitiesInSelectedFiles =
             resourceManager.Api.AllEntities()
-            |> List.filter (fun struct (e, _) -> files |> List.contains e.filepath)
+            |> Seq.filter (fun struct (e, _) -> files |> List.contains e.filepath)
+            |> Seq.toList
 
         let locSet = referenceManager.Localisation |> Map.ofList
 
         let findLoc key =
             locSet |> Map.tryFind key |> Option.map (fun l -> l.desc)
 
-        let getSourceTypesTD (x: Map<string, TypeDefInfo list>) =
+        let getSourceTypesTD (x: Map<string, TypeDefInfo array>) =
             Map.toList x
             |> List.filter (fun (k, _) -> sourceTypes |> List.contains k)
             |> List.collect (fun (k, vs) ->
                 vs
-                |> List.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes))
+                |> Array.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes)
+                |> List.ofSeq)
 
         let getSourceTypes (x: Map<string, ReferenceDetails list>) =
             Map.toList x
@@ -609,8 +608,8 @@ module LanguageFeatures =
 
                 let newIncomingRefs =
                     resourceManager.Api.AllEntities()
-                    |> List.filter (fun struct (e, _) -> allOtherFiles |> List.contains e.filepath)
-                    |> List.collect (fun struct (_, data) ->
+                    |> Seq.filter (fun struct (e, _) -> allOtherFiles |> List.contains e.filepath)
+                    |> Seq.collect (fun struct (_, data) ->
                         data.Force().Referencedtypes
                         |> Option.map (
                             getSourceTypes
@@ -618,7 +617,8 @@ module LanguageFeatures =
                                 (v.GetString(), r, isOutgoing, refLabel))
                         )
                         |> Option.defaultValue [])
-                    |> List.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)
+                    |> Seq.filter (fun (v, r, isOutgoing, refLabel) -> targetTypeNames |> List.contains v)
+                    |> Seq.toList
 
                 newIncomingRefs
 

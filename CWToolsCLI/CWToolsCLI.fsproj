@@ -4,7 +4,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <PaketCommand>dotnet paket</PaketCommand>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>cwtools</ToolCommandName>
@@ -29,5 +28,13 @@
     <None Include="App.config" />
     <EmbeddedResource Include="../CWTools/files/**" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Argu"/>
+    <PackageReference Include="System.Text.Encoding.CodePages"/>
+    <PackageReference Include="FSharpPlus"/>
+    <PackageReference Include="FsPickler"/>
+    <PackageReference Include="Pastel"/>
+    <PackageReference Include="Chiron"/>
+    <PackageReference Include="SharpZipLib"/>
+  </ItemGroup>
 </Project>

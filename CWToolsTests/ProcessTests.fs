@@ -27,12 +27,12 @@ open LogCaptureTest
 
 
 let emptyStellarisSettings rootDirectory =
-    { rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
           experimental = true
-          langs = [ STL STLLang.English ] }
+          langs = [| STL STLLang.English |] }
       rules = None
       embedded = FromConfig([], [])
       scriptFolders = None
@@ -43,7 +43,7 @@ let emptyStellarisSettings rootDirectory =
 let emptyEmbeddedSettings =
     { triggers = []
       effects = []
-      modifiers = []
+      modifiers = [||]
       embeddedFiles = []
       cachedResourceData = []
       localisationCommands = Legacy([], [], [])
@@ -70,7 +70,7 @@ let parseConfig = RulesParser.parseConfig
 let dynamicSettings _ =
     { CWTools.Process.Localisation.LegacyLocDynamicsSettings.scriptedLocCommands = []
       CWTools.Process.Localisation.LegacyLocDynamicsSettings.eventTargets = []
-      CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = LowerCaseStringSet() }
+      CWTools.Process.Localisation.LegacyLocDynamicsSettings.setVariables = IgnoreCaseStringSet() }
 
 let processLocalisationLazy =
     lazy
@@ -106,7 +106,10 @@ let createStarbaseLazy =
 
          let effect =
              NewRule(
-                 NodeRule(specificField "effect", [ LeafRule(AliasField "effect", AliasField "effect"), optionalMany ]),
+                 NodeRule(
+                     specificField "effect",
+                     [| (LeafRule(AliasField "effect", AliasField "effect")), optionalMany |]
+                 ),
                  { optionalSingle with
                      replaceScopes =
                          Some
@@ -118,7 +121,7 @@ let createStarbaseLazy =
 
          let rule =
              NewRule(
-                 NodeRule(specificField "create_starbase", [ owner; size; moduleR; building; effect ]),
+                 NodeRule(specificField "create_starbase", [| owner; size; moduleR; building; effect |]),
                  optionalMany
              )
 
@@ -180,8 +183,8 @@ let createStarbaseTypeDefLazy =
 let buildingLazy =
     lazy
         (let inner =
-            [ NewRule(LeafRule(specificField "allow", ScalarField ScalarValue), requiredSingle)
-              NewRule(LeafRule(specificField "empire_unique", ValueField ValueType.Bool), optionalSingle) ]
+            [| NewRule(LeafRule(specificField "allow", ScalarField ScalarValue), requiredSingle)
+               NewRule(LeafRule(specificField "empire_unique", ValueField ValueType.Bool), optionalSingle) |]
 
          NewRule(NodeRule(specificField "building", inner), optionalMany))
 
@@ -221,32 +224,32 @@ let buildingLazy =
 let shipsizeLazy =
     lazy
         (let inner =
-            [ NewRule(LeafRule(specificField "formation_priority", defaultInt), optionalSingle)
-              NewRule(LeafRule(specificField "max_speed", defaultFloat), requiredSingle)
-              NewRule(LeafRule(specificField "acceleration", defaultFloat), requiredSingle)
-              NewRule(LeafRule(specificField "rotation_speed", defaultFloat), requiredSingle)
-              NewRule(LeafRule(specificField "collision_radius", defaultFloat), optionalSingle)
-              NewRule(LeafRule(specificField "max_hitpoints", defaultInt), requiredSingle)
-              NewRule(NodeRule(specificField "modifier", []), optionalSingle)
-              NewRule(LeafRule(specificField "size_multiplier", defaultInt), requiredSingle)
-              NewRule(LeafRule(specificField "fleet_slot_size", defaultInt), requiredSingle)
-              NewRule(NodeRule(specificField "section_slots", []), optionalSingle)
-              NewRule(LeafRule(specificField "num_target_locators", defaultInt), requiredSingle)
-              NewRule(LeafRule(specificField "is_space_station", ValueField ValueType.Bool), requiredSingle)
-              NewRule(LeafRule(specificField "icon_frame", defaultInt), requiredSingle)
-              NewRule(LeafRule(specificField "base_buildtime", defaultInt), requiredSingle)
-              NewRule(LeafRule(specificField "can_have_federation_design", ValueField ValueType.Bool), requiredSingle)
-              NewRule(LeafRule(specificField "enable_default_design", ValueField ValueType.Bool), requiredSingle)
-              NewRule(
-                  LeafRule(specificField "default_behavior", TypeField(TypeType.Simple "ship_behavior")),
-                  requiredSingle
-              )
-              NewRule(NodeRule(specificField "prerequisites", []), optionalSingle)
-              NewRule(LeafRule(specificField "combat_disengage_chance", defaultFloat), optionalSingle)
-              NewRule(LeafRule(specificField "has_mineral_upkeep", ValueField ValueType.Bool), requiredSingle)
-              NewRule(LeafRule(specificField "class", ScalarField ScalarValue), requiredSingle)
-              NewRule(LeafRule(specificField "construction_type", ScalarField ScalarValue), requiredSingle)
-              NewRule(LeafRule(specificField "required_component_set", ScalarField ScalarValue), requiredSingle) ]
+            [| NewRule(LeafRule(specificField "formation_priority", defaultInt), optionalSingle)
+               NewRule(LeafRule(specificField "max_speed", defaultFloat), requiredSingle)
+               NewRule(LeafRule(specificField "acceleration", defaultFloat), requiredSingle)
+               NewRule(LeafRule(specificField "rotation_speed", defaultFloat), requiredSingle)
+               NewRule(LeafRule(specificField "collision_radius", defaultFloat), optionalSingle)
+               NewRule(LeafRule(specificField "max_hitpoints", defaultInt), requiredSingle)
+               NewRule(NodeRule(specificField "modifier", [||]), optionalSingle)
+               NewRule(LeafRule(specificField "size_multiplier", defaultInt), requiredSingle)
+               NewRule(LeafRule(specificField "fleet_slot_size", defaultInt), requiredSingle)
+               NewRule(NodeRule(specificField "section_slots", [||]), optionalSingle)
+               NewRule(LeafRule(specificField "num_target_locators", defaultInt), requiredSingle)
+               NewRule(LeafRule(specificField "is_space_station", ValueField ValueType.Bool), requiredSingle)
+               NewRule(LeafRule(specificField "icon_frame", defaultInt), requiredSingle)
+               NewRule(LeafRule(specificField "base_buildtime", defaultInt), requiredSingle)
+               NewRule(LeafRule(specificField "can_have_federation_design", ValueField ValueType.Bool), requiredSingle)
+               NewRule(LeafRule(specificField "enable_default_design", ValueField ValueType.Bool), requiredSingle)
+               NewRule(
+                   LeafRule(specificField "default_behavior", TypeField(TypeType.Simple "ship_behavior")),
+                   requiredSingle
+               )
+               NewRule(NodeRule(specificField "prerequisites", [||]), optionalSingle)
+               NewRule(LeafRule(specificField "combat_disengage_chance", defaultFloat), optionalSingle)
+               NewRule(LeafRule(specificField "has_mineral_upkeep", ValueField ValueType.Bool), requiredSingle)
+               NewRule(LeafRule(specificField "class", ScalarField ScalarValue), requiredSingle)
+               NewRule(LeafRule(specificField "construction_type", ScalarField ScalarValue), requiredSingle)
+               NewRule(LeafRule(specificField "required_component_set", ScalarField ScalarValue), requiredSingle) |]
 
          NewRule(NodeRule(specificField "ship_size", inner), optionalMany))
 
@@ -360,13 +363,13 @@ let testc =
 
                   let apply =
                       RuleValidationService(
-                          RulesWrapper(rules),
+                          RulesWrapper(rules |> List.toArray),
                           [],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -377,7 +380,7 @@ let testc =
                           validateLocalisationLazy.Value
                       )
 
-                  let errors = apply.ApplyNodeRule(Typerules, node)
+                  let errors = apply.ApplyNodeRule(Typerules |> Array.ofList, node)
 
                   match errors with
                   | OK -> ()
@@ -393,7 +396,7 @@ let leftScopeLazy =
             "effect",
             (NodeRule(
                 (ScopeField [ (scopeManager.ParseScope () "Any") ]),
-                [ LeafRule((AliasField "effect"), (AliasField "Effect")), optionalMany ]
+                [| LeafRule((AliasField "effect"), (AliasField "Effect")), optionalMany |]
              ),
              optionalMany)
         )
@@ -404,7 +407,7 @@ let eopEffectLazy =
             "effect",
             (NodeRule(
                 SpecificField(SpecificValue(StringResource.stringManager.InternIdentifierToken "every_owned_planet")),
-                [ LeafRule((AliasField "effect"), (AliasField "Effect")), optionalMany ]
+                [| LeafRule((AliasField "effect"), (AliasField "Effect")), optionalMany |]
              ),
              { optionalMany with
                  pushScope = Some(scopeManager.ParseScope () "Planet") })
@@ -449,13 +452,13 @@ let testsv =
 
                   let rules =
                       RuleValidationService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [],
                           FrozenDictionary.Empty,
                           enums.ToFrozenDictionary(),
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -466,7 +469,7 @@ let testsv =
                           validateLocalisationLazy.Value
                       )
 
-                  let errors = rules.ApplyNodeRule([ createStarbaseLazy.Value ], node)
+                  let errors = rules.ApplyNodeRule([| createStarbaseLazy.Value |], node)
 
                   match errors with
                   | OK -> ()
@@ -494,13 +497,13 @@ let testsv =
 
                   let rules =
                       RuleValidationService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [],
                           FrozenDictionary.Empty,
                           enums.ToFrozenDictionary(),
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -511,7 +514,7 @@ let testsv =
                           validateLocalisationLazy.Value
                       )
 
-                  let errors = rules.ApplyNodeRule([ createStarbaseLazy.Value ], node)
+                  let errors = rules.ApplyNodeRule([| createStarbaseLazy.Value |], node)
 
                   match errors with
                   | OK -> ()
@@ -537,13 +540,13 @@ let testsv =
 
                   let rules =
                       RuleValidationService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           enums.ToFrozenDictionary(),
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -554,7 +557,7 @@ let testsv =
                           validateLocalisationLazy.Value
                       )
 
-                  let errors = rules.ApplyNodeRule([ createStarbaseLazy.Value ], node)
+                  let errors = rules.ApplyNodeRule([| createStarbaseLazy.Value |], node)
 
                   match errors with
                   | OK -> ()
@@ -583,13 +586,13 @@ let testsv =
 
                   let rules =
                       RuleValidationService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [],
                           FrozenDictionary.Empty,
                           enums.ToFrozenDictionary(),
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -600,7 +603,7 @@ let testsv =
                           validateLocalisationLazy.Value
                       )
 
-                  let errors = rules.ApplyNodeRule([ createStarbaseLazy.Value ], node)
+                  let errors = rules.ApplyNodeRule([| createStarbaseLazy.Value |], node)
 
                   match errors with
                   | OK -> ()
@@ -634,14 +637,14 @@ let testsv =
                   let rules =
                       RuleValidationService(
                           RulesWrapper
-                              [ TypeRule("create_starbase", createStarbaseLazy.Value)
-                                createStarbaseAliasLazy.Value ],
+                              [| TypeRule("create_starbase", createStarbaseLazy.Value)
+                                 createStarbaseAliasLazy.Value |],
                           [],
                           FrozenDictionary.Empty,
                           enums.ToFrozenDictionary(),
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -652,7 +655,7 @@ let testsv =
                           validateLocalisationLazy.Value
                       )
 
-                  let errors = rules.ApplyNodeRule([ createStarbaseLazy.Value ], node)
+                  let errors = rules.ApplyNodeRule([| createStarbaseLazy.Value |], node)
 
                   match errors with
                   | OK -> ()
@@ -692,13 +695,13 @@ let testsv =
 
                   let comp =
                       CompletionService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           enums.ToFrozenDictionary(),
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           [],
@@ -748,13 +751,13 @@ let testsv =
 
                   let comp =
                       CompletionService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           [],
@@ -822,13 +825,13 @@ let testsv =
 
                   let comp =
                       CompletionService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           [],
@@ -888,13 +891,13 @@ let testsv =
 
                   let ruleapplicator =
                       RuleValidationService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value) ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value) |],
                           [],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -909,9 +912,9 @@ let testsv =
                       RulesHelpers.getTypesFromDefinitions
                           (Some ruleapplicator)
                           [ shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value ]
-                          [ be ]
+                          [| be |]
                       |> Map.toSeq
-                      |> Seq.map (fun (k, s) -> k, createStringSet (s |> List.map _.id))
+                      |> Seq.map (fun (k, s) -> k, createStringSet (s |> Array.map _.id))
                       |> Map.ofSeq
                   // eprintfn "%A" typeinfo
                   let node =
@@ -930,13 +933,13 @@ let testsv =
 
                   let comp =
                       CompletionService(
-                          RulesWrapper [ TypeRule("ship_size", shipsizeLazy.Value) ],
+                          RulesWrapper [| TypeRule("ship_size", shipsizeLazy.Value) |],
                           [ shipBehaviorTypeLazy.Value; shipSizeTypeLazy.Value ],
                           typeinfo.ToFrozenDictionary(),
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           [],
@@ -979,7 +982,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  UtilityParser.initializeScopes None (Some defaultScopeInputs)
+                  UtilityParser.initializeScopes None (Some(defaultScopeInputs ()))
                   let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
@@ -993,13 +996,13 @@ let testsv =
 
                   let rules =
                       RuleValidationService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -1012,13 +1015,13 @@ let testsv =
 
                   let infoService =
                       InfoService(
-                          RulesWrapper [ TypeRule("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value ],
+                          RulesWrapper [| TypeRule("create_starbase", createStarbaseLazy.Value); eopEffectLazy.Value |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           rules,
@@ -1058,7 +1061,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  UtilityParser.initializeScopes None (Some defaultScopeInputs)
+                  UtilityParser.initializeScopes None (Some(defaultScopeInputs ()))
                   let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
@@ -1073,15 +1076,15 @@ let testsv =
                   let rules =
                       RuleValidationService(
                           RulesWrapper
-                              [ TypeRule("create_starbase", createStarbaseLazy.Value)
-                                eopEffectLazy.Value
-                                leftScopeLazy.Value ],
+                              [| TypeRule("create_starbase", createStarbaseLazy.Value)
+                                 eopEffectLazy.Value
+                                 leftScopeLazy.Value |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -1095,15 +1098,15 @@ let testsv =
                   let infoService =
                       InfoService(
                           RulesWrapper
-                              [ TypeRule("create_starbase", createStarbaseLazy.Value)
-                                eopEffectLazy.Value
-                                leftScopeLazy.Value ],
+                              [| TypeRule("create_starbase", createStarbaseLazy.Value)
+                                 eopEffectLazy.Value
+                                 leftScopeLazy.Value |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           rules,
@@ -1143,7 +1146,7 @@ let testsv =
 
               match CKParser.parseString input "test.txt" with
               | Success(r, _, _) ->
-                  UtilityParser.initializeScopes None (Some defaultScopeInputs)
+                  UtilityParser.initializeScopes None (Some(defaultScopeInputs ()))
                   let node = (STLProcess.shipProcess.ProcessNode () "root" range.Zero r)
 
                   let entity =
@@ -1158,16 +1161,16 @@ let testsv =
                   let rules =
                       RuleValidationService(
                           RulesWrapper
-                              [ TypeRule("create_starbase", createStarbaseLazy.Value)
-                                eopEffectLazy.Value
-                                leftScopeLazy.Value
-                                logEffectLazy.Value ],
+                              [| TypeRule("create_starbase", createStarbaseLazy.Value)
+                                 eopEffectLazy.Value
+                                 leftScopeLazy.Value
+                                 logEffectLazy.Value |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           (scopeManager.ParseScope () "Any"),
@@ -1181,16 +1184,16 @@ let testsv =
                   let infoService =
                       InfoService(
                           RulesWrapper
-                              [ TypeRule("create_starbase", createStarbaseLazy.Value)
-                                eopEffectLazy.Value
-                                leftScopeLazy.Value
-                                logEffectLazy.Value ],
+                              [| TypeRule("create_starbase", createStarbaseLazy.Value)
+                                 eopEffectLazy.Value
+                                 leftScopeLazy.Value
+                                 logEffectLazy.Value |],
                           [ createStarbaseTypeDefLazy.Value ],
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
                           FrozenDictionary.Empty,
-                          [],
-                          Set.empty,
+                          [||],
+                          FrozenSet.Empty,
                           effectMap,
                           effectMap,
                           rules,

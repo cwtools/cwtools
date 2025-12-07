@@ -15,7 +15,7 @@ open CWTools.Common
 let getTypesFromDefinitions
     (ruleapplicator: RuleValidationService option)
     (types: TypeDefinition list)
-    (entities: Entity list)
+    (entities: Entity seq)
     =
     let getExplicitLocalisationKeys (entity: IClause) (typeDef: TypeDefinition) =
         typeDef.localisation
@@ -25,12 +25,12 @@ let getTypesFromDefinitions
 
     let getTypeInfo (def: TypeDefinition) =
         entities
-        |> List.choose (fun e ->
+        |> Seq.choose (fun e ->
             if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(def.pathOptions, e.logicalpath) then
                 Some(e.entity, Path.GetFileNameWithoutExtension e.logicalpath, e.validate)
             else
                 None)
-        |> List.collect (fun (e, fileNameWithoutExtension, v) ->
+        |> Seq.collect (fun (e, fileNameWithoutExtension, v) ->
             let inner (n: IClause) =
                 let rawSubtypes, subtypes =
                     match ruleapplicator with
@@ -119,7 +119,6 @@ let getTypesFromDefinitions
     let resDict = Dictionary<string, _>()
 
     types
-    |> Seq.ofList
     |> PSeq.collect getTypeInfo
     |> Seq.iter (fun (n, k) ->
         let mutable value: (bool * string * Position.range * (string * string * bool) list * string list) list =
@@ -144,15 +143,16 @@ let getTypesFromDefinitions
 
         k,
         vs
-        |> List.map (fun (v, n, r, el, sts) ->
+        |> Seq.map (fun (v, n, r, el, sts) ->
             { TypeDefInfo.validate = v
               id = n
               range = r
               explicitLocalisation = el
-              subtypes = sts }))
+              subtypes = sts }) |> Seq.toArray)
     |> Map.ofSeq
 
-let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity list) : EnumDefinition list =
+let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity seq) : EnumDefinition list =
+    let entities = es |> Seq.toArray
     let scalarKeyId = StringResource.stringManager.InternIdentifierToken "scalar"
     let enumNameKeyId = StringResource.stringManager.InternIdentifierToken "enum_name"
     let nameKeyId = StringResource.stringManager.InternIdentifierToken "name"
@@ -242,7 +242,7 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
     //enumtree.Children |> List.collect (fun e -> node.Children |> List.collect (inner e ))
     let getEnumInfo (complexenum: ComplexEnumDef) =
         let values =
-            es
+            entities
             |> Seq.choose (fun e ->
                 if CSharpHelpers.FieldValidatorsHelper.CheckPathDir(complexenum.pathOptions, e.logicalpath) then
                     Some e.entity
@@ -253,24 +253,24 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
                     innerStart complexenum.nameTree e
                 else
                     e.Nodes |> Seq.collect (innerStart complexenum.nameTree))
+            |> Seq.toArray
         // log "%A %A" complexenum.name values
         { key = complexenum.name
-          values = values |> Seq.map fst |> List.ofSeq
+          values = values |> Array.map fst
           description = complexenum.description
-          valuesWithRange = values |> List.ofSeq }
+          valuesWithRange = values }
 
     complexenums
     |> List.toSeq
     |> PSeq.map getEnumInfo
-    |> List.ofSeq
-    |> List.fold
+    |> Seq.fold
         (fun acc e ->
             if Map.containsKey e.key acc then
                 Map.add
                     e.key
                     { e with
-                        values = e.values @ acc.[e.key].values
-                        valuesWithRange = e.valuesWithRange @ acc.[e.key].valuesWithRange }
+                        values = Array.append e.values acc[e.key].values
+                        valuesWithRange = Array.append e.valuesWithRange acc[e.key].valuesWithRange }
                     acc
             else
                 Map.add e.key e acc)
@@ -278,29 +278,9 @@ let getEnumsFromComplexEnums (complexenums: ComplexEnumDef list) (es: Entity lis
     |> Map.toList
     |> List.map snd
 
-let getDefinedVariables (infoService: InfoService) (es: Entity list) =
-    // let results = es |> List.toSeq |> PSeq.fold (fun c e -> infoService.GetDefinedVariables(c,e)) (Collections.Map.empty)//|> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Collections.Map.empty
-    let results =
-        es
-        |> List.toSeq
-        |> PSeq.map (fun e -> infoService.GetDefinedVariables(e))
-        |> Seq.fold
-            (fun m map ->
-                Map.toList map
-                |> List.fold
-                    (fun m2 (n, k) ->
-                        if Map.containsKey n m2 then
-                            Map.add n ((k |> List.ofSeq) @ m2.[n]) m2
-                        else
-                            Map.add n (k |> List.ofSeq) m2)
-                    m)
-            Collections.Map.empty
-
-    results
-
 let expandPredefinedValues
     (types: Map<string, PrefixOptimisedStringSet>)
-    (enums: Map<string, _ * list<string * option<CWTools.Utilities.Position.range>>>)
+    (enums: Map<string, _ * array<string * option<Position.range>>>)
     (values: string list)
     =
     let replaceType (value: string) =
@@ -398,11 +378,11 @@ let generateModifiersFromType (typedef: TypeDefinition) (typeInstance: TypeDefIn
 
     (typedef.modifiers |> List.map inner) @ subtype
 
-let generateModifiersFromTypes (typedefs: TypeDefinition list) (typeDefMap: Collections.Map<string, TypeDefInfo list>) =
+let generateModifiersFromTypes (typedefs: TypeDefinition list) (typeDefMap: Collections.Map<string, TypeDefInfo array>) =
     typedefs
     |> List.collect (fun td ->
         match typeDefMap |> Map.tryFind td.name with
-        | Some typeInstances -> typeInstances |> List.collect (fun ti -> generateModifiersFromType td ti)
+        | Some typeInstances -> typeInstances |> Seq.collect (fun ti -> generateModifiersFromType td ti) |> List.ofSeq
         | None -> [])
 
 let private modifierRuleFromNameAndTypeDef (nameWithSubtypes: string) (m: TypeModifier) =

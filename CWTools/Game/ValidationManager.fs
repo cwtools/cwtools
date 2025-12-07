@@ -35,7 +35,7 @@ type ValidationManagerServices<'T when 'T :> ComputedData> =
       lookup: Lookup
       ruleValidationService: RuleValidationService option
       infoService: InfoService option
-      localisationKeys: unit -> (Lang * Set<string>) list
+      localisationKeys: unit -> (Lang * Set<string>) array
       fileManager: Files.FileManager }
 
 open System.Collections.Generic
@@ -289,7 +289,7 @@ type ValidationManager<'T when 'T :> ComputedData>
     let globalTypeDefLoc () =
         let valLocCommand = validateLocalisationCommand services.lookup
 
-        let validateLoc (values: (string * range) list) (locdef: TypeLocalisation) =
+        let validateLoc (values: struct (string * range) array) (locdef: TypeLocalisation) =
             let res1 (value: string) =
                 let validate (locentry: LocEntry) =
                     valLocCommand locentry (createScopeContextFromReplace locdef.replaceScopes)
@@ -307,22 +307,22 @@ type ValidationManager<'T when 'T :> ComputedData>
             // let validateLocEntry (locentry : LocEntry<_>) =
             // locentry.
             // services.lookup.proccessedLoc |> List.fold (fun state (l, keys)  -> state <&&> (Map.tryFind value keys |> Option.map validateLocEntry |> Option.defaultValue OK ) OK
-            values |> List.filter (fun (s, _) -> s.Contains('.') |> not)
-            <&!&> (fun (key, range) ->
+            values |> Seq.filter (fun struct (s, _) -> s.Contains('.') |> not)
+            <&!&> (fun struct (key, range) ->
                 let fakeLeaf = LeafValue(Value.Bool true, range)
                 let lockey = locdef.prefix + key + locdef.suffix
 
                 if locdef.explicitField.IsNone then res1 lockey else OK
                 <&&> checkLocKeysLeafOrNode (services.localisationKeys ()) lockey fakeLeaf)
 
-        let validateType (typename: string) (values: (string * range) list) =
+        let validateType (typename: string) (values: struct (string * range) array) =
             match services.lookup.typeDefs |> List.tryFind (fun td -> td.name = typename) with
             | None -> OK
             | Some td ->
                 td.localisation |> List.filter (fun locdef -> locdef.required)
                 <&!&> validateLoc values
 
-        let validateSubType (typename: string) (values: (string * range) list) =
+        let validateSubType (typename: string) (values: struct (string * range) array) =
             let splittype = typename.Split('.', 2)
 
             if splittype.Length > 1 then
@@ -343,19 +343,15 @@ type ValidationManager<'T when 'T :> ComputedData>
               <&!&> (fun (t, l) -> validateSubType t l))
 
 
-    member __.Validate(shallow: bool, entities: struct (Entity * Lazy<'T>) list) = validate shallow entities
-    member __.ValidateLocalisation(entities: struct (Entity * Lazy<'T>) list) = validateLocalisation entities
-    member __.ValidateGlobalLocalisation() = globalTypeDefLoc ()
+    member _.Validate(shallow: bool, entities: struct (Entity * Lazy<'T>) list) = validate shallow entities
+    member _.ValidateLocalisation(entities: struct (Entity * Lazy<'T>) list) = validateLocalisation entities
+    member _.ValidateGlobalLocalisation() = globalTypeDefLoc ()
 
-    member __.CachedRuleErrors(entities: struct (Entity * Lazy<'T>) list) =
+    member _.CachedRuleErrors(entities: struct (Entity * Lazy<'T>) list) =
         let res =
             entities
             |> List.map (fun struct (e, l) -> (struct (e, l)), errorCache.GetErrorsForEntity e)
-        // TODO: This is too performance slow
-        // res |> List.filter (fun (e, errors) -> errors.IsNone)
-        //             |> List.map fst
-        //             |> (validate true)
-        //             |> ignore
+
         let forced =
             res
             |> List.filter (fun (e, errors) -> errors.IsNone)
@@ -364,4 +360,4 @@ type ValidationManager<'T when 'T :> ComputedData>
 
         (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced
 
-    member __.ErrorCache() = errorCache
+    member _.ErrorCache() = errorCache

@@ -49,7 +49,7 @@ module private RulesParserImpl =
         let findComments (t: range) s (a: Child) =
             match struct (s, a) with
             | struct (struct (b, c), _) when b -> struct (b, c)
-            | struct ((_, c), CommentC comment) when comment.Comment.StartsWith("#", StringComparison.OrdinalIgnoreCase) ->
+            | struct ((_, c), CommentC comment) when comment.Comment.StartsWith('#') ->
                 struct (false, comment.Comment :: c)
             | struct ((_, c), CommentC _) -> struct (false, c)
             | struct ((_, c), NodeC n) when n.Position.Code = t.Code -> struct (true, c)
@@ -74,8 +74,7 @@ module private RulesParserImpl =
                 NodeC e,
                 clause.AllArray
                 |> Array.fold (findComments e.Position) (false, [])
-                |> structSnd
-                |> (fun l -> l))
+                |> structSnd)
             |> List.ofSeq
 
         let three =
@@ -381,9 +380,9 @@ module private RulesParserImpl =
         | x when fastStartsWith x "filepath[" ->
             match getSettingFromString x "filepath" with
             | Some setting ->
-                match setting.Contains "," with
+                match setting.Contains ',' with
                 | true ->
-                    match setting.Split([| ',' |], 2) with
+                    match setting.Split(',', 2) with
                     | [| folder; extension |] -> FilepathField(Some folder, Some extension)
                     | _ -> FilepathField(Some setting, None)
                 | false -> FilepathField(Some setting, None)
@@ -586,7 +585,8 @@ module private RulesParserImpl =
 
         let innerRules =
             children
-            |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
+            |> Seq.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
+            |> Seq.toArray
 
         let rule =
             match key with
@@ -616,7 +616,8 @@ module private RulesParserImpl =
 
         let innerRules =
             children
-            |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
+            |> Seq.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
+            |> Seq.toArray
 
         let rule = ValueClauseRule innerRules
         NewRule(rule, options)
@@ -676,9 +677,9 @@ module private RulesParserImpl =
         | _, x when x.StartsWith("colour[") ->
             let colourRules =
                 match getSettingFromString x "colour" with
-                | Some "rgb" -> [ rgbRule ]
-                | Some "hsv" -> [ hsvRule ]
-                | _ -> [ rgbRule; hsvRule ]
+                | Some "rgb" -> [| rgbRule |]
+                | Some "hsv" -> [| hsvRule |]
+                | _ -> [| rgbRule; hsvRule |]
 
             NewRule(NodeRule(leftfield, colourRules), options)
         | l, r when l.StartsWith "clause_single_alias" && r.StartsWith "single_alias_right" ->
@@ -771,7 +772,8 @@ module private RulesParserImpl =
 
         let innerRules =
             children
-            |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
+            |> Seq.choose (processChildConfig parseScope allScopes anyScope scopeGroup)
+            |> Seq.toArray
 
         match node.Key with
         | x when x.StartsWith "alias[" ->
@@ -911,7 +913,7 @@ module private RulesParserImpl =
 
                 let description =
                     match comments |> List.tryFind (fun s -> s.StartsWith "##") with
-                    | Some d -> Some(d.Trim('#'))
+                    | Some d -> Some(d.TrimStart('#'))
                     | None -> None
 
                 match value.IndexOf '$' with
@@ -949,27 +951,27 @@ module private RulesParserImpl =
             | NodeC subtype when subtype.Key.StartsWith "subtype" ->
                 let typekeyfilter =
                     match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let displayName =
                     match comments |> List.tryFind (fun s -> s.Contains "display_name") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let abbreviation =
                     match comments |> List.tryFind (fun s -> s.Contains "abbreviation") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let pushScope =
                     match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
-                    | Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+                    | Some s -> s.Substring(s.IndexOf '=' + 1).Trim() |> parseScope |> Some
                     | None -> None
 
                 let startsWith =
                     match comments |> List.tryFind (fun s -> s.Contains "starts_with") with
-                    | Some c -> Some(c.Substring(c.IndexOf "=" + 1).Trim())
+                    | Some c -> Some(c.Substring(c.IndexOf '=' + 1).Trim())
                     | None -> None
 
                 let onlyIfNot =
@@ -982,7 +984,7 @@ module private RulesParserImpl =
 
                             let values =
                                 match rhs.StartsWith('{') && rhs.EndsWith('}') with
-                                | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
+                                | true -> rhs.Trim('{', '}') |> (fun s -> s.Split(' ')) |> List.ofArray
                                 | false -> [ rhs ]
 
                             values
@@ -992,7 +994,8 @@ module private RulesParserImpl =
 
                 let rules =
                     (getNodeComments subtype
-                     |> List.choose (processChildConfig parseScope allScopes anyScope scopeGroup))
+                     |> Seq.choose (processChildConfig parseScope allScopes anyScope scopeGroup))
+                    |> Seq.toArray
 
                 match getSettingFromString subtype.Key "subtype" with
                 | Some key ->
@@ -1071,7 +1074,7 @@ module private RulesParserImpl =
 
         match node.Key with
         | x when x.StartsWith("type") ->
-            node.All |> List.iter checkTypeChildren
+            node.AllArray |> Array.iter checkTypeChildren
             let typename = getSettingFromString node.Key "type"
 
             let namefield =
@@ -1159,7 +1162,7 @@ module private RulesParserImpl =
 
                         let values =
                             match rhs.StartsWith('{') && rhs.EndsWith('}') with
-                            | true -> rhs.Trim('{', '}') |> (fun s -> s.Split([| ' ' |])) |> List.ofArray
+                            | true -> rhs.Trim('{', '}') |> (fun s -> s.Split(' ')) |> List.ofArray
                             | false -> [ rhs ]
 
                         Some(values, negative)
@@ -1227,8 +1230,8 @@ module private RulesParserImpl =
 
             let values =
                 node.LeafValues
-                |> List.ofSeq
-                |> List.map (fun lv -> lv.Value.ToString().Trim([| '\"' |]), None)
+                |> Array.ofSeq
+                |> Array.map (fun lv -> lv.Value.ToString().Trim('\"'), None)
 
             match enumname with
             | Some en ->
@@ -1239,7 +1242,7 @@ module private RulesParserImpl =
 
                 Some
                     { key = en
-                      values = values |> List.map fst
+                      values = values |> Array.map fst
                       description = description
                       valuesWithRange = values }
             | None -> None
@@ -1320,25 +1323,25 @@ module private RulesParserImpl =
 
 
 
-    let replaceSingleAliases (rules: RootRule list) =
+    let replaceSingleAliases (rules: RootRule array) =
         let mutable singlealiases =
             rules
-            |> List.choose (function
+            |> Array.choose (function
                 | SingleAliasRule(name, inner) -> Some(SingleAliasRule(name, inner))
-                | _ -> None) //|> Map.ofList
+                | _ -> None)
 
         let singlealiasesmap () =
             singlealiases
-            |> List.choose (function
+            |> Array.choose (function
                 | SingleAliasRule(name, inner) -> Some(name, inner)
                 | _ -> None)
-            |> Map.ofList
+            |> Map.ofArray
 
         let rec cataRule rule : NewRule =
             match rule with
-            | NodeRule(l, r), o -> (NodeRule(l, r |> List.map cataRule), o)
-            | ValueClauseRule r, o -> (ValueClauseRule(r |> List.map cataRule), o)
-            | SubtypeRule(a, b, i), o -> (SubtypeRule(a, b, (i |> List.map cataRule)), o)
+            | NodeRule(l, r), o -> (NodeRule(l, r |> Array.map cataRule), o)
+            | ValueClauseRule r, o -> (ValueClauseRule(r |> Array.map cataRule), o)
+            | SubtypeRule(a, b, i), o -> (SubtypeRule(a, b, (i |> Array.map cataRule)), o)
             | LeafRule(l, SingleAliasField name), o ->
                 match singlealiasesmap () |> Map.tryFind name with
                 | Some(LeafRule(al, ar), ao) ->
@@ -1383,7 +1386,7 @@ module private RulesParserImpl =
         let ff () =
             i <- i + 1
             let before = final
-            final <- final |> List.map singlealiasesmapper
+            final <- final |> Array.map singlealiasesmapper
             singlealiases <- final
             first <- false
             before = final || i > 10
@@ -1397,97 +1400,97 @@ module private RulesParserImpl =
             | AliasRule(name, rule) -> AliasRule(name, cataRule rule)
             | SingleAliasRule(name, rule) -> SingleAliasRule(name, cataRule rule)
 
-        rules |> List.map rulesMapper
+        rules |> Array.map rulesMapper
 
 
-    let replaceColourField (rules: RootRule list) =
+    let replaceColourField (rules: RootRule array) =
 
-        let rec cataRule rule : NewRule list =
+        let rec cataRule rule : NewRule array =
             match rule with
             | LeafRule(l, MarkerField ColourField), o ->
-                [ NodeRule(
-                      l,
-                      [ LeafValueRule(ValueField(ValueType.Float(-256.0M, 256.0M))),
-                        { defaultOptions with min = 3; max = 3 } ]
-                  ),
-                  o ]
+                [| NodeRule(
+                       l,
+                       [| LeafValueRule(ValueField(ValueType.Float(-256.0M, 256.0M))),
+                          { defaultOptions with min = 3; max = 3 } |]
+                   ),
+                   o |]
             | LeafRule(l, MarkerField IRCountryTag), o ->
-                [ LeafRule(l, ValueField(ValueType.Enum "country_tags")), o
-                  LeafRule(l, VariableGetField "dynamic_country_tag"), o ]
+                [| LeafRule(l, ValueField(ValueType.Enum "country_tags")), o
+                   LeafRule(l, VariableGetField "dynamic_country_tag"), o |]
             | LeafRule(MarkerField IRCountryTag, r), o ->
-                [ LeafRule(ValueField(ValueType.Enum "country_tags"), r), o
-                  LeafRule(VariableGetField "dynamic_country_tag", r), o ]
+                [| LeafRule(ValueField(ValueType.Enum "country_tags"), r), o
+                   LeafRule(VariableGetField "dynamic_country_tag", r), o |]
             | NodeRule(MarkerField IRCountryTag, r), o ->
-                [ NodeRule(ValueField(ValueType.Enum "country_tags"), r |> List.collect cataRule), o
-                  NodeRule(VariableGetField "dynamic_country_tag", r |> List.collect cataRule), o ]
-            | NodeRule(l, r), o -> [ NodeRule(l, r |> List.collect cataRule), o ]
-            | ValueClauseRule r, o -> [ ValueClauseRule(r |> List.collect cataRule), o ]
-            | SubtypeRule(a, b, i), o -> [ (SubtypeRule(a, b, (i |> List.collect cataRule)), o) ]
-            | _ -> [ rule ]
+                [| NodeRule(ValueField(ValueType.Enum "country_tags"), r |> Array.collect cataRule), o
+                   NodeRule(VariableGetField "dynamic_country_tag", r |> Array.collect cataRule), o |]
+            | NodeRule(l, r), o -> [| NodeRule(l, r |> Array.collect cataRule), o |]
+            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule ), o |]
+            | SubtypeRule(a, b, i), o -> [| (SubtypeRule(a, b, (i |> Array.collect cataRule )), o) |]
+            | _ -> [| rule |]
 
         let rulesMapper =
             function
-            | TypeRule(name, rule) -> cataRule rule |> List.map (fun x -> TypeRule(name, x))
-            | AliasRule(name, rule) -> cataRule rule |> List.map (fun x -> AliasRule(name, x))
-            | SingleAliasRule(name, rule) -> cataRule rule |> List.map (fun x -> SingleAliasRule(name, x))
+            | TypeRule(name, rule) -> cataRule rule |> Array.map (fun x -> TypeRule(name, x))
+            | AliasRule(name, rule) -> cataRule rule |> Array.map (fun x -> AliasRule(name, x))
+            | SingleAliasRule(name, rule) -> cataRule rule |> Array.map (fun x -> SingleAliasRule(name, x))
 
-        rules |> List.collect rulesMapper
+        rules |> Array.collect rulesMapper
 
     /// stellarisScopeTrigger -> num_moons = owner -> num_moons = owner.trigger:num_moons
-    let replaceValueMarkerFields (useFormulas: bool) (stellarisScopeTrigger: bool) (rules: RootRule list) =
-        let rec cataRule rule : NewRule list =
+    let replaceValueMarkerFields (useFormulas: bool) (stellarisScopeTrigger: bool) (rules: RootRule array) =
+        let rec cataRule rule : NewRule array =
             match rule with
             | LeafRule(ValueScopeMarkerField(i, m), ValueScopeMarkerField(i2, m2)), o when useFormulas ->
-                [ LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
-                  LeafRule(ValueScopeField(i, m), SingleAliasField("formula")), o
-                  LeafRule(ValueScopeField(i, m), SingleAliasField("range")), o ]
+                [| LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
+                   LeafRule(ValueScopeField(i, m), SingleAliasField("formula")), o
+                   LeafRule(ValueScopeField(i, m), SingleAliasField("range")), o |]
             | LeafRule(ValueScopeMarkerField(i, m), ValueScopeMarkerField(i2, m2)), o when
                 o.comparison && stellarisScopeTrigger
                 ->
-                [ LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
-                  LeafRule(ValueScopeField(i, m), ScopeField(o.requiredScopes)), o ]
+                [| LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o
+                   LeafRule(ValueScopeField(i, m), ScopeField(o.requiredScopes)), o |]
             | LeafRule(ValueScopeMarkerField(i, m), ValueScopeMarkerField(i2, m2)), o ->
-                [ LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o ]
+                [| LeafRule(ValueScopeField(i, m), ValueScopeField(i2, m2)), o |]
             | LeafRule(l, ValueScopeMarkerField(i2, m2)), o when useFormulas ->
-                [ LeafRule(l, ValueScopeField(i2, m2)), o
-                  LeafRule(l, SingleAliasField("formula")), o
-                  LeafRule(l, SingleAliasField("range")), o ]
+                [| LeafRule(l, ValueScopeField(i2, m2)), o
+                   LeafRule(l, SingleAliasField("formula")), o
+                   LeafRule(l, SingleAliasField("range")), o |]
             | LeafRule(l, ValueScopeMarkerField(i2, m2)), o when o.comparison && stellarisScopeTrigger ->
-                [ LeafRule(l, ValueScopeField(i2, m2)), o
-                  LeafRule(l, ScopeField(o.requiredScopes)), o ]
-            | LeafRule(l, ValueScopeMarkerField(i2, m2)), o -> [ LeafRule(l, ValueScopeField(i2, m2)), o ]
-            | LeafRule(ValueScopeMarkerField(i, m), r), o -> [ LeafRule(ValueScopeField(i, m), r), o ]
+                [| LeafRule(l, ValueScopeField(i2, m2)), o
+                   LeafRule(l, ScopeField(o.requiredScopes)), o |]
+            | LeafRule(l, ValueScopeMarkerField(i2, m2)), o -> [| LeafRule(l, ValueScopeField(i2, m2)), o |]
+            | LeafRule(ValueScopeMarkerField(i, m), r), o -> [| LeafRule(ValueScopeField(i, m), r), o |]
             | NodeRule(ValueScopeMarkerField(i, m), r), o ->
-                [ NodeRule(ValueScopeField(i, m), r |> List.collect cataRule), o ]
-            | NodeRule(l, r), o -> [ NodeRule(l, r |> List.collect cataRule), o ]
-            | ValueClauseRule r, o -> [ ValueClauseRule(r |> List.collect cataRule), o ]
-            | SubtypeRule(a, b, i), o -> [ (SubtypeRule(a, b, (i |> List.collect cataRule)), o) ]
-            | _ -> [ rule ]
+                [| NodeRule(ValueScopeField(i, m), r |> Array.collect cataRule), o |]
+            | NodeRule(l, r), o -> [| NodeRule(l, r |> Array.collect cataRule), o |]
+            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule ), o |]
+            | SubtypeRule(a, b, i), o -> [| (SubtypeRule(a, b, (i |> Seq.collect cataRule |> Seq.toArray)), o) |]
+            | _ -> [| rule |]
 
         let rulesMapper =
             function
-            | TypeRule(name, rule) -> cataRule rule |> List.map (fun x -> TypeRule(name, x))
-            | AliasRule(name, rule) -> cataRule rule |> List.map (fun x -> AliasRule(name, x))
-            | SingleAliasRule(name, rule) -> cataRule rule |> List.map (fun x -> SingleAliasRule(name, x))
+            | TypeRule(name, rule) -> cataRule rule |> Array.map (fun x -> TypeRule(name, x))
+            | AliasRule(name, rule) -> cataRule rule |> Array.map (fun x -> AliasRule(name, x))
+            | SingleAliasRule(name, rule) -> cataRule rule |> Array.map (fun x -> SingleAliasRule(name, x))
 
-        rules |> List.collect rulesMapper
+        rules |> Array.collect rulesMapper
 
-    let replaceIgnoreMarkerFields (rules: RootRule list) =
-        let rec cataRule rule : NewRule list =
+    let replaceIgnoreMarkerFields (rules: RootRule array) =
+        let rec cataRule rule : NewRule array =
             match rule with
-            | LeafRule(field, IgnoreMarkerField), o -> [ NodeRule(IgnoreField field, []), o ]
-            | NodeRule(l, r), o -> [ NodeRule(l, r |> List.collect cataRule), o ]
-            | ValueClauseRule r, o -> [ ValueClauseRule(r |> List.collect cataRule), o ]
-            | SubtypeRule(a, b, i), o -> [ (SubtypeRule(a, b, (i |> List.collect cataRule)), o) ]
-            | _ -> [ rule ]
+            | LeafRule(field, IgnoreMarkerField), o -> [| NodeRule(IgnoreField field, [||]), o |]
+            | NodeRule(l, r), o -> [| NodeRule(l, r |> Array.collect cataRule), o |]
+            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule), o |]
+            | SubtypeRule(a, b, i), o -> [| (SubtypeRule(a, b, (i |> Array.collect cataRule)), o) |]
+            | _ -> [| rule |]
 
         let rulesMapper =
             function
-            | TypeRule(name, rule) -> cataRule rule |> List.map (fun x -> TypeRule(name, x))
-            | AliasRule(name, rule) -> cataRule rule |> List.map (fun x -> AliasRule(name, x))
-            | SingleAliasRule(name, rule) -> cataRule rule |> List.map (fun x -> SingleAliasRule(name, x))
+            | TypeRule(name, rule) -> cataRule rule |> Array.map (fun x -> TypeRule(name, x))
+            | AliasRule(name, rule) -> cataRule rule |> Array.map (fun x -> AliasRule(name, x))
+            | SingleAliasRule(name, rule) -> cataRule rule |> Array.map (fun x -> SingleAliasRule(name, x))
 
-        rules |> List.collect rulesMapper
+        rules |> Array.collect rulesMapper
 
     let processConfig parseScope allScopes anyScope scopeGroup (node: Node) =
         let nodes = getNodeComments node
@@ -1530,7 +1533,7 @@ module RulesConsistencyValidation =
         | LeafValueRule(TypeField(TypeType.Complex(name = name))) -> name :: acc
         | _ -> acc
 
-    let checkForUndefinedTypes (rules: RootRule list) (typedefs: TypeDefinition list) =
+    let checkForUndefinedTypes (rules: RootRule seq) (typedefs: TypeDefinition list) =
         let referencedTypes =
             rules
             |> Seq.collect (function
@@ -1551,9 +1554,9 @@ module RulesConsistencyValidation =
                     ->
                     Some(key + "." + subtype)
                 | _ -> None)
-            |> List.ofSeq
+            |> Array.ofSeq
 
-        if missing |> List.isEmpty |> not then
+        if missing |> Array.isEmpty |> not then
             logWarning $"The following types were referenced in rules but not defined in rules %A{missing}"
 
 
@@ -1624,6 +1627,7 @@ module RulesParser =
 
         let rules =
             rules
+            |> Array.ofList
             |> replaceValueMarkerFields useFormulas stellarisScopeTriggers
             |> replaceSingleAliases
             |> replaceColourField

@@ -118,7 +118,7 @@ module LocalisationString =
     /// Checks quotes, localisation command chains, localisation references
     let validateProcessedLocalisationBase
         hardcodedLocalisation
-        (keys: (Lang * LocKeySet) list)
+        (rawKeys: (Lang * LocKeySet) array)
         (api: (Lang * Map<string, LocEntry>) list)
         =
         let validateInvalidChars _ (e: LocEntry) =
@@ -129,13 +129,13 @@ module LocalisationString =
         let validateQuotes _ (e: LocEntry) =
             let desc = e.desc.Trim()
             // let lastHash = desc.LastIndexOf "#"
-            let lastQuote = desc.LastIndexOf "\""
+            let lastQuote = desc.LastIndexOf '\"'
 
             let firstHashAfterQuote =
                 if lastQuote = -1 then
-                    desc.IndexOf "#"
+                    desc.IndexOf '#'
                 else
-                    (desc.Substring(lastQuote).IndexOf "#") + lastQuote
+                    (desc.Substring(lastQuote).IndexOf '#') + lastQuote
 
             let desc =
                 match firstHashAfterQuote, lastQuote with
@@ -144,7 +144,7 @@ module LocalisationString =
                 | h, q when h > q -> desc.Substring(0, h).Trim()
                 | _ -> desc
 
-            if desc.StartsWith "\"" <> desc.EndsWith "\"" then
+            if desc.StartsWith '\"' <> desc.EndsWith '\"' then
                 Invalid(Guid.NewGuid(), [ invManual (ErrorCodes.LocMissingQuote e.key) e.position e.key None ])
             else
                 OK
@@ -185,11 +185,12 @@ module LocalisationString =
             | _ -> OK
 
         let validateLocMap (lang, m: Map<string, LocEntry>) =
-            let keys =
-                keys
-                |> List.filter (fun (l, _) -> l = lang)
-                |> List.map snd
-                |> List.fold (fun a b -> LocKeySet.Union(a, b)) (LocKeySet.Empty(InsensitiveStringComparer()))
+            let keys = LocKeySet(StringComparer.OrdinalIgnoreCase)
+
+            rawKeys
+            |> Array.filter (fun (l, _) -> l = lang)
+            |> Array.map snd
+            |> Array.iter keys.UnionWith
 
             m
             |> Map.map (fun _ e -> e.refs <&!&> checkRef hardcodedLocalisation lang keys e)
@@ -269,7 +270,6 @@ module LocalisationString =
     let processJominiLocalisationBase
         localisationCommandValidator
         (eventtargets: Collections.Map<string, Scope list>)
-        (setvariables: string list)
         (api: Lang * Map<string, Entry>)
         : Lang * Map<string, LocEntry> =
         let extractResult =
@@ -299,9 +299,7 @@ module LocalisationString =
                     | _ -> None)
               commands = []
               jominiCommands = commands
-              scopes =
-                commands
-                |> List.map (fun s -> localisationCommandValidator eventtargets setvariables s)
+              scopes = commands |> List.map (fun s -> localisationCommandValidator eventtargets s)
               errorRanges = m.errorRange }
 
         api
@@ -341,7 +339,6 @@ module LocalisationString =
     let validateJominiLocalisationCommandsBase
         localisationCommandValidator
         (eventtargets: Collections.Map<string, Scope list>)
-        (setvariables: string list)
         (locentry: LocEntry)
         (startContext: ScopeContext)
         =
@@ -354,7 +351,7 @@ module LocalisationString =
         let keycommands = locentry.jominiCommands
 
         let validateCommand (c: JominiLocCommand list) =
-            match localisationCommandValidator startContext eventtargets setvariables c with
+            match localisationCommandValidator startContext eventtargets c with
             | LocNotFound s ->
                 Invalid(
                     Guid.NewGuid(),

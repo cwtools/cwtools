@@ -17,5 +17,10 @@
         <ProjectReference Include="..\CWTools\CWTools.fsproj"/>
         <ProjectReference Include="..\CWToolsCLI\CWToolsCLI.fsproj"/>
     </ItemGroup>
-    <Import Project="..\.paket\Paket.Restore.targets"/>
+
+    <ItemGroup>
+        <PackageReference Include="ByteSize"/>
+        <PackageReference Include="Argu"/>
+        <PackageReference Include="Expecto"/>
+    </ItemGroup>
 </Project>

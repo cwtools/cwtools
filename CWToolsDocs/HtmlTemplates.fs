@@ -1,6 +1,6 @@
 module HtmlTemplates
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 open CWTools.Rules
 open CWTools.Utilities.StringResource
 
@@ -240,8 +240,8 @@ let rec ruleTemplate
 
         let desc = td [] [ str (options.description |> Option.defaultValue "") ]
 
-        [ (tr [] [ lhs; desc; reqCount; rhs ]) ]
-    | NodeRule(left, [ LeafRule(AliasField x, _), innerOptions ]) ->
+        [| (tr [] [ lhs; desc; reqCount; rhs ]) |]
+    | NodeRule(left, [| LeafRule(AliasField x, _), innerOptions |]) ->
         let lhs = td [ _colspan colspan ] [ (fieldToText enums left _lshPostfix) ]
 
         let desc = td [] [ str (options.description |> Option.defaultValue "") ]
@@ -255,7 +255,7 @@ let rec ruleTemplate
                 (x + " block")
 
         let rhs = td [] [ str rhsText ]
-        [ (tr [] [ lhs; desc; reqCount; rhs ]) ]
+        [| (tr [] [ lhs; desc; reqCount; rhs ]) |]
     | NodeRule(left, inner) ->
         let desc =
             td [ _colspan colspan ] [ str (options.description |> Option.defaultValue "") ]
@@ -263,21 +263,21 @@ let rec ruleTemplate
         let rhs = td [] [ strong [] [ str "block, containing:" ] ]
 
         let inners =
-            (inner |> List.collect (ruleTemplate enums maxDepth (indent + 1) _lshPostfix))
+            (inner |> Array.collect (ruleTemplate enums maxDepth (indent + 1) _lshPostfix))
 
         let lhs =
             td [ _rowspan ((inners.Length + 1).ToString()) ] [ strong [] [ (fieldToText enums left _lshPostfix) ] ]
 
-        ((tr [] ([ lhs; desc; reqCount; rhs ])) :: inners)
+        Array.append [|(tr [] [ lhs; desc; reqCount; rhs ])|] inners
 
     | LeafValueRule(left) ->
         let lhs = td [ _colspan colspan ] [ (fieldToText enums left _lshPostfix) ]
 
         let desc = td [] [ str (options.description |> Option.defaultValue "") ]
 
-        [ (tr [] [ lhs; desc; reqCount; td [] [ str "" ] ]) ]
-    | ValueClauseRule(inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent _lshPostfix)
-    | SubtypeRule(_, _, inner) -> inner |> List.collect (ruleTemplate enums maxDepth indent _lshPostfix)
+        [| (tr [] [ lhs; desc; reqCount; td [] [ str "" ] ]) |]
+    | ValueClauseRule(inner) -> inner |> Array.collect (ruleTemplate enums maxDepth indent _lshPostfix)
+    | SubtypeRule(_, _, inner) -> inner |> Array.collect (ruleTemplate enums maxDepth indent _lshPostfix)
 
 // | _ -> []
 // lhs |> Option.map fieldToText
@@ -285,12 +285,12 @@ let rec ruleTemplate
 
 let rec getTypeBlockDepth (depth: int) ((rule, _): NewRule) =
     match rule with
-    | SubtypeRule(_, _, inner) -> inner |> List.map (getTypeBlockDepth (depth)) |> List.max
-    | NodeRule(_, []) -> depth
-    | NodeRule(_, inner) -> inner |> List.map (getTypeBlockDepth (depth + 1)) |> List.max
+    | SubtypeRule(_, _, inner) -> inner |> Array.map (getTypeBlockDepth (depth)) |> Array.max
+    | NodeRule(_, [||]) -> depth
+    | NodeRule(_, inner) -> inner |> Array.map (getTypeBlockDepth (depth + 1)) |> Array.max
     | _ -> depth
 
-let extractRulesFromRuleType (ruleType: RuleType) : NewRule list =
+let extractRulesFromRuleType (ruleType: RuleType) : NewRule array =
     let rules =
         ruleType
         |> (function
@@ -298,16 +298,16 @@ let extractRulesFromRuleType (ruleType: RuleType) : NewRule list =
         | SubtypeRule(_, _, r) -> r
         | ValueClauseRule(r) -> r
         | LeafValueRule(_)
-        | LeafRule(_) -> [])
+        | LeafRule(_) -> [||])
 
     rules
 
 
 let subTypeBlock (enums: EnumDefinition list) ((subTypeDef: SubTypeDefinition)) =
     let typeBlockDepth =
-        match subTypeDef.rules |> List.map (getTypeBlockDepth 0) with
-        | [] -> 0
-        | x -> List.max x
+        match subTypeDef.rules |> Array.map (getTypeBlockDepth 0) with
+        | [||] -> 0
+        | x -> Array.max x
 
     let subTypeName = subTypeDef.name
 
@@ -328,8 +328,8 @@ let subTypeBlock (enums: EnumDefinition list) ((subTypeDef: SubTypeDefinition)) 
               [ (sprintf "subtype %s" subTypeName) |> str ]
           table
               [ _class "table is-striped is-fullwidth" ]
-              (tableHeader
-               :: (subTypeDef.rules |> List.collect (ruleTemplate enums typeBlockDepth 0 None))) ]
+              (Array.append [| tableHeader |] (subTypeDef.rules |> Array.collect (ruleTemplate enums typeBlockDepth 0 None)) |> Array.toList) 
+        ]
 
 let typeBlock (enums: EnumDefinition list) ((typeDef: TypeDefinition), ((ruleType, options): NewRule)) =
     let rules = extractRulesFromRuleType ruleType
@@ -380,21 +380,22 @@ let typeBlock (enums: EnumDefinition list) ((typeDef: TypeDefinition), ((ruleTyp
           div [] ([ description ] |> List.choose id)
           table
               [ _class "table is-striped is-fullwidth" ]
-              (tableHeader
-               :: (rules |> List.collect (ruleTemplate enums typeBlockDepth 0 None))) ]
+              (Array.append [| tableHeader |] (rules |> Array.collect (ruleTemplate enums typeBlockDepth 0 None)) |> Array.toList)
+        ]
 
-let rootRules (rootRules: RootRule list) (enums: EnumDefinition list) (types: TypeDefinition list) =
+let rootRules (rootRules: RootRule array) (enums: EnumDefinition list) (types: TypeDefinition list) =
     let typeBlocks =
         ((rootRules)
-         |> List.choose (function
+         |> Seq.choose (function
              | TypeRule(name, rule) -> Some(name, rule)
              | _ -> None)
-         |> List.sortBy fst
-         |> List.choose (function
+         |> Seq.sortBy fst
+         |> Seq.choose (function
              | (name, rule) ->
                  let typeDef = types |> List.tryFind (fun td -> td.name = name)
 
                  typeDef |> Option.map (fun td -> typeBlock enums ((td), (rule)))))
+        |> Seq.toList
 
     let tableOfContents = createTableOfContents types
 
@@ -406,4 +407,4 @@ let rootRules (rootRules: RootRule list) (enums: EnumDefinition list) (types: Ty
               [ rawText
                     "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css\" integrity=\"sha256-ujE/ZUB6CMZmyJSgQjXGCF4sRRneOimQplBVLu8OU5w=\" crossorigin=\"anonymous\" />" ]
           body [] [ section [ _class "section" ] [ div [ _class "container" ] (tableOfContents :: typeBlocks) ] ] ]
-    |> renderHtmlDocument
+    |> RenderView.AsString.htmlDocument

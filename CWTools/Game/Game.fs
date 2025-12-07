@@ -1,5 +1,7 @@
 namespace CWTools.Games
 
+open System.Linq
+
 open CWTools.Common
 // open CWTools.Process.STLScopes
 open Files
@@ -11,17 +13,17 @@ open CWTools.Rules
 
 
 type ValidationSettings =
-    { langs: Lang list
+    { langs: Lang array
       validateVanilla: bool
       experimental: bool }
 
 type GameSettings<'L> =
-    { rootDirectories: WorkspaceDirectoryInput list
+    { rootDirectories: WorkspaceDirectoryInput array
       embedded: EmbeddedSettings
       validation: ValidationSettings
       rules: RulesSettings option
-      scriptFolders: string list option
-      excludeGlobPatterns: string list option
+      scriptFolders: string array option
+      excludeGlobPatterns: string array option
       modFilter: string option
       initialLookup: 'L
       maxFileSize: int option
@@ -45,19 +47,17 @@ type DebugSettings =
     static member Default = { EarlyStop = Full }
 
 type GameSetupSettings<'L> =
-    { rootDirectories: WorkspaceDirectoryInput list
+    { rootDirectories: WorkspaceDirectoryInput array
       embedded: EmbeddedSetupSettings
       validation: ValidationSettings
       rules: RulesSettings option
-      scriptFolders: string list option
-      excludeGlobPatterns: string list option
+      scriptFolders: string array option
+      excludeGlobPatterns: string array option
       modFilter: string option
       maxFileSize: int option
       debugSettings: DebugSettings }
 
-
-
-
+[<Sealed>]
 type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     (
         settings: GameSettings<'L>,
@@ -79,7 +79,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         debugSettings: DebugSettings
     ) as this =
     let scriptFolders = settings.scriptFolders |> Option.defaultValue scriptFolders
-    let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue []
+    let excludeGlobPatterns = settings.excludeGlobPatterns |> Option.defaultValue [||]
 
     let embeddedDir =
         settings.embedded.cachedResourceData
@@ -131,10 +131,10 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         match settings.embedded.cachedRuleMetadata with
         | None -> id
         | Some md ->
-            fun (newList: (Lang * Set<string>) list) ->
-                let newMap = newList |> Map.ofList
-                let oldList = md.loc |> List.filter (fun (l, _) -> List.contains l langs)
-                let embeddedMap = oldList |> Map.ofList
+            fun (newList: (Lang * Set<string>) array) ->
+                let newMap = newList |> Map.ofArray
+                let oldList = md.loc |> Array.filter (fun (l, _) -> Array.contains l langs)
+                let embeddedMap = oldList |> Map.ofArray
 
                 let res =
                     Map.fold
@@ -145,7 +145,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                         newMap
                         embeddedMap
 
-                res |> Map.toList
+                res |> Map.toArray
 
     let validationServices () =
         { resources = resourceManager.Api
@@ -176,25 +176,17 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             settings.validation.langs,
             debugMode
         )
-    // let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
-    // let mutable localisationErrors : CWError list option = None
-    // let mutable localisationKeys = []
-    // let mutable taggedLocalisationKeys = []
-    let getEmbeddedFiles () =
-        settings.embedded.embeddedFiles
-        |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
-
     let mutable errorCache = Map.empty
 
-    let updateFile (shallow: bool) filepath (filetext: string option) =
-        log (sprintf "%s" filepath)
-        let timer = new System.Diagnostics.Stopwatch()
+    let updateFile (shallow: bool) filepath (fileText: string option) =
+        log $"updateFile %s{filepath}"
+        let timer = System.Diagnostics.Stopwatch()
         timer.Start()
 
         let res =
             match filepath with
             | x when x.EndsWith localisationExtension ->
-                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                let file = fileText |> Option.defaultWith (fun () -> File.ReadAllText filepath)
 
                 let resourceInput =
                     LanguageFeatures.makeFileWithContentResourceInput fileManager filepath file
@@ -204,15 +196,13 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                 match resource with
                 | FileWithContentResource(_, r) -> this.LocalisationManager.UpdateLocalisationFile r
                 | _ -> logWarning (sprintf "Localisation file failed to parse %s" filepath)
-                // let les = (validationManager.ValidateLocalisation (this.Resources.ValidatableEntities()))
+
                 let ges = globalLocalisation (this)
-                // this.LocalisationManager.localisationErrors <- Some les
                 this.LocalisationManager.globalLocalisationErrors <- Some ges
                 []
-            // les @ ges
             | _ ->
                 let file =
-                    filetext |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
+                    fileText |> Option.defaultWith (fun () -> File.ReadAllText(filepath, encoding))
 
                 let resource = LanguageFeatures.makeEntityResourceInput fileManager filepath file
                 let newEntities = [ this.Resources.UpdateFile resource ] |> List.choose snd
@@ -229,26 +219,22 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     let shallowres = shallowres @ (validationManager.ValidateLocalisation newEntities)
                     errorCache <- errorCache.Add(filepath, deepres)
                     shallowres @ deepres
-        //validateAll shallow newEntities @ localisationCheck newEntities
-        log (sprintf "Update Time: %i" timer.ElapsedMilliseconds)
+
+        log $"Update file Time: %i{timer.ElapsedMilliseconds}"
         res
 
     let initialLoad () =
-        log (sprintf "Parsing %i files" (fileManager.AllFilesByPath().Length))
-        let timer = new System.Diagnostics.Stopwatch()
+        let timer = System.Diagnostics.Stopwatch()
         timer.Start()
-        // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
-        //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
-        // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
-        //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
         let files = fileManager.AllFilesByPath()
+        log $"Parsing %i{files.Length} files"
 
         let filteredfiles =
             if settings.validation.validateVanilla then
                 files
             else
                 files
-                |> List.choose (function
+                |> Array.choose (function
                     | FileResourceInput f -> Some(FileResourceInput f)
                     | FileWithContentResourceInput f -> Some(FileWithContentResourceInput f)
                     | EntityResourceInput f ->
@@ -259,29 +245,25 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
                     | _ -> None)
 
         resourceManager.Api.UpdateFiles(filteredfiles) |> ignore
-        log (sprintf "Parsed files in %A" timer.ElapsedMilliseconds)
+        log $"Parsed files in %A{timer.ElapsedMilliseconds}"
         timer.Restart()
 
         let embeddedFiles =
             settings.embedded.embeddedFiles
-            |> List.map (fun (f, ft) -> f.Replace("\\", "/"), ft)
-            |> List.choose (fun (f, ft) ->
-                if ft = "" then
-                    Some(
-                        FileResourceInput
-                            { scope = "embedded"
-                              filepath = f
-                              logicalpath = (fileManager.ConvertPathToLogicalPath f) }
-                    )
+            |> List.map (fun (filePath: string, fileText) ->
+                let newFilePath = filePath.Replace('\\', '/')
+                if fileText = "" then
+                    FileResourceInput
+                        { scope = "embedded"
+                          filepath = newFilePath
+                          logicalpath = (fileManager.ConvertPathToLogicalPath newFilePath) }
                 else
-                    Some(
-                        FileWithContentResourceInput
-                            { scope = "embedded"
-                              filepath = f
-                              logicalpath = (fileManager.ConvertPathToLogicalPath f)
-                              filetext = ft
-                              validate = false }
-                    ))
+                    FileWithContentResourceInput
+                        { scope = "embedded"
+                          filepath = newFilePath
+                          logicalpath = (fileManager.ConvertPathToLogicalPath newFilePath)
+                          filetext = fileText
+                          validate = false })
 
         let disableValidate (r, e) : Resource * Entity =
             match r with
@@ -299,7 +281,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             settings.embedded.cachedResourceData
             |> List.map (fun (r, e) -> CachedResourceInput(disableValidate (r, e)))
 
-        let embedded = embeddedFiles @ cached
+        let embedded = embeddedFiles.Concat(cached).ToArray()
 
         if fileManager.ShouldUseEmbedded then
             resourceManager.Api.UpdateFiles(embedded) |> ignore
@@ -316,7 +298,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         this.RefreshValidationManager()
 
     let initialConfigRules () =
-        log (sprintf "Initial config rules update")
+        log "Initial config rules update"
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         localisationManager.UpdateAllLocalisation()
@@ -345,30 +327,30 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         if debugSettings.EarlyStop >= GameInitLoad then
             initialLoad ()
 
-    member __.RuleValidationService = ruleValidationService
+    member _.RuleValidationService = ruleValidationService
 
-    member __.RuleValidationService
+    member _.RuleValidationService
         with set value = ruleValidationService <- value
     // member val ruleValidationService : RuleValidationService<'S> option = None with get, set
-    member __.InfoService = infoService
+    member _.InfoService = infoService
 
-    member __.InfoService
+    member _.InfoService
         with set value = infoService <- value
     // member val infoService : InfoService<'S> option = None with get, set
     member val completionService: CompletionService option = None with get, set
 
-    member __.Resources: IResourceAPI<'T> = resourceManager.Api
-    member __.ResourceManager = resourceManager
-    member __.Lookup: 'L = lookup
+    member _.Resources: IResourceAPI<'T> = resourceManager.Api
+    member _.ResourceManager = resourceManager
+    member _.Lookup: 'L = lookup
     // member __.AllLocalisation() = localisationManager.allLocalisation()
     // member __.ValidatableLocalisation() = localisationManager.validatableLocalisation()
-    member __.FileManager = (fun () -> fileManager) ()
-    member __.LocalisationManager: LocalisationManager<'T> = localisationManager
-    member __.ValidationManager = validationManager
-    member __.Settings = settings
-    member __.UpdateFile shallow file text = updateFile shallow file text
+    member _.FileManager = (fun () -> fileManager) ()
+    member _.LocalisationManager: LocalisationManager<'T> = localisationManager
+    member _.ValidationManager = validationManager
+    member _.Settings = settings
+    member _.UpdateFile shallow file text = updateFile shallow file text
 
-    member __.RefreshValidationManager() =
+    member _.RefreshValidationManager() =
         validationManager <-
             ValidationManager(
                 validationSettings,
@@ -389,10 +371,10 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
             file
             text
 
-    member __.ReplaceConfigRules rules = rulesManager.LoadBaseConfig rules
-    member __.RefreshCaches() = updateRulesCache ()
-    member __.InitialConfigRules() = initialConfigRules ()
-    member private __.DebugSettings = debugSettings
+    member _.ReplaceConfigRules rules = rulesManager.LoadBaseConfig rules
+    member _.RefreshCaches() = updateRulesCache ()
+    member _.InitialConfigRules() = initialConfigRules ()
+    member private _.DebugSettings = debugSettings
 
     static member CreateGame settings afterInit =
         let game = GameObject(settings)

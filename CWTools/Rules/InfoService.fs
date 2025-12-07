@@ -42,6 +42,7 @@ module Test =
 
         fLeaf, fLeafValue, fComment, fNode, fValueClause, (ctx1, ctx2)
 
+[<Sealed>]
 type InfoService
     (
         rootRules: RulesWrapper,
@@ -49,12 +50,12 @@ type InfoService
         types: FrozenDictionary<string, PrefixOptimisedStringSet>,
         enums: FrozenDictionary<string, string * PrefixOptimisedStringSet>,
         varMap: FrozenDictionary<string, PrefixOptimisedStringSet>,
-        localisation: (Lang * Collections.Set<string>) list,
-        files: Collections.Set<string>,
+        localisation: (Lang * Collections.Set<string>) array,
+        files: FrozenSet<string>,
         links: EffectMap,
         valueTriggers: EffectMap,
         ruleValidationService: RuleValidationService,
-        changeScope,
+        changeScope: ChangeScope,
         defaultContext,
         anyScope,
         defaultLang,
@@ -95,13 +96,13 @@ type InfoService
 
     let defaultKeys =
         localisation
-        |> List.choose (fun (l, ks) -> if l = defaultLang then Some ks else None)
-        |> List.tryHead
+        |> Array.choose (fun (l, ks) -> if l = defaultLang then Some ks else None)
+        |> Array.tryHead
         |> Option.defaultValue Set.empty
 
     let localisationKeys =
         localisation
-        |> List.choose (fun (l, ks) -> if l = defaultLang then None else Some(l, ks))
+        |> Array.choose (fun (l, ks) -> if l = defaultLang then None else Some(l, ks))
 
     let ruleToCompletionListHelper =
         function
@@ -141,7 +142,7 @@ type InfoService
         let dict =
             new System.Collections.Concurrent.ConcurrentDictionary<_, System.Collections.Generic.Dictionary<_, _>>()
 
-        fun (rules: NewRule list) (subtypes: string list) ->
+        fun (rules: NewRule array) (subtypes: string list) ->
             match dict.TryGetValue(rules) with
             | true, v ->
                 match v.TryGetValue(subtypes) with
@@ -191,25 +192,25 @@ type InfoService
 
                 let subtypedrules =
                     rules
-                    |> List.collect (fun (r, o) ->
+                    |> Array.collect (fun (r, o) ->
                         r
                         |> (function
                         | SubtypeRule(_, _, cfs) -> cfs
-                        | x -> []))
+                        | x -> [||]))
 
                 let expandedbaserules =
                     rules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
 
                 let expandedsubtypedrules =
                     subtypedrules
-                    |> List.collect (function
-                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                        | x -> [])
+                    |> Array.collect (function
+                        | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                        | x -> [||])
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 // let res = expandedsubtypedrules @ subtypedrules @ rules @ expandedbaserules
                 let noderules = new ResizeArray<_>()
@@ -406,7 +407,7 @@ type InfoService
                     let key = node.Key.Trim('"')
 
                     let newCtx =
-                        match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+                        match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
                         | NewScope({ Scopes = current :: _ }, _, _) ->
                             // log "cs %A %A %A" s node.Key current
                             { newCtx with
@@ -463,38 +464,31 @@ type InfoService
           anyScope = anyScope
           defaultLang = defaultLang
           wildcardLinks = wildCardLinks
-          aliasKeyList = aliasKeyMap
+          aliasKeys = aliasKeyMap
           processLocalisation = processLocalisation
           validateLocalisation = validateLocalisation }
 
     let foldWithPos fLeaf fLeafValue fComment fNode fValueClause acc (pos: pos) (node: Node) (logicalpath: string) =
         let fChild (ctx, _) (node: IClause) ((field, options): NewRule) =
-            // log "child acc %A %A" ctx field
             let rules =
                 match field with
-                //| Field.LeftTypeField (t, f) -> inner f newCtx n
                 | NodeRule(_, rs) -> rs
-                // | Field.ClauseField rs -> rs
-                // | Field.LeftClauseField (_, ClauseField rs) -> rs
-                // | Field.LeftScopeField rs -> rs
-                | _ -> []
+                | _ -> [||]
 
             let subtypedrules =
                 rules
-                |> List.collect (fun (r, o) ->
+                |> Array.collect (fun (r, o) ->
                     r
                     |> (function
                     | SubtypeRule(_, _, cfs) -> cfs
-                    | x -> [ (r, o) ]))
-            // let subtypedrules =
-            //     rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (_, _, ClauseField cfs) -> cfs | x -> [(s, o, x)]))
-            //     |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
+                    | x -> [| (r, o) |]))
+
             let expandedrules =
                 subtypedrules
-                |> List.collect (function
-                    | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                    | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [])
-                    | x -> [ x ])
+                |> Array.collect (function
+                    | LeafRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                    | NodeRule(AliasField a, _), _ -> (rootRules.Aliases.TryFind a |> Option.defaultValue [||])
+                    | x -> [| x |])
 
             let childMatch =
                 node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
@@ -511,7 +505,7 @@ type InfoService
             | Some c, _, _ ->
                 match
                     expandedrules
-                    |> List.tryPick (function
+                    |> Array.tryPick (function
                         | NodeRule(l, rs), o when FieldValidators.checkLeftField p Severity.Error ctx l c.KeyId ->
                             Some(l, rs, o)
                         | _ -> None)
@@ -523,7 +517,7 @@ type InfoService
             | _, Some leaf, _ ->
                 match
                     expandedrules
-                    |> List.tryPick (function
+                    |> Array.tryPick (function
                         | LeafRule(l, r), o when FieldValidators.checkLeftField p Severity.Error ctx l leaf.KeyId ->
                             Some(l, r, o)
                         | _ -> None)
@@ -534,7 +528,7 @@ type InfoService
             | None, None, None -> None
 
         let childMatch =
-            node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+            node.Nodes |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
         // eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
         // let rec skipRootKeySkipper
         let skiprootkey (skipRootKey: SkipRootKey) (n: Node) =
@@ -563,21 +557,21 @@ type InfoService
                     None
             | head :: tail ->
                 if skiprootkey head n then
-                    node.Children
-                    |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+                    node.Nodes
+                    |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
                     |> Option.bind (foldAtPosSkipRoot rs o t tail acc)
                 else
                     None
 
         let resultForType (child: Node option) (typedef: TypeDefinition) =
+            let typeRules =
+                rootRules.TypeRules |> Array.filter (fun (name, _) -> name == typedef.name)
+
             match child with
             | Some c ->
-                let typerules =
-                    rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
-
-                match typerules, typedef.type_per_file with
-                | [ (n, (NodeRule(l, rs), o)) ], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
-                | [ (n, (NodeRule(l, rs), o)) ], true ->
+                match typeRules, typedef.type_per_file with
+                | [| (n, (NodeRule(l, rs), o)) |], false -> foldAtPosSkipRoot rs o typedef typedef.skipRootKey acc c
+                | [| (n, (NodeRule(l, rs), o)) |], true ->
                     Some(
                         singleInfoService
                             fNode
@@ -592,11 +586,8 @@ type InfoService
                     )
                 | _ -> None
             | None ->
-                let typerules =
-                    rootRules.TypeRules |> List.filter (fun (name, _) -> name == typedef.name)
-
-                match typerules with
-                | [ (n, (NodeRule(l, rs), o)) ] ->
+                match typeRules with
+                | [| (n, (NodeRule(l, rs), o)) |] ->
                     Some(
                         singleInfoService
                             fNode
@@ -726,8 +717,8 @@ type InfoService
         // | _ -> newCtx, (Some options, None, Some (NodeC node))
 
         let childMatch =
-            entity.entity.Children
-            |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+            entity.entity.Nodes
+            |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
         // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
         let ctx =
             match
@@ -738,12 +729,12 @@ type InfoService
             | Some c, Some typedef ->
                 let typerules =
                     rootRules.TypeRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
 
                 let typeruleOptions =
-                    match typerules |> List.tryHead with
+                    match typerules |> Array.tryHead with
                     | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                         (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                         ->
@@ -765,22 +756,22 @@ type InfoService
         foldWithPos fLeaf fLeafValue fComment fNode fValueClause ctx pos entity.entity entity.logicalpath
 
     let getInfoAtPos (pos: pos) (entity: Entity) =
-        let changeScopeInner key scope =
-            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+        let changeScopeInner (key: string) scope =
+            match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ -> None
 
-        let changeValueScopeInner key scope =
-            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+        let changeValueScopeInner (key: string) scope =
+            match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
                 match enums.TryFind "static_values" with
                 | Some(_, ss) ->
-                    if ss.ContainsKey key then
+                    if ss.Contains key then
                         Some(EnumRef("static_values", key))
                     else
                         None
@@ -875,7 +866,7 @@ type InfoService
                 let key = node.Key.Trim('"')
 
                 let newCtx, rh =
-                    match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+                    match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
                     | NewScope({ Scopes = current :: _ }, _, rh) ->
                         // log "cs %A %A %A" s node.Key current
                         { newCtx with
@@ -911,8 +902,8 @@ type InfoService
             | _ -> newCtx, (Some options, None, Some(NodeC node))
 
         let childMatch =
-            entity.entity.Children
-            |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+            entity.entity.Nodes
+            |> Seq.tryFind (fun c -> rangeContainsPos c.Position pos)
         // log "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
         let ctx =
 
@@ -925,12 +916,12 @@ type InfoService
             | Some c, Some typedef ->
                 let typerules =
                     rootRules.TypeRules
-                    |> List.choose (function
+                    |> Array.choose (function
                         | name, r when name == typedef.name -> Some r
                         | _ -> None)
 
                 let typeruleOptions =
-                    match typerules |> List.tryHead with
+                    match typerules |> Array.tryHead with
                     | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                         (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                         ->
@@ -960,7 +951,7 @@ type InfoService
             let rules =
                 match field with
                 | NodeRule(_, rs) -> rs
-                | _ -> []
+                | _ -> [||]
 
             let noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificDict, leafSpecificDict =
                 memoizeRules rules ctx.subtypes
@@ -1034,12 +1025,12 @@ type InfoService
                 let ctx =
                     let typerules =
                         rootRules.TypeRules
-                        |> List.choose (function
+                        |> Seq.choose (function
                             | name, r when name == typedef.name -> Some r
                             | _ -> None)
 
                     let typeruleOptions =
-                        match typerules |> List.tryHead with
+                        match typerules |> Seq.tryHead with
                         | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
                             (StringResource.stringManager.GetStringForID x.normal) == typedef.name
                             ->
@@ -1082,11 +1073,13 @@ type InfoService
                     acc
 
         let infoServiceBase (n: Node) acc (t: TypeDefinition) =
-            let typerules = rootRules.TypeRules |> List.filter (fun (name, _) -> name == t.name)
+            let typerules =
+                rootRules.TypeRules |> Array.filter (fun (name, _) -> name == t.name)
 
             match typerules, t.type_per_file with
-            | [ (_, (NodeRule(_, rs), o)) ], false -> n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
-            | [ (_, (NodeRule(_, rs), o)) ], true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
+            | [| (_, (NodeRule(_, rs), o)) |], false ->
+                n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
+            | [| (_, (NodeRule(_, rs), o)) |], true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
             | _ -> acc
 
         pathFilteredTypes |> List.fold (infoServiceBase node) acc
@@ -1158,22 +1151,22 @@ type InfoService
 
     let getTypesInEntity () = // (entity : Entity) =
         let changeValueScopeInner (keyId: StringTokens) scope =
-            let metadata = StringResource.stringManager.GetMetadataForID keyId.lower
-            let key = StringResource.stringManager.GetStringForIDs keyId
+            let metadata = stringManager.GetMetadataForID keyId.lower
+            let key = stringManager.GetStringForIDs keyId
 
             let key =
                 match metadata.containsPipe with
-                | true -> key.Split('|').[0]
+                | true -> key.Split('|', 2)[0]
                 | _ -> key
 
-            match changeScope false true links valueTriggers wildCardLinks varSet key scope with
+            match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
             | WrongScope(_, _, _, rh) -> rh
             | NewScope(_, _, rh) -> rh
             | _ ->
                 match enums.TryFind "static_values" with
-                | Some(_, ss) ->
-                    if ss.ContainsKey key then
+                | Some(_, trie) ->
+                    if trie.Contains key then
                         Some(EnumRef("static_values", key))
                     else
                         None
@@ -1198,6 +1191,64 @@ type InfoService
               associatedType = assocType }
 
         let res = ConcurrentDictionary<string, ResizeArray<ReferenceDetails>>()
+        let lookup = res.GetAlternateLookup<ReadOnlySpan<char>>()
+
+        let addReferenceDetails (s: string) token position isOutgoing referenceLabel referenceType assocType =
+            let typename = s.AsSpan().SplitFirst('.')
+            let result, resizeArray = lookup.TryGetValue(typename)
+
+            if result then
+                resizeArray.Add(createReferenceDetails token position isOutgoing referenceLabel referenceType assocType)
+                res
+            else
+                let newArr = ResizeArray<ReferenceDetails>(4)
+                newArr.Add(createReferenceDetails token position isOutgoing referenceLabel referenceType assocType)
+                res.TryAdd(typename.ToString(), newArr) |> ignore
+
+                res
+
+        let addReferenceDetailsValue
+            (s: string)
+            typeValue
+            token
+            position
+            isOutgoing
+            referenceLabel
+            referenceType
+            assocType
+            =
+            let typename = s.AsSpan().SplitFirst('.')
+            let result, resizeArray = lookup.TryGetValue(typename)
+
+            if result then
+                resizeArray.Add(
+                    createReferenceDetailsValue
+                        (stringManager.InternIdentifierToken typeValue)
+                        token
+                        position
+                        isOutgoing
+                        referenceLabel
+                        referenceType
+                        assocType
+                )
+
+                res
+            else
+                let newArr = ResizeArray<ReferenceDetails>(4)
+
+                newArr.Add(
+                    createReferenceDetailsValue
+                        (stringManager.InternIdentifierToken typeValue)
+                        token
+                        position
+                        isOutgoing
+                        referenceLabel
+                        referenceType
+                        assocType
+                )
+
+                res.TryAdd(typename.ToString(), newArr) |> ignore
+                res
 
         let fLeaf _ (leaf: Leaf) ((field, options): NewRule) =
             let isOutgoing, referenceLabel =
@@ -1209,144 +1260,49 @@ type InfoService
 
             match field with
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leaf.ValueId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                TypeDef
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails leaf.ValueId leaf.Position isOutgoing referenceLabel TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leaf.ValueId
+                    leaf.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDef
+                    assocType
             | LeafRule(_, TypeField(TypeType.Complex(_, t, _))) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leaf.ValueId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                TypeDefFuzzy
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails
-                            leaf.ValueId
-                            leaf.Position
-                            isOutgoing
-                            referenceLabel
-                            TypeDefFuzzy
-                            assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leaf.ValueId
+                    leaf.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDefFuzzy
+                    assocType
             | LeafRule(_, ValueScopeField _) ->
-
                 let refHint = changeValueScopeInner leaf.ValueId Scopes.defaultContext
 
                 match refHint with
                 | Some(TypeRef(typeName, typeValue)) ->
-                    let typename = typeName.Split('.').[0]
-
-                    if res.ContainsKey(typename) then
-                        res.[typename]
-                            .Add(
-                                createReferenceDetailsValue
-                                    (stringManager.InternIdentifierToken typeValue)
-                                    leaf.ValueId
-                                    leaf.Position
-                                    isOutgoing
-                                    referenceLabel
-                                    TypeDef
-                                    assocType
-                            )
-
-                        res
-                    else
-                        let newArr = ResizeArray<ReferenceDetails>()
-
-                        newArr.Add(
-                            createReferenceDetailsValue
-                                (StringResource.stringManager.InternIdentifierToken typeValue)
-                                leaf.ValueId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                TypeDef
-                                assocType
-                        )
-
-                        res.TryAdd(typename, newArr) |> ignore
-                        res
+                    addReferenceDetailsValue
+                        typeName
+                        typeValue
+                        leaf.ValueId
+                        leaf.Position
+                        isOutgoing
+                        referenceLabel
+                        ReferenceType.TypeDef
+                        assocType
                 | _ -> res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDef assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails t leaf.KeyId leaf.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
             | LeafRule(TypeField(TypeType.Complex(_, t, _)), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leaf.KeyId
-                                leaf.Position
-                                isOutgoing
-                                referenceLabel
-                                TypeDefFuzzy
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails leaf.KeyId leaf.Position isOutgoing referenceLabel TypeDefFuzzy assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leaf.KeyId
+                    leaf.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDefFuzzy
+                    assocType
             | _ -> res
 
         let fLeafValue _ (leafvalue: LeafValue) (field, options) =
@@ -1359,36 +1315,14 @@ type InfoService
 
             match field with
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                leafvalue.ValueId
-                                leafvalue.Position
-                                isOutgoing
-                                referenceLabel
-                                TypeDef
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails
-                            leafvalue.ValueId
-                            leafvalue.Position
-                            isOutgoing
-                            referenceLabel
-                            TypeDef
-                            assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    leafvalue.ValueId
+                    leafvalue.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDef
+                    assocType
             | _ -> res
 
         let fComment _ _ _ = res
@@ -1403,68 +1337,27 @@ type InfoService
 
             match field with
             | NodeRule(TypeField(TypeType.Simple t), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails t node.KeyId node.Position isOutgoing referenceLabel ReferenceType.TypeDef assocType
             | NodeRule(TypeField(TypeType.Complex(_, t, _)), _) ->
-                let typename = t.Split('.').[0]
-
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails
-                                node.KeyId
-                                node.Position
-                                isOutgoing
-                                referenceLabel
-                                TypeDefFuzzy
-                                assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDefFuzzy assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    t
+                    node.KeyId
+                    node.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDefFuzzy
+                    assocType
             | NodeRule(JominiGuiField, _) ->
                 let typename = "gui_type"
 
-                if res.ContainsKey(typename) then
-                    res.[typename]
-                        .Add(
-                            createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
-                        )
-
-                    res
-                else
-                    let newArr = ResizeArray<ReferenceDetails>()
-
-                    newArr.Add(
-                        createReferenceDetails node.KeyId node.Position isOutgoing referenceLabel TypeDef assocType
-                    )
-
-                    res.TryAdd(typename, newArr) |> ignore
-                    res
+                addReferenceDetails
+                    typename
+                    node.KeyId
+                    node.Position
+                    isOutgoing
+                    referenceLabel
+                    ReferenceType.TypeDef
+                    assocType
             | _ -> res
 
         let fValueClause _ _ _ = res
@@ -1473,10 +1366,14 @@ type InfoService
 
     let getDefVarInEntity = //(ctx : Collections.Map<string, (string * range) list>) (entity : Entity) =
         let getVariableFromString (v: string) (s: string) =
+            let first = s.AsSpan().SplitFirst('@')
+
             if v = "variable" then
-                s.Split('@').[0].Split('.') |> Array.last |> _.Split('?').[0]
+                let range = first.Split('.').Last()
+                let struct (start, length) = range.GetOffsetAndLength(first.Length)
+                first.Slice(start, length).SplitFirst('?').ToString()
             else
-                s.Split('@').[0]
+                first.ToString()
 
         let fLeaf (res: Collections.Map<string, ResizeArray<string * range>>) (leaf: Leaf) ((field, _): NewRule) =
             match field with
@@ -1583,7 +1480,7 @@ type InfoService
             match finished, field with
             | false, NodeRule(_, rs) when
                 rs
-                |> List.exists (function
+                |> Array.exists (function
                     | LeafRule(AliasField "effect", _), _ -> true
                     | _ -> false)
                 ->
@@ -1606,7 +1503,7 @@ type InfoService
             match finished, field with
             | false, NodeRule(_, rs) when
                 rs
-                |> List.exists (function
+                |> Array.exists (function
                     | LeafRule(AliasField "trigger", _), _ -> true
                     | _ -> false)
                 ->
@@ -1677,7 +1574,7 @@ type InfoService
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
                 let value = leaf.ValueText
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1685,7 +1582,7 @@ type InfoService
             | LeafRule(TypeField(TypeType.Simple t), _) ->
                 let value = leaf.Key
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
                 else
@@ -1710,7 +1607,7 @@ type InfoService
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
                 let value = leafvalue.ValueText
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
                 else
@@ -1722,7 +1619,7 @@ type InfoService
             | NodeRule(TypeField(TypeType.Simple t), _) ->
                 let value = node.Key
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.ContainsKey(value)) then
+                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
                 else
@@ -1752,18 +1649,18 @@ type InfoService
 
         res
 
-    member __.GetInfo(pos: pos, entity: Entity) =
+    member _.GetInfo(pos: pos, entity: Entity) =
         (getInfoAtPos pos entity) |> Option.map (fun (p, e) -> p.scopes, e)
 
-    member __.GetNode(pos: pos, entity: Entity) =
+    member _.GetNode(pos: pos, entity: Entity) =
         (getNodeAtPos pos entity) |> Option.map (fun (p, n) -> n)
 
-    member __.GetReferencedTypes(entity: Entity) = singleFold (getTypesInEntity ()) entity
-    member __.GetDefinedVariables(entity: Entity) = singleFold getDefVarInEntity entity
-    member __.GetSavedEventTargets(entity: Entity) = getSavedScopesInEntityFolder entity
-    member __.GetTypeLocalisationErrors(entity: Entity) = validateLocalisationFromTypes entity
+    member _.GetReferencedTypes(entity: Entity) = singleFold (getTypesInEntity ()) entity
+    member _.GetDefinedVariables(entity: Entity) = singleFold getDefVarInEntity entity
+    member _.GetSavedEventTargets(entity: Entity) = getSavedScopesInEntityFolder entity
+    member _.GetTypeLocalisationErrors(entity: Entity) = validateLocalisationFromTypes entity
 
-    member __.GetEffectBlocks(entity: Entity) =
+    member _.GetEffectBlocks(entity: Entity) =
         (singleFold getEffectsInEntity entity), (singleFold getTriggersInEntity entity)
 
-    member __.BatchFolds(entity: Entity) = allFolds entity
+    member _.BatchFolds(entity: Entity) = allFolds entity

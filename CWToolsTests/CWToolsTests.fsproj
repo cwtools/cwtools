@@ -4,7 +4,6 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <PaketCommand>dotnet paket</PaketCommand>
         <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
         <ServerGarbageCollection>true</ServerGarbageCollection>
@@ -34,5 +33,15 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    <Import Project="..\.paket\Paket.Restore.targets"/>
+    <ItemGroup>
+        <PackageReference Include="Expecto"/>
+        <PackageReference Include="FParsec"/>
+        <PackageReference Include="System.Text.Encoding.CodePages"/>
+        <PackageReference Include="FsPickler"/>
+        <PackageReference Include="FSharpx.Collections"/>
+        <PackageReference Include="Argu"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="YoloDev.Expecto.TestSdk"/>
+        <PackageReference Include="Microsoft.Testing.Platform.MSBuild"/>
+    </ItemGroup>
 </Project>

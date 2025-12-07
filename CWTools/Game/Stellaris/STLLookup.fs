@@ -16,16 +16,17 @@ module STLLookup =
             | (_, c), NodeC n when n.Key = t -> (true, c)
             | (_, _), _ -> (false, [])
 
-        root.Children
-        |> List.map (fun e -> e, root.All |> List.fold (findComment e.Key) (false, []) |> snd)
+        root.Nodes
+        |> Seq.map (fun e -> e, root.AllArray |> Array.fold (findComment e.Key) (false, []) |> snd)
+        |> Seq.toList
 
     let updateScriptedTriggers (resources: IResourceAPI<STLComputedData>) (vanillaTriggers: Effect list) =
         let rawTriggers =
             resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("scripted_triggers") -> Some f.entity
                 | _ -> None)
-            |> List.collect getChildrenWithComments
+            |> Seq.collect getChildrenWithComments
 
         let scopedEffects =
             vanillaTriggers
@@ -86,10 +87,10 @@ module STLLookup =
         =
         let rawEffects =
             resources.AllEntities()
-            |> List.choose (function
+            |> Seq.choose (function
                 | struct (f, _) when f.filepath.Contains("scripted_effects") -> Some f.entity
                 | _ -> None)
-            |> List.collect getChildrenWithComments
+            |> Seq.collect getChildrenWithComments
 
         let scopedEffects =
             vanillaEffects

@@ -4,42 +4,32 @@ open CWTools.Common.NewScope
 
 module HOI4Constants =
     let defaultScopes =
-        [ "Country", [ "country" ]
-          "State", [ "state" ]
-          "Unit Leader", [ "unit leader"; "unit_leader" ]
-          "Air", [ "air" ] ]
+        [| "Country", [ "country" ]
+           "State", [ "state" ]
+           "Unit Leader", [ "unit leader"; "unit_leader" ]
+           "Air", [ "air" ] |]
 
-    let defaultScopeInputs =
+    let defaultScopeInputs () =
         defaultScopes
-        |> List.map (fun (n, s) ->
-            { NewScope.ScopeInput.name = n
-              NewScope.ScopeInput.aliases = s
-              NewScope.ScopeInput.isSubscopeOf = []
+        |> Array.map (fun (n, s) ->
+            { ScopeInput.name = n
+              ScopeInput.aliases = s
+              ScopeInput.isSubscopeOf = []
               dataTypeName = None })
 
     let defaultModifiers =
-        [ "State", None, [ "any" ]
-          "Country", None, [ "country" ]
-          "Unit", None, [ "UnitLeader"; "Country" ]
-          "UnitLeader", None, [ "UnitLeader"; "Country" ]
-          "Air", None, [ "air"; "country" ] ]
+        [| "State", None, [ "any" ]
+           "Country", None, [ "country" ]
+           "Unit", None, [ "UnitLeader"; "Country" ]
+           "UnitLeader", None, [ "UnitLeader"; "Country" ]
+           "Air", None, [ "air"; "country" ] |]
 
     let defaultModifiersInputs () =
         defaultModifiers
-        |> List.map (fun (n, intID, ss) ->
-            { NewScope.ModifierCategoryInput.name = n
-              NewScope.ModifierCategoryInput.internalID = intID
-              NewScope.ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
+        |> Array.map (fun (n, intID, ss) ->
+            { ModifierCategoryInput.name = n
+              ModifierCategoryInput.internalID = intID
+              ModifierCategoryInput.scopes = ss |> List.map (scopeManager.ParseScope()) })
 
     let scriptFolders =
-        [ "common"
-          "country_metadata"
-          "events"
-          "gfx"
-          "interface"
-          "localisation"
-          "history"
-          "map"
-          "music"
-          "portraits"
-          "sound" ]
+        [| "common"; "country_metadata"; "events"; "gfx"; "interface"; "localisation"; "history"; "map"; "music"; "portraits"; "sound"|]

@@ -27,8 +27,7 @@ let getFolderList (filename: string, filetext: string) =
     if Path.GetFileName filename = "folders.cwt" then
         Some(
             filetext.Split([| "\r\n"; "\r"; "\n" |], System.StringSplitOptions.None)
-            |> List.ofArray
-            |> List.filter ((<>) "")
+            |> Array.filter ((<>) "")
         )
     else
         None
@@ -37,7 +36,7 @@ let getFolderList (filename: string, filetext: string) =
 let emptyEmbeddedSettings =
     { EmbeddedSettings.triggers = []
       effects = []
-      modifiers = []
+      modifiers = [||]
       embeddedFiles = []
       cachedResourceData = []
       localisationCommands = Legacy([], [], [])
@@ -46,12 +45,12 @@ let emptyEmbeddedSettings =
       featureSettings = CWTools.Parser.UtilityParser.FeatureSettings.Default }
 
 let emptyStellarisSettings rootDirectory =
-    { StellarisSettings.rootDirectories = [ WD { name = "test"; path = rootDirectory } ]
+    { StellarisSettings.rootDirectories = [| WD { name = "test"; path = rootDirectory } |]
       modFilter = None
       validation =
         { validateVanilla = false
           experimental = true
-          langs = [ STL STLLang.English ] }
+          langs = [| STL STLLang.English |] }
       rules = None
       embedded = FromConfig([], [])
       scriptFolders = None

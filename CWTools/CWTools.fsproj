@@ -2,8 +2,7 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <Tailcalls>true</Tailcalls>
-        <PaketCommand>dotnet paket</PaketCommand>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="AssemblyInfo.fs"/>
@@ -58,7 +57,6 @@
         <Compile Include="Rules/RulesLoader.fs"/>
         <Compile Include="Game/ResourceManager.fs"/>
         <Compile Include="Game/FileManager.fs"/>
-        <Compile Include="Game/CachedFileManager.fs"/>
         <Compile Include="Game/Lookups.fs"/>
         <Compile Include="Game/References.fs"/>
         <Compile Include="Game/GameTypes.fs"/>
@@ -82,11 +80,7 @@
         <Compile Include="Game/LanguageFeatures.fs"/>
         <Compile Include="Game/ValidationManager.fs"/>
         <Compile Include="Validation/Common/CommonValidation.fs"/>
-        <Compile Include="Validation/EU4/EU4LocalisationString.fs"/>
-        <Compile Include="Validation/EU4/EU4LocalisationValidation.fs"/>
         <Compile Include="Validation/EU4/EU4Validation.fs"/>
-        <Compile Include="Validation/VIC2/VIC2Validation.fs"/>
-        <Compile Include="Validation/HOI4/HOI4Validation.fs"/>
         <Compile Include="Game/Game.fs"/>
         <Compile Include="Game/Helpers.fs"/>
         <Compile Include="Game/Hooks.fs"/>
@@ -110,5 +104,22 @@
         <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj"/>
         <ProjectReference Include="..\Shared\Shared.fsproj"/>
     </ItemGroup>
-    <Import Project="..\.paket\Paket.Restore.targets"/>
+    <ItemGroup>
+      <PackageReference Update="FSharp.Core">
+        <Version>9.0.303</Version>
+      </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FParsec"/>
+        <PackageReference Include="FSharp.Data"/>
+        <PackageReference Include="FSharp.Collections.ParallelSeq"/>
+        <PackageReference Include="DotNet.Glob"/>
+        <PackageReference Include="FSharpx.Collections"/>
+        <PackageReference Include="Sandwych.QuickGraph.Core"/>
+        <PackageReference Include="VDS.Common"/>
+        <PackageReference Include="System.Text.Encoding.CodePages"/>
+        <PackageReference Include="FsPickler"/>
+        <PackageReference Include="SharpZipLib"/>
+        <PackageReference Include="KTrie" />
+    </ItemGroup>
 </Project>

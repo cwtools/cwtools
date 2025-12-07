@@ -1,7 +1,11 @@
 namespace CWTools.Games
 
+open System
+open System.Collections.Concurrent
 open System.Collections.Generic
-open System.Runtime.CompilerServices
+open System.Diagnostics
+open System.Linq
+open System.Threading
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open FParsec
@@ -17,9 +21,9 @@ open CWTools.Utilities.StringResource
 
 // Fuzzy = prefix/suffix
 type ReferenceType =
-    | TypeDef
-    | Link
-    | TypeDefFuzzy
+    | TypeDef = 0uy
+    | Link = 1uy
+    | TypeDefFuzzy = 2uy
 
 type ReferenceDetails =
     { name: StringTokens
@@ -56,7 +60,7 @@ type EU4ComputedData
     inherit
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
-    member __.ScriptedEffectParams: string list option = scriptedeffectparams
+    member _.ScriptedEffectParams: string list option = scriptedeffectparams
 
 type HOI4ComputedData = ComputedData
 type CK2ComputedData = ComputedData
@@ -75,7 +79,7 @@ type ScriptedEffectComputedData
     inherit
         ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets)
 
-    member __.ScriptedEffectParams: string list option = scriptedeffectparams
+    member _.ScriptedEffectParams: string list option = scriptedeffectparams
 
 type STLComputedData = ScriptedEffectComputedData
 type JominiComputedData = ScriptedEffectComputedData
@@ -91,23 +95,22 @@ type EU5ComputedData = JominiComputedData
 //     inherit ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks)
 
 
-type PassFileResult = { parseTime: int64 }
+type PassFileResult = { parseTime: float }
 
 type FailFileResult =
     { error: string
       position: FParsec.Position
-      parseTime: int64 }
+      parseTime: float }
 
 type FileResult =
     | Pass of result: PassFileResult
     | Fail of result: FailFileResult
 //|Embedded of file : string * statements : Statement list
 
-[<Struct; IsReadOnly>]
 type Overwrite =
-    | No
-    | Overwrote
-    | Overwritten
+    | No = 1uy
+    | Overwrote = 2uy
+    | Overwritten = 3uy
 
 type EntityResource =
     { scope: string
@@ -126,7 +129,6 @@ type FileWithContentResource =
     { scope: string
       filetext: string
       filepath: string
-      extension: string
       logicalpath: string
       overwrite: Overwrite
       validate: bool }
@@ -185,12 +187,12 @@ type ResourceInput =
 
 
 type UpdateFile<'T> = ResourceInput -> Resource * struct (Entity * Lazy<'T>) option
-type UpdateFiles<'T> = ResourceInput list -> (Resource * struct (Entity * Lazy<'T>) option) list
+type UpdateFiles<'T> = ResourceInput array -> (Resource * struct (Entity * Lazy<'T>) option) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
-type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
+type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) seq
 type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
-type GetFileNames = unit -> string array
+type FileNames = unit -> string seq
 
 type IResourceAPI<'T when 'T :> ComputedData> =
     abstract UpdateFiles: UpdateFiles<'T>
@@ -201,8 +203,10 @@ type IResourceAPI<'T when 'T :> ComputedData> =
     abstract ValidatableEntities: ValidatableEntities<'T>
     abstract ForceRecompute: unit -> unit
     abstract ForceRulesDataGenerate: unit -> unit
-    abstract GetFileNames: GetFileNames
+    abstract GetFileNames: FileNames
+    abstract GetEntityByFilePath: string -> struct (Entity * Lazy<'T>) option
 
+[<Sealed>]
 type ResourceManager<'T when 'T :> ComputedData>
     (
         computedDataFunction: Entity -> 'T,
@@ -211,24 +215,16 @@ type ResourceManager<'T when 'T :> ComputedData>
         fallbackencoding,
         enableInlineScripts
     ) =
-    let memoize keyFunction memFunction =
-        let dict = Dictionary<_, _>()
+    static do GlobOptions.Default.Evaluation.CaseInsensitive <- true
+    static let globCache = ConcurrentDictionary<string, Glob>()
 
-        fun n ->
-            match dict.TryGetValue(keyFunction (n)) with
-            | true, v -> v
-            | _ ->
-                let temp = memFunction (n)
-                dict.Add(keyFunction (n), temp)
-                temp
-
-    let globCheckFilepathI (pattern: string) =
-        let options = new GlobOptions()
-        options.Evaluation.CaseInsensitive <- true
-        let glob = Glob.Parse(pattern, options)
-        (fun (p: string) -> glob.IsMatch(p))
-
-    let globCheckFilepath pattern = (memoize id globCheckFilepathI) pattern
+    let globCheckFilepath (pattern: string) (path: string) =
+        match globCache.TryGetValue(pattern) with
+        | true, glob -> glob.IsMatch(path)
+        | false, _ ->
+            let glob = Glob.Parse(pattern)
+            globCache.TryAdd(pattern, glob) |> ignore
+            glob.IsMatch(path)
 
     let filepathToEntityType =
         function
@@ -342,14 +338,15 @@ type ResourceManager<'T when 'T :> ComputedData>
         | x when globCheckFilepath "**/gfx/*.asset" x -> EntityType.GfxAsset
         | _ -> EntityType.Other
 
-    let mutable fileMap: Map<string, Resource> = Map.empty
-    let mutable entitiesMap: Map<string, struct (Entity * Lazy<'T>)> = Map.empty
+    let fileMap = Dictionary<string, Resource>(52361)
+
+    /// Key: filePath
+    let entitiesMap = Dictionary<string, struct (Entity * Lazy<'T>)>(5306)
 
     let duration f =
-        let timer = System.Diagnostics.Stopwatch()
-        timer.Start()
+        let timestamp = Stopwatch.GetTimestamp()
         let returnValue = f ()
-        (returnValue, timer.ElapsedMilliseconds)
+        (returnValue, Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds)
 
     let matchResult (scope: string, file: string, logicalpath: string, validate: bool, (parseResult, time)) =
         match parseResult with
@@ -361,7 +358,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   logicalpath = logicalpath
                   validate = validate
                   result = Pass({ parseTime = time })
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             parsed
         | Failure(msg, pe, _) ->
@@ -377,17 +374,9 @@ type ResourceManager<'T when 'T :> ComputedData>
                           position = pe.Position
                           parseTime = time }
                     )
-                  overwrite = No }
+                  overwrite = Overwrite.No }
             ),
             []
-
-    // let parseFile (file : ResourceInput) =
-    //      match file with
-    //                 |CachedResourceInput (r, s) -> r, s
-    //                 |EntityResourceInput e ->
-    //                     // log "%A %A" e.logicalpath e.filepath
-    //                     e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
-    //                 |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
 
     let shipProcess = STLProcess.shipProcess.ProcessNode
 
@@ -410,7 +399,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   rawEntity = entity
                   validate = v
                   entityType = entityType
-                  overwrite = No }
+                  overwrite = Overwrite.No }
         | _ -> None
 
     let changeEncoding (filestring: string) (source: System.Text.Encoding) (target: System.Text.Encoding) =
@@ -465,8 +454,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                   filepath = f.filepath
                   logicalpath = f.logicalpath
                   filetext = f.filetext
-                  overwrite = No
-                  extension = Path.GetExtension(f.filepath)
+                  overwrite = Overwrite.No
                   validate = f.validate }
              ),
              [])
@@ -475,128 +463,120 @@ type ResourceManager<'T when 'T :> ComputedData>
 
     let saveResults (resource, entity) =
         seq {
-            fileMap <-
-                match resource with
-                | EntityResource(f, _) -> fileMap.Add(f, resource)
-                | FileResource(f, _) -> fileMap.Add(f, resource)
-                | FileWithContentResource(f, _) -> fileMap.Add(f, resource)
+            match resource with
+            | EntityResource(f, _) -> fileMap[f] <- resource
+            | FileResource(f, _) -> fileMap[f] <- resource
+            | FileWithContentResource(f, _) -> fileMap[f] <- resource
 
             match entity with
             | Some e ->
                 let lazyi =
-                    new System.Lazy<_>(
-                        (fun () -> computedDataFunction e),
-                        System.Threading.LazyThreadSafetyMode.PublicationOnly
-                    )
+                    new System.Lazy<_>((fun () -> computedDataFunction e), LazyThreadSafetyMode.PublicationOnly)
 
                 let item = struct (e, lazyi)
                 // log "e %A %A %A" e.filepath e.logicalpath e.overwrite
-                entitiesMap <- entitiesMap.Add(e.filepath, item)
+                entitiesMap[e.filepath] <- item
                 yield resource, Some item
             | None -> yield resource, None
         }
 
     let updateOverwrite () =
-        let filelist = fileMap.Values |> Seq.toList
+        let fileList = fileMap.Values.ToArray()
 
         let entities =
-            filelist
-            |> List.choose (function
+            fileList
+            |> Array.choose (function
                 | EntityResource(s, e) -> Some((s, e))
                 | _ -> None)
 
-        let processGroup (key, es: (string * EntityResource) list) =
+        let processGroup (key, es: (string * EntityResource) array) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [| s, e |] -> [| s, { e with overwrite = Overwrite.No } |]
             | es ->
                 let sorted =
                     es
-                    |> List.sortByDescending (fun (s, e) ->
+                    |> Array.sortByDescending (fun (s, e) ->
                         if e.scope = "embedded" then ""
                         else if e.scope = "" then "ZZZZZZZZ"
                         else e.scope)
 
-                let first =
-                    sorted
-                    |> List.head
-                    |> (fun (s, h) ->
-                        s,
-                        { h with
-                            overwrite = Overwrite.Overwrote })
-                // log "overwrote: %s" (first |> fst)
-                let rest =
-                    sorted
-                    |> List.skip 1
-                    |> List.map (fun (s, r) ->
-                        s,
-                        { r with
-                            overwrite = Overwrite.Overwritten })
-                // rest |> List.iter (fun (s, _) -> log "overwritten: %s" s)
-                first :: rest
+                let firstStr, entity = sorted[0]
+
+                sorted[0] <-
+                    (firstStr,
+                     { entity with
+                         overwrite = Overwrite.Overwrote })
+
+                for i in 1 .. sorted.Length - 1 do
+                    let s, entity = sorted[i]
+
+                    sorted[i] <-
+                        (s,
+                         { entity with
+                             overwrite = Overwrite.Overwritten })
+
+                sorted
 
         let res =
             entities
-            |> List.groupBy (fun (s, e) -> e.logicalpath)
-            |> List.collect processGroup
+            |> Array.groupBy (fun (_, e) -> e.logicalpath)
+            |> Array.collect processGroup
 
-        fileMap <- res |> List.fold (fun fm (s, e) -> fm.Add(s, EntityResource(s, e))) fileMap
+        res |> Array.iter (fun (s, e) -> fileMap[s] <- EntityResource(s, e))
 
-        let entityMap em (s, e: EntityResource) =
-            match Map.tryFind s em with
-            | None -> em
-            | Some struct (olde, oldl) ->
-                em.Add(
-                    s,
-                    ({ olde with
-                        Entity.overwrite = e.overwrite },
-                     oldl)
-                )
+        let entityMap (filePath, e: EntityResource) =
+            let found, result = entitiesMap.TryGetValue(filePath)
 
-        entitiesMap <- res |> List.fold entityMap entitiesMap
+            if found then
+                let struct (olde, oldl) = result
+
+                entitiesMap[filePath] <-
+                    struct ({ olde with
+                                Entity.overwrite = e.overwrite },
+                            oldl)
+
+        res |> Array.iter entityMap
 
         let filesWithContent =
-            filelist
-            |> List.choose (function
+            fileList
+            |> Array.choose (function
                 | FileWithContentResource(s, e) -> Some((s, e))
                 | _ -> None)
 
-        let processGroup (key, es: (string * FileWithContentResource) list) =
+        let processGroup (key, es: (string * FileWithContentResource) array) =
             match es with
-            | [ s, e ] -> [ s, { e with overwrite = No } ]
+            | [| s, e |] -> [| s, { e with overwrite = Overwrite.No } |]
             | es ->
                 let sorted =
                     es
-                    |> List.sortByDescending (fun (s, e) ->
+                    |> Array.sortByDescending (fun (s, e) ->
                         if e.scope = "embedded" then ""
                         else if e.scope = "" then "ZZZZZZZZ"
                         else e.scope)
 
-                let first =
-                    sorted
-                    |> List.head
-                    |> (fun (s, h) ->
-                        s,
-                        { h with
-                            overwrite = Overwrite.Overwrote })
-                // log "overwrote: %s" (first |> fst)
-                let rest =
-                    sorted
-                    |> List.skip 1
-                    |> List.map (fun (s, r) ->
-                        s,
-                        { r with
-                            overwrite = Overwrite.Overwritten })
-                // rest |> List.iter (fun (s, _) -> log "overwritten: %s" s)
-                first :: rest
+                let firstStr, entity = sorted[0]
+
+                sorted[0] <-
+                    (firstStr,
+                     { entity with
+                         overwrite = Overwrite.Overwrote })
+
+                for i in 1 .. sorted.Length - 1 do
+                    let s, entity = sorted[i]
+
+                    sorted[i] <-
+                        (s,
+                         { entity with
+                             overwrite = Overwrite.Overwritten })
+
+                sorted
 
         let res =
             filesWithContent
-            |> List.groupBy (fun (s, e) -> e.logicalpath)
-            |> List.collect processGroup
+            |> Array.groupBy (fun (s, e) -> e.logicalpath)
+            |> Array.collect processGroup
 
-        fileMap <-
-            res
-            |> List.fold (fun fm (s, e) -> fm.Add(s, FileWithContentResource(s, e))) fileMap
+        res |> Array.iter (fun (s, e) -> fileMap[s] <- FileWithContentResource(s, e))
 
     // log "print all"
     // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (log "%s")
@@ -605,14 +585,11 @@ type ResourceManager<'T when 'T :> ComputedData>
         let inlinePathLength = inlinePath.Length
 
         let inlineScriptsMap =
-            entitiesMap
-            |> Map.toSeq
-            |> Seq.map snd
-            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+            entitiesMap.Values
+            |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
             |> Seq.map structFst
             |> Seq.filter (fun e -> e.logicalpath.StartsWith inlinePath)
             |> Seq.map (fun e -> ((e.logicalpath.Substring inlinePathLength).Replace(".txt", ""), e.rawEntity))
-            // |> Seq.map (fun (x, e) -> log x; (x, e))
             |> Map.ofSeq
 
         let keyId = StringResource.stringManager.InternIdentifierToken "inline_script"
@@ -650,9 +627,9 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                     match child with
                     | NodeC n ->
-                        let stringReplace (isParams: (string * string) list) (key: string) =
+                        let stringReplace (isParams: (string * string) seq) (key: string) =
                             isParams
-                            |> List.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
+                            |> Seq.fold (fun (key: string) (par, value) -> key.Replace(par, value)) key
 
                         let rec foldOverNode stringReplacer (node: Node) =
                             node.Key <- stringReplacer node.Key
@@ -661,8 +638,8 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 let res = stringReplacer (token.GetString())
                                 StringResource.stringManager.InternIdentifierToken res
 
-                            node.Values
-                            |> List.iter (fun (l: Leaf) ->
+                            node.Leaves
+                            |> Seq.iter (fun (l: Leaf) ->
                                 l.Key <- stringReplacer l.Key
 
                                 l.Value
@@ -679,24 +656,26 @@ type ResourceManager<'T when 'T :> ComputedData>
                                 | Value.QString s -> l.Value <- QString(stringTokenReplace s)
                                 | _ -> ()))
 
-                            node.Children |> List.iter (foldOverNode stringReplacer)
+                            node.Nodes |> Seq.iter (foldOverNode stringReplacer)
 
 
                         if
                             nodeScriptRefs
-                            |> List.exists (fun s -> s.Position = n.Position && s.KeyId.lower = n.KeyId.lower)
+                            |> List.exists (fun s -> s.Position.Equals(n.Position) && s.KeyId.lower = n.KeyId.lower)
                         then
                             let scriptName = (n.TagText "script")
 
                             let values =
-                                n.Leaves |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText) |> List.ofSeq
+                                n.Leaves
+                                |> Seq.map (fun l -> "$" + l.Key + "$", l.ValueText)
+                                |> Seq.where (fun (k, v) -> k.Length > 0 && v.Length > 0)
 
                             match inlineScriptsMap |> Map.tryFind scriptName with
                             | Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
                                 foldOverNode (stringReplace values) newScriptNode
 
-                                newScriptNode.All
+                                newScriptNode.AllArray
                                 |> Seq.map (fun x ->
                                     addTrivia n.Position x
                                     x)
@@ -718,7 +697,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                         if
                             leafScriptRefs
                             |> List.exists (fun s ->
-                                s.Position = l.Position
+                                s.Position.Equals(l.Position)
                                 && s.KeyId = l.KeyId
                                 && s.ValueId.lower = l.ValueId.lower)
                         then
@@ -728,7 +707,7 @@ type ResourceManager<'T when 'T :> ComputedData>
                             | Some scriptNode ->
                                 let newScriptNode = STLProcess.cloneNode scriptNode
 
-                                newScriptNode.All
+                                newScriptNode.AllArray
                                 |> Seq.map (fun x ->
                                     addTrivia l.Position x
                                     x)
@@ -751,7 +730,7 @@ type ResourceManager<'T when 'T :> ComputedData>
             if List.isEmpty allScriptRefs then
                 None
             else
-                let newNode = CWTools.Process.STLProcess.cloneNode e.entity
+                let newNode = STLProcess.cloneNode e.entity
                 replaceCataFun newNode
                 Some newNode
 
@@ -771,67 +750,43 @@ type ResourceManager<'T when 'T :> ComputedData>
 
                 match updatedE with
                 | Some newNode ->
-                    let newE = { oldE with entity = newNode }
+                    let newEntity = { oldE with entity = newNode }
 
                     let lazyi =
-                        new System.Lazy<_>(
-                            (fun () -> computedDataFunction newE),
-                            System.Threading.LazyThreadSafetyMode.PublicationOnly
-                        )
+                        System.Lazy<_>((fun () -> computedDataFunction newEntity), LazyThreadSafetyMode.PublicationOnly)
 
-                    let item = struct (newE, lazyi)
-                    entitiesMap <- entitiesMap.Add(newE.filepath, item)
+                    let item = struct (newEntity, lazyi)
+                    entitiesMap[newEntity.filepath] <- item
                     resource, Some item
                 | None -> resource, Some struct (oldE, oldLazy)
             | resource, None -> resource, None)
-    // entities |> Seq.map (fun e -> e, updateEntity e)
-    //     |> Seq.map (function |e, Some newNode -> (e, {e with entity = newNode }, true) |e, None -> (e, e, false))
-    //     |> Seq.map (fun (oldE, newE, updated) ->
-    //         if updated
-    //         then
-    //             let lazyi = new System.Lazy<_>((fun () -> computedDataFunction newE),System.Threading.LazyThreadSafetyMode.PublicationOnly)
-    //             let item = struct(newE, lazyi)
-    //             rawEntitiesMap <- rawEntitiesMap.Add(oldE.filepath, oldE)
-    //             entitiesMap <- entitiesMap.Add(newE.filepath, item)
-    //             item
-    //         else
-    //             oldE
-    // )
+
     let forceRulesData () =
-        entitiesMap
-        |> Map.toSeq
-        |> PSeq.iter (fun (_, (struct (e, l))) -> computedDataUpdateFunction e (l.Force()))
+        entitiesMap.Values
+        |> PSeq.iter (fun (struct (e, l)) -> computedDataUpdateFunction e (l.Force()))
 
     let forceEagerData () =
-        entitiesMap
-        |> Map.toArray
+        entitiesMap.Values.ToArray()
         |> (fun array ->
             Array.randomShuffleInPlace array
             array)
-        |> PSeq.iter (fun (_, (struct (e, l))) -> (l.Force() |> ignore))
+        |> PSeq.iter (fun (struct (_, l)) -> (l.Force() |> ignore))
 
     let forceRecompute () =
-        entitiesMap <-
-            entitiesMap
-            |> Map.map (fun _ (struct (e, _)) ->
-                let lazyi =
-                    new System.Lazy<_>(
-                        (fun () -> computedDataFunction e),
-                        System.Threading.LazyThreadSafetyMode.PublicationOnly
-                    ) in
+        for pair in entitiesMap do
+            let struct (entity, _) = pair.Value
 
-                struct (e, lazyi))
+            let lazyi =
+                System.Lazy<_>((fun () -> computedDataFunction entity), LazyThreadSafetyMode.PublicationOnly)
 
-        let task = new Task(fun () -> forceEagerData ())
-        task.Start()
+            entitiesMap[pair.Key] <- struct (entity, lazyi)
 
-    let updateFiles files =
+        let _ = Task.Run(fun () -> forceEagerData ())
+        ()
+
+    let updateFiles (files: ResourceInput array) =
         let news =
-            files
-            |> PSeq.ofList
-            |> PSeq.map parseFileThenEntity
-            |> Seq.collect saveResults
-            |> Seq.toList
+            files |> PSeq.map parseFileThenEntity |> Seq.collect saveResults |> Seq.toList
 
         updateOverwrite ()
         let mutable res = news
@@ -839,12 +794,11 @@ type ResourceManager<'T when 'T :> ComputedData>
         if enableInlineScripts then
             res <- updateInlineScripts news |> Seq.toList
 
-        let task = new Task(fun () -> forceEagerData ())
-        task.Start()
+        let _ = Task.Run(fun () -> forceEagerData ())
         res
 
     let updateFile file =
-        let res = updateFiles [ file ]
+        let res = updateFiles [| file |]
 
         if res.Length > 1 then
             log (sprintf "File %A returned multiple resources" file)
@@ -856,38 +810,37 @@ type ResourceManager<'T when 'T :> ComputedData>
     let getResources () = fileMap.Values |> List.ofSeq
 
     let validatableFiles () =
-        fileMap
-        |> Map.toList
-        |> List.map snd
+        fileMap.Values
+        |> List.ofSeq
         |> List.choose (function
             | EntityResource(_, e) -> Some e
             | _ -> None)
         |> List.filter (fun f -> f.validate)
 
     let allEntities () =
-        entitiesMap
-        |> Map.toList
-        |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+        entitiesMap.Values
+        |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten)
 
     let validatableEntities () =
-        entitiesMap
-        |> Map.toList
-        |> List.map snd
-        |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
-        |> List.filter (fun struct (e, _) -> e.validate)
+        entitiesMap.Values
+        |> Seq.filter (fun struct (e, _) -> e.overwrite <> Overwrite.Overwritten && e.validate)
+        |> Seq.toList
 
-    let getFileNames () : string array =
+    let getFileNames () : string seq =
         fileMap.Values
         |> Seq.map (function
             | EntityResource(_, r) -> r.logicalpath
             | FileResource(_, r) -> r.logicalpath
             | FileWithContentResource(_, r) -> r.logicalpath)
-        |> Seq.toArray
 
-    member __.ManualProcessResource = parseFileThenEntity >> snd
+    let getEntityByFilePath path =
+        match entitiesMap.TryGetValue(path) with
+        | true, r -> Some r
+        | _ -> None
 
-    member __.ManualProcess (filename: string) (filetext: string) =
+    member _.ManualProcessResource = parseFileThenEntity >> snd
+
+    member _.ManualProcess (filename: string) (filetext: string) =
         let parsed = CKParser.parseString filetext filename
 
         match parsed with
@@ -896,14 +849,15 @@ type ResourceManager<'T when 'T :> ComputedData>
             let filenamenopath = Path.GetFileNameWithoutExtension filename
             Some(shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)
 
-    member __.Api =
+    member _.Api =
         { new IResourceAPI<'T> with
-            member __.UpdateFiles = updateFiles
-            member __.UpdateFile = updateFile
-            member __.GetResources = getResources
-            member __.ValidatableFiles = validatableFiles
-            member __.AllEntities = allEntities
-            member __.ValidatableEntities = validatableEntities
-            member __.ForceRecompute() = forceRecompute ()
-            member __.ForceRulesDataGenerate() = forceRulesData ()
-            member __.GetFileNames = getFileNames }
+            member _.UpdateFiles = updateFiles
+            member _.UpdateFile = updateFile
+            member _.GetResources = getResources
+            member _.ValidatableFiles = validatableFiles
+            member _.AllEntities = allEntities
+            member _.ValidatableEntities = validatableEntities
+            member _.ForceRecompute() = forceRecompute ()
+            member _.ForceRulesDataGenerate() = forceRulesData ()
+            member _.GetFileNames = getFileNames
+            member _.GetEntityByFilePath path = getEntityByFilePath path }

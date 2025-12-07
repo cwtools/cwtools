@@ -1,11 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
         <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
+        <FakeVersion>6.1.4</FakeVersion>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Program.fs"/>
     </ItemGroup>
-    <Import Project="..\.paket\Paket.Restore.targets"/>
+    <ItemGroup>
+        <PackageReference Include="Fake.Core.Target" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.IO.FileSystem" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.DotNet.Cli" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.DotNet.Paket" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.JavaScript.Npm" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.Core.UserInput" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.Tools.Git" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.Core.ReleaseNotes" Version="$(FakeVersion)"/>
+        <PackageReference Include="Fake.Api.GitHub" Version="$(FakeVersion)"/>
+        <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0"/>
+        <PackageReference Include="MSBuild.StructuredLogger" Version="2.3.113"/>
+    </ItemGroup>
 </Project>

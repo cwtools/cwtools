@@ -47,7 +47,7 @@ type LegacyLocDynamicsSettings =
         /// Event targets, must be first, can have a scope
         eventTargets: (string * Scope) seq
         /// Variables
-        setVariables: LowerCaseStringSet
+        setVariables: IgnoreCaseStringSet
     }
 
 type LegacyLocStaticSettings =
@@ -79,14 +79,14 @@ module ChangeLocScope =
             let command, res =
                 if staticSettings.questionMarkVariable then
                     if
-                        command.StartsWith("?", StringComparison.OrdinalIgnoreCase)
-                        && command.TrimStart([| '?' |])
+                        command.StartsWith('?')
+                        && command.TrimStart('?')
                            |> CWTools.Utilities.TryParser.parseIntWithDecimal
                            |> (fun s -> s.IsSome)
                     then
                         command, Some(LocContextResult.Found "number")
                     else
-                        command.TrimStart([| '?' |]), None
+                        command.TrimStart('?'), None
                 else
                     command, None
 
@@ -109,7 +109,7 @@ module ChangeLocScope =
                         let exact = validScopes |> List.exists currentScope.IsOfScope
 
                         match context.CurrentScope, validScopes, exact with
-                        | x, _, _ when x = context.Root.AnyScope ->
+                        | x, _, _ when x.Equals context.Root.AnyScope ->
                             (LocContextResult.NewScope
                                 { source with
                                     Scopes = applyTargetScope e.Target context.Scopes })
@@ -183,17 +183,10 @@ module ChangeLocScope =
 
     // type LocContext
     let createJominiLocalisationCommandValidator (dataTypes: CWTools.Parser.DataTypeParser.JominiLocDataTypes) =
-        let textInfo = CultureInfo.CurrentCulture.TextInfo
-
         fun
             (source: ScopeContext)
             (eventtargets: Collections.Map<string, Scope list>)
-            (setvariables: string list)
             (command: JominiLocCommand list) ->
-            // let keys = command.Split('.') |> List.ofArray
-            // let keys =
-            //     match
-            // eprintfn "%A" command
             let convScopeToDataType (scope: Scope) = scopeManager.DataTypeForScope(scope)
 
             let command =
