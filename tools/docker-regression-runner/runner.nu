@@ -121,6 +121,7 @@ def main [
         # Run Builder (capture output for debugging)
         let build_output = (do -i {
             (^docker run --rm
+                -v nuget-cache:/root/.nuget/packages
                 -v $"($repo_path):/mnt/repo:ro"
                 -v $"($cache_parent):/out"
                 $BUILDER_IMAGE
