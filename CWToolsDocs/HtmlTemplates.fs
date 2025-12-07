@@ -1,6 +1,6 @@
 module HtmlTemplates
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 open CWTools.Rules
 open CWTools.Utilities.StringResource
 
@@ -406,4 +406,4 @@ let rootRules (rootRules: RootRule list) (enums: EnumDefinition list) (types: Ty
               [ rawText
                     "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css\" integrity=\"sha256-ujE/ZUB6CMZmyJSgQjXGCF4sRRneOimQplBVLu8OU5w=\" crossorigin=\"anonymous\" />" ]
           body [] [ section [ _class "section" ] [ div [ _class "container" ] (tableOfContents :: typeBlocks) ] ] ]
-    |> renderHtmlDocument
+    |> RenderView.AsString.htmlDocument

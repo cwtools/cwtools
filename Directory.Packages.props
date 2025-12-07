@@ -28,5 +28,7 @@
     <PackageVersion Include="NUnit" Version="4.2.2" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.4.0" />
+    
+    <PackageVersion Include="Giraffe.ViewEngine" Version="1.4.0"/>
   </ItemGroup>
 </Project>
