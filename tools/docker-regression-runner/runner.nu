@@ -98,7 +98,6 @@ def main [
             cd /tmp/build &&
             git checkout ($full_hash) --quiet &&
             dotnet tool restore &&
-            dotnet paket restore &&
             dotnet restore CWToolsCLI/CWToolsCLI.fsproj &&
             dotnet publish CWToolsCLI/CWToolsCLI.fsproj -c Release -o /out/temp_($full_hash) --no-restore &&
 
