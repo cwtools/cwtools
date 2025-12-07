@@ -94,12 +94,12 @@ def main [
             mkdir -p /out/temp_($full_hash) &&
 
             # Clone, build, and validate
-            git clone file:///mnt/repo /tmp/build --revision ($full_hash) --depth 1 &&
+            git clone file:///mnt/repo /tmp/build --revision ($full_hash) --depth 1 --quiet &&
             cd /tmp/build &&
-            git checkout ($full_hash) &&
+            git checkout ($full_hash) --quiet &&
             dotnet tool restore &&
-            dotnet restore CWToolsCLI/CWToolsCLI.fsproj &&
-            dotnet publish CWToolsCLI/CWToolsCLI.fsproj -c Release -o /out/temp_($full_hash) --no-restore &&
+            dotnet restore CWToolsCLI/CWToolsCLI.fsproj -r win-x64 &&
+            dotnet publish CWToolsCLI/CWToolsCLI.fsproj --self-contained -r win-x64 -c Release -o /out/temp_($full_hash) --no-restore &&
 
             # Validate the build succeeded
             if [ -f '/out/temp_($full_hash)/CWToolsCLI.dll' ]; then
