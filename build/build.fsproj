@@ -4,7 +4,7 @@
         <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
         <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
-        <FakeVersion>5.23.1</FakeVersion>
+        <FakeVersion>6.1.4</FakeVersion>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Program.fs"/>
