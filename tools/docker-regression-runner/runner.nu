@@ -5,6 +5,7 @@ def main [
     commit: string      # Commit hash to test (e.g., "HEAD", "a1b2c")
     rules_path: path    # Path to rules
     game_path: path     # Path to game
+    game: string        # Game name
     --force-rebuild     # Force fresh build
     --force-rerun       # Force rerun even if results exist
 ] {
@@ -177,7 +178,7 @@ def main [
         $"--directory" $"($game_path | path expand)"
         $"--outputfile" $"($result_path | path join "output.json")"
         $"--reporttype" "json"
-        $"--game" "stl"
+        $"--game" $game
         $"--scope" "vanilla"
         "all"
     ]
