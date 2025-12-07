@@ -95,12 +95,20 @@ def main [
 
     print $"(ansi cyan)Bisecting: Testing commit ($commit_hash)...(ansi reset)"
 
-    # Execute the Runner
-    # Note: runner.nu writes results relative to current PWD. 
-    # git bisect run executes from the repo root.
-    nu $runner_path $local_repo $commit_hash $rules_path $game_path
+        # Execute the Runner
+        # Note: runner.nu writes results relative to current PWD. 
+        # git bisect run executes from the repo root.
+        let runner_result = (do -i {
+            nu $runner_path $local_repo $commit_hash $rules_path $game_path
+        } | complete)
 
-    # Locate Output
+        if $runner_result.exit_code != 0 {
+            print $"(ansi red)Runner failed with exit code ($runner_result.exit_code)(ansi reset)"
+            print $"(ansi yellow)Skipping this commit(ansi reset)"
+            exit 125 # Skip this commit
+        }
+
+        # Locate Output
     let result_dir = ($env.PWD | path join "regression-results" $"($commit_hash)_0_0")
     let output_json = ($result_dir | path join "output.json")
 
