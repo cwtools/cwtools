@@ -80,3 +80,4 @@ dotnetcore
 .ionide
 publish/
 BenchmarkTests/
+build-cache/
