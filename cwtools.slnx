@@ -1,0 +1,15 @@
+<Solution>
+    <Folder Name="/Solution Items/">
+
+    </Folder>
+    <Project Path="build/build.fsproj"/>
+    <Project Path="CSharpHelpers/CSharpHelpers.csproj"/>
+    <Project Path="CWTools/CWTools.fsproj"/>
+    <Project Path="CWToolsCLI/CWToolsCLI.fsproj"/>
+    <Project Path="CWToolsCSTests/CWToolsCSTests.csproj"/>
+    <Project Path="CWToolsDocs/CWToolsDocs.fsproj"/>
+    <Project Path="CWToolsPerformanceCLI/CWToolsPerformanceCLI.fsproj"/>
+    <Project Path="CWToolsScripts/CWToolsScripts.fsproj"/>
+    <Project Path="CWToolsTests/CWToolsTests.fsproj"/>
+    <Project Path="Shared/Shared.fsproj"/>
+</Solution>
