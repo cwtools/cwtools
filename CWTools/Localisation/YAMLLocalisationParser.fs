@@ -27,6 +27,7 @@ module YAMLLocalisationParser =
         || (c >= '\u3000' && c <= '\u30FF')
         || (c >= '\uFE30' && c <= '\uFE4F')
         || (c >= '\uFF00' && c <= '\uFFEF')
+        || (c >= '\uAC00' && c <= '\uD7A3')
 
     let key = many1Satisfy ((=) ':' >> not) .>> skipChar ':' .>> spaces <?> "key"
 
