@@ -1,5 +1,7 @@
 <Solution>
     <Folder Name="/Solution Items/">
+        <File Path=".github/workflows/release.yml" />
+        <File Path=".github/workflows/test.yml" />
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
 
