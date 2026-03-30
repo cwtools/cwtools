@@ -138,7 +138,10 @@ module ChangeLocScope =
                     | Some _, _, _ -> LocContextResult.Found(context.CurrentScope.ToString())
                     | _, _, true -> LocContextResult.Found(context.CurrentScope.ToString())
                     | None, false, false ->
-                        let firstPart = nextKey.Split('@').[0]
+                        let firstPart =
+                            let atPart = nextKey.Split('@').[0]
+                            let hatIndex = atPart.IndexOf('^')
+                            if hatIndex >= 0 then atPart.Substring(0, hatIndex) else atPart
 
                         match staticSettings.usesVariableCommands, dynamicSettings.setVariables.Contains firstPart with
                         | true, true -> LocContextResult.Found(context.CurrentScope.ToString())

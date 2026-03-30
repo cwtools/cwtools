@@ -385,5 +385,4 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         if game.DebugSettings.EarlyStop >= GameInitialConfigRules then
             game.InitialConfigRules()
 
-        game.Resources.ClearFileTexts()
         game
