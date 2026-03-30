@@ -67,6 +67,13 @@ module internal FieldValidators =
     let inline getLowerKey (ids: StringTokens) = stringManager.GetLowerStringForIDs(ids)
     let inline getOriginalKey (ids: StringTokens) = stringManager.GetStringForIDs ids
 
+    /// Check if a value contains scope interpolation (e.g. @PREV, @ROOT, @FROM, @THIS)
+    /// used in dynamically constructed names like flag_name_@PREV
+    let containsScopeInterpolation (value: System.ReadOnlySpan<char>) =
+        let scopeKeywords = [| "@prev"; "@root"; "@from"; "@this" |]
+        let valueStr = value.ToString().ToLowerInvariant()
+        scopeKeywords |> Array.exists (fun kw -> valueStr.Contains(kw))
+
     let checkValidValue
         (varMap: FrozenDictionary<_, PrefixOptimisedStringSet>)
         (enumsMap: FrozenDictionary<_, string * PrefixOptimisedStringSet>)
@@ -453,6 +460,9 @@ module internal FieldValidators =
                 errors
             else if value.Contains('@') && values.Contains(value.SplitFirst('@')) then
                 errors
+            else if value.Contains('@') && containsScopeInterpolation value then
+                // Accept dynamic scope interpolation in flag names (e.g. flag_name_@PREV, flag_name_@ROOT)
+                errors
             else if (let result = values.LongestPrefixMatch(value) in result <> null) then
                 errors
             else
@@ -486,6 +496,7 @@ module internal FieldValidators =
             else
                 values.Contains value
                 || (value.Contains('@') && values.Contains(value.SplitFirst('@')))
+                || (value.Contains('@') && containsScopeInterpolation value)
                 || (values.FindFirstByPrefix(value) <> null)
         | None -> false
 
