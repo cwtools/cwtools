@@ -89,7 +89,7 @@ module private RulesParserImpl =
             |> List.map (fun e ->
                 ValueClauseC e, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> structSnd)
 
-        let new2 = one @ two @ three @ four
+        let new2 = [ yield! one; yield! two; yield! three; yield! four ]
         new2
 
     let internal getSettingFromString (full: string) (key: string) =
@@ -1424,8 +1424,8 @@ module private RulesParserImpl =
                 [| NodeRule(ValueField(ValueType.Enum "country_tags"), r |> Array.collect cataRule), o
                    NodeRule(VariableGetField "dynamic_country_tag", r |> Array.collect cataRule), o |]
             | NodeRule(l, r), o -> [| NodeRule(l, r |> Array.collect cataRule), o |]
-            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule ), o |]
-            | SubtypeRule(a, b, i), o -> [| (SubtypeRule(a, b, (i |> Array.collect cataRule )), o) |]
+            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule), o |]
+            | SubtypeRule(a, b, i), o -> [| (SubtypeRule(a, b, (i |> Array.collect cataRule)), o) |]
             | _ -> [| rule |]
 
         let rulesMapper =
@@ -1463,7 +1463,7 @@ module private RulesParserImpl =
             | NodeRule(ValueScopeMarkerField(i, m), r), o ->
                 [| NodeRule(ValueScopeField(i, m), r |> Array.collect cataRule), o |]
             | NodeRule(l, r), o -> [| NodeRule(l, r |> Array.collect cataRule), o |]
-            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule ), o |]
+            | ValueClauseRule r, o -> [| ValueClauseRule(r |> Array.collect cataRule), o |]
             | SubtypeRule(a, b, i), o -> [| (SubtypeRule(a, b, (i |> Seq.collect cataRule |> Seq.toArray)), o) |]
             | _ -> [| rule |]
 

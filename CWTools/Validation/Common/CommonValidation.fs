@@ -11,6 +11,7 @@ open CWTools.Common
 open CWTools.Utilities.Position
 open CWTools.Games
 open CWTools.Parser
+open System.Collections.Generic
 
 module CommonValidation =
     let validateMixedBlocks: StructureValidator<_> =
@@ -151,11 +152,10 @@ module CommonValidation =
                 let allScriptedEffects =
                     ses |> Array.map (fun se -> se.id, se.range.FileName, findSE se.range)
 
-                let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
-                    //eprintfn "grfrt %A" referencedtypes
-                    referencedtypes
-                    |> (fun refMap -> Map.tryFind "scripted_effect" refMap)
-                    |> Option.defaultValue []
+                let getRefsFromRefTypes (referencedtypes: IReadOnlyDictionary<string, ReferenceDetails list>) =
+                    match referencedtypes.TryGetValue "scripted_effect" with
+                    | true, v -> v
+                    | false, _ -> []
 
                 let allRefs =
                     es.AllWithData
@@ -338,11 +338,10 @@ module CommonValidation =
                     scriptValues
                     |> Array.map (fun se -> se.id, se.range.FileName, findScriptValue se.range)
 
-                let getRefsFromRefTypes (referencedtypes: Map<string, ReferenceDetails list>) =
-                    //eprintfn "grfrt %A" referencedtypes
-                    referencedtypes
-                    |> (fun refMap -> Map.tryFind "script_value" refMap)
-                    |> Option.defaultValue []
+                let getRefsFromRefTypes (referencedtypes: IReadOnlyDictionary<string, ReferenceDetails list>) =
+                    match referencedtypes.TryGetValue "script_value" with
+                    | true, v -> v
+                    | false, _ -> []
 
                 let allRefs =
                     es.AllWithData
@@ -513,14 +512,11 @@ module CommonValidation =
             <&!&> (foldNodeWithState fNode BoolState.AND >> (fun e -> Invalid(Guid.NewGuid(), e)))
 
     let validateUnusuedTypes: LookupValidator<_> =
-        let merge (a: Map<'a, 'b>) (b: Map<'a, 'b>) (f: 'a -> 'b * 'b -> 'b) =
-            Map.fold
-                (fun s k v ->
-                    match Map.tryFind k s with
-                    | Some v' -> Map.add k (f k (v, v')) s
-                    | None -> Map.add k v s)
-                a
-                b
+        let mergeInto (target: Dictionary<string, ReferenceDetails list>) (source: IReadOnlyDictionary<string, ReferenceDetails list>) =
+            for kv in source do
+                match target.TryGetValue kv.Key with
+                | true, existing -> target[kv.Key] <- kv.Value @ existing
+                | false, _ -> target[kv.Key] <- kv.Value
 
         fun l os _ ->
             let typesToCheck =
@@ -534,9 +530,11 @@ module CommonValidation =
                 |> Map.toList
 
             let allReferences =
+                let dict = Dictionary<string, ReferenceDetails list>()
                 os.AllWithData
                 |> List.choose (fun (_, lazydata) -> lazydata.Force().Referencedtypes)
-                |> Seq.fold (fun a b -> merge a b (fun _ (l1, l2) -> l1 @ l2)) Map.empty
+                |> List.iter (mergeInto dict)
+                dict
 
             let checkTypeDef (typename) (refs: string list) (typedef: TypeDefInfo) =
                 match List.contains typedef.id refs with
@@ -544,9 +542,8 @@ module CommonValidation =
                 | false -> Some(invManual (ErrorCodes.UnusedType typename typedef.id) typedef.range typedef.id None)
 
             let checkType (typename: string, typedefs: TypeDefInfo array) =
-                match allReferences |> Map.tryFind typename with
-                | None -> failwith "no refernences?" //inv (ErrorCodes.CustomError "This type should be used" Severity.Error)
-                | Some refs ->
+                match allReferences.TryGetValue typename with
+                | true, refs ->
                     typedefs
                     |> Seq.choose (
                         checkTypeDef
@@ -556,21 +553,13 @@ module CommonValidation =
                              |> List.map (fun r -> r.name.GetString()))
                     )
                     |> Seq.toList
+                | false, _ -> failwith "no refernences?"
 
             match typeInfos |> List.collect checkType with
             | [] -> OK
             | errors -> Invalid(Guid.NewGuid(), errors)
 
     let validateUndefinedModifierTypes: LookupValidator<_> =
-        let merge (a: Map<'a, 'b>) (b: Map<'a, 'b>) (f: 'a -> 'b * 'b -> 'b) =
-            Map.fold
-                (fun s k v ->
-                    match Map.tryFind k s with
-                    | Some v' -> Map.add k (f k (v, v')) s
-                    | None -> Map.add k v s)
-                a
-                b
-
         fun l os _ ->
             // Check that all referenced modifiers have a defined modifier type
             let modifierReferences =

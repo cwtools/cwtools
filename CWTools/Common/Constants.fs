@@ -214,6 +214,8 @@ module rec NewScope =
         let mutable matchesSet = Set<struct (Scope * Scope)>(Seq.empty)
         let mutable dataTypeMap = Map<Scope, string>(Seq.empty)
         let anyScope = Scope(0uy)
+        let getAllScopeLazy () = lazy (reverseDict.Keys |> List.ofSeq)
+        let mutable allScopeLazy = getAllScopeLazy ()
 
         let anyScopeInput =
             { ScopeInput.name = "Any"
@@ -244,6 +246,8 @@ module rec NewScope =
                     log (sprintf "Unexpected scope %O" x)
                     anyScope)
 
+
+
         let init (scopes: ScopeInput array, scopeGroups: (string * string list) array) =
             initialized <- true
             // log (sprintfn "Init scopes %A" scopes)
@@ -269,6 +273,8 @@ module rec NewScope =
                 | None -> ()
 
             scopes |> Array.iter addScope
+
+            allScopeLazy <- getAllScopeLazy ()
 
             let addScopeSubset (newScope: ScopeInput) =
                 newScope.isSubscopeOf
@@ -297,7 +303,7 @@ module rec NewScope =
                 log (sprintf "Unexpected scope %O" scope.Tag)
                 ""
 
-        member this.AllScopes = reverseDict.Keys |> List.ofSeq
+        member this.AllScopes = allScopeLazy.Value
         member this.AnyScope = anyScope
         member this.InvalidScope = invalidScope
         member this.ParseScope = parseScope

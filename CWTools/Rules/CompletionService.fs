@@ -44,7 +44,7 @@ type private CompletionLinkItem =
       desc: string option
       kind: CompletionCategory }
 
-
+[<Sealed>]
 type CompletionService
     (
         rootRules: RulesWrapper,
@@ -63,19 +63,17 @@ type CompletionService
         oneToOneScopes,
         defaultLang,
         dataTypes: CWTools.Parser.DataTypeParser.JominiLocDataTypes,
-        processLocalisation:
-            Lang * Collections.Map<string, CWTools.Localisation.Entry> -> Lang * Collections.Map<string, LocEntry>,
+        processLocalisation: Lang * Map<string, CWTools.Localisation.Entry> -> Lang * Map<string, LocEntry>,
         validateLocalisation: LocEntry -> ScopeContext -> CWTools.Validation.ValidationResult
     ) =
 
-    let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+    let typesMap = types
 
-    //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
-    let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+    let enumsMap = enums
 
-    let types: FrozenDictionary<string, string list> =
+    let types: FrozenDictionary<string, string array> =
         (types
-         |> Seq.map (fun pair -> KeyValuePair(pair.Key, pair.Value.StringValues |> List.ofSeq)))
+         |> Seq.map (fun pair -> KeyValuePair(pair.Key, pair.Value.StringValues |> Array.ofSeq)))
             .ToFrozenDictionary()
 
     let defaultKeys =
@@ -163,10 +161,10 @@ type CompletionService
             FieldValidators.getValidValues v
             |> Option.bind Array.tryHead
             |> Option.defaultValue "x"
-        | TypeField(TypeType.Simple t) -> types.TryFind(t) |> Option.bind List.tryHead |> Option.defaultValue "x"
+        | TypeField(TypeType.Simple t) -> types.TryFind(t) |> Option.bind Array.tryHead |> Option.defaultValue "x"
         | TypeField(TypeType.Complex(p, t, s)) ->
             types.TryFind(t)
-            |> Option.bind List.tryHead
+            |> Option.bind Array.tryHead
             |> Option.map (fun n -> p + n + s)
             |> Option.defaultValue "x"
         | ScopeField _ -> "THIS"
@@ -707,13 +705,13 @@ type CompletionService
                     match lv with
                     | NewField.TypeField(TypeType.Simple t) ->
                         types.TryFind(t)
-                        |> Option.defaultValue []
+                        |> Option.defaultValue [||]
                         |> Seq.map CompletionResponse.CreateSimple
                         |> Seq.toArray
                     | NewField.TypeField(TypeType.Complex(p, t, s)) ->
                         types.TryFind(t)
-                        |> Option.map (fun ns -> List.map (fun n -> p + n + s) ns)
-                        |> Option.defaultValue []
+                        |> Option.map (fun ns -> Array.map (fun n -> p + n + s) ns)
+                        |> Option.defaultValue [||]
                         |> Seq.map CompletionResponse.CreateSimple
                         |> Seq.toArray
                     | NewField.ValueField(Enum e) ->
@@ -754,13 +752,13 @@ type CompletionService
                 |> Seq.toArray
             | NewField.TypeField(TypeType.Simple t) ->
                 types.TryFind(t)
-                |> Option.defaultValue []
+                |> Option.defaultValue [||]
                 |> Seq.map CompletionResponse.CreateSimple
                 |> Seq.toArray
             | NewField.TypeField(TypeType.Complex(p, t, s)) ->
                 types.TryFind(t)
-                |> Option.map (fun ns -> List.map (fun n -> p + n + s) ns)
-                |> Option.defaultValue []
+                |> Option.map (fun ns -> Array.map (fun n -> p + n + s) ns)
+                |> Option.defaultValue [||]
                 |> Seq.map CompletionResponse.CreateSimple
                 |> Seq.toArray
             | NewField.LocalisationField(s, _) ->

@@ -2,6 +2,7 @@ namespace CWTools.Process.Localisation
 
 open CWTools.Process.Scopes
 open CWTools.Common
+open CWTools.Utilities
 open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open System
@@ -78,19 +79,18 @@ module ChangeLocScope =
         fun (dynamicSettings: LegacyLocDynamicsSettings) (source: ScopeContext) (command: string) ->
             let command, res =
                 if staticSettings.questionMarkVariable then
+                    let cleanCommand = command.AsSpan().TrimStart('?')
                     if
                         command.StartsWith('?')
-                        && command.TrimStart('?')
-                           |> CWTools.Utilities.TryParser.parseIntWithDecimal
-                           |> (fun s -> s.IsSome)
+                        && TryParser.parseIntWithDecimalSpan(cleanCommand).IsSome
                     then
                         command, Some(LocContextResult.Found "number")
                     else
-                        command.TrimStart('?'), None
+                        cleanCommand.ToString(), None
                 else
                     command, None
 
-            let keys = command.Split('.') |> List.ofArray
+            let keys = command.Split('.')
 
             let inner (first: bool, inVariable: bool, context: ScopeContext) (nextKey: string) =
                 let onetooneMatch () =
@@ -177,9 +177,7 @@ module ChangeLocScope =
                 | res -> res
 
             res
-            |> Option.defaultWith (fun () -> keys |> List.fold locKeyFolder (LocContextResult.Start source))
-
-    open System.Globalization
+            |> Option.defaultWith (fun () -> keys |> Array.fold locKeyFolder (LocContextResult.Start source))
 
     // type LocContext
     let createJominiLocalisationCommandValidator (dataTypes: CWTools.Parser.DataTypeParser.JominiLocDataTypes) =

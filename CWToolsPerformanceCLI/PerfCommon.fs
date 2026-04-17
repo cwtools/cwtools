@@ -6,6 +6,7 @@ open CWTools.Common
 open CWTools.Games
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
+open CWTools.Process
 
 // Directory helpers
 let rec getAllFolders dirs =
@@ -86,3 +87,11 @@ let perfRunner (buildGame: unit -> IGame<_>) runValidation =
         ()
 
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+
+let getChildPosition (child: Child) =
+    match child with
+    | LeafC leaf -> leaf.Position
+    | NodeC node -> node.Position
+    | LeafValueC leafValue -> leafValue.Position
+    | CommentC comment -> comment.Position
+    | ValueClauseC valueClause -> valueClause.Position

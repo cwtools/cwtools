@@ -18,6 +18,7 @@ open CWTools.Utilities.Utils
 open CWTools.Utilities
 open System.Threading.Tasks
 open CWTools.Utilities.StringResource
+open System.Collections.Generic
 
 // Fuzzy = prefix/suffix
 type ReferenceType =
@@ -38,7 +39,7 @@ type ReferenceDetails =
 type ComputedData(referencedtypes, definedvariable, withRulesData, effectBlocks, triggersBlocks, savedEventTargets) =
     member val Cache: Map<string, obj list> = Map.empty with get, set
     member val WithRulesData: bool = withRulesData with get, set
-    member val Referencedtypes: Map<string, ReferenceDetails list> option = referencedtypes with get, set
+    member val Referencedtypes: IReadOnlyDictionary<string, ReferenceDetails list> option = referencedtypes with get, set
     member val Definedvariables: Map<string, ResizeArray<string * range>> option = definedvariable with get, set
 
     member val SavedEventTargets: ResizeArray<string * range * CWTools.Common.NewScope.Scope> option =

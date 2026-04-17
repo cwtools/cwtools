@@ -76,7 +76,7 @@ type IGame =
     abstract Folders: unit -> (string * string) array
     abstract AllFiles: unit -> Resource list
     abstract AllLoadedLocalisation: unit -> string list
-    abstract UpdateFile: bool -> string -> string option -> CWError list
+    abstract UpdateFile: shallow: bool -> filepath: string -> fileText: string option -> CWError list
     abstract Complete: pos -> string -> string -> CompletionResponse list
     abstract GoToType: pos -> string -> string -> range option
     abstract FindAllRefs: pos -> string -> string -> range list option
@@ -86,7 +86,7 @@ type IGame =
     abstract ForceRecompute: unit -> unit
     abstract Types: unit -> Map<string, TypeDefInfo array>
     abstract TypeDefs: unit -> CWTools.Rules.TypeDefinition list
-    abstract InfoAtPos: pos -> string -> string -> SymbolInformation option
+    abstract InfoAtPos: pos -> filePath: string -> fileText: string -> SymbolInformation option
     abstract GetPossibleCodeEdits: string -> string -> range list
     abstract GetCodeEdits: string -> string -> (range seq * pos * string) list option
     abstract GetEventGraphData: GraphDataRequest

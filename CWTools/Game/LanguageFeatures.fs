@@ -7,6 +7,7 @@ open CWTools.Utilities.Utils
 open CWTools.Process
 open CWTools.Rules
 open CWTools.Common
+open System.Collections.Generic
 
 module LanguageFeatures =
 
@@ -165,7 +166,9 @@ module LanguageFeatures =
                     let x = l.Force().Referencedtypes in
 
                     if x.IsSome then
-                        (x.Value.TryFind t)
+                        match x.Value.TryGetValue t with
+                        | true, v -> Some v
+                        | false, _ -> None
                     else
                         let contains, value = (info.GetReferencedTypes e).TryGetValue t in
                         if contains then Some(value |> List.ofSeq) else None)
@@ -214,13 +217,13 @@ module LanguageFeatures =
         (lookup: Lookup)
         (pos: pos)
         (filepath: string)
-        (filetext: string)
+        (fileText: string)
         : SymbolInformation option =
-        let resource = makeEntityResourceInput fileManager filepath filetext
+        let resource = makeEntityResourceInput fileManager filepath fileText
 
         match resourceManager.ManualProcessResource resource, infoService with
         | Some e, Some info ->
-            log (sprintf "symbolInfoAtPos %s %s" (fileManager.ConvertPathToLogicalPath filepath) filepath)
+            log $"symbolInfoAtPos %s{fileManager.ConvertPathToLogicalPath filepath} %s{filepath}"
 
             let ruleOptions, typeInfo, nodeAtPos =
                 info.GetInfo(pos, e)
@@ -429,13 +432,6 @@ module LanguageFeatures =
                 None
         | _ -> None
 
-    // type CachedRuleMetadata = {
-    //     typeDefs : Map<string,list<TypeDefInfo>>
-    //     enumDefs : Map<string,string * list<string>>
-    //     varDefs : Map<string,list<string * range>>
-    //     loc : (Lang * Set<string>) list
-    //     files : Set<string>
-    // }
     let getEmbeddedMetadata (lookup: Lookup) (localisation: LocalisationManager<_>) (resources: ResourceManager<_>) =
         { typeDefs = lookup.typeDefInfo
           enumDefs = lookup.enumDefs |> Map.map (fun _ (s, v) -> s, v |> Array.map fst)
@@ -443,7 +439,6 @@ module LanguageFeatures =
           loc = localisation.LocalisationKeys()
           files = resources.Api.GetFileNames() |> Set.ofSeq
           scriptedLoc = lookup.scriptedLoc }
-
 
     let graphEventDataForFiles
         (referenceManager: References<_>)
@@ -480,12 +475,13 @@ module LanguageFeatures =
                 |> Array.map (fun tdi -> k, tdi.id, tdi.range, tdi.explicitLocalisation, tdi.subtypes)
                 |> List.ofSeq)
 
-        let getSourceTypes (x: Map<string, ReferenceDetails list>) =
-            Map.toList x
-            |> List.filter (fun (k, _) -> sourceTypes |> List.contains k)
-            |> List.collect (fun (k, vs) ->
-                vs
-                |> List.map (fun rd -> k, rd.name, rd.position, rd.isOutgoing, rd.referenceLabel, []))
+        let getSourceTypes (x: IReadOnlyDictionary<string, ReferenceDetails list>) =
+            x
+            |> Seq.filter (fun kv -> sourceTypes |> List.contains kv.Key)
+            |> Seq.collect (fun kv ->
+                kv.Value
+                |> List.map (fun rd -> kv.Key, rd.name, rd.position, rd.isOutgoing, rd.referenceLabel, []))
+            |> List.ofSeq
 
         let getNonExplicitLoc (id: string) (typeName: string) =
             lookup.typeDefs

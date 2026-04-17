@@ -226,7 +226,7 @@ type ValidationManager<'T when 'T :> ComputedData>
                     else
                         []
 
-                res @ fres @ lres @ lfres @ rres, hres
+                [ yield! res; yield! fres; yield! lres; yield! lfres; yield! rres ], hres
 
         shallow, deep
 

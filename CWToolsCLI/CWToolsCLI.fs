@@ -226,47 +226,7 @@ module CWToolsCLI =
                 | CacheType _ -> "type of cache file"
                 | Compression _ -> "compression type for output files (none|bz2, default: none)"
 
-
-    let getEffectsAndTriggers docsPath =
-        let docsParsed =
-            match docsPath with
-            | Some path -> DocsParser.parseDocsFile path
-            | None ->
-                DocsParser.parseDocsStream (
-                    Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsCLI.game_effects_triggers_1.9.1.txt")
-                )
-
-        match docsParsed with
-        | Success(p, _, _) -> p |> (DocsParser.processDocs scopeManager.ParseScopes)
-        | Failure(msg, _, _) -> failwith ("docs parsing failed with " + msg)
-
-    let merge (a: Map<'a, 'b>) (b: Map<'a, 'b>) (f: 'a -> 'b * 'b -> 'b) =
-        Map.fold
-            (fun s k v ->
-                match Map.tryFind k s with
-                | Some v' -> Map.add k (f k (v, v')) s
-                | None -> Map.add k v s)
-            a
-            b
-
-    let rec getAllFolders dirs =
-        if Seq.isEmpty dirs then
-            Seq.empty
-        else
-            seq {
-                yield! dirs |> Seq.collect Directory.EnumerateDirectories
-                yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders
-            }
-
-    let getAllFoldersUnion dirs =
-        seq {
-            yield! dirs
-            yield! getAllFolders dirs
-        }
-
     let getConfigFiles (gameDir: string option, rulesDir: string option) =
-        let configpath = "Main.files.config.cwt"
-
         let configDir =
             match gameDir, rulesDir with
             | _, Some rulesDir -> rulesDir
@@ -275,23 +235,20 @@ module CWToolsCLI =
 
         let configFiles =
             (if Directory.Exists configDir then
-                 getAllFoldersUnion ([ configDir ] |> Seq.ofList)
+                 Directory.EnumerateFiles(configDir, "*", SearchOption.AllDirectories)
              else
                  Seq.empty)
-            |> Seq.collect (Directory.EnumerateFiles)
 
         let configFiles =
             configFiles
+            |> Seq.filter (fun f ->
+                let extension = Path.GetExtension(f.AsSpan())
+
+                extension.Equals(".cwt", StringComparison.OrdinalIgnoreCase)
+                || extension.Equals(".log", StringComparison.OrdinalIgnoreCase))
             |> List.ofSeq
-            |> List.filter (fun f -> Path.GetExtension f = ".cwt" || Path.GetExtension f = ".log")
 
-        let configs =
-            match true, configFiles.Length > 0 with
-            | false, _ -> []
-            | _, true -> configFiles |> List.map (fun f -> f, File.ReadAllText(f))
-            //["./config.cwt", File.ReadAllText("./config.cwt")]
-            | _, false -> []
-
+        let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
         configs
 
     let list game directory scope modFilter docsPath rulesPath (results: ParseResults<ListArgs>) =
@@ -307,7 +264,7 @@ module CWToolsCLI =
                 FromConfig([], []),
                 None
             )
-        //let gameObj = STL(directory, scope, modFilter, triggers, effects, getConfigFiles(Some directory, None))
+
         let sortOrder = results.GetResult <@ Sort @>
 
         match results.GetResult <@ ListType @> with
@@ -318,38 +275,14 @@ module CWToolsCLI =
             | Some ListSort.Path ->
                 let files = gameObj.allFileList |> List.map (fun s -> s.file.Replace(directory, ""))
                 File.WriteAllLines("cwtools-files.csv", files)
-            //gameObj.allFileList |> List.iter (fun f -> printfn "%O" f)
             | _ -> failwith "Unexpected sort order"
         | ListTypes.Triggers ->
-            // let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
-            // let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
             let t = gameObj.scriptedTriggerList
             printfn "%A" t
         | ListTypes.Effects ->
             let t = gameObj.scriptedEffectList
             printfn "%A" t
         | ListTypes.Localisation -> ()
-        //printfn "%A" loc.GetKeys
-        // | ListTypes.Technology ->
-        //     (gameObj.references().Technologies) |> List.map fst |> List.iter (printfn "%A")
-        // | ListTypes.Types ->
-        //     gameObj.recompute()
-        //     let referencedTypes = gameObj.entities() |> List.choose (fun struct(e,l) -> l.Force().Referencedtypes)
-        //     // printfn "%A" referencedTypes
-        //     let combinedReferences = referencedTypes |> List.fold (fun s m -> merge s m (fun _ (a,b) -> a @ b)) Map.empty
-        //                                 |> Map.map (fun _ vs -> vs |> List.map (fun v -> v.name))
-        //     let types = gameObj.references().TypeMapInfo |> Map.map (fun _ vs -> vs |> List.map (fun t -> t.id))
-        //     let events = types |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
-        //     let eventReferences = combinedReferences |> Map.tryFind "scripted_trigger" |> Option.defaultValue []
-        //     // eventReferences |> List.iter (printfn "%s")
-        //     let unused = List.except eventReferences events
-        //     unused |> List.iter (printfn "%s")
-        //     let files = events |> List.map (sprintf "%A")
-        //     File.WriteAllLines("file1.csv", files)
-        //     let files = eventReferences |> List.map (sprintf "%A")
-        //     File.WriteAllLines("file2.csv", files)
-
-
         | _ -> failwith "Unexpected list type"
 
     let validate

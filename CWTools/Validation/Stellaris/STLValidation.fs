@@ -595,7 +595,10 @@ module STLValidation =
                 resourceAPI.AllEntities()
                 |> Seq.collect (fun struct (a, b) ->
                     b.Force().Referencedtypes
-                    |> Option.bind (Map.tryFind "technology")
+                    |> Option.bind (fun dict ->
+                        match dict.TryGetValue "technology" with
+                        | true, v -> Some v
+                        | false, _ -> None)
                     |> Option.defaultValue [])
                 |> Seq.map (fun x -> x.name.GetString())
 

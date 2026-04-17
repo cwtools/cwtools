@@ -1,10 +1,13 @@
 module CWToolsPerformanceCLI.PerfFunctions
 
+open System.Linq
 open CWTools
 open CWTools.Games.CK3
 open CWTools.Games.EU4
 open CWTools.Games.EU5
 open CWTools.Games.HOI4
+open CWTools.Utilities.Position
+open CWTools.Utilities.Utils
 open CWToolsPerformanceCLI.PerfCommon
 open CWTools.Parser.DocsParser
 open CWTools.Games
@@ -18,6 +21,7 @@ open CWTools.Games.Stellaris
 open CWTools.Common.STLConstants
 open CWToolsCLI
 open System
+open JetBrains.Profiler.Api
 
 // Performance result record
 type PerfResult =
@@ -82,23 +86,49 @@ let getDefaultGamePaths (config: PathConfig) =
 
 // Updated performance runner that returns structured data
 let perfRunnerWithResult (buildGame: unit -> IGame<_>) runValidation =
-    let timer = Stopwatch()
-    timer.Start()
+    MeasureProfiler.StartCollectingData()
+    let timer = Stopwatch.StartNew()
     let game = buildGame ()
 
     let errorCount =
         if runValidation then
             let errors = game.ValidationErrors() |> List.map (fun e -> e.range)
-            let testVals = game.AllEntities()
+            let testVals = game.AllEntities() |> Array.ofSeq
             game.RefreshCaches()
             game.ForceRecompute()
             game.RefreshCaches()
             game.ValidationErrors() |> ignore
+
+            match
+                game.AllEntities()
+                |> Seq.tryFind (fun struct (entity, _) ->
+                    Path.GetExtension(entity.filepath) = ".txt" && not (entity.filepath.Contains("dlc")))
+            with
+            | Some data ->
+                data
+                |> structFst
+                |> (fun entity ->
+                    if entity.rawEntity.AllArray.Length - entity.rawEntity.Comments.Count() > 0 then
+                        game.InfoAtPos
+                            (entity.rawEntity.AllArray
+                             // comment nodes don't have little info, so find the first non-comment child for the position
+                             |> Array.find (fun x -> not x.IsCommentC)
+                             |> getChildPosition
+                             |> _.Start)
+                            entity.filepath
+                            (File.ReadAllText entity.filepath)
+                        |> ignore
+
+                    game.UpdateFile true entity.filepath None)
+                |> ignore
+            | None -> ()
+
             errors.Length
         else
             0
 
     timer.Stop()
+    MeasureProfiler.SaveData()
 
     { ElapsedMilliseconds = timer.ElapsedMilliseconds
       ErrorCount = errorCount }
@@ -427,7 +457,8 @@ let perfHOI4
                         rootDirectories = Array.append settings.rootDirectories [| WD { path = mp; name = "mod" } |] }
                 | None -> settings
 
-            HOI4Game(finalSettings) :> IGame<_>)
+            let game = HOI4Game(finalSettings) :> IGame<_>
+            game)
         runTests
 
 // Simple test function for parsing individual files

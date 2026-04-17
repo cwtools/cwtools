@@ -33,8 +33,8 @@ module Utils =
     let logInner level message =
         match loglevel, level with
         | Silent, _ -> ()
-        | Normal, Normal -> Printf.eprintfn "%s: %s" (System.DateTime.Now.ToString("HH:mm:ss")) message
-        | Verbose, _ -> Printf.eprintfn "%s: %s" (System.DateTime.Now.ToString("HH:mm:ss")) message
+        | Normal, Normal -> Printf.eprintfn "%s: %s" (DateTime.Now.ToString("HH:mm:ss")) message
+        | Verbose, _ -> Printf.eprintfn "%s: %s" (DateTime.Now.ToString("HH:mm:ss")) message
         | _, _ -> ()
     // |Verbose -> logWith logger format
 
@@ -42,7 +42,7 @@ module Utils =
     let private defaultLogNormal message = logInner Normal message
 
     let private defaultLogAll message =
-        Printf.eprintfn "%s: %s" (System.DateTime.Now.ToString("HH:mm:ss")) message
+        Printf.eprintfn "%s: %s" (DateTime.Now.ToString("HH:mm:ss")) message
 
     let mutable logDiag = defaultLogVerbose
     let mutable logInfo = defaultLogNormal
@@ -92,27 +92,30 @@ module TryParser =
 
     let parseDate: string -> _ = tryParseWith DateTime.TryParse
     let parseInt: string -> _ = tryParseWith Int32.TryParse
-    let parseIntSpan (s: ReadOnlySpan<char>)  =
+
+    let parseIntSpan (s: ReadOnlySpan<char>) =
         match Int32.TryParse(s) with
         | true, v -> ValueSome v
         | false, _ -> ValueNone
 
     let parseIntWithDecimal: string -> _ =
         tryParseWith (fun s ->
-            System.Int32.TryParse(
-                s,
-                Globalization.NumberStyles.AllowDecimalPoint
-                ||| Globalization.NumberStyles.Integer,
-                CultureInfo.InvariantCulture
-            ))
+            Int32.TryParse(s, NumberStyles.AllowDecimalPoint ||| NumberStyles.Integer, CultureInfo.InvariantCulture))
 
-    let parseSingle: string -> _ = tryParseWith System.Single.TryParse
+    let parseIntWithDecimalSpan (s: ReadOnlySpan<char>) =
+        match
+            Int32.TryParse(s, (NumberStyles.AllowDecimalPoint ||| NumberStyles.Integer), CultureInfo.InvariantCulture)
+        with
+        | true, v -> ValueSome v
+        | false, _ -> ValueNone
+
+    let parseSingle: string -> _ = tryParseWith Single.TryParse
 
     let parseDouble: string -> _ =
         tryParseWith (fun s ->
-            System.Double.TryParse(
+            Double.TryParse(
                 s,
-                (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands),
+                (NumberStyles.Float ||| NumberStyles.AllowThousands),
                 CultureInfo.InvariantCulture
             ))
 

@@ -2,7 +2,6 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <Tailcalls>true</Tailcalls>
-        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="AssemblyInfo.fs"/>
@@ -104,19 +103,15 @@
         <ProjectReference Include="..\CSharpHelpers\CSharpHelpers.csproj"/>
         <ProjectReference Include="..\Shared\Shared.fsproj"/>
     </ItemGroup>
+
     <ItemGroup>
-      <PackageReference Update="FSharp.Core">
-        <Version>9.0.303</Version>
-      </PackageReference>
-    </ItemGroup>
-    <ItemGroup>
+        <PackageReference Include="Faster.Collections.Pooled" />
         <PackageReference Include="FParsec"/>
         <PackageReference Include="FSharp.Data"/>
         <PackageReference Include="FSharp.Collections.ParallelSeq"/>
         <PackageReference Include="DotNet.Glob"/>
         <PackageReference Include="FSharpx.Collections"/>
         <PackageReference Include="Sandwych.QuickGraph.Core"/>
-        <PackageReference Include="VDS.Common"/>
         <PackageReference Include="System.Text.Encoding.CodePages"/>
         <PackageReference Include="FsPickler"/>
         <PackageReference Include="SharpZipLib"/>

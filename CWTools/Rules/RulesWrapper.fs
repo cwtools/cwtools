@@ -14,7 +14,7 @@ type RulesWrapper(rules: RootRule array) =
     let typeRules =
         rules
         |> Array.choose (function
-            | TypeRule(k, rs) -> Some(k, rs)
+            | TypeRule(k, rs) -> Some(struct (k, rs))
             | _ -> None)
 
     member this.Aliases = aliases

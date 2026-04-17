@@ -28,6 +28,7 @@ open CWTools.Utilities.Utils2
 //         tree
 type varPrefixFunc = delegate of ReadOnlySpan<char> -> struct (string * bool)
 
+[<Sealed>]
 type EffectDictionary(effects: Effect seq) =
 
     let mutable dictionary: FrozenDictionary<int, Effect> =

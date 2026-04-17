@@ -1,5 +1,6 @@
 namespace CWTools.Games
 
+open System
 open System.Linq
 
 open CWTools.Common
@@ -104,8 +105,8 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     let resourceManager =
         ResourceManager<'T>(
-            computeFunction (fun () -> this.InfoService),
-            computeUpdateFunction (fun () -> this.InfoService),
+            computeFunction (fun () -> infoService),
+            computeUpdateFunction (fun () -> infoService),
             encoding,
             fallbackencoding,
             settings.enableInlineScripts
@@ -180,12 +181,11 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
 
     let updateFile (shallow: bool) filepath (fileText: string option) =
         log $"updateFile %s{filepath}"
-        let timer = System.Diagnostics.Stopwatch()
-        timer.Start()
+        let timer = System.Diagnostics.Stopwatch.StartNew()
 
         let res =
             match filepath with
-            | x when x.EndsWith localisationExtension ->
+            | x when Path.GetExtension(x.AsSpan()).Equals(localisationExtension, StringComparison.OrdinalIgnoreCase) ->
                 let file = fileText |> Option.defaultWith (fun () -> File.ReadAllText filepath)
 
                 let resourceInput =
@@ -224,8 +224,7 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
         res
 
     let initialLoad () =
-        let timer = System.Diagnostics.Stopwatch()
-        timer.Start()
+        let timer = System.Diagnostics.Stopwatch.StartNew()
         let files = fileManager.AllFilesByPath()
         log $"Parsing %i{files.Length} files"
 

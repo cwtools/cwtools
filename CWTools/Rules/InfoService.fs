@@ -565,7 +565,7 @@ type InfoService
 
         let resultForType (child: Node option) (typedef: TypeDefinition) =
             let typeRules =
-                rootRules.TypeRules |> Array.filter (fun (name, _) -> name == typedef.name)
+                rootRules.TypeRules |> Array.filter (fun (struct (name, _)) -> name == typedef.name)
 
             match child with
             | Some c ->
@@ -863,7 +863,7 @@ type InfoService
             | Some(t, true), _ -> ctx, (Some options, Some(TypeRef(t, node.Key)), Some(NodeC node))
             | _, NodeRule(ScopeField s, f) ->
                 let scope = newCtx.scopes
-                let key = node.Key.Trim('"')
+                let key = node.Key.AsSpan().Trim('"')
 
                 let newCtx, rh =
                     match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
@@ -956,63 +956,60 @@ type InfoService
             let noderules, leafrules, leafvaluerules, valueclauserules, nodeSpecificDict, leafSpecificDict =
                 memoizeRules rules ctx.subtypes
 
-            let inner (child: Child) =
+            let res = ResizeArray<_>(node.AllArray.Length)
+            for child in node.AllArray do
                 match child with
                 | NodeC c ->
                     let keyId = c.KeyId
                     let found, value = nodeSpecificDict.TryGetValue keyId.lower
 
-                    let rs =
-                        if found then
-                            Seq.append value noderules
-                        else
-                            upcast noderules
-
-                    rs
-                    |> Seq.choose (function
+                    if found then
+                        for r in value do
+                            match r with
+                            | NodeRule(l, rs), o ->
+                                if FieldValidators.checkLeftField p Severity.Error ctx l keyId then
+                                    res.Add(struct (NodeC c, ((NodeRule(l, rs)), o)))
+                            | _ -> ()
+                    for r in noderules do
+                        match r with
                         | NodeRule(l, rs), o ->
-                            (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then
-                                 Some struct (NodeC c, ((NodeRule(l, rs)), o))
-                             else
-                                 None)
-                        | _ -> None)
+                            if FieldValidators.checkLeftField p Severity.Error ctx l keyId then
+                                res.Add(struct (NodeC c, ((NodeRule(l, rs)), o)))
+                        | _ -> ()
                 | ValueClauseC vc ->
-                    valueclauserules
-                    |> Seq.choose (function
-                        | ValueClauseRule rs, o -> Some struct (ValueClauseC vc, ((ValueClauseRule rs), o))
-                        | _ -> None)
+                    for r in valueclauserules do
+                        match r with
+                        | ValueClauseRule rs, o -> res.Add(struct (ValueClauseC vc, ((ValueClauseRule rs), o)))
+                        | _ -> ()
                 | LeafC leaf ->
                     let keyId = leaf.KeyId
                     let found, value = leafSpecificDict.TryGetValue keyId.lower
 
-                    let rs =
-                        if found then
-                            Seq.append value leafrules
-                        else
-                            upcast leafrules
-
-                    rs
-                    |> Seq.choose (function
+                    if found then
+                        for r in value do
+                            match r with
+                            | LeafRule(l, r), o ->
+                                if FieldValidators.checkLeftField p Severity.Error ctx l keyId then
+                                    res.Add(struct (LeafC leaf, ((LeafRule(l, r)), o)))
+                            | _ -> ()
+                    for r in leafrules do
+                        match r with
                         | LeafRule(l, r), o ->
-                            (if FieldValidators.checkLeftField p Severity.Error ctx l keyId then
-                                 Some struct (LeafC leaf, ((LeafRule(l, r)), o))
-                             else
-                                 None)
-                        | _ -> None)
+                            if FieldValidators.checkLeftField p Severity.Error ctx l keyId then
+                                res.Add(struct (LeafC leaf, ((LeafRule(l, r)), o)))
+                        | _ -> ()
                 | LeafValueC leafvalue ->
                     let keyId = leafvalue.ValueId
 
-                    leafvaluerules
-                    |> Seq.choose (function
+                    for r in leafvaluerules do
+                        match r with
                         | LeafValueRule lv, o ->
-                            (if FieldValidators.checkLeftField p Severity.Error ctx lv keyId then
-                                 Some struct (LeafValueC leafvalue, ((LeafValueRule lv), o))
-                             else
-                                 None)
-                        | _ -> None)
-                | CommentC _ -> Seq.empty
+                            if FieldValidators.checkLeftField p Severity.Error ctx lv keyId then
+                                res.Add(struct (LeafValueC leafvalue, ((LeafValueRule lv), o)))
+                        | _ -> ()
+                | CommentC _ -> ()
 
-            node.AllArray |> Seq.collect inner
+            res :> seq<_>
 
         let skiprootkey (skipRootKey: SkipRootKey) (n: Node) =
             match skipRootKey with
@@ -1023,25 +1020,24 @@ type InfoService
         let infoServiceNode (typedef: TypeDefinition) rs o =
             (fun a (c: Node) ->
                 let ctx =
-                    let typerules =
+                    let typeRuleOptions =
                         rootRules.TypeRules
-                        |> Seq.choose (function
-                            | name, r when name == typedef.name -> Some r
+                        |> Array.tryPick (function
+                            | struct (name, r) when name == typedef.name ->
+                                match r with
+                                | NodeRule(SpecificField(SpecificValue x), rs), o when
+                                    (StringResource.stringManager.GetStringForID x.normal) == typedef.name
+                                    ->
+                                    if FieldValidators.typekeyfilter typedef c.Key c.KeyPrefix then
+                                        Some(Some o)
+                                    else
+                                        Some None
+                                | _ -> Some None
                             | _ -> None)
-
-                    let typeruleOptions =
-                        match typerules |> Seq.tryHead with
-                        | Some(NodeRule(SpecificField(SpecificValue x), rs), o) when
-                            (StringResource.stringManager.GetStringForID x.normal) == typedef.name
-                            ->
-                            if FieldValidators.typekeyfilter typedef c.Key c.KeyPrefix then
-                                Some o
-                            else
-                                None
-                        | _ -> None
+                        |> Option.flatten
 
                     let pushScope, subtypes = ruleValidationService.TestSubType(typedef.subtypes, c)
-                    getRulesContextFromOptions pushScope subtypes typeruleOptions
+                    getRulesContextFromOptions pushScope subtypes typeRuleOptions
 
                 infoServiceFunction
                     fNode
@@ -1068,96 +1064,50 @@ type InfoService
                     acc
             | head :: tail ->
                 if skiprootkey head n then
-                    n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t tail) acc
+                    let mutable currentAcc = acc
+                    for child in n.AllArray do
+                        match child with
+                        | NodeC c -> currentAcc <- infoServiceSkipRoot rs o t tail currentAcc c
+                        | _ -> ()
+                    currentAcc
                 else
                     acc
 
         let infoServiceBase (n: Node) acc (t: TypeDefinition) =
-            let typerules =
-                rootRules.TypeRules |> Array.filter (fun (name, _) -> name == t.name)
+            let mutable matchCount = 0
+            let mutable firstMatch = Unchecked.defaultof<_>
+            for i = 0 to rootRules.TypeRules.Length - 1 do
+                let struct (name, r) = rootRules.TypeRules.[i]
+                if name == t.name then
+                    if matchCount = 0 then
+                        firstMatch <- r
+                    matchCount <- matchCount + 1
 
-            match typerules, t.type_per_file with
-            | [| (_, (NodeRule(_, rs), o)) |], false ->
-                n.Nodes |> Seq.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
-            | [| (_, (NodeRule(_, rs), o)) |], true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
-            | _ -> acc
+            if matchCount = 1 then
+                match firstMatch, t.type_per_file with
+                | (NodeRule(_, rs), o), false ->
+                    let mutable currentAcc = acc
+                    for child in n.AllArray do
+                        match child with
+                        | NodeC c -> currentAcc <- infoServiceSkipRoot rs o t t.skipRootKey currentAcc c
+                        | _ -> ()
+                    currentAcc
+                | (NodeRule(_, rs), o), true -> infoServiceSkipRoot rs o t t.skipRootKey acc n
+                | _ -> acc
+            else
+                acc
 
         pathFilteredTypes |> List.fold (infoServiceBase node) acc
-
-    // let foldCollectEarly fLeaf fLeafValue fComment fNode acc (node : Node) (path: string) =
-    //     let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false  }
-    //     let fChild (node : Node) ((field, options) : NewRule<_>) =
-    //         let rules =
-    //             match field with
-    //             | (NodeRule (_, rs)) -> rs
-    //             | _ -> []
-    //         let noderules, leafrules, leafvaluerules = memoizeRules rules ctx.subtypes
-    //         let p = {
-    //             varMap = varMap
-    //             enumsMap = enumsMap
-    //             typesMap = typesMap
-    //             effectMap = effectMap
-    //             triggerMap = triggerMap
-    //             varSet = varSet
-    //             localisation = localisation
-    //             files = files
-    //             changeScope = changeScope
-    //             anyScope = anyScope
-    //             defaultLang = defaultLang
-    //             ctx = ctx
-    //             severity = Severity.Error
-    //         }
-    //         let inner (child : Child) =
-    //             match child with
-    //             | NodeC c ->
-    //                 // expandedrules |> Seq.choose (function |(NodeRule (l, rs), o) when checkLeftField p l c.KeyId.lower c.Key -> Some (NodeC c, ((NodeRule (l, rs)), o)) |_ -> None)
-    //                 noderules |> Seq.choose (fun (l, rs, o) -> if checkLeftField p l c.KeyId.lower c.Key then Some (NodeC c, ((NodeRule (l, rs)), o)) else None)
-    //             | LeafC leaf ->
-    //                 // expandedrules |> Seq.choose (function |(LeafRule (l, r), o) when checkLeftField p l leaf.KeyId.lower leaf.Key -> Some (LeafC leaf, ((LeafRule (l, r)), o)) |_ -> None)
-    //                 leafrules |> Seq.choose (fun (l, r, o) -> if checkLeftField p l leaf.KeyId.lower leaf.Key then Some (LeafC leaf, ((LeafRule (l, r)), o)) else None)
-    //             | LeafValueC leafvalue ->
-    //                 // expandedrules |> Seq.choose (function |(LeafValueRule (lv), o) when checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key ->  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) |_ -> None)
-    //                 leafvaluerules |> Seq.choose (fun (lv, o) -> if checkLeftField p lv leafvalue.ValueId.lower leafvalue.Key then  Some (LeafValueC leafvalue, ((LeafValueRule (lv)), o)) else None)
-    //             | CommentC _ -> Seq.empty
-    //         node.AllArray |> Seq.collect inner
-    //     let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
-    //     let file = Path.GetFileName path
-    //     let typekeyfilter (td : TypeDefinition<_>) (n : Node) =
-    //         match td.typeKeyFilter with
-    //         |Some (values, negate) -> ((values |> List.exists ((==) n.Key))) <> negate
-    //         |None -> true
-    //     let skiprootkey (skipRootKey : SkipRootKey) (n : Node) =
-    //         match skipRootKey with
-    //         |(SpecificKey key) -> n.Key == key
-    //         |(AnyKey) -> true
-    //     let infoServiceNode typedef rs o =
-    //         (fun a c ->
-    //             infoServiceEarlyExit fNode fChild fLeaf fLeafValue fComment a (NodeC c) (NodeRule (TypeMarkerField (c.KeyId.lower, typedef), rs), o))
-    //     let pathFilteredTypes = typedefs |> List.filter (fun t -> checkPathDir t pathDir file)
-    //     let rec infoServiceSkipRoot rs o (t : TypeDefinition<_>) (skipRootKeyStack : SkipRootKey list) acc (n : Node) =
-    //         match skipRootKeyStack with
-    //         |[] -> if typekeyfilter t n then infoServiceNode t rs o acc n else acc
-    //         |head::tail ->
-    //             if skiprootkey head n
-    //             then n.Children |> List.fold (infoServiceSkipRoot rs o t tail) acc
-    //             else acc
-    //     let infoServiceBase (n : Node) acc (t : TypeDefinition<_>) =
-    //         let typerules = typeRules |> List.filter (fun (name, _) -> name == t.name)
-    //         match typerules with
-    //         |[(_, (NodeRule (_, rs), o))] ->
-    //             n.Children |> List.fold (infoServiceSkipRoot rs o t t.skipRootKey) acc
-    //         |_ -> acc
-    //     pathFilteredTypes |> List.fold (infoServiceBase node) acc
 
     let getTypesInEntity () = // (entity : Entity) =
         let changeValueScopeInner (keyId: StringTokens) scope =
             let metadata = stringManager.GetMetadataForID keyId.lower
-            let key = stringManager.GetStringForIDs keyId
+            let rawKey = stringManager.GetStringForIDs keyId
 
             let key =
                 match metadata.containsPipe with
-                | true -> key.Split('|', 2)[0]
-                | _ -> key
+                | true -> rawKey.AsSpan().SplitFirst('|')
+                | _ -> rawKey.AsSpan()
 
             match changeScope.Invoke(false, true, links, valueTriggers, wildCardLinks, varSet, key, scope) with
             | ValueFound rh -> rh
@@ -1165,9 +1115,9 @@ type InfoService
             | NewScope(_, _, rh) -> rh
             | _ ->
                 match enums.TryFind "static_values" with
-                | Some(_, trie) ->
+                | Some(_, trie: LowerStringSparseTrie) ->
                     if trie.Contains key then
-                        Some(EnumRef("static_values", key))
+                        Some(EnumRef("static_values", if metadata.containsPipe then key.ToString() else rawKey))
                     else
                         None
                 | None -> None
@@ -1375,7 +1325,7 @@ type InfoService
             else
                 first.ToString()
 
-        let fLeaf (res: Collections.Map<string, ResizeArray<string * range>>) (leaf: Leaf) ((field, _): NewRule) =
+        let fLeaf (res: Map<string, ResizeArray<string * range>>) (leaf: Leaf) ((field, _): NewRule) =
             match field with
             | LeafRule(_, VariableSetField v) ->
                 res
@@ -1401,7 +1351,7 @@ type InfoService
                     ))
             | _ -> res
 
-        let fLeafValue (res: Collections.Map<string, ResizeArray<string * range>>) (leafvalue: LeafValue) (field, _) =
+        let fLeafValue (res: Map<string, ResizeArray<string * range>>) (leafvalue: LeafValue) (field, _) =
             match field with
             | LeafValueRule(VariableSetField v) ->
                 res
@@ -1416,7 +1366,7 @@ type InfoService
                     ))
             | _ -> res
 
-        let fNode (res: Collections.Map<string, ResizeArray<string * range>>) (node: Node) ((field, option): NewRule) =
+        let fNode (res: Map<string, ResizeArray<string * range>>) (node: Node) ((field, option): NewRule) =
             match field with
             | NodeRule(VariableSetField v, _) ->
                 res
@@ -1521,26 +1471,34 @@ type InfoService
         fLeaf, fLeafValue, fComment, fNode, fValueClause, acc
 
     let allFolds entity =
-        let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx =
+        let fLeaf1, fLeafValue1, fComment1, fNode1, fValueClause1, ctx1 =
             Test.mergeFolds getTriggersInEntity getEffectsInEntity
             |> Test.mergeFolds getDefVarInEntity
             |> Test.mergeFolds (getTypesInEntity ())
 
-        let types, (defvars, (effects, triggers)) =
-            foldCollect infoService fLeaf fLeafValue fComment fNode fValueClause ctx entity.entity entity.logicalpath
+        let fLeaf2, fLeafValue2, fComment2, fNode2, fValueClause2, ctx2 = getSavedScopesInEntity
+        let fNode2 = fNodeContextAugmenter fNode2
+        let fValueClause2 = (fun c r vc rul -> c, fValueClause2 c r vc rul)
 
-        let fLeaf, fLeafValue, fComment, fNode, fValueClause, ctx = getSavedScopesInEntity
-        let fValueClause = (fun c r vc rul -> c, fValueClause c r vc rul)
+        let fLeaf = (fun ctx (acc1, acc2) l r -> (fLeaf1 acc1 l r, fLeaf2 ctx acc2 l r))
+        let fLeafValue = (fun ctx (acc1, acc2) lv r -> (fLeafValue1 acc1 lv r, fLeafValue2 ctx acc2 lv r))
+        let fComment = (fun ctx (acc1, acc2) c r -> (fComment1 acc1 c r, fComment2 ctx acc2 c r))
+        let fNode = (fun ctx (acc1, acc2) n r -> 
+            let newCtx, res2 = fNode2 ctx acc2 n r
+            newCtx, (fNode1 acc1 n r, res2))
+        let fValueClause = (fun ctx (acc1, acc2) vc r -> 
+            let newCtx, res2 = fValueClause2 ctx acc2 vc r
+            newCtx, (fValueClause1 acc1 vc r, res2))
 
-        let eventtargets =
+        let (types, (defvars, (effects, triggers))), eventtargets =
             foldCollect
                 depthInfoService
                 fLeaf
                 fLeafValue
                 fComment
-                (fNodeContextAugmenter fNode)
+                fNode
                 fValueClause
-                (ctx ())
+                (ctx1, ctx2 ())
                 entity.entity
                 entity.logicalpath
 
@@ -1574,19 +1532,19 @@ type InfoService
             | LeafRule(_, TypeField(TypeType.Simple t)) ->
                 let value = leaf.ValueText
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
+                match types.TryGetValue t with
+                | true, values when values.Contains(value) ->
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
-                else
-                    res
+                | _ -> res
             | LeafRule(TypeField(TypeType.Simple t), _) ->
                 let value = leaf.Key
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
+                match types.TryGetValue t with
+                | true, values when values.Contains(value) ->
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leaf)
                     <&&> res
-                else
-                    res
+                | _ -> res
             | LeafRule(LocalisationField(synced, isInline), _) ->
                 FieldValidators.checkLocalisationField
                     p.processLocalisation
@@ -1607,11 +1565,11 @@ type InfoService
             | LeafValueRule(TypeField(TypeType.Simple t)) ->
                 let value = leafvalue.ValueText
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
+                match types.TryGetValue t with
+                | true, values when values.Contains(value) ->
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value leafvalue)
                     <&&> res
-                else
-                    res
+                | _ -> res
             | _ -> res
 
         let fNode (res: ValidationResult) (node: Node) (field, _) =
@@ -1619,11 +1577,11 @@ type InfoService
             | NodeRule(TypeField(TypeType.Simple t), _) ->
                 let value = node.Key
 
-                if types |> Seq.exists (fun pair -> pair.Key == t && pair.Value.Contains(value)) then
+                match types.TryGetValue t with
+                | true, values when values.Contains(value) ->
                     (FieldValidators.validateTypeLocalisation typedefs invertedTypeMap localisation t value node)
                     <&&> res
-                else
-                    res
+                | _ -> res
             | NodeRule(LocalisationField(synced, isInline), _) ->
                 FieldValidators.checkLocalisationField
                     p.processLocalisation

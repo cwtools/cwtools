@@ -88,8 +88,10 @@ module HOI4GameFunctions =
         | None -> ()
         | Some pf ->
             let resizeArray = ResizeArray<string>(pf.filetext.AsSpan().Count('\n'))
+
             for line: ReadOnlySpan<char> in pf.filetext.AsSpan().EnumerateLines() do
-                   resizeArray.Add(line.SplitFirst(';').ToString())
+                resizeArray.Add(line.SplitFirst(';').ToString())
+
             game.Lookup.HOI4provinces <- resizeArray.ToArray()
 
     let updateScriptedLoc (game: GameObject) =
@@ -213,7 +215,11 @@ module HOI4GameFunctions =
             ))
 
     let loadConfigRulesHook (rules: RootRule array) (lookup: Lookup) embedded =
-        lookup.allCoreLinks <- lookup.triggers @ lookup.effects @ updateEventTargetLinks embedded
+        lookup.allCoreLinks <-
+            [ yield! lookup.triggers
+              yield! lookup.effects
+              yield! updateEventTargetLinks embedded ]
+
         Array.append rules (addModifiersWithScopes lookup)
 
     let refreshConfigBeforeFirstTypesHook (lookup: HOI4Lookup) _ _ =
@@ -255,10 +261,10 @@ module HOI4GameFunctions =
         (embeddedSettings: EmbeddedSettings)
         =
         lookup.allCoreLinks <-
-            lookup.triggers
-            @ lookup.effects
-            @ updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            [ yield! lookup.triggers
+              yield! lookup.effects
+              yield! updateEventTargetLinks embeddedSettings
+              yield! addDataEventTargetLinks lookup embeddedSettings false ]
 
     let afterInit (game: GameObject) =
         updateModifiers (game)

@@ -156,7 +156,7 @@ let getNodeComments (clause: IClause) =
                     e.Position, clause.AllArray |> Array.fold (findComments e.Position) (false, []) |> snd)
 
             let new2 =
-                one @ two @ three @ four |> List.filter (fun (_, c) -> not (List.isEmpty c))
+                [ yield! one; yield! two; yield! three; yield! four ] |> List.filter (fun (_, c) -> not (List.isEmpty c))
 
             new2 @ children)
 
