@@ -95,6 +95,8 @@ type IGame =
     abstract StaticModifiers: unit -> StaticModifier array
     abstract ScopesAtPos: pos -> string -> string -> ScopeContext option
     abstract GetEmbeddedMetadata: unit -> CachedRuleMetadata
+    abstract ClearResources: unit -> unit
+    abstract ClearValidationCache: unit -> unit
 
 type IGame<'T when 'T :> ComputedData> =
     inherit IGame

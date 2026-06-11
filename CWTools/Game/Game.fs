@@ -374,6 +374,8 @@ type GameObject<'T, 'L when 'T :> ComputedData and 'L :> Lookup>
     member _.ReplaceConfigRules rules = rulesManager.LoadBaseConfig rules
     member _.RefreshCaches() = updateRulesCache ()
     member _.InitialConfigRules() = initialConfigRules ()
+    member _.ClearResources() = resourceManager.Clear()
+    member _.ClearValidationCache() = validationManager.ClearCache()
     member private _.DebugSettings = debugSettings
 
     static member CreateGame settings afterInit =

@@ -335,3 +335,6 @@ type VIC2Game(setupSettings: VIC2Settings) =
 
         member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager
+
+        member _.ClearResources() = game.ClearResources()
+        member _.ClearValidationCache() = game.ClearValidationCache()

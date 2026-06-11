@@ -300,3 +300,6 @@ type CK3Game(setupSettings: CK3Settings) =
 
         member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager
+
+        member _.ClearResources() = game.ClearResources()
+        member _.ClearValidationCache() = game.ClearValidationCache()

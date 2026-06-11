@@ -50,6 +50,13 @@ type ErrorCache() =
 
     let monitor = new Object()
 
+    member _.Clear() =
+        lock monitor (fun () ->
+            sourceToErrorsForTargets.Clear()
+            targetToErrors.Clear()
+            selfErrors.Clear()
+        )
+
     member this.AddErrorsGeneratedByFile(fromEntity: Entity, errorsForFiles: CWError seq) =
         lock monitor (fun () ->
             let mutable impactedFiles = HashSet<string>()
@@ -361,3 +368,4 @@ type ValidationManager<'T when 'T :> ComputedData>
         (res |> List.choose (fun (_, errors) -> errors) |> List.collect id) @ forced
 
     member _.ErrorCache() = errorCache
+    member _.ClearCache() = errorCache.Clear()

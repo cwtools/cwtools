@@ -849,6 +849,10 @@ type ResourceManager<'T when 'T :> ComputedData>
             let filenamenopath = Path.GetFileNameWithoutExtension filename
             Some(shipProcess EntityType.Other filenamenopath (mkZeroFile filename) s)
 
+    member _.Clear() =
+        fileMap.Clear()
+        entitiesMap.Clear()
+
     member _.Api =
         { new IResourceAPI<'T> with
             member _.UpdateFiles = updateFiles

@@ -321,12 +321,20 @@ module STLGameFunctions =
         =
         addModifiersFromCoreAndTypes lookup embeddedSettings resources
         lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
+        // Compute and cache addDataEventTargetLinks once, so refreshConfigAfterVarDefHook reuses it
+        let dataLinks = addDataEventTargetLinks lookup embeddedSettings false
+        lookup.dataEventTargetLinksCache <- dataLinks
+
+        // Filter out ScopedEffect instances from triggers (they are data event target links, not real triggers)
+        // This prevents ValueTrigger data links from accumulating across RefreshCaches cycles
+        let pureTriggers =
+            lookup.triggers |> List.filter (fun t -> not (t :? ScopedEffect))
 
         lookup.allCoreLinks <-
-            lookup.triggers
+            pureTriggers
             @ lookup.effects
             @ (updateEventTargetLinks embeddedSettings
-               @ addDataEventTargetLinks lookup embeddedSettings false)
+               @ dataLinks)
 
     let refreshConfigAfterVarDefHook
         (lookup: Lookup)
@@ -336,8 +344,7 @@ module STLGameFunctions =
         lookup.allCoreLinks <-
             lookup.triggers
             @ lookup.effects
-            @ (updateEventTargetLinks embeddedSettings
-               @ addDataEventTargetLinks lookup embeddedSettings false)
+            @ lookup.eventTargetLinks
 
     let afterInit (game: GameObject) =
         let ts = updateScriptedTriggers (game)
@@ -666,3 +673,6 @@ type STLGame(setupSettings: StellarisSettings) =
 
         member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager
+
+        member _.ClearResources() = game.ClearResources()
+        member _.ClearValidationCache() = game.ClearValidationCache()

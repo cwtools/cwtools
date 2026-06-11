@@ -240,12 +240,14 @@ module HOI4GameFunctions =
             |> Option.map (fun x -> (snd x) |> Array.map (fst >> StringResource.stringManager.InternIdentifierToken))
             |> Option.defaultValue [||]
 
+        let dataLinks = addDataEventTargetLinks lookup embeddedSettings false
+        lookup.dataEventTargetLinksCache <- dataLinks
         let ts = updateScriptedTriggers lookup.configRules states countries
         let es = updateScriptedEffects lookup.configRules states countries
 
         let ls =
             updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            @ dataLinks
 
         lookup.allCoreLinks <- ts.Concat(es).Concat(ls) |> List.ofSeq
 
@@ -257,8 +259,7 @@ module HOI4GameFunctions =
         lookup.allCoreLinks <-
             lookup.triggers
             @ lookup.effects
-            @ updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            @ lookup.eventTargetLinks
 
     let afterInit (game: GameObject) =
         updateModifiers (game)
@@ -526,3 +527,6 @@ type HOI4Game(setupSettings: HOI4Settings) =
 
         member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager
+
+        member _.ClearResources() = game.ClearResources()
+        member _.ClearValidationCache() = game.ClearValidationCache()

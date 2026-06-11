@@ -260,12 +260,14 @@ module EU4GameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup: Lookup) _ (embeddedSettings: EmbeddedSettings) =
         lookup.typeDefInfo <- lookup.typeDefInfo |> addModifiersAsTypes lookup
+        let dataLinks = addDataEventTargetLinks lookup embeddedSettings false
+        lookup.dataEventTargetLinksCache <- dataLinks
 
         lookup.allCoreLinks <-
             lookup.triggers
             @ lookup.effects
             @ updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            @ dataLinks
 
     let refreshConfigAfterVarDefHook
         (lookup: Lookup)
@@ -275,8 +277,7 @@ module EU4GameFunctions =
         lookup.allCoreLinks <-
             lookup.triggers
             @ lookup.effects
-            @ updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            @ lookup.eventTargetLinks
 
     let afterInit (game: GameObject) =
         updateScriptedLoc (game)
@@ -529,3 +530,6 @@ type EU4Game(setupSettings: EU4Settings) =
 
         member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager
+
+        member _.ClearResources() = game.ClearResources()
+        member _.ClearValidationCache() = game.ClearValidationCache()

@@ -322,12 +322,14 @@ module CK2GameFunctions =
 
     let refreshConfigAfterFirstTypesHook (lookup: CK2Lookup) _ (embeddedSettings: EmbeddedSettings) =
         lookup.typeDefInfo <- createLandedTitleTypes lookup lookup.typeDefInfo |> addModifiersAsTypes lookup
+        let dataLinks = addDataEventTargetLinks lookup embeddedSettings false
+        lookup.dataEventTargetLinksCache <- dataLinks
 
         lookup.allCoreLinks <-
             lookup.triggers
             @ lookup.effects
             @ updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            @ dataLinks
 
     let refreshConfigAfterVarDefHook
         (lookup: Lookup)
@@ -337,8 +339,7 @@ module CK2GameFunctions =
         lookup.allCoreLinks <-
             lookup.triggers
             @ lookup.effects
-            @ updateEventTargetLinks embeddedSettings
-            @ addDataEventTargetLinks lookup embeddedSettings false
+            @ lookup.eventTargetLinks
 
 
     let afterInit (game: GameObject) =
@@ -593,3 +594,6 @@ type CK2Game(setupSettings: CK2Settings) =
 
         member _.GetEmbeddedMetadata() =
             getEmbeddedMetadata lookup game.LocalisationManager game.ResourceManager
+
+        member _.ClearResources() = game.ClearResources()
+        member _.ClearValidationCache() = game.ClearValidationCache()

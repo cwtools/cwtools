@@ -86,6 +86,7 @@ type Lookup() =
     member val typeDefInfoForValidation: Map<string, struct (string * range) array> = Map.empty with get, set
     member val varDefInfo: Map<string, (string * range) array> = Map.empty with get, set
     member val savedEventTargets: ResizeArray<string * range * Scope> = new ResizeArray<_>() with get, set
+    member val dataEventTargetLinksCache: Effect list = [] with get, set
 
 type JominiLookup() =
     inherit Lookup()
