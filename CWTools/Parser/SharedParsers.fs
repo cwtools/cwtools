@@ -89,6 +89,7 @@ module internal SharedParsers =
            '^'
            '&'
            '|'
+           '?'
            magicChar |]
 
     let isAnyOfIdCharArray = isAnyOf idCharArray
@@ -180,7 +181,16 @@ module internal SharedParsers =
     let comment =
         parseWithPosition (skipChar '#' >>. restOfLine true .>> ws) <?> "comment"
 
-    let key = (many1SatisfyL isIdChar "id character") .>> ws |>> Key <?> "id"
+    // Key stops before `?=` operator to prevent `a?=b` parsing as key `a?` + op `=`
+    let key =
+        (many1SatisfyL isIdChar "id character"
+         .>> notFollowedBy (pstring "?=")
+         |>> fun s ->
+             // Strip trailing `?` if immediately followed by `=` (operator wins)
+             if s.EndsWith "?" then s[..s.Length - 2] else s)
+        .>> ws
+        |>> Key
+        <?> "id"
 
     let keyQStr =
         between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar))
