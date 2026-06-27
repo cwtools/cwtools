@@ -556,9 +556,7 @@ type ErrorCodes =
               Severity = severity
               Message = error }
 
-#if NET5_0_OR_GREATER
 [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
 [<CustomEquality; NoComparison; Struct>]
 type ValidationResult =
     | OK

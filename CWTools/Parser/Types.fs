@@ -8,10 +8,7 @@ open System.Globalization
 
 [<AutoOpen>]
 module Types =
-#if NET5_0_OR_GREATER
-    [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-    [<Struct>]
+    [<System.Runtime.CompilerServices.IsReadOnly; Struct>]
     type Position =
         | Position of FParsec.Position
 
@@ -48,18 +45,13 @@ module Types =
         | Operator.QuestionEqual -> "?="
         | x -> failwith (sprintf "Unknown enum value %A" x)
 
-#if NET5_0_OR_GREATER
-    [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-    [<Struct>]
+    [<System.Runtime.CompilerServices.IsReadOnly; Struct>]
     type Key =
         | Key of string
 
         override x.ToString() = let (Key v) = x in sprintf "%s" v
 
-#if NET5_0_OR_GREATER
     [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
     [<Struct>]
     type KeyValueItem =
         | KeyValueItem of Key * Value * Operator
@@ -74,7 +66,7 @@ module Types =
         | Int of int
         | Bool of bool
         | Clause of Statement list
-        
+
         static member CreateString(s: string) =
             String(StringResource.stringManager.InternIdentifierToken(s))
 
@@ -103,11 +95,7 @@ module Types =
             | QString stringTokens -> stringTokens
             | _ -> StringResource.stringManager.InternIdentifierToken(x.ToString())
 
-    and
-#if NET5_0_OR_GREATER
-        [<System.Runtime.CompilerServices.IsReadOnly>]
-#endif
-        [<CustomEquality; NoComparison; Struct>] PosKeyValue =
+    and [<System.Runtime.CompilerServices.IsReadOnly; CustomEquality; NoComparison; Struct>] PosKeyValue =
         | PosKeyValue of range * KeyValueItem
 
         override x.Equals(y) =
