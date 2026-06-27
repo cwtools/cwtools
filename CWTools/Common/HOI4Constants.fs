@@ -9,7 +9,7 @@ module HOI4Constants =
           "Unit Leader", [ "unit leader"; "unit_leader" ]
           "Air", [ "air" ] ]
 
-    let defaultScopeInputs() =
+    let defaultScopeInputs () =
         defaultScopes
         |> List.map (fun (n, s) ->
             { ScopeInput.name = n

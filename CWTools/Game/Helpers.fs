@@ -214,7 +214,10 @@ module Helpers =
                 | None -> ()
             }
 
-        links |> Seq.collect convertLinkToEffects |> Seq.map (fun e -> e :> Effect) |> List.ofSeq
+        links
+        |> Seq.collect convertLinkToEffects
+        |> Seq.map (fun e -> e :> Effect)
+        |> List.ofSeq
 
     let getLocalisationErrors (game: GameObject<_, _>) globalLocalisation =
         fun (force: bool, forceGlobal: bool) ->

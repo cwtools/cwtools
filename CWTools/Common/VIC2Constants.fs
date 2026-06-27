@@ -26,7 +26,7 @@ module VIC2Constants =
           "Governorship", [ "governorship" ]
           "Region", [ "region" ] ]
 
-    let defaultScopeInputs() =
+    let defaultScopeInputs () =
         defaultScopes
         |> List.map (fun (n, s) ->
             { ScopeInput.name = n
