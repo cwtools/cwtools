@@ -35,7 +35,6 @@
     <ItemGroup>
         <PackageReference Include="Expecto"/>
         <PackageReference Include="FParsec"/>
-        <PackageReference Include="System.Text.Encoding.CodePages"/>
         <PackageReference Include="FsPickler"/>
         <PackageReference Include="FSharpx.Collections"/>
         <PackageReference Include="Argu"/>

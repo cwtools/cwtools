@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CWTools\CWTools.fsproj">
-      <Name>CWTools.fsproj</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Vic3.fs" />
-    <Compile Include="CWToolsScripts.fs" />
-    <None Include="App.config" />
-    <EmbeddedResource Include="../CWTools/files/**" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Argu"/>
-    <PackageReference Include="System.Text.Encoding.CodePages"/>
-    <PackageReference Include="FSharpPlus"/>
-    <PackageReference Include="FsPickler"/>
-    <PackageReference Include="FSharp.Data"/>
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CWTools\CWTools.fsproj">
+            <Name>CWTools.fsproj</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Vic3.fs"/>
+        <Compile Include="CWToolsScripts.fs"/>
+        <None Include="App.config"/>
+        <EmbeddedResource Include="../CWTools/files/**"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Argu"/>
+        <PackageReference Include="FSharpPlus"/>
+        <PackageReference Include="FsPickler"/>
+        <PackageReference Include="FSharp.Data"/>
+    </ItemGroup>
 </Project>

@@ -112,7 +112,6 @@
         <PackageReference Include="FSharpx.Collections"/>
         <PackageReference Include="Sandwych.QuickGraph.Core"/>
         <PackageReference Include="VDS.Common"/>
-        <PackageReference Include="System.Text.Encoding.CodePages"/>
         <PackageReference Include="FsPickler"/>
         <PackageReference Include="SharpZipLib"/>
     </ItemGroup>

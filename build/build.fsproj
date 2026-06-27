@@ -20,5 +20,8 @@
         <PackageReference Include="Fake.Api.GitHub" Version="$(FakeVersion)"/>
         <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0"/>
         <PackageReference Include="MSBuild.StructuredLogger" Version="2.3.113"/>
+        <!--    Pinned to avoid vulnerabilities -->
+        <PackageReference Include="NuGet.Packaging" Version="6.12.5"/>
+        <PackageReference Include="NuGet.Protocol" Version="6.12.5"/>
     </ItemGroup>
 </Project>
