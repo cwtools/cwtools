@@ -62,11 +62,16 @@ and Leaf =
     val mutable Position: range
     val mutable Operator: Operator
     val mutable Trivia: Trivia option
+    val mutable HasExistenceGuard: bool
 
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
-        and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
+        and set value =
+            let cleaned, hasGuard =
+                if value.EndsWith "?" then value[..value.Length - 2], true else value, false
+            this.KeyId <- StringResource.stringManager.InternIdentifierToken(cleaned)
+            this.HasExistenceGuard <- hasGuard
 
     member this.ValueId = this._valueId
 
@@ -80,15 +85,19 @@ and Leaf =
         StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
 
     member this.ToRaw =
-        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key(this.Key), this.Value, this.Operator)))
+        let keyText = if this.HasExistenceGuard then this.Key + "?" else this.Key
+        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key(keyText), this.Value, this.Operator)))
 
     new(key: string, value: Value, pos: range, op: Operator) =
-        { KeyId = StringResource.stringManager.InternIdentifierToken(key)
+        let cleaned, hasGuard =
+            if key.EndsWith "?" then key[..key.Length - 2], true else key, false
+        { KeyId = StringResource.stringManager.InternIdentifierToken(cleaned)
           _valueId = StringResource.stringManager.InternIdentifierToken(value.ToString())
           _value = value
           Position = pos
           Operator = op
-          Trivia = None }
+          Trivia = None
+          HasExistenceGuard = hasGuard }
 
     new(keyvalueitem: KeyValueItem, ?pos: range) =
         let (KeyValueItem(Key(key), value, op)) = keyvalueitem
@@ -361,6 +370,9 @@ and ValueClause(keys: Value[], pos: range) =
 
 
 and Node(key: string, pos: range) =
+    // ponytail: existence-guard ? stripped at construction, re-added by ToRaw
+    let cleanedKey, hasGuard =
+        if key.EndsWith "?" then key[..key.Length - 2], true else key, false
     let bothFind (x: string) =
         function
         | NodeC n when n.Key == x -> true
@@ -390,11 +402,16 @@ and Node(key: string, pos: range) =
 
     new(key: string) = Node(key, range.Zero)
 
-    member val KeyId: StringTokens = StringResource.stringManager.InternIdentifierToken(key) with get, set
+    member val KeyId: StringTokens = StringResource.stringManager.InternIdentifierToken(cleanedKey) with get, set
+    member val HasExistenceGuard: bool = hasGuard with get, set
 
     member this.Key
         with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
-        and set value = this.KeyId <- StringResource.stringManager.InternIdentifierToken(value)
+        and set value =
+            let cleaned, hasGuard =
+                if value.EndsWith "?" then value[..value.Length - 2], true else value, false
+            this.KeyId <- StringResource.stringManager.InternIdentifierToken(cleaned)
+            this.HasExistenceGuard <- hasGuard
 
     member val Position = pos
     member val Scope: Scope = scopeManager.AnyScope with get, set
@@ -571,7 +588,8 @@ and Node(key: string, pos: range) =
                 children.AddRange(keys)
                 children.Add(Value(vc.Position, Value.Clause vc.ToRaw))
 
-        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key this.Key, Clause(List.ofSeq children), Operator.Equals)))
+        let keyText = if this.HasExistenceGuard then this.Key + "?" else this.Key
+        KeyValue(PosKeyValue(this.Position, KeyValueItem(Key keyText, Clause(List.ofSeq children), Operator.Equals)))
 
     static member Create key = Node(key)
 

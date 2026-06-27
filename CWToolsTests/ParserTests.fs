@@ -91,7 +91,69 @@ let tests =
 
                   Expect.equal printed file "Printing shouldn't have changed string"
 
-              | _ -> failwith "Parsing unsuccessul." ]
+              | _ -> failwith "Parsing unsuccessul."
+          testCase "jomini question-equals operator no space"
+          <| fun () ->
+              // `a?=b` should parse as key `a`, op `QuestionEqual`, value `b`
+              let file = "test = { a?=b }"
+              let intermediateParseResult = CKParser.parseString file "test"
+              match intermediateParseResult with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  match node.Statements |> Seq.tryHead with
+                  | Some (Types.Statement.KeyValue(_, kvi)) ->
+                      Expect.equal kvi.Key.Text "a" "Key should be `a`"
+                      Expect.equal kvi.Operator Types.Operator.QuestionEqual "Op should be QuestionEqual"
+                      match kvi.Value with
+                      | Types.Value.Statement(Types.Statement.Value(Types.StringResource.String "b")) -> ()
+                      | _ -> failwith "Value should be `b`"
+                  | _ -> failwith "Expected KeyValue"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
+          testCase "jomini question-equals operator with space"
+          <| fun () ->
+              // `a ?= b` should parse as key `a`, op `QuestionEqual`, value `b`
+              let file = "test = { a ?= b }"
+              let intermediateParseResult = CKParser.parseString file "test"
+              match intermediateParseResult with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  match node.Statements |> Seq.tryHead with
+                  | Some (Types.Statement.KeyValue(_, kvi)) ->
+                      Expect.equal kvi.Key.Text "a" "Key should be `a`"
+                      Expect.equal kvi.Operator Types.Operator.QuestionEqual "Op should be QuestionEqual"
+                      match kvi.Value with
+                      | Types.Value.Statement(Types.Statement.Value(Types.StringResource.String "b")) -> ()
+                      | _ -> failwith "Value should be `b`"
+                  | _ -> failwith "Expected KeyValue"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
+          testCase "jomini owner? existence guard"
+          <| fun () ->
+              // `owner? = { }` should parse as key `owner?`, op `Equals`, value Clause
+              let file = "test = { owner? = { } }"
+              let intermediateParseResult = CKParser.parseString file "test"
+              match intermediateParseResult with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  match node.Statements |> Seq.tryHead with
+                  | Some (Types.Statement.KeyValue(_, kvi)) ->
+                      Expect.equal kvi.Key.Text "owner?" "Key should be `owner?` (with guard)"
+                      Expect.equal kvi.Operator Types.Operator.Equals "Op should be Equals"
+                      match kvi.Value with
+                      | Types.Value.Statement(Types.Statement.Clause []) -> ()
+                      | _ -> failwith "Value should be empty Clause"
+                  | _ -> failwith "Expected KeyValue"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
+          testCase "jomini owner? round-trip"
+          <| fun () ->
+              // Parse `owner? = { }`, process, print back: should round-trip the `?`
+              let file = "test = { owner? = { } }"
+              let intermediateParseResult = CKParser.parseString file "test"
+              match intermediateParseResult with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  let printed = CKPrinter.api.prettyPrintStatement node.ToRaw
+                  Expect.isTrue (printed.Contains "owner?") "Printed output should contain `owner?`"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e ]
     |> ignore
 
     testList

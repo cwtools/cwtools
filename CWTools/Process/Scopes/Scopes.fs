@@ -149,6 +149,7 @@ module Scopes =
             (vars: PrefixOptimisedStringSet)
             (key: string)
             (source: ScopeContext) ->
+            // Strip `hidden:` prefix for scope resolution
             let key =
                 if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then
                     key.Substring(7)
@@ -338,6 +339,7 @@ module Scopes =
             (vars: PrefixOptimisedStringSet)
             (key: string)
             (source: ScopeContext) ->
+            // Strip `hidden:` prefix for scope resolution
             let key =
                 if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then
                     key.Substring(7)

@@ -48,6 +48,7 @@ type RuleValidationService
 
     let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
     let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+
     //let varMap = varMap |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
     let varSet =
         varMap.TryFind "variable" |> Option.defaultValue (PrefixOptimisedStringSet())
@@ -951,6 +952,7 @@ type RuleValidationService
                     match n with
                     | :? ValueClause as vc -> vc.FirstKey |> Option.defaultValue "clause"
                     | _ -> n.Key
+
 
                 let prefixKey =
                     match n with
