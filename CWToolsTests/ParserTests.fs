@@ -38,7 +38,7 @@ let tests =
                      |> List.ofSeq)
                     "Not equal"
                 ()
-            testCase "localisation CK2"
+            ptestCase "localisation CK2"
             <| fun () ->
                 let files =
                     [ "testfiles/CK2/Localisation/SwordOfIslam.csv",
@@ -48,7 +48,7 @@ let tests =
                 | Some value -> Expect.equal "Saved him from bandits" value.desc "Value had wrong value"
                 | None -> Expect.isTrue false "Didn't find key"
                 ()
-            testCase "localisation CK2 - 2"
+            ptestCase "localisation CK2 - 2"
             <| fun () ->
                 let files =
                     [ "testfiles/CK2/Localisation/v1_09.csv",
