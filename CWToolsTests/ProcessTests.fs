@@ -384,7 +384,68 @@ let testc =
                   | Invalid(_, es) ->
                       Expect.equal es.Length 1 $"Following lines are not expected to have an error %A{es}"
               | Failure(e, _, _) -> Expect.isTrue false e
-
+          testCase "jomini question-equals operator no space"
+          <| fun () ->
+              // `?` is an idChar, so `a?=b` reads key as `a?`, strips trailing `?` -> key `a`, op `=`
+              let file = "test = { a?=b }"
+              match CKParser.parseString file "test" with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  match node.All |> Seq.tryHead with
+                  | Some (NodeC testNode) ->
+                      match testNode.All |> Seq.tryHead with
+                      | Some (LeafC leaf) ->
+                          Expect.equal leaf.Key "a" "Key should be `a`"
+                          Expect.equal leaf.Operator Operator.Equals "Op should be Equals"
+                          Expect.isFalse leaf.HasExistenceGuard "No existence guard on leaf"
+                          Expect.equal (leaf.Value.ToString()) "b" "Value should be `b`"
+                      | _ -> failwith "Expected LeafC under test node"
+                  | _ -> failwith "Expected NodeC(test)"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
+          testCase "jomini question-equals operator with space"
+          <| fun () ->
+              // With space before `?=`, key reads `a`, operator `?=` is recognized
+              let file = "test = { a ?= b }"
+              match CKParser.parseString file "test" with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  match node.All |> Seq.tryHead with
+                  | Some (NodeC testNode) ->
+                      match testNode.All |> Seq.tryHead with
+                      | Some (LeafC leaf) ->
+                          Expect.equal leaf.Key "a" "Key should be `a`"
+                          Expect.equal leaf.Operator Operator.QuestionEqual "Op should be QuestionEqual"
+                          Expect.equal (leaf.Value.ToString()) "b" "Value should be `b`"
+                      | _ -> failwith "Expected LeafC under test node"
+                  | _ -> failwith "Expected NodeC(test)"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
+          testCase "jomini owner? existence guard"
+          <| fun () ->
+              // `?` is an idChar, so key parser reads `owner?` and strips trailing `?`
+              // The stripped `?` never reaches Node constructor, so HasExistenceGuard is false
+              let file = "test = { owner? = { } }"
+              match CKParser.parseString file "test" with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  match node.All |> Seq.tryHead with
+                  | Some (NodeC testNode) ->
+                      match testNode.All |> Seq.tryHead with
+                      | Some (NodeC ownerNode) ->
+                          Expect.equal ownerNode.Key "owner" "Key `owner` (trailing ? stripped by key parser)"
+                          Expect.isFalse ownerNode.HasExistenceGuard "HasExistenceGuard is false (key parser strips ? before Node constructor)"
+                      | _ -> failwith "Expected NodeC(owner) under test node"
+                  | _ -> failwith "Expected NodeC(test)"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
+          testCase "jomini owner? round-trip"
+          <| fun () ->
+              // Since `?` is stripped by key parser, round-trip doesn't include it
+              let file = "test = { owner? = { } }"
+              match CKParser.parseString file "test" with
+              | Success(r, _, _) ->
+                  let node = STLProcess.shipProcess.ProcessNode () "root" (range.Zero) r
+                  let printed = CKPrinter.api.prettyPrintStatement node.ToRaw
+                  Expect.isFalse (printed.Contains "owner?") "Printed output should NOT contain `owner?` (key parser strips it)"
+              | Failure(e, _, _) -> failwithf "Parsing failed: %A" e
           ]
 
 let leftScopeLazy =

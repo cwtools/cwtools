@@ -66,8 +66,8 @@ and Leaf =
 
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
-        and set value =
+        with get () : string = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim(quoteCharArray)
+        and set (value: string) =
             let cleaned, hasGuard =
                 if value.EndsWith "?" then value[..value.Length - 2], true else value, false
             this.KeyId <- StringResource.stringManager.InternIdentifierToken(cleaned)
@@ -82,7 +82,7 @@ and Leaf =
             this._valueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim(quoteCharArray)
 
     member this.ToRaw =
         let keyText = if this.HasExistenceGuard then this.Key + "?" else this.Key
@@ -126,10 +126,10 @@ and LeafValue(value: Value, ?pos: range) =
             this.ValueId <- StringResource.stringManager.InternIdentifierToken(value.ToString())
 
     member this.ValueText =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim(quoteCharArray)
 
     member this.Key =
-        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim quoteCharArray
+        StringResource.stringManager.GetStringForID(this.ValueId.normal).Trim(quoteCharArray)
 
     member val Position = defaultArg pos range.Zero
     member this.ToRaw = Value(this.Position, this._value)
@@ -406,8 +406,8 @@ and Node(key: string, pos: range) =
     member val HasExistenceGuard: bool = hasGuard with get, set
 
     member this.Key
-        with get () = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim quoteCharArray
-        and set value =
+        with get () : string = StringResource.stringManager.GetStringForID(this.KeyId.normal).Trim(quoteCharArray)
+        and set (value: string) =
             let cleaned, hasGuard =
                 if value.EndsWith "?" then value[..value.Length - 2], true else value, false
             this.KeyId <- StringResource.stringManager.InternIdentifierToken(cleaned)

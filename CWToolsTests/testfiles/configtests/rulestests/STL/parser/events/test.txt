@@ -1,0 +1,6 @@
+event = {
+    option = {
+        name ?= "my_option"
+        custom_tooltip? = yes
+    }
+}
