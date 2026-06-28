@@ -2,5 +2,7 @@ event = {
     option = {
         name ?= "my_option"
         custom_tooltip? = yes
+        #error
+        bogus_key = test
     }
 }
