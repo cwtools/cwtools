@@ -1065,6 +1065,7 @@ module private RulesParserImpl =
                 match node.Key with
                 | "localisation" -> ()
                 | "modifiers" -> ()
+                | "skip_root_key" -> ()
                 | x when x.StartsWith "subtype" -> ()
                 | x -> log $"Unexpected node %s{x} found in type definition at %A{node.Position}"
             | LeafValueC leafvalue ->
